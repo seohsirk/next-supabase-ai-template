@@ -4,7 +4,6 @@
   "engines": {
     "node": ">=v18.17.1"
   },
-  "packageManager": "pnpm@8.6.12",
   "scripts": {
     "build": "turbo build",
     "clean": "git clean -xdf node_modules dist .next",
@@ -29,5 +28,11 @@
     "turbo": "^1.11.3",
     "typescript": "^5.3.3"
   },
-  "prettier": "@acme/prettier-config"
+  "prettier": "@acme/prettier-config",
+  "packageManager": "npm@10.2.3",
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "tooling/*"
+  ]
 }
