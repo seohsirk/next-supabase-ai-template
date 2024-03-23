@@ -1,5 +1,5 @@
 import { execSync } from "node:child_process";
-import type { PackageJson, PlopTypes } from "@turbo/gen";
+import type { PlopTypes } from "@turbo/gen";
 
 export default function generator(plop: PlopTypes.NodePlopAPI): void {
   plop.setGenerator("init", {
@@ -9,7 +9,7 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
         type: "input",
         name: "name",
         message:
-          "What is the name of the package? (You can skip the `@acme/` prefix)",
+          "What is the name of the package? (You can skip the `@kit/` prefix)",
       },
       {
         type: "input",
@@ -21,8 +21,8 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
     actions: [
       (answers) => {
         if ("name" in answers && typeof answers.name === "string") {
-          if (answers.name.startsWith("@acme/")) {
-            answers.name = answers.name.replace("@acme/", "");
+          if (answers.name.startsWith("@kit/")) {
+            answers.name = answers.name.replace("@kit/", "");
           }
         }
         return "Config sanitized";
@@ -51,7 +51,8 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
         type: "modify",
         path: "packages/{{ name }}/package.json",
         async transform(content, answers) {
-          const pkg = JSON.parse(content) as PackageJson;
+          const pkg = JSON.parse(content);
+
           for (const dep of answers.deps.split(" ").filter(Boolean)) {
             const version = await fetch(
               `https://registry.npmjs.org/-/package/${dep}/dist-tags`,

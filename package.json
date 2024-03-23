@@ -1,5 +1,5 @@
 {
-  "name": "create-t3-turbo",
+  "name": "next-supabase-saas-kit-turbo",
   "private": true,
   "engines": {
     "node": ">=v18.17.1"
@@ -12,27 +12,33 @@
     "db:push": "turbo db:push db:generate",
     "db:studio": "pnpm -F db studio",
     "dev": "cross-env FORCE_COLOR=1 turbo dev --parallel",
-    "dev:web": "turbo dev --parallel --filter !@acme/expo --filter !@acme/db",
+    "dev:web": "turbo dev --parallel",
     "format": "turbo format --continue -- --cache --cache-location='node_modules/.cache/.prettiercache' --ignore-path='../../.gitignore'",
     "format:fix": "turbo format --continue -- --write --cache --cache-location='node_modules/.cache/.prettiercache' --ignore-path='../../.gitignore'",
     "lint": "turbo lint --continue -- --cache --cache-location 'node_modules/.cache/.eslintcache' && manypkg check",
     "lint:fix": "turbo lint --continue -- --fix --cache --cache-location 'node_modules/.cache/.eslintcache' && manypkg fix",
-    "typecheck": "turbo typecheck"
+    "typecheck": "turbo typecheck",
+    "supabase:start": "turbo dev --filter @kit/supabase-config",
+    "supabase:stop": "pnpm --filter '@kit/supabase-config' stop",
+    "supabase:reset": "pnpm --filter '@kit/supabase-config' reset",
+    "supabase:lint": "pnpm --filter '@kit/supabase-config' lint",
+    "supabase:typegen": "pnpm --filter '@kit/supabase-config' typegen"
   },
-  "dependencies": {
-    "@acme/prettier-config": "^0.1.0",
-    "@manypkg/cli": "^0.21.2",
-    "@turbo/gen": "^1.11.3",
-    "cross-env": "^7.0.3",
-    "prettier": "^3.2.4",
-    "turbo": "^1.11.3",
-    "typescript": "^5.3.3"
-  },
-  "prettier": "@acme/prettier-config",
+  "prettier": "@kit/prettier-config",
   "packageManager": "npm@10.2.3",
   "workspaces": [
     "apps/*",
     "packages/*",
-    "tooling/*"
-  ]
+    "packages/features/*",
+    "tooling/*",
+    "supabase"
+  ],
+  "devDependencies": {
+    "@manypkg/cli": "^0.21.2",
+    "@turbo/gen": "^1.11.3",
+    "cross-env": "^7.0.3",
+    "pnpm": "^8.15.5",
+    "prettier": "^3.2.4",
+    "turbo": "^1.11.3"
+  }
 }

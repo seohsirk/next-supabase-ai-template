@@ -4,25 +4,32 @@
 
 /** @type { PrettierConfig | SortImportsConfig | TailwindConfig } */
 const config = {
-  plugins: [
-    "@ianvs/prettier-plugin-sort-imports",
-    "prettier-plugin-tailwindcss",
-  ],
-  tailwindConfig: "../../tooling/tailwind",
+  tabWidth: 2,
+  useTabs: false,
+  semi: true,
+  printWidth: 80,
+  singleQuote: true,
+  arrowParens: 'always',
   importOrder: [
-    "^(react/(.*)$)|^(react$)|^(react-native(.*)$)",
-    "^(next/(.*)$)|^(next$)",
-    "^(expo(.*)$)|^(expo$)",
-    "<THIRD_PARTY_MODULES>",
-    "",
-    "^@acme/(.*)$",
-    "",
-    "^~/",
-    "^[../]",
-    "^[./]",
+    '/^(?!.*\\.css).*/',
+    '^react$',
+    '^react-dom$',
+    '^next$',
+    '^next/(.*)$',
+    '^@supabase/supabase-js$',
+    '^@supabase/gotrue-js$',
+    '<THIRD_PARTY_MODULES>',
+    '^@packages/(.*)$',
+    '^@kit/(.*)$',
+    '^~/(.*)$', // app-specific imports
+    '^[./]', // relative imports
   ],
-  importOrderParserPlugins: ["typescript", "jsx", "decorators-legacy"],
-  importOrderTypeScriptVersion: "4.4.0",
+  importOrderSeparation: true,
+  importOrderSortSpecifiers: true,
+  plugins: [
+    '@trivago/prettier-plugin-sort-imports',
+    'prettier-plugin-tailwindcss',
+  ],
 };
 
 export default config;

@@ -1,0 +1,48 @@
+{
+  "name": "@kit/i18n",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "clean": "git clean -xdf .turbo node_modules",
+    "format": "prettier --check \"**/*.{ts,tsx}\"",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit"
+  },
+  "prettier": "@kit/prettier-config",
+  "exports": {
+    "./server": "./src/i18n.server.ts",
+    "./client": "./src/i18n.client.ts",
+    "./cookie": "./src/get-language-cookie.ts",
+    "./provider": "./src/I18nProvider.tsx"
+  },
+  "dependencies": {
+    "@kit/shared": "^0.1.0"
+  },
+  "devDependencies": {
+    "@kit/prettier-config": "0.1.0",
+    "@kit/eslint-config": "0.2.0",
+    "@kit/tailwind-config": "0.1.0",
+    "@kit/tsconfig": "0.1.0"
+  },
+  "peerDependencies": {
+    "i18next": "^23.10.1",
+    "react-i18next": "^14.1.0",
+    "i18next-browser-languagedetector": "7.2.0",
+    "i18next-resources-to-backend": "^1.2.0",
+    "next": "^14.1.4"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "@kit/eslint-config/base",
+      "@kit/eslint-config/react"
+    ]
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "src/*"
+      ]
+    }
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "name": "@kit/supabase",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "clean": "git clean -xdf .turbo node_modules",
+    "format": "prettier --check \"**/*.{ts,tsx}\"",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit"
+  },
+  "prettier": "@kit/prettier-config",
+  "exports": {
+    ".": "./src/index.ts",
+    "./middleware-client": "./src/clients/middleware.client.ts",
+    "./server-actions-client": "./src/clients/server-actions.client.ts",
+    "./route-handler-client": "./src/clients/route-handler.client.ts",
+    "./server-component-client": "./src/clients/server-component.client.ts",
+    "./browser-client": "./src/clients/browser.client.ts",
+    "./check-requires-mfa": "./src/check-requires-mfa.ts",
+    "./require-auth": "./src/require-auth.ts",
+    "./hooks/*": "./src/hooks/*.ts",
+    "./components/*": "./src/components/*.tsx",
+    "./database": "./src/database.types.ts"
+  },
+  "devDependencies": {
+    "@kit/prettier-config": "0.1.0",
+    "@kit/eslint-config": "0.2.0",
+    "@kit/tailwind-config": "0.1.0",
+    "@kit/tsconfig": "0.1.0"
+  },
+  "peerDependencies": {
+    "@tanstack/react-query": "^5.28.6",
+    "@supabase/ssr": "^0.1.0",
+    "@supabase/supabase-js": "^2.39.8",
+    "@epic-web/invariant": "^1.0.0"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "@kit/eslint-config/base",
+      "@kit/eslint-config/react"
+    ]
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "src/*"
+      ]
+    }
+  }
+}

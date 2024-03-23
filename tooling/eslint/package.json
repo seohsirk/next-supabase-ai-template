@@ -1,5 +1,5 @@
 {
-  "name": "@acme/eslint-config",
+  "name": "@kit/eslint-config",
   "version": "0.2.0",
   "private": true,
   "license": "MIT",
@@ -17,20 +17,21 @@
   "dependencies": {
     "@next/eslint-plugin-next": "^14.1.0",
     "@types/eslint": "^8.56.2",
-    "@typescript-eslint/eslint-plugin": "^6.19.0",
-    "@typescript-eslint/parser": "^6.19.0",
+    "@typescript-eslint/eslint-plugin": "^7.3.1",
+    "@typescript-eslint/parser": "^7.3.1",
     "eslint-config-prettier": "^9.1.0",
-    "eslint-config-turbo": "^1.11.3",
+    "eslint-config-turbo": "^1.12.5",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-jsx-a11y": "^6.8.0",
-    "eslint-plugin-react": "^7.33.2",
-    "eslint-plugin-react-hooks": "^4.6.0"
+    "eslint-plugin-react": "^7.34.1",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0"
   },
   "devDependencies": {
-    "@acme/prettier-config": "^0.1.0",
-    "@acme/tsconfig": "^0.1.0",
-    "eslint": "^8.56.0",
-    "typescript": "^5.3.3"
+    "@kit/prettier-config": "^0.1.0",
+    "@kit/tsconfig": "^0.1.0",
+    "eslint": "^8.57.0",
+    "typescript": "^5.4.3"
   },
   "eslintConfig": {
     "root": true,
@@ -38,5 +39,5 @@
       "./base.js"
     ]
   },
-  "prettier": "@acme/prettier-config"
+  "prettier": "@kit/prettier-config"
 }

@@ -1,0 +1,45 @@
+{
+  "name": "@kit/billing",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "clean": "git clean -xdf .turbo node_modules",
+    "format": "prettier --check \"**/*.{ts,tsx}\"",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit"
+  },
+  "prettier": "@kit/prettier-config",
+  "exports": {
+    ".": "./src/create-billing-schema.ts",
+    "./components/*": "./src/components/*"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "zod": "^3.22.4"
+  },
+  "dependencies": {
+    "@kit/ui": "0.1.0",
+    "lucide-react": "^0.361.0"
+  },
+  "devDependencies": {
+    "@kit/prettier-config": "0.1.0",
+    "@kit/eslint-config": "0.2.0",
+    "@kit/tailwind-config": "0.1.0",
+    "@kit/tsconfig": "0.1.0"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "@kit/eslint-config/base",
+      "@kit/eslint-config/react"
+    ]
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "src/*"
+      ]
+    }
+  }
+}

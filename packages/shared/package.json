@@ -1,0 +1,46 @@
+{
+  "name": "@kit/shared",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "clean": "git clean -xdf .turbo node_modules",
+    "format": "prettier --check \"**/*.{ts,tsx}\"",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit"
+  },
+  "prettier": "@kit/prettier-config",
+  "exports": {
+    "./mailer": "./src/mailer.ts",
+    "./logger": "./src/logger.ts",
+    "./hooks/*": "./src/hooks/*.ts",
+    "./contexts/*": "./src/contexts/*.ts",
+    "./cookies/*": "./src/cookies/*.ts",
+    "./utils": "./src/utils.ts"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0"
+  },
+  "dependencies": {
+    "pino": "^8.19.0"
+  },
+  "devDependencies": {
+    "@kit/prettier-config": "0.1.0",
+    "@kit/eslint-config": "0.2.0",
+    "@kit/tailwind-config": "0.1.0",
+    "@kit/tsconfig": "0.1.0"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "@kit/eslint-config/base",
+      "@kit/eslint-config/react"
+    ]
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "src/*"
+      ]
+    }
+  }
+}
