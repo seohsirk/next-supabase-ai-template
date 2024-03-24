@@ -10,8 +10,9 @@
   },
   "prettier": "@kit/prettier-config",
   "exports": {
-    ".": "./src/create-billing-schema.ts",
-    "./components/*": "./src/components/*"
+    ".": "./src/index.ts",
+    "./components/*": "./src/components/*",
+    "./schema": "./src/schema/index.ts"
   },
   "peerDependencies": {
     "react": "^18.2.0",

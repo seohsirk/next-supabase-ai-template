@@ -47,6 +47,9 @@ importers:
       '@kit/billing':
         specifier: ^0.1.0
         version: link:../../packages/billing
+      '@kit/billing-gateway':
+        specifier: ^0.1.0
+        version: link:../../packages/billing-gateway
       '@kit/emails':
         specifier: ^0.1.0
         version: link:../../packages/emails
@@ -186,6 +189,46 @@ importers:
 
   packages/billing:
     dependencies:
+      '@kit/ui':
+        specifier: 0.1.0
+        version: link:../ui
+      lucide-react:
+        specifier: ^0.361.0
+        version: 0.361.0(react@18.2.0)
+      react:
+        specifier: ^18.2.0
+        version: 18.2.0
+      react-dom:
+        specifier: ^18.2.0
+        version: 18.2.0(react@18.2.0)
+      zod:
+        specifier: ^3.22.4
+        version: 3.22.4
+    devDependencies:
+      '@kit/eslint-config':
+        specifier: 0.2.0
+        version: link:../../tooling/eslint
+      '@kit/prettier-config':
+        specifier: 0.1.0
+        version: link:../../tooling/prettier
+      '@kit/tailwind-config':
+        specifier: 0.1.0
+        version: link:../../tooling/tailwind
+      '@kit/tsconfig':
+        specifier: 0.1.0
+        version: link:../../tooling/typescript
+
+  packages/billing-gateway:
+    dependencies:
+      '@kit/billing':
+        specifier: 0.1.0
+        version: link:../billing
+      '@kit/stripe':
+        specifier: 0.1.0
+        version: link:../stripe
+      '@kit/supabase':
+        specifier: ^0.1.0
+        version: link:../supabase
       '@kit/ui':
         specifier: 0.1.0
         version: link:../ui
@@ -434,6 +477,18 @@ importers:
 
   packages/stripe:
     dependencies:
+      '@kit/billing':
+        specifier: 0.1.0
+        version: link:../billing
+      '@kit/ui':
+        specifier: 0.1.0
+        version: link:../ui
+      '@stripe/react-stripe-js':
+        specifier: ^2.6.2
+        version: 2.6.2(@stripe/stripe-js@3.0.10)(react-dom@18.2.0)(react@18.2.0)
+      '@stripe/stripe-js':
+        specifier: ^3.0.10
+        version: 3.0.10
       stripe:
         specifier: ^14.21.0
         version: 14.21.0
@@ -517,6 +572,9 @@ importers:
       '@radix-ui/react-select':
         specifier: ^2.0.0
         version: 2.0.0(@types/react-dom@18.2.22)(@types/react@18.2.67)(react-dom@18.2.0)(react@18.2.0)
+      '@radix-ui/react-separator':
+        specifier: ^1.0.3
+        version: 1.0.3(@types/react-dom@18.2.22)(@types/react@18.2.67)(react-dom@18.2.0)(react@18.2.0)
       '@radix-ui/react-slot':
         specifier: ^1.0.2
         version: 1.0.2(@types/react@18.2.67)(react@18.2.0)
@@ -3141,6 +3199,27 @@ packages:
       react-remove-scroll: 2.5.5(@types/react@18.2.67)(react@18.2.0)
     dev: false
 
+  /@radix-ui/react-separator@1.0.3(@types/react-dom@18.2.22)(@types/react@18.2.67)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-itYmTy/kokS21aiV5+Z56MZB54KrhPgn6eHDKkFeOLR34HMN2s8PaN47qZZAGnvupcjxHaFZnW4pQEh0BvvVuw==}
+    peerDependencies:
+      '@types/react': '*'
+      '@types/react-dom': '*'
+      react: ^16.8 || ^17.0 || ^18.0
+      react-dom: ^16.8 || ^17.0 || ^18.0
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      '@types/react-dom':
+        optional: true
+    dependencies:
+      '@babel/runtime': 7.24.1
+      '@radix-ui/react-primitive': 1.0.3(@types/react-dom@18.2.22)(@types/react@18.2.67)(react-dom@18.2.0)(react@18.2.0)
+      '@types/react': 18.2.67
+      '@types/react-dom': 18.2.22
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    dev: false
+
   /@radix-ui/react-slot@1.0.0(react@18.2.0):
     resolution: {integrity: sha512-3mrKauI/tWXo1Ll+gN5dHcxDPdm/Df1ufcDLCecn+pnCIVcdWE7CujXo8QaXOWRJyZyQWWbpB8eFwHzWXlv5mQ==}
     peerDependencies:
@@ -3739,6 +3818,24 @@ packages:
 
   /@socket.io/component-emitter@3.1.0:
     resolution: {integrity: sha512-+9jVqKhRSpsc591z5vX+X5Yyw+he/HCB4iQ/RYxw35CEPaY1gnsNE43nf9n9AaYjAQrTiI/mOwKUKdUs9vf7Xg==}
+    dev: false
+
+  /@stripe/react-stripe-js@2.6.2(@stripe/stripe-js@3.0.10)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-FSjNg4v7BiCfojvx25PQ8DugOa09cGk1t816R/DLI/lT+1bgRAYpMvoPirLT4ZQ3ev/0VDtPdWNaabPsLDTOMA==}
+    peerDependencies:
+      '@stripe/stripe-js': ^1.44.1 || ^2.0.0 || ^3.0.0
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      '@stripe/stripe-js': 3.0.10
+      prop-types: 15.8.1
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    dev: false
+
+  /@stripe/stripe-js@3.0.10:
+    resolution: {integrity: sha512-CFRNha+aPXR8GrqJss2TbK1j4aSGZXQY8gx0hvaYiSp+dU7EK/Zs5uwFTSAgV+t8H4+jcZ/iBGajAvoMYOwy+A==}
+    engines: {node: '>=12.16'}
     dev: false
 
   /@supabase/functions-js@2.1.5:

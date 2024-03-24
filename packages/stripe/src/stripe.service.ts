@@ -1,37 +1,59 @@
 import 'server-only';
 import type { Stripe } from 'stripe';
+import { z } from 'zod';
 
-import createStripeCheckout, {
-  CreateStripeCheckoutParams,
-} from './create-checkout';
+import { BillingStrategyProviderService } from '@kit/billing';
 import {
-  CreateBillingPortalSessionParams,
-  createStripeBillingPortalSession,
-} from './create-stripe-billing-portal-session';
+  CancelSubscriptionParamsSchema,
+  CreateBillingCheckoutSchema,
+  CreateBillingPortalSessionSchema,
+  RetrieveCheckoutSessionSchema,
+} from '@kit/billing/schema';
+
+import { createStripeCheckout } from './create-checkout';
+import { createStripeBillingPortalSession } from './create-stripe-billing-portal-session';
 import { createStripeClient } from './stripe-sdk';
 
-class StripeService {
-  constructor(private readonly stripeProvider: () => Promise<Stripe>) {}
-
-  async createCheckout(params: CreateStripeCheckoutParams) {
+export class StripeBillingStrategyService
+  implements BillingStrategyProviderService
+{
+  async createCheckoutSession(
+    params: z.infer<typeof CreateBillingCheckoutSchema>,
+  ) {
     const stripe = await this.stripeProvider();
 
     return createStripeCheckout(stripe, params);
   }
 
-  async createBillingPortalSession(params: CreateBillingPortalSessionParams) {
+  async createBillingPortalSession(
+    params: z.infer<typeof CreateBillingPortalSessionSchema>,
+  ) {
     const stripe = await this.stripeProvider();
 
     return createStripeBillingPortalSession(stripe, params);
   }
 
-  async cancelSubscription(subscriptionId: string) {
+  async cancelSubscription(
+    params: z.infer<typeof CancelSubscriptionParamsSchema>,
+  ) {
     const stripe = await this.stripeProvider();
 
-    return stripe.subscriptions.cancel(subscriptionId, {
-      invoice_now: true,
+    await stripe.subscriptions.cancel(params.subscriptionId, {
+      invoice_now: params.invoiceNow ?? true,
     });
+
+    return { success: true };
+  }
+
+  async retrieveCheckoutSession(
+    params: z.infer<typeof RetrieveCheckoutSessionSchema>,
+  ) {
+    const stripe = await this.stripeProvider();
+
+    return await stripe.subscriptions.retrieve(params.sessionId);
+  }
+
+  private async stripeProvider(): Promise<Stripe> {
+    return createStripeClient();
   }
 }
-
-export const stripe = new StripeService(createStripeClient);

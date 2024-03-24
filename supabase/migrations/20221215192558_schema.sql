@@ -141,10 +141,10 @@ create type public.billing_provider as ENUM('stripe', 'lemon-squeezy', 'paddle')
  */
 create table if not exists
   public.config (
-    enable_organization_accounts boolean default true,
-    enable_account_billing boolean default true,
-    enable_organization_billing boolean default true,
-    billing_provider public.billing_provider default 'stripe'
+    enable_organization_accounts boolean default true not null,
+    enable_account_billing boolean default true not null,
+    enable_organization_billing boolean default true not null,
+    billing_provider public.billing_provider default 'stripe' not null
   );
 
 comment on table public.config is 'Configuration for the Supabase MakerKit.';

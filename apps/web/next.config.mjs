@@ -12,7 +12,7 @@ const config = {
     '@kit/i18n',
     '@kit/mailers',
     '@kit/billing',
-    '@kit/stripe',
+    '@kit/billing-gateway'
   ],
   pageExtensions: ['ts', 'tsx', 'mdx'],
   experimental: {

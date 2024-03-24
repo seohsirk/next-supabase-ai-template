@@ -1,1 +1,1 @@
-export { stripe } from './stripe.service';
+export { StripeBillingStrategyService } from './stripe.service';

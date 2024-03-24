@@ -2,7 +2,8 @@ import { z } from 'zod';
 
 const Interval = z.enum(['month', 'year']);
 const PaymentType = z.enum(['recurring', 'one-time']);
-const BillingProvider = z.enum(['stripe']);
+
+export const BillingProvider = z.enum(['stripe', 'paddle', 'lemon-squeezy']);
 
 const PlanSchema = z.object({
   id: z.string().min(1),
@@ -72,7 +73,6 @@ export function createBillingSchema(config: z.infer<typeof BillingSchema>) {
  * Returns an array of billing plans based on the provided configuration.
  *
  * @param {Object} config - The configuration object containing product and plan information.
- * @return {Array} - An array of billing plans.
  */
 export function getBillingPlans(config: z.infer<typeof BillingSchema>) {
   return config.products.flatMap((product) => product.plans);
@@ -82,7 +82,6 @@ export function getBillingPlans(config: z.infer<typeof BillingSchema>) {
  * Retrieves the intervals of all plans specified in the given configuration.
  *
  * @param {Object} config - The billing configuration containing products and plans.
- * @returns {Array} - An array of intervals.
  */
 export function getPlanIntervals(config: z.infer<typeof BillingSchema>) {
   return Array.from(
@@ -92,4 +91,19 @@ export function getPlanIntervals(config: z.infer<typeof BillingSchema>) {
       ),
     ),
   );
+}
+
+export function getProductPlanPairFromId(
+  config: z.infer<typeof BillingSchema>,
+  planId: string,
+) {
+  for (const product of config.products) {
+    const plan = product.plans.find((plan) => plan.id === planId);
+
+    if (plan) {
+      return { product, plan };
+    }
+  }
+
+  return undefined;
 }

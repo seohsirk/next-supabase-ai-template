@@ -1,14 +1,7 @@
 import type { Stripe } from 'stripe';
+import { z } from 'zod';
 
-export interface CreateStripeCheckoutParams {
-  returnUrl: string;
-  organizationUid: string;
-  priceId: string;
-  customerId?: string;
-  trialPeriodDays?: number | undefined;
-  customerEmail?: string;
-  embedded: boolean;
-}
+import { CreateBillingCheckoutSchema } from '@kit/billing/schema';
 
 /**
  * @name createStripeCheckout
@@ -16,43 +9,43 @@ export interface CreateStripeCheckoutParams {
  * containing the session, which you can use to redirect the user to the
  * checkout page
  */
-export default async function createStripeCheckout(
+export async function createStripeCheckout(
   stripe: Stripe,
-  params: CreateStripeCheckoutParams,
+  params: z.infer<typeof CreateBillingCheckoutSchema>,
 ) {
   // in MakerKit, a subscription belongs to an organization,
   // rather than to a user
   // if you wish to change it, use the current user ID instead
-  const clientReferenceId = params.organizationUid;
+  const clientReferenceId = params.accountId;
 
   // we pass an optional customer ID, so we do not duplicate the Stripe
   // customers if an organization subscribes multiple times
   const customer = params.customerId ?? undefined;
 
-  // if it's a one-time payment
-  // you should change this to "payment"
   // docs: https://stripe.com/docs/billing/subscriptions/build-subscription
-  const mode: Stripe.Checkout.SessionCreateParams.Mode = 'subscription';
+  const mode: Stripe.Checkout.SessionCreateParams.Mode =
+    params.paymentType === 'recurring' ? 'subscription' : 'payment';
 
+  // TODO: support multiple line items and per-seat pricing
   const lineItem: Stripe.Checkout.SessionCreateParams.LineItem = {
     quantity: 1,
-    price: params.priceId,
+    price: params.planId,
   };
 
   const subscriptionData: Stripe.Checkout.SessionCreateParams.SubscriptionData =
     {
       trial_period_days: params.trialPeriodDays,
       metadata: {
-        organizationUid: params.organizationUid,
+        accountId: params.accountId,
       },
     };
 
   const urls = getUrls({
-    embedded: params.embedded,
     returnUrl: params.returnUrl,
   });
 
-  const uiMode = params.embedded ? 'embedded' : 'hosted';
+  // we use the embedded mode, so the user does not leave the page
+  const uiMode = 'embedded';
 
   const customerData = customer
     ? {
@@ -66,24 +59,17 @@ export default async function createStripeCheckout(
     mode,
     ui_mode: uiMode,
     line_items: [lineItem],
-    client_reference_id: clientReferenceId.toString(),
+    client_reference_id: clientReferenceId,
     subscription_data: subscriptionData,
     ...customerData,
     ...urls,
   });
 }
 
-function getUrls(params: { returnUrl: string; embedded?: boolean }) {
-  const successUrl = `${params.returnUrl}?success=true`;
-  const cancelUrl = `${params.returnUrl}?cancel=true`;
-  const returnUrl = `${params.returnUrl}/return?session_id={CHECKOUT_SESSION_ID}`;
+function getUrls(params: { returnUrl: string }) {
+  const returnUrl = `${params.returnUrl}?session_id={CHECKOUT_SESSION_ID}`;
 
-  return params.embedded
-    ? {
-        return_url: returnUrl,
-      }
-    : {
-        success_url: successUrl,
-        cancel_url: cancelUrl,
-      };
+  return {
+    return_url: returnUrl,
+  };
 }

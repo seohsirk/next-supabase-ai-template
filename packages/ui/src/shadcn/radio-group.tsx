@@ -42,4 +42,24 @@ const RadioGroupItem = React.forwardRef<
 });
 RadioGroupItem.displayName = RadioGroupPrimitive.Item.displayName;
 
-export { RadioGroup, RadioGroupItem };
+const RadioGroupItemLabel = (
+  props: React.PropsWithChildren<{
+    className?: string;
+  }>,
+) => {
+  return (
+    <label
+      className={cn(
+        props.className,
+        'flex cursor-pointer rounded-md' +
+          ' items-center space-x-4 border border-input hover:bg-muted' +
+          ' transition-duration-500 p-4 text-sm transition-colors focus-within:border-primary',
+      )}
+    >
+      {props.children}
+    </label>
+  );
+};
+RadioGroupItemLabel.displayName = 'RadioGroupItemLabel';
+
+export { RadioGroup, RadioGroupItem, RadioGroupItemLabel };
