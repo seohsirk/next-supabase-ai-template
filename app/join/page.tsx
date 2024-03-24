@@ -3,19 +3,20 @@ import { notFound } from 'next/navigation';
 
 import type { SupabaseClient } from '@supabase/supabase-js';
 
-import ExistingUserInviteForm from '~/join/_components/ExistingUserInviteForm';
-import NewUserInviteForm from '~/join/_components/NewUserInviteForm';
-import { withI18n } from '~/lib/i18n/with-i18n';
-
 import { Logger } from '@kit/shared/logger';
+import { Database } from '@kit/supabase/database';
 import { getSupabaseServerComponentClient } from '@kit/supabase/server-component-client';
 import { Heading } from '@kit/ui/heading';
 import { If } from '@kit/ui/if';
 import { Trans } from '@kit/ui/trans';
 
+import ExistingUserInviteForm from '~/join/_components/ExistingUserInviteForm';
+import NewUserInviteForm from '~/join/_components/NewUserInviteForm';
+import { withI18n } from '~/lib/i18n/with-i18n';
+
 interface Context {
-  params: {
-    code: string;
+  searchParams: {
+    invite_token: string;
   };
 }
 
@@ -23,9 +24,9 @@ export const metadata = {
   title: `Join Organization`,
 };
 
-async function InvitePage({ params }: Context) {
-  const code = params.code;
-  const data = await loadInviteData(code);
+async function JoinTeamAccountPage({ searchParams }: Context) {
+  const token = searchParams.invite_token;
+  const data = await getInviteDataFromInviteToken(token);
 
   if (!data.membership) {
     notFound();
@@ -62,16 +63,19 @@ async function InvitePage({ params }: Context) {
         </p>
       </div>
 
-      <If condition={data.session} fallback={<NewUserInviteForm code={code} />}>
-        {(session) => <ExistingUserInviteForm code={code} session={session} />}
+      <If
+        condition={data.session}
+        fallback={<NewUserInviteForm code={token} />}
+      >
+        {(session) => <ExistingUserInviteForm code={token} session={session} />}
       </If>
     </>
   );
 }
 
-export default withI18n(InvitePage);
+export default withI18n(JoinTeamAccountPage);
 
-async function loadInviteData(code: string) {
+async function getInviteDataFromInviteToken(code: string) {
   const client = getSupabaseServerComponentClient();
 
   // we use an admin client to be able to read the pending membership

@@ -2,21 +2,23 @@ import { z } from 'zod';
 
 const PathsSchema = z.object({
   auth: z.object({
-    signIn: z.string(),
-    signUp: z.string(),
-    verifyMfa: z.string(),
-    callback: z.string(),
-    passwordReset: z.string(),
-    passwordUpdate: z.string(),
+    signIn: z.string().min(1),
+    signUp: z.string().min(1),
+    verifyMfa: z.string().min(1),
+    callback: z.string().min(1),
+    passwordReset: z.string().min(1),
+    passwordUpdate: z.string().min(1),
   }),
   app: z.object({
-    home: z.string(),
-    personalAccountSettings: z.string(),
-    personalAccountBilling: z.string(),
-    accountHome: z.string(),
-    accountSettings: z.string(),
-    accountBilling: z.string(),
-    accountMembers: z.string(),
+    home: z.string().min(1),
+    personalAccountSettings: z.string().min(1),
+    personalAccountBilling: z.string().min(1),
+    personalAccountBillingReturn: z.string().min(1),
+    accountHome: z.string().min(1),
+    accountSettings: z.string().min(1),
+    accountBilling: z.string().min(1),
+    accountMembers: z.string().min(1),
+    accountBillingReturn: z.string().min(1),
   }),
 });
 
@@ -33,10 +35,12 @@ const pathsConfig = PathsSchema.parse({
     home: '/home',
     personalAccountSettings: '/home/account',
     personalAccountBilling: '/home/billing',
+    personalAccountBillingReturn: '/home/billing/return',
     accountHome: '/home/[account]',
     accountSettings: `/home/[account]/settings`,
     accountBilling: `/home/[account]/billing`,
     accountMembers: `/home/[account]/members`,
+    accountBillingReturn: `/home/[account]/billing/return`,
   },
 });
 
