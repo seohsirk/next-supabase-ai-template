@@ -1,9 +1,9 @@
 'use client';
 
-import { getOrganizationAccountSidebarConfig } from '~/config/organization-account-sidebar.config';
-
 import { SidebarDivider, SidebarGroup, SidebarItem } from '@kit/ui/sidebar';
 import { Trans } from '@kit/ui/trans';
+
+import { getOrganizationAccountSidebarConfig } from '~/config/organization-account-sidebar.config';
 
 export function AppSidebarNavigation({
   account,

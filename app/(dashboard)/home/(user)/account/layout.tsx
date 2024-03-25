@@ -1,7 +1,7 @@
-import { withI18n } from '~/lib/i18n/with-i18n';
-
 import { PageBody, PageHeader } from '@kit/ui/page';
 import { Trans } from '@kit/ui/trans';
+
+import { withI18n } from '~/lib/i18n/with-i18n';
 
 function UserSettingsLayout(props: React.PropsWithChildren) {
   return (

@@ -4,14 +4,15 @@ import { notFound } from 'next/navigation';
 
 import { allDocumentationPages } from 'contentlayer/generated';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
+
+import { If } from '@kit/ui/if';
+import { Mdx } from '@kit/ui/mdx';
+
 import { SitePageHeader } from '~/(marketing)/components/site-page-header';
 import { DocsCards } from '~/(marketing)/docs/components/docs-cards';
 import { DocumentationPageLink } from '~/(marketing)/docs/components/documentation-page-link';
 import { getDocumentationPageTree } from '~/(marketing)/docs/utils/get-documentation-page-tree';
 import { withI18n } from '~/lib/i18n/with-i18n';
-
-import { If } from '@kit/ui/if';
-import { Mdx } from '@kit/ui/mdx';
 
 const getPageBySlug = cache((slug: string) => {
   return allDocumentationPages.find((post) => post.resolvedPath === slug);

@@ -1,8 +1,8 @@
 'use client';
 
-import { Alert, AlertDescription, AlertTitle } from '@kit/ui/alert';
-
 import { PageBody } from '@/components/app/Page';
+
+import { Alert, AlertDescription, AlertTitle } from '@kit/ui/alert';
 
 function UsersAdminPageError() {
   return (

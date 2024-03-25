@@ -3,9 +3,6 @@
 import { useRouter } from 'next/navigation';
 
 import { ArrowLeftCircleIcon, ArrowRightCircleIcon } from 'lucide-react';
-import { ProfileDropdownContainer } from '~/(dashboard)/home/components/personal-account-dropdown';
-import featureFlagsConfig from '~/config/feature-flags.config';
-import pathsConfig from '~/config/paths.config';
 
 import { AccountSelector } from '@kit/accounts/account-selector';
 import { Sidebar, SidebarContent } from '@kit/ui/sidebar';
@@ -17,6 +14,10 @@ import {
 } from '@kit/ui/tooltip';
 import { Trans } from '@kit/ui/trans';
 import { cn } from '@kit/ui/utils';
+
+import { ProfileDropdownContainer } from '~/(dashboard)/home/components/personal-account-dropdown';
+import featureFlagsConfig from '~/config/feature-flags.config';
+import pathsConfig from '~/config/paths.config';
 
 import { AppSidebarNavigation } from './app-sidebar-navigation';
 

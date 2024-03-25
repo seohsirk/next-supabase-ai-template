@@ -1,8 +1,7 @@
-import getSupabaseServerComponentClient from '@packages/supabase/server-component-client';
-
+import { PageBody } from '@/components/app/Page';
 import appConfig from '@/config/app.config';
 
-import { PageBody } from '@/components/app/Page';
+import getSupabaseServerComponentClient from '@packages/supabase/server-component-client';
 
 import AdminDashboard from '../../packages/admin/components/AdminDashboard';
 import AdminGuard from '../../packages/admin/components/AdminGuard';

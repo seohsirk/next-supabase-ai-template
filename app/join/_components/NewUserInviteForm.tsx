@@ -2,8 +2,6 @@
 
 import { useCallback, useState, useTransition } from 'react';
 
-import authConfig from '~/config/auth.config';
-
 import { EmailOtpContainer } from '@kit/auth/src/components/email-otp-container';
 import { OauthProviders } from '@kit/auth/src/components/oauth-providers';
 import { PasswordSignInContainer } from '@kit/auth/src/components/password-sign-in-container';
@@ -13,6 +11,8 @@ import { Button } from '@kit/ui/button';
 import { If } from '@kit/ui/if';
 import { LoadingOverlay } from '@kit/ui/loading-overlay';
 import { Trans } from '@kit/ui/trans';
+
+import authConfig from '~/config/auth.config';
 
 enum Mode {
   SignUp,

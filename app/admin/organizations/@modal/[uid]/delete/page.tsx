@@ -1,6 +1,6 @@
-import getSupabaseServerComponentClient from '@packages/supabase/server-component-client';
-
 import { getOrganizationByUid } from '@/lib/organizations/database/queries';
+
+import getSupabaseServerComponentClient from '@packages/supabase/server-component-client';
 
 import AdminGuard from '../../../../../../packages/admin/components/AdminGuard';
 import DeleteOrganizationModal from '../components/DeleteOrganizationModal';

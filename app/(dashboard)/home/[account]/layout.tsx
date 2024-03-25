@@ -1,8 +1,8 @@
-import { withI18n } from '~/lib/i18n/with-i18n';
-
 import { parseSidebarStateCookie } from '@kit/shared/cookies/sidebar-state.cookie';
 import { parseThemeCookie } from '@kit/shared/cookies/theme.cookie';
 import { Page } from '@kit/ui/page';
+
+import { withI18n } from '~/lib/i18n/with-i18n';
 
 import { AppSidebar } from './(components)/app-sidebar';
 import { loadOrganizationWorkspace } from './(lib)/load-workspace';

@@ -3,9 +3,10 @@ import { cache } from 'react';
 import { redirect } from 'next/navigation';
 
 import 'server-only';
-import pathsConfig from '~/config/paths.config';
 
 import { getSupabaseServerComponentClient } from '@kit/supabase/server-component-client';
+
+import pathsConfig from '~/config/paths.config';
 
 /**
  * Load the organization workspace data.

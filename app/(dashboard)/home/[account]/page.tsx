@@ -1,13 +1,14 @@
 import loadDynamic from 'next/dynamic';
 
 import { PlusIcon } from 'lucide-react';
-import { AppHeader } from '~/(dashboard)/home/[account]/(components)/app-header';
-import { withI18n } from '~/lib/i18n/with-i18n';
 
 import { Button } from '@kit/ui/button';
 import { PageBody } from '@kit/ui/page';
 import Spinner from '@kit/ui/spinner';
 import { Trans } from '@kit/ui/trans';
+
+import { AppHeader } from '~/(dashboard)/home/[account]/(components)/app-header';
+import { withI18n } from '~/lib/i18n/with-i18n';
 
 const DashboardDemo = loadDynamic(
   () => import('~/(dashboard)/home/[account]/(components)/dashboard-demo'),

@@ -1,8 +1,9 @@
 import { CreditCardIcon, HomeIcon, UserIcon } from 'lucide-react';
-import featureFlagsConfig from '~/config/feature-flags.config';
-import pathsConfig from '~/config/paths.config';
 
 import { SidebarConfigSchema } from '@kit/ui/sidebar-schema';
+
+import featureFlagsConfig from '~/config/feature-flags.config';
+import pathsConfig from '~/config/paths.config';
 
 const iconClasses = 'w-4';
 

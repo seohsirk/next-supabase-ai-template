@@ -1,8 +1,8 @@
+import { PersonalAccountSettingsContainer } from '@kit/accounts/personal-account-settings';
+
 import featureFlagsConfig from '~/config/feature-flags.config';
 import pathsConfig from '~/config/paths.config';
 import { withI18n } from '~/lib/i18n/with-i18n';
-
-import { PersonalAccountSettingsContainer } from '@kit/accounts/personal-account-settings';
 
 function PersonalAccountSettingsPage() {
   return (

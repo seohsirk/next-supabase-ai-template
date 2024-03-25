@@ -8,6 +8,8 @@ import { useRouter } from 'next/navigation';
 
 import type { User } from '@supabase/gotrue-js';
 
+import ErrorBoundary from '@/components/app/ErrorBoundary';
+
 import useCsrfToken from '@kit/hooks/use-csrf-token';
 import { Alert, AlertDescription, AlertTitle } from '@kit/ui/alert';
 import { Button } from '@kit/ui/button';
@@ -19,8 +21,6 @@ import {
 } from '@kit/ui/dialog';
 import { Input } from '@kit/ui/input';
 import { Label } from '@kit/ui/label';
-
-import ErrorBoundary from '@/components/app/ErrorBoundary';
 
 import { banUser } from '../actions.server';
 

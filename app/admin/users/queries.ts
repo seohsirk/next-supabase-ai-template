@@ -1,6 +1,6 @@
-import getSupabaseServerComponentClient from '@packages/supabase/server-component-client';
-
 import { USERS_TABLE } from '@/lib/db-tables';
+
+import getSupabaseServerComponentClient from '@packages/supabase/server-component-client';
 
 export async function getUsers(ids: string[]) {
   const client = getSupabaseServerComponentClient({ admin: true });

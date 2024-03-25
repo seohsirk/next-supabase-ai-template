@@ -2,10 +2,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { ChevronRightIcon } from 'lucide-react';
-import { withI18n } from '~/lib/i18n/with-i18n';
 
 import { Button } from '@kit/ui/button';
 import { Heading } from '@kit/ui/heading';
+
+import { withI18n } from '~/lib/i18n/with-i18n';
 
 function Home() {
   return (

@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import Script from 'next/script';
 
 import { allPosts } from 'contentlayer/generated';
+
 import appConfig from '~/config/app.config';
 import { withI18n } from '~/lib/i18n/with-i18n';
 

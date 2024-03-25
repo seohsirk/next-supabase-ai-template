@@ -2,10 +2,10 @@
 
 import { useRouter } from 'next/navigation';
 
+import { AccountSelector } from '@kit/accounts/account-selector';
+
 import featureFlagsConfig from '~/config/feature-flags.config';
 import pathsConfig from '~/config/paths.config';
-
-import { AccountSelector } from '@kit/accounts/account-selector';
 
 const features = {
   enableOrganizationAccounts: featureFlagsConfig.enableOrganizationAccounts,

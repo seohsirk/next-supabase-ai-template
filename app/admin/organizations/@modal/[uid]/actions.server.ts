@@ -3,10 +3,10 @@
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
-import { withAdminSession } from '~/admin/lib/actions-utils';
-
 import { Logger } from '@kit/shared/logger';
 import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
+
+import { withAdminSession } from '~/admin/lib/actions-utils';
 
 const getClient = () => getSupabaseServerActionClient({ admin: true });
 

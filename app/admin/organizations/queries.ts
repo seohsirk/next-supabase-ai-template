@@ -1,7 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 
 import type { Database } from '@/database.types';
-
 import { MEMBERSHIPS_TABLE, ORGANIZATIONS_TABLE } from '@/lib/db-tables';
 import type { UserOrganizationData } from '@/lib/organizations/database/queries';
 import type MembershipRole from '@/lib/organizations/types/membership-role';

@@ -1,3 +1,5 @@
+import withBundleAnalyzer from '@next/bundle-analyzer';
+
 /** @type {import('next').NextConfig} */
 const config = {
   reactStrictMode: true,
@@ -12,16 +14,17 @@ const config = {
     '@kit/i18n',
     '@kit/mailers',
     '@kit/billing',
-    '@kit/billing-gateway'
+    '@kit/billing-gateway',
   ],
-  pageExtensions: ['ts', 'tsx', 'mdx'],
+  pageExtensions: ['ts', 'tsx'],
   experimental: {
     mdxRs: true,
   },
-
   /** We already do linting and typechecking as separate tasks in CI */
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
 };
 
-export default config;
+export default withBundleAnalyzer({
+  enabled: process.env.ANALYZE === 'true',
+})(config);

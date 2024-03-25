@@ -1,10 +1,10 @@
 import { redirect } from 'next/navigation';
 import type { NextRequest } from 'next/server';
 
-import pathsConfig from '~/config/paths.config';
-
 import { Logger } from '@kit/shared/logger';
 import { getSupabaseRouteHandlerClient } from '@kit/supabase/route-handler-client';
+
+import pathsConfig from '~/config/paths.config';
 
 export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url);

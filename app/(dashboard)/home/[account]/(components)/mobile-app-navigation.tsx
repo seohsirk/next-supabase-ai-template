@@ -4,9 +4,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import { HomeIcon, LogOutIcon, MenuIcon } from 'lucide-react';
-import featureFlagsConfig from '~/config/feature-flags.config';
-import { getOrganizationAccountSidebarConfig } from '~/config/organization-account-sidebar.config';
-import pathsConfig from '~/config/paths.config';
 
 import { AccountSelector } from '@kit/accounts/account-selector';
 import { useSignOut } from '@kit/supabase/hooks/use-sign-out';
@@ -25,6 +22,10 @@ import {
   DropdownMenuTrigger,
 } from '@kit/ui/dropdown-menu';
 import { Trans } from '@kit/ui/trans';
+
+import featureFlagsConfig from '~/config/feature-flags.config';
+import { getOrganizationAccountSidebarConfig } from '~/config/organization-account-sidebar.config';
+import pathsConfig from '~/config/paths.config';
 
 export const MobileAppNavigation = (
   props: React.PropsWithChildren<{

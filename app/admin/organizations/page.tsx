@@ -1,13 +1,11 @@
+import { PageBody } from '@/components/app/Page';
+import appConfig from '@/config/app.config';
 import AdminGuard from '@/packages/admin/components/AdminGuard';
 import AdminHeader from '@/packages/admin/components/AdminHeader';
 
 import getSupabaseServerComponentClient from '@packages/supabase/server-component-client';
 
 import { Input } from '@kit/ui/input';
-
-import appConfig from '@/config/app.config';
-
-import { PageBody } from '@/components/app/Page';
 
 import OrganizationsTable from './components/OrganizationsTable';
 import { getOrganizations } from './queries';

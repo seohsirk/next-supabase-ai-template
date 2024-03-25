@@ -3,11 +3,12 @@
 import Link from 'next/link';
 
 import { ArrowLeftIcon } from 'lucide-react';
-import { SiteHeader } from '~/(marketing)/components/site-header';
 
 import { Button } from '@kit/ui/button';
 import { Heading } from '@kit/ui/heading';
 import { Trans } from '@kit/ui/trans';
+
+import { SiteHeader } from '~/(marketing)/components/site-header';
 
 const ErrorPage = () => {
   return (
