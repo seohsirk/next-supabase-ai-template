@@ -1,4 +1,4 @@
-import { CreditCardIcon, HomeIcon, UserIcon } from 'lucide-react';
+import { CreditCard, Home, User } from 'lucide-react';
 
 import { SidebarConfigSchema } from '@kit/ui/sidebar-schema';
 
@@ -11,13 +11,13 @@ const routes = [
   {
     label: 'common:homeTabLabel',
     path: pathsConfig.app.home,
-    Icon: <HomeIcon className={iconClasses} />,
+    Icon: <Home className={iconClasses} />,
     end: true,
   },
   {
     label: 'common:yourAccountTabLabel',
     path: pathsConfig.app.personalAccountSettings,
-    Icon: <UserIcon className={iconClasses} />,
+    Icon: <User className={iconClasses} />,
   },
 ];
 
@@ -25,7 +25,7 @@ if (featureFlagsConfig.enablePersonalAccountBilling) {
   routes.push({
     label: 'common:billingTabLabel',
     path: pathsConfig.app.personalAccountBilling,
-    Icon: <CreditCardIcon className={iconClasses} />,
+    Icon: <CreditCard className={iconClasses} />,
   });
 }
 

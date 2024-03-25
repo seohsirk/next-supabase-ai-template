@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { ChevronRightIcon } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 
 import { Button } from '@kit/ui/button';
 import { Heading } from '@kit/ui/heading';
@@ -135,7 +135,7 @@ function Home() {
                 <Button variant={'outline'}>
                   <span className={'flex items-center space-x-2'}>
                     <span>Get Started</span>
-                    <ChevronRightIcon className={'h-3'} />
+                    <ChevronRight className={'h-3'} />
                   </span>
                 </Button>
               </div>
@@ -273,7 +273,7 @@ function MainCallToActionButton() {
         <span className={'flex items-center space-x-2'}>
           <span>Get Started</span>
 
-          <ChevronRightIcon
+          <ChevronRight
             className={
               'h-4 animate-in fade-in slide-in-from-left-8' +
               ' delay-1000 duration-1000 zoom-in fill-mode-both'

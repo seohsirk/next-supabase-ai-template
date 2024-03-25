@@ -12,7 +12,7 @@ export default createBillingSchema({
       badge: `Value`,
       plans: [
         {
-          id: 'starter-monthly',
+          id: 'price_1NNwYHI1i3VnbZTqI2UzaHIe',
           name: 'Starter Monthly',
           price: '9.99',
           interval: 'month',

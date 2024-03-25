@@ -1,14 +1,16 @@
 'use server';
 
-import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 import { z } from 'zod';
 
 import { getProductPlanPairFromId } from '@kit/billing';
 import { getBillingGatewayProvider } from '@kit/billing-gateway';
+import { Logger } from '@kit/shared/logger';
+import { requireAuth } from '@kit/supabase/require-auth';
 import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
 
+import appConfig from '~/config/app.config';
 import billingConfig from '~/config/billing.config';
 import pathsConfig from '~/config/paths.config';
 
@@ -22,13 +24,21 @@ export async function createPersonalAccountCheckoutSession(params: {
   planId: string;
 }) {
   const client = getSupabaseServerActionClient();
-  const { data, error } = await client.auth.getUser();
+  const { data, error } = await requireAuth(client);
 
   if (error ?? !data.user) {
     throw new Error('Authentication required');
   }
 
   const planId = z.string().min(1).parse(params.planId);
+
+  Logger.info(
+    {
+      planId,
+    },
+    `Creating checkout session for plan ID`,
+  );
+
   const service = await getBillingGatewayProvider(client);
   const productPlanPairFromId = getProductPlanPairFromId(billingConfig, planId);
 
@@ -61,6 +71,13 @@ export async function createPersonalAccountCheckoutSession(params: {
     customerId,
   });
 
+  Logger.info(
+    {
+      userId: data.user.id,
+    },
+    `Checkout session created. Returning checkout token to client...`,
+  );
+
   // return the checkout token to the client
   // so we can call the payment gateway to complete the checkout
   return {
@@ -68,7 +85,7 @@ export async function createPersonalAccountCheckoutSession(params: {
   };
 }
 
-export async function createBillingPortalSession() {
+export async function createPersonalAccountBillingPortalSession() {
   const client = getSupabaseServerActionClient();
   const { data, error } = await client.auth.getUser();
 
@@ -95,18 +112,17 @@ export async function createBillingPortalSession() {
 }
 
 function getCheckoutSessionReturnUrl() {
-  const origin = headers().get('origin')!;
-
   return new URL(
     pathsConfig.app.personalAccountBillingReturn,
-    origin,
+    appConfig.url,
   ).toString();
 }
 
 function getBillingPortalReturnUrl() {
-  const origin = headers().get('origin')!;
-
-  return new URL(pathsConfig.app.accountBilling, origin).toString();
+  return new URL(
+    pathsConfig.app.personalAccountBilling,
+    appConfig.url,
+  ).toString();
 }
 
 async function getCustomerIdFromAccountId(accountId: string) {

@@ -4,7 +4,7 @@ import { getServerSideSitemap } from 'next-sitemap';
 
 import appConfig from '~/config/app.config';
 
-const siteUrl = appConfig.url;
+invariant(appConfig.url, 'No NEXT_PUBLIC_SITE_URL environment variable found');
 
 export async function GET() {
   const urls = getSiteUrls();
@@ -15,35 +15,29 @@ export async function GET() {
 }
 
 function getSiteUrls() {
-  invariant(siteUrl, 'No NEXT_PUBLIC_SITE_URL found');
-
-  const urls = ['', 'faq', 'pricing'];
+  const urls = ['/', 'faq', 'pricing'];
 
   return urls.map((url) => {
     return {
-      loc: new URL(siteUrl, url).href,
+      loc: new URL(url, appConfig.url).href,
       lastmod: new Date().toISOString(),
     };
   });
 }
 
 function getPostsSitemap() {
-  invariant(siteUrl, 'No NEXT_PUBLIC_SITE_URL found');
-
   return allPosts.map((post) => {
     return {
-      loc: new URL(siteUrl, post.url).href,
+      loc: new URL(post.url, appConfig.url).href,
       lastmod: new Date().toISOString(),
     };
   });
 }
 
 function getDocsSitemap() {
-  invariant(siteUrl, 'No NEXT_PUBLIC_SITE_URL found');
-
   return allDocumentationPages.map((page) => {
     return {
-      loc: new URL(siteUrl, page.url).href,
+      loc: new URL(page.url, appConfig.url).href,
       lastmod: new Date().toISOString(),
     };
   });

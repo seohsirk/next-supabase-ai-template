@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { ChevronRightIcon } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 
 export const DocsCard: React.FC<
   React.PropsWithChildren<{
@@ -36,7 +36,7 @@ export const DocsCard: React.FC<
               {link.label}
             </Link>
 
-            <ChevronRightIcon className={'h-4'} />
+            <ChevronRight className={'h-4'} />
           </span>
         </div>
       )}

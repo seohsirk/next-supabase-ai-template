@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-import { ChevronDownIcon, MenuIcon } from 'lucide-react';
+import { ChevronDown, Menu } from 'lucide-react';
 
 import { isBrowser } from '@kit/shared/utils';
 import { Button } from '@kit/ui/button';
@@ -53,7 +53,7 @@ const DocsNavLink: React.FC<{
           <span
             className={`block w-2.5 ${collapsed ? '-rotate-90 transform' : ''}`}
           >
-            <ChevronDownIcon className="h-4 w-4" />
+            <ChevronDown className="h-4 w-4" />
           </span>
         </button>
       )}
@@ -218,7 +218,7 @@ function FloatingDocumentationNavigation({
         className={'fixed bottom-5 right-5 z-10 h-16 w-16 rounded-full'}
         onClick={onClick}
       >
-        <MenuIcon className={'h-8'} />
+        <Menu className={'h-8'} />
       </Button>
     </>
   );

@@ -1,4 +1,4 @@
-import { ChevronDownIcon } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 
 import { SitePageHeader } from '~/(marketing)/_components/site-page-header';
 import { withI18n } from '~/lib/i18n/with-i18n';
@@ -108,7 +108,7 @@ function FaqItem({
         </h2>
 
         <div>
-          <ChevronDownIcon
+          <ChevronDown
             className={'h-5 transition duration-300 group-open:-rotate-180'}
           />
         </div>

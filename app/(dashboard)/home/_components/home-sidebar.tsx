@@ -2,19 +2,16 @@ import { use } from 'react';
 
 import { cookies } from 'next/headers';
 
-import { getSupabaseServerComponentClient } from '@kit/supabase/server-component-client';
 import { Sidebar, SidebarContent, SidebarNavigation } from '@kit/ui/sidebar';
 
 import { HomeSidebarAccountSelector } from '~/(dashboard)/home/_components/home-sidebar-account-selector';
 import { ProfileDropdownContainer } from '~/(dashboard)/home/_components/personal-account-dropdown';
+import { loadUserWorkspace } from '~/(dashboard)/home/_lib/load-user-workspace';
 import { personalAccountSidebarConfig } from '~/config/personal-account-sidebar.config';
 
 export function HomeSidebar() {
   const collapsed = getSidebarCollapsed();
-
-  const [accounts, session] = use(
-    Promise.all([loadUserAccounts(), loadSession()]),
-  );
+  const { session, accounts } = use(loadUserWorkspace());
 
   return (
     <Sidebar collapsed={collapsed}>
@@ -37,39 +34,4 @@ export function HomeSidebar() {
 
 function getSidebarCollapsed() {
   return cookies().get('sidebar-collapsed')?.value === 'true';
-}
-
-async function loadSession() {
-  const client = getSupabaseServerComponentClient();
-
-  const {
-    data: { session },
-    error,
-  } = await client.auth.getSession();
-
-  if (error) {
-    throw error;
-  }
-
-  return session;
-}
-
-async function loadUserAccounts() {
-  const client = getSupabaseServerComponentClient();
-
-  const { data: accounts, error } = await client
-    .from('user_accounts')
-    .select(`name, slug, picture_url`);
-
-  if (error) {
-    throw error;
-  }
-
-  return accounts.map(({ name, slug, picture_url }) => {
-    return {
-      label: name,
-      value: slug,
-      image: picture_url,
-    };
-  });
 }

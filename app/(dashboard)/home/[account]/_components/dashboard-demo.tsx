@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react';
 
-import { ArrowDownIcon, ArrowUpIcon, MenuIcon } from 'lucide-react';
+import { ArrowDown, ArrowUp, Menu } from 'lucide-react';
 import { Line, LineChart, ResponsiveContainer, XAxis } from 'recharts';
 
 import { Badge } from '@kit/ui/badge';
@@ -328,11 +328,11 @@ function Trend(
   const Icon = useMemo(() => {
     switch (props.trend) {
       case 'up':
-        return <ArrowUpIcon className={'h-4 text-green-500'} />;
+        return <ArrowUp className={'h-4 text-green-500'} />;
       case 'down':
-        return <ArrowDownIcon className={'h-4 text-destructive'} />;
+        return <ArrowDown className={'h-4 text-destructive'} />;
       case 'stale':
-        return <MenuIcon className={'h-4 text-orange-500'} />;
+        return <Menu className={'h-4 text-orange-500'} />;
     }
   }, [props.trend]);
 

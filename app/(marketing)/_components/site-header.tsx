@@ -4,7 +4,7 @@ import { SiteHeaderAccountSection } from '~/(marketing)/_components/site-header-
 import { SiteNavigation } from '~/(marketing)/_components/site-navigation';
 import { AppLogo } from '~/components/app-logo';
 
-export async function SiteHeader(props: { session: Session | null }) {
+export async function SiteHeader(props: { session?: Session | null }) {
   return (
     <div className={'container mx-auto'}>
       <div className="flex h-16 items-center justify-between">
@@ -19,7 +19,7 @@ export async function SiteHeader(props: { session: Session | null }) {
         <div className={'flex flex-1 items-center justify-end space-x-4'}>
           <div className={'flex items-center'}></div>
 
-          <SiteHeaderAccountSection session={props.session} />
+          <SiteHeaderAccountSection session={props.session ?? null} />
 
           <div className={'flex lg:hidden'}>
             <SiteNavigation />

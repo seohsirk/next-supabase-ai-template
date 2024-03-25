@@ -1,6 +1,5 @@
 'use server';
 
-import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 import { z } from 'zod';
@@ -10,6 +9,7 @@ import { getBillingGatewayProvider } from '@kit/billing-gateway';
 import { requireAuth } from '@kit/supabase/require-auth';
 import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
 
+import appConfig from '~/config/app.config';
 import billingConfig from '~/config/billing.config';
 import pathsConfig from '~/config/paths.config';
 
@@ -22,6 +22,7 @@ import pathsConfig from '~/config/paths.config';
 export async function createTeamAccountCheckoutSession(params: {
   planId: string;
   accountId: string;
+  slug: string;
 }) {
   const client = getSupabaseServerActionClient();
 
@@ -57,7 +58,7 @@ export async function createTeamAccountCheckoutSession(params: {
   }
 
   // the return URL for the checkout session
-  const returnUrl = getCheckoutSessionReturnUrl();
+  const returnUrl = getCheckoutSessionReturnUrl(params.slug);
 
   // find the customer ID for the account if it exists
   // (eg. if the account has been billed before)
@@ -85,14 +86,15 @@ export async function createTeamAccountCheckoutSession(params: {
   };
 }
 
-export async function createBillingPortalSession(data: FormData) {
+export async function createBillingPortalSession(formData: FormData) {
   const client = getSupabaseServerActionClient();
 
-  const accountId = z
+  const { accountId, slug } = z
     .object({
       accountId: z.string().min(1),
+      slug: z.string().min(1),
     })
-    .parse(Object.fromEntries(data)).accountId;
+    .parse(Object.fromEntries(formData));
 
   const { data: session, error } = await requireAuth(client);
 
@@ -113,7 +115,7 @@ export async function createBillingPortalSession(data: FormData) {
 
   const service = await getBillingGatewayProvider(client);
   const customerId = await getCustomerIdFromAccountId(client, accountId);
-  const returnUrl = getBillingPortalReturnUrl();
+  const returnUrl = getBillingPortalReturnUrl(slug);
 
   if (!customerId) {
     throw new Error('Customer not found');
@@ -128,16 +130,16 @@ export async function createBillingPortalSession(data: FormData) {
   return redirect(url);
 }
 
-function getCheckoutSessionReturnUrl() {
-  const origin = headers().get('origin')!;
-
-  return new URL(pathsConfig.app.accountBillingReturn, origin).toString();
+function getCheckoutSessionReturnUrl(accountSlug: string) {
+  return new URL(pathsConfig.app.accountBillingReturn, appConfig.url)
+    .toString()
+    .replace('[account]', accountSlug);
 }
 
-function getBillingPortalReturnUrl() {
-  const origin = headers().get('origin')!;
-
-  return new URL(pathsConfig.app.accountBilling, origin).toString();
+function getBillingPortalReturnUrl(accountSlug: string) {
+  return new URL(pathsConfig.app.accountBilling, appConfig.url)
+    .toString()
+    .replace('[account]', accountSlug);
 }
 
 /**

@@ -1,9 +1,4 @@
-import {
-  CreditCardIcon,
-  LayoutDashboardIcon,
-  SettingsIcon,
-  UsersIcon,
-} from 'lucide-react';
+import { CreditCard, LayoutDashboard, Settings, Users } from 'lucide-react';
 
 import { SidebarConfigSchema } from '@kit/ui/sidebar-schema';
 
@@ -16,7 +11,7 @@ const routes = (account: string) => [
   {
     label: 'common:dashboardTabLabel',
     path: pathsConfig.app.accountHome.replace('[account]', account),
-    Icon: <LayoutDashboardIcon className={iconClasses} />,
+    Icon: <LayoutDashboard className={iconClasses} />,
     end: true,
   },
   {
@@ -26,18 +21,18 @@ const routes = (account: string) => [
       {
         label: 'common:settingsTabLabel',
         path: createPath(pathsConfig.app.accountSettings, account),
-        Icon: <SettingsIcon className={iconClasses} />,
+        Icon: <Settings className={iconClasses} />,
       },
       {
         label: 'common:accountMembers',
         path: createPath(pathsConfig.app.accountMembers, account),
-        Icon: <UsersIcon className={iconClasses} />,
+        Icon: <Users className={iconClasses} />,
       },
       featureFlagsConfig.enableOrganizationBilling
         ? {
             label: 'common:billingTabLabel',
             path: createPath(pathsConfig.app.accountBilling, account),
-            Icon: <CreditCardIcon className={iconClasses} />,
+            Icon: <CreditCard className={iconClasses} />,
           }
         : undefined,
     ].filter(Boolean),

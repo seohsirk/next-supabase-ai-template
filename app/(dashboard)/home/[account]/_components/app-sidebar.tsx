@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 
 import type { Session } from '@supabase/supabase-js';
 
-import { ArrowLeftCircleIcon, ArrowRightCircleIcon } from 'lucide-react';
+import { ArrowLeftCircle, ArrowRightCircle } from 'lucide-react';
 
 import { AccountSelector } from '@kit/accounts/account-selector';
 import { Sidebar, SidebarContent } from '@kit/ui/sidebar';
@@ -138,13 +138,13 @@ function CollapsibleButton({
           aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           onClick={() => onClick(!collapsed)}
         >
-          <ArrowRightCircleIcon
+          <ArrowRightCircle
             className={cn(iconClassName, {
               hidden: !collapsed,
             })}
           />
 
-          <ArrowLeftCircleIcon
+          <ArrowLeftCircle
             className={cn(iconClassName, {
               hidden: collapsed,
             })}

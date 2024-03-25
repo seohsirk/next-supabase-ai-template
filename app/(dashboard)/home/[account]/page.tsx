@@ -1,6 +1,6 @@
 import loadDynamic from 'next/dynamic';
 
-import { PlusIcon } from 'lucide-react';
+import { Plus } from 'lucide-react';
 
 import { Button } from '@kit/ui/button';
 import { PageBody } from '@kit/ui/page';
@@ -11,7 +11,7 @@ import { AppHeader } from '~/(dashboard)/home/[account]/_components/app-header';
 import { withI18n } from '~/lib/i18n/with-i18n';
 
 const DashboardDemo = loadDynamic(
-  () => import('~/(dashboard)/home/[account]/_components/dashboard-demo'),
+  () => import('./_components/dashboard-demo'),
   {
     ssr: false,
     loading: () => (
@@ -50,7 +50,7 @@ function OrganizationAccountHomePage({
         account={params.account}
       >
         <Button>
-          <PlusIcon className={'mr-2 h-4'} />
+          <Plus className={'mr-2 h-4'} />
           <span>Add Widget</span>
         </Button>
       </AppHeader>
