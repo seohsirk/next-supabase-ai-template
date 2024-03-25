@@ -33,7 +33,7 @@ const pathsConfig = PathsSchema.parse({
   },
   app: {
     home: '/home',
-    personalAccountSettings: '/home/account',
+    personalAccountSettings: '/home/settings',
     personalAccountBilling: '/home/billing',
     personalAccountBillingReturn: '/home/billing/return',
     accountHome: '/home/[account]',

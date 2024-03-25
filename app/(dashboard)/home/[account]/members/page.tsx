@@ -1,4 +1,4 @@
-import { PlusCircledIcon } from '@radix-ui/react-icons';
+import { PlusCircleIcon } from 'lucide-react';
 
 import { getSupabaseServerComponentClient } from '@kit/supabase/server-component-client';
 import {
@@ -17,7 +17,7 @@ import {
 import { PageBody, PageHeader } from '@kit/ui/page';
 import { Trans } from '@kit/ui/trans';
 
-import { loadOrganizationWorkspace } from '~/(dashboard)/home/[account]/(lib)/load-workspace';
+import { loadOrganizationWorkspace } from '~/(dashboard)/home/[account]/_lib/load-workspace';
 import { withI18n } from '~/lib/i18n/with-i18n';
 
 interface Params {
@@ -99,7 +99,7 @@ async function OrganizationAccountMembersPage({ params }: Params) {
 
               <InviteMembersDialogContainer account={account.slug}>
                 <Button size={'sm'}>
-                  <PlusCircledIcon className={'mr-2 w-4'} />
+                  <PlusCircleIcon className={'mr-2 w-4'} />
                   <span>Add Member</span>
                 </Button>
               </InviteMembersDialogContainer>

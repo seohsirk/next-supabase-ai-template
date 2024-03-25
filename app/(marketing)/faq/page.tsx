@@ -1,8 +1,7 @@
 import { ChevronDownIcon } from 'lucide-react';
 
+import { SitePageHeader } from '~/(marketing)/_components/site-page-header';
 import { withI18n } from '~/lib/i18n/with-i18n';
-
-import { SitePageHeader } from '../components/site-page-header';
 
 export const metadata = {
   title: 'FAQ',

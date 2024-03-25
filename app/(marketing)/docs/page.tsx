@@ -1,11 +1,10 @@
 import { allDocumentationPages } from 'contentlayer/generated';
 
+import { SitePageHeader } from '~/(marketing)/_components/site-page-header';
+import { DocsCards } from '~/(marketing)/docs/_components/docs-cards';
+import { buildDocumentationTree } from '~/(marketing)/docs/_lib/build-documentation-tree';
 import appConfig from '~/config/app.config';
 import { withI18n } from '~/lib/i18n/with-i18n';
-
-import { SitePageHeader } from '../components/site-page-header';
-import { DocsCards } from './components/docs-cards';
-import { buildDocumentationTree } from './utils/build-documentation-tree';
 
 export const metadata = {
   title: `Documentation - ${appConfig.name}`,

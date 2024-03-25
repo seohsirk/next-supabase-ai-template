@@ -7,11 +7,11 @@ import { PageBody } from '@kit/ui/page';
 import Spinner from '@kit/ui/spinner';
 import { Trans } from '@kit/ui/trans';
 
-import { AppHeader } from '~/(dashboard)/home/[account]/(components)/app-header';
+import { AppHeader } from '~/(dashboard)/home/[account]/_components/app-header';
 import { withI18n } from '~/lib/i18n/with-i18n';
 
 const DashboardDemo = loadDynamic(
-  () => import('~/(dashboard)/home/[account]/(components)/dashboard-demo'),
+  () => import('~/(dashboard)/home/[account]/_components/dashboard-demo'),
   {
     ssr: false,
     loading: () => (

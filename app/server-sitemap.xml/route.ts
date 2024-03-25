@@ -1,8 +1,8 @@
-import appConfig from '@/config/app.config';
 import { invariant } from '@epic-web/invariant';
 import { allDocumentationPages, allPosts } from 'contentlayer/generated';
 import { getServerSideSitemap } from 'next-sitemap';
-import { join } from 'path';
+
+import appConfig from '~/config/app.config';
 
 const siteUrl = appConfig.url;
 
@@ -21,7 +21,7 @@ function getSiteUrls() {
 
   return urls.map((url) => {
     return {
-      loc: join(siteUrl, url),
+      loc: new URL(siteUrl, url).href,
       lastmod: new Date().toISOString(),
     };
   });
@@ -32,7 +32,7 @@ function getPostsSitemap() {
 
   return allPosts.map((post) => {
     return {
-      loc: join(siteUrl, post.url),
+      loc: new URL(siteUrl, post.url).href,
       lastmod: new Date().toISOString(),
     };
   });
@@ -43,7 +43,7 @@ function getDocsSitemap() {
 
   return allDocumentationPages.map((page) => {
     return {
-      loc: join(siteUrl, page.url),
+      loc: new URL(siteUrl, page.url).href,
       lastmod: new Date().toISOString(),
     };
   });

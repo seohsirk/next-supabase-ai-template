@@ -1,25 +1,36 @@
+import { use } from 'react';
+
 import { parseSidebarStateCookie } from '@kit/shared/cookies/sidebar-state.cookie';
 import { parseThemeCookie } from '@kit/shared/cookies/theme.cookie';
+import { getSupabaseServerComponentClient } from '@kit/supabase/server-component-client';
 import { Page } from '@kit/ui/page';
 
+import { AppSidebar } from '~/(dashboard)/home/[account]/_components/app-sidebar';
+import { loadOrganizationWorkspace } from '~/(dashboard)/home/[account]/_lib/load-workspace';
 import { withI18n } from '~/lib/i18n/with-i18n';
-
-import { AppSidebar } from './(components)/app-sidebar';
-import { loadOrganizationWorkspace } from './(lib)/load-workspace';
 
 interface Params {
   account: string;
 }
 
-async function OrganizationWorkspaceLayout({
+function OrganizationWorkspaceLayout({
   children,
   params,
 }: React.PropsWithChildren<{
   params: Params;
 }>) {
-  const data = await loadOrganizationWorkspace(params.account);
+  const [data, session] = use(
+    Promise.all([loadOrganizationWorkspace(params.account), loadSession()]),
+  );
+
   const ui = getUIStateCookies();
   const sidebarCollapsed = ui.sidebarState === 'collapsed';
+
+  const accounts = data.accounts.map(({ name, slug, picture_url }) => ({
+    label: name,
+    value: slug,
+    image: picture_url,
+  }));
 
   return (
     <Page
@@ -27,11 +38,8 @@ async function OrganizationWorkspaceLayout({
         <AppSidebar
           collapsed={sidebarCollapsed}
           account={params.account}
-          accounts={data.accounts.map(({ name, slug, picture_url }) => ({
-            label: name,
-            value: slug,
-            image: picture_url,
-          }))}
+          session={session}
+          accounts={accounts}
         />
       }
     >
@@ -47,4 +55,19 @@ function getUIStateCookies() {
     theme: parseThemeCookie(),
     sidebarState: parseSidebarStateCookie(),
   };
+}
+
+async function loadSession() {
+  const client = getSupabaseServerComponentClient();
+
+  const {
+    data: { session },
+    error,
+  } = await client.auth.getSession();
+
+  if (error) {
+    throw error;
+  }
+
+  return session;
 }
