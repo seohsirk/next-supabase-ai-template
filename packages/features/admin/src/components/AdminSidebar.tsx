@@ -1,31 +1,26 @@
 'use client';
 
-import Logo from '@/components/app/Logo';
-import { Sidebar, SidebarContent, SidebarItem } from '@/components/app/Sidebar';
-import { HomeIcon, UserIcon, UsersIcon } from 'lucide-react';
+import { Home, User, Users } from 'lucide-react';
 
-function AdminSidebar() {
+import { Sidebar, SidebarContent, SidebarItem } from '@kit/ui/sidebar';
+
+function AdminSidebar(props: { Logo: React.ReactNode }) {
   return (
     <Sidebar>
-      <SidebarContent className={'mb-6 mt-4 pt-2'}>
-        <Logo href={'/admin'} />
-      </SidebarContent>
+      <SidebarContent className={'mb-6 mt-4 pt-2'}>{props.Logo}</SidebarContent>
 
       <SidebarContent>
-        <SidebarItem end path={'/admin'} Icon={<HomeIcon className={'h-4'} />}>
+        <SidebarItem end path={'/admin'} Icon={<Home className={'h-4'} />}>
           Admin
         </SidebarItem>
 
-        <SidebarItem
-          path={'/admin/users'}
-          Icon={<UserIcon className={'h-4'} />}
-        >
+        <SidebarItem path={'/admin/users'} Icon={<User className={'h-4'} />}>
           Users
         </SidebarItem>
 
         <SidebarItem
           path={'/admin/organizations'}
-          Icon={<UsersIcon className={'h-4'} />}
+          Icon={<Users className={'h-4'} />}
         >
           Organizations
         </SidebarItem>

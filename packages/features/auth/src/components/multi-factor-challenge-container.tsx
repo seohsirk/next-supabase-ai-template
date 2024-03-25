@@ -1,10 +1,12 @@
+'use client';
+
 import type { FormEventHandler } from 'react';
 import { useCallback, useEffect, useState } from 'react';
 
 import { useMutation } from '@tanstack/react-query';
 
 import useFetchAuthFactors from '@kit/supabase/hooks/use-fetch-mfa-factors';
-import useSignOut from '@kit/supabase/hooks/use-sign-out';
+import { useSignOut } from '@kit/supabase/hooks/use-sign-out';
 import { useSupabase } from '@kit/supabase/hooks/use-supabase';
 import { Alert, AlertDescription } from '@kit/ui/alert';
 import { Button } from '@kit/ui/button';

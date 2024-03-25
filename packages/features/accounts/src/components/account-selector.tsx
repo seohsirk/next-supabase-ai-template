@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 
 import { CaretSortIcon, PersonIcon } from '@radix-ui/react-icons';
-import { CheckIcon, PlusIcon } from 'lucide-react';
+import { Check, Plus } from 'lucide-react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@kit/ui/avatar';
 import { Button } from '@kit/ui/button';
@@ -19,7 +19,7 @@ import { If } from '@kit/ui/if';
 import { Popover, PopoverContent, PopoverTrigger } from '@kit/ui/popover';
 import { cn } from '@kit/ui/utils';
 
-import { CreateOrganizationAccountDialog } from './create-organization-account-dialog';
+import { CreateTeamAccountDialog } from '../../../team-accounts/src/components/create-team-account-dialog';
 
 interface AccountSelectorProps {
   accounts: Array<{
@@ -64,7 +64,7 @@ export function AccountSelector({
 
   const Icon = (props: { item: string }) => {
     return (
-      <CheckIcon
+      <Check
         className={cn(
           'ml-auto h-4 w-4',
           value === props.item ? 'opacity-100' : 'opacity-0',
@@ -196,7 +196,7 @@ export function AccountSelector({
                       setOpen(false);
                     }}
                   >
-                    <PlusIcon className="mr-2 h-4 w-4" />
+                    <Plus className="mr-2 h-4 w-4" />
 
                     <span>Create Organization</span>
                   </Button>
@@ -208,7 +208,7 @@ export function AccountSelector({
       </Popover>
 
       <If condition={features.enableOrganizationCreation}>
-        <CreateOrganizationAccountDialog
+        <CreateTeamAccountDialog
           isOpen={isCreatingAccount}
           setIsOpen={setIsCreatingAccount}
         />

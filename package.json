@@ -18,6 +18,7 @@
     "lint": "turbo lint --continue -- --cache --cache-location 'node_modules/.cache/.eslintcache' && manypkg check",
     "lint:fix": "turbo lint --continue -- --fix --cache --cache-location 'node_modules/.cache/.eslintcache' && manypkg fix",
     "typecheck": "turbo typecheck",
+    "stripe:listen": "pnpm --filter '@kit/stripe' start",
     "supabase:start": "turbo dev --filter @kit/supabase-config",
     "supabase:stop": "pnpm --filter '@kit/supabase-config' stop",
     "supabase:reset": "pnpm --filter '@kit/supabase-config' reset",

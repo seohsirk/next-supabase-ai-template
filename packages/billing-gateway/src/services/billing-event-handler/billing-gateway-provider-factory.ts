@@ -10,11 +10,11 @@ import { BillingEventHandlerFactoryService } from './billing-gateway-factory.ser
  * defined in the host application.
  */
 export async function getBillingEventHandlerService(
-  client: ReturnType<typeof getSupabaseServerActionClient>,
+  clientProvider: () => ReturnType<typeof getSupabaseServerActionClient>,
   provider: Database['public']['Enums']['billing_provider'],
 ) {
   const strategy =
     await BillingEventHandlerFactoryService.GetProviderStrategy(provider);
 
-  return new BillingEventHandlerService(client, strategy);
+  return new BillingEventHandlerService(clientProvider, strategy);
 }

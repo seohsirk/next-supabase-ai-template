@@ -1,5 +1,5 @@
 import { z } from 'zod';
 
-export const CreateOrganizationAccountSchema = z.object({
+export const CreateTeamSchema = z.object({
   name: z.string().min(2).max(50),
 });

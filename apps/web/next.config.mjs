@@ -18,6 +18,7 @@ const config = {
     '@kit/mailers',
     '@kit/billing',
     '@kit/billing-gateway',
+    '@kit/stripe',
   ],
   pageExtensions: ['ts', 'tsx'],
   images: {
@@ -25,6 +26,12 @@ const config = {
   },
   experimental: {
     mdxRs: true,
+    optimizePackageImports: []
+  },
+  modularizeImports: {
+    "lucide-react": {
+      transform: "lucide-react/dist/esm/icons/{{ kebabCase member }}",
+    }
   },
   /** We already do linting and typechecking as separate tasks in CI */
   eslint: { ignoreDuringBuilds: true },

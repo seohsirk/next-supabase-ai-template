@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { MenuIcon } from 'lucide-react';
+import { Menu } from 'lucide-react';
 
 import {
   DropdownMenu,
@@ -81,7 +81,7 @@ function MobileDropdown() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger aria-label={'Open Menu'}>
-        <MenuIcon className={'h-9'} />
+        <Menu className={'h-9'} />
       </DropdownMenuTrigger>
 
       <DropdownMenuContent>

@@ -18,12 +18,11 @@ import type {
   SortingState,
   VisibilityState,
 } from '@tanstack/react-table';
-import classNames from 'clsx';
 import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  ChevronsLeftIcon,
-  ChevronsRightIcon,
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
 } from 'lucide-react';
 
 import { Button } from '../shadcn/button';
@@ -36,6 +35,7 @@ import {
   TableHeader,
   TableRow,
 } from '../shadcn/table';
+import { cn } from '../utils';
 import Trans from './trans';
 
 interface ReactTableProps<T extends object> {
@@ -148,7 +148,7 @@ export function DataTable<T extends object>({
           {table.getRowModel().rows.map((row) => (
             <Fragment key={row.id}>
               <TableRow
-                className={classNames({
+                className={cn({
                   'border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted':
                     row.getIsExpanded(),
                 })}
@@ -200,7 +200,7 @@ function Pagination<T>({
         onClick={() => table.setPageIndex(0)}
         disabled={!table.getCanPreviousPage()}
       >
-        <ChevronsLeftIcon className={'h-4'} />
+        <ChevronsLeft className={'h-4'} />
       </Button>
 
       <Button
@@ -208,7 +208,7 @@ function Pagination<T>({
         onClick={() => table.previousPage()}
         disabled={!table.getCanPreviousPage()}
       >
-        <ChevronLeftIcon className={'h-4'} />
+        <ChevronLeft className={'h-4'} />
       </Button>
 
       <Button
@@ -216,7 +216,7 @@ function Pagination<T>({
         onClick={() => table.nextPage()}
         disabled={!table.getCanNextPage()}
       >
-        <ChevronRightIcon className={'h-4'} />
+        <ChevronRight className={'h-4'} />
       </Button>
 
       <Button
@@ -224,7 +224,7 @@ function Pagination<T>({
         onClick={() => table.setPageIndex(table.getPageCount() - 1)}
         disabled={!table.getCanNextPage()}
       >
-        <ChevronsRightIcon className={'h-4'} />
+        <ChevronsRight className={'h-4'} />
       </Button>
 
       <span className="flex items-center text-sm">

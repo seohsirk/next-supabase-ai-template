@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 import type { Session } from '@supabase/supabase-js';
 
-import { ChevronRightIcon } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 
 import { PersonalAccountDropdown } from '@kit/accounts/personal-account-dropdown';
 import { useSignOut } from '@kit/supabase/hooks/use-sign-out';
@@ -60,7 +60,7 @@ function AuthButtons() {
       <Link href={pathsConfig.auth.signUp}>
         <Button className={'rounded-full'}>
           <Trans i18nKey={'auth:signUp'} />
-          <ChevronRightIcon className={'h-4'} />
+          <ChevronRight className={'h-4'} />
         </Button>
       </Link>
     </div>

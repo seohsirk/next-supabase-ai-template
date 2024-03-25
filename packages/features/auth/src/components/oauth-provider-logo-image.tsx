@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-import { AtSignIcon, PhoneIcon } from 'lucide-react';
+import { AtSign, Phone } from 'lucide-react';
 
 const DEFAULT_IMAGE_SIZE = 18;
 
@@ -29,8 +29,8 @@ export const OauthProviderLogoImage: React.FC<{
 
 function getOAuthProviderLogos(): Record<string, string | React.ReactNode> {
   return {
-    password: <AtSignIcon className={'s-[18px]'} />,
-    phone: <PhoneIcon className={'s-[18px]'} />,
+    password: <AtSign className={'s-[18px]'} />,
+    phone: <Phone className={'s-[18px]'} />,
     google: '/assets/images/google.webp',
     facebook: '/assets/images/facebook.webp',
     twitter: '/assets/images/twitter.webp',

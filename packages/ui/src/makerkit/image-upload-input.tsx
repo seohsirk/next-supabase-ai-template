@@ -5,11 +5,11 @@ import { forwardRef, useCallback, useEffect, useRef, useState } from 'react';
 
 import Image from 'next/image';
 
-import cn from 'clsx';
-import { UploadCloud, XIcon } from 'lucide-react';
+import { UploadCloud, X } from 'lucide-react';
 
 import { Button } from '../shadcn/button';
 import { Label } from '../shadcn/label';
+import { cn } from '../utils';
 import { If } from './if';
 
 type Props = Omit<React.InputHTMLAttributes<unknown>, 'value'> & {
@@ -21,7 +21,7 @@ type Props = Omit<React.InputHTMLAttributes<unknown>, 'value'> & {
 
 const IMAGE_SIZE = 22;
 
-const ImageUploadInput = forwardRef<React.ElementRef<'input'>, Props>(
+export const ImageUploadInput = forwardRef<React.ElementRef<'input'>, Props>(
   function ImageUploadInputComponent(
     {
       children,
@@ -190,7 +190,7 @@ const ImageUploadInput = forwardRef<React.ElementRef<'input'>, Props>(
               className={'!h-5 !w-5'}
               onClick={imageRemoved}
             >
-              <XIcon className="h-4" />
+              <X className="h-4" />
             </Button>
           </If>
         </div>
@@ -198,4 +198,3 @@ const ImageUploadInput = forwardRef<React.ElementRef<'input'>, Props>(
     );
   },
 );
-export default ImageUploadInput;

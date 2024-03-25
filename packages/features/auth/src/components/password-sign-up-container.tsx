@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { CheckIcon } from 'lucide-react';
+import { Check } from 'lucide-react';
 
 import { useSignUpWithEmailAndPassword } from '@kit/supabase/hooks/use-sign-up-with-email-password';
 import { Alert, AlertDescription, AlertTitle } from '@kit/ui/alert';
@@ -66,7 +66,7 @@ export function EmailPasswordSignUpContainer({
     <>
       <If condition={showVerifyEmailAlert}>
         <Alert variant={'success'}>
-          <CheckIcon className={'w-4'} />
+          <Check className={'w-4'} />
 
           <AlertTitle>
             <Trans i18nKey={'auth:emailConfirmationAlertHeading'} />

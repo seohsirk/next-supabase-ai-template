@@ -4,6 +4,14 @@ import featureFlagsConfig from '~/config/feature-flags.config';
 import pathsConfig from '~/config/paths.config';
 import { withI18n } from '~/lib/i18n/with-i18n';
 
+const features = {
+  enableAccountDeletion: featureFlagsConfig.enableAccountDeletion,
+};
+
+const paths = {
+  callback: pathsConfig.auth.callback,
+};
+
 function PersonalAccountSettingsPage() {
   return (
     <div
@@ -11,14 +19,7 @@ function PersonalAccountSettingsPage() {
         'container mx-auto flex max-w-2xl flex-1 flex-col items-center'
       }
     >
-      <PersonalAccountSettingsContainer
-        features={{
-          enableAccountDeletion: featureFlagsConfig.enableAccountDeletion,
-        }}
-        paths={{
-          callback: pathsConfig.auth.callback,
-        }}
-      />
+      <PersonalAccountSettingsContainer features={features} paths={paths} />
     </div>
   );
 }

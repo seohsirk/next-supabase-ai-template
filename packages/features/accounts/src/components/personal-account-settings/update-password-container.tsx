@@ -15,7 +15,7 @@ export function UpdatePasswordFormContainer(
   const { data: user, isPending } = useUser();
 
   if (isPending) {
-    return <LoadingOverlay />;
+    return <LoadingOverlay fullPage={false} />;
   }
 
   const canUpdatePassword = user.identities?.some(

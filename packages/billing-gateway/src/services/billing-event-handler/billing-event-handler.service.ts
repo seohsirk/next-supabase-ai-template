@@ -6,7 +6,7 @@ import { Database } from '@kit/supabase/database';
 
 export class BillingEventHandlerService {
   constructor(
-    private readonly client: SupabaseClient<Database>,
+    private readonly clientProvider: () => SupabaseClient<Database>,
     private readonly strategy: BillingWebhookHandlerService,
   ) {}
 
@@ -19,6 +19,8 @@ export class BillingEventHandlerService {
 
     return this.strategy.handleWebhookEvent(event, {
       onSubscriptionDeleted: async (subscriptionId: string) => {
+        const client = this.clientProvider();
+
         // Handle the subscription deleted event
         // here we delete the subscription from the database
         Logger.info(
@@ -29,7 +31,7 @@ export class BillingEventHandlerService {
           'Processing subscription deleted event',
         );
 
-        const { error } = await this.client
+        const { error } = await client
           .from('subscriptions')
           .delete()
           .match({ id: subscriptionId });
@@ -47,6 +49,8 @@ export class BillingEventHandlerService {
         );
       },
       onSubscriptionUpdated: async (subscription) => {
+        const client = this.clientProvider();
+
         const ctx = {
           namespace: 'billing',
           subscriptionId: subscription.id,
@@ -58,7 +62,7 @@ export class BillingEventHandlerService {
 
         // Handle the subscription updated event
         // here we update the subscription in the database
-        const { error } = await this.client
+        const { error } = await client
           .from('subscriptions')
           .update(subscription)
           .match({ id: subscription.id });
@@ -77,9 +81,11 @@ export class BillingEventHandlerService {
 
         Logger.info(ctx, 'Successfully updated subscription');
       },
-      onCheckoutSessionCompleted: async (subscription) => {
+      onCheckoutSessionCompleted: async (subscription, customerId) => {
         // Handle the checkout session completed event
         // here we add the subscription to the database
+        const client = this.clientProvider();
+
         const ctx = {
           namespace: 'billing',
           subscriptionId: subscription.id,
@@ -89,12 +95,21 @@ export class BillingEventHandlerService {
 
         Logger.info(ctx, 'Processing checkout session completed event...');
 
-        const { error } = await this.client.rpc('add_subscription', {
-          subscription,
+        const { id, ...data } = subscription;
+
+        const { error } = await client.rpc('add_subscription', {
+          ...data,
+          subscription_id: subscription.id,
+          customer_id: customerId,
+          price_amount: subscription.price_amount ?? 0,
+          period_starts_at: subscription.period_starts_at!,
+          period_ends_at: subscription.period_ends_at!,
+          trial_starts_at: subscription.trial_starts_at!,
+          trial_ends_at: subscription.trial_ends_at!,
         });
 
         if (error) {
-          Logger.error(ctx, 'Failed to add subscription');
+          Logger.error({ ...ctx, error }, 'Failed to add subscription');
 
           throw new Error('Failed to add subscription');
         }

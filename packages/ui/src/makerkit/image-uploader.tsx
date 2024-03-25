@@ -4,11 +4,11 @@ import { useCallback, useEffect, useState } from 'react';
 
 import Image from 'next/image';
 
-import { ImageIcon } from 'lucide-react';
+import { Image as ImageIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 
 import { Button } from '../shadcn/button';
-import ImageUploadInput from './image-upload-input';
+import { ImageUploadInput } from './image-upload-input';
 import { Trans } from './trans';
 
 function ImageUploader(

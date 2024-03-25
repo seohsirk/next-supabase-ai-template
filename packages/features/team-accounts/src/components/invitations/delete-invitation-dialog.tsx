@@ -17,7 +17,7 @@ import { deleteInvitationAction } from '../../actions/account-invitations-server
 export const DeleteInvitationDialog: React.FC<{
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
-  invitationId: string;
+  invitationId: number;
 }> = ({ isOpen, setIsOpen, invitationId }) => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -45,7 +45,7 @@ function DeleteInvitationForm({
   invitationId,
   setIsOpen,
 }: {
-  invitationId: string;
+  invitationId: number;
   setIsOpen: (isOpen: boolean) => void;
 }) {
   const [isSubmitting, startTransition] = useTransition();

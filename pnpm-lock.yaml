@@ -334,9 +334,18 @@ importers:
 
   packages/features/admin:
     devDependencies:
+      '@kit/eslint-config':
+        specifier: 0.2.0
+        version: link:../../../tooling/eslint
       '@kit/prettier-config':
         specifier: 0.1.0
         version: link:../../../tooling/prettier
+      '@kit/tailwind-config':
+        specifier: 0.1.0
+        version: link:../../../tooling/tailwind
+      '@kit/tsconfig':
+        specifier: 0.1.0
+        version: link:../../../tooling/typescript
 
   packages/features/auth:
     devDependencies:

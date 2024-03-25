@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-import { HomeIcon, LogOutIcon, MenuIcon } from 'lucide-react';
+import { Home, LogOut, Menu } from 'lucide-react';
 
 import { AccountSelector } from '@kit/accounts/account-selector';
 import { useSignOut } from '@kit/supabase/hooks/use-sign-out';
@@ -67,7 +67,7 @@ export const MobileAppNavigation = (
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <MenuIcon className={'h-9'} />
+        <Menu className={'h-9'} />
       </DropdownMenuTrigger>
 
       <DropdownMenuContent sideOffset={10} className={'w-screen rounded-none'}>
@@ -115,7 +115,7 @@ function SignOutDropdownItem(
       className={'flex h-12 w-full items-center space-x-4'}
       onClick={props.onSignOut}
     >
-      <LogOutIcon className={'h-6'} />
+      <LogOut className={'h-6'} />
 
       <span>
         <Trans i18nKey={'common:signOut'} defaults={'Sign out'} />
@@ -135,7 +135,7 @@ function OrganizationsModal() {
           onSelect={(e) => e.preventDefault()}
         >
           <button className={'flex items-center space-x-4'}>
-            <HomeIcon className={'h-6'} />
+            <Home className={'h-6'} />
 
             <span>
               <Trans i18nKey={'common:yourOrganizations'} />

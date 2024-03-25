@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import Link from 'next/link';
 
-import { CheckCircleIcon, SparklesIcon } from 'lucide-react';
+import { CheckCircle, Sparkles } from 'lucide-react';
 import { z } from 'zod';
 
 import { Button } from '@kit/ui/button';
@@ -147,7 +147,7 @@ function PricingItem(
               )}
             >
               <If condition={highlighted}>
-                <SparklesIcon className={'mr-1 h-4 w-4'} />
+                <Sparkles className={'mr-1 h-4 w-4'} />
               </If>
 
               <span>{props.product.badge}</span>
@@ -238,7 +238,7 @@ function ListItem({ children }: React.PropsWithChildren) {
   return (
     <li className={'flex items-center space-x-3 font-medium'}>
       <div>
-        <CheckCircleIcon className={'h-5 text-green-500'} />
+        <CheckCircle className={'h-5 text-green-500'} />
       </div>
 
       <span className={'text-muted-foreground text-sm'}>{children}</span>
@@ -275,7 +275,7 @@ function PlanIntervalSwitcher(
           >
             <span className={'flex items-center space-x-1'}>
               <If condition={selected}>
-                <CheckCircleIcon className={'h-4 text-green-500'} />
+                <CheckCircle className={'h-4 text-green-500'} />
               </If>
 
               <span className={'capitalize'}>

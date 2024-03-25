@@ -1,8 +1,13 @@
-import { lazy } from 'react';
+import { Suspense, forwardRef, lazy, memo, useMemo } from 'react';
 
 import { Database } from '@kit/supabase/database';
+import { LoadingOverlay } from '@kit/ui/loading-overlay';
 
 type BillingProvider = Database['public']['Enums']['billing_provider'];
+
+const Fallback = (
+  <LoadingOverlay fullPage={false}>Loading Checkout...</LoadingOverlay>
+);
 
 export function EmbeddedCheckout(
   props: React.PropsWithChildren<{
@@ -11,7 +16,10 @@ export function EmbeddedCheckout(
     onClose?: () => void;
   }>,
 ) {
-  const CheckoutComponent = loadCheckoutComponent(props.provider);
+  const CheckoutComponent = useMemo(
+    () => memo(loadCheckoutComponent(props.provider)),
+    [],
+  );
 
   return (
     <CheckoutComponent
@@ -24,10 +32,12 @@ export function EmbeddedCheckout(
 function loadCheckoutComponent(provider: BillingProvider) {
   switch (provider) {
     case 'stripe': {
-      return lazy(() => {
-        return import('@kit/stripe/components').then((c) => ({
-          default: c.StripeCheckout,
-        }));
+      return buildLazyComponent(() => {
+        return import('@kit/stripe/components').then(({ StripeCheckout }) => {
+          return {
+            default: StripeCheckout,
+          };
+        });
       });
     }
 
@@ -42,4 +52,34 @@ function loadCheckoutComponent(provider: BillingProvider) {
     default:
       throw new Error(`Unsupported provider: ${provider as string}`);
   }
+}
+
+function buildLazyComponent<
+  Cmp extends React.ComponentType<
+    React.PropsWithChildren<{
+      onClose?: (() => unknown) | undefined;
+      checkoutToken: string;
+    }>
+  >,
+>(
+  load: () => Promise<{
+    default: Cmp;
+  }>,
+  fallback = Fallback,
+) {
+  let LoadedComponent: ReturnType<typeof lazy> | null = null;
+
+  const LazyComponent = forwardRef((props, ref) => {
+    if (!LoadedComponent) {
+      LoadedComponent = lazy(load);
+    }
+
+    return (
+      <Suspense fallback={fallback}>
+        <LoadedComponent {...props} ref={ref} />
+      </Suspense>
+    );
+  });
+
+  return memo(LazyComponent);
 }

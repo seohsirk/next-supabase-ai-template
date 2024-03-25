@@ -2,11 +2,6 @@ import { Database } from '@kit/supabase/database';
 
 type SubscriptionObject = Database['public']['Tables']['subscriptions'];
 
-type SubscriptionInsertParams = Omit<
-  SubscriptionObject['Insert'],
-  'billing_customer_id'
->;
-
 type SubscriptionUpdateParams = SubscriptionObject['Update'];
 
 /**
@@ -19,7 +14,8 @@ export abstract class BillingWebhookHandlerService {
     event: unknown,
     params: {
       onCheckoutSessionCompleted: (
-        subscription: SubscriptionInsertParams,
+        subscription: SubscriptionObject['Row'],
+        customerId: string,
       ) => Promise<unknown>;
 
       onSubscriptionUpdated: (

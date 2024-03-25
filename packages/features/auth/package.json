@@ -15,7 +15,6 @@
     "./shared": "./src/shared.ts",
     "./mfa": "./src/mfa.ts"
   },
-  "dependencies": {},
   "devDependencies": {
     "@kit/prettier-config": "0.1.0",
     "@kit/eslint-config": "0.2.0",

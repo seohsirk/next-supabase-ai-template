@@ -3,7 +3,7 @@
 import { useMemo, useState } from 'react';
 
 import { ColumnDef } from '@tanstack/react-table';
-import { EllipsisIcon } from 'lucide-react';
+import { Ellipsis } from 'lucide-react';
 
 import { Database } from '@kit/supabase/database';
 import { Button } from '@kit/ui/button';
@@ -189,7 +189,7 @@ function ActionsDropdown({
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant={'ghost'} size={'icon'}>
-            <EllipsisIcon className={'h-5 w-5'} />
+            <Ellipsis className={'h-5 w-5'} />
           </Button>
         </DropdownMenuTrigger>
 

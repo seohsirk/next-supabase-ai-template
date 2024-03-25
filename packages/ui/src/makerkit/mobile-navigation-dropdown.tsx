@@ -5,7 +5,7 @@ import { useMemo } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-import { ChevronDownIcon } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 
 import { Button } from '../shadcn/button';
 import {
@@ -14,7 +14,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '../shadcn/dropdown-menu';
-import { Trans } from '../shadcn/trans';
+import { Trans } from './trans';
 
 function MobileNavigationDropdown({
   links,
@@ -41,7 +41,7 @@ function MobileNavigationDropdown({
               <Trans i18nKey={currentPathName} defaults={currentPathName} />
             </span>
 
-            <ChevronDownIcon className={'h-5'} />
+            <ChevronDown className={'h-5'} />
           </span>
         </Button>
       </DropdownMenuTrigger>

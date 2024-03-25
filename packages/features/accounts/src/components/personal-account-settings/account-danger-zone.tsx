@@ -18,6 +18,8 @@ import { Heading } from '@kit/ui/heading';
 import { Input } from '@kit/ui/input';
 import { Trans } from '@kit/ui/trans';
 
+import { deletePersonalAccountAction } from '../../server/personal-accounts-server-actions';
+
 export function AccountDangerZone() {
   return <DeleteAccountContainer />;
 }
@@ -72,7 +74,7 @@ function DeleteAccountForm() {
   return (
     <Form {...form}>
       <form
-        action={deleteUserAccountAction}
+        action={deletePersonalAccountAction}
         className={'flex flex-col space-y-4'}
       >
         <div className={'flex flex-col space-y-6'}>
@@ -99,6 +101,7 @@ function DeleteAccountForm() {
               <Input
                 data-test={'delete-account-input-field'}
                 required
+                name={'confirmation'}
                 type={'text'}
                 className={'w-full'}
                 placeholder={''}

@@ -10,8 +10,7 @@
   },
   "prettier": "@kit/prettier-config",
   "exports": {
-    "./mailer": "./src/mailer.ts",
-    "./logger": "./src/logger.ts",
+    "./logger": "./src/logger/index.ts",
     "./hooks/*": "./src/hooks/*.ts",
     "./contexts/*": "./src/contexts/*.ts",
     "./cookies/*": "./src/cookies/*.ts",

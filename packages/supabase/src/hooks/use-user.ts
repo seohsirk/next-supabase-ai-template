@@ -1,16 +1,20 @@
+import { useRouter } from 'next/navigation';
+
 import { useQuery } from '@tanstack/react-query';
 
 import { useSupabase } from './use-supabase';
 
 export function useUser() {
   const client = useSupabase();
+  const router = useRouter();
   const queryKey = ['user'];
 
   const queryFn = async () => {
     const response = await client.auth.getUser();
 
+    // this is most likely a session error or the user is not logged in
     if (response.error) {
-      return Promise.reject(response.error);
+      throw router.replace('/');
     }
 
     if (response.data?.user) {

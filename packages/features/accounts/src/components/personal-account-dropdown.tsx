@@ -7,11 +7,11 @@ import Link from 'next/link';
 import type { Session } from '@supabase/gotrue-js';
 
 import {
-  EllipsisVerticalIcon,
-  HomeIcon,
-  LogOutIcon,
-  MessageCircleQuestionIcon,
-  ShieldIcon,
+  EllipsisVertical,
+  Home,
+  LogOut,
+  MessageCircleQuestion,
+  Shield,
 } from 'lucide-react';
 
 import {
@@ -87,7 +87,7 @@ export function PersonalAccountDropdown({
             </span>
           </div>
 
-          <EllipsisVerticalIcon
+          <EllipsisVertical
             className={'text-muted-foreground hidden h-8 group-hover:flex'}
           />
         </If>
@@ -119,7 +119,7 @@ export function PersonalAccountDropdown({
             className={'s-full flex items-center space-x-2'}
             href={paths.home}
           >
-            <HomeIcon className={'h-5'} />
+            <Home className={'h-5'} />
 
             <span>
               <Trans i18nKey={'common:homeTabLabel'} />
@@ -131,7 +131,7 @@ export function PersonalAccountDropdown({
 
         <DropdownMenuItem asChild>
           <Link className={'s-full flex items-center space-x-2'} href={'/docs'}>
-            <MessageCircleQuestionIcon className={'h-5'} />
+            <MessageCircleQuestion className={'h-5'} />
 
             <span>
               <Trans i18nKey={'common:documentation'} />
@@ -147,7 +147,7 @@ export function PersonalAccountDropdown({
               className={'s-full flex items-center space-x-2'}
               href={'/admin'}
             >
-              <ShieldIcon className={'h-5'} />
+              <Shield className={'h-5'} />
 
               <span>Admin</span>
             </Link>
@@ -162,7 +162,7 @@ export function PersonalAccountDropdown({
           onClick={signOutRequested}
         >
           <span className={'flex w-full items-center space-x-2'}>
-            <LogOutIcon className={'h-5'} />
+            <LogOut className={'h-5'} />
 
             <span>
               <Trans i18nKey={'auth:signOut'} />

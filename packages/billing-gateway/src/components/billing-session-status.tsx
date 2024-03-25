@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 
-import { CheckIcon, ChevronRightIcon } from 'lucide-react';
+import { Check, ChevronRight } from 'lucide-react';
 
 import { Button } from '@kit/ui/button';
 import { Heading } from '@kit/ui/heading';
@@ -55,9 +55,9 @@ function SuccessSessionStatus({
           'flex flex-col items-center justify-center space-y-4 text-center'
         }
       >
-        <CheckIcon
+        <Check
           className={
-            'w-16 rounded-full bg-green-500 p-1 text-white ring-8' +
+            'h-16 w-16 rounded-full bg-green-500 p-1 text-white ring-8' +
             ' ring-green-500/30 dark:ring-green-500/50'
           }
         />
@@ -87,7 +87,7 @@ function SuccessSessionStatus({
                 <Trans i18nKey={'subscription:checkoutSuccessBackButton'} />
               </span>
 
-              <ChevronRightIcon className={'h-4'} />
+              <ChevronRight className={'h-4'} />
             </span>
           </Link>
         </Button>

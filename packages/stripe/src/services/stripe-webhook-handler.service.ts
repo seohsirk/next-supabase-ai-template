@@ -29,9 +29,11 @@ export class StripeWebhookHandlerService
    */
   async verifyWebhookSignature(request: Request) {
     const body = await request.clone().text();
-    const signature = `stripe-signature`;
+    const signatureKey = `stripe-signature`;
+    const signature = request.headers.get(signatureKey) as string;
 
     const { STRIPE_WEBHOOK_SECRET } = StripeServerEnvSchema.parse({
+      STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
       STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
     });
 
@@ -109,7 +111,7 @@ export class StripeWebhookHandlerService
   private async handleCheckoutSessionCompleted(
     event: Stripe.CheckoutSessionCompletedEvent,
     onCheckoutCompletedCallback: (
-      data: InsertSubscriptionParams,
+      data: Omit<Subscription['Insert'], 'billing_customer_id'>,
       customerId: string,
     ) => Promise<unknown>,
   ) {
@@ -128,11 +130,11 @@ export class StripeWebhookHandlerService
     // TODO: convert or store the amount in cents?
     const amount = session.amount_total ?? 0;
 
-    const payload = this.buildSubscriptionPayload<typeof accountId>({
+    const payload = this.buildSubscriptionPayload({
       subscription,
       accountId,
       amount,
-    });
+    }) as InsertSubscriptionParams;
 
     return onCheckoutCompletedCallback(payload, customerId);
   }
@@ -149,7 +151,7 @@ export class StripeWebhookHandlerService
       return (acc + (item.plan.amount ?? 0)) * (item.quantity ?? 1);
     }, 0);
 
-    const payload = this.buildSubscriptionPayload<undefined>({
+    const payload = this.buildSubscriptionPayload({
       subscription,
       amount,
     });
@@ -166,27 +168,27 @@ export class StripeWebhookHandlerService
     return onSubscriptionDeletedCallback(subscription.id);
   }
 
-  private buildSubscriptionPayload<
-    AccountId extends string | undefined,
-  >(params: {
+  private buildSubscriptionPayload(params: {
     subscription: Stripe.Subscription;
     amount: number;
     // we only need the account id if we
     // are creating a subscription for an account
-    accountId?: AccountId;
-  }): AccountId extends string
-    ? InsertSubscriptionParams
-    : Subscription['Update'] {
+    accountId?: string;
+  }) {
     const { subscription } = params;
     const lineItem = subscription.items.data[0];
     const price = lineItem?.price;
     const priceId = price?.id!;
     const interval = price?.recurring?.interval ?? null;
 
+    const active =
+      subscription.status === 'active' || subscription.status === 'trialing';
+
     const data = {
       billing_provider: this.provider,
       id: subscription.id,
       status: subscription.status,
+      active,
       price_amount: params.amount,
       cancel_at_period_end: subscription.cancel_at_period_end ?? false,
       interval: interval as string,
@@ -194,15 +196,27 @@ export class StripeWebhookHandlerService
       product_id: price?.product as string,
       variant_id: priceId,
       interval_count: price?.recurring?.interval_count ?? 1,
-    };
+      period_starts_at: getISOString(subscription.current_period_start),
+      period_ends_at: getISOString(subscription.current_period_end),
+      trial_starts_at: getISOString(subscription.trial_start),
+      trial_ends_at: getISOString(subscription.trial_end),
+    } satisfies Omit<InsertSubscriptionParams, 'account_id'>;
 
+    // when we are creating a subscription for an account
+    // we need to include the account id
     if (params.accountId !== undefined) {
       return {
         ...data,
         account_id: params.accountId,
-      } satisfies InsertSubscriptionParams;
+      };
     }
 
-    return data as Subscription['Update'];
+    // otherwise we are updating a subscription
+    // and we only need to return the update payload
+    return data;
   }
+}
+
+function getISOString(date: number | null) {
+  return date ? new Date(date * 1000).toISOString() : null;
 }

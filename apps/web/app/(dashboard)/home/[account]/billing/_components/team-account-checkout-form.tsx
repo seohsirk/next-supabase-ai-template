@@ -2,6 +2,8 @@
 
 import { useState, useTransition } from 'react';
 
+import { useParams } from 'next/navigation';
+
 import { EmbeddedCheckout, PlanPicker } from '@kit/billing-gateway/components';
 import {
   Card,
@@ -16,6 +18,7 @@ import billingConfig from '~/config/billing.config';
 import { createTeamAccountCheckoutSession } from '../server-actions';
 
 export function TeamAccountCheckoutForm(params: { accountId: string }) {
+  const routeParams = useParams();
   const [pending, startTransition] = useTransition();
   const [checkoutToken, setCheckoutToken] = useState<string | null>(null);
 
@@ -31,34 +34,32 @@ export function TeamAccountCheckoutForm(params: { accountId: string }) {
 
   // Otherwise, render the plan picker component
   return (
-    <div className={'mx-auto w-full max-w-2xl'}>
-      <Card>
-        <CardHeader>
-          <CardTitle>Manage your Team Plan</CardTitle>
+    <Card>
+      <CardHeader>
+        <CardTitle>Manage your Team Plan</CardTitle>
 
-          <CardDescription>
-            You can change your plan at any time.
-          </CardDescription>
-        </CardHeader>
+        <CardDescription>You can change your plan at any time.</CardDescription>
+      </CardHeader>
 
-        <CardContent>
-          <PlanPicker
-            pending={pending}
-            config={billingConfig}
-            onSubmit={({ planId }) => {
-              startTransition(async () => {
-                const { checkoutToken } =
-                  await createTeamAccountCheckoutSession({
-                    planId,
-                    accountId: params.accountId,
-                  });
+      <CardContent>
+        <PlanPicker
+          pending={pending}
+          config={billingConfig}
+          onSubmit={({ planId }) => {
+            startTransition(async () => {
+              const slug = routeParams.account as string;
 
-                setCheckoutToken(checkoutToken);
+              const { checkoutToken } = await createTeamAccountCheckoutSession({
+                planId,
+                accountId: params.accountId,
+                slug,
               });
-            }}
-          />
-        </CardContent>
-      </Card>
-    </div>
+
+              setCheckoutToken(checkoutToken);
+            });
+          }}
+        />
+      </CardContent>
+    </Card>
   );
 }

@@ -3,7 +3,7 @@ import { cache } from 'react';
 import { notFound } from 'next/navigation';
 
 import { allDocumentationPages } from 'contentlayer/generated';
-import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 import { If } from '@kit/ui/if';
 import { Mdx } from '@kit/ui/mdx';
@@ -77,7 +77,7 @@ function DocumentationPage({ params }: PageParams) {
               {(page) => (
                 <DocumentationPageLink
                   page={page}
-                  before={<ChevronLeftIcon className={'w-4'} />}
+                  before={<ChevronLeft className={'w-4'} />}
                 />
               )}
             </If>
@@ -88,7 +88,7 @@ function DocumentationPage({ params }: PageParams) {
               {(page) => (
                 <DocumentationPageLink
                   page={page}
-                  after={<ChevronRightIcon className={'w-4'} />}
+                  after={<ChevronRight className={'w-4'} />}
                 />
               )}
             </If>

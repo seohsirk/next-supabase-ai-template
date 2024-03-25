@@ -9,10 +9,30 @@
     "typecheck": "tsc --noEmit"
   },
   "prettier": "@kit/prettier-config",
+  "peerDependencies": {
+    "@kit/ui": "0.1.0"
+  },
+  "devDependencies": {
+    "@kit/eslint-config": "0.2.0",
+    "@kit/prettier-config": "0.1.0",
+    "@kit/tailwind-config": "0.1.0",
+    "@kit/tsconfig": "0.1.0"
+  },
   "exports": {
     ".": "./src/index.ts"
   },
-  "devDependencies": {
-    "@kit/prettier-config": "0.1.0"
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "@kit/eslint-config/base",
+      "@kit/eslint-config/react"
+    ]
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "src/*"
+      ]
+    }
   }
 }

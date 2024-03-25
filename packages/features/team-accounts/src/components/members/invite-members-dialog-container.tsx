@@ -3,7 +3,7 @@
 import { useState, useTransition } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { PlusIcon, XIcon } from 'lucide-react';
+import { Plus, X } from 'lucide-react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -181,7 +181,7 @@ function InviteMembersForm({
                               form.clearErrors(emailInputName);
                             }}
                           >
-                            <XIcon className={'h-4 lg:h-5'} />
+                            <X className={'h-4 lg:h-5'} />
                           </Button>
                         </TooltipTrigger>
 
@@ -208,7 +208,7 @@ function InviteMembersForm({
               }}
             >
               <span className={'flex items-center space-x-2'}>
-                <PlusIcon className={'h-4'} />
+                <Plus className={'h-4'} />
 
                 <span>
                   <Trans i18nKey={'organization:addAnotherMemberButtonLabel'} />

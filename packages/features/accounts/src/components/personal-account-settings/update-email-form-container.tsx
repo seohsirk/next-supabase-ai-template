@@ -9,7 +9,7 @@ export function UpdateEmailFormContainer(props: { callbackPath: string }) {
   const { data: user, isPending } = useUser();
 
   if (isPending) {
-    return <LoadingOverlay />;
+    return <LoadingOverlay fullPage={false} />;
   }
 
   if (!user) {

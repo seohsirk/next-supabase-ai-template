@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 import { cva } from 'class-variance-authority';
-import { ChevronDownIcon } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import { z } from 'zod';
 
 import { Button } from '../shadcn/button';
@@ -111,7 +111,7 @@ export function SidebarGroup({
           <Title>{label}</Title>
 
           <If condition={collapsible}>
-            <ChevronDownIcon
+            <ChevronDown
               className={cn(`h-3 transition duration-300`, {
                 'rotate-180': !isGroupCollapsed,
               })}

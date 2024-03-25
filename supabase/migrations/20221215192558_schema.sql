@@ -313,14 +313,6 @@ create policy accounts_read_self on public.accounts for
 select
   to authenticated using (auth.uid () = primary_owner_user_id);
 
--- RLS on the accounts table
--- SELECT: Users can read the team accounts they are a member of
-create policy accounts_read_team on public.accounts for
-select
-  to authenticated using (
-    has_role_on_account (id)
-  );
-
 -- UPDATE: Team owners can update their accounts
 create policy accounts_self_update on public.accounts
 for update
@@ -537,6 +529,14 @@ create policy accounts_memberships_team_read on public.accounts_memberships for
 select
   to authenticated using (is_team_member (account_id, user_id));
 
+-- RLS on the accounts table
+-- SELECT: Users can read the team accounts they are a member of
+create policy accounts_read_team on public.accounts for
+select
+  to authenticated using (
+    has_role_on_account (id)
+  );
+
 -- DELETE: Users can remove themselves from an account
 create policy accounts_memberships_delete_self on public.accounts_memberships for
 delete
@@ -628,6 +628,29 @@ update,
 delete on table public.role_permissions to authenticated,
 service_role;
 
+-- Create a function to check if a user has a permission
+create function public.has_permission (
+  user_id uuid,
+  account_id uuid,
+  permission_name app_permissions
+) returns boolean as $$
+begin
+    return exists(
+        select
+        1
+        from
+        public.accounts_memberships
+        join public.role_permissions on accounts_memberships.account_role = role_permissions.role
+        where
+        accounts_memberships.user_id = has_permission.user_id
+        and accounts_memberships.account_id = has_permission.account_id
+        and role_permissions.permission = has_permission.permission_name);
+    end;
+
+$$ language plpgsql;
+
+grant execute on function public.has_permission (uuid, uuid, public.app_permissions) to authenticated, postgres;
+
 -- Enable RLS on the role_permissions table
 alter table public.role_permissions enable row level security;
 
@@ -712,7 +735,6 @@ insert
     has_role_on_account (account_id)
     and public.has_permission (auth.uid (), account_id, 'invites.manage'::app_permissions));
 
-
 /*
  * -------------------------------------------------------
  * Section: Billing Customers
@@ -756,7 +778,7 @@ select
 -- SELECT: Users can read account subscriptions on an account they are a member of
 create policy billing_customers_read_self on public.billing_customers for
 select
-  to authenticated using (has_role_on_account (account_id));
+  to authenticated using (account_id = auth.uid() or has_role_on_account (account_id));
 
 /*
  * -------------------------------------------------------
@@ -771,6 +793,7 @@ create table if not exists
     billing_customer_id int references public.billing_customers on delete cascade not null,
     id text not null primary key,
     status public.subscription_status not null,
+    active bool not null,
     billing_provider public.billing_provider not null,
     product_id varchar(255) not null,
     variant_id varchar(255) not null,
@@ -825,6 +848,8 @@ select
 update,
 delete on table public.subscriptions to service_role;
 
+grant select on table public.subscriptions to authenticated;
+
 -- Enable RLS on subscriptions table
 alter table public.subscriptions enable row level security;
 
@@ -832,12 +857,14 @@ alter table public.subscriptions enable row level security;
 -- SELECT: Users can read account subscriptions on an account they are a member of
 create policy subscriptions_read_self on public.subscriptions for
 select
-  to authenticated using (has_role_on_account (account_id));
+  to authenticated using (has_role_on_account (account_id) or account_id = auth.uid ());
 
 -- Functions
+
 create or replace function public.add_subscription (
   account_id uuid,
-  id text,
+  subscription_id text,
+  active bool,
   status public.subscription_status,
   billing_provider public.billing_provider,
   product_id varchar(255),
@@ -845,35 +872,34 @@ create or replace function public.add_subscription (
   price_amount numeric,
   cancel_at_period_end bool,
   currency varchar(3),
-  interval varchar(255),
+  "interval" varchar(255),
   interval_count integer,
   period_starts_at timestamptz,
   period_ends_at timestamptz,
   trial_starts_at timestamptz,
   trial_ends_at timestamptz,
-  customer_id text
+  customer_id varchar(255)
 ) returns public.subscriptions as $$
 declare
   new_subscription public.subscriptions;
-  billing_customer_id int;
+  new_billing_customer_id int;
 begin
     insert into public.billing_customers(
         account_id,
-        id,
         provider,
         customer_id)
     values (
         account_id,
-        billing_customer_id,
         billing_provider,
         customer_id)
     returning
-        id into billing_customer_id;
+        id into new_billing_customer_id;
 
     insert into public.subscriptions(
         account_id,
         billing_customer_id,
         id,
+        active,
         status,
         billing_provider,
         product_id,
@@ -889,8 +915,9 @@ begin
         trial_ends_at)
     values (
         account_id,
-        billing_customer_id,
-        id,
+        new_billing_customer_id,
+        subscription_id,
+        active,
         status,
         billing_provider,
         product_id,
@@ -910,34 +937,31 @@ begin
     end;
 $$ language plpgsql;
 
+grant execute on function public.add_subscription (
+  uuid,
+  text,
+  boolean,
+  public.subscription_status,
+  public.billing_provider,
+  varchar,
+  varchar,
+  numeric,
+  boolean,
+  varchar,
+  varchar,
+  integer,
+  timestamptz,
+  timestamptz,
+  timestamptz,
+  timestamptz,
+  varchar
+) to service_role;
+
 /*
  * -------------------------------------------------------
  * Section: Functions
  * -------------------------------------------------------
  */
--- Create a function to check if a user has a permission
-create function public.has_permission (
-  user_id uuid,
-  account_id uuid,
-  permission_name app_permissions
-) returns boolean as $$
-begin
-    return exists(
-        select
-        1
-        from
-        public.accounts_memberships
-        join public.role_permissions on accounts_memberships.account_role = role_permissions.role
-        where
-        accounts_memberships.user_id = has_permission.user_id
-        and accounts_memberships.account_id = has_permission.account_id
-        and role_permissions.permission = has_permission.permission_name);
-    end;
-
-$$ language plpgsql;
-
-grant execute on function public.has_permission (uuid, uuid, public.app_permissions) to authenticated, postgres;
-
 -- Create a function to slugify a string
 create
 or replace function kit.slugify ("value" text) returns text as $$
@@ -1262,7 +1286,7 @@ execute on function public.get_account_members (text) to authenticated,
 postgres;
 
 create or replace function public.get_account_invitations(account_slug text) returns table (
-  id serial,
+  id integer,
   email varchar(255),
   account_id uuid,
   invited_by uuid,
@@ -1293,6 +1317,7 @@ end;
 $$ language plpgsql;
 
 grant execute on function public.get_account_invitations (text) to authenticated, postgres;
+
 CREATE TYPE kit.invitation AS (
   email text,
   role public.account_role
@@ -1334,7 +1359,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-grant execute on function public.add_invitations_to_account (text, array) to authenticated, postgres;
+grant execute on function public.add_invitations_to_account (text, kit.invitation[]) to authenticated, postgres;
 
 -- Storage
 -- Account Image

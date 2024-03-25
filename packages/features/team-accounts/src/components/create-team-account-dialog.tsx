@@ -20,10 +20,10 @@ import { If } from '@kit/ui/if';
 import { Input } from '@kit/ui/input';
 import { Trans } from '@kit/ui/trans';
 
-import { CreateOrganizationAccountSchema } from '../schema/create-organization.schema';
-import { createOrganizationAccountAction } from '../server/accounts-server-actions';
+import { createOrganizationAccountAction } from '../actions/create-team-account-server-actions';
+import { CreateTeamSchema } from '../schema/create-team.schema';
 
-export function CreateOrganizationAccountDialog(
+export function CreateTeamAccountDialog(
   props: React.PropsWithChildren<{
     isOpen: boolean;
     setIsOpen: (isOpen: boolean) => void;
@@ -46,11 +46,11 @@ function CreateOrganizationAccountForm() {
   const [error, setError] = useState<boolean>();
   const [pending, startTransition] = useTransition();
 
-  const form = useForm<z.infer<typeof CreateOrganizationAccountSchema>>({
+  const form = useForm<z.infer<typeof CreateTeamSchema>>({
     defaultValues: {
       name: '',
     },
-    resolver: zodResolver(CreateOrganizationAccountSchema),
+    resolver: zodResolver(CreateTeamSchema),
   });
 
   return (

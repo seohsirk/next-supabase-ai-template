@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 
-import { ArrowLeftIcon } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 
 import { Button } from '@kit/ui/button';
 import { Heading } from '@kit/ui/heading';
@@ -41,7 +41,7 @@ const ErrorPage = () => {
             <div>
               <Link href={'/'}>
                 <Button variant={'outline'}>
-                  <ArrowLeftIcon className={'mr-2 h-4'} />
+                  <ArrowLeft className={'mr-2 h-4'} />
 
                   <Trans i18nKey={'common:backToHomePage'} />
                 </Button>

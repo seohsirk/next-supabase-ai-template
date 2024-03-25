@@ -1,4 +1,4 @@
-import { PlusCircleIcon } from 'lucide-react';
+import { PlusCircle } from 'lucide-react';
 
 import { getSupabaseServerComponentClient } from '@kit/supabase/server-component-client';
 import {
@@ -99,7 +99,7 @@ async function OrganizationAccountMembersPage({ params }: Params) {
 
               <InviteMembersDialogContainer account={account.slug}>
                 <Button size={'sm'}>
-                  <PlusCircleIcon className={'mr-2 w-4'} />
+                  <PlusCircle className={'mr-2 w-4'} />
                   <span>Add Member</span>
                 </Button>
               </InviteMembersDialogContainer>
