@@ -2,6 +2,7 @@
 
 import { useUser } from '@kit/supabase/hooks/use-user';
 import { Alert } from '@kit/ui/alert';
+import { LoadingOverlay } from '@kit/ui/loading-overlay';
 import { Trans } from '@kit/ui/trans';
 
 import { UpdatePasswordForm } from './update-password-form';
@@ -11,10 +12,10 @@ export function UpdatePasswordFormContainer(
     callbackPath: string;
   }>,
 ) {
-  const { data: user } = useUser();
+  const { data: user, isPending } = useUser();
 
-  if (!user) {
-    return null;
+  if (isPending) {
+    return <LoadingOverlay />;
   }
 
   const canUpdatePassword = user.identities?.some(

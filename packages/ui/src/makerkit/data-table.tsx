@@ -26,7 +26,7 @@ import {
   ChevronsRightIcon,
 } from 'lucide-react';
 
-import { Button } from '@kit/ui/button';
+import { Button } from '../shadcn/button';
 import {
   Table,
   TableBody,
@@ -35,8 +35,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@kit/ui/table';
-
+} from '../shadcn/table';
 import Trans from './trans';
 
 interface ReactTableProps<T extends object> {

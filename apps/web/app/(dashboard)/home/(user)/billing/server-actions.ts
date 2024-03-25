@@ -82,6 +82,10 @@ export async function createBillingPortalSession() {
   const customerId = await getCustomerIdFromAccountId(accountId);
   const returnUrl = getBillingPortalReturnUrl();
 
+  if (!customerId) {
+    throw new Error('Customer not found');
+  }
+
   const { url } = await service.createBillingPortalSession({
     customerId,
     returnUrl,

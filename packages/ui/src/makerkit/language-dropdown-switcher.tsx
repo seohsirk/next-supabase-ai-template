@@ -5,13 +5,14 @@ import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import useRefresh from '@kit/shared/hooks/use-refresh';
+
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@kit/ui/select';
+} from '../shadcn/select';
 
 const LanguageDropdownSwitcher: React.FC<{
   onChange?: (locale: string) => unknown;

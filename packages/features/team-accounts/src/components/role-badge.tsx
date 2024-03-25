@@ -10,7 +10,7 @@ const roleClassNameBuilder = cva('font-medium capitalize', {
   variants: {
     role: {
       owner: 'bg-primary',
-      member: 'bg-blue-50 text-blue-500 hover:bg-blue-50',
+      member: 'bg-blue-50 text-blue-500 dark:bg-blue-500/10',
     },
   },
 });

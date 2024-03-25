@@ -8,9 +8,8 @@ import Image from 'next/image';
 import cn from 'clsx';
 import { UploadCloud, XIcon } from 'lucide-react';
 
-import { Button } from '@kit/ui/button';
-import { Label } from '@kit/ui/label';
-
+import { Button } from '../shadcn/button';
+import { Label } from '../shadcn/label';
 import { If } from './if';
 
 type Props = Omit<React.InputHTMLAttributes<unknown>, 'value'> & {

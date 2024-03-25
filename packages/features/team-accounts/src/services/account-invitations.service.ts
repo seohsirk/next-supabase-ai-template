@@ -7,7 +7,9 @@ import { Mailer } from '@kit/mailers';
 import { Logger } from '@kit/shared/logger';
 import { Database } from '@kit/supabase/database';
 
+import { DeleteInvitationSchema } from '../schema/delete-invitation.schema';
 import { InviteMembersSchema } from '../schema/invite-members.schema';
+import { UpdateInvitationSchema } from '../schema/update-invitation-schema';
 
 const invitePath = process.env.INVITATION_PAGE_PATH;
 const siteURL = process.env.NEXT_PUBLIC_SITE_URL;
@@ -33,10 +35,10 @@ export class AccountInvitationsService {
 
   constructor(private readonly client: SupabaseClient<Database>) {}
 
-  async removeInvitation(params: { invitationId: string }) {
+  async deleteInvitation(params: z.infer<typeof DeleteInvitationSchema>) {
     Logger.info('Removing invitation', {
-      invitationId: params.invitationId,
       name: this.namespace,
+      ...params,
     });
 
     const { data, error } = await this.client
@@ -51,20 +53,16 @@ export class AccountInvitationsService {
     }
 
     Logger.info('Invitation successfully removed', {
-      invitationId: params.invitationId,
+      ...params,
       name: this.namespace,
     });
 
     return data;
   }
 
-  async updateInvitation(params: {
-    invitationId: string;
-    role: Database['public']['Enums']['account_role'];
-  }) {
+  async updateInvitation(params: z.infer<typeof UpdateInvitationSchema>) {
     Logger.info('Updating invitation', {
-      invitationId: params.invitationId,
-      role: params.role,
+      ...params,
       name: this.namespace,
     });
 
@@ -74,7 +72,7 @@ export class AccountInvitationsService {
         role: params.role,
       })
       .match({
-        id: params.invitationId,
+        id: params.id,
       });
 
     if (error) {
@@ -82,8 +80,7 @@ export class AccountInvitationsService {
     }
 
     Logger.info('Invitation successfully updated', {
-      invitationId: params.invitationId,
-      role: params.role,
+      ...params,
       name: this.namespace,
     });
 
@@ -154,7 +151,7 @@ export class AccountInvitationsService {
         try {
           const { renderInviteEmail } = await import('@kit/emails');
 
-          const html = await renderInviteEmail({
+          const html = renderInviteEmail({
             link: this.getInvitationLink(invitation.invite_token),
             invitedUserEmail: invitation.email,
             inviter: user.email,

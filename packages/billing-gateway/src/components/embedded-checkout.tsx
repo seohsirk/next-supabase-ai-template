@@ -8,11 +8,17 @@ export function EmbeddedCheckout(
   props: React.PropsWithChildren<{
     checkoutToken: string;
     provider: BillingProvider;
+    onClose?: () => void;
   }>,
 ) {
   const CheckoutComponent = loadCheckoutComponent(props.provider);
 
-  return <CheckoutComponent checkoutToken={props.checkoutToken} />;
+  return (
+    <CheckoutComponent
+      onClose={props.onClose}
+      checkoutToken={props.checkoutToken}
+    />
+  );
 }
 
 function loadCheckoutComponent(provider: BillingProvider) {

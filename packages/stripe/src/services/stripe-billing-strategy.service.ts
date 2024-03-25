@@ -56,7 +56,17 @@ export class StripeBillingStrategyService
   ) {
     const stripe = await this.stripeProvider();
 
-    return await stripe.subscriptions.retrieve(params.sessionId);
+    const session = await stripe.checkout.sessions.retrieve(params.sessionId);
+    const isSessionOpen = session.status === 'open';
+
+    return {
+      checkoutToken: session.client_secret,
+      isSessionOpen,
+      status: session.status ?? 'complete',
+      customer: {
+        email: session.customer_details?.email ?? null,
+      },
+    };
   }
 
   private async stripeProvider(): Promise<Stripe> {

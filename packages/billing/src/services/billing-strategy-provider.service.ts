@@ -16,7 +16,15 @@ export abstract class BillingStrategyProviderService {
 
   abstract retrieveCheckoutSession(
     params: z.infer<typeof RetrieveCheckoutSessionSchema>,
-  ): Promise<unknown>;
+  ): Promise<{
+    checkoutToken: string | null;
+    status: 'complete' | 'expired' | 'open';
+    isSessionOpen: boolean;
+
+    customer: {
+      email: string | null;
+    };
+  }>;
 
   abstract createCheckoutSession(
     params: z.infer<typeof CreateBillingCheckoutSchema>,

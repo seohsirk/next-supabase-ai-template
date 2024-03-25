@@ -5,10 +5,9 @@ import Script from 'next/script';
 
 import { allPosts } from 'contentlayer/generated';
 
+import Post from '~/(marketing)/blog/_components/post';
 import appConfig from '~/config/app.config';
 import { withI18n } from '~/lib/i18n/with-i18n';
-
-import Post from '../components/post';
 
 export async function generateMetadata({
   params,

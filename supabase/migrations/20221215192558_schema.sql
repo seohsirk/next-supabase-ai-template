@@ -1261,8 +1261,8 @@ grant
 execute on function public.get_account_members (text) to authenticated,
 postgres;
 
-
 create or replace function public.get_account_invitations(account_slug text) returns table (
+  id serial,
   email varchar(255),
   account_id uuid,
   invited_by uuid,

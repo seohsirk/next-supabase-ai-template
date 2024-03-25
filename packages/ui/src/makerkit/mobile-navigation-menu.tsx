@@ -10,8 +10,8 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@kit/ui/dropdown-menu';
-import { Trans } from '@kit/ui/trans';
+} from '../shadcn/dropdown-menu';
+import { Trans } from '../shadcn/trans';
 
 const MobileNavigationDropdown: React.FC<{
   links: {

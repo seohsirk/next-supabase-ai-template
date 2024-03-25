@@ -28,12 +28,13 @@ const AccountInfoSchema = z.object({
 export function UpdateAccountDetailsForm({
   displayName,
   onUpdate,
+  userId,
 }: {
   displayName: string;
   userId: string;
   onUpdate: (user: Partial<UpdateUserDataParams>) => void;
 }) {
-  const updateAccountMutation = useUpdateAccountData();
+  const updateAccountMutation = useUpdateAccountData(userId);
   const { t } = useTranslation();
 
   const form = useForm({

@@ -38,6 +38,8 @@ export function PlanPicker(
   }, []);
 
   const form = useForm({
+    reValidateMode: 'onChange',
+    mode: 'onChange',
     resolver: zodResolver(
       z
         .object({
@@ -56,7 +58,7 @@ export function PlanPicker(
 
             return intervals.includes(data.interval);
           },
-          { message: 'Invalid plan', path: ['planId'] },
+          { message: `Please pick a plan to continue`, path: ['planId'] },
         ),
     ),
     defaultValues: {
@@ -65,7 +67,7 @@ export function PlanPicker(
     },
   });
 
-  const selectedInterval = form.watch('interval');
+  const { interval: selectedInterval } = form.watch();
 
   return (
     <Form {...form}>
@@ -101,8 +103,12 @@ export function PlanPicker(
                               id={interval}
                               value={interval}
                               onClick={() => {
-                                form.setValue('planId', '');
-                                form.setValue('interval', interval);
+                                form.setValue('planId', '', {
+                                  shouldValidate: true,
+                                });
+                                form.setValue('interval', interval, {
+                                  shouldValidate: true,
+                                });
                               }}
                             />
 
@@ -149,7 +155,9 @@ export function PlanPicker(
                           id={variant.id}
                           value={variant.id}
                           onClick={() => {
-                            form.setValue('planId', variant.id);
+                            form.setValue('planId', variant.id, {
+                              shouldValidate: true,
+                            });
                           }}
                         />
 
@@ -198,7 +206,7 @@ export function PlanPicker(
         />
 
         <div>
-          <Button disabled={props.pending}>
+          <Button disabled={props.pending || !form.formState.isValid}>
             {props.pending ? (
               'Processing...'
             ) : (

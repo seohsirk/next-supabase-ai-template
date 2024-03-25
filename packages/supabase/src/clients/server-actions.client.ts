@@ -14,7 +14,7 @@ const createServerSupabaseClient = () => {
   });
 };
 
-export const getSupabaseServerActionClient = (params?: { admin: false }) => {
+export const getSupabaseServerActionClient = (params?: { admin: boolean }) => {
   const keys = getSupabaseClientKeys();
   const admin = params?.admin ?? false;
 

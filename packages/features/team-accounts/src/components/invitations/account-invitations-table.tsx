@@ -15,6 +15,7 @@ import {
   DropdownMenuTrigger,
 } from '@kit/ui/dropdown-menu';
 import { If } from '@kit/ui/if';
+import { Input } from '@kit/ui/input';
 import { ProfileAvatar } from '@kit/ui/profile-avatar';
 
 import { RoleBadge } from '../role-badge';
@@ -37,9 +38,30 @@ export function AccountInvitationsTable({
   invitations,
   permissions,
 }: AccountInvitationsTableProps) {
+  const [search, setSearch] = useState('');
   const columns = useMemo(() => getColumns(permissions), [permissions]);
 
-  return <DataTable columns={columns} data={invitations} />;
+  const filteredInvitations = invitations.filter((member) => {
+    const searchString = search.toLowerCase();
+    const email = member.email.split('@')[0]?.toLowerCase() ?? '';
+
+    return (
+      email.includes(searchString) ||
+      member.role.toLowerCase().includes(searchString)
+    );
+  });
+
+  return (
+    <div className={'flex flex-col space-y-2'}>
+      <Input
+        value={search}
+        onInput={(e) => setSearch((e.target as HTMLInputElement).value)}
+        placeholder={'Search Invitation'}
+      />
+
+      <DataTable columns={columns} data={filteredInvitations} />
+    </div>
+  );
 }
 
 function getColumns(permissions: {

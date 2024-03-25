@@ -29,7 +29,7 @@ export function UpdateAccountImageContainer() {
 
   return (
     <UploadProfileAvatarForm
-      currentPhotoURL={accountData.data.picture_url}
+      pictureUrl={accountData.data.picture_url ?? null}
       userId={accountData.data.id}
       onAvatarUpdated={revalidateUserDataQuery}
     />
@@ -37,7 +37,7 @@ export function UpdateAccountImageContainer() {
 }
 
 function UploadProfileAvatarForm(props: {
-  currentPhotoURL: string | null;
+  pictureUrl: string | null;
   userId: string;
   onAvatarUpdated: () => void;
 }) {
@@ -58,10 +58,9 @@ function UploadProfileAvatarForm(props: {
   const onValueChange = useCallback(
     (file: File | null) => {
       const removeExistingStorageFile = () => {
-        if (props.currentPhotoURL) {
+        if (props.pictureUrl) {
           return (
-            deleteProfilePhoto(client, props.currentPhotoURL) ??
-            Promise.resolve()
+            deleteProfilePhoto(client, props.pictureUrl) ?? Promise.resolve()
           );
         }
 
@@ -108,7 +107,7 @@ function UploadProfileAvatarForm(props: {
   );
 
   return (
-    <ImageUploader value={props.currentPhotoURL} onValueChange={onValueChange}>
+    <ImageUploader value={props.pictureUrl} onValueChange={onValueChange}>
       <div className={'flex flex-col space-y-1'}>
         <span className={'text-sm'}>
           <Trans i18nKey={'profile:profilePictureHeading'} />

@@ -7,14 +7,14 @@ import { usePathname } from 'next/navigation';
 
 import { ChevronDownIcon } from 'lucide-react';
 
-import { Button } from '@kit/ui/button';
+import { Button } from '../shadcn/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@kit/ui/dropdown-menu';
-import { Trans } from '@kit/ui/trans';
+} from '../shadcn/dropdown-menu';
+import { Trans } from '../shadcn/trans';
 
 function MobileNavigationDropdown({
   links,

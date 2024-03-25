@@ -23,7 +23,7 @@ import { Trans } from '@kit/ui/trans';
 
 import { PasswordResetSchema } from '../schemas/password-reset.schema';
 
-function PasswordResetForm(params: { redirectTo: string }) {
+export function PasswordResetForm(params: { redirectTo: string }) {
   const updateUser = useUpdateUser();
 
   const form = useForm<z.infer<typeof PasswordResetSchema>>({
@@ -108,8 +108,6 @@ function PasswordResetForm(params: { redirectTo: string }) {
     </div>
   );
 }
-
-export default PasswordResetForm;
 
 function SuccessState() {
   return (

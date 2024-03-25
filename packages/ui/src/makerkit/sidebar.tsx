@@ -9,8 +9,7 @@ import { cva } from 'class-variance-authority';
 import { ChevronDownIcon } from 'lucide-react';
 import { z } from 'zod';
 
-import { Button } from '@kit/ui/button';
-
+import { Button } from '../shadcn/button';
 import {
   Tooltip,
   TooltipContent,

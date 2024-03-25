@@ -9,7 +9,9 @@ import { z } from 'zod';
 import { Database } from '@kit/supabase/database';
 import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
 
+import { DeleteInvitationSchema } from '../schema/delete-invitation.schema';
 import { InviteMembersSchema } from '../schema/invite-members.schema';
+import { UpdateInvitationSchema } from '../schema/update-invitation-schema';
 import { AccountInvitationsService } from '../services/account-invitations.service';
 
 /**
@@ -44,7 +46,11 @@ export async function createInvitationsAction(params: {
  *
  * @return {Object} - The result of the delete operation.
  */
-export async function deleteInvitationAction(params: { invitationId: string }) {
+export async function deleteInvitationAction(
+  params: z.infer<typeof DeleteInvitationSchema>,
+) {
+  const invitation = DeleteInvitationSchema.parse(params);
+
   const client = getSupabaseServerActionClient();
   const { data, error } = await client.auth.getUser();
 
@@ -54,27 +60,22 @@ export async function deleteInvitationAction(params: { invitationId: string }) {
 
   const service = new AccountInvitationsService(client);
 
-  await service.removeInvitation({
-    invitationId: params.invitationId,
-  });
+  await service.deleteInvitation(invitation);
 
   return { success: true };
 }
 
-export async function updateInvitationAction(params: {
-  invitationId: string;
-  role: Database['public']['Enums']['account_role'];
-}) {
+export async function updateInvitationAction(
+  params: z.infer<typeof UpdateInvitationSchema>,
+) {
   const client = getSupabaseServerActionClient();
+  const invitation = UpdateInvitationSchema.parse(params);
 
   await assertSession(client);
 
   const service = new AccountInvitationsService(client);
 
-  await service.updateInvitation({
-    invitationId: params.invitationId,
-    role: params.role,
-  });
+  await service.updateInvitation(invitation);
 
   return { success: true };
 }

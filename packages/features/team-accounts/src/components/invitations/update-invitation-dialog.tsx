@@ -34,7 +34,7 @@ type Role = Database['public']['Enums']['account_role'];
 export const UpdateInvitationDialog: React.FC<{
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
-  invitationId: string;
+  invitationId: number;
   userRole: Role;
 }> = ({ isOpen, setIsOpen, invitationId, userRole }) => {
   return (
@@ -65,7 +65,7 @@ function UpdateInvitationForm({
   userRole,
   setIsOpen,
 }: React.PropsWithChildren<{
-  invitationId: string;
+  invitationId: number;
   userRole: Role;
   setIsOpen: (isOpen: boolean) => void;
 }>) {
@@ -75,7 +75,10 @@ function UpdateInvitationForm({
   const onSubmit = ({ role }: { role: Role }) => {
     startTransition(async () => {
       try {
-        await updateInvitationAction({ invitationId, role });
+        await updateInvitationAction({
+          invitationId,
+          role,
+        });
 
         setIsOpen(false);
       } catch (e) {

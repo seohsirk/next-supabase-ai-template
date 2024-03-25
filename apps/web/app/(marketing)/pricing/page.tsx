@@ -1,10 +1,9 @@
 import { PricingTable } from '@kit/billing/components/pricing-table';
 
+import { SitePageHeader } from '~/(marketing)/_components/site-page-header';
 import billingConfig from '~/config/billing.config';
 import pathsConfig from '~/config/paths.config';
 import { withI18n } from '~/lib/i18n/with-i18n';
-
-import { SitePageHeader } from '../components/site-page-header';
 
 export const metadata = {
   title: 'Pricing',

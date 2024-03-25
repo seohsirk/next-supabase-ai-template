@@ -36,7 +36,7 @@ export function PersonalAccountDropdown({
   paths,
 }: {
   className?: string;
-  session: Session | undefined;
+  session: Session | null;
   signOutRequested: () => unknown;
   showProfileName?: boolean;
   paths: {

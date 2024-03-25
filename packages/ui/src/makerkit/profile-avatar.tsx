@@ -1,7 +1,7 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@kit/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '../shadcn/avatar';
 
 type SessionProps = {
-  displayName?: string | null;
+  displayName: string | null;
   pictureUrl?: string | null;
 };
 
@@ -31,7 +31,9 @@ export function ProfileAvatar(props: ProfileAvatarProps) {
       <AvatarImage src={props.pictureUrl ?? undefined} />
 
       <AvatarFallback>
-        <span className={'uppercase'}>{initials}</span>
+        <span suppressHydrationWarning className={'uppercase'}>
+          {initials}
+        </span>
       </AvatarFallback>
     </Avatar>
   );

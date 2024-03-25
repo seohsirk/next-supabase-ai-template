@@ -1,16 +1,19 @@
 import { useCallback } from 'react';
 
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import type { Session } from '@supabase/supabase-js';
+
+import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 
 import { useSupabase } from './use-supabase';
 
 const queryKey = ['supabase:session'];
 
-export function useUserSession() {
+export function useUserSession(initialSession?: Session | null) {
   const supabase = useSupabase();
+
   const queryFn = async () => {
     const { data, error } = await supabase.auth.getSession();
-    console.log(data, error);
+
     if (error) {
       throw error;
     }
@@ -18,7 +21,11 @@ export function useUserSession() {
     return data.session;
   };
 
-  return useQuery({ queryKey, queryFn });
+  return useSuspenseQuery({
+    queryKey,
+    queryFn,
+    initialData: initialSession,
+  });
 }
 
 export function useRevalidateUserSession() {
