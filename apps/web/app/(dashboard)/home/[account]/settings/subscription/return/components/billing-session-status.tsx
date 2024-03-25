@@ -4,11 +4,12 @@ import Link from 'next/link';
 
 import { CheckIcon, ChevronRightIcon } from 'lucide-react';
 import type { Stripe } from 'stripe';
-import pathsConfig from '~/config/paths.config';
 
 import { Button } from '@kit/ui/button';
 import { Heading } from '@kit/ui/heading';
 import { Trans } from '@kit/ui/trans';
+
+import pathsConfig from '~/config/paths.config';
 
 /**
  * Retrieves the session status for a Stripe checkout session.

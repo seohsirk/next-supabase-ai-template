@@ -1,6 +1,6 @@
-import { MobileAppNavigation } from '~/(dashboard)/home/[account]/(components)/mobile-app-navigation';
-
 import { PageHeader } from '@kit/ui/page';
+
+import { MobileAppNavigation } from '~/(dashboard)/home/[account]/(components)/mobile-app-navigation';
 
 export function AppHeader({
   children,

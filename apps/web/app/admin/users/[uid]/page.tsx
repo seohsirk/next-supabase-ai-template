@@ -1,5 +1,8 @@
 import Link from 'next/link';
 
+import { PageBody } from '@/components/app/Page';
+import configuration from '@/config/app.config';
+import type MembershipRole from '@/lib/organizations/types/membership-role';
 import { ChevronRightIcon } from 'lucide-react';
 
 import getSupabaseServerComponentClient from '@packages/supabase/server-component-client';
@@ -16,12 +19,6 @@ import {
   TableHeader,
   TableRow,
 } from '@kit/ui/table';
-
-import configuration from '@/config/app.config';
-
-import type MembershipRole from '@/lib/organizations/types/membership-role';
-
-import { PageBody } from '@/components/app/Page';
 
 import RoleBadge from '../../../(app)/[account]/account/organization/components/RoleBadge';
 import AdminGuard from '../../../../packages/admin/components/AdminGuard';

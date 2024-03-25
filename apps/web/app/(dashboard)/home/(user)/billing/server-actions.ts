@@ -1,13 +1,12 @@
 'use server';
 
-import { URL } from 'next/dist/compiled/@edge-runtime/primitives';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 import { z } from 'zod';
 
 import { getProductPlanPairFromId } from '@kit/billing';
-import { getGatewayProvider } from '@kit/billing-gateway';
+import { getBillingGatewayProvider } from '@kit/billing-gateway';
 import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
 
 import billingConfig from '~/config/billing.config';
@@ -30,7 +29,7 @@ export async function createPersonalAccountCheckoutSession(params: {
   }
 
   const planId = z.string().min(1).parse(params.planId);
-  const service = await getGatewayProvider(client);
+  const service = await getBillingGatewayProvider(client);
   const productPlanPairFromId = getProductPlanPairFromId(billingConfig, planId);
 
   if (!productPlanPairFromId) {
@@ -77,7 +76,7 @@ export async function createBillingPortalSession() {
     throw new Error('Authentication required');
   }
 
-  const service = await getGatewayProvider(client);
+  const service = await getBillingGatewayProvider(client);
 
   const accountId = data.user.id;
   const customerId = await getCustomerIdFromAccountId(accountId);

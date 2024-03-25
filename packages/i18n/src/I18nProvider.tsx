@@ -35,7 +35,6 @@ async function withI18nClient(lang: string, resolver: Resolver) {
 }
 
 async function loadClientI18n(lang: string | undefined, resolver: Resolver) {
-  // TODO: pull cookie client-side
   const { initializeI18nClient } = await import('./i18n.client');
 
   return initializeI18nClient(lang, resolver);

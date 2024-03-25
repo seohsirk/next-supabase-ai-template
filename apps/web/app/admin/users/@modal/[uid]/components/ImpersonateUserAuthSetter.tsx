@@ -4,9 +4,9 @@ import { useEffect } from 'react';
 
 import { useRouter } from 'next/navigation';
 
-import useSupabase from '@kit/hooks/use-supabase';
-
 import Spinner from '@/components/app/Spinner';
+
+import useSupabase from '@kit/hooks/use-supabase';
 
 function ImpersonateUserAuthSetter({
   tokens,

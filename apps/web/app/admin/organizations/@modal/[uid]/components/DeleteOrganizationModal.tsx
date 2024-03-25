@@ -4,6 +4,8 @@ import { useState, useTransition } from 'react';
 
 import { useRouter } from 'next/navigation';
 
+import type Organization from '@/lib/organizations/types/organization';
+
 import useCsrfToken from '@kit/hooks/use-csrf-token';
 import { Button } from '@kit/ui/button';
 import {
@@ -14,8 +16,6 @@ import {
 } from '@kit/ui/dialog';
 import { Input } from '@kit/ui/input';
 import { Label } from '@kit/ui/label';
-
-import type Organization from '@/lib/organizations/types/organization';
 
 import { deleteOrganizationAction } from '../actions.server';
 

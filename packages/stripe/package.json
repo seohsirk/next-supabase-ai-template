@@ -14,12 +14,16 @@
     ".": "./src/index.ts",
     "./components": "./src/components/index.ts"
   },
+  "peerDependencies": {
+    "@kit/billing": "0.1.0",
+    "@kit/ui": "0.1.0",
+    "@kit/shared": "0.1.0",
+    "@kit/supabase": "0.1.0"
+  },
   "dependencies": {
     "stripe": "^14.21.0",
     "@stripe/react-stripe-js": "^2.6.2",
-    "@stripe/stripe-js": "^3.0.10",
-    "@kit/billing": "0.1.0",
-    "@kit/ui": "0.1.0"
+    "@stripe/stripe-js": "^3.0.10"
   },
   "devDependencies": {
     "@kit/prettier-config": "0.1.0",

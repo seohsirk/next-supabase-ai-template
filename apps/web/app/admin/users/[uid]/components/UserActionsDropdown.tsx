@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 
+import If from '@/components/app/If';
 import { EllipsisVerticalIcon } from 'lucide-react';
 
 import { Button } from '@kit/ui/button';
@@ -11,8 +12,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@kit/ui/dropdown-menu';
-
-import If from '@/components/app/If';
 
 function UserActionsDropdown({
   uid,

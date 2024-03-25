@@ -17,10 +17,9 @@
   "peerDependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "zod": "^3.22.4"
-  },
-  "dependencies": {
+    "zod": "^3.22.4",
     "@kit/ui": "0.1.0",
+    "@kit/supabase": "0.1.0",
     "lucide-react": "^0.361.0"
   },
   "devDependencies": {

@@ -5,11 +5,10 @@ import { useContext } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
+import Trans from '@/components/app/Trans';
 import { cva } from 'class-variance-authority';
 
 import isRouteActive from '@kit/generic/is-route-active';
-
-import Trans from '@/components/app/Trans';
 
 import { NavigationMenuContext } from './navigation-menu-context';
 import { cn } from './utils';

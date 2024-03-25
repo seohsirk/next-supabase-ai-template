@@ -1,8 +1,8 @@
 import { notFound } from 'next/navigation';
 
-import isUserSuperAdmin from '~/admin/utils/is-user-super-admin';
-
 import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
+
+import isUserSuperAdmin from '~/admin/utils/is-user-super-admin';
 
 export function withAdminSession<Args extends unknown[], Response>(
   fn: (...params: Args) => Response,

@@ -6,6 +6,9 @@ import { useRouter } from 'next/navigation';
 
 import type { User } from '@supabase/gotrue-js';
 
+import If from '@/components/app/If';
+import LoadingOverlay from '@/components/app/LoadingOverlay';
+
 import useCsrfToken from '@kit/hooks/use-csrf-token';
 import { Alert, AlertDescription, AlertTitle } from '@kit/ui/alert';
 import { Button } from '@kit/ui/button';
@@ -15,9 +18,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@kit/ui/dialog';
-
-import If from '@/components/app/If';
-import LoadingOverlay from '@/components/app/LoadingOverlay';
 
 import { impersonateUser } from '../actions.server';
 import ImpersonateUserAuthSetter from '../components/ImpersonateUserAuthSetter';

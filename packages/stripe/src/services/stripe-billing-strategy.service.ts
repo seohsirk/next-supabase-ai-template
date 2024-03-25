@@ -10,8 +10,8 @@ import {
   RetrieveCheckoutSessionSchema,
 } from '@kit/billing/schema';
 
-import { createStripeCheckout } from './create-checkout';
 import { createStripeBillingPortalSession } from './create-stripe-billing-portal-session';
+import { createStripeCheckout } from './create-stripe-checkout';
 import { createStripeClient } from './stripe-sdk';
 
 export class StripeBillingStrategyService
@@ -22,7 +22,13 @@ export class StripeBillingStrategyService
   ) {
     const stripe = await this.stripeProvider();
 
-    return createStripeCheckout(stripe, params);
+    const { client_secret } = await createStripeCheckout(stripe, params);
+
+    if (!client_secret) {
+      throw new Error('Failed to create checkout session');
+    }
+
+    return { checkoutToken: client_secret };
   }
 
   async createBillingPortalSession(

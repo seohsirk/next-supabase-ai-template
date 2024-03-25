@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 
 import { allPosts } from 'contentlayer/generated';
+
 import PostPreview from '~/(marketing)/blog/components/post-preview';
 import { SitePageHeader } from '~/(marketing)/components/site-page-header';
 import appConfig from '~/config/app.config';

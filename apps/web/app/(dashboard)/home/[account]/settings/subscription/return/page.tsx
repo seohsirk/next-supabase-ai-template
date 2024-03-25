@@ -1,11 +1,11 @@
 import { notFound, redirect } from 'next/navigation';
 
+import requireSession from '@/lib/user/require-session';
+
 import { withI18n } from '@packages/i18n/with-i18n';
 import getSupabaseServerComponentClient from '@packages/supabase/server-component-client';
 
 import createStripeClient from '@kit/stripe/get-stripe';
-
-import requireSession from '@/lib/user/require-session';
 
 import { BillingSessionStatus } from './components/billing-session-status';
 import RecoverCheckout from './components/recover-checkout';

@@ -1,9 +1,8 @@
 'use client';
 
-import { HomeIcon, UserIcon, UsersIcon } from 'lucide-react';
-
 import Logo from '@/components/app/Logo';
 import { Sidebar, SidebarContent, SidebarItem } from '@/components/app/Sidebar';
+import { HomeIcon, UserIcon, UsersIcon } from 'lucide-react';
 
 function AdminSidebar() {
   return (

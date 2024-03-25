@@ -56,5 +56,9 @@
       "label": "Member",
       "description": "Cannot invite members or change settings"
     }
+  },
+  "billingInterval": {
+    "month": "Billed monthly",
+    "year": "Billed yearly"
   }
 }

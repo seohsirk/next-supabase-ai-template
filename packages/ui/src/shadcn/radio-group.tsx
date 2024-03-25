@@ -45,6 +45,7 @@ RadioGroupItem.displayName = RadioGroupPrimitive.Item.displayName;
 const RadioGroupItemLabel = (
   props: React.PropsWithChildren<{
     className?: string;
+    selected?: boolean;
   }>,
 ) => {
   return (
@@ -54,6 +55,9 @@ const RadioGroupItemLabel = (
         'flex cursor-pointer rounded-md' +
           ' items-center space-x-4 border border-input hover:bg-muted' +
           ' transition-duration-500 p-4 text-sm transition-colors focus-within:border-primary',
+        {
+          [`border-primary`]: props.selected,
+        },
       )}
     >
       {props.children}

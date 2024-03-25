@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 
+import { DataTable } from '@/components/app/DataTable';
+import type Membership from '@/lib/organizations/types/membership';
 import type { ColumnDef } from '@tanstack/react-table';
 import { EllipsisVerticalIcon } from 'lucide-react';
 
@@ -14,10 +16,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@kit/ui/dropdown-menu';
-
-import type Membership from '@/lib/organizations/types/membership';
-
-import { DataTable } from '@/components/app/DataTable';
 
 import RoleBadge from '../../../../../(app)/[account]/account/organization/components/RoleBadge';
 

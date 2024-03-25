@@ -2,14 +2,12 @@ import { use } from 'react';
 
 import Link from 'next/link';
 
+import { PageBody } from '@/components/app/Page';
+import appConfig from '@/config/app.config';
 import { ChevronRightIcon } from 'lucide-react';
 
 import AdminHeader from '@packages/admin/components/AdminHeader';
 import getSupabaseServerComponentClient from '@packages/supabase/server-component-client';
-
-import appConfig from '@/config/app.config';
-
-import { PageBody } from '@/components/app/Page';
 
 import getPageFromQueryParams from '../../../utils/get-page-from-query-param';
 import { getMembershipsByOrganizationUid } from '../../queries';

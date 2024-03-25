@@ -1,12 +1,10 @@
 import Link from 'next/link';
 
+import { PageHeader } from '@/components/app/Page';
+import pathsConfig from '@/config/paths.config';
 import { ArrowLeftIcon } from 'lucide-react';
 
 import { Button } from '@kit/ui/button';
-
-import pathsConfig from '@/config/paths.config';
-
-import { PageHeader } from '@/components/app/Page';
 
 function AdminHeader({ children }: React.PropsWithChildren) {
   return (

@@ -1,15 +1,13 @@
+import { PageBody } from '@/components/app/Page';
+import appConfig from '@/config/app.config';
+
 import getSupabaseServerComponentClient from '@packages/supabase/server-component-client';
 
 import type UserData from '@kit/session/types/user-data';
 
-import appConfig from '@/config/app.config';
-
-import { PageBody } from '@/components/app/Page';
-
 import AdminGuard from '../../../packages/admin/components/AdminGuard';
 import AdminHeader from '../../../packages/admin/components/AdminHeader';
 import getPageFromQueryParams from '../utils/get-page-from-query-param';
-import UsersTable from './components/UsersTable';
 import { getUsers } from './queries';
 
 interface UsersAdminPageProps {
@@ -32,14 +30,7 @@ async function UsersAdminPage({ searchParams }: UsersAdminPageProps) {
     <div className={'flex flex-1 flex-col'}>
       <AdminHeader>Users</AdminHeader>
 
-      <PageBody>
-        <UsersTable
-          users={users}
-          page={page}
-          pageCount={pageCount}
-          perPage={perPage}
-        />
-      </PageBody>
+      <PageBody></PageBody>
     </div>
   );
 }

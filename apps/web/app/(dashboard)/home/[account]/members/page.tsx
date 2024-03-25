@@ -1,6 +1,4 @@
 import { PlusCircledIcon } from '@radix-ui/react-icons';
-import { loadOrganizationWorkspace } from '~/(dashboard)/home/[account]/(lib)/load-workspace';
-import { withI18n } from '~/lib/i18n/with-i18n';
 
 import { getSupabaseServerComponentClient } from '@kit/supabase/server-component-client';
 import {
@@ -18,6 +16,9 @@ import {
 } from '@kit/ui/card';
 import { PageBody, PageHeader } from '@kit/ui/page';
 import { Trans } from '@kit/ui/trans';
+
+import { loadOrganizationWorkspace } from '~/(dashboard)/home/[account]/(lib)/load-workspace';
+import { withI18n } from '~/lib/i18n/with-i18n';
 
 interface Params {
   params: {

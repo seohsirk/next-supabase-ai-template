@@ -1,10 +1,11 @@
 import Link from 'next/link';
 
 import type { Post } from 'contentlayer/generated';
-import { CoverImage } from '~/(marketing)/blog/components/cover-image';
-import { DateFormatter } from '~/(marketing)/blog/components/date-formatter';
 
 import { If } from '@kit/ui/if';
+
+import { CoverImage } from '~/(marketing)/blog/components/cover-image';
+import { DateFormatter } from '~/(marketing)/blog/components/date-formatter';
 
 type Props = {
   post: Post;

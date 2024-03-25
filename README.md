@@ -106,13 +106,13 @@ The configuration is defined in the `apps/web/config` folder. Here you can find 
 To install a Shadcn UI component, you can use the following command:
 
 ```bash
-npx shadcn-ui@latest add <component> --path=packages/ui/shadcn
+npx shadcn-ui@latest add <component> --path=packages/src/ui/shadcn
 ```
 
 For example, to install the `Button` component, you can use the following command:
 
 ```bash
-npx shadcn-ui@latest add button --path=packages/rsc/ui/shadcn
+npx shadcn-ui@latest add button --path=packages/src/ui/shadcn
 ```
 
 We pass the `--path` flag to specify the path where the component should be installed.

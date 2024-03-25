@@ -781,7 +781,6 @@ create table if not exists
     interval_count integer not null check (interval_count > 0),
     created_at timestamptz not null default current_timestamp,
     updated_at timestamptz not null default current_timestamp,
-    last_payment_at timestamptz,
     period_starts_at timestamptz,
     period_ends_at timestamptz,
     trial_starts_at timestamptz,
@@ -834,6 +833,82 @@ alter table public.subscriptions enable row level security;
 create policy subscriptions_read_self on public.subscriptions for
 select
   to authenticated using (has_role_on_account (account_id));
+
+-- Functions
+create or replace function public.add_subscription (
+  account_id uuid,
+  id text,
+  status public.subscription_status,
+  billing_provider public.billing_provider,
+  product_id varchar(255),
+  variant_id varchar(255),
+  price_amount numeric,
+  cancel_at_period_end bool,
+  currency varchar(3),
+  interval varchar(255),
+  interval_count integer,
+  period_starts_at timestamptz,
+  period_ends_at timestamptz,
+  trial_starts_at timestamptz,
+  trial_ends_at timestamptz,
+  customer_id text
+) returns public.subscriptions as $$
+declare
+  new_subscription public.subscriptions;
+  billing_customer_id int;
+begin
+    insert into public.billing_customers(
+        account_id,
+        id,
+        provider,
+        customer_id)
+    values (
+        account_id,
+        billing_customer_id,
+        billing_provider,
+        customer_id)
+    returning
+        id into billing_customer_id;
+
+    insert into public.subscriptions(
+        account_id,
+        billing_customer_id,
+        id,
+        status,
+        billing_provider,
+        product_id,
+        variant_id,
+        price_amount,
+        cancel_at_period_end,
+        currency,
+        interval,
+        interval_count,
+        period_starts_at,
+        period_ends_at,
+        trial_starts_at,
+        trial_ends_at)
+    values (
+        account_id,
+        billing_customer_id,
+        id,
+        status,
+        billing_provider,
+        product_id,
+        variant_id,
+        price_amount,
+        cancel_at_period_end,
+        currency,
+        interval,
+        interval_count,
+        period_starts_at,
+        period_ends_at,
+        trial_starts_at,
+        trial_ends_at)
+    returning
+        * into new_subscription;
+    return new_subscription;
+    end;
+$$ language plpgsql;
 
 /*
  * -------------------------------------------------------

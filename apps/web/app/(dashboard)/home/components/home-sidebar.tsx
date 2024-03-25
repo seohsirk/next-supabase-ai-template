@@ -2,12 +2,12 @@ import { use } from 'react';
 
 import { cookies } from 'next/headers';
 
+import { getSupabaseServerComponentClient } from '@kit/supabase/server-component-client';
+import { Sidebar, SidebarContent, SidebarNavigation } from '@kit/ui/sidebar';
+
 import { HomeSidebarAccountSelector } from '~/(dashboard)/home/components/home-sidebar-account-selector';
 import { ProfileDropdownContainer } from '~/(dashboard)/home/components/personal-account-dropdown';
 import { personalAccountSidebarConfig } from '~/config/personal-account-sidebar.config';
-
-import { getSupabaseServerComponentClient } from '@kit/supabase/server-component-client';
-import { Sidebar, SidebarContent, SidebarNavigation } from '@kit/ui/sidebar';
 
 export function HomeSidebar() {
   const collapsed = getSidebarCollapsed();

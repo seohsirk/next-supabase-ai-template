@@ -22,6 +22,7 @@ import {
   RadioGroupItemLabel,
 } from '@kit/ui/radio-group';
 import { Trans } from '@kit/ui/trans';
+import { cn } from '@kit/ui/utils';
 
 export function PlanPicker(
   props: React.PropsWithChildren<{
@@ -81,29 +82,39 @@ export function PlanPicker(
 
                 <FormControl>
                   <RadioGroup name={field.name} value={field.value}>
-                    {intervals.map((interval) => {
-                      return (
-                        <div
-                          key={interval}
-                          className={'flex items-center space-x-2'}
-                        >
-                          <RadioGroupItem
-                            id={interval}
-                            value={interval}
-                            onClick={() => {
-                              form.setValue('interval', interval);
-                            }}
-                          />
+                    <div className={'flex space-x-2.5'}>
+                      {intervals.map((interval) => {
+                        const selected = field.value === interval;
 
-                          <span className={'text-sm font-bold'}>
-                            <Trans
-                              i18nKey={`common.billingInterval.${interval}`}
-                              defaults={interval}
+                        return (
+                          <label
+                            key={interval}
+                            className={cn(
+                              'hover:bg-muted flex items-center space-x-2 rounded-md border border-transparent px-4 py-2',
+                              {
+                                ['border-border']: selected,
+                                ['hover:bg-muted']: !selected,
+                              },
+                            )}
+                          >
+                            <RadioGroupItem
+                              id={interval}
+                              value={interval}
+                              onClick={() => {
+                                form.setValue('planId', '');
+                                form.setValue('interval', interval);
+                              }}
                             />
-                          </span>
-                        </div>
-                      );
-                    })}
+
+                            <span className={'text-sm font-bold'}>
+                              <Trans
+                                i18nKey={`common:billingInterval.${interval}`}
+                              />
+                            </span>
+                          </label>
+                        );
+                      })}
+                    </div>
                   </RadioGroup>
                 </FormControl>
                 <FormMessage />
@@ -130,7 +141,10 @@ export function PlanPicker(
                     }
 
                     return (
-                      <RadioGroupItemLabel key={variant.id}>
+                      <RadioGroupItemLabel
+                        selected={field.value === variant.id}
+                        key={variant.id}
+                      >
                         <RadioGroupItem
                           id={variant.id}
                           value={variant.id}
@@ -144,9 +158,7 @@ export function PlanPicker(
                         >
                           <Label
                             htmlFor={variant.id}
-                            className={
-                              'flex flex-col justify-center space-y-1.5'
-                            }
+                            className={'flex flex-col justify-center space-y-2'}
                           >
                             <span className="font-bold">{item.name}</span>
 

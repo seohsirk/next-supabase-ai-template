@@ -1,4 +1,5 @@
 import { allDocumentationPages } from 'contentlayer/generated';
+
 import appConfig from '~/config/app.config';
 import { withI18n } from '~/lib/i18n/with-i18n';
 

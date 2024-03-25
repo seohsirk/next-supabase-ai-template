@@ -14,13 +14,6 @@
     "./personal-account-settings": "./src/components/personal-account-settings/index.ts",
     "./hooks/*": "./src/hooks/*.ts"
   },
-  "dependencies": {
-    "@kit/supabase": "0.1.0",
-    "@kit/ui": "0.1.0",
-    "@kit/shared": "0.1.0",
-    "lucide-react": "^0.360.0",
-    "@radix-ui/react-icons": "^1.3.0"
-  },
   "devDependencies": {
     "@kit/eslint-config": "0.2.0",
     "@kit/prettier-config": "0.1.0",
@@ -29,7 +22,12 @@
   },
   "peerDependencies": {
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "@kit/supabase": "0.1.0",
+    "@kit/ui": "0.1.0",
+    "@kit/shared": "0.1.0",
+    "lucide-react": "^0.360.0",
+    "@radix-ui/react-icons": "^1.3.0"
   },
   "prettier": "@kit/prettier-config",
   "eslintConfig": {

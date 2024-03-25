@@ -1,9 +1,10 @@
 import type { Post } from 'contentlayer/generated';
-import { CoverImage } from '~/(marketing)/blog/components/cover-image';
-import { DateFormatter } from '~/(marketing)/blog/components/date-formatter';
 
 import { Heading } from '@kit/ui/heading';
 import { If } from '@kit/ui/if';
+
+import { CoverImage } from '~/(marketing)/blog/components/cover-image';
+import { DateFormatter } from '~/(marketing)/blog/components/date-formatter';
 
 const PostHeader: React.FC<{
   post: Post;

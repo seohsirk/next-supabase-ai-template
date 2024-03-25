@@ -1,11 +1,12 @@
 'use client';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import pathsConfig from '~/config/paths.config';
-import { i18nResolver } from '~/lib/i18n/i18n.resolver';
 
 import { I18nProvider } from '@kit/i18n/provider';
 import { AuthChangeListener } from '@kit/supabase/components/auth-change-listener';
+
+import pathsConfig from '~/config/paths.config';
+import { i18nResolver } from '~/lib/i18n/i18n.resolver';
 
 export function RootProviders({
   lang,

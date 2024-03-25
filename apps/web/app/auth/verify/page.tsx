@@ -1,12 +1,12 @@
 import { redirect } from 'next/navigation';
 
-import pathsConfig from '~/config/paths.config';
-import { createI18nServerInstance } from '~/lib/i18n/i18n.server';
-import { withI18n } from '~/lib/i18n/with-i18n';
-
 import { MultiFactorChallengeContainer } from '@kit/auth/mfa';
 import { checkRequiresMultiFactorAuthentication } from '@kit/supabase/check-requires-mfa';
 import { getSupabaseServerComponentClient } from '@kit/supabase/server-component-client';
+
+import pathsConfig from '~/config/paths.config';
+import { createI18nServerInstance } from '~/lib/i18n/i18n.server';
+import { withI18n } from '~/lib/i18n/with-i18n';
 
 export const generateMetadata = async () => {
   const i18n = await createI18nServerInstance();

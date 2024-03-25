@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "analyze": "ANALYZE=true pnpm run build",
     "build": "pnpm with-env next build",
     "clean": "git clean -xdf .next .turbo node_modules",
     "dev": "pnpm with-env next dev",
@@ -57,6 +58,7 @@
     "@kit/prettier-config": "^0.1.0",
     "@kit/tailwind-config": "^0.1.0",
     "@kit/tsconfig": "^0.1.0",
+    "@next/bundle-analyzer": "^14.1.4",
     "@types/mdx": "^2.0.10",
     "@types/node": "^20.11.5",
     "@types/react": "^18.2.48",

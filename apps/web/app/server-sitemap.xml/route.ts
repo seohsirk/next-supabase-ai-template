@@ -1,9 +1,8 @@
+import appConfig from '@/config/app.config';
 import { invariant } from '@epic-web/invariant';
 import { allDocumentationPages, allPosts } from 'contentlayer/generated';
 import { getServerSideSitemap } from 'next-sitemap';
 import { join } from 'path';
-
-import appConfig from '@/config/app.config';
 
 const siteUrl = appConfig.url;
 
