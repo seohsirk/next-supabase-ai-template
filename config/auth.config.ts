@@ -8,7 +8,6 @@ const AuthConfigSchema = z.object({
   providers: z.object({
     password: z.boolean(),
     magicLink: z.boolean(),
-    otp: z.boolean(),
     oAuth: providers.array(),
   }),
 });
@@ -17,9 +16,8 @@ const authConfig = AuthConfigSchema.parse({
   // NB: Enable the providers below in the Supabase Console
   // in your production project
   providers: {
-    password: true,
-    magicLink: false,
-    otp: false,
+    password: false,
+    magicLink: true,
     oAuth: ['google'],
   },
 });

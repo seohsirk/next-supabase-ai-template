@@ -29,7 +29,7 @@ const pathsConfig = PathsSchema.parse({
     verifyMfa: '/auth/verify',
     callback: '/auth/callback',
     passwordReset: '/auth/password-reset',
-    passwordUpdate: '/password-reset',
+    passwordUpdate: '/update-password',
   },
   app: {
     home: '/home',
