@@ -2,9 +2,9 @@
 
 import { useCallback, useMemo, useState } from 'react';
 
-import { useTranslation } from 'react-i18next';
+import { useRouter } from 'next/navigation';
 
-import useRefresh from '@kit/shared/hooks/use-refresh';
+import { useTranslation } from 'react-i18next';
 
 import {
   Select,
@@ -14,11 +14,11 @@ import {
   SelectValue,
 } from '../shadcn/select';
 
-const LanguageDropdownSwitcher: React.FC<{
+export const LanguageDropdownSwitcher: React.FC<{
   onChange?: (locale: string) => unknown;
 }> = ({ onChange }) => {
   const { i18n } = useTranslation();
-  const refresh = useRefresh();
+  const router = useRouter();
 
   const { language: currentLanguage, options } = i18n;
 
@@ -43,9 +43,10 @@ const LanguageDropdownSwitcher: React.FC<{
       }
 
       await i18n.changeLanguage(locale);
-      return refresh();
+
+      return router.refresh();
     },
-    [i18n, onChange, refresh],
+    [i18n, onChange, router],
   );
 
   return (
@@ -77,5 +78,3 @@ const LanguageDropdownSwitcher: React.FC<{
 function capitalize(lang: string) {
   return lang.slice(0, 1).toUpperCase() + lang.slice(1);
 }
-
-export default LanguageDropdownSwitcher;

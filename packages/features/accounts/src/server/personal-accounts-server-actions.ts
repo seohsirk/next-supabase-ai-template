@@ -33,9 +33,15 @@ export async function deletePersonalAccountAction(formData: FormData) {
     `Deleting personal account...`,
   );
 
-  const deleteAccountResponse = await service.deletePersonalAccount({
-    userId,
-  });
+  const deleteAccountResponse = await service.deletePersonalAccount(
+    getSupabaseServerActionClient({ admin: true }),
+    {
+      userId,
+    },
+  );
+
+  //
+  // also delete any associated data and subscriptions
 
   if (deleteAccountResponse.error) {
     Logger.error(

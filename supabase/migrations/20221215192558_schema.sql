@@ -671,7 +671,7 @@ create table if not exists
     id serial primary key,
     email varchar(255) not null,
     account_id uuid references public.accounts (id) on delete cascade not null,
-    invited_by uuid references auth.users not null,
+    invited_by uuid references auth.users on delete cascade not null,
     role public.account_role not null,
     invite_token varchar(255) unique not null,
     created_at timestamp default current_timestamp not null,

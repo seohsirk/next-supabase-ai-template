@@ -26,9 +26,7 @@ export function SiteHeaderAccountSection(
     return <AuthButtons />;
   }
 
-  return (
-    <SuspendedPersonalAccountDropdown session={props.session} />
-  );
+  return <SuspendedPersonalAccountDropdown session={props.session} />;
 }
 
 function SuspendedPersonalAccountDropdown(props: { session: Session | null }) {

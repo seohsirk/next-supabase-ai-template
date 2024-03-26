@@ -13,5 +13,10 @@ import { Database } from '@kit/supabase/database';
 export class PersonalAccountsService {
   constructor(private readonly client: SupabaseClient<Database>) {}
 
-  async deletePersonalAccount(param: { userId: string }) {}
+  async deletePersonalAccount(
+    adminClient: SupabaseClient<Database>,
+    params: { userId: string },
+  ) {
+    return adminClient.auth.admin.deleteUser(params.userId);
+  }
 }
