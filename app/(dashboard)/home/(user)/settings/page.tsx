@@ -9,7 +9,7 @@ const features = {
 };
 
 const paths = {
-  callback: pathsConfig.auth.callback,
+  callback: pathsConfig.auth.callback + `?next=${pathsConfig.app.accountHome}`,
 };
 
 function PersonalAccountSettingsPage() {

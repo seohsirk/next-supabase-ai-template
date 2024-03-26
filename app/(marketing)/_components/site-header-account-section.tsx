@@ -22,10 +22,12 @@ export function SiteHeaderAccountSection(
     session: Session | null;
   }>,
 ) {
+  if (!props.session) {
+    return <AuthButtons />;
+  }
+
   return (
-    <Suspense fallback={<AuthButtons />}>
-      <SuspendedPersonalAccountDropdown session={props.session} />
-    </Suspense>
+    <SuspendedPersonalAccountDropdown session={props.session} />
   );
 }
 
