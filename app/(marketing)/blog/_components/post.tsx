@@ -1,10 +1,12 @@
-import React from 'react';
+import dynamic from 'next/dynamic';
 
 import type { Post as PostType } from 'contentlayer/generated';
 
-import { Mdx } from '@kit/ui/mdx';
-
 import { PostHeader } from './post-header';
+
+const Mdx = dynamic(() =>
+  import('@kit/ui/mdx').then((mod) => ({ default: mod.Mdx })),
+);
 
 export const Post: React.FC<{
   post: PostType;

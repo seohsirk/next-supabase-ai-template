@@ -26,6 +26,7 @@ export function TeamAccountCheckoutForm(params: { accountId: string }) {
   if (checkoutToken) {
     return (
       <EmbeddedCheckout
+        load
         checkoutToken={checkoutToken}
         provider={billingConfig.provider}
       />

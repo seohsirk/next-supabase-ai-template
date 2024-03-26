@@ -143,12 +143,14 @@ function getPatterns() {
         const supabase = createMiddlewareClient(req, res);
         const { data, error } = await supabase.auth.getSession();
         const origin = req.nextUrl.origin;
+        const next = req.nextUrl.pathname;
 
         // If user is not logged in, redirect to sign in page.
         if (!data.session || error) {
-          return NextResponse.redirect(
-            new URL(pathsConfig.auth.signIn, origin).href,
-          );
+          const signIn = pathsConfig.auth.signIn;
+          const redirectPath = `${signIn}?next=${next}`;
+
+          return NextResponse.redirect(new URL(redirectPath, origin).href);
         }
 
         const requiresMultiFactorAuthentication =
