@@ -90,11 +90,11 @@ function RemoveInvitationErrorAlert() {
   return (
     <Alert variant={'destructive'}>
       <AlertTitle>
-        <Trans i18nKey={'organization:deleteInvitationErrorTitle'} />
+        <Trans i18nKey={'teams:deleteInvitationErrorTitle'} />
       </AlertTitle>
 
       <AlertDescription>
-        <Trans i18nKey={'organization:deleteInvitationErrorMessage'} />
+        <Trans i18nKey={'teams:deleteInvitationErrorMessage'} />
       </AlertDescription>
     </Alert>
   );

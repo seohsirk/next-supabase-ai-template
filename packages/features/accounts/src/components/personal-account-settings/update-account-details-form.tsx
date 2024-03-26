@@ -2,7 +2,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
-import { z } from 'zod';
 
 import { Database } from '@kit/supabase/database';
 import { Button } from '@kit/ui/button';
@@ -18,12 +17,9 @@ import { Input } from '@kit/ui/input';
 import { Trans } from '@kit/ui/trans';
 
 import { useUpdateAccountData } from '../../hooks/use-update-account';
+import { AccountDetailsSchema } from '../../schema/account-details.schema';
 
 type UpdateUserDataParams = Database['public']['Tables']['accounts']['Update'];
-
-const AccountInfoSchema = z.object({
-  displayName: z.string().min(2).max(100),
-});
 
 export function UpdateAccountDetailsForm({
   displayName,
@@ -35,10 +31,10 @@ export function UpdateAccountDetailsForm({
   onUpdate: (user: Partial<UpdateUserDataParams>) => void;
 }) {
   const updateAccountMutation = useUpdateAccountData(userId);
-  const { t } = useTranslation();
+  const { t } = useTranslation('account');
 
   const form = useForm({
-    resolver: zodResolver(AccountInfoSchema),
+    resolver: zodResolver(AccountDetailsSchema),
     defaultValues: {
       displayName,
     },
@@ -51,10 +47,10 @@ export function UpdateAccountDetailsForm({
       onUpdate(data);
     });
 
-    return toast.promise(promise, {
-      success: t(`profile:updateProfileSuccess`),
-      error: t(`profile:updateProfileError`),
-      loading: t(`profile:updateProfileLoading`),
+    return toast.promise(() => promise, {
+      success: t(`updateProfileSuccess`),
+      error: t(`updateProfileError`),
+      loading: t(`:pdateProfileLoading`),
     });
   };
 
@@ -72,7 +68,7 @@ export function UpdateAccountDetailsForm({
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  <Trans i18nKey={'profile:displayNameLabel'} />
+                  <Trans i18nKey={'account:name'} />
                 </FormLabel>
 
                 <FormControl>
@@ -92,7 +88,7 @@ export function UpdateAccountDetailsForm({
 
           <div>
             <Button disabled={updateAccountMutation.isPending}>
-              <Trans i18nKey={'profile:updateProfileSubmitLabel'} />
+              <Trans i18nKey={'account:updateProfileSubmitLabel'} />
             </Button>
           </div>
         </form>

@@ -211,7 +211,7 @@ function InviteMembersForm({
                 <Plus className={'h-4'} />
 
                 <span>
-                  <Trans i18nKey={'organization:addAnotherMemberButtonLabel'} />
+                  <Trans i18nKey={'teams:addAnotherMemberButtonLabel'} />
                 </span>
               </span>
             </Button>

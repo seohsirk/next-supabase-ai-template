@@ -1,14 +1,11 @@
 'use client';
 
-import { useCallback } from 'react';
-
 import type { User } from '@supabase/gotrue-js';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
-import { z } from 'zod';
 
 import { useUpdateUser } from '@kit/supabase/hooks/use-update-user-mutation';
 import { Alert, AlertDescription, AlertTitle } from '@kit/ui/alert';
@@ -25,32 +22,13 @@ import { If } from '@kit/ui/if';
 import { Input } from '@kit/ui/input';
 import { Trans } from '@kit/ui/trans';
 
-const UpdateEmailSchema = z
-  .object({
-    email: z.string().email(),
-    repeatEmail: z.string().email(),
-  })
-  .refine(
-    (values) => {
-      return values.email === values.repeatEmail;
-    },
-    {
-      path: ['repeatEmail'],
-      message: 'Emails do not match',
-    },
-  );
+import { UpdateEmailSchema } from '../../schema/update-email.schema';
 
-function createEmailResolver(currentEmail: string) {
+function createEmailResolver(currentEmail: string, errorMessage: string) {
   return zodResolver(
-    UpdateEmailSchema.refine(
-      (values) => {
-        return values.email !== currentEmail;
-      },
-      {
-        path: ['email'],
-        message: 'New email must be different from current email',
-      },
-    ),
+    UpdateEmailSchema.withTranslation(errorMessage).refine((schema) => {
+      return schema.email !== currentEmail;
+    }),
   );
 }
 
@@ -61,31 +39,31 @@ export function UpdateEmailForm({
   user: User;
   callbackPath: string;
 }) {
-  const { t } = useTranslation();
+  const { t } = useTranslation('account');
   const updateUserMutation = useUpdateUser();
 
-  const updateEmail = useCallback(
-    (email: string) => {
-      const redirectTo = new URL(callbackPath, window.location.host).toString();
+  const updateEmail = ({ email }: { email: string }) => {
+    // then, we update the user's email address
+    const promise = async () => {
+      const redirectTo = new URL(
+        callbackPath,
+        window.location.origin,
+      ).toString();
 
-      // then, we update the user's email address
-      const promise = updateUserMutation.mutateAsync({ email, redirectTo });
+      await updateUserMutation.mutateAsync({ email, redirectTo });
+    };
 
-      return toast.promise(promise, {
-        success: t(`profile:updateEmailSuccess`),
-        loading: t(`profile:updateEmailLoading`),
-        error: (error: Error) => {
-          return error.message ?? t(`profile:updateEmailError`);
-        },
-      });
-    },
-    [callbackPath, t, updateUserMutation],
-  );
+    toast.promise(promise, {
+      success: t(`updateEmailSuccess`),
+      loading: t(`updateEmailLoading`),
+      error: t(`updateEmailError`),
+    });
+  };
 
   const currentEmail = user.email;
 
   const form = useForm({
-    resolver: createEmailResolver(currentEmail!),
+    resolver: createEmailResolver(currentEmail!, t('emailNotMatching')),
     defaultValues: {
       email: '',
       repeatEmail: '',
@@ -97,18 +75,16 @@ export function UpdateEmailForm({
       <form
         className={'flex flex-col space-y-4'}
         data-test={'update-email-form'}
-        onSubmit={form.handleSubmit((values) => {
-          return updateEmail(values.email);
-        })}
+        onSubmit={form.handleSubmit(updateEmail)}
       >
         <If condition={updateUserMutation.data}>
           <Alert variant={'success'}>
             <AlertTitle>
-              <Trans i18nKey={'profile:updateEmailSuccess'} />
+              <Trans i18nKey={'account:updateEmailSuccess'} />
             </AlertTitle>
 
             <AlertDescription>
-              <Trans i18nKey={'profile:updateEmailSuccessMessage'} />
+              <Trans i18nKey={'account:updateEmailSuccessMessage'} />
             </AlertDescription>
           </Alert>
         </If>
@@ -118,7 +94,7 @@ export function UpdateEmailForm({
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  <Trans i18nKey={'profile:newEmail'} />
+                  <Trans i18nKey={'account:newEmail'} />
                 </FormLabel>
 
                 <FormControl>
@@ -141,7 +117,7 @@ export function UpdateEmailForm({
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  <Trans i18nKey={'profile:repeatEmail'} />
+                  <Trans i18nKey={'account:repeatEmail'} />
                 </FormLabel>
 
                 <FormControl>
@@ -160,8 +136,8 @@ export function UpdateEmailForm({
           />
 
           <div>
-            <Button>
-              <Trans i18nKey={'profile:updateEmailSubmitLabel'} />
+            <Button disabled={updateUserMutation.isPending}>
+              <Trans i18nKey={'account:updateEmailSubmitLabel'} />
             </Button>
           </div>
         </div>

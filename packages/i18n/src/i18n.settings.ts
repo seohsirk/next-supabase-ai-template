@@ -14,10 +14,11 @@ export const I18N_COOKIE_NAME = 'lang';
 export const defaultI18nNamespaces = [
   'common',
   'auth',
-  'organization',
-  'profile',
-  'subscription',
-  'onboarding',
+  'account',
+  'teams',
+  'billing',
+  'marketing',
+  'admin',
 ];
 
 export function getI18nSettings(

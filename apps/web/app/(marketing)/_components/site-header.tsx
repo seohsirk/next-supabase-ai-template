@@ -4,7 +4,7 @@ import { SiteHeaderAccountSection } from '~/(marketing)/_components/site-header-
 import { SiteNavigation } from '~/(marketing)/_components/site-navigation';
 import { AppLogo } from '~/components/app-logo';
 
-export async function SiteHeader(props: { session?: Session | null }) {
+export function SiteHeader(props: { session?: Session | null }) {
   return (
     <div className={'container mx-auto'}>
       <div className="flex h-16 items-center justify-between">

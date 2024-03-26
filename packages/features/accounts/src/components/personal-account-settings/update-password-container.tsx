@@ -18,6 +18,10 @@ export function UpdatePasswordFormContainer(
     return <LoadingOverlay fullPage={false} />;
   }
 
+  if (!user) {
+    return null;
+  }
+
   const canUpdatePassword = user.identities?.some(
     (item) => item.provider === `email`,
   );
@@ -32,7 +36,7 @@ export function UpdatePasswordFormContainer(
 function WarnCannotUpdatePasswordAlert() {
   return (
     <Alert variant={'warning'}>
-      <Trans i18nKey={'profile:cannotUpdatePassword'} />
+      <Trans i18nKey={'account:cannotUpdatePassword'} />
     </Alert>
   );
 }

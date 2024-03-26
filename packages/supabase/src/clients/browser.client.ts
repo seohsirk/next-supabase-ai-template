@@ -3,7 +3,7 @@ import { createBrowserClient } from '@supabase/ssr';
 
 import { Database } from '../database.types';
 
-let client: ReturnType<typeof createBrowserClient>;
+let client: ReturnType<typeof createBrowserClient<Database>>;
 
 export function getSupabaseBrowserClient<GenericSchema = Database>() {
   const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -12,7 +12,9 @@ export function getSupabaseBrowserClient<GenericSchema = Database>() {
   invariant(SUPABASE_URL, `Supabase URL was not provided`);
   invariant(SUPABASE_ANON_KEY, `Supabase Anon key was not provided`);
 
-  if (client) return client;
+  if (client) {
+    return client;
+  }
 
   client = createBrowserClient<GenericSchema>(SUPABASE_URL, SUPABASE_ANON_KEY);
 

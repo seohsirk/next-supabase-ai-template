@@ -66,9 +66,7 @@ export const UpdateOrganizationForm = (props: {
               return (
                 <FormItem>
                   <FormLabel>
-                    <Trans
-                      i18nKey={'organization:organizationNameInputLabel'}
-                    />
+                    <Trans i18nKey={'teams:organizationNameInputLabel'} />
                   </FormLabel>
 
                   <FormControl>
@@ -90,7 +88,7 @@ export const UpdateOrganizationForm = (props: {
               data-test={'update-organization-submit-button'}
               disabled={updateAccountData.isPending}
             >
-              <Trans i18nKey={'organization:updateOrganizationSubmitLabel'} />
+              <Trans i18nKey={'teams:updateOrganizationSubmitLabel'} />
             </Button>
           </div>
         </form>

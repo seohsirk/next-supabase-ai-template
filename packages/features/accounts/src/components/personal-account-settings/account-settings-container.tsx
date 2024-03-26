@@ -1,5 +1,12 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@kit/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@kit/ui/card';
 import { If } from '@kit/ui/if';
+import { Trans } from '@kit/ui/trans';
 
 import { AccountDangerZone } from './account-danger-zone';
 import { UpdateAccountDetailsFormContainer } from './update-account-details-form-container';
@@ -22,7 +29,13 @@ export function PersonalAccountSettingsContainer(
     <div className={'flex w-full flex-col space-y-8 pb-32'}>
       <Card>
         <CardHeader>
-          <CardTitle>Your Profile Picture</CardTitle>
+          <CardTitle>
+            <Trans i18nKey={'account:accountImage'} />
+          </CardTitle>
+
+          <CardDescription>
+            <Trans i18nKey={'account:accountImageDescription'} />
+          </CardDescription>
         </CardHeader>
 
         <CardContent>
@@ -32,7 +45,13 @@ export function PersonalAccountSettingsContainer(
 
       <Card>
         <CardHeader>
-          <CardTitle>Your Details</CardTitle>
+          <CardTitle>
+            <Trans i18nKey={'account:name'} />
+          </CardTitle>
+
+          <CardDescription>
+            <Trans i18nKey={'account:nameDescription'} />
+          </CardDescription>
         </CardHeader>
 
         <CardContent>
@@ -42,7 +61,13 @@ export function PersonalAccountSettingsContainer(
 
       <Card>
         <CardHeader>
-          <CardTitle>Update your Email</CardTitle>
+          <CardTitle>
+            <Trans i18nKey={'account:updateEmailCardTitle'} />
+          </CardTitle>
+
+          <CardDescription>
+            <Trans i18nKey={'account:updateEmailCardDescription'} />
+          </CardDescription>
         </CardHeader>
 
         <CardContent>
@@ -52,7 +77,13 @@ export function PersonalAccountSettingsContainer(
 
       <Card>
         <CardHeader>
-          <CardTitle>Update your Password</CardTitle>
+          <CardTitle>
+            <Trans i18nKey={'account:updatePasswordCardTitle'} />
+          </CardTitle>
+
+          <CardDescription>
+            <Trans i18nKey={'account:updatePasswordCardDescription'} />
+          </CardDescription>
         </CardHeader>
 
         <CardContent>
@@ -63,7 +94,13 @@ export function PersonalAccountSettingsContainer(
       <If condition={props.features.enableAccountDeletion}>
         <Card className={'border-destructive border-2'}>
           <CardHeader>
-            <CardTitle>Danger Zone</CardTitle>
+            <CardTitle>
+              <Trans i18nKey={'account:dangerZone'} />
+            </CardTitle>
+
+            <CardDescription>
+              <Trans i18nKey={'account:dangerZoneDescription'} />
+            </CardDescription>
           </CardHeader>
 
           <CardContent>

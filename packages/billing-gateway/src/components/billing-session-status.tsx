@@ -64,7 +64,7 @@ function SuccessSessionStatus({
 
         <Heading level={3}>
           <span className={'mr-4 font-semibold'}>
-            <Trans i18nKey={'subscription:checkoutSuccessTitle'} />
+            <Trans i18nKey={'billing:checkoutSuccessTitle'} />
           </span>
           🎉
         </Heading>
@@ -74,7 +74,7 @@ function SuccessSessionStatus({
         >
           <p>
             <Trans
-              i18nKey={'subscription:checkoutSuccessDescription'}
+              i18nKey={'billing:checkoutSuccessDescription'}
               values={{ customerEmail }}
             />
           </p>
@@ -84,7 +84,7 @@ function SuccessSessionStatus({
           <Link href={redirectPath}>
             <span className={'flex items-center space-x-2.5'}>
               <span>
-                <Trans i18nKey={'subscription:checkoutSuccessBackButton'} />
+                <Trans i18nKey={'billing:checkoutSuccessBackButton'} />
               </span>
 
               <ChevronRight className={'h-4'} />

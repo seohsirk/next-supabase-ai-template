@@ -38,10 +38,12 @@ export function CurrentPlanCard({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Your Plan</CardTitle>
+        <CardTitle>
+          <Trans i18nKey="billing:planCardTitle" />
+        </CardTitle>
 
         <CardDescription>
-          You can change your plan or cancel your subscription at any time.
+          <Trans i18nKey="billing:planCardDescription" />
         </CardDescription>
       </CardHeader>
 
@@ -53,13 +55,20 @@ export function CurrentPlanCard({
                 's-6 fill-green-500 text-white dark:fill-white dark:text-black'
               }
             />
+
             <span>{product.name}</span>
             <CurrentPlanBadge status={subscription.status} />
           </div>
 
           <div className={'text-muted-foreground'}>
-            Renews every {subscription.interval} at{' '}
-            <span>{product.currency}</span> <span>{plan.price}</span>
+            <Trans
+              i18nKey="billing:planRenewal"
+              values={{
+                interval: subscription.interval,
+                currency: product.currency,
+                price: plan.price,
+              }}
+            />
           </div>
         </div>
 
@@ -70,12 +79,16 @@ export function CurrentPlanCard({
         <div>
           <Accordion type="single" collapsible>
             <AccordionItem value="features">
-              <AccordionTrigger>Plan details</AccordionTrigger>
+              <AccordionTrigger>
+                <Trans i18nKey="billing:planDetails" />
+              </AccordionTrigger>
 
               <AccordionContent className="space-y-2.5">
                 <If condition={subscription.status === 'trialing'}>
                   <div className="flex flex-col">
-                    <span className="font-medium">Your trial ends on</span>
+                    <span className="font-medium">
+                      <Trans i18nKey="billing:trialEndsOn" />
+                    </span>
 
                     <div className={'text-muted-foreground'}>
                       <span>
@@ -118,12 +131,16 @@ export function CurrentPlanCard({
                 <div className="flex flex-col space-y-1">
                   <span className="font-medium">Features</span>
 
-                  <ul>
+                  <ul className={'flex flex-col space-y-0.5'}>
                     {product.features.map((item) => {
                       return (
-                        <li key={item} className="flex items-center space-x-0.5">
+                        <li
+                          key={item}
+                          className="flex items-center space-x-0.5"
+                        >
                           <CheckCircle2 className="h-4 text-green-500" />
-                          <span>
+
+                          <span className={'text-muted-foreground'}>
                             <Trans i18nKey={item} defaults={item} />
                           </span>
                         </li>

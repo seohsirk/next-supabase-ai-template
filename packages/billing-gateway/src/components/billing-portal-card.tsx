@@ -10,22 +10,27 @@ import {
   CardHeader,
   CardTitle,
 } from '@kit/ui/card';
+import { Trans } from '@kit/ui/trans';
 
 export function BillingPortalCard() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Manage your Billing Details</CardTitle>
+        <CardTitle>
+          <Trans i18nKey="billing:billingPortalCardTitle" />
+        </CardTitle>
 
         <CardDescription>
-          You can change your plan or cancel your subscription at any time.
+          <Trans i18nKey="billing:billingPortalCardDescription" />
         </CardDescription>
       </CardHeader>
 
       <CardContent className={'space-y-2'}>
         <div>
           <Button>
-            <span>Visit the billing portal</span>
+            <span>
+              <Trans i18nKey="billing:billingPortalCardButton" />
+            </span>
 
             <ArrowUpRight className={'h-4'} />
           </Button>

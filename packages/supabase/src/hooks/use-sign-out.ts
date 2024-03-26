@@ -1,16 +1,15 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { useSupabase } from './use-supabase';
-import { useRevalidateUserSession } from './use-user-session';
 
 export function useSignOut() {
   const client = useSupabase();
-  const revalidateUserSession = useRevalidateUserSession();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async () => {
       await client.auth.signOut();
-      await revalidateUserSession();
+      await queryClient.invalidateQueries();
     },
   });
 }

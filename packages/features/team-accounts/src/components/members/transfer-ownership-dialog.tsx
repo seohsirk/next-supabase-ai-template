@@ -109,7 +109,7 @@ function TransferOrganizationOwnershipForm({
 
         <p>
           <Trans
-            i18nKey={'organization:transferOwnershipDisclaimer'}
+            i18nKey={'teams:transferOwnershipDisclaimer'}
             values={{
               member: targetDisplayName,
             }}
@@ -153,9 +153,9 @@ function TransferOrganizationOwnershipForm({
         >
           <If
             condition={pending}
-            fallback={<Trans i18nKey={'organization:transferOwnership'} />}
+            fallback={<Trans i18nKey={'teams:transferOwnership'} />}
           >
-            <Trans i18nKey={'organization:transferringOwnership'} />
+            <Trans i18nKey={'teams:transferringOwnership'} />
           </If>
         </Button>
       </form>
@@ -167,11 +167,11 @@ function TransferOwnershipErrorAlert() {
   return (
     <Alert variant={'destructive'}>
       <AlertTitle>
-        <Trans i18nKey={'organization:transferOrganizationErrorHeading'} />
+        <Trans i18nKey={'teams:transferOrganizationErrorHeading'} />
       </AlertTitle>
 
       <AlertDescription>
-        <Trans i18nKey={'organization:transferOrganizationErrorMessage'} />
+        <Trans i18nKey={'teams:transferOrganizationErrorMessage'} />
       </AlertDescription>
     </Alert>
   );

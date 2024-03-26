@@ -11,7 +11,7 @@ import { Button } from '../shadcn/button';
 import { ImageUploadInput } from './image-upload-input';
 import { Trans } from './trans';
 
-function ImageUploader(
+export function ImageUploader(
   props: React.PropsWithChildren<{
     value: string | null | undefined;
     onValueChange: (value: File | null) => unknown;
@@ -86,8 +86,6 @@ function ImageUploader(
     </div>
   );
 }
-
-export default ImageUploader;
 
 function FallbackImage(
   props: React.PropsWithChildren<{

@@ -33,7 +33,7 @@ function MultiFactorAuthSetupModal(
   const onEnrollSuccess = useCallback(() => {
     props.setIsOpen(false);
 
-    return toast.success(t(`profile:multiFactorSetupSuccess`));
+    return toast.success(t(`multiFactorSetupSuccess`));
   }, [props, t]);
 
   return (
@@ -41,7 +41,7 @@ function MultiFactorAuthSetupModal(
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            <Trans i18nKey={'profile:setupMfaButtonLabel'} />
+            <Trans i18nKey={'account:setupMfaButtonLabel'} />
           </DialogTitle>
         </DialogHeader>
 
@@ -109,7 +109,7 @@ function MultiFactorAuthSetupForm({
     return (
       <div className={'flex flex-col space-y-4'}>
         <Alert variant={'destructive'}>
-          <Trans i18nKey={'profile:multiFactorSetupError'} />
+          <Trans i18nKey={'account:multiFactorSetupError'} />
         </Alert>
       </div>
     );
@@ -132,7 +132,7 @@ function MultiFactorAuthSetupForm({
         >
           <div className={'flex flex-col space-y-4'}>
             <Label>
-              <Trans i18nKey={'profile:verificationCode'} />
+              <Trans i18nKey={'account:verificationCode'} />
 
               <OtpInput
                 onInvalid={() => setVerificationCode('')}
@@ -140,16 +140,16 @@ function MultiFactorAuthSetupForm({
               />
 
               <span>
-                <Trans i18nKey={'profile:verifyActivationCodeDescription'} />
+                <Trans i18nKey={'account:verifyActivationCodeDescription'} />
               </span>
             </Label>
 
             <div className={'flex justify-end space-x-2'}>
               <Button disabled={!verificationCode} type={'submit'}>
                 {state.loading ? (
-                  <Trans i18nKey={'profile:verifyingCode'} />
+                  <Trans i18nKey={'account:verifyingCode'} />
                 ) : (
-                  <Trans i18nKey={'profile:enableMfaFactor'} />
+                  <Trans i18nKey={'account:enableMfaFactor'} />
                 )}
               </Button>
             </div>
@@ -210,7 +210,7 @@ function FactorQrCode({
     return (
       <div className={'flex w-full flex-col space-y-2'}>
         <Alert variant={'destructive'}>
-          <Trans i18nKey={'profile:qrCodeError'} />
+          <Trans i18nKey={'account:qrCodeError'} />
         </Alert>
       </div>
     );
@@ -231,7 +231,7 @@ function FactorQrCode({
     <div className={'flex flex-col space-y-4'}>
       <p>
         <span className={'text-base'}>
-          <Trans i18nKey={'profile:multiFactorModalHeading'} />
+          <Trans i18nKey={'account:multiFactorModalHeading'} />
         </span>
       </p>
 
@@ -264,18 +264,18 @@ function FactorNameForm(
     >
       <div className={'flex flex-col space-y-4'}>
         <Label>
-          <Trans i18nKey={'profile:factorNameLabel'} />
+          <Trans i18nKey={'account:factorNameLabel'} />
 
           <Input autoComplete={'off'} required name={inputName} />
 
           <span>
-            <Trans i18nKey={'profile:factorNameHint'} />
+            <Trans i18nKey={'account:factorNameHint'} />
           </span>
         </Label>
 
         <div className={'flex justify-end space-x-2'}>
           <Button type={'submit'}>
-            <Trans i18nKey={'profile:factorNameSubmitLabel'} />
+            <Trans i18nKey={'account:factorNameSubmitLabel'} />
           </Button>
         </div>
       </div>

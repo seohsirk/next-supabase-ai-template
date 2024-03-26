@@ -8,7 +8,7 @@ type Params = UserAttributes & { redirectTo: string };
 
 export function useUpdateUser() {
   const client = useSupabase();
-  const mutationKey = ['auth', 'update-user'];
+  const mutationKey = ['supabase:user'];
 
   const mutationFn = async (attributes: Params) => {
     const { redirectTo, ...params } = attributes;
@@ -17,9 +17,13 @@ export function useUpdateUser() {
       emailRedirectTo: redirectTo,
     });
 
+    console.log(response);
+
     if (response.error) {
       throw response.error;
     }
+
+    console.log('response.data:', response.data);
 
     return response.data;
   };

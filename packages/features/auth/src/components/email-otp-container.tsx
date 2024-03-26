@@ -80,9 +80,9 @@ function VerifyOtpForm({
 
         <Button disabled={verifyOtpMutation.isPending || !verifyCode}>
           {verifyOtpMutation.isPending ? (
-            <Trans i18nKey={'profile:verifyingCode'} />
+            <Trans i18nKey={'account:verifyingCode'} />
           ) : (
-            <Trans i18nKey={'profile:submitVerificationCode'} />
+            <Trans i18nKey={'account:submitVerificationCode'} />
           )}
         </Button>
       </div>

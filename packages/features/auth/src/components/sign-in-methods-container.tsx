@@ -30,10 +30,9 @@ export function SignInMethodsContainer(props: {
   const router = useRouter();
   const nextPath = useSearchParams().get('next') ?? props.paths.home;
 
-  const redirectUrl = new URL(
-    props.paths.callback,
-    isBrowser() ? window?.location.origin : '',
-  ).toString();
+  const redirectUrl = isBrowser()
+    ? new URL(props.paths.callback, window?.location.origin).toString()
+    : '';
 
   const onSignIn = () => {
     router.replace(nextPath);

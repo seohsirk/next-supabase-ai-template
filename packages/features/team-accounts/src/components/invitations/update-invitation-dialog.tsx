@@ -42,11 +42,11 @@ export const UpdateInvitationDialog: React.FC<{
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            <Trans i18nKey={'organization:updateMemberRoleModalHeading'} />
+            <Trans i18nKey={'teams:updateMemberRoleModalHeading'} />
           </DialogTitle>
 
           <DialogDescription>
-            <Trans i18nKey={'organization:updateMemberRoleModalDescription'} />
+            <Trans i18nKey={'teams:updateMemberRoleModalDescription'} />
           </DialogDescription>
         </DialogHeader>
 
@@ -139,7 +139,7 @@ function UpdateInvitationForm({
         />
 
         <Button data-test={'confirm-update-member-role'} disabled={pending}>
-          <Trans i18nKey={'organization:updateRoleSubmitLabel'} />
+          <Trans i18nKey={'teams:updateRoleSubmitLabel'} />
         </Button>
       </form>
     </Form>
@@ -150,11 +150,11 @@ function UpdateRoleErrorAlert() {
   return (
     <Alert variant={'destructive'}>
       <AlertTitle>
-        <Trans i18nKey={'organization:updateRoleErrorHeading'} />
+        <Trans i18nKey={'teams:updateRoleErrorHeading'} />
       </AlertTitle>
 
       <AlertDescription>
-        <Trans i18nKey={'organization:updateRoleErrorMessage'} />
+        <Trans i18nKey={'teams:updateRoleErrorMessage'} />
       </AlertDescription>
     </Alert>
   );

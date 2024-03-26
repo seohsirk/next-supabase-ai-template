@@ -7,7 +7,7 @@ import { useSupabase } from './use-supabase';
 export function useUser() {
   const client = useSupabase();
   const router = useRouter();
-  const queryKey = ['user'];
+  const queryKey = ['supabase:user'];
 
   const queryFn = async () => {
     const response = await client.auth.getUser();

@@ -114,11 +114,11 @@ function SuccessState() {
     <div className={'flex flex-col space-y-4'}>
       <Alert variant={'destructive'}>
         <AlertTitle>
-          <Trans i18nKey={'profile:updatePasswordSuccess'} />
+          <Trans i18nKey={'account:updatePasswordSuccess'} />
         </AlertTitle>
 
         <AlertDescription>
-          <Trans i18nKey={'profile:updatePasswordSuccessMessage'} />
+          <Trans i18nKey={'account:updatePasswordSuccessMessage'} />
         </AlertDescription>
       </Alert>
 

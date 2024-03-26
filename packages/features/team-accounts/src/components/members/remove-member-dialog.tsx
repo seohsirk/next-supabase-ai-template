@@ -84,7 +84,7 @@ function RemoveMemberForm({
           disabled={isSubmitting}
           onClick={onMemberRemoved}
         >
-          <Trans i18nKey={'organization:removeMemberSubmitLabel'} />
+          <Trans i18nKey={'teams:removeMemberSubmitLabel'} />
         </Button>
       </div>
     </form>
@@ -95,11 +95,11 @@ function RemoveMemberErrorAlert() {
   return (
     <Alert variant={'destructive'}>
       <AlertTitle>
-        <Trans i18nKey={'organization:removeMemberErrorHeading'} />
+        <Trans i18nKey={'teams:removeMemberErrorHeading'} />
       </AlertTitle>
 
       <AlertDescription>
-        <Trans i18nKey={'organization:removeMemberErrorMessage'} />
+        <Trans i18nKey={'teams:removeMemberErrorMessage'} />
       </AlertDescription>
     </Alert>
   );

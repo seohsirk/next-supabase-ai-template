@@ -33,7 +33,7 @@ export function CreateTeamAccountDialog(
     <Dialog open={props.isOpen} onOpenChange={props.setIsOpen}>
       <DialogContent>
         <DialogTitle>
-          <Trans i18nKey={'organization:createOrganizationModalHeading'} />
+          <Trans i18nKey={'teams:createOrganizationModalHeading'} />
         </DialogTitle>
 
         <CreateOrganizationAccountForm />
@@ -77,7 +77,7 @@ function CreateOrganizationAccountForm() {
               return (
                 <FormItem>
                   <FormLabel>
-                    <Trans i18nKey={'organization:organizationNameLabel'} />
+                    <Trans i18nKey={'teams:organizationNameLabel'} />
                   </FormLabel>
 
                   <FormControl>
@@ -105,7 +105,7 @@ function CreateOrganizationAccountForm() {
             data-test={'confirm-create-organization-button'}
             disabled={pending}
           >
-            <Trans i18nKey={'organization:createOrganizationSubmitLabel'} />
+            <Trans i18nKey={'teams:createOrganizationSubmitLabel'} />
           </Button>
         </div>
       </form>
@@ -117,11 +117,11 @@ function CreateOrganizationErrorAlert() {
   return (
     <Alert variant={'destructive'}>
       <AlertTitle>
-        <Trans i18nKey={'organization:createOrganizationErrorHeading'} />
+        <Trans i18nKey={'teams:createOrganizationErrorHeading'} />
       </AlertTitle>
 
       <AlertDescription>
-        <Trans i18nKey={'organization:createOrganizationErrorMessage'} />
+        <Trans i18nKey={'teams:createOrganizationErrorMessage'} />
       </AlertDescription>
     </Alert>
   );

@@ -16,9 +16,7 @@ export function EmbeddedCheckout(
     onClose?: () => void;
   }>,
 ) {
-  return (
-    <LazyCheckout onClose={props.onClose} checkoutToken={props.checkoutToken} />
-  );
+  return <LazyCheckout {...props} />;
 }
 
 function LazyCheckout(

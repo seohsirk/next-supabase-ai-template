@@ -55,7 +55,7 @@ export function MultiFactorChallengeContainer({
     <form onSubmit={onSubmitClicked}>
       <div className={'flex flex-col space-y-4'}>
         <span className={'text-sm'}>
-          <Trans i18nKey={'profile:verifyActivationCodeDescription'} />
+          <Trans i18nKey={'account:verifyActivationCodeDescription'} />
         </span>
 
         <div className={'flex w-full flex-col space-y-2.5'}>
@@ -67,7 +67,7 @@ export function MultiFactorChallengeContainer({
           <If condition={verifyMFAChallenge.error}>
             <Alert variant={'destructive'}>
               <AlertDescription>
-                <Trans i18nKey={'profile:invalidVerificationCode'} />
+                <Trans i18nKey={'account:invalidVerificationCode'} />
               </AlertDescription>
             </Alert>
           </If>
@@ -75,9 +75,9 @@ export function MultiFactorChallengeContainer({
 
         <Button disabled={verifyMFAChallenge.isPending || !verifyCode}>
           {verifyMFAChallenge.isPending ? (
-            <Trans i18nKey={'profile:verifyingCode'} />
+            <Trans i18nKey={'account:verifyingCode'} />
           ) : (
-            <Trans i18nKey={'profile:submitVerificationCode'} />
+            <Trans i18nKey={'account:submitVerificationCode'} />
           )}
         </Button>
       </div>
@@ -154,7 +154,7 @@ function FactorsListContainer({
         <Spinner />
 
         <div>
-          <Trans i18nKey={'profile:loadingFactors'} />
+          <Trans i18nKey={'account:loadingFactors'} />
         </div>
       </div>
     );
@@ -165,7 +165,7 @@ function FactorsListContainer({
       <div className={'w-full'}>
         <Alert variant={'destructive'}>
           <AlertDescription>
-            <Trans i18nKey={'profile:factorsListError'} />
+            <Trans i18nKey={'account:factorsListError'} />
           </AlertDescription>
         </Alert>
       </div>
@@ -178,7 +178,7 @@ function FactorsListContainer({
     <div className={'flex flex-col space-y-4'}>
       <div>
         <Heading level={6}>
-          <Trans i18nKey={'profile:selectFactor'} />
+          <Trans i18nKey={'account:selectFactor'} />
         </Heading>
       </div>
 

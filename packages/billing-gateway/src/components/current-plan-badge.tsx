@@ -1,5 +1,6 @@
 import { Database } from '@kit/supabase/database';
 import { Badge } from '@kit/ui/badge';
+import { Trans } from '@kit/ui/trans';
 
 export function CurrentPlanBadge(
   props: React.PropsWithoutRef<{
@@ -7,42 +8,38 @@ export function CurrentPlanBadge(
   }>,
 ) {
   let variant: 'success' | 'warning' | 'destructive';
-  let text: string;
+  const text = `billing:status.${props.status}.badge`;
 
   switch (props.status) {
     case 'active':
       variant = 'success';
-      text = 'Active';
       break;
     case 'trialing':
       variant = 'success';
-      text = 'Trialing';
       break;
     case 'past_due':
       variant = 'destructive';
-      text = 'Past due';
       break;
     case 'canceled':
       variant = 'destructive';
-      text = 'Canceled';
       break;
     case 'unpaid':
       variant = 'destructive';
-      text = 'Unpaid';
       break;
     case 'incomplete':
       variant = 'warning';
-      text = 'Incomplete';
       break;
     case 'incomplete_expired':
       variant = 'destructive';
-      text = 'Incomplete expired';
       break;
     case 'paused':
       variant = 'warning';
-      text = 'Paused';
       break;
   }
 
-  return <Badge variant={variant}>{text}</Badge>;
+  return (
+    <Badge variant={variant}>
+      <Trans i18nKey={text} />
+    </Badge>
+  );
 }

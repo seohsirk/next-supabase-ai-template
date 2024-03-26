@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 
 import type { User } from '@supabase/gotrue-js';
 
@@ -8,7 +8,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
-import { z } from 'zod';
 
 import { useUpdateUser } from '@kit/supabase/hooks/use-update-user-mutation';
 import { Alert, AlertDescription, AlertTitle } from '@kit/ui/alert';
@@ -26,21 +25,7 @@ import { Input } from '@kit/ui/input';
 import { Label } from '@kit/ui/label';
 import { Trans } from '@kit/ui/trans';
 
-const PasswordUpdateSchema = z
-  .object({
-    currentPassword: z.string().min(8).max(99),
-    newPassword: z.string().min(8).max(99),
-    repeatPassword: z.string().min(8).max(99),
-  })
-  .refine(
-    (values) => {
-      return values.newPassword === values.repeatPassword;
-    },
-    {
-      path: ['repeatPassword'],
-      message: 'Passwords do not match',
-    },
-  );
+import { PasswordUpdateSchema } from '../../schema/update-password.schema';
 
 export const UpdatePasswordForm = ({
   user,
@@ -49,57 +34,58 @@ export const UpdatePasswordForm = ({
   user: User;
   callbackPath: string;
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('account');
   const updateUserMutation = useUpdateUser();
   const [needsReauthentication, setNeedsReauthentication] = useState(false);
 
   const form = useForm({
-    resolver: zodResolver(PasswordUpdateSchema),
+    resolver: zodResolver(
+      PasswordUpdateSchema.withTranslation(t('passwordNotMatching')),
+    ),
     defaultValues: {
-      currentPassword: '',
       newPassword: '',
       repeatPassword: '',
     },
   });
 
-  const updatePasswordFromCredential = useCallback(
-    (password: string) => {
-      const redirectTo = [window.location.origin, callbackPath].join('');
+  const updatePasswordFromCredential = (password: string) => {
+    const redirectTo = [window.location.origin, callbackPath].join('');
 
-      const promise = updateUserMutation
-        .mutateAsync({ password, redirectTo })
-        .then(() => {
-          form.reset();
-        })
-        .catch((error) => {
-          if (error?.includes('Password update requires reauthentication')) {
-            setNeedsReauthentication(true);
-          }
-        });
-
-      toast.promise(promise, {
-        success: t(`profile:updatePasswordSuccess`),
-        error: t(`profile:updatePasswordError`),
-        loading: t(`profile:updatePasswordLoading`),
+    const promise = updateUserMutation
+      .mutateAsync({ password, redirectTo })
+      .catch((error) => {
+        if (
+          typeof error === 'string' &&
+          error?.includes('Password update requires reauthentication')
+        ) {
+          setNeedsReauthentication(true);
+        } else {
+          throw error;
+        }
       });
-    },
-    [callbackPath, updateUserMutation, t, form],
-  );
 
-  const updatePasswordCallback = useCallback(
-    async ({ newPassword }: { newPassword: string }) => {
-      const email = user.email;
+    toast.promise(() => promise, {
+      success: t(`updatePasswordSuccess`),
+      error: t(`updatePasswordError`),
+      loading: t(`updatePasswordLoading`),
+    });
+  };
 
-      // if the user does not have an email assigned, it's possible they
-      // don't have an email/password factor linked, and the UI is out of sync
-      if (!email) {
-        return Promise.reject(t(`profile:cannotUpdatePassword`));
-      }
+  const updatePasswordCallback = async ({
+    newPassword,
+  }: {
+    newPassword: string;
+  }) => {
+    const email = user.email;
 
-      updatePasswordFromCredential(newPassword);
-    },
-    [user.email, updatePasswordFromCredential, t],
-  );
+    // if the user does not have an email assigned, it's possible they
+    // don't have an email/password factor linked, and the UI is out of sync
+    if (!email) {
+      return Promise.reject(t(`cannotUpdatePassword`));
+    }
+
+    updatePasswordFromCredential(newPassword);
+  };
 
   return (
     <Form {...form}>
@@ -111,11 +97,11 @@ export const UpdatePasswordForm = ({
           <If condition={updateUserMutation.data}>
             <Alert variant={'success'}>
               <AlertTitle>
-                <Trans i18nKey={'profile:updatePasswordSuccess'} />
+                <Trans i18nKey={'account:updatePasswordSuccess'} />
               </AlertTitle>
 
               <AlertDescription>
-                <Trans i18nKey={'profile:updatePasswordSuccessMessage'} />
+                <Trans i18nKey={'account:updatePasswordSuccessMessage'} />
               </AlertDescription>
             </Alert>
           </If>
@@ -123,11 +109,11 @@ export const UpdatePasswordForm = ({
           <If condition={needsReauthentication}>
             <Alert variant={'warning'}>
               <AlertTitle>
-                <Trans i18nKey={'profile:needsReauthentication'} />
+                <Trans i18nKey={'account:needsReauthentication'} />
               </AlertTitle>
 
               <AlertDescription>
-                <Trans i18nKey={'profile:needsReauthenticationDescription'} />
+                <Trans i18nKey={'account:needsReauthenticationDescription'} />
               </AlertDescription>
             </Alert>
           </If>
@@ -139,7 +125,7 @@ export const UpdatePasswordForm = ({
                 <FormItem>
                   <FormLabel>
                     <Label>
-                      <Trans i18nKey={'profile:newPassword'} />
+                      <Trans i18nKey={'account:newPassword'} />
                     </Label>
                   </FormLabel>
 
@@ -165,7 +151,7 @@ export const UpdatePasswordForm = ({
                 <FormItem>
                   <FormLabel>
                     <Label>
-                      <Trans i18nKey={'profile:repeatPassword'} />
+                      <Trans i18nKey={'account:repeatPassword'} />
                     </Label>
                   </FormLabel>
 
@@ -185,8 +171,8 @@ export const UpdatePasswordForm = ({
           />
 
           <div>
-            <Button>
-              <Trans i18nKey={'profile:updatePasswordSubmitLabel'} />
+            <Button disabled={updateUserMutation.isPending}>
+              <Trans i18nKey={'account:updatePasswordSubmitLabel'} />
             </Button>
           </div>
         </div>

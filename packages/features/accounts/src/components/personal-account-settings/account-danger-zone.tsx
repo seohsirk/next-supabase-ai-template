@@ -14,7 +14,6 @@ import {
 } from '@kit/ui/dialog';
 import { ErrorBoundary } from '@kit/ui/error-boundary';
 import { Form, FormControl, FormItem, FormLabel } from '@kit/ui/form';
-import { Heading } from '@kit/ui/heading';
 import { Input } from '@kit/ui/input';
 import { Trans } from '@kit/ui/trans';
 
@@ -28,12 +27,12 @@ function DeleteAccountContainer() {
   return (
     <div className={'flex flex-col space-y-4'}>
       <div className={'flex flex-col space-y-1'}>
-        <Heading level={6}>
-          <Trans i18nKey={'profile:deleteAccount'} />
-        </Heading>
+        <span className={'text-sm font-medium'}>
+          <Trans i18nKey={'account:deleteAccount'} />
+        </span>
 
         <p className={'text-muted-foreground text-sm'}>
-          <Trans i18nKey={'profile:deleteAccountDescription'} />
+          <Trans i18nKey={'account:deleteAccountDescription'} />
         </p>
       </div>
 
@@ -49,14 +48,14 @@ function DeleteAccountModal() {
     <Dialog>
       <DialogTrigger asChild>
         <Button data-test={'delete-account-button'} variant={'destructive'}>
-          <Trans i18nKey={'profile:deleteAccount'} />
+          <Trans i18nKey={'account:deleteAccount'} />
         </Button>
       </DialogTrigger>
 
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            <Trans i18nKey={'profile:deleteAccount'} />
+            <Trans i18nKey={'account:deleteAccount'} />
           </DialogTitle>
         </DialogHeader>
 
@@ -83,7 +82,7 @@ function DeleteAccountForm() {
           >
             <div className={'flex flex-col space-y-2'}>
               <div>
-                <Trans i18nKey={'profile:deleteAccountDescription'} />
+                <Trans i18nKey={'account:deleteAccountDescription'} />
               </div>
 
               <div>
@@ -94,7 +93,7 @@ function DeleteAccountForm() {
 
           <FormItem>
             <FormLabel>
-              <Trans i18nKey={'profile:deleteProfileConfirmationInputLabel'} />
+              <Trans i18nKey={'account:deleteProfileConfirmationInputLabel'} />
             </FormLabel>
 
             <FormControl>
@@ -127,7 +126,7 @@ function DeleteAccountSubmitButton() {
       value={'delete'}
       variant={'destructive'}
     >
-      <Trans i18nKey={'profile:deleteAccount'} />
+      <Trans i18nKey={'account:deleteAccount'} />
     </Button>
   );
 }
@@ -138,7 +137,7 @@ function DeleteAccountErrorAlert() {
       <ExclamationTriangleIcon className={'h-4'} />
 
       <AlertTitle>
-        <Trans i18nKey={'profile:deleteAccountErrorHeading'} />
+        <Trans i18nKey={'account:deleteAccountErrorHeading'} />
       </AlertTitle>
 
       <AlertDescription>

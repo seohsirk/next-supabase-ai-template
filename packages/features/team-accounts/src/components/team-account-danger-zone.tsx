@@ -45,12 +45,12 @@ function DeleteOrganizationContainer(props: { account: AccountData }) {
     <div className={'flex flex-col space-y-4'}>
       <div className={'flex flex-col space-y-1'}>
         <Heading level={6}>
-          <Trans i18nKey={'organization:deleteOrganization'} />
+          <Trans i18nKey={'teams:deleteOrganization'} />
         </Heading>
 
         <p className={'text-sm text-gray-500'}>
           <Trans
-            i18nKey={'organization:deleteOrganizationDescription'}
+            i18nKey={'teams:deleteOrganizationDescription'}
             values={{
               organizationName: props.account.name,
             }}
@@ -66,14 +66,14 @@ function DeleteOrganizationContainer(props: { account: AccountData }) {
               type={'button'}
               variant={'destructive'}
             >
-              <Trans i18nKey={'organization:deleteOrganization'} />
+              <Trans i18nKey={'teams:deleteOrganization'} />
             </Button>
           </DialogTrigger>
 
           <DialogContent>
             <DialogHeader>
               <DialogTitle>
-                <Trans i18nKey={'organization:deletingOrganization'} />
+                <Trans i18nKey={'teams:deletingOrganization'} />
               </DialogTitle>
             </DialogHeader>
 
@@ -104,7 +104,7 @@ function DeleteOrganizationForm({ name, id }: { name: string; id: string }) {
           >
             <div>
               <Trans
-                i18nKey={'organization:deleteOrganizationDisclaimer'}
+                i18nKey={'teams:deleteOrganizationDisclaimer'}
                 values={{
                   organizationName: name,
                 }}
@@ -119,7 +119,7 @@ function DeleteOrganizationForm({ name, id }: { name: string; id: string }) {
           <input type="hidden" value={id} name={'id'} />
 
           <Label>
-            <Trans i18nKey={'organization:organizationNameInputLabel'} />
+            <Trans i18nKey={'teams:organizationNameInputLabel'} />
 
             <Input
               name={'name'}
@@ -132,7 +132,7 @@ function DeleteOrganizationForm({ name, id }: { name: string; id: string }) {
             />
 
             <span className={'text-xs'}>
-              <Trans i18nKey={'organization:deleteOrganizationInputField'} />
+              <Trans i18nKey={'teams:deleteOrganizationInputField'} />
             </span>
           </Label>
         </div>
@@ -154,7 +154,7 @@ function DeleteOrganizationSubmitButton() {
       disabled={pending}
       variant={'destructive'}
     >
-      <Trans i18nKey={'organization:deleteOrganization'} />
+      <Trans i18nKey={'teams:deleteOrganization'} />
     </Button>
   );
 }
@@ -164,7 +164,7 @@ function LeaveOrganizationContainer(props: { account: AccountData }) {
     <div className={'flex flex-col space-y-4'}>
       <p>
         <Trans
-          i18nKey={'organization:leaveOrganizationDescription'}
+          i18nKey={'teams:leaveOrganizationDescription'}
           values={{
             organizationName: props.account.name,
           }}
@@ -179,16 +179,14 @@ function LeaveOrganizationContainer(props: { account: AccountData }) {
               type={'button'}
               variant={'destructive'}
             >
-              <Trans i18nKey={'organization:leaveOrganization'} />
+              <Trans i18nKey={'teams:leaveOrganization'} />
             </Button>
           </DialogTrigger>
 
           <DialogContent>
             <DialogHeader>
               <DialogTitle>
-                <Trans
-                  i18nKey={'organization:leavingOrganizationModalHeading'}
-                />
+                <Trans i18nKey={'teams:leavingOrganizationModalHeading'} />
               </DialogTitle>
             </DialogHeader>
 
@@ -200,7 +198,7 @@ function LeaveOrganizationContainer(props: { account: AccountData }) {
                   <div>
                     <div>
                       <Trans
-                        i18nKey={'organization:leaveOrganizationDisclaimer'}
+                        i18nKey={'teams:leaveOrganizationDisclaimer'}
                         values={{
                           organizationName: props.account?.name,
                         }}
@@ -230,7 +228,7 @@ function LeaveOrganizationSubmitButton() {
       disabled={pending}
       variant={'destructive'}
     >
-      <Trans i18nKey={'organization:leaveOrganization'} />
+      <Trans i18nKey={'teams:leaveOrganization'} />
     </Button>
   );
 }
@@ -239,7 +237,7 @@ function LeaveOrganizationErrorAlert() {
   return (
     <Alert variant={'destructive'}>
       <AlertTitle>
-        <Trans i18nKey={'organization:leaveOrganizationErrorHeading'} />
+        <Trans i18nKey={'teams:leaveOrganizationErrorHeading'} />
       </AlertTitle>
 
       <AlertDescription>
@@ -253,7 +251,7 @@ function DeleteOrganizationErrorAlert() {
   return (
     <Alert variant={'destructive'}>
       <AlertTitle>
-        <Trans i18nKey={'organization:deleteOrganizationErrorHeading'} />
+        <Trans i18nKey={'teams:deleteOrganizationErrorHeading'} />
       </AlertTitle>
 
       <AlertDescription>

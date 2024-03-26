@@ -30,9 +30,8 @@ export default async function RootLayout({
     <html lang={lang} className={getClassName()}>
       <body>
         <RootProviders lang={lang}>{children}</RootProviders>
+        <Toaster richColors={false} />
       </body>
-
-      <Toaster richColors={false} />
     </html>
   );
 }

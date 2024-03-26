@@ -22,14 +22,14 @@
     "@kit/billing": "0.1.0",
     "@kit/supabase": "^0.1.0",
     "@kit/shared": "^0.1.0",
-    "lucide-react": "^0.361.0"
+    "lucide-react": "^0.361.0",
+    "@supabase/supabase-js": "^2.39.8"
   },
   "devDependencies": {
     "@kit/prettier-config": "0.1.0",
     "@kit/eslint-config": "0.2.0",
     "@kit/tailwind-config": "0.1.0",
-    "@kit/tsconfig": "0.1.0",
-    "@supabase/supabase-js": "^2.39.8"
+    "@kit/tsconfig": "0.1.0"
   },
   "eslintConfig": {
     "root": true,

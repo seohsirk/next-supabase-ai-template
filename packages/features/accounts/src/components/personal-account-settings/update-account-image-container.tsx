@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 import { useSupabase } from '@kit/supabase/hooks/use-supabase';
-import ImageUploader from '@kit/ui/image-uploader';
+import { ImageUploader } from '@kit/ui/image-uploader';
 import { LoadingOverlay } from '@kit/ui/loading-overlay';
 import { Trans } from '@kit/ui/trans';
 
@@ -42,10 +42,10 @@ function UploadProfileAvatarForm(props: {
   onAvatarUpdated: () => void;
 }) {
   const client = useSupabase();
-  const { t } = useTranslation('profile');
+  const { t } = useTranslation('account');
 
   const createToaster = useCallback(
-    (promise: Promise<unknown>) => {
+    (promise: () => Promise<unknown>) => {
       return toast.promise(promise, {
         success: t(`updateProfileSuccess`),
         error: t(`updateProfileError`),
@@ -68,37 +68,39 @@ function UploadProfileAvatarForm(props: {
       };
 
       if (file) {
-        const promise = removeExistingStorageFile().then(() =>
-          uploadUserProfilePhoto(client, file, props.userId)
-            .then((pictureUrl) => {
+        const promise = () =>
+          removeExistingStorageFile().then(() =>
+            uploadUserProfilePhoto(client, file, props.userId)
+              .then((pictureUrl) => {
+                return client
+                  .from('accounts')
+                  .update({
+                    picture_url: pictureUrl,
+                  })
+                  .eq('id', props.userId)
+                  .throwOnError();
+              })
+              .then(() => {
+                props.onAvatarUpdated();
+              }),
+          );
+
+        createToaster(promise);
+      } else {
+        const promise = () =>
+          removeExistingStorageFile()
+            .then(() => {
               return client
                 .from('accounts')
                 .update({
-                  picture_url: pictureUrl,
+                  picture_url: null,
                 })
                 .eq('id', props.userId)
                 .throwOnError();
             })
             .then(() => {
               props.onAvatarUpdated();
-            }),
-        );
-
-        createToaster(promise);
-      } else {
-        const promise = removeExistingStorageFile()
-          .then(() => {
-            return client
-              .from('accounts')
-              .update({
-                picture_url: null,
-              })
-              .eq('id', props.userId)
-              .throwOnError();
-          })
-          .then(() => {
-            props.onAvatarUpdated();
-          });
+            });
 
         createToaster(promise);
       }
@@ -110,11 +112,11 @@ function UploadProfileAvatarForm(props: {
     <ImageUploader value={props.pictureUrl} onValueChange={onValueChange}>
       <div className={'flex flex-col space-y-1'}>
         <span className={'text-sm'}>
-          <Trans i18nKey={'profile:profilePictureHeading'} />
+          <Trans i18nKey={'account:profilePictureHeading'} />
         </span>
 
         <span className={'text-xs'}>
-          <Trans i18nKey={'profile:profilePictureSubheading'} />
+          <Trans i18nKey={'account:profilePictureSubheading'} />
         </span>
       </div>
     </ImageUploader>
@@ -142,9 +144,7 @@ async function uploadUserProfilePhoto(
   const extension = photoFile.name.split('.').pop();
   const fileName = await getAvatarFileName(userId, extension);
 
-  const result = await bucket.upload(fileName, bytes, {
-    upsert: true,
-  });
+  const result = await bucket.upload(fileName, bytes);
 
   if (!result.error) {
     return bucket.getPublicUrl(fileName).data.publicUrl;
