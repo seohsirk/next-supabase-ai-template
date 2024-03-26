@@ -13,10 +13,13 @@ import { AuthErrorAlert } from './auth-error-alert';
 import { AuthProviderButton } from './auth-provider-button';
 
 export const OauthProviders: React.FC<{
-  returnUrl?: string;
-  inviteCode?: string;
+  inviteToken?: string;
   enabledProviders: Provider[];
-  redirectUrl: string;
+
+  paths: {
+    callback: string;
+    returnPath: string;
+  };
 }> = (props) => {
   const signInWithProviderMutation = useSignInWithProvider();
 
@@ -57,16 +60,16 @@ export const OauthProviders: React.FC<{
                   const origin = window.location.origin;
                   const queryParams = new URLSearchParams();
 
-                  if (props.returnUrl) {
-                    queryParams.set('next', props.returnUrl);
+                  if (props.paths.returnPath) {
+                    queryParams.set('next', props.paths.returnPath);
                   }
 
-                  if (props.inviteCode) {
-                    queryParams.set('inviteCode', props.inviteCode);
+                  if (props.inviteToken) {
+                    queryParams.set('invite_token', props.inviteToken);
                   }
 
                   const redirectPath = [
-                    props.redirectUrl,
+                    props.paths.callback,
                     queryParams.toString(),
                   ].join('?');
 

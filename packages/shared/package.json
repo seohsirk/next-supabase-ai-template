@@ -16,9 +16,6 @@
     "./cookies/*": "./src/cookies/*.ts",
     "./utils": "./src/utils.ts"
   },
-  "peerDependencies": {
-    "react": "^18.2.0"
-  },
   "dependencies": {
     "pino": "^8.19.0"
   },

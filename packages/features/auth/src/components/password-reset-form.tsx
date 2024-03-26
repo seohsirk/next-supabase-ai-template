@@ -3,6 +3,11 @@
 import Link from 'next/link';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import {
+  ArrowLeftIcon,
+  CheckIcon,
+  ExclamationTriangleIcon,
+} from '@radix-ui/react-icons';
 import { useForm } from 'react-hook-form';
 import type { z } from 'zod';
 
@@ -112,7 +117,9 @@ export function PasswordResetForm(params: { redirectTo: string }) {
 function SuccessState() {
   return (
     <div className={'flex flex-col space-y-4'}>
-      <Alert variant={'destructive'}>
+      <Alert variant={'success'}>
+        <CheckIcon className={'s-6'} />
+
         <AlertTitle>
           <Trans i18nKey={'account:updatePasswordSuccess'} />
         </AlertTitle>
@@ -123,8 +130,12 @@ function SuccessState() {
       </Alert>
 
       <Link href={'/'}>
-        <Button variant={'outline'}>
-          <Trans i18nKey={'common:backToHomePage'} />
+        <Button variant={'outline'} className={'w-full'}>
+          <ArrowLeftIcon className={'mr-2 h-4'} />
+
+          <span>
+            <Trans i18nKey={'common:backToHomePage'} />
+          </span>
         </Button>
       </Link>
     </div>
@@ -135,12 +146,14 @@ function ErrorState(props: { onRetry: () => void }) {
   return (
     <div className={'flex flex-col space-y-4'}>
       <Alert variant={'destructive'}>
+        <ExclamationTriangleIcon className={'s-6'} />
+
         <AlertTitle>
-          <Trans i18nKey={'auth:resetPasswordError'} />
+          <Trans i18nKey={'common:genericError'} />
         </AlertTitle>
 
         <AlertDescription>
-          <Trans i18nKey={'common:genericError'} />
+          <Trans i18nKey={'auth:resetPasswordError'} />
         </AlertDescription>
       </Alert>
 

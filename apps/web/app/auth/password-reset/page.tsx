@@ -18,6 +18,8 @@ export const generateMetadata = async () => {
 };
 
 function PasswordResetPage() {
+  const redirectPath = `${pathsConfig.auth.callback}?next=${pathsConfig.auth.passwordUpdate}`;
+
   return (
     <>
       <Heading level={5}>
@@ -25,9 +27,7 @@ function PasswordResetPage() {
       </Heading>
 
       <div className={'flex flex-col space-y-4'}>
-        <PasswordResetRequestContainer
-          redirectTo={pathsConfig.auth.passwordUpdate}
-        />
+        <PasswordResetRequestContainer redirectPath={redirectPath} />
 
         <div className={'flex justify-center text-xs'}>
           <Link href={pathsConfig.auth.signIn}>

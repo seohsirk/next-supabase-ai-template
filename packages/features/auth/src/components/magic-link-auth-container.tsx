@@ -1,98 +1,132 @@
 'use client';
 
-import type { FormEventHandler } from 'react';
-import { useCallback } from 'react';
-
+import { zodResolver } from '@hookform/resolvers/zod';
+import { CheckIcon } from '@radix-ui/react-icons';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
+import { z } from 'zod';
 
 import { useSignInWithOtp } from '@kit/supabase/hooks/use-sign-in-with-otp';
-import { Alert, AlertDescription } from '@kit/ui/alert';
+import { Alert, AlertDescription, AlertTitle } from '@kit/ui/alert';
 import { Button } from '@kit/ui/button';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@kit/ui/form';
 import { If } from '@kit/ui/if';
 import { Input } from '@kit/ui/input';
-import { Label } from '@kit/ui/label';
 import { Trans } from '@kit/ui/trans';
 
 export function MagicLinkAuthContainer({
-  inviteCode,
+  inviteToken,
   redirectUrl,
 }: {
-  inviteCode?: string;
+  inviteToken?: string;
   redirectUrl: string;
 }) {
   const { t } = useTranslation();
   const signInWithOtpMutation = useSignInWithOtp();
 
-  const onSubmit: FormEventHandler<HTMLFormElement> = useCallback(
-    (event) => {
-      event.preventDefault();
+  const form = useForm({
+    resolver: zodResolver(
+      z.object({
+        email: z.string().email(),
+      }),
+    ),
+    defaultValues: {
+      email: '',
+    },
+  });
 
-      const target = event.currentTarget;
-      const data = new FormData(target);
-      const email = data.get('email') as string;
-      const queryParams = inviteCode ? `?inviteCode=${inviteCode}` : '';
+  const onSubmit = ({ email }: { email: string }) => {
+    const queryParams = inviteToken ? `?invite_token=${inviteToken}` : '';
+    const emailRedirectTo = [redirectUrl, queryParams].join('');
 
-      const emailRedirectTo = [redirectUrl, queryParams].join('');
-
-      const promise = signInWithOtpMutation.mutateAsync({
+    const promise = () =>
+      signInWithOtpMutation.mutateAsync({
         email,
         options: {
           emailRedirectTo,
         },
       });
 
-      toast.promise(promise, {
-        loading: t('auth:sendingEmailLink'),
-        success: t(`auth:sendLinkSuccessToast`),
-        error: t(`auth:errors.link`),
-      });
-    },
-    [inviteCode, redirectUrl, signInWithOtpMutation, t],
-  );
+    toast.promise(promise, {
+      loading: t('auth:sendingEmailLink'),
+      success: t(`auth:sendLinkSuccessToast`),
+      error: t(`auth:errors.link`),
+    });
+  };
 
   if (signInWithOtpMutation.data) {
     return (
       <Alert variant={'success'}>
-        <AlertDescription>
+        <CheckIcon className={'h-4'} />
+
+        <AlertTitle>
           <Trans i18nKey={'auth:sendLinkSuccess'} />
+        </AlertTitle>
+
+        <AlertDescription>
+          <Trans i18nKey={'auth:sendLinkSuccessDescription'} />
         </AlertDescription>
       </Alert>
     );
   }
 
   return (
-    <form className={'w-full'} onSubmit={onSubmit}>
-      <If condition={signInWithOtpMutation.error}>
-        <Alert variant={'destructive'}>
-          <AlertDescription>
-            <Trans i18nKey={'auth:errors.link'} />
-          </AlertDescription>
-        </Alert>
-      </If>
+    <Form {...form}>
+      <form className={'w-full'} onSubmit={form.handleSubmit(onSubmit)}>
+        <If condition={signInWithOtpMutation.error}>
+          <Alert variant={'destructive'}>
+            <AlertTitle>
+              <Trans i18nKey={'auth:errors.generic'} />
+            </AlertTitle>
 
-      <div className={'flex flex-col space-y-4'}>
-        <Label>
-          <Trans i18nKey={'common:emailAddress'} />
+            <AlertDescription>
+              <Trans i18nKey={'auth:errors.link'} />
+            </AlertDescription>
+          </Alert>
+        </If>
 
-          <Input
-            data-test={'email-input'}
-            required
-            type="email"
-            placeholder={t('auth:emailPlaceholder')}
+        <div className={'flex flex-col space-y-4'}>
+          <FormField
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  <Trans i18nKey={'common:emailAddress'} />
+                </FormLabel>
+
+                <FormControl>
+                  <Input
+                    data-test={'email-input'}
+                    required
+                    type="email"
+                    placeholder={t('auth:emailPlaceholder')}
+                    {...field}
+                  />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
             name={'email'}
           />
-        </Label>
 
-        <Button disabled={signInWithOtpMutation.isPending}>
-          <If
-            condition={signInWithOtpMutation.isPending}
-            fallback={<Trans i18nKey={'auth:sendEmailLink'} />}
-          >
-            <Trans i18nKey={'auth:sendingEmailLink'} />
-          </If>
-        </Button>
-      </div>
-    </form>
+          <Button disabled={signInWithOtpMutation.isPending}>
+            <If
+              condition={signInWithOtpMutation.isPending}
+              fallback={<Trans i18nKey={'auth:sendEmailLink'} />}
+            >
+              <Trans i18nKey={'auth:sendingEmailLink'} />
+            </If>
+          </Button>
+        </div>
+      </form>
+    </Form>
   );
 }

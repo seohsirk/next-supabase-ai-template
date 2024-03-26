@@ -18,7 +18,15 @@ export const generateMetadata = async () => {
   };
 };
 
-function SignUpPage() {
+interface Props {
+  searchParams: {
+    invite_token?: string;
+  };
+}
+
+function SignUpPage({ searchParams }: Props) {
+  const inviteToken = searchParams.invite_token;
+
   return (
     <>
       <Heading level={5}>
@@ -27,7 +35,10 @@ function SignUpPage() {
 
       <SignUpMethodsContainer
         providers={authConfig.providers}
-        callbackPath={pathsConfig.auth.callback}
+        paths={{
+          callback: pathsConfig.auth.callback,
+        }}
+        inviteToken={inviteToken}
       />
 
       <div className={'justify-centers flex'}>

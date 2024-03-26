@@ -26,7 +26,9 @@ const PasswordResetSchema = z.object({
   email: z.string().email(),
 });
 
-export function PasswordResetRequestContainer(params: { redirectTo: string }) {
+export function PasswordResetRequestContainer(params: {
+  redirectPath: string;
+}) {
   const { t } = useTranslation('auth');
   const resetPasswordMutation = useRequestResetPassword();
   const error = resetPasswordMutation.error;
@@ -55,7 +57,8 @@ export function PasswordResetRequestContainer(params: { redirectTo: string }) {
             onSubmit={form.handleSubmit(({ email }) => {
               return resetPasswordMutation.mutateAsync({
                 email,
-                redirectTo: params.redirectTo,
+                redirectTo: new URL(params.redirectPath, window.location.origin)
+                  .href,
               });
             })}
             className={'w-full'}

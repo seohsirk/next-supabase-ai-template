@@ -9,7 +9,6 @@ import { isBrowser } from '@supabase/ssr';
 import { Divider } from '@kit/ui/divider';
 import { If } from '@kit/ui/if';
 
-import { EmailOtpContainer } from './email-otp-container';
 import { MagicLinkAuthContainer } from './magic-link-auth-container';
 import { OauthProviders } from './oauth-providers';
 import { PasswordSignInContainer } from './password-sign-in-container';
@@ -23,7 +22,6 @@ export function SignInMethodsContainer(props: {
   providers: {
     password: boolean;
     magicLink: boolean;
-    otp: boolean;
     oAuth: Provider[];
   };
 }) {
@@ -48,20 +46,15 @@ export function SignInMethodsContainer(props: {
         <MagicLinkAuthContainer redirectUrl={redirectUrl} />
       </If>
 
-      <If condition={props.providers.otp}>
-        <EmailOtpContainer
-          onSignIn={onSignIn}
-          redirectUrl={redirectUrl}
-          shouldCreateUser={false}
-        />
-      </If>
-
       <If condition={props.providers.oAuth.length}>
         <Divider />
 
         <OauthProviders
           enabledProviders={props.providers.oAuth}
-          redirectUrl={redirectUrl}
+          paths={{
+            callback: props.paths.callback,
+            returnPath: props.paths.home,
+          }}
         />
       </If>
     </>

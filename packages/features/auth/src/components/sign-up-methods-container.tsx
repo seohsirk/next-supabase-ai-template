@@ -7,27 +7,27 @@ import { isBrowser } from '@supabase/ssr';
 import { Divider } from '@kit/ui/divider';
 import { If } from '@kit/ui/if';
 
-import { EmailOtpContainer } from './email-otp-container';
 import { MagicLinkAuthContainer } from './magic-link-auth-container';
 import { OauthProviders } from './oauth-providers';
 import { EmailPasswordSignUpContainer } from './password-sign-up-container';
 
 export function SignUpMethodsContainer(props: {
-  callbackPath: string;
+  paths: {
+    callback: string;
+    appHome: string;
+  };
 
   providers: {
     password: boolean;
     magicLink: boolean;
-    otp: boolean;
     oAuth: Provider[];
   };
 
-  inviteCode?: string;
+  inviteToken?: string;
 }) {
-  const redirectUrl = new URL(
-    props.callbackPath,
-    isBrowser() ? window?.location.origin : '',
-  ).toString();
+  const redirectUrl = isBrowser()
+    ? new URL(props.paths.callback, window?.location.origin).toString()
+    : '';
 
   return (
     <>
@@ -37,16 +37,8 @@ export function SignUpMethodsContainer(props: {
 
       <If condition={props.providers.magicLink}>
         <MagicLinkAuthContainer
-          inviteCode={props.inviteCode}
+          inviteToken={props.inviteToken}
           redirectUrl={redirectUrl}
-        />
-      </If>
-
-      <If condition={props.providers.otp}>
-        <EmailOtpContainer
-          redirectUrl={redirectUrl}
-          shouldCreateUser={true}
-          inviteCode={props.inviteCode}
         />
       </If>
 
@@ -55,8 +47,11 @@ export function SignUpMethodsContainer(props: {
 
         <OauthProviders
           enabledProviders={props.providers.oAuth}
-          redirectUrl={redirectUrl}
-          inviteCode={props.inviteCode}
+          inviteToken={props.inviteToken}
+          paths={{
+            callback: props.paths.callback,
+            returnPath: props.paths.appHome,
+          }}
         />
       </If>
     </>

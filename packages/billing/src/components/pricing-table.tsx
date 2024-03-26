@@ -53,7 +53,7 @@ export function PricingTable({
       <div
         className={
           'flex flex-col items-start space-y-6 lg:space-y-0' +
-          ' justify-center lg:flex-row lg:space-x-4'
+          ' justify-center space-x-2 lg:flex-row'
         }
       >
         {config.products.map((product) => {
@@ -107,6 +107,7 @@ function PricingItem(
 
     product: {
       name: string;
+      currency: string;
       description: string;
       badge?: string;
       highlighted?: boolean;
@@ -122,12 +123,8 @@ function PricingItem(
       className={cn(
         `
          relative flex w-full flex-col justify-between space-y-6 rounded-lg
-         p-6 lg:w-4/12 xl:max-w-xs xl:p-8 2xl:w-3/12
+         border p-6 lg:w-4/12 xl:max-w-xs xl:p-8 2xl:w-3/12
       `,
-        {
-          ['dark:border-dark-900 border border-gray-100']: !highlighted,
-          ['border-primary border-2']: highlighted,
-        },
       )}
     >
       <div className={'flex flex-col space-y-2.5'}>
@@ -142,7 +139,7 @@ function PricingItem(
                 `flex space-x-1 rounded-md px-2 py-1 text-xs font-medium`,
                 {
                   ['text-primary-foreground bg-primary']: highlighted,
-                  ['bg-gray-50 text-gray-500 dark:text-gray-800']: !highlighted,
+                  ['text-muted-foreground bg-gray-50']: !highlighted,
                 },
               )}
             >
@@ -161,7 +158,10 @@ function PricingItem(
       </div>
 
       <div className={'flex items-center space-x-1'}>
-        <Price>{props.plan.price}</Price>
+        <Price>
+          <span className={'text-base'}>{props.product.currency}</span>
+          {props.plan.price}
+        </Price>
 
         <If condition={props.plan.name}>
           <span className={cn(`text-muted-foreground text-base lowercase`)}>
@@ -223,10 +223,12 @@ function Price({ children }: React.PropsWithChildren) {
   return (
     <div
       key={key}
-      className={`animate-in slide-in-from-left-4 fade-in duration-500`}
+      className={`animate-in slide-in-from-left-4 fade-in items-center duration-500`}
     >
       <span
-        className={'text-2xl font-bold lg:text-3xl xl:text-4xl 2xl:text-5xl'}
+        className={
+          'flex items-center text-2xl font-bold lg:text-3xl xl:text-4xl 2xl:text-5xl'
+        }
       >
         {children}
       </span>

@@ -9,7 +9,7 @@ export function AuthLayoutShell({
       className={
         'flex h-screen flex-col items-center justify-center space-y-4' +
         ' dark:lg:bg-background md:space-y-8 lg:space-y-12 lg:bg-gray-50' +
-        ' animate-in fade-in slide-in-from-top-8 duration-1000'
+        ' animate-in fade-in slide-in-from-top-8 zoom-in-95 duration-1000'
       }
     >
       {Logo && <Logo />}
