@@ -16,11 +16,18 @@ interface SessionPageProps {
   };
 }
 
-const LazyEmbeddedCheckout = dynamic(async () => {
-  const { EmbeddedCheckout } = await import('@kit/billing-gateway/components');
+const LazyEmbeddedCheckout = dynamic(
+  async () => {
+    const { EmbeddedCheckout } = await import(
+      '@kit/billing-gateway/components'
+    );
 
-  return EmbeddedCheckout;
-});
+    return EmbeddedCheckout;
+  },
+  {
+    ssr: false,
+  },
+);
 
 async function ReturnStripeSessionPage({ searchParams }: SessionPageProps) {
   const { customerEmail, checkoutToken } = await loadCheckoutSession(

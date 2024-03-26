@@ -16,9 +16,21 @@ export function EmbeddedCheckout(
     onClose?: () => void;
   }>,
 ) {
+  return (
+    <LazyCheckout onClose={props.onClose} checkoutToken={props.checkoutToken} />
+  );
+}
+
+function LazyCheckout(
+  props: React.PropsWithChildren<{
+    checkoutToken: string;
+    provider: BillingProvider;
+    onClose?: () => void;
+  }>,
+) {
   const CheckoutComponent = useMemo(
     () => memo(loadCheckoutComponent(props.provider)),
-    [],
+    [props.provider],
   );
 
   return (
@@ -69,7 +81,7 @@ function buildLazyComponent<
 ) {
   let LoadedComponent: ReturnType<typeof lazy> | null = null;
 
-  const LazyComponent = forwardRef((props, ref) => {
+  const LazyComponent = forwardRef(function LazyDynamicComponent(props, ref) {
     if (!LoadedComponent) {
       LoadedComponent = lazy(load);
     }

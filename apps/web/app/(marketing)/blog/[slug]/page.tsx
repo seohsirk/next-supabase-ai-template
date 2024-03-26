@@ -9,7 +9,7 @@ import Post from '~/(marketing)/blog/_components/post';
 import appConfig from '~/config/app.config';
 import { withI18n } from '~/lib/i18n/with-i18n';
 
-export async function generateMetadata({
+export function generateMetadata({
   params,
 }: {
   params: { slug: string };
@@ -49,7 +49,7 @@ export async function generateMetadata({
   };
 }
 
-async function BlogPost({ params }: { params: { slug: string } }) {
+function BlogPost({ params }: { params: { slug: string } }) {
   const post = allPosts.find((post) => post.slug === params.slug);
 
   if (!post) {

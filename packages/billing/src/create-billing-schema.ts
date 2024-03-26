@@ -105,5 +105,5 @@ export function getProductPlanPairFromId(
     }
   }
 
-  return undefined;
+  throw new Error(`Plan with ID ${planId} not found`);
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowRightIcon } from '@radix-ui/react-icons';
+import { ArrowUpRight } from 'lucide-react';
 
 import { Button } from '@kit/ui/button';
 import {
@@ -15,7 +15,7 @@ export function BillingPortalCard() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Manage your Subscription</CardTitle>
+        <CardTitle>Manage your Billing Details</CardTitle>
 
         <CardDescription>
           You can change your plan or cancel your subscription at any time.
@@ -23,15 +23,13 @@ export function BillingPortalCard() {
       </CardHeader>
 
       <CardContent className={'space-y-2'}>
-        <Button className={'w-full'}>
-          <span>Manage your Billing Settings</span>
-          <ArrowRightIcon className={'ml-2 h-4'} />
-        </Button>
+        <div>
+          <Button>
+            <span>Visit the billing portal</span>
 
-        <p className={'text-sm'}>
-          Visit the billing portal to manage your subscription (update payment
-          method, cancel subscription, etc.)
-        </p>
+            <ArrowUpRight className={'h-4'} />
+          </Button>
+        </div>
       </CardContent>
     </Card>
   );

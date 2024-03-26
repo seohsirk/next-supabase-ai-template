@@ -19,7 +19,6 @@ const config = {
     '^@supabase/supabase-js$',
     '^@supabase/gotrue-js$',
     '<THIRD_PARTY_MODULES>',
-    '^@packages/(.*)$',
     '^@kit/(.*)$',
     '^~/(.*)$', // app-specific imports
     '^[./]', // relative imports

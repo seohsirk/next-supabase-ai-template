@@ -23,7 +23,7 @@ export function initializeI18nClient(
       .use(
         resourcesToBackend(async (language, namespace, callback) => {
           const data = await i18nResolver(language, namespace);
-          console.log(data);
+
           return callback(null, data);
         }),
       )

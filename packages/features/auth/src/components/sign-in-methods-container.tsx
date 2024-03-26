@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 import type { Provider } from '@supabase/supabase-js';
 
@@ -27,13 +27,17 @@ export function SignInMethodsContainer(props: {
     oAuth: Provider[];
   };
 }) {
+  const router = useRouter();
+  const nextPath = useSearchParams().get('next') ?? props.paths.home;
+
   const redirectUrl = new URL(
     props.paths.callback,
     isBrowser() ? window?.location.origin : '',
   ).toString();
 
-  const router = useRouter();
-  const onSignIn = () => router.replace(props.paths.home);
+  const onSignIn = () => {
+    router.replace(nextPath);
+  };
 
   return (
     <>

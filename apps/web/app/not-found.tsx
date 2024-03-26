@@ -2,6 +2,7 @@ import Link from 'next/link';
 
 import { ArrowLeft } from 'lucide-react';
 
+import { getSupabaseServerComponentClient } from '@kit/supabase/server-component-client';
 import { Button } from '@kit/ui/button';
 import { Heading } from '@kit/ui/heading';
 import { Trans } from '@kit/ui/trans';
@@ -14,10 +15,16 @@ export const metadata = {
   title: `Page not found - ${appConfig.name}`,
 };
 
-const NotFoundPage = () => {
+const NotFoundPage = async () => {
+  const client = getSupabaseServerComponentClient();
+
+  const {
+    data: { session },
+  } = await client.auth.getSession();
+
   return (
     <div className={'flex h-screen flex-1 flex-col'}>
-      <SiteHeader session={null} />
+      <SiteHeader session={session} />
 
       <div
         className={

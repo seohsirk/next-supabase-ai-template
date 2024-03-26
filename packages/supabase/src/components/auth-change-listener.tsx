@@ -28,6 +28,7 @@ function AuthRedirectListener({
   useEffect(() => {
     // keep this running for the whole session unless the component was unmounted
     const listener = client.auth.onAuthStateChange((_, user) => {
+      console.log(_, user);
       // log user out if user is falsy
       // and if the current path is a private route
       const shouldRedirectUser = !user && isPrivateRoute(pathName);
