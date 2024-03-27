@@ -16,8 +16,8 @@ const authConfig = AuthConfigSchema.parse({
   // NB: Enable the providers below in the Supabase Console
   // in your production project
   providers: {
-    password: false,
-    magicLink: true,
+    password: true,
+    magicLink: false,
     oAuth: ['google'],
   },
 });
