@@ -32,7 +32,7 @@ const RecurringLineItemSchema = z
   )
   .refine(
     (schema) => {
-      if (!schema.metered && !schema.usageType) {
+      if (schema.metered && !schema.usageType) {
         return false;
       }
 
@@ -51,13 +51,15 @@ const RecurringSchema = z
     costPerUnit: z.number().positive().optional(),
     perSeat: z.boolean().optional(),
     usageType: LineItemUsageType.optional(),
-    addOns: z.array(RecurringLineItemSchema).default([]).optional(),
+    addOns: z.array(RecurringLineItemSchema).optional(),
   })
   .refine(
     (schema) => {
       if (schema.metered) {
-        return schema.costPerUnit !== undefined;
+        return schema.costPerUnit;
       }
+
+      return true;
     },
     {
       message: 'Metered plans must have a cost per unit',
@@ -79,7 +81,11 @@ const RecurringSchema = z
   )
   .refine(
     (schema) => {
-      return schema.metered && schema.usageType;
+      if (schema.metered) {
+        return !!schema.usageType;
+      }
+
+      return true;
     },
     {
       message: 'Metered plans must have a usage type',
@@ -91,8 +97,8 @@ export const RecurringPlanSchema = z.object({
   name: z.string().min(1).max(100),
   id: z.string().min(1),
   price: z.number().positive(),
-  trialDays: z.number().positive().optional(),
   recurring: RecurringSchema,
+  trialDays: z.number().positive().optional(),
 });
 
 export const OneTimePlanSchema = z.object({
@@ -107,10 +113,10 @@ export const ProductSchema = z
     name: z.string(),
     description: z.string(),
     currency: z.string().optional().default('USD'),
-    plans: z.union([
-      RecurringPlanSchema.array().nonempty(),
-      OneTimePlanSchema.array().nonempty(),
-    ]),
+    plans: RecurringPlanSchema.strict()
+      .array()
+      .nonempty()
+      .or(OneTimePlanSchema.strict().array().nonempty()),
     paymentType: PaymentType,
     features: z.array(z.string()),
     badge: z.string().min(1).optional(),
@@ -119,8 +125,6 @@ export const ProductSchema = z
   })
   .refine(
     (schema) => {
-      console.log(schema);
-
       const recurringPlans = schema.plans.filter((plan) => 'recurring' in plan);
 
       if (recurringPlans.length && schema.paymentType === 'one-time') {
@@ -193,6 +197,7 @@ export const BillingSchema = z
  * @param config The billing configuration
  */
 export function createBillingSchema(config: z.infer<typeof BillingSchema>) {
+  console.log(JSON.stringify(config));
   return BillingSchema.parse(config);
 }
 
