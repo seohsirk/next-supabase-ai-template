@@ -6,6 +6,7 @@ import {
   CreateBillingPortalSessionSchema,
   RetrieveCheckoutSessionSchema,
 } from '../schema';
+import { ReportBillingUsageSchema } from '../schema/report-billing-usage.schema';
 
 export abstract class BillingStrategyProviderService {
   abstract createBillingPortalSession(
@@ -34,6 +35,12 @@ export abstract class BillingStrategyProviderService {
 
   abstract cancelSubscription(
     params: z.infer<typeof CancelSubscriptionParamsSchema>,
+  ): Promise<{
+    success: boolean;
+  }>;
+
+  abstract reportUsage(
+    params: z.infer<typeof ReportBillingUsageSchema>,
   ): Promise<{
     success: boolean;
   }>;

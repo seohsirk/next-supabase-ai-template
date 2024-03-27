@@ -5,29 +5,17 @@ import { LoadingOverlay } from '@kit/ui/loading-overlay';
 
 type BillingProvider = Database['public']['Enums']['billing_provider'];
 
-const Fallback = (
-  <LoadingOverlay fullPage={false}>Loading Checkout...</LoadingOverlay>
-);
+const Fallback = <LoadingOverlay fullPage={false} />;
 
 export function EmbeddedCheckout(
   props: React.PropsWithChildren<{
     checkoutToken: string;
     provider: BillingProvider;
-    onClose?: () => void;
-  }>,
-) {
-  return <LazyCheckout {...props} />;
-}
-
-function LazyCheckout(
-  props: React.PropsWithChildren<{
-    checkoutToken: string;
-    provider: BillingProvider;
-    onClose?: () => void;
+    onClose: () => void;
   }>,
 ) {
   const CheckoutComponent = useMemo(
-    () => memo(loadCheckoutComponent(props.provider)),
+    () => loadCheckoutComponent(props.provider),
     [props.provider],
   );
 
@@ -65,28 +53,37 @@ function loadCheckoutComponent(provider: BillingProvider) {
 }
 
 function buildLazyComponent<
-  Cmp extends React.ComponentType<
-    React.PropsWithChildren<{
-      onClose?: (() => unknown) | undefined;
-      checkoutToken: string;
-    }>
-  >,
+  Component extends React.ComponentType<{
+    onClose: (() => unknown) | undefined;
+    checkoutToken: string;
+  }>,
 >(
   load: () => Promise<{
-    default: Cmp;
+    default: Component;
   }>,
   fallback = Fallback,
 ) {
-  let LoadedComponent: ReturnType<typeof lazy> | null = null;
+  let LoadedComponent: ReturnType<typeof lazy<Component>> | null = null;
 
-  const LazyComponent = forwardRef(function LazyDynamicComponent(props, ref) {
+  const LazyComponent = forwardRef<
+    React.ElementRef<'div'>,
+    {
+      onClose: (() => unknown) | undefined;
+      checkoutToken: string;
+    }
+  >(function LazyDynamicComponent(props, ref) {
     if (!LoadedComponent) {
       LoadedComponent = lazy(load);
     }
 
     return (
       <Suspense fallback={fallback}>
-        <LoadedComponent {...props} ref={ref} />
+        {/* @ts-ignore */}
+        <LoadedComponent
+          onClose={props.onClose}
+          checkoutToken={props.checkoutToken}
+          ref={ref}
+        />
       </Suspense>
     );
   });

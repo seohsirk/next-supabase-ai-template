@@ -16,18 +16,22 @@
     "./provider": "./src/I18nProvider.tsx"
   },
   "devDependencies": {
-    "@kit/prettier-config": "0.1.0",
     "@kit/eslint-config": "0.2.0",
+    "@kit/prettier-config": "0.1.0",
+    "@kit/shared": "^0.1.0",
     "@kit/tailwind-config": "0.1.0",
-    "@kit/tsconfig": "0.1.0"
-  },
-  "peerDependencies": {
+    "@kit/tsconfig": "0.1.0",
     "i18next": "^23.10.1",
-    "react-i18next": "^14.1.0",
     "i18next-browser-languagedetector": "7.2.0",
     "i18next-resources-to-backend": "^1.2.0",
-    "next": "^14.1.4",
-    "@kit/shared": "^0.1.0"
+    "react-i18next": "^14.1.0"
+  },
+  "peerDependencies": {
+    "@kit/shared": "^0.1.0",
+    "i18next": "^23.10.1",
+    "i18next-browser-languagedetector": "7.2.0",
+    "i18next-resources-to-backend": "^1.2.0",
+    "react-i18next": "^14.1.0"
   },
   "eslintConfig": {
     "root": true,

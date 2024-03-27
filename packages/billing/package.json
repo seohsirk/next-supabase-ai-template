@@ -15,16 +15,20 @@
     "./schema": "./src/schema/index.ts"
   },
   "peerDependencies": {
-    "zod": "^3.22.4",
-    "@kit/ui": "0.1.0",
     "@kit/supabase": "0.1.0",
-    "lucide-react": "^0.361.0"
+    "@kit/ui": "0.1.0",
+    "lucide-react": "^0.363.0",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@kit/prettier-config": "0.1.0",
     "@kit/eslint-config": "0.2.0",
+    "@kit/prettier-config": "0.1.0",
+    "@kit/supabase": "0.1.0",
     "@kit/tailwind-config": "0.1.0",
-    "@kit/tsconfig": "0.1.0"
+    "@kit/tsconfig": "0.1.0",
+    "@kit/ui": "0.1.0",
+    "lucide-react": "^0.363.0",
+    "zod": "^3.22.4"
   },
   "eslintConfig": {
     "root": true,

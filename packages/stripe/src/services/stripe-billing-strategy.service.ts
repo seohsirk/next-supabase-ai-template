@@ -7,6 +7,7 @@ import {
   CancelSubscriptionParamsSchema,
   CreateBillingCheckoutSchema,
   CreateBillingPortalSessionSchema,
+  ReportBillingUsageSchema,
   RetrieveCheckoutSessionSchema,
 } from '@kit/billing/schema';
 
@@ -67,6 +68,16 @@ export class StripeBillingStrategyService
         email: session.customer_details?.email ?? null,
       },
     };
+  }
+
+  async reportUsage(params: z.infer<typeof ReportBillingUsageSchema>) {
+    const stripe = await this.stripeProvider();
+
+    await stripe.subscriptionItems.createUsageRecord(params.subscriptionId, {
+      quantity: params.usage.quantity,
+    });
+
+    return { success: true };
   }
 
   private async stripeProvider(): Promise<Stripe> {

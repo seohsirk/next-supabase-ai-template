@@ -12,19 +12,26 @@
     "./components": "./src/components/index.ts"
   },
   "devDependencies": {
+    "@kit/accounts": "*",
+    "@kit/emails": "*",
     "@kit/eslint-config": "0.2.0",
+    "@kit/mailers": "*",
     "@kit/prettier-config": "0.1.0",
+    "@kit/shared": "*",
+    "@kit/supabase": "*",
     "@kit/tailwind-config": "0.1.0",
-    "@kit/tsconfig": "0.1.0"
+    "@kit/tsconfig": "0.1.0",
+    "@kit/ui": "*",
+    "lucide-react": "^0.363.0"
   },
   "peerDependencies": {
+    "@kit/accounts": "0.1.0",
+    "@kit/emails": "0.1.0",
+    "@kit/mailers": "0.1.0",
+    "@kit/shared": "0.1.0",
     "@kit/supabase": "0.1.0",
     "@kit/ui": "0.1.0",
-    "@kit/shared": "0.1.0",
-    "@kit/accounts": "0.1.0",
-    "@kit/mailers": "0.1.0",
-    "@kit/emails": "0.1.0",
-    "lucide-react": "^0.360.0"
+    "lucide-react": "^0.363.0"
   },
   "prettier": "@kit/prettier-config",
   "eslintConfig": {

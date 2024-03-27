@@ -16,7 +16,8 @@
     "@kit/eslint-config": "0.2.0",
     "@kit/prettier-config": "0.1.0",
     "@kit/tailwind-config": "0.1.0",
-    "@kit/tsconfig": "0.1.0"
+    "@kit/tsconfig": "0.1.0",
+    "@kit/ui": "*"
   },
   "exports": {
     ".": "./src/index.ts"
