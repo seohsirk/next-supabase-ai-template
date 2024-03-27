@@ -1,8 +1,11 @@
+import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
 import { Alert, AlertDescription, AlertTitle } from '@kit/ui/alert';
 import { Button } from '@kit/ui/button';
 import { Trans } from '@kit/ui/trans';
+
+import pathsConfig from '~/config/paths.config';
 
 interface Params {
   searchParams: {
@@ -15,7 +18,7 @@ function AuthCallbackErrorPage({ searchParams }: Params) {
 
   // if there is no error, redirect the user to the sign-in page
   if (!error) {
-    redirect('/auth/sign-in');
+    redirect(pathsConfig.auth.signIn);
   }
 
   return (
@@ -32,15 +35,11 @@ function AuthCallbackErrorPage({ searchParams }: Params) {
         </Alert>
       </div>
 
-      <ResendLinkForm />
-
-      <div className={'flex flex-col space-y-2'}>
-        <Button variant={'ghost'}>
-          <a href={'/auth/sign-in'}>
-            <Trans i18nKey={'auth:signIn'} />
-          </a>
-        </Button>
-      </div>
+      <Button>
+        <Link href={pathsConfig.auth.signIn}>
+          <Trans i18nKey={'auth:signIn'} />
+        </Link>
+      </Button>
     </div>
   );
 }

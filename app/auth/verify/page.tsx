@@ -8,6 +8,12 @@ import pathsConfig from '~/config/paths.config';
 import { createI18nServerInstance } from '~/lib/i18n/i18n.server';
 import { withI18n } from '~/lib/i18n/with-i18n';
 
+interface Props {
+  searchParams: {
+    next?: string;
+  };
+}
+
 export const generateMetadata = async () => {
   const i18n = await createI18nServerInstance();
 
@@ -16,7 +22,7 @@ export const generateMetadata = async () => {
   };
 };
 
-async function VerifyPage() {
+async function VerifyPage(props: Props) {
   const client = getSupabaseServerComponentClient();
   const needsMfa = await checkRequiresMultiFactorAuthentication(client);
 
@@ -24,10 +30,12 @@ async function VerifyPage() {
     redirect(pathsConfig.auth.signIn);
   }
 
+  const redirectPath = props.searchParams.next ?? pathsConfig.app.home;
+
   return (
     <MultiFactorChallengeContainer
-      onSuccess={() => {
-        console.log('2');
+      paths={{
+        redirectPath,
       }}
     />
   );
