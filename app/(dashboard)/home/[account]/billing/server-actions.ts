@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation';
 
 import { z } from 'zod';
 
-import { getProductPlanPairFromId } from '@kit/billing';
+import { getLineItemsFromPlanId } from '@kit/billing';
 import { getBillingGatewayProvider } from '@kit/billing-gateway';
 import { requireAuth } from '@kit/supabase/require-auth';
 import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
@@ -20,6 +20,7 @@ import pathsConfig from '~/config/paths.config';
  * @param {string} params.planId - The ID of the plan to be associated with the account.
  */
 export async function createTeamAccountCheckoutSession(params: {
+  productId: string;
   planId: string;
   accountId: string;
   slug: string;
@@ -29,6 +30,7 @@ export async function createTeamAccountCheckoutSession(params: {
   // we parse the plan ID from the parameters
   // no need in continuing if the plan ID is not valid
   const planId = z.string().min(1).parse(params.planId);
+  const productId = z.string().min(1).parse(params.productId);
 
   // we require the user to be authenticated
   const { data: session } = await requireAuth(client);
@@ -51,32 +53,34 @@ export async function createTeamAccountCheckoutSession(params: {
   // here we have confirmed that the user has permission to manage billing for the account
   // so we go on and create a checkout session
   const service = await getBillingGatewayProvider(client);
-  const productPlanPairFromId = getProductPlanPairFromId(billingConfig, planId);
 
-  if (!productPlanPairFromId) {
+  const product = billingConfig.products.find(
+    (product) => product.id === productId,
+  );
+
+  if (!product) {
     throw new Error('Product not found');
   }
 
-  // the return URL for the checkout session
-  const returnUrl = getCheckoutSessionReturnUrl(params.slug);
+  const { lineItems, trialDays } = getLineItemsFromPlanId(product, planId);
 
   // find the customer ID for the account if it exists
   // (eg. if the account has been billed before)
   const customerId = await getCustomerIdFromAccountId(client, accountId);
   const customerEmail = session.user.email;
 
-  // retrieve the product and plan from the billing configuration
-  const { product, plan } = productPlanPairFromId;
+  // the return URL for the checkout session
+  const returnUrl = getCheckoutSessionReturnUrl(params.slug);
 
   // call the payment gateway to create the checkout session
   const { checkoutToken } = await service.createCheckoutSession({
     accountId,
+    lineItems,
     returnUrl,
-    planId,
     customerEmail,
     customerId,
+    trialDays,
     paymentType: product.paymentType,
-    trialPeriodDays: plan.trialPeriodDays,
   });
 
   // return the checkout token to the client

@@ -45,14 +45,15 @@ export function TeamAccountCheckoutForm(params: { accountId: string }) {
         <PlanPicker
           pending={pending}
           config={billingConfig}
-          onSubmit={({ planId }) => {
+          onSubmit={({ planId, productId }) => {
             startTransition(async () => {
               const slug = routeParams.account as string;
 
               const { checkoutToken } = await createTeamAccountCheckoutSession({
                 planId,
-                accountId: params.accountId,
+                productId,
                 slug,
+                accountId: params.accountId,
               });
 
               setCheckoutToken(checkoutToken);

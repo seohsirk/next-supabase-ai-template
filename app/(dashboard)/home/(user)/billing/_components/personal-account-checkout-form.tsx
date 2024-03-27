@@ -54,12 +54,13 @@ export function PersonalAccountCheckoutForm() {
           <PlanPicker
             pending={pending}
             config={billingConfig}
-            onSubmit={({ planId }) => {
+            onSubmit={({ planId, productId }) => {
               startTransition(async () => {
                 try {
                   const { checkoutToken } =
                     await createPersonalAccountCheckoutSession({
                       planId,
+                      productId,
                     });
 
                   setCheckoutToken(checkoutToken);
