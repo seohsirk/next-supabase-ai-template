@@ -3,6 +3,7 @@ import { BadgeCheck, CheckCircle2 } from 'lucide-react';
 import { z } from 'zod';
 
 import { BillingSchema, getProductPlanPairFromId } from '@kit/billing';
+import { formatCurrency } from '@kit/shared/utils';
 import { Database } from '@kit/supabase/database';
 import {
   Accordion,
@@ -65,8 +66,7 @@ export function CurrentPlanCard({
               i18nKey="billing:planRenewal"
               values={{
                 interval: subscription.interval,
-                currency: product.currency,
-                price: plan.price,
+                price: formatCurrency(product.currency, plan.price),
               }}
             />
           </div>

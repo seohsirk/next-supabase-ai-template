@@ -14,7 +14,7 @@ export default function isRouteActive(
   depth: number,
 ) {
   // we remove any eventual query param from the route's URL
-  const currentRoutePath = currentRoute.split('?')[0];
+  const currentRoutePath = currentRoute.split('?')[0] ?? '';
 
   if (!isRoot(currentRoutePath) && isRoot(targetLink)) {
     return false;

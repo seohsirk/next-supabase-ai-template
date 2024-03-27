@@ -11,7 +11,7 @@ export function EmbeddedCheckout(
   props: React.PropsWithChildren<{
     checkoutToken: string;
     provider: BillingProvider;
-    onClose: () => void;
+    onClose?: () => void;
   }>,
 ) {
   const CheckoutComponent = useMemo(

@@ -2,7 +2,7 @@
   "subscriptionTabSubheading": "Manage your Subscription and Billing",
   "planCardTitle": "Your Plan",
   "planCardDescription": "Below are the details of your current plan. You can change your plan or cancel your subscription at any time.",
-  "planRenewal": "Renews every {{interval}} at {{currency}} {{price}}",
+  "planRenewal": "Renews every {{interval}} at {{price}}",
   "planDetails": "Plan Details",
   "checkout": "Proceed to Checkout",
   "trialEndsOn": "Your trial ends on",

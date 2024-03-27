@@ -7,13 +7,12 @@ import Link from 'next/link';
 import { CheckCircle, Sparkles } from 'lucide-react';
 import { z } from 'zod';
 
+import { BillingSchema, getPlanIntervals } from '@kit/billing';
 import { Button } from '@kit/ui/button';
 import { Heading } from '@kit/ui/heading';
 import { If } from '@kit/ui/if';
 import { Trans } from '@kit/ui/trans';
 import { cn } from '@kit/ui/utils';
-
-import { BillingSchema, getPlanIntervals } from '../create-billing-schema';
 
 type Config = z.infer<typeof BillingSchema>;
 

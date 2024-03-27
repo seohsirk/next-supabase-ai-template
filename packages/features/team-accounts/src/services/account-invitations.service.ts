@@ -72,7 +72,7 @@ export class AccountInvitationsService {
         role: params.role,
       })
       .match({
-        id: params.id,
+        id: params.invitationId,
       });
 
     if (error) {

@@ -2,7 +2,7 @@ import { forwardRef } from 'react';
 
 import Image from 'next/image';
 
-import { cn } from '../../shadcn';
+import { cn } from '../../utils';
 import { LazyRender } from '../lazy-render';
 
 const NextImage: React.FC<{

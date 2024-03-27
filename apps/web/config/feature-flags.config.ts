@@ -36,7 +36,7 @@ const featuresFlagConfig = FeatureFlagsSchema.parse({
     process.env.NEXT_PUBLIC_ENABLE_ORGANIZATION_BILLING,
     false,
   ),
-});
+} satisfies z.infer<typeof FeatureFlagsSchema>);
 
 export default featuresFlagConfig;
 

@@ -49,6 +49,11 @@ export const ImageUploadInput = forwardRef<React.ElementRef<'input'>, Props>(
 
         if (files?.length) {
           const file = files[0];
+
+          if (!file) {
+            return;
+          }
+
           const data = URL.createObjectURL(file);
 
           setState({

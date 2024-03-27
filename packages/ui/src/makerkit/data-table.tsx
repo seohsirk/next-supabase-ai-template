@@ -36,7 +36,7 @@ import {
   TableRow,
 } from '../shadcn/table';
 import { cn } from '../utils';
-import Trans from './trans';
+import { Trans } from './trans';
 
 interface ReactTableProps<T extends object> {
   data: T[];

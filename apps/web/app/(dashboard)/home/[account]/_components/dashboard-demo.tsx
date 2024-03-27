@@ -206,7 +206,9 @@ function generateDemoData() {
     });
   }
 
-  return [data, data[data.length - 1].value] as [typeof data, string];
+  const lastValue = data[data.length - 1]?.value;
+
+  return [data, lastValue] as [typeof data, string];
 }
 
 function Chart(

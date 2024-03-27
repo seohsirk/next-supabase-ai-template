@@ -1,9 +1,6 @@
 import { notFound } from 'next/navigation';
 
 import { getSupabaseServerComponentClient } from '@kit/supabase/server-component-client';
-import { Heading } from '@kit/ui/heading';
-import { If } from '@kit/ui/if';
-import { Trans } from '@kit/ui/trans';
 
 import { withI18n } from '~/lib/i18n/with-i18n';
 
@@ -25,36 +22,7 @@ async function JoinTeamAccountPage({ searchParams }: Context) {
     notFound();
   }
 
-  return (
-    <>
-      <Heading level={4}>
-        <Trans
-          i18nKey={'auth:joinOrganizationHeading'}
-          values={{
-            organization: organization.name,
-          }}
-        />
-      </Heading>
-
-      <div>
-        <p className={'text-center'}>
-          <Trans
-            i18nKey={'auth:joinOrganizationSubHeading'}
-            values={{
-              organization: organization.name,
-            }}
-            components={{ b: <b /> }}
-          />
-        </p>
-
-        <p className={'text-center'}>
-          <If condition={!data.session}>
-            <Trans i18nKey={'auth:signUpToAcceptInvite'} />
-          </If>
-        </p>
-      </div>
-    </>
-  );
+  return <></>;
 }
 
 export default withI18n(JoinTeamAccountPage);
@@ -66,7 +34,7 @@ async function getInviteDataFromInviteToken(token: string) {
 
   const { data: invitation, error } = await adminClient
     .from('invitations')
-    .select('*')
+    .select()
     .eq('invite_token', token)
     .single();
 

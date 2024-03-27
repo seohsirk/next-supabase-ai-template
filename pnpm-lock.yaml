@@ -319,6 +319,9 @@ importers:
       '@kit/prettier-config':
         specifier: 0.1.0
         version: link:../../../tooling/prettier
+      '@kit/supabase':
+        specifier: '*'
+        version: link:../../supabase
       '@kit/tailwind-config':
         specifier: 0.1.0
         version: link:../../../tooling/tailwind
@@ -328,6 +331,12 @@ importers:
       '@kit/ui':
         specifier: '*'
         version: link:../../ui
+      '@supabase/supabase-js':
+        specifier: 2.40.0
+        version: 2.40.0
+      lucide-react:
+        specifier: ^0.363.0
+        version: 0.363.0(react@18.2.0)
 
   packages/features/auth:
     devDependencies:

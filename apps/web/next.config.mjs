@@ -57,11 +57,13 @@ export default withBundleAnalyzer({
 })(config);
 
 function getRemotePatterns() {
-  // add here the remote patterns for your images
+  /** @type {import('next').NextConfig['remotePatterns']} */
+    // add here the remote patterns for your images
   const remotePatterns = [];
 
   if (SUPABASE_URL) {
     const hostname = new URL(SUPABASE_URL).hostname;
+
     remotePatterns.push({
       protocol: 'https',
       hostname,

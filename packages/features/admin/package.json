@@ -17,10 +17,14 @@
     "@kit/prettier-config": "0.1.0",
     "@kit/tailwind-config": "0.1.0",
     "@kit/tsconfig": "0.1.0",
-    "@kit/ui": "*"
+    "@kit/ui": "*",
+    "@kit/supabase": "*",
+    "@supabase/supabase-js": "2.40.0",
+    "lucide-react": "^0.363.0"
   },
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./components/*": "./src/components/*"
   },
   "eslintConfig": {
     "root": true,

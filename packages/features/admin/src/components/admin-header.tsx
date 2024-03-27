@@ -5,11 +5,10 @@ import { ArrowLeft } from 'lucide-react';
 import { Button } from '@kit/ui/button';
 import { PageHeader } from '@kit/ui/page';
 
-function AdminHeader({
+export function AdminHeader({
   children,
   paths,
 }: React.PropsWithChildren<{
-  appHome: string;
   paths: {
     appHome: string;
   };
@@ -28,5 +27,3 @@ function AdminHeader({
     </PageHeader>
   );
 }
-
-export default AdminHeader;

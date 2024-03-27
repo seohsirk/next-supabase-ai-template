@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { BillingSchema } from '@kit/billing';
+import { formatCurrency } from '@kit/shared/utils';
 import { Button } from '@kit/ui/button';
 import {
   Form,
@@ -232,11 +233,4 @@ function Price(props: React.PropsWithChildren) {
       {props.children}
     </span>
   );
-}
-
-function formatCurrency(currencyCode: string, value: string) {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: currencyCode,
-  }).format(value);
 }

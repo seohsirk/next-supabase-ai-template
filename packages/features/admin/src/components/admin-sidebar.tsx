@@ -1,10 +1,8 @@
-'use client';
-
 import { Home, User, Users } from 'lucide-react';
 
 import { Sidebar, SidebarContent, SidebarItem } from '@kit/ui/sidebar';
 
-function AdminSidebar(props: { Logo: React.ReactNode }) {
+export function AdminSidebar(props: { Logo: React.ReactNode }) {
   return (
     <Sidebar>
       <SidebarContent className={'mb-6 mt-4 pt-2'}>{props.Logo}</SidebarContent>
@@ -28,5 +26,3 @@ function AdminSidebar(props: { Logo: React.ReactNode }) {
     </Sidebar>
   );
 }
-
-export default AdminSidebar;

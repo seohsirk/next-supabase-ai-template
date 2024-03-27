@@ -7,7 +7,7 @@ interface Data {
   trialSubscriptions: number;
 }
 
-function AdminDashboard({
+export function AdminDashboard({
   data,
 }: React.PropsWithChildren<{
   data: Data;
@@ -69,8 +69,6 @@ function AdminDashboard({
     </div>
   );
 }
-
-export default AdminDashboard;
 
 function Figure(props: React.PropsWithChildren) {
   return <div className={'text-3xl font-bold'}>{props.children}</div>;
