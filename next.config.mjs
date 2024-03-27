@@ -58,7 +58,7 @@ export default withBundleAnalyzer({
 
 function getRemotePatterns() {
   /** @type {import('next').NextConfig['remotePatterns']} */
-    // add here the remote patterns for your images
+  // add here the remote patterns for your images
   const remotePatterns = [];
 
   if (SUPABASE_URL) {
