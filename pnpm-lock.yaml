@@ -283,6 +283,9 @@ importers:
 
   packages/features/accounts:
     devDependencies:
+      '@kit/billing-gateway':
+        specifier: '*'
+        version: link:../../billing-gateway
       '@kit/eslint-config':
         specifier: 0.2.0
         version: link:../../../tooling/eslint

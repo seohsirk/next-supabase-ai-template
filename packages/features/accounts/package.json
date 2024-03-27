@@ -15,6 +15,7 @@
     "./hooks/*": "./src/hooks/*.ts"
   },
   "devDependencies": {
+    "@kit/billing-gateway": "*",
     "@kit/eslint-config": "0.2.0",
     "@kit/prettier-config": "0.1.0",
     "@kit/shared": "*",

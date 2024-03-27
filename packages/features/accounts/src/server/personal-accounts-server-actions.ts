@@ -1,6 +1,6 @@
 'use server';
 
-import { redirect } from 'next/navigation';
+import { RedirectType, redirect } from 'next/navigation';
 
 import { Logger } from '@kit/shared/logger';
 import { requireAuth } from '@kit/supabase/require-auth';
@@ -33,27 +33,12 @@ export async function deletePersonalAccountAction(formData: FormData) {
     `Deleting personal account...`,
   );
 
-  const deleteAccountResponse = await service.deletePersonalAccount(
+  await service.deletePersonalAccount(
     getSupabaseServerActionClient({ admin: true }),
     {
       userId,
     },
   );
-
-  //
-  // also delete any associated data and subscriptions
-
-  if (deleteAccountResponse.error) {
-    Logger.error(
-      {
-        error: deleteAccountResponse.error,
-        name: 'accounts',
-      },
-      `Error deleting personal account`,
-    );
-
-    throw new Error('Error deleting personal account');
-  }
 
   Logger.info(
     {
@@ -65,5 +50,5 @@ export async function deletePersonalAccountAction(formData: FormData) {
 
   await client.auth.signOut();
 
-  redirect('/');
+  redirect('/', RedirectType.replace);
 }

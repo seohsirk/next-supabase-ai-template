@@ -95,7 +95,7 @@ export class BillingEventHandlerService {
 
         Logger.info(ctx, 'Processing checkout session completed event...');
 
-        const { id, ...data } = subscription;
+        const { id: _, ...data } = subscription;
 
         const { error } = await client.rpc('add_subscription', {
           ...data,

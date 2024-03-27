@@ -1,11 +1,18 @@
 'use client';
 
+import { useMemo } from 'react';
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowRight } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { BillingSchema } from '@kit/billing';
+import {
+  BillingSchema,
+  RecurringPlanSchema,
+  getPlanIntervals,
+  getProductPlanPairFromId,
+} from '@kit/billing';
 import { formatCurrency } from '@kit/shared/utils';
 import { Button } from '@kit/ui/button';
 import {
@@ -28,15 +35,14 @@ import { cn } from '@kit/ui/utils';
 export function PlanPicker(
   props: React.PropsWithChildren<{
     config: z.infer<typeof BillingSchema>;
-    onSubmit: (data: { planId: string }) => void;
+    onSubmit: (data: { planId: string; productId: string }) => void;
     pending?: boolean;
   }>,
 ) {
-  const intervals = props.config.products.reduce<string[]>((acc, item) => {
-    return Array.from(
-      new Set([...acc, ...item.plans.map((plan) => plan.interval)]),
-    );
-  }, []);
+  const intervals = useMemo(
+    () => getPlanIntervals(props.config),
+    [props.config],
+  );
 
   const form = useForm({
     reValidateMode: 'onChange',
@@ -44,20 +50,17 @@ export function PlanPicker(
     resolver: zodResolver(
       z
         .object({
-          planId: z.string(),
-          interval: z.string(),
+          planId: z.string().min(1),
+          interval: z.string().min(1),
         })
         .refine(
           (data) => {
-            const planFound = props.config.products
-              .flatMap((item) => item.plans)
-              .some((plan) => plan.id === data.planId);
+            const { product, plan } = getProductPlanPairFromId(
+              props.config,
+              data.planId,
+            );
 
-            if (!planFound) {
-              return false;
-            }
-
-            return intervals.includes(data.interval);
+            return product && plan;
           },
           { message: `Please pick a plan to continue`, path: ['planId'] },
         ),
@@ -65,6 +68,7 @@ export function PlanPicker(
     defaultValues: {
       interval: intervals[0],
       planId: '',
+      productId: '',
     },
   });
 
@@ -81,9 +85,11 @@ export function PlanPicker(
           render={({ field }) => {
             return (
               <FormItem className={'rounded-md border p-4'}>
-                <FormLabel>Choose your billing interval</FormLabel>
+                <FormLabel htmlFor={'plan-picker-id'}>
+                  Choose your billing interval
+                </FormLabel>
 
-                <FormControl>
+                <FormControl id={'plan-picker-id'}>
                   <RadioGroup name={field.name} value={field.value}>
                     <div className={'flex space-x-2.5'}>
                       {intervals.map((interval) => {
@@ -91,6 +97,7 @@ export function PlanPicker(
 
                         return (
                           <label
+                            htmlFor={interval}
                             key={interval}
                             className={cn(
                               'hover:bg-muted flex items-center space-x-2 rounded-md border border-transparent px-4 py-2',
@@ -107,6 +114,7 @@ export function PlanPicker(
                                 form.setValue('planId', '', {
                                   shouldValidate: true,
                                 });
+
                                 form.setValue('interval', interval, {
                                   shouldValidate: true,
                                 });
@@ -138,25 +146,38 @@ export function PlanPicker(
 
               <FormControl>
                 <RadioGroup name={field.name}>
-                  {props.config.products.map((item) => {
-                    const variant = item.plans.find(
-                      (plan) => plan.interval === selectedInterval,
-                    );
+                  {props.config.products.map((product) => {
+                    const plan =
+                      product.paymentType === 'one-time'
+                        ? product.plans[0]
+                        : product.plans.find((item) => {
+                            if (
+                              'recurring' in item &&
+                              (item as z.infer<typeof RecurringPlanSchema>)
+                                .recurring.interval === selectedInterval
+                            ) {
+                              return item;
+                            }
+                          });
 
-                    if (!variant) {
-                      throw new Error('No plan found');
+                    if (!plan) {
+                      throw new Error('Plan not found');
                     }
 
                     return (
                       <RadioGroupItemLabel
-                        selected={field.value === variant.id}
-                        key={variant.id}
+                        selected={field.value === plan.id}
+                        key={plan.id}
                       >
                         <RadioGroupItem
-                          id={variant.id}
-                          value={variant.id}
+                          id={plan.id}
+                          value={plan.id}
                           onClick={() => {
-                            form.setValue('planId', variant.id, {
+                            form.setValue('planId', plan.id, {
+                              shouldValidate: true,
+                            });
+
+                            form.setValue('productId', product.id, {
                               shouldValidate: true,
                             });
                           }}
@@ -166,23 +187,23 @@ export function PlanPicker(
                           className={'flex w-full items-center justify-between'}
                         >
                           <Label
-                            htmlFor={variant.id}
+                            htmlFor={plan.id}
                             className={'flex flex-col justify-center space-y-2'}
                           >
-                            <span className="font-bold">{item.name}</span>
+                            <span className="font-bold">{product.name}</span>
 
                             <span className={'text-muted-foreground'}>
-                              {item.description}
+                              {product.description}
                             </span>
                           </Label>
 
                           <div className={'text-right'}>
                             <div>
-                              <Price key={variant.id}>
+                              <Price key={plan.id}>
                                 <span>
                                   {formatCurrency(
-                                    item.currency.toLowerCase(),
-                                    variant.price,
+                                    product.currency.toLowerCase(),
+                                    plan.price,
                                   )}
                                 </span>
                               </Price>
@@ -190,7 +211,7 @@ export function PlanPicker(
 
                             <div>
                               <span className={'text-muted-foreground'}>
-                                per {variant.interval}
+                                per {selectedInterval}
                               </span>
                             </div>
                           </div>
@@ -207,7 +228,7 @@ export function PlanPicker(
         />
 
         <div>
-          <Button disabled={props.pending || !form.formState.isValid}>
+          <Button disabled={props.pending ?? !form.formState.isValid}>
             {props.pending ? (
               'Processing...'
             ) : (

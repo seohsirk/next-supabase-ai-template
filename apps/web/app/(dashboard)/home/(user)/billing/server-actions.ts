@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation';
 
 import { z } from 'zod';
 
-import { getProductPlanPairFromId } from '@kit/billing';
+import { getLineItemsFromPlanId } from '@kit/billing';
 import { getBillingGatewayProvider } from '@kit/billing-gateway';
 import { Logger } from '@kit/shared/logger';
 import { requireAuth } from '@kit/supabase/require-auth';
@@ -22,6 +22,7 @@ import pathsConfig from '~/config/paths.config';
  */
 export async function createPersonalAccountCheckoutSession(params: {
   planId: string;
+  productId: string;
 }) {
   const client = getSupabaseServerActionClient();
   const { data, error } = await requireAuth(client);
@@ -30,21 +31,22 @@ export async function createPersonalAccountCheckoutSession(params: {
     throw new Error('Authentication required');
   }
 
-  const planId = z.string().min(1).parse(params.planId);
+  const { planId, productId } = z
+    .object({
+      planId: z.string().min(1),
+      productId: z.string().min(1),
+    })
+    .parse(params);
 
   Logger.info(
     {
       planId,
+      productId,
     },
     `Creating checkout session for plan ID`,
   );
 
   const service = await getBillingGatewayProvider(client);
-  const productPlanPairFromId = getProductPlanPairFromId(billingConfig, planId);
-
-  if (!productPlanPairFromId) {
-    throw new Error('Product not found');
-  }
 
   // in the case of personal accounts
   // the account ID is the same as the user ID
@@ -57,16 +59,21 @@ export async function createPersonalAccountCheckoutSession(params: {
   // (eg. if the account has been billed before)
   const customerId = await getCustomerIdFromAccountId(accountId);
 
-  // retrieve the product and plan from the billing configuration
-  const { product, plan } = productPlanPairFromId;
+  const product = billingConfig.products.find((item) => item.id === productId);
+
+  if (!product) {
+    throw new Error('Product not found');
+  }
+
+  const { lineItems, trialDays } = getLineItemsFromPlanId(product, planId);
 
   // call the payment gateway to create the checkout session
   const { checkoutToken } = await service.createCheckoutSession({
-    paymentType: product.paymentType,
+    lineItems,
     returnUrl,
     accountId,
-    planId,
-    trialPeriodDays: plan.trialPeriodDays,
+    trialDays,
+    paymentType: product.paymentType,
     customerEmail: data.user.email,
     customerId,
   });

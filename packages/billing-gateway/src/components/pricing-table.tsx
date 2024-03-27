@@ -7,7 +7,13 @@ import Link from 'next/link';
 import { CheckCircle, Sparkles } from 'lucide-react';
 import { z } from 'zod';
 
-import { BillingSchema, getPlanIntervals } from '@kit/billing';
+import {
+  BillingSchema,
+  RecurringPlanInterval,
+  RecurringPlanSchema,
+  getPlanIntervals,
+} from '@kit/billing';
+import { formatCurrency } from '@kit/shared/utils';
 import { Button } from '@kit/ui/button';
 import { Heading } from '@kit/ui/heading';
 import { If } from '@kit/ui/if';
@@ -15,6 +21,7 @@ import { Trans } from '@kit/ui/trans';
 import { cn } from '@kit/ui/utils';
 
 type Config = z.infer<typeof BillingSchema>;
+type Interval = z.infer<typeof RecurringPlanInterval>;
 
 interface Paths {
   signUp: string;
@@ -33,20 +40,20 @@ export function PricingTable({
     highlighted?: boolean;
   }>;
 }) {
-  const intervals = getPlanIntervals(config);
+  const intervals = getPlanIntervals(config).filter(Boolean);
 
-  const [planVariant, setPlanVariant] = useState<string>(
-    intervals[0] as string,
-  );
+  const [interval, setInterval] = useState<Interval>(intervals[0]!);
 
   return (
     <div className={'flex flex-col space-y-12'}>
       <div className={'flex justify-center'}>
-        <PlanIntervalSwitcher
-          intervals={intervals}
-          interval={planVariant}
-          setInterval={setPlanVariant}
-        />
+        {intervals.length ? (
+          <PlanIntervalSwitcher
+            intervals={intervals}
+            interval={interval}
+            setInterval={setInterval}
+          />
+        ) : null}
       </div>
 
       <div
@@ -56,21 +63,28 @@ export function PricingTable({
         }
       >
         {config.products.map((product) => {
-          const plan = product.plans.find(
-            (item) => item.interval === planVariant,
+          const plan = product.plans.find((item) =>
+            'recurring' in item
+              ? (item as z.infer<typeof RecurringPlanSchema>).recurring
+                  .interval === interval
+              : true,
           );
 
-          if (!plan || product.hidden) {
+          if (!plan) {
             console.warn(`No plan found for ${product.name}`);
 
             return;
+          }
+
+          if (product.hidden) {
+            return null;
           }
 
           return (
             <PricingItem
               selectable
               key={plan.id}
-              plan={plan}
+              plan={{ ...plan, interval }}
               product={product}
               paths={paths}
               CheckoutButton={CheckoutButtonRenderer}
@@ -92,7 +106,7 @@ function PricingItem(
 
     plan: {
       id: string;
-      price: string;
+      price: number;
       interval: string;
       name?: string;
       href?: string;
@@ -158,8 +172,7 @@ function PricingItem(
 
       <div className={'flex items-center space-x-1'}>
         <Price>
-          <span className={'text-base'}>{props.product.currency}</span>
-          {props.plan.price}
+          {formatCurrency(props.product.currency, props.plan.price)}
         </Price>
 
         <If condition={props.plan.name}>
@@ -249,9 +262,9 @@ function ListItem({ children }: React.PropsWithChildren) {
 
 function PlanIntervalSwitcher(
   props: React.PropsWithChildren<{
-    intervals: string[];
-    interval: string;
-    setInterval: (interval: string) => void;
+    intervals: Interval[];
+    interval: Interval;
+    setInterval: (interval: Interval) => void;
   }>,
 ) {
   return (

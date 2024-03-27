@@ -26,19 +26,18 @@ export async function createStripeCheckout(
   const mode: Stripe.Checkout.SessionCreateParams.Mode =
     params.paymentType === 'recurring' ? 'subscription' : 'payment';
 
-  // TODO: support multiple line items and per-seat pricing
-  const lineItem: Stripe.Checkout.SessionCreateParams.LineItem = {
-    quantity: 1,
-    price: params.planId,
-  };
-
-  const subscriptionData: Stripe.Checkout.SessionCreateParams.SubscriptionData =
-    {
-      trial_period_days: params.trialPeriodDays,
-      metadata: {
-        accountId: params.accountId,
-      },
-    };
+  // this should only be set if the mode is 'subscription'
+  const subscriptionData:
+    | Stripe.Checkout.SessionCreateParams.SubscriptionData
+    | undefined =
+    mode === 'subscription'
+      ? {
+          trial_period_days: params.trialDays,
+          metadata: {
+            accountId: params.accountId,
+          },
+        }
+      : undefined;
 
   const urls = getUrls({
     returnUrl: params.returnUrl,
@@ -55,10 +54,23 @@ export async function createStripeCheckout(
         customer_email: params.customerEmail,
       };
 
+  const lineItems = params.lineItems.map((item) => {
+    if (item.usageType === 'metered') {
+      return {
+        price: item.id,
+      };
+    }
+
+    return {
+      price: item.id,
+      quantity: item.quantity,
+    };
+  });
+
   return stripe.checkout.sessions.create({
     mode,
     ui_mode: uiMode,
-    line_items: [lineItem],
+    line_items: lineItems,
     client_reference_id: clientReferenceId,
     subscription_data: subscriptionData,
     ...customerData,

@@ -8,22 +8,24 @@ export default createBillingSchema({
       name: 'Starter',
       description: 'The perfect plan to get started',
       currency: 'USD',
-      paymentType: 'recurring',
       badge: `Value`,
+      paymentType: 'recurring',
       plans: [
         {
-          id: 'price_1NNwYHI1i3VnbZTqI2UzaHIe',
           name: 'Starter Monthly',
-          price: '9.99',
-          interval: 'month',
-          perSeat: false,
+          id: 'price_1NNwYHI1i3VnbZTqI2UzaHIe',
+          price: 9.99,
+          recurring: {
+            interval: 'month',
+          },
         },
         {
-          id: 'starter-yearly',
           name: 'Starter Yearly',
-          price: '99.99',
-          interval: 'year',
-          perSeat: false,
+          id: 'starter-yearly',
+          price: 99.99,
+          recurring: {
+            interval: 'year',
+          },
         },
       ],
       features: ['Feature 1', 'Feature 2', 'Feature 3'],
@@ -34,22 +36,24 @@ export default createBillingSchema({
       badge: `Popular`,
       highlighted: true,
       description: 'The perfect plan for professionals',
-      paymentType: 'recurring',
       currency: 'USD',
+      paymentType: 'recurring',
       plans: [
         {
-          id: 'pro-monthly',
           name: 'Pro Monthly',
-          price: '19.99',
-          interval: 'month',
-          perSeat: false,
+          id: 'pro-monthly',
+          price: 19.99,
+          recurring: {
+            interval: 'month',
+          },
         },
         {
-          id: 'pro-yearly',
           name: 'Pro Yearly',
-          price: '199.99',
-          interval: 'year',
-          perSeat: false,
+          id: 'pro-yearly',
+          price: 199.99,
+          recurring: {
+            interval: 'year',
+          },
         },
       ],
       features: [
@@ -64,22 +68,24 @@ export default createBillingSchema({
       id: 'enterprise',
       name: 'Enterprise',
       description: 'The perfect plan for enterprises',
-      paymentType: 'recurring',
       currency: 'USD',
+      paymentType: 'recurring',
       plans: [
         {
-          id: 'enterprise-monthly',
           name: 'Enterprise Monthly',
-          price: '99.99',
-          interval: 'month',
-          perSeat: false,
+          id: 'enterprise-monthly',
+          price: 99.99,
+          recurring: {
+            interval: 'month',
+          },
         },
         {
-          id: 'enterprise-yearly',
           name: 'Enterprise Yearly',
-          price: '999.99',
-          interval: 'year',
-          perSeat: false,
+          id: 'enterprise-yearly',
+          price: 999.99,
+          recurring: {
+            interval: 'year',
+          },
         },
       ],
       features: [
