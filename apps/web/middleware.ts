@@ -128,9 +128,10 @@ function getPatterns() {
       handler: async (req: NextRequest, res: NextResponse) => {
         const supabase = createMiddlewareClient(req, res);
         const { data } = await supabase.auth.getSession();
+        const isVerifyMfa = req.nextUrl.pathname === pathsConfig.auth.verifyMfa;
 
         // If user is logged in, redirect to home page.
-        if (data.session) {
+        if (data.session && !isVerifyMfa) {
           return NextResponse.redirect(
             new URL(pathsConfig.app.home, req.nextUrl.origin).href,
           );
@@ -138,7 +139,7 @@ function getPatterns() {
       },
     },
     {
-      pattern: new URLPattern({ pathname: '/home/*' }),
+      pattern: new URLPattern({ pathname: '/home*' }),
       handler: async (req: NextRequest, res: NextResponse) => {
         const supabase = createMiddlewareClient(req, res);
         const { data, error } = await supabase.auth.getSession();
@@ -155,6 +156,10 @@ function getPatterns() {
 
         const requiresMultiFactorAuthentication =
           await checkRequiresMultiFactorAuthentication(supabase);
+
+        console.log({
+          requiresMultiFactorAuthentication,
+        });
 
         // If user requires multi-factor authentication, redirect to MFA page.
         if (requiresMultiFactorAuthentication) {

@@ -118,8 +118,10 @@ export class StripeWebhookHandlerService
     const stripe = await this.loadStripe();
 
     const session = event.data.object;
-    const subscriptionId = session.subscription as string;
 
+    // TODO: handle one-off payments
+    // is subscription there?
+    const subscriptionId = session.subscription as string;
     const subscription = await stripe.subscriptions.retrieve(subscriptionId);
 
     const accountId = session.client_reference_id!;

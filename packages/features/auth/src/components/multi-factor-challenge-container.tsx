@@ -1,20 +1,35 @@
 'use client';
 
-import type { FormEventHandler } from 'react';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 
 import { useRouter } from 'next/navigation';
 
+import { zodResolver } from '@hookform/resolvers/zod';
+import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
 import { useMutation } from '@tanstack/react-query';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 
 import useFetchAuthFactors from '@kit/supabase/hooks/use-fetch-mfa-factors';
 import { useSignOut } from '@kit/supabase/hooks/use-sign-out';
 import { useSupabase } from '@kit/supabase/hooks/use-supabase';
-import { Alert, AlertDescription } from '@kit/ui/alert';
+import { Alert, AlertDescription, AlertTitle } from '@kit/ui/alert';
 import { Button } from '@kit/ui/button';
-import { Heading } from '@kit/ui/heading';
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormMessage,
+} from '@kit/ui/form';
 import { If } from '@kit/ui/if';
-import { OtpInput } from '@kit/ui/otp-input';
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+} from '@kit/ui/input-otp';
 import Spinner from '@kit/ui/spinner';
 import { Trans } from '@kit/ui/trans';
 
@@ -26,72 +41,128 @@ export function MultiFactorChallengeContainer({
   };
 }>) {
   const router = useRouter();
-
-  const [factorId, setFactorId] = useState('');
-  const [verifyCode, setVerifyCode] = useState('');
   const verifyMFAChallenge = useVerifyMFAChallenge();
 
   const onSuccess = useCallback(() => {
     router.replace(paths.redirectPath);
   }, [router, paths.redirectPath]);
 
-  const onSubmitClicked: FormEventHandler<HTMLFormElement> = useCallback(
-    (event) => {
-      void (async () => {
-        event.preventDefault();
-
-        if (!factorId || !verifyCode) {
-          return;
-        }
-
-        await verifyMFAChallenge.mutateAsync({
-          factorId,
-          verifyCode,
-        });
-
-        onSuccess();
-      })();
+  const verificationCodeForm = useForm({
+    resolver: zodResolver(
+      z.object({
+        factorId: z.string().min(1),
+        verificationCode: z.string().min(6).max(6),
+      }),
+    ),
+    defaultValues: {
+      factorId: '',
+      verificationCode: '',
     },
-    [factorId, verifyMFAChallenge, onSuccess, verifyCode],
-  );
+  });
+
+  const factorId = verificationCodeForm.watch('factorId');
 
   if (!factorId) {
     return (
-      <FactorsListContainer onSelect={setFactorId} onSuccess={onSuccess} />
+      <FactorsListContainer
+        onSelect={(factorId) => {
+          verificationCodeForm.setValue('factorId', factorId);
+        }}
+        onSuccess={onSuccess}
+      />
     );
   }
 
   return (
-    <form onSubmit={onSubmitClicked}>
-      <div className={'flex flex-col space-y-4'}>
-        <span className={'text-sm'}>
-          <Trans i18nKey={'account:verifyActivationCodeDescription'} />
-        </span>
+    <Form {...verificationCodeForm}>
+      <form
+        className={'w-full'}
+        onSubmit={verificationCodeForm.handleSubmit(async (data) => {
+          await verifyMFAChallenge.mutateAsync({
+            factorId,
+            verificationCode: data.verificationCode,
+          });
 
-        <div className={'flex w-full flex-col space-y-2.5'}>
-          <OtpInput
-            onInvalid={() => setVerifyCode('')}
-            onValid={setVerifyCode}
-          />
+          onSuccess();
+        })}
+      >
+        <div className={'flex flex-col space-y-4'}>
+          <span className={'text-muted-foreground text-sm'}>
+            <Trans i18nKey={'account:verifyActivationCodeDescription'} />
+          </span>
 
-          <If condition={verifyMFAChallenge.error}>
-            <Alert variant={'destructive'}>
-              <AlertDescription>
-                <Trans i18nKey={'account:invalidVerificationCode'} />
-              </AlertDescription>
-            </Alert>
-          </If>
+          <div className={'flex w-full flex-col space-y-2.5'}>
+            <div className={'flex flex-col space-y-4'}>
+              <If condition={verifyMFAChallenge.error}>
+                <Alert variant={'destructive'}>
+                  <ExclamationTriangleIcon className={'h-5'} />
+
+                  <AlertTitle>
+                    <Trans i18nKey={'account:invalidVerificationCodeHeading'} />
+                  </AlertTitle>
+
+                  <AlertDescription>
+                    <Trans
+                      i18nKey={'account:invalidVerificationCodeDescription'}
+                    />
+                  </AlertDescription>
+                </Alert>
+              </If>
+
+              <FormField
+                name={'verificationCode'}
+                render={({ field }) => {
+                  return (
+                    <FormItem
+                      className={
+                        'mx-auto flex flex-col items-center justify-center'
+                      }
+                    >
+                      <FormControl>
+                        <InputOTP {...field} maxLength={6} minLength={6}>
+                          <InputOTPGroup>
+                            <InputOTPSlot index={0} />
+                            <InputOTPSlot index={1} />
+                            <InputOTPSlot index={2} />
+                          </InputOTPGroup>
+                          <InputOTPSeparator />
+                          <InputOTPGroup>
+                            <InputOTPSlot index={3} />
+                            <InputOTPSlot index={4} />
+                            <InputOTPSlot index={5} />
+                          </InputOTPGroup>
+                        </InputOTP>
+                      </FormControl>
+
+                      <FormDescription>
+                        <Trans
+                          i18nKey={'account:verifyActivationCodeDescription'}
+                        />
+                      </FormDescription>
+
+                      <FormMessage />
+                    </FormItem>
+                  );
+                }}
+              />
+            </div>
+          </div>
+
+          <Button
+            disabled={
+              verifyMFAChallenge.isPending ||
+              !verificationCodeForm.formState.isValid
+            }
+          >
+            {verifyMFAChallenge.isPending ? (
+              <Trans i18nKey={'account:verifyingCode'} />
+            ) : (
+              <Trans i18nKey={'account:submitVerificationCode'} />
+            )}
+          </Button>
         </div>
-
-        <Button disabled={verifyMFAChallenge.isPending || !verifyCode}>
-          {verifyMFAChallenge.isPending ? (
-            <Trans i18nKey={'account:verifyingCode'} />
-          ) : (
-            <Trans i18nKey={'account:submitVerificationCode'} />
-          )}
-        </Button>
-      </div>
-    </form>
+      </form>
+    </Form>
   );
 }
 
@@ -99,11 +170,12 @@ function useVerifyMFAChallenge() {
   const client = useSupabase();
 
   const mutationKey = ['mfa-verify-challenge'];
+
   const mutationFn = async (params: {
     factorId: string;
-    verifyCode: string;
+    verificationCode: string;
   }) => {
-    const { factorId, verifyCode: code } = params;
+    const { factorId, verificationCode: code } = params;
 
     const response = await client.auth.mfa.challengeAndVerify({
       factorId,
@@ -128,7 +200,6 @@ function FactorsListContainer({
   onSelect: (factor: string) => void;
 }>) {
   const signOut = useSignOut();
-
   const { data: factors, isLoading, error } = useFetchAuthFactors();
 
   const isSuccess = factors && !isLoading && !error;
@@ -174,8 +245,14 @@ function FactorsListContainer({
     return (
       <div className={'w-full'}>
         <Alert variant={'destructive'}>
-          <AlertDescription>
+          <ExclamationTriangleIcon className={'h-4'} />
+
+          <AlertTitle>
             <Trans i18nKey={'account:factorsListError'} />
+          </AlertTitle>
+
+          <AlertDescription>
+            <Trans i18nKey={'account:factorsListErrorDescription'} />
           </AlertDescription>
         </Alert>
       </div>
@@ -187,22 +264,24 @@ function FactorsListContainer({
   return (
     <div className={'flex flex-col space-y-4'}>
       <div>
-        <Heading level={6}>
+        <span className={'font-medium'}>
           <Trans i18nKey={'account:selectFactor'} />
-        </Heading>
+        </span>
       </div>
 
-      {verifiedFactors.map((factor) => (
-        <div key={factor.id}>
-          <Button
-            variant={'outline'}
-            className={'w-full border-gray-50'}
-            onClick={() => onSelect(factor.id)}
-          >
-            {factor.friendly_name}
-          </Button>
-        </div>
-      ))}
+      <div className={'flex flex-col space-y-2'}>
+        {verifiedFactors.map((factor) => (
+          <div key={factor.id}>
+            <Button
+              variant={'outline'}
+              className={'w-full'}
+              onClick={() => onSelect(factor.id)}
+            >
+              {factor.friendly_name}
+            </Button>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

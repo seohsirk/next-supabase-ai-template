@@ -22,6 +22,7 @@
     "@kit/tailwind-config": "0.1.0",
     "@kit/tsconfig": "0.1.0",
     "@kit/ui": "*",
+    "@hookform/resolvers/zod": "1.0.0",
     "lucide-react": "^0.363.0"
   },
   "peerDependencies": {

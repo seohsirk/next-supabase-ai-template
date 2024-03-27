@@ -22,7 +22,7 @@ import { If } from '@kit/ui/if';
 import { Input } from '@kit/ui/input';
 import { Trans } from '@kit/ui/trans';
 
-import { UpdateEmailSchema } from '../../schema/update-email.schema';
+import { UpdateEmailSchema } from '../../../schema/update-email.schema';
 
 function createEmailResolver(currentEmail: string, errorMessage: string) {
   return zodResolver(

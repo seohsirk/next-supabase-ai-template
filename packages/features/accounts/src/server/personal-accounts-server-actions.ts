@@ -8,6 +8,14 @@ import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-clie
 
 import { PersonalAccountsService } from './services/personal-accounts.service';
 
+export async function refreshAuthSession() {
+  const client = getSupabaseServerActionClient();
+
+  await client.auth.refreshSession();
+
+  return {};
+}
+
 export async function deletePersonalAccountAction(formData: FormData) {
   const confirmation = formData.get('confirmation');
 

@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Card,
   CardContent,
@@ -9,10 +11,11 @@ import { If } from '@kit/ui/if';
 import { Trans } from '@kit/ui/trans';
 
 import { AccountDangerZone } from './account-danger-zone';
+import { UpdateEmailFormContainer } from './email/update-email-form-container';
+import { MultiFactorAuthFactorsList } from './mfa/multi-factor-auth-list';
+import { UpdatePasswordFormContainer } from './password/update-password-container';
 import { UpdateAccountDetailsFormContainer } from './update-account-details-form-container';
 import { UpdateAccountImageContainer } from './update-account-image-container';
-import { UpdateEmailFormContainer } from './update-email-form-container';
-import { UpdatePasswordFormContainer } from './update-password-container';
 
 export function PersonalAccountSettingsContainer(
   props: React.PropsWithChildren<{
@@ -88,6 +91,22 @@ export function PersonalAccountSettingsContainer(
 
         <CardContent>
           <UpdatePasswordFormContainer callbackPath={props.paths.callback} />
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>
+            <Trans i18nKey={'account:multiFactorAuth'} />
+          </CardTitle>
+
+          <CardDescription>
+            <Trans i18nKey={'account:multiFactorAuthDescription'} />
+          </CardDescription>
+        </CardHeader>
+
+        <CardContent>
+          <MultiFactorAuthFactorsList />
         </CardContent>
       </Card>
 

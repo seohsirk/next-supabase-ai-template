@@ -25,7 +25,7 @@ import { Input } from '@kit/ui/input';
 import { Label } from '@kit/ui/label';
 import { Trans } from '@kit/ui/trans';
 
-import { PasswordUpdateSchema } from '../../schema/update-password.schema';
+import { PasswordUpdateSchema } from '../../../schema/update-password.schema';
 
 export const UpdatePasswordForm = ({
   user,

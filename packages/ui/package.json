@@ -28,6 +28,7 @@
     "@radix-ui/react-tooltip": "1.0.7",
     "clsx": "^2.1.0",
     "cmdk": "^0.2.0",
+    "input-otp": "1.2.3",
     "react-top-loading-bar": "2.3.1",
     "tailwind-merge": "^2.2.0"
   },
@@ -75,6 +76,7 @@
   "prettier": "@kit/prettier-config",
   "exports": {
     "./accordion": "./src/shadcn/accordion.tsx",
+    "./alert-dialog": "./src/shadcn/alert-dialog.tsx",
     "./avatar": "./src/shadcn/avatar.tsx",
     "./button": "./src/shadcn/button.tsx",
     "./calendar": "./src/shadcn/calendar.tsx",
@@ -101,6 +103,7 @@
     "./badge": "./src/shadcn/badge.tsx",
     "./radio-group": "./src/shadcn/radio-group.tsx",
     "./separator": "./src/shadcn/separator.tsx",
+    "./input-otp": "./src/shadcn/input-otp.tsx",
     "./utils": "./src/utils/index.ts",
     "./if": "./src/makerkit/if.tsx",
     "./trans": "./src/makerkit/trans.tsx",
@@ -113,7 +116,6 @@
     "./global-loader": "./src/makerkit/global-loader.tsx",
     "./error-boundary": "./src/makerkit/error-boundary.tsx",
     "./auth-change-listener": "./src/makerkit/auth-change-listener.tsx",
-    "./otp-input": "./src/makerkit/otp-input.tsx",
     "./loading-overlay": "./src/makerkit/loading-overlay.tsx",
     "./profile-avatar": "./src/makerkit/profile-avatar.tsx",
     "./mdx": "./src/makerkit/mdx/mdx-renderer.tsx"
