@@ -5,8 +5,8 @@ import type { DocumentationPage } from 'contentlayer/generated';
 export interface ProcessedDocumentationPage extends DocumentationPage {
   collapsible: boolean;
   pathSegments: string[];
-  nextPage: ProcessedDocumentationPage | DocumentationPage | null;
-  previousPage: ProcessedDocumentationPage | DocumentationPage | null;
+  nextPage: ProcessedDocumentationPage | DocumentationPage | undefined;
+  previousPage: ProcessedDocumentationPage | DocumentationPage | undefined;
   children: DocsTree;
 }
 

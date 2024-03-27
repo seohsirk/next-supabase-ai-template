@@ -6,30 +6,37 @@ import { getSupabaseRouteHandlerClient } from '@kit/supabase/route-handler-clien
 
 import pathsConfig from '~/config/paths.config';
 
+const defaultNextUrl = pathsConfig.app.home;
+
 export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url);
   const searchParams = requestUrl.searchParams;
 
   const authCode = searchParams.get('code');
-  const inviteCode = searchParams.get('inviteCode');
   const error = searchParams.get('error');
-  const nextUrl = searchParams.get('next') ?? pathsConfig.app.home;
+  const nextUrlPathFromParams = searchParams.get('next');
+  const inviteToken = searchParams.get('invite_token');
 
-  let userId: string | undefined = undefined;
+  let nextUrl = nextUrlPathFromParams ?? defaultNextUrl;
+
+  // if we have an invite token, we redirect to the join team page
+  // instead of the default next url. This is because the user is trying
+  // to join a team and we want to make sure they are redirected to the
+  // correct page.
+  if (inviteToken) {
+    nextUrl = `${pathsConfig.app.joinTeam}?invite_token=${inviteToken}`;
+  }
 
   if (authCode) {
     const client = getSupabaseRouteHandlerClient();
 
     try {
-      const { error, data } =
-        await client.auth.exchangeCodeForSession(authCode);
+      const { error } = await client.auth.exchangeCodeForSession(authCode);
 
       // if we have an error, we redirect to the error page
       if (error) {
         return onError({ error: error.message });
       }
-
-      userId = data.user.id;
     } catch (error) {
       Logger.error(
         {
@@ -42,34 +49,6 @@ export async function GET(request: NextRequest) {
 
       return onError({ error: message as string });
     }
-
-    if (inviteCode && userId) {
-      try {
-        Logger.info(
-          {
-            userId,
-            inviteCode,
-          },
-          `Attempting to accept user invite...`,
-        );
-
-        // if we have an invite code, we accept the invite
-        await acceptInviteFromEmailLink({ inviteCode, userId });
-      } catch (error) {
-        Logger.error(
-          {
-            userId,
-            inviteCode,
-            error,
-          },
-          `An error occurred while accepting user invite`,
-        );
-
-        const message = error instanceof Error ? error.message : error;
-
-        return onError({ error: message as string });
-      }
-    }
   }
 
   if (error) {
@@ -77,37 +56,6 @@ export async function GET(request: NextRequest) {
   }
 
   return redirect(nextUrl);
-}
-
-/**
- * @name acceptInviteFromEmailLink
- * @description If we find an invite code, we try to accept the invite
- * received from the email link method
- * @param params
- */
-async function acceptInviteFromEmailLink(params: {
-  inviteCode: string;
-  userId: string | undefined;
-}) {
-  if (!params.userId) {
-    Logger.error(params, `Attempted to accept invite, but no user id provided`);
-
-    return;
-  }
-
-  Logger.info(params, `Found invite code. Accepting invite...`);
-
-  await acceptInviteToOrganization(
-    getSupabaseRouteHandlerClient({
-      admin: true,
-    }),
-    {
-      code: params.inviteCode,
-      userId: params.userId,
-    },
-  );
-
-  Logger.info(params, `Invite successfully accepted`);
 }
 
 function onError({ error }: { error: string }) {

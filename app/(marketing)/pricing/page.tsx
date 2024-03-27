@@ -1,4 +1,4 @@
-import { PricingTable } from '@kit/billing/components/pricing-table';
+import { PricingTable } from '@kit/billing-gateway/components';
 
 import { SitePageHeader } from '~/(marketing)/_components/site-page-header';
 import billingConfig from '~/config/billing.config';

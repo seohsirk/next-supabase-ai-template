@@ -9,7 +9,7 @@ import Post from '~/(marketing)/blog/_components/post';
 import appConfig from '~/config/app.config';
 import { withI18n } from '~/lib/i18n/with-i18n';
 
-export function generateMetadata({
+export async function generateMetadata({
   params,
 }: {
   params: { slug: string };
@@ -17,7 +17,7 @@ export function generateMetadata({
   const post = allPosts.find((post) => post.slug === params.slug);
 
   if (!post) {
-    return;
+    notFound();
   }
 
   const { title, date, description, image, slug } = post;

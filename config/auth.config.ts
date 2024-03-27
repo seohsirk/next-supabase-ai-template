@@ -24,7 +24,7 @@ const authConfig = AuthConfigSchema.parse({
     magicLink: false,
     oAuth: ['google'],
   },
-});
+} satisfies z.infer<typeof AuthConfigSchema>);
 
 export default authConfig;
 
