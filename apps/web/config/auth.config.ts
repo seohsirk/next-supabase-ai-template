@@ -6,8 +6,12 @@ const providers: z.ZodType<Provider> = getProviders();
 
 const AuthConfigSchema = z.object({
   providers: z.object({
-    password: z.boolean(),
-    magicLink: z.boolean(),
+    password: z.boolean({
+      description: 'Enable password authentication.',
+    }),
+    magicLink: z.boolean({
+      description: 'Enable magic link authentication.',
+    }),
     oAuth: providers.array(),
   }),
 });

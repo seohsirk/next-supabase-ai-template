@@ -337,6 +337,9 @@ importers:
       '@kit/prettier-config':
         specifier: 0.1.0
         version: link:../../../tooling/prettier
+      '@kit/shared':
+        specifier: 0.1.0
+        version: link:../../shared
       '@kit/supabase':
         specifier: 0.1.0
         version: link:../../supabase
@@ -361,6 +364,9 @@ importers:
       sonner:
         specifier: ^1.4.41
         version: 1.4.41(react-dom@18.2.0)(react@18.2.0)
+      zod:
+        specifier: ^3.22.4
+        version: 3.22.4
 
   packages/features/team-accounts:
     devDependencies:
