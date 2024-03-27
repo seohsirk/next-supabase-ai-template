@@ -2,8 +2,7 @@
 
 import type { Provider } from '@supabase/supabase-js';
 
-import { isBrowser } from '@supabase/ssr';
-
+import { isBrowser } from '@kit/shared/utils';
 import { Divider } from '@kit/ui/divider';
 import { If } from '@kit/ui/if';
 

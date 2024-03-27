@@ -37,6 +37,7 @@ function SignUpPage({ searchParams }: Props) {
         providers={authConfig.providers}
         paths={{
           callback: pathsConfig.auth.callback,
+          appHome: pathsConfig.app.home,
         }}
         inviteToken={inviteToken}
       />

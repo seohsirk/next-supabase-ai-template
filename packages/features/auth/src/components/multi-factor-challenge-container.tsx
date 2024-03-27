@@ -3,6 +3,8 @@
 import type { FormEventHandler } from 'react';
 import { useCallback, useEffect, useState } from 'react';
 
+import { useRouter } from 'next/navigation';
+
 import { useMutation } from '@tanstack/react-query';
 
 import useFetchAuthFactors from '@kit/supabase/hooks/use-fetch-mfa-factors';
@@ -17,13 +19,21 @@ import Spinner from '@kit/ui/spinner';
 import { Trans } from '@kit/ui/trans';
 
 export function MultiFactorChallengeContainer({
-  onSuccess,
+  paths,
 }: React.PropsWithChildren<{
-  onSuccess: () => void;
+  paths: {
+    redirectPath: string;
+  };
 }>) {
+  const router = useRouter();
+
   const [factorId, setFactorId] = useState('');
   const [verifyCode, setVerifyCode] = useState('');
   const verifyMFAChallenge = useVerifyMFAChallenge();
+
+  const onSuccess = useCallback(() => {
+    router.replace(paths.redirectPath);
+  }, [router, paths.redirectPath]);
 
   const onSubmitClicked: FormEventHandler<HTMLFormElement> = useCallback(
     (event) => {
