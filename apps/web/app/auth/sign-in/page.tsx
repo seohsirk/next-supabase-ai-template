@@ -26,7 +26,7 @@ const paths = {
 function SignInPage() {
   return (
     <>
-      <Heading level={5}>
+      <Heading level={4}>
         <Trans i18nKey={'auth:signInHeading'} />
       </Heading>
 
