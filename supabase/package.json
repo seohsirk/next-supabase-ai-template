@@ -8,8 +8,7 @@
     "reset": "supabase db reset || supabase start",
     "status": "supabase status",
     "test": "supabase db test",
-    "lint": "supabase db lint",
-    "lint:report": "supabase db lint",
+    "db:lint": "supabase db lint",
     "deploy": "supabase link --project-ref $SUPABASE_PROJECT_REF && supabase db push",
     "typegen": "supabase gen types typescript --local > ../packages/supabase/src/database.types.ts"
   },

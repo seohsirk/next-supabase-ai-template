@@ -7,6 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@kit/ui/card';
+import { Trans } from '@kit/ui/trans';
 
 import { TeamAccountDangerZone } from './team-account-danger-zone';
 import { UpdateTeamAccountImage } from './update-team-account-image-container';
@@ -31,10 +32,12 @@ export function TeamAccountSettingsContainer(props: {
     <div className={'flex flex-col space-y-8'}>
       <Card>
         <CardHeader>
-          <CardTitle>Team Logo</CardTitle>
+          <CardTitle>
+            <Trans i18nKey={'teams:settings.teamLogo'} />
+          </CardTitle>
 
           <CardDescription>
-            Update your team's logo to make it easier to identify
+            <Trans i18nKey={'teams:settings.teamLogoDescription'} />
           </CardDescription>
         </CardHeader>
 
@@ -45,9 +48,13 @@ export function TeamAccountSettingsContainer(props: {
 
       <Card>
         <CardHeader>
-          <CardTitle>Team Account Settings</CardTitle>
+          <CardTitle>
+            <Trans i18nKey={'teams:settings.teamName'} />
+          </CardTitle>
 
-          <CardDescription>Manage your team account settings</CardDescription>
+          <CardDescription>
+            <Trans i18nKey={'teams:settings.teamNameDescription'} />
+          </CardDescription>
         </CardHeader>
 
         <CardContent>
@@ -60,11 +67,12 @@ export function TeamAccountSettingsContainer(props: {
 
       <Card className={'border-destructive border-2'}>
         <CardHeader>
-          <CardTitle>Danger Zone</CardTitle>
+          <CardTitle>
+            <Trans i18nKey={'teams:settings.dangerZone'} />
+          </CardTitle>
 
           <CardDescription>
-            Please be careful when making changes in this section as they are
-            irreversible.
+            <Trans i18nKey={'teams:settings.dangerZoneDescription'} />
           </CardDescription>
         </CardHeader>
 

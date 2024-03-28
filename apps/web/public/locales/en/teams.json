@@ -1,7 +1,13 @@
 {
   "settings": {
     "pageTitle": "Settings",
-    "pageDescription": "Manage your Team details"
+    "pageDescription": "Manage your Team details",
+    "teamLogo": "Team Logo",
+    "teamLogoDescription": "Update your team's logo to make it easier to identify",
+    "teamName": "Team Name",
+    "teamNameDescription": "Update your team's name",
+    "dangerZone": "Danger Zone",
+    "dangerZoneDescription": "This section contains actions that are irreversible"
   },
   "yourTeam": "Your Teams",
   "createTeam": "Create Team",

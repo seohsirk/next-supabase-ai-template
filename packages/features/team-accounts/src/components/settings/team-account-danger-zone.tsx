@@ -148,7 +148,7 @@ function DeleteTeamConfirmationForm({
             <div
               className={
                 'border-2 border-red-500 p-4 text-sm text-red-500' +
-                ' flex flex-col space-y-2'
+                ' my-4 flex flex-col space-y-2'
               }
             >
               <div>

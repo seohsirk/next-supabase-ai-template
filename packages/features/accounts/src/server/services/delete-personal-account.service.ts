@@ -105,7 +105,7 @@ export class DeletePersonalAccountService {
     const { renderAccountDeleteEmail } = await import('@kit/email-templates');
     const mailer = new Mailer();
 
-    const html = await renderAccountDeleteEmail({
+    const html = renderAccountDeleteEmail({
       userDisplayName: params.userDisplayName,
       productName: params.productName,
     });
