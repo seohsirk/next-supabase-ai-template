@@ -2,7 +2,6 @@ import {
   BillingPortalCard,
   CurrentPlanCard,
 } from '@kit/billing-gateway/components';
-import { Database } from '@kit/supabase/database';
 import { getSupabaseServerComponentClient } from '@kit/supabase/server-component-client';
 import { If } from '@kit/ui/if';
 import { PageBody, PageHeader } from '@kit/ui/page';
