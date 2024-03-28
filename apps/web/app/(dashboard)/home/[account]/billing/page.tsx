@@ -11,6 +11,7 @@ import { Trans } from '@kit/ui/trans';
 import { loadTeamWorkspace } from '~/(dashboard)/home/[account]/_lib/load-team-account-workspace';
 import { createBillingPortalSession } from '~/(dashboard)/home/[account]/billing/server-actions';
 import billingConfig from '~/config/billing.config';
+import { createI18nServerInstance } from '~/lib/i18n/i18n.server';
 import { withI18n } from '~/lib/i18n/with-i18n';
 
 import { TeamAccountCheckoutForm } from './_components/team-account-checkout-form';
@@ -20,6 +21,15 @@ interface Params {
     account: string;
   };
 }
+
+export const generateMetadata = async () => {
+  const i18n = await createI18nServerInstance();
+  const title = i18n.t('teams:billing.pageTitle');
+
+  return {
+    title,
+  };
+};
 
 async function TeamAccountBillingPage({ params }: Params) {
   const workspace = await loadTeamWorkspace(params.account);

@@ -22,8 +22,6 @@ export function TeamAccountSettingsContainer(props: {
     primaryOwnerUserId: string;
   };
 
-  userId: string;
-
   paths: {
     teamAccountSettings: string;
   };
@@ -78,9 +76,7 @@ export function TeamAccountSettingsContainer(props: {
 
         <CardContent>
           <TeamAccountDangerZone
-            userIsPrimaryOwner={
-              props.userId === props.account.primaryOwnerUserId
-            }
+            primaryOwnerUserId={props.account.primaryOwnerUserId}
             account={props.account}
           />
         </CardContent>

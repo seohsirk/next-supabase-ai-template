@@ -8,6 +8,7 @@ import Spinner from '@kit/ui/spinner';
 import { Trans } from '@kit/ui/trans';
 
 import { AppHeader } from '~/(dashboard)/home/[account]/_components/app-header';
+import { createI18nServerInstance } from '~/lib/i18n/i18n.server';
 import { withI18n } from '~/lib/i18n/with-i18n';
 
 const DashboardDemo = loadDynamic(
@@ -31,8 +32,13 @@ const DashboardDemo = loadDynamic(
   },
 );
 
-export const metadata = {
-  title: 'Organization Account Home',
+export const generateMetadata = async () => {
+  const i18n = await createI18nServerInstance();
+  const title = i18n.t('teams:home.pageTitle');
+
+  return {
+    title,
+  };
 };
 
 function TeamAccountHomePage({

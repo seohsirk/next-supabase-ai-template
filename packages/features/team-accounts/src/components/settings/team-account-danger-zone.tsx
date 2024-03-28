@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
+import { useUser } from '@kit/supabase/hooks/use-user';
 import { Alert, AlertDescription, AlertTitle } from '@kit/ui/alert';
 import {
   AlertDialog,
@@ -29,6 +30,7 @@ import {
   FormMessage,
 } from '@kit/ui/form';
 import { Input } from '@kit/ui/input';
+import { LoadingOverlay } from '@kit/ui/loading-overlay';
 import { Trans } from '@kit/ui/trans';
 
 import { deleteTeamAccountAction } from '../../server/actions/delete-team-account-server-actions';
@@ -36,15 +38,23 @@ import { leaveTeamAccountAction } from '../../server/actions/leave-team-account-
 
 export function TeamAccountDangerZone({
   account,
-  userIsPrimaryOwner,
+  primaryOwnerUserId,
 }: React.PropsWithChildren<{
   account: {
     name: string;
     id: string;
   };
 
-  userIsPrimaryOwner: boolean;
+  primaryOwnerUserId: string;
 }>) {
+  const { data: user, isLoading } = useUser();
+
+  if (isLoading) {
+    return <LoadingOverlay fullPage={false} />;
+  }
+
+  const userIsPrimaryOwner = user?.id === primaryOwnerUserId;
+
   if (userIsPrimaryOwner) {
     return <DeleteTeamContainer account={account} />;
   }
