@@ -29,7 +29,7 @@ function SignUpPage({ searchParams }: Props) {
 
   return (
     <>
-      <Heading level={5}>
+      <Heading level={4}>
         <Trans i18nKey={'auth:signUpHeading'} />
       </Heading>
 
