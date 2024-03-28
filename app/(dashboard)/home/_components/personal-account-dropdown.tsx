@@ -5,9 +5,10 @@ import type { Session } from '@supabase/supabase-js';
 import { PersonalAccountDropdown } from '@kit/accounts/personal-account-dropdown';
 import { useSignOut } from '@kit/supabase/hooks/use-sign-out';
 
+import featuresFlagConfig from '~/config/feature-flags.config';
 import pathsConfig from '~/config/paths.config';
 
-export function ProfileDropdownContainer(props: {
+export function ProfileAccountDropdownContainer(props: {
   collapsed: boolean;
   session: Session | null;
 }) {
@@ -18,6 +19,9 @@ export function ProfileDropdownContainer(props: {
       <PersonalAccountDropdown
         paths={{
           home: pathsConfig.app.home,
+        }}
+        features={{
+          enableThemeToggle: featuresFlagConfig.enableThemeToggle,
         }}
         className={'w-full'}
         showProfileName={!props.collapsed}

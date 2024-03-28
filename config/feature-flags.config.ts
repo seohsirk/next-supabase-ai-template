@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 const FeatureFlagsSchema = z.object({
-  enableThemeSwitcher: z.boolean(),
+  enableThemeToggle: z.boolean(),
   enableAccountDeletion: z.boolean(),
   enableTeamDeletion: z.boolean(),
   enableTeamAccounts: z.boolean(),
@@ -11,7 +11,7 @@ const FeatureFlagsSchema = z.object({
 });
 
 const featuresFlagConfig = FeatureFlagsSchema.parse({
-  enableThemeSwitcher: true,
+  enableThemeToggle: true,
   enableAccountDeletion: getBoolean(
     process.env.NEXT_PUBLIC_ENABLE_ACCOUNT_DELETION,
     false,
