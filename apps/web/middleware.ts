@@ -115,7 +115,14 @@ function getPatterns() {
       pattern: new URLPattern({ pathname: '/auth*' }),
       handler: async (req: NextRequest, res: NextResponse) => {
         const supabase = createMiddlewareClient(req, res);
-        const { data: user } = await supabase.auth.getUser();
+        const { data: user, error } = await supabase.auth.getUser();
+
+        // the user is logged out, so we don't need to do anything
+        if (error) {
+          await supabase.auth.signOut();
+
+          return;
+        }
 
         // check if we need to verify MFA (user is authenticated but needs to verify MFA)
         const isVerifyMfa = req.nextUrl.pathname === pathsConfig.auth.verifyMfa;
@@ -136,6 +143,9 @@ function getPatterns() {
         const { data: user, error } = await supabase.auth.getUser();
         const origin = req.nextUrl.origin;
         const next = req.nextUrl.pathname;
+
+        console.log('home:user', user);
+        console.log('home:error', error);
 
         // If user is not logged in, redirect to sign in page.
         if (!user || error) {
