@@ -3,16 +3,16 @@ import { useCallback } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { useSupabase } from '@kit/supabase/hooks/use-supabase';
+import { useUser } from '@kit/supabase/hooks/use-user';
 
 const queryKey = ['personal-account:data'];
 
 export function usePersonalAccountData() {
   const client = useSupabase();
+  const user = useUser();
 
   const queryFn = async () => {
-    const { data, error } = await client.auth.getSession();
-
-    if (!data.session || error) {
+    if (!user.data?.id) {
       return null;
     }
 
@@ -25,7 +25,7 @@ export function usePersonalAccountData() {
         picture_url
     `,
       )
-      .eq('primary_owner_user_id', data.session.user.id)
+      .eq('primary_owner_user_id', user.data?.id)
       .eq('is_personal_account', true)
       .single();
 
@@ -39,6 +39,7 @@ export function usePersonalAccountData() {
   return useQuery({
     queryKey,
     queryFn,
+    enabled: !!user.data?.id,
   });
 }
 

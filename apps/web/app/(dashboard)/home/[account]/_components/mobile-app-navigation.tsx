@@ -24,8 +24,8 @@ import {
 import { Trans } from '@kit/ui/trans';
 
 import featureFlagsConfig from '~/config/feature-flags.config';
-import { getOrganizationAccountSidebarConfig } from '~/config/organization-account-sidebar.config';
 import pathsConfig from '~/config/paths.config';
+import { getOrganizationAccountSidebarConfig } from '~/config/team-account-sidebar.config';
 
 const features = {
   enableTeamAccounts: featureFlagsConfig.enableTeamAccounts,

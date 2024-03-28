@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 
 import { CaretSortIcon, PersonIcon } from '@radix-ui/react-icons';
 import { Check, Plus } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@kit/ui/avatar';
 import { Button } from '@kit/ui/button';
@@ -59,6 +60,8 @@ export function AccountSelector({
     selectedAccount ?? PERSONAL_ACCOUNT_SLUG,
   );
 
+  const { t } = useTranslation('teams');
+
   useEffect(() => {
     setValue(selectedAccount ?? PERSONAL_ACCOUNT_SLUG);
   }, [selectedAccount]);
@@ -105,7 +108,7 @@ export function AccountSelector({
                       hidden: collapsed,
                     })}
                   >
-                    Personal Account
+                    <Trans i18nKey={'teams:personalAccount'} />
                   </span>
                 </span>
               }
@@ -137,7 +140,7 @@ export function AccountSelector({
 
         <PopoverContent className="w-full p-0">
           <Command>
-            <CommandInput placeholder="Search account..." className="h-9" />
+            <CommandInput placeholder={t('searchAccount')} className="h-9" />
 
             <CommandList>
               <CommandGroup>
@@ -147,7 +150,9 @@ export function AccountSelector({
                 >
                   <PersonIcon className="mr-2 h-4 w-4" />
 
-                  <span>Personal Account</span>
+                  <span>
+                    <Trans i18nKey={'teams:personalAccount'} />
+                  </span>
 
                   <Icon item={PERSONAL_ACCOUNT_SLUG} />
                 </CommandItem>

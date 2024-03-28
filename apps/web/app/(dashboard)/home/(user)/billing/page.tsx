@@ -1,5 +1,3 @@
-import { redirect } from 'next/navigation';
-
 import { SupabaseClient } from '@supabase/supabase-js';
 
 import {
@@ -14,23 +12,15 @@ import { Trans } from '@kit/ui/trans';
 
 import { createPersonalAccountBillingPortalSession } from '~/(dashboard)/home/(user)/billing/server-actions';
 import billingConfig from '~/config/billing.config';
-import pathsConfig from '~/config/paths.config';
 import { withI18n } from '~/lib/i18n/with-i18n';
 
-import { loadUserWorkspace } from '../../_lib/load-user-workspace';
 import { PersonalAccountCheckoutForm } from './_components/personal-account-checkout-form';
 
 type Subscription = Database['public']['Tables']['subscriptions']['Row'];
 
 async function PersonalAccountBillingPage() {
   const client = getSupabaseServerComponentClient();
-  const { session } = await loadUserWorkspace();
-
-  if (!session?.user) {
-    redirect(pathsConfig.auth.signIn);
-  }
-
-  const [subscription, customerId] = await loadData(client, session.user.id);
+  const [subscription, customerId] = await loadData(client);
 
   return (
     <>
@@ -68,18 +58,26 @@ async function PersonalAccountBillingPage() {
 
 export default withI18n(PersonalAccountBillingPage);
 
-function loadData(client: SupabaseClient<Database>, userId: string) {
+async function loadData(client: SupabaseClient<Database>) {
+  const { data, error } = await client.auth.getUser();
+
+  if (error ?? !data?.user) {
+    throw new Error('Authentication required');
+  }
+
+  const user = data.user;
+
   const subscription = client
     .from('subscriptions')
     .select<string, Subscription>('*')
-    .eq('account_id', userId)
+    .eq('account_id', user.id)
     .maybeSingle()
     .then(({ data }) => data);
 
   const customer = client
     .from('billing_customers')
     .select('customer_id')
-    .eq('account_id', userId)
+    .eq('account_id', user.id)
     .maybeSingle()
     .then(({ data }) => data?.customer_id);
 

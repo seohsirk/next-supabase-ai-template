@@ -1,5 +1,8 @@
+import { SupabaseClient } from '@supabase/supabase-js';
+
 import { PlusCircle } from 'lucide-react';
 
+import { Database } from '@kit/supabase/database';
 import { getSupabaseServerComponentClient } from '@kit/supabase/server-component-client';
 import {
   AccountInvitationsTable,
@@ -26,9 +29,20 @@ interface Params {
   };
 }
 
-async function loadAccountMembers(account: string) {
-  const client = getSupabaseServerComponentClient();
+async function loadUser(client: SupabaseClient<Database>) {
+  const { data, error } = await client.auth.getUser();
 
+  if (error) {
+    throw error;
+  }
+
+  return data.user;
+}
+
+async function loadAccountMembers(
+  client: SupabaseClient<Database>,
+  account: string,
+) {
   const { data, error } = await client.rpc('get_account_members', {
     account_slug: account,
   });
@@ -41,9 +55,10 @@ async function loadAccountMembers(account: string) {
   return data ?? [];
 }
 
-async function loadInvitations(account: string) {
-  const client = getSupabaseServerComponentClient();
-
+async function loadInvitations(
+  client: SupabaseClient<Database>,
+  account: string,
+) {
   const { data, error } = await client.rpc('get_account_invitations', {
     account_slug: account,
   });
@@ -56,14 +71,22 @@ async function loadInvitations(account: string) {
   return data ?? [];
 }
 
-async function TeamAccountMembersPage({ params }: Params) {
-  const slug = params.account;
-
-  const [{ account, user }, members, invitations] = await Promise.all([
+async function loadData(client: SupabaseClient<Database>, slug: string) {
+  return Promise.all([
     loadTeamWorkspace(slug),
-    loadAccountMembers(slug),
-    loadInvitations(slug),
+    loadAccountMembers(client, slug),
+    loadInvitations(client, slug),
+    loadUser(client),
   ]);
+}
+
+async function TeamAccountMembersPage({ params }: Params) {
+  const client = getSupabaseServerComponentClient();
+
+  const [{ account }, members, invitations, user] = await loadData(
+    client,
+    params.account,
+  );
 
   const canManageRoles = account.permissions.includes('roles.manage');
   const isPrimaryOwner = account.primary_owner_user_id === user.id;

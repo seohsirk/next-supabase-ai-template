@@ -7,7 +7,7 @@ import pathsConfig from '~/config/paths.config';
 
 const iconClasses = 'w-4';
 
-const routes = (account: string) => [
+const getRoutes = (account: string) => [
   {
     label: 'common:dashboardTabLabel',
     path: pathsConfig.app.accountHome.replace('[account]', account),
@@ -41,7 +41,7 @@ const routes = (account: string) => [
 
 export function getOrganizationAccountSidebarConfig(account: string) {
   return SidebarConfigSchema.parse({
-    routes: routes(account),
+    routes: getRoutes(account),
   });
 }
 

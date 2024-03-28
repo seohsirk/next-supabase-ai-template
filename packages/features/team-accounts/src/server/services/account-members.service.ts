@@ -12,7 +12,7 @@ export class AccountMembersService {
       .from('accounts_memberships')
       .delete()
       .match({
-        id: params.accountId,
+        account_id: params.accountId,
         user_id: params.userId,
       });
 
