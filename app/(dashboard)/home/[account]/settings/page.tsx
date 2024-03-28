@@ -2,13 +2,14 @@ import { TeamAccountSettingsContainer } from '@kit/team-accounts/components';
 import { PageBody, PageHeader } from '@kit/ui/page';
 import { Trans } from '@kit/ui/trans';
 
-import { loadTeamWorkspace } from '~/(dashboard)/home/[account]/_lib/load-team-account-workspace';
 import pathsConfig from '~/config/paths.config';
 import { createI18nServerInstance } from '~/lib/i18n/i18n.server';
 
+import { loadTeamWorkspace } from '../_lib/load-team-account-workspace';
+
 export const generateMetadata = async () => {
   const i18n = await createI18nServerInstance();
-  const title = i18n.t('accounts:settings:pageTitle');
+  const title = i18n.t('teams:settings:pageTitle');
 
   return {
     title,
@@ -27,6 +28,7 @@ const paths = {
 
 async function TeamAccountSettingsPage(props: Props) {
   const data = await loadTeamWorkspace(props.params.account);
+
   const account = {
     id: data.account.id,
     name: data.account.name,
@@ -48,11 +50,7 @@ async function TeamAccountSettingsPage(props: Props) {
             'container mx-auto flex max-w-2xl flex-1 flex-col items-center'
           }
         >
-          <TeamAccountSettingsContainer
-            userId={data.user.id}
-            account={account}
-            paths={paths}
-          />
+          <TeamAccountSettingsContainer account={account} paths={paths} />
         </div>
       </PageBody>
     </>

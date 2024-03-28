@@ -12,11 +12,21 @@ import { Trans } from '@kit/ui/trans';
 
 import { createPersonalAccountBillingPortalSession } from '~/(dashboard)/home/(user)/billing/server-actions';
 import billingConfig from '~/config/billing.config';
+import { createI18nServerInstance } from '~/lib/i18n/i18n.server';
 import { withI18n } from '~/lib/i18n/with-i18n';
 
 import { PersonalAccountCheckoutForm } from './_components/personal-account-checkout-form';
 
 type Subscription = Database['public']['Tables']['subscriptions']['Row'];
+
+export const generateMetadata = async () => {
+  const i18n = await createI18nServerInstance();
+  const title = i18n.t('account:billingTab');
+
+  return {
+    title,
+  };
+};
 
 async function PersonalAccountBillingPage() {
   const client = getSupabaseServerComponentClient();

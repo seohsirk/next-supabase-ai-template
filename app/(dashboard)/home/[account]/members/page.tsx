@@ -21,6 +21,7 @@ import { PageBody, PageHeader } from '@kit/ui/page';
 import { Trans } from '@kit/ui/trans';
 
 import { loadTeamWorkspace } from '~/(dashboard)/home/[account]/_lib/load-team-account-workspace';
+import { createI18nServerInstance } from '~/lib/i18n/i18n.server';
 import { withI18n } from '~/lib/i18n/with-i18n';
 
 interface Params {
@@ -79,6 +80,15 @@ async function loadData(client: SupabaseClient<Database>, slug: string) {
     loadUser(client),
   ]);
 }
+
+export const generateMetadata = async () => {
+  const i18n = await createI18nServerInstance();
+  const title = i18n.t('teams:members.pageTitle');
+
+  return {
+    title,
+  };
+};
 
 async function TeamAccountMembersPage({ params }: Params) {
   const client = getSupabaseServerComponentClient();

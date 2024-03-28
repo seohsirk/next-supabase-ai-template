@@ -1,4 +1,7 @@
 {
+  "home": {
+    "pageTitle": "Home"
+  },
   "settings": {
     "pageTitle": "Settings",
     "pageDescription": "Manage your Team details",
@@ -8,6 +11,12 @@
     "teamNameDescription": "Update your team's name",
     "dangerZone": "Danger Zone",
     "dangerZoneDescription": "This section contains actions that are irreversible"
+  },
+  "members": {
+    "pageTitle": "Members"
+  },
+  "billing": {
+    "pageTitle": "Billing"
   },
   "yourTeams": "Your Teams",
   "createTeam": "Create a Team",
