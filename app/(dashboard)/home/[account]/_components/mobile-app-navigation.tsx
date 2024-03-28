@@ -27,6 +27,11 @@ import featureFlagsConfig from '~/config/feature-flags.config';
 import { getOrganizationAccountSidebarConfig } from '~/config/organization-account-sidebar.config';
 import pathsConfig from '~/config/paths.config';
 
+const features = {
+  enableTeamAccounts: featureFlagsConfig.enableTeamAccounts,
+  enableTeamCreation: featureFlagsConfig.enableTeamCreation,
+};
+
 export const MobileAppNavigation = (
   props: React.PropsWithChildren<{
     slug: string;
@@ -161,12 +166,7 @@ function OrganizationsModal() {
               router.replace(path);
             }}
             accounts={[]}
-            features={{
-              enableOrganizationAccounts:
-                featureFlagsConfig.enableOrganizationAccounts,
-              enableOrganizationCreation:
-                featureFlagsConfig.enableOrganizationCreation,
-            }}
+            features={features}
           />
         </div>
       </DialogContent>

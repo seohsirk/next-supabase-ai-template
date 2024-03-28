@@ -8,7 +8,7 @@ import { If } from '@kit/ui/if';
 import { PageBody, PageHeader } from '@kit/ui/page';
 import { Trans } from '@kit/ui/trans';
 
-import { loadOrganizationWorkspace } from '~/(dashboard)/home/[account]/_lib/load-workspace';
+import { loadTeamWorkspace } from '~/(dashboard)/home/[account]/_lib/load-team-account-workspace';
 import { createBillingPortalSession } from '~/(dashboard)/home/[account]/billing/server-actions';
 import billingConfig from '~/config/billing.config';
 import { withI18n } from '~/lib/i18n/with-i18n';
@@ -22,7 +22,7 @@ interface Params {
 }
 
 async function OrganizationAccountBillingPage({ params }: Params) {
-  const workspace = await loadOrganizationWorkspace(params.account);
+  const workspace = await loadTeamWorkspace(params.account);
   const accountId = workspace.account.id;
   const [subscription, customerId] = await loadAccountData(accountId);
 

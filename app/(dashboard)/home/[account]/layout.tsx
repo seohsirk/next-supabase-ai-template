@@ -6,7 +6,7 @@ import { getSupabaseServerComponentClient } from '@kit/supabase/server-component
 import { Page } from '@kit/ui/page';
 
 import { AppSidebar } from '~/(dashboard)/home/[account]/_components/app-sidebar';
-import { loadOrganizationWorkspace } from '~/(dashboard)/home/[account]/_lib/load-workspace';
+import { loadTeamWorkspace } from '~/(dashboard)/home/[account]/_lib/load-team-account-workspace';
 import { withI18n } from '~/lib/i18n/with-i18n';
 
 interface Params {
@@ -20,7 +20,7 @@ function OrganizationWorkspaceLayout({
   params: Params;
 }>) {
   const [data, session] = use(
-    Promise.all([loadOrganizationWorkspace(params.account), loadSession()]),
+    Promise.all([loadTeamWorkspace(params.account), loadSession()]),
   );
 
   const ui = getUIStateCookies();
