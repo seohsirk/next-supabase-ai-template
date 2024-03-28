@@ -100,10 +100,13 @@ function Home() {
               <span>A modern, scalable, and secure SaaS Starter Kit</span>
             </Pill>
 
-            <div className={'flex flex-col space-y-2.5'}>
+            <div className={'flex flex-col space-y-1'}>
               <Heading level={2}>The best tool in the space</Heading>
 
-              <Heading level={3} className={'text-muted-foreground'}>
+              <Heading
+                level={3}
+                className={'font-medium text-muted-foreground'}
+              >
                 Unbeatable Features and Benefits for Your SaaS Business
               </Heading>
             </div>
@@ -115,29 +118,20 @@ function Home() {
         <div className={'flex flex-col space-y-4'}>
           <FeatureShowcaseContainer>
             <LeftFeatureContainer>
-              <div className={'flex flex-col space-y-4'}>
+              <div className={'flex flex-col space-y-2'}>
                 <Heading level={2}>Authentication</Heading>
 
                 <Heading level={3} className={'text-muted-foreground'}>
                   Secure and Easy-to-Use Authentication for Your SaaS Website
                   and API
                 </Heading>
-              </div>
 
-              <div>
-                Our authentication system is built on top of the
-                industry-leading PaaS such as Supabase and Firebase. It is
-                secure, easy-to-use, and fully customizable. It supports
-                email/password, social logins, and more.
-              </div>
-
-              <div>
-                <Button variant={'outline'}>
-                  <span className={'flex items-center space-x-2'}>
-                    <span>Get Started</span>
-                    <ChevronRight className={'h-3'} />
-                  </span>
-                </Button>
+                <div>
+                  Our authentication system is built on top of the
+                  industry-leading PaaS such as Supabase and Firebase. It is
+                  secure, easy-to-use, and fully customizable. It supports
+                  email/password, social logins, and more.
+                </div>
               </div>
             </LeftFeatureContainer>
 
@@ -164,10 +158,10 @@ function Home() {
             </LeftFeatureContainer>
 
             <RightFeatureContainer>
-              <div className={'flex flex-col space-y-4'}>
-                <Heading level={1}>Dashboard</Heading>
+              <div className={'flex flex-col space-y-2'}>
+                <Heading level={2}>Dashboard</Heading>
 
-                <Heading level={2} className={'text-muted-foreground'}>
+                <Heading level={3} className={'text-muted-foreground'}>
                   A fantastic dashboard to manage your SaaS business
                 </Heading>
 
@@ -218,7 +212,7 @@ function HeroTitle({ children }: React.PropsWithChildren) {
     <h1
       className={
         'text-center text-4xl md:text-5xl' +
-        ' font-heading flex flex-col font-bold xl:text-7xl'
+        ' flex flex-col font-semibold xl:text-7xl'
       }
     >
       {children}
@@ -270,7 +264,7 @@ function MainCallToActionButton() {
   return (
     <Button className={'rounded-full'}>
       <Link href={'/auth/sign-up'}>
-        <span className={'flex items-center space-x-2'}>
+        <span className={'flex items-center space-x-0.5'}>
           <span>Get Started</span>
 
           <ChevronRight

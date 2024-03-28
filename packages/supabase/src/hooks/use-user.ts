@@ -6,10 +6,11 @@ import { useQuery } from '@tanstack/react-query';
 
 import { useSupabase } from './use-supabase';
 
+const queryKey = ['supabase:user'];
+
 export function useUser(initialData?: User | null) {
   const client = useSupabase();
   const router = useRouter();
-  const queryKey = ['supabase:user'];
 
   const queryFn = async () => {
     const response = await client.auth.getUser();
@@ -30,5 +31,7 @@ export function useUser(initialData?: User | null) {
     queryFn,
     queryKey,
     initialData,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
   });
 }

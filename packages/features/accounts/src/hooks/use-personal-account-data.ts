@@ -40,6 +40,8 @@ export function usePersonalAccountData() {
     queryKey,
     queryFn,
     enabled: !!user.data?.id,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
   });
 }
 
