@@ -1,4 +1,4 @@
-import type { Session } from '@supabase/supabase-js';
+import type { User } from '@supabase/supabase-js';
 
 import { ModeToggle } from '@kit/ui/mode-toggle';
 
@@ -6,7 +6,7 @@ import { SiteHeaderAccountSection } from '~/(marketing)/_components/site-header-
 import { SiteNavigation } from '~/(marketing)/_components/site-navigation';
 import { AppLogo } from '~/components/app-logo';
 
-export function SiteHeader(props: { session?: Session | null }) {
+export function SiteHeader(props: { user?: User | null }) {
   return (
     <div className={'container mx-auto'}>
       <div className="flex h-16 items-center justify-between">
@@ -23,7 +23,7 @@ export function SiteHeader(props: { session?: Session | null }) {
             <ModeToggle />
           </div>
 
-          <SiteHeaderAccountSection session={props.session ?? null} />
+          <SiteHeaderAccountSection user={props.user ?? null} />
         </div>
       </div>
     </div>

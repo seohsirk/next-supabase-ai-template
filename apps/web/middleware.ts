@@ -23,17 +23,13 @@ export async function middleware(request: NextRequest) {
 
   // apply CSRF and session middleware
   const csrfResponse = await withCsrfMiddleware(request, response);
-  const sessionResponse = await sessionMiddleware(request, csrfResponse);
 
   // handle patterns for specific routes
   const handlePattern = matchUrlPattern(request.url);
 
   // if a pattern handler exists, call it
   if (handlePattern) {
-    const patternHandlerResponse = await handlePattern(
-      request,
-      sessionResponse,
-    );
+    const patternHandlerResponse = await handlePattern(request, csrfResponse);
 
     // if a pattern handler returns a response, return it
     if (patternHandlerResponse) {
@@ -42,15 +38,7 @@ export async function middleware(request: NextRequest) {
   }
 
   // if no pattern handler returned a response, return the session response
-  return sessionResponse;
-}
-
-async function sessionMiddleware(req: NextRequest, res: NextResponse) {
-  const supabase = createMiddlewareClient(req, res);
-
-  await supabase.auth.getSession();
-
-  return res;
+  return csrfResponse;
 }
 
 async function withCsrfMiddleware(
@@ -127,14 +115,14 @@ function getPatterns() {
       pattern: new URLPattern({ pathname: '/auth*' }),
       handler: async (req: NextRequest, res: NextResponse) => {
         const supabase = createMiddlewareClient(req, res);
-        const { data } = await supabase.auth.getSession();
+        const { data: user } = await supabase.auth.getUser();
 
         // check if we need to verify MFA (user is authenticated but needs to verify MFA)
         const isVerifyMfa = req.nextUrl.pathname === pathsConfig.auth.verifyMfa;
 
         // If user is logged in and does not need to verify MFA,
         // redirect to home page.
-        if (data.session && !isVerifyMfa) {
+        if (user && !isVerifyMfa) {
           return NextResponse.redirect(
             new URL(pathsConfig.app.home, req.nextUrl.origin).href,
           );
@@ -145,12 +133,12 @@ function getPatterns() {
       pattern: new URLPattern({ pathname: '/home*' }),
       handler: async (req: NextRequest, res: NextResponse) => {
         const supabase = createMiddlewareClient(req, res);
-        const { data, error } = await supabase.auth.getSession();
+        const { data: user, error } = await supabase.auth.getUser();
         const origin = req.nextUrl.origin;
         const next = req.nextUrl.pathname;
 
         // If user is not logged in, redirect to sign in page.
-        if (!data.session || error) {
+        if (!user || error) {
           const signIn = pathsConfig.auth.signIn;
           const redirectPath = `${signIn}?next=${next}`;
 

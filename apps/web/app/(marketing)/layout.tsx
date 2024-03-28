@@ -8,12 +8,12 @@ async function SiteLayout(props: React.PropsWithChildren) {
   const client = getSupabaseServerComponentClient();
 
   const {
-    data: { session },
-  } = await client.auth.getSession();
+    data: { user },
+  } = await client.auth.getUser();
 
   return (
     <>
-      <SiteHeader session={session} />
+      <SiteHeader user={user} />
 
       {props.children}
 

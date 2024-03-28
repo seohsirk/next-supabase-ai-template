@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 
 import Link from 'next/link';
 
-import type { Session } from '@supabase/gotrue-js';
+import type { User } from '@supabase/supabase-js';
 
 import {
   EllipsisVertical,
@@ -31,14 +31,14 @@ import { usePersonalAccountData } from '../hooks/use-personal-account-data';
 
 export function PersonalAccountDropdown({
   className,
-  session,
+  user,
   signOutRequested,
   showProfileName,
   paths,
   features,
 }: {
   className?: string;
-  session: Session | null;
+  user: User | null;
   signOutRequested: () => unknown;
   showProfileName?: boolean;
   paths: {
@@ -49,20 +49,19 @@ export function PersonalAccountDropdown({
   };
 }) {
   const { data: personalAccountData } = usePersonalAccountData();
-  const authUser = session?.user;
 
   const signedInAsLabel = useMemo(() => {
-    const email = authUser?.email ?? undefined;
-    const phone = authUser?.phone ?? undefined;
+    const email = user?.email ?? undefined;
+    const phone = user?.phone ?? undefined;
 
     return email ?? phone;
-  }, [authUser?.email, authUser?.phone]);
+  }, [user?.email, user?.phone]);
 
-  const displayName = personalAccountData?.name ?? authUser?.email ?? '';
+  const displayName = personalAccountData?.name ?? user?.email ?? '';
 
   const isSuperAdmin = useMemo(() => {
-    return authUser?.app_metadata.role === 'super-admin';
-  }, [authUser]);
+    return user?.app_metadata.role === 'super-admin';
+  }, [user]);
 
   return (
     <DropdownMenu>
@@ -79,7 +78,7 @@ export function PersonalAccountDropdown({
         )}
       >
         <ProfileAvatar
-          displayName={displayName ?? authUser?.email ?? ''}
+          displayName={displayName ?? user?.email ?? ''}
           pictureUrl={personalAccountData?.picture_url}
         />
 

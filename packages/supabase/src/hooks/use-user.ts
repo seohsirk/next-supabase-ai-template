@@ -1,10 +1,12 @@
 import { useRouter } from 'next/navigation';
 
+import type { User } from '@supabase/supabase-js';
+
 import { useQuery } from '@tanstack/react-query';
 
 import { useSupabase } from './use-supabase';
 
-export function useUser() {
+export function useUser(initialData?: User | null) {
   const client = useSupabase();
   const router = useRouter();
   const queryKey = ['supabase:user'];
@@ -27,5 +29,6 @@ export function useUser() {
   return useQuery({
     queryFn,
     queryKey,
+    initialData,
   });
 }

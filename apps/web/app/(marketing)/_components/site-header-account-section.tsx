@@ -2,12 +2,13 @@
 
 import Link from 'next/link';
 
-import type { Session } from '@supabase/supabase-js';
+import { Session, User } from '@supabase/supabase-js';
 
 import { ChevronRight } from 'lucide-react';
 
 import { PersonalAccountDropdown } from '@kit/accounts/personal-account-dropdown';
 import { useSignOut } from '@kit/supabase/hooks/use-sign-out';
+import { useUser } from '@kit/supabase/hooks/use-user';
 import { useUserSession } from '@kit/supabase/hooks/use-user-session';
 import { Button } from '@kit/ui/button';
 import { If } from '@kit/ui/if';
@@ -18,23 +19,23 @@ import pathsConfig from '~/config/paths.config';
 
 export function SiteHeaderAccountSection(
   props: React.PropsWithChildren<{
-    session: Session | null;
+    user: User | null;
   }>,
 ) {
-  if (!props.session) {
+  if (!props.user) {
     return <AuthButtons />;
   }
 
-  return <SuspendedPersonalAccountDropdown session={props.session} />;
+  return <SuspendedPersonalAccountDropdown user={props.user} />;
 }
 
-function SuspendedPersonalAccountDropdown(props: { session: Session | null }) {
+function SuspendedPersonalAccountDropdown(props: { user: User | null }) {
   const signOut = useSignOut();
-  const userSession = useUserSession(props.session);
+  const user = useUser(props.user);
 
   return (
-    <If condition={userSession.data} fallback={<AuthButtons />}>
-      {(session) => (
+    <If condition={user.data} fallback={<AuthButtons />}>
+      {(data) => (
         <PersonalAccountDropdown
           paths={{
             home: pathsConfig.app.home,
@@ -42,7 +43,7 @@ function SuspendedPersonalAccountDropdown(props: { session: Session | null }) {
           features={{
             enableThemeToggle: featuresFlagConfig.enableThemeToggle,
           }}
-          session={session}
+          user={data}
           signOutRequested={() => signOut.mutateAsync()}
         />
       )}

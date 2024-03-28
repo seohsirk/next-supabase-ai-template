@@ -38,7 +38,6 @@ export function AppSidebar(props: {
   account: string;
   accounts: AccountModel[];
   collapsed: boolean;
-  session: Session | null;
 }) {
   return (
     <Sidebar collapsed={props.collapsed}>
@@ -48,7 +47,6 @@ export function AppSidebar(props: {
           setCollapsed={setCollapsed}
           account={props.account}
           accounts={props.accounts}
-          session={props.session}
         />
       )}
     </Sidebar>
@@ -58,7 +56,6 @@ export function AppSidebar(props: {
 function SidebarContainer(props: {
   account: string;
   accounts: AccountModel[];
-  session: Session | null;
   collapsed: boolean;
   setCollapsed: (collapsed: boolean) => void;
 }) {
@@ -89,10 +86,7 @@ function SidebarContainer(props: {
 
       <div className={'absolute bottom-4 left-0 w-full'}>
         <SidebarContent>
-          <ProfileAccountDropdownContainer
-            session={props.session}
-            collapsed={props.collapsed}
-          />
+          <ProfileAccountDropdownContainer collapsed={props.collapsed} />
 
           <AppSidebarFooterMenu
             collapsed={props.collapsed}
