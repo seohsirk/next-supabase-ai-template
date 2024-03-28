@@ -35,25 +35,30 @@ export class DeletePersonalAccountService {
       productName: string;
     };
   }) {
+    const userId = params.userId;
+
     Logger.info(
-      { userId: params.userId, name: this.namespace },
+      { name: this.namespace, userId },
       'User requested deletion. Processing...',
     );
 
     // Cancel all user subscriptions
     const billingService = new AccountBillingService(params.adminClient);
 
-    await billingService.cancelAllAccountSubscriptions(params.userId);
+    await billingService.cancelAllAccountSubscriptions({
+      userId,
+      accountId: userId,
+    });
 
     // execute the deletion of the user
     try {
-      await params.adminClient.auth.admin.deleteUser(params.userId);
+      await params.adminClient.auth.admin.deleteUser(userId);
     } catch (error) {
       Logger.error(
         {
-          userId: params.userId,
-          error,
           name: this.namespace,
+          userId,
+          error,
         },
         'Error deleting user',
       );
@@ -66,8 +71,8 @@ export class DeletePersonalAccountService {
       try {
         Logger.info(
           {
-            userId: params.userId,
             name: this.namespace,
+            userId,
           },
           `Sending account deletion email...`,
         );
@@ -81,8 +86,8 @@ export class DeletePersonalAccountService {
       } catch (error) {
         Logger.error(
           {
-            userId: params.userId,
             name: this.namespace,
+            userId,
             error,
           },
           `Error sending account deletion email`,

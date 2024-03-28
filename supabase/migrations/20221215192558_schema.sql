@@ -516,7 +516,7 @@ begin
 
 $$ language plpgsql;
 
-grant execute on function kit.can_remove_account_member (uuid, uuid) to authenticated, postgres;
+grant execute on function kit.can_remove_account_member (uuid, uuid) to authenticated, service_role;
 
 -- RLS
 -- SELECT: Users can read their team members account memberships
@@ -649,7 +649,7 @@ begin
 
 $$ language plpgsql;
 
-grant execute on function public.has_permission (uuid, uuid, public.app_permissions) to authenticated, postgres;
+grant execute on function public.has_permission (uuid, uuid, public.app_permissions) to authenticated, service_role;
 
 -- Enable RLS on the role_permissions table
 alter table public.role_permissions enable row level security;
@@ -1116,7 +1116,7 @@ end;
 $$ language plpgsql;
 
 grant
-execute on function public.create_account (text) to authenticated;
+execute on function public.create_account (text) to authenticated, service_role;
 
 -- RLS
 -- Authenticated users can create organization accounts
@@ -1194,7 +1194,7 @@ where
 grant
 select
   on public.user_account_workspace to authenticated,
-  postgres;
+  service_role;
 
 create or replace view
   public.user_accounts as
@@ -1214,7 +1214,7 @@ where
 grant
 select
   on public.user_accounts to authenticated,
-  postgres;
+  service_role;
 
 create
 or replace function public.organization_account_workspace (account_slug text) returns table (
@@ -1256,7 +1256,7 @@ $$ language plpgsql;
 
 grant
 execute on function public.organization_account_workspace (text) to authenticated,
-postgres;
+service_role;
 
 CREATE
 OR REPLACE FUNCTION public.get_account_members (account_slug text) RETURNS TABLE (
@@ -1283,7 +1283,7 @@ $$;
 
 grant
 execute on function public.get_account_members (text) to authenticated,
-postgres;
+service_role;
 
 create or replace function public.get_account_invitations(account_slug text) returns table (
   id integer,
@@ -1316,7 +1316,7 @@ begin
 end;
 $$ language plpgsql;
 
-grant execute on function public.get_account_invitations (text) to authenticated, postgres;
+grant execute on function public.get_account_invitations (text) to authenticated, service_role;
 
 CREATE TYPE kit.invitation AS (
   email text,
@@ -1359,7 +1359,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-grant execute on function public.add_invitations_to_account (text, kit.invitation[]) to authenticated, postgres;
+grant execute on function public.add_invitations_to_account (text, kit.invitation[]) to authenticated, service_role;
 
 -- Storage
 -- Account Image
@@ -1368,25 +1368,27 @@ insert into
 values
   ('account_image', 'account_image', true);
 
+create or replace function kit.get_storage_filename_as_uuid (name text) returns uuid as $$
+begin
+  return replace(
+    storage.filename (name),
+    concat('.', storage.extension (name)),
+    ''
+  )::uuid;
+end;
+$$ language plpgsql;
+
+grant execute on function kit.get_storage_filename_as_uuid (text) to authenticated, service_role;
+
 -- RLS policies for storage
 create policy account_image on storage.objects for all using (
   bucket_id = 'account_image'
-  and (
-    replace(
-      storage.filename (name),
-      concat('.', storage.extension (name)),
-      ''
-    )::uuid
-  ) = auth.uid ()
+  and kit.get_storage_filename_as_uuid(name) = auth.uid () or
+    public.has_role_on_account(kit.get_storage_filename_as_uuid(name))
 )
 with
   check (
     bucket_id = 'account_image'
-    and (
-      replace(
-        storage.filename (name),
-        concat('.', storage.extension (name)),
-        ''
-      )::uuid
-    ) = auth.uid ()
+    and kit.get_storage_filename_as_uuid(name) = auth.uid () or
+     public.has_permission(auth.uid(), kit.get_storage_filename_as_uuid(name), 'settings.manage')
   );

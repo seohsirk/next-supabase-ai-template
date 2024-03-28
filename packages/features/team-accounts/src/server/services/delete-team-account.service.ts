@@ -20,12 +20,16 @@ export class DeleteTeamAccountService {
    */
   async deleteTeamAccount(
     adminClient: SupabaseClient<Database>,
-    params: { accountId: string },
+    params: {
+      accountId: string;
+      userId: string;
+    },
   ) {
     Logger.info(
       {
         name: this.namespace,
         accountId: params.accountId,
+        userId: params.userId,
       },
       `Requested team account deletion. Processing...`,
     );
@@ -34,6 +38,7 @@ export class DeleteTeamAccountService {
       {
         name: this.namespace,
         accountId: params.accountId,
+        userId: params.userId,
       },
       `Deleting all account subscriptions...`,
     );
@@ -41,7 +46,7 @@ export class DeleteTeamAccountService {
     // First - we want to cancel all Stripe active subscriptions
     const billingService = new AccountBillingService(adminClient);
 
-    await billingService.cancelAllAccountSubscriptions(params.accountId);
+    await billingService.cancelAllAccountSubscriptions(params);
 
     // now we can use the admin client to delete the account.
     const { error } = await adminClient
@@ -54,6 +59,7 @@ export class DeleteTeamAccountService {
         {
           name: this.namespace,
           accountId: params.accountId,
+          userId: params.userId,
           error,
         },
         'Failed to delete team account',
@@ -66,6 +72,7 @@ export class DeleteTeamAccountService {
       {
         name: this.namespace,
         accountId: params.accountId,
+        userId: params.userId,
       },
       'Successfully deleted team account',
     );

@@ -35,7 +35,7 @@ export const metadata = {
   title: 'Organization Account Home',
 };
 
-function OrganizationAccountHomePage({
+function TeamAccountHomePage({
   params,
 }: {
   params: {
@@ -62,4 +62,4 @@ function OrganizationAccountHomePage({
   );
 }
 
-export default withI18n(OrganizationAccountHomePage);
+export default withI18n(TeamAccountHomePage);

@@ -2,6 +2,7 @@
   "homeTabLabel": "Home",
   "homeTabDescription": "Welcome to your home page",
   "accountMembers": "Members",
+  "membersTabDescription": "Manage your organization's members",
   "billingTabLabel": "Billing",
   "billingTabDescription": "Manage your billing and subscription",
   "yourAccountTabLabel": "Account Settings",

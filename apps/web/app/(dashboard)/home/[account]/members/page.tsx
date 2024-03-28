@@ -56,7 +56,7 @@ async function loadInvitations(account: string) {
   return data ?? [];
 }
 
-async function OrganizationAccountMembersPage({ params }: Params) {
+async function TeamAccountMembersPage({ params }: Params) {
   const slug = params.account;
 
   const [{ account, user }, members, invitations] = await Promise.all([
@@ -142,4 +142,4 @@ async function OrganizationAccountMembersPage({ params }: Params) {
   );
 }
 
-export default withI18n(OrganizationAccountMembersPage);
+export default withI18n(TeamAccountMembersPage);

@@ -17,6 +17,11 @@ export async function deleteTeamAccountAction(formData: FormData) {
   );
 
   const client = getSupabaseServerActionClient();
+  const auth = await requireAuth(client);
+
+  if (auth.error) {
+    throw new Error('Authentication required');
+  }
 
   // Check if the user has the necessary permissions to delete the team account
   await assertUserPermissionsToDeleteTeamAccount(client, params.accountId);
@@ -29,7 +34,10 @@ export async function deleteTeamAccountAction(formData: FormData) {
     getSupabaseServerActionClient({
       admin: true,
     }),
-    params,
+    {
+      accountId: params.accountId,
+      userId: auth.data.user.id,
+    },
   );
 
   return redirect('/home');

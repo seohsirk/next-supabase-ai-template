@@ -2,8 +2,8 @@ import { notFound } from 'next/navigation';
 
 import featureFlagsConfig from '~/config/feature-flags.config';
 
-function OrganizationAccountBillingLayout(props: React.PropsWithChildren) {
-  const isEnabled = featureFlagsConfig.enableOrganizationBilling;
+function TeamAccountBillingLayout(props: React.PropsWithChildren) {
+  const isEnabled = featureFlagsConfig.enableTeamAccountBilling;
 
   if (!isEnabled) {
     notFound();
@@ -12,4 +12,4 @@ function OrganizationAccountBillingLayout(props: React.PropsWithChildren) {
   return <>{props.children}</>;
 }
 
-export default OrganizationAccountBillingLayout;
+export default TeamAccountBillingLayout;
