@@ -34,6 +34,7 @@
   "currentPassword": "Current Password",
   "newPassword": "New Password",
   "repeatPassword": "Repeat New Password",
+  "repeatPasswordDescription": "Please repeat your new password to confirm it",
   "yourPassword": "Your Password",
   "updatePasswordSubmitLabel": "Update Password",
   "updateEmailCardTitle": "Update your Email",

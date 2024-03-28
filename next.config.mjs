@@ -15,6 +15,7 @@ const INTERNAL_PACKAGES = [
   '@kit/billing',
   '@kit/billing-gateway',
   '@kit/stripe',
+  '@kit/email-templates',
 ];
 
 /** @type {import('next').NextConfig} */
