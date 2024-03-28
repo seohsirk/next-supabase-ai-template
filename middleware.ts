@@ -144,9 +144,6 @@ function getPatterns() {
         const origin = req.nextUrl.origin;
         const next = req.nextUrl.pathname;
 
-        console.log('home:user', user);
-        console.log('home:error', error);
-
         // If user is not logged in, redirect to sign in page.
         if (!user || error) {
           const signIn = pathsConfig.auth.signIn;
