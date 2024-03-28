@@ -13,7 +13,7 @@ interface Params {
   account: string;
 }
 
-function OrganizationWorkspaceLayout({
+function TeamWorkspaceLayout({
   children,
   params,
 }: React.PropsWithChildren<{
@@ -48,7 +48,7 @@ function OrganizationWorkspaceLayout({
   );
 }
 
-export default withI18n(OrganizationWorkspaceLayout);
+export default withI18n(TeamWorkspaceLayout);
 
 function getUIStateCookies() {
   return {

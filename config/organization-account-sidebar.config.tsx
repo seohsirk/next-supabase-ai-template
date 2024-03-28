@@ -28,7 +28,7 @@ const routes = (account: string) => [
         path: createPath(pathsConfig.app.accountMembers, account),
         Icon: <Users className={iconClasses} />,
       },
-      featureFlagsConfig.enableOrganizationBilling
+      featureFlagsConfig.enableTeamAccountBilling
         ? {
             label: 'common:billingTabLabel',
             path: createPath(pathsConfig.app.accountBilling, account),

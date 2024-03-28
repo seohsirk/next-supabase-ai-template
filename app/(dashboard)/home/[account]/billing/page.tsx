@@ -21,7 +21,7 @@ interface Params {
   };
 }
 
-async function OrganizationAccountBillingPage({ params }: Params) {
+async function TeamAccountBillingPage({ params }: Params) {
   const workspace = await loadTeamWorkspace(params.account);
   const accountId = workspace.account.id;
   const [subscription, customerId] = await loadAccountData(accountId);
@@ -60,7 +60,7 @@ async function OrganizationAccountBillingPage({ params }: Params) {
   );
 }
 
-export default withI18n(OrganizationAccountBillingPage);
+export default withI18n(TeamAccountBillingPage);
 
 async function loadAccountData(accountId: string) {
   const client = getSupabaseServerComponentClient();
