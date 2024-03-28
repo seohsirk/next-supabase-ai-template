@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 
 import { ColumnDef } from '@tanstack/react-table';
 import { Ellipsis } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 import { Database } from '@kit/supabase/database';
 import { Button } from '@kit/ui/button';
@@ -17,6 +18,7 @@ import {
 import { If } from '@kit/ui/if';
 import { Input } from '@kit/ui/input';
 import { ProfileAvatar } from '@kit/ui/profile-avatar';
+import { Trans } from '@kit/ui/trans';
 
 import { RemoveMemberDialog } from './remove-member-dialog';
 import { RoleBadge } from './role-badge';
@@ -44,11 +46,8 @@ export function AccountMembersTable({
   currentUserId,
 }: AccountMembersTableProps) {
   const [search, setSearch] = useState('');
-
-  const columns = useMemo(
-    () => getColumns(permissions, currentUserId),
-    [currentUserId, permissions],
-  );
+  const { t } = useTranslation('teams');
+  const columns = useGetColumns(permissions, currentUserId);
 
   const filteredMembers = members.filter((member) => {
     const searchString = search.toLowerCase();
@@ -65,7 +64,7 @@ export function AccountMembersTable({
       <Input
         value={search}
         onInput={(e) => setSearch((e.target as HTMLInputElement).value)}
-        placeholder={'Search Member'}
+        placeholder={t(`searchMembersPlaceholder`)}
       />
 
       <DataTable columns={columns} data={filteredMembers} />
@@ -73,7 +72,7 @@ export function AccountMembersTable({
   );
 }
 
-function getColumns(
+function useGetColumns(
   permissions: {
     canUpdateRole: boolean;
     canTransferOwnership: boolean;
@@ -81,87 +80,92 @@ function getColumns(
   },
   currentUserId: string,
 ): ColumnDef<Members[0]>[] {
-  return [
-    {
-      header: 'Name',
-      size: 200,
-      cell: ({ row }) => {
-        const member = row.original;
-        const displayName = member.name ?? member.email.split('@')[0];
-        const isSelf = member.user_id === currentUserId;
+  const { t } = useTranslation('teams');
 
-        return (
-          <span className={'flex items-center space-x-4 text-left'}>
-            <span>
-              <ProfileAvatar
-                displayName={displayName}
-                pictureUrl={member.picture_url}
-              />
+  return useMemo(
+    () => [
+      {
+        header: t('memberName'),
+        size: 200,
+        cell: ({ row }) => {
+          const member = row.original;
+          const displayName = member.name ?? member.email.split('@')[0];
+          const isSelf = member.user_id === currentUserId;
+
+          return (
+            <span className={'flex items-center space-x-4 text-left'}>
+              <span>
+                <ProfileAvatar
+                  displayName={displayName}
+                  pictureUrl={member.picture_url}
+                />
+              </span>
+
+              <span>{displayName}</span>
+
+              <If condition={isSelf}>
+                <span
+                  className={
+                    'bg-muted rounded-md px-2.5 py-1 text-xs font-medium'
+                  }
+                >
+                  {t('youLabel')}
+                </span>
+              </If>
             </span>
-
-            <span>{displayName}</span>
-
-            <If condition={isSelf}>
-              <span
-                className={
-                  'bg-muted rounded-md px-2.5 py-1 text-xs font-medium'
-                }
-              >
-                You
-              </span>
-            </If>
-          </span>
-        );
+          );
+        },
       },
-    },
-    {
-      header: 'Email',
-      accessorKey: 'email',
-      cell: ({ row }) => {
-        return row.original.email ?? '-';
+      {
+        header: t('emailLabel'),
+        accessorKey: 'email',
+        cell: ({ row }) => {
+          return row.original.email ?? '-';
+        },
       },
-    },
-    {
-      header: 'Role',
-      cell: ({ row }) => {
-        const { role, primary_owner_user_id, user_id } = row.original;
-        const isPrimaryOwner = primary_owner_user_id === user_id;
+      {
+        header: t('roleLabel'),
+        cell: ({ row }) => {
+          const { role, primary_owner_user_id, user_id } = row.original;
+          const isPrimaryOwner = primary_owner_user_id === user_id;
 
-        return (
-          <span className={'flex items-center space-x-1'}>
-            <RoleBadge role={role} />
+          return (
+            <span className={'flex items-center space-x-1'}>
+              <RoleBadge role={role} />
 
-            <If condition={isPrimaryOwner}>
-              <span
-                className={
-                  'rounded-md bg-yellow-400 px-2.5 py-1 text-xs font-medium dark:text-black'
-                }
-              >
-                Primary
-              </span>
-            </If>
-          </span>
-        );
+              <If condition={isPrimaryOwner}>
+                <span
+                  className={
+                    'rounded-md bg-yellow-400 px-2.5 py-1 text-xs font-medium dark:text-black'
+                  }
+                >
+                  {t('primaryOwnerLabel')}
+                </span>
+              </If>
+            </span>
+          );
+        },
       },
-    },
-    {
-      header: 'Joined At',
-      cell: ({ row }) => {
-        return new Date(row.original.created_at).toLocaleDateString();
+      {
+        header: t('joinedAtLabel'),
+        cell: ({ row }) => {
+          return new Date(row.original.created_at).toLocaleDateString();
+        },
       },
-    },
-    {
-      header: '',
-      id: 'actions',
-      cell: ({ row }) => (
-        <ActionsDropdown
-          permissions={permissions}
-          member={row.original}
-          currentUserId={currentUserId}
-        />
-      ),
-    },
-  ];
+      {
+        header: '',
+        id: 'actions',
+        cell: ({ row }) => (
+          <ActionsDropdown
+            permissions={permissions}
+            member={row.original}
+            currentUserId={currentUserId}
+          />
+        ),
+      },
+    ],
+    [permissions, currentUserId, t],
+  );
 }
 
 function ActionsDropdown({
@@ -196,19 +200,19 @@ function ActionsDropdown({
         <DropdownMenuContent>
           <If condition={permissions.canUpdateRole}>
             <DropdownMenuItem onClick={() => setIsUpdatingRole(true)}>
-              Update Role
+              <Trans i18nKey={'teams:updateRole'} />
             </DropdownMenuItem>
           </If>
 
           <If condition={permissions.canTransferOwnership}>
             <DropdownMenuItem onClick={() => setIsTransferring(true)}>
-              Transfer Ownership
+              <Trans i18nKey={'teams:transferOwnership'} />
             </DropdownMenuItem>
           </If>
 
           <If condition={permissions.canRemoveFromAccount}>
             <DropdownMenuItem onClick={() => setIsRemoving(true)}>
-              Remove from Account
+              <Trans i18nKey={'teams:removeMember'} />
             </DropdownMenuItem>
           </If>
         </DropdownMenuContent>

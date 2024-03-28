@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 
 import { ColumnDef } from '@tanstack/react-table';
 import { Ellipsis } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 import { Database } from '@kit/supabase/database';
 import { Button } from '@kit/ui/button';
@@ -17,6 +18,7 @@ import {
 import { If } from '@kit/ui/if';
 import { Input } from '@kit/ui/input';
 import { ProfileAvatar } from '@kit/ui/profile-avatar';
+import { Trans } from '@kit/ui/trans';
 
 import { RoleBadge } from '../members/role-badge';
 import { DeleteInvitationDialog } from './delete-invitation-dialog';
@@ -38,8 +40,9 @@ export function AccountInvitationsTable({
   invitations,
   permissions,
 }: AccountInvitationsTableProps) {
+  const { t } = useTranslation('teams');
   const [search, setSearch] = useState('');
-  const columns = useMemo(() => getColumns(permissions), [permissions]);
+  const columns = useGetColumns(permissions);
 
   const filteredInvitations = invitations.filter((member) => {
     const searchString = search.toLowerCase();
@@ -56,7 +59,7 @@ export function AccountInvitationsTable({
       <Input
         value={search}
         onInput={(e) => setSearch((e.target as HTMLInputElement).value)}
-        placeholder={'Search Invitation'}
+        placeholder={t(`searchInvitations`)}
       />
 
       <DataTable columns={columns} data={filteredInvitations} />
@@ -64,51 +67,59 @@ export function AccountInvitationsTable({
   );
 }
 
-function getColumns(permissions: {
+function useGetColumns(permissions: {
   canUpdateInvitation: boolean;
   canRemoveInvitation: boolean;
 }): ColumnDef<Invitations[0]>[] {
-  return [
-    {
-      header: 'Email',
-      size: 200,
-      cell: ({ row }) => {
-        const member = row.original;
-        const email = member.email;
+  const { t } = useTranslation('teams');
 
-        return (
-          <span className={'flex items-center space-x-4 text-left'}>
-            <span>
-              <ProfileAvatar text={email} />
+  return useMemo(
+    () => [
+      {
+        header: t('emailLabel'),
+        size: 200,
+        cell: ({ row }) => {
+          const member = row.original;
+          const email = member.email;
+
+          return (
+            <span className={'flex items-center space-x-4 text-left'}>
+              <span>
+                <ProfileAvatar text={email} />
+              </span>
+
+              <span>{email}</span>
             </span>
+          );
+        },
+      },
+      {
+        header: t('roleLabel'),
+        cell: ({ row }) => {
+          const { role } = row.original;
 
-            <span>{email}</span>
-          </span>
-        );
+          return <RoleBadge role={role} />;
+        },
       },
-    },
-    {
-      header: 'Role',
-      cell: ({ row }) => {
-        const { role } = row.original;
-
-        return <RoleBadge role={role} />;
+      {
+        header: t('invitedAtLabel'),
+        cell: ({ row }) => {
+          return new Date(row.original.created_at).toLocaleDateString();
+        },
       },
-    },
-    {
-      header: 'Invited At',
-      cell: ({ row }) => {
-        return new Date(row.original.created_at).toLocaleDateString();
+      {
+        header: '',
+        id: 'actions',
+        cell: ({ row }) => (
+          <ActionsDropdown
+            permissions={permissions}
+            invitation={row.original}
+          />
+        ),
       },
-    },
-    {
-      header: '',
-      id: 'actions',
-      cell: ({ row }) => (
-        <ActionsDropdown permissions={permissions} invitation={row.original} />
-      ),
-    },
-  ];
+    ],
+    [permissions, t],
+  );
 }
 
 function ActionsDropdown({
@@ -133,13 +144,13 @@ function ActionsDropdown({
         <DropdownMenuContent>
           <If condition={permissions.canUpdateInvitation}>
             <DropdownMenuItem onClick={() => setIsUpdatingRole(true)}>
-              Update Invitation
+              <Trans i18nKey={'teams:updateInvitation'} />
             </DropdownMenuItem>
           </If>
 
           <If condition={permissions.canRemoveInvitation}>
             <DropdownMenuItem onClick={() => setIsDeletingInvite(true)}>
-              Remove
+              <Trans i18nKey={'teams:removeInvitation'} />
             </DropdownMenuItem>
           </If>
         </DropdownMenuContent>

@@ -56,10 +56,12 @@ export function InviteMembersDialogContainer({
 
       <DialogContent onInteractOutside={(e) => e.preventDefault()}>
         <DialogHeader>
-          <DialogTitle>Invite Members to Organization</DialogTitle>
+          <DialogTitle>
+            <Trans i18nKey={'teams:inviteMembersHeading'} />
+          </DialogTitle>
 
           <DialogDescription>
-            Invite members to your team by entering their email and role.
+            <Trans i18nKey={'teams:inviteMembersDescription'} />
           </DialogDescription>
         </DialogHeader>
 
@@ -88,7 +90,7 @@ function InviteMembersForm({
   onSubmit: (data: { invitations: InviteModel[] }) => void;
   pending: boolean;
 }) {
-  const { t } = useTranslation('team');
+  const { t } = useTranslation('teams');
 
   const form = useForm({
     resolver: zodResolver(InviteMembersSchema),
@@ -130,7 +132,7 @@ function InviteMembersForm({
                             <FormControl>
                               <Input
                                 data-test={'invite-email-input'}
-                                placeholder="member@email.com"
+                                placeholder={t('emailPlaceholder')}
                                 type="email"
                                 required
                                 {...field}
@@ -148,7 +150,9 @@ function InviteMembersForm({
                       render={({ field }) => {
                         return (
                           <FormItem>
-                            <FormLabel>Role</FormLabel>
+                            <FormLabel>
+                              <Trans i18nKey={'teams:roleLabel'} />
+                            </FormLabel>
 
                             <FormControl>
                               <MembershipRoleSelector
@@ -199,26 +203,30 @@ function InviteMembersForm({
             <Button
               data-test={'append-new-invite-button'}
               type={'button'}
-              variant={'outline'}
+              variant={'link'}
               size={'sm'}
               disabled={pending}
               onClick={() => {
                 fieldArray.append(createEmptyInviteModel());
               }}
             >
-              <span className={'flex items-center space-x-2'}>
-                <Plus className={'h-4'} />
+              <Plus className={'mr-1 h-3'} />
 
-                <span>
-                  <Trans i18nKey={'teams:addAnotherMemberButtonLabel'} />
-                </span>
+              <span>
+                <Trans i18nKey={'teams:addAnotherMemberButtonLabel'} />
               </span>
             </Button>
           </div>
         </div>
 
         <Button disabled={pending}>
-          {pending ? 'Inviting...' : 'Invite Members'}
+          <Trans
+            i18nKey={
+              pending
+                ? 'teams:invitingMembers'
+                : 'teams:inviteMembersButtonLabel'
+            }
+          />
         </Button>
       </form>
     </Form>

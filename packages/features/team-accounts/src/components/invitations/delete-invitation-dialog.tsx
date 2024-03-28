@@ -1,14 +1,16 @@
 import { useState, useTransition } from 'react';
 
 import { Alert, AlertDescription, AlertTitle } from '@kit/ui/alert';
-import { Button } from '@kit/ui/button';
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@kit/ui/dialog';
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@kit/ui/alert-dialog';
+import { Button } from '@kit/ui/button';
 import { If } from '@kit/ui/if';
 import { Trans } from '@kit/ui/trans';
 
@@ -20,24 +22,24 @@ export const DeleteInvitationDialog: React.FC<{
   invitationId: number;
 }> = ({ isOpen, setIsOpen, invitationId }) => {
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>
-            <Trans i18nKey="team:deleteInvitationDialogTitle" />
-          </DialogTitle>
+    <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>
+            <Trans i18nKey="team:deleteInvitation" />
+          </AlertDialogTitle>
 
-          <DialogDescription>
-            Remove the invitation to join this account.
-          </DialogDescription>
-        </DialogHeader>
+          <AlertDialogDescription>
+            <Trans i18nKey="team:deleteInvitationDialogDescription" />
+          </AlertDialogDescription>
+        </AlertDialogHeader>
 
         <DeleteInvitationForm
           setIsOpen={setIsOpen}
           invitationId={invitationId}
         />
-      </DialogContent>
-    </Dialog>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 };
 
@@ -66,7 +68,7 @@ function DeleteInvitationForm({
   return (
     <form action={onInvitationRemoved}>
       <div className={'flex flex-col space-y-6'}>
-        <p className={'text-sm'}>
+        <p className={'text-muted-foreground text-sm'}>
           <Trans i18nKey={'common:modalConfirmationQuestion'} />
         </p>
 
@@ -74,13 +76,19 @@ function DeleteInvitationForm({
           <RemoveInvitationErrorAlert />
         </If>
 
-        <Button
-          data-test={'confirm-delete-invitation'}
-          variant={'destructive'}
-          disabled={isSubmitting}
-        >
-          Delete Invitation
-        </Button>
+        <AlertDialogFooter>
+          <AlertDialogCancel>
+            <Trans i18nKey={'common:cancel'} />
+          </AlertDialogCancel>
+
+          <Button
+            data-test={'confirm-delete-invitation'}
+            variant={'destructive'}
+            disabled={isSubmitting}
+          >
+            <Trans i18nKey={'teams:deleteInvitation'} />
+          </Button>
+        </AlertDialogFooter>
       </div>
     </form>
   );

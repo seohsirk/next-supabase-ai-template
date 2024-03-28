@@ -2,6 +2,7 @@ import { useState, useTransition } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
 import { Database } from '@kit/supabase/database';
 import { Alert, AlertDescription, AlertTitle } from '@kit/ui/alert';
@@ -75,6 +76,7 @@ function UpdateMemberForm({
 }>) {
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<boolean>();
+  const { t } = useTranslation('teams');
 
   const onSubmit = ({ role }: { role: Role }) => {
     startTransition(async () => {
@@ -95,7 +97,7 @@ function UpdateMemberForm({
           return data.role !== userRole;
         },
         {
-          message: 'Role must be different from the current role.',
+          message: t(`roleMustBeDifferent`),
           path: ['role'],
         },
       ),
@@ -122,7 +124,8 @@ function UpdateMemberForm({
           render={({ field }) => {
             return (
               <FormItem>
-                <FormLabel>New Role</FormLabel>
+                <FormLabel>{t('memberRole')}</FormLabel>
+
                 <FormControl>
                   <MembershipRoleSelector
                     currentUserRole={userRole}
@@ -131,7 +134,7 @@ function UpdateMemberForm({
                   />
                 </FormControl>
 
-                <FormDescription>Pick a role for this member.</FormDescription>
+                <FormDescription>{t('updateRoleDescription')}</FormDescription>
 
                 <FormMessage />
               </FormItem>

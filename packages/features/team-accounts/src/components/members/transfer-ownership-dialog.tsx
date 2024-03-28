@@ -46,7 +46,7 @@ export const TransferOwnershipDialog: React.FC<{
           </DialogTitle>
 
           <DialogDescription>
-            Transfer ownership of the team to another member.
+            <Trans i18nKey="team:transferOwnershipDescription" />
           </DialogDescription>
         </DialogHeader>
 
@@ -127,7 +127,7 @@ function TransferOrganizationOwnershipForm({
             return (
               <FormItem>
                 <FormLabel>
-                  Please type TRANSFER to confirm the transfer of ownership.
+                  <Trans i18nKey={'teams:transferOwnershipInputLabel'} />
                 </FormLabel>
 
                 <FormControl>
@@ -135,8 +135,7 @@ function TransferOrganizationOwnershipForm({
                 </FormControl>
 
                 <FormDescription>
-                  Please make sure you understand the implications of this
-                  action.
+                  <Trans i18nKey={'teams:transferOwnershipInputDescription'} />
                 </FormDescription>
 
                 <FormMessage />

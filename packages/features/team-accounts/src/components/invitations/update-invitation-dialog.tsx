@@ -2,6 +2,7 @@ import { useState, useTransition } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
 import { Database } from '@kit/supabase/database';
 import { Alert, AlertDescription, AlertTitle } from '@kit/ui/alert';
@@ -69,6 +70,7 @@ function UpdateInvitationForm({
   userRole: Role;
   setIsOpen: (isOpen: boolean) => void;
 }>) {
+  const { t } = useTranslation('teams');
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<boolean>();
 
@@ -94,7 +96,7 @@ function UpdateInvitationForm({
           return data.role !== userRole;
         },
         {
-          message: 'Role must be different from the current role.',
+          message: t('roleMustBeDifferent'),
           path: ['role'],
         },
       ),
@@ -121,7 +123,10 @@ function UpdateInvitationForm({
           render={({ field }) => {
             return (
               <FormItem>
-                <FormLabel>New Role</FormLabel>
+                <FormLabel>
+                  <Trans i18nKey={'teams:roleLabel'} />
+                </FormLabel>
+
                 <FormControl>
                   <MembershipRoleSelector
                     currentUserRole={userRole}
@@ -130,7 +135,9 @@ function UpdateInvitationForm({
                   />
                 </FormControl>
 
-                <FormDescription>Pick a role for this member.</FormDescription>
+                <FormDescription>
+                  <Trans i18nKey={'teams:updateRoleDescription'} />
+                </FormDescription>
 
                 <FormMessage />
               </FormItem>

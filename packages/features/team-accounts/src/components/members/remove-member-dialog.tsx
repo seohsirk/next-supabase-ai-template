@@ -1,14 +1,16 @@
 import { useState, useTransition } from 'react';
 
 import { Alert, AlertDescription, AlertTitle } from '@kit/ui/alert';
-import { Button } from '@kit/ui/button';
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@kit/ui/dialog';
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@kit/ui/alert-dialog';
+import { Button } from '@kit/ui/button';
 import { If } from '@kit/ui/if';
 import { Trans } from '@kit/ui/trans';
 
@@ -21,25 +23,25 @@ export const RemoveMemberDialog: React.FC<{
   userId: string;
 }> = ({ isOpen, setIsOpen, accountId, userId }) => {
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>
-            <Trans i18nKey="team:removeMemberModalHeading" />
-          </DialogTitle>
+    <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>
+            <Trans i18nKey="teamS:removeMemberModalHeading" />
+          </AlertDialogTitle>
 
-          <DialogDescription>
-            Remove this member from the team.
-          </DialogDescription>
-        </DialogHeader>
+          <AlertDialogDescription>
+            <Trans i18nKey={'teams:removeMemberModalDescription'} />
+          </AlertDialogDescription>
+        </AlertDialogHeader>
 
         <RemoveMemberForm
           setIsOpen={setIsOpen}
           accountId={accountId}
           userId={userId}
         />
-      </DialogContent>
-    </Dialog>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 };
 
@@ -70,7 +72,7 @@ function RemoveMemberForm({
   return (
     <form action={onMemberRemoved}>
       <div className={'flex flex-col space-y-6'}>
-        <p className={'text-sm'}>
+        <p className={'text-muted-foreground text-sm'}>
           <Trans i18nKey={'common:modalConfirmationQuestion'} />
         </p>
 
@@ -78,14 +80,20 @@ function RemoveMemberForm({
           <RemoveMemberErrorAlert />
         </If>
 
-        <Button
-          data-test={'confirm-remove-member'}
-          variant={'destructive'}
-          disabled={isSubmitting}
-          onClick={onMemberRemoved}
-        >
-          <Trans i18nKey={'teams:removeMemberSubmitLabel'} />
-        </Button>
+        <AlertDialogFooter>
+          <AlertDialogCancel>
+            <Trans i18nKey={'common:cancel'} />
+          </AlertDialogCancel>
+
+          <Button
+            data-test={'confirm-remove-member'}
+            variant={'destructive'}
+            disabled={isSubmitting}
+            onClick={onMemberRemoved}
+          >
+            <Trans i18nKey={'teams:removeMemberSubmitLabel'} />
+          </Button>
+        </AlertDialogFooter>
       </div>
     </form>
   );
