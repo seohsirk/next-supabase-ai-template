@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react';
 
-import { Check, Moon, Sun } from 'lucide-react';
+import { CheckCircle, Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
 
 import { Button } from '../shadcn/button';
@@ -69,7 +69,7 @@ export function SubMenuModeToggle() {
             <Trans i18nKey={`common:${item}Theme`} />
 
             <If condition={theme === item}>
-              <Check className={'mr-2 h-4'} />
+              <CheckCircle className={'mr-2 h-3'} />
             </If>
           </DropdownMenuItem>
         );

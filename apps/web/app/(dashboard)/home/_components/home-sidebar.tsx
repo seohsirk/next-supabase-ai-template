@@ -5,7 +5,7 @@ import { cookies } from 'next/headers';
 import { Sidebar, SidebarContent, SidebarNavigation } from '@kit/ui/sidebar';
 
 import { HomeSidebarAccountSelector } from '~/(dashboard)/home/_components/home-sidebar-account-selector';
-import { ProfileAccountDropdownContainer } from '~/(dashboard)/home/_components/personal-account-dropdown';
+import { ProfileAccountDropdownContainer } from '~/(dashboard)/home/_components/personal-account-dropdown-container';
 import { loadUserWorkspace } from '~/(dashboard)/home/_lib/load-user-workspace';
 import { personalAccountSidebarConfig } from '~/config/personal-account-sidebar.config';
 

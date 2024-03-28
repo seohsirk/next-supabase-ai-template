@@ -72,7 +72,7 @@ export function PersonalAccountDropdown({
           'animate-in fade-in group flex cursor-pointer items-center focus:outline-none',
           className ?? '',
           {
-            ['items-center space-x-2.5 rounded-lg border' +
+            ['active:bg-muted/50 items-center space-x-2.5 rounded-md' +
             ' hover:bg-muted p-2 transition-colors']: showProfileName,
           },
         )}

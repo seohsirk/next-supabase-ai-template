@@ -99,10 +99,10 @@ export function AccountSelector({
         <PopoverTrigger asChild>
           <Button
             size={collapsed ? 'icon' : 'default'}
-            variant="outline"
+            variant="ghost"
             role="combobox"
             aria-expanded={open}
-            className={cn('w-full', {
+            className={cn('w-full shadow', {
               'justify-between': !collapsed,
               'justify-center': collapsed,
             })}
@@ -208,7 +208,6 @@ export function AccountSelector({
               <If condition={features.enableTeamCreation}>
                 <CommandGroup>
                   <Button
-                    size={'sm'}
                     variant="ghost"
                     className="w-full justify-start"
                     onClick={() => {

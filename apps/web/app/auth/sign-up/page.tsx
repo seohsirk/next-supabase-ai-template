@@ -35,11 +35,11 @@ function SignUpPage({ searchParams }: Props) {
 
       <SignUpMethodsContainer
         providers={authConfig.providers}
+        inviteToken={inviteToken}
         paths={{
           callback: pathsConfig.auth.callback,
           appHome: pathsConfig.app.home,
         }}
-        inviteToken={inviteToken}
       />
 
       <div className={'justify-centers flex'}>
