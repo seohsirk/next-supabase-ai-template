@@ -17,7 +17,7 @@ import pathsConfig from '~/config/paths.config';
  *
  * @param accountSlug
  */
-export const loadOrganizationWorkspace = cache(async (accountSlug: string) => {
+export const loadTeamWorkspace = cache(async (accountSlug: string) => {
   const client = getSupabaseServerComponentClient();
 
   const accountPromise = client.rpc('organization_account_workspace', {

@@ -18,7 +18,7 @@ import { If } from '@kit/ui/if';
 import { Input } from '@kit/ui/input';
 import { ProfileAvatar } from '@kit/ui/profile-avatar';
 
-import { RoleBadge } from '../role-badge';
+import { RoleBadge } from '../members/role-badge';
 import { DeleteInvitationDialog } from './delete-invitation-dialog';
 import { UpdateInvitationDialog } from './update-invitation-dialog';
 

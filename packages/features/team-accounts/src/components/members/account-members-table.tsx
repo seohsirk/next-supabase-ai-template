@@ -18,8 +18,8 @@ import { If } from '@kit/ui/if';
 import { Input } from '@kit/ui/input';
 import { ProfileAvatar } from '@kit/ui/profile-avatar';
 
-import { RoleBadge } from '../role-badge';
 import { RemoveMemberDialog } from './remove-member-dialog';
+import { RoleBadge } from './role-badge';
 import { TransferOwnershipDialog } from './transfer-ownership-dialog';
 import { UpdateMemberRoleDialog } from './update-member-role-dialog';
 

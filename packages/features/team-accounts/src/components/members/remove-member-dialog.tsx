@@ -12,7 +12,7 @@ import {
 import { If } from '@kit/ui/if';
 import { Trans } from '@kit/ui/trans';
 
-import { removeMemberFromAccountAction } from '../../actions/account-members-server-actions';
+import { removeMemberFromAccountAction } from '../../server/actions/team-members-server-actions';
 
 export const RemoveMemberDialog: React.FC<{
   isOpen: boolean;
@@ -25,11 +25,11 @@ export const RemoveMemberDialog: React.FC<{
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            <Trans i18nKey="organization:removeMemberModalHeading" />
+            <Trans i18nKey="team:removeMemberModalHeading" />
           </DialogTitle>
 
           <DialogDescription>
-            Remove this member from the organization.
+            Remove this member from the team.
           </DialogDescription>
         </DialogHeader>
 

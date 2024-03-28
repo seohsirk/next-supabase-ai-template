@@ -8,7 +8,7 @@ import { Logger } from '@kit/shared/logger';
 import { requireAuth } from '@kit/supabase/require-auth';
 import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
 
-import { CreateTeamSchema } from '../schema/create-team.schema';
+import { CreateTeamSchema } from '../../schema/create-team.schema';
 import { CreateTeamAccountService } from '../services/create-team-account.service';
 
 const TEAM_ACCOUNTS_HOME_PATH = z
@@ -45,10 +45,10 @@ export async function createOrganizationAccountAction(
         error: createAccountResponse.error,
         name: 'accounts',
       },
-      `Error creating organization account`,
+      `Error creating team account`,
     );
 
-    throw new Error('Error creating organization account');
+    throw new Error('Error creating team account');
   }
 
   const accountHomePath =

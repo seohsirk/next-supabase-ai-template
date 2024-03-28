@@ -7,9 +7,9 @@ import { Mailer } from '@kit/mailers';
 import { Logger } from '@kit/shared/logger';
 import { Database } from '@kit/supabase/database';
 
-import { DeleteInvitationSchema } from '../schema/delete-invitation.schema';
-import { InviteMembersSchema } from '../schema/invite-members.schema';
-import { UpdateInvitationSchema } from '../schema/update-invitation-schema';
+import { DeleteInvitationSchema } from '../../schema/delete-invitation.schema';
+import { InviteMembersSchema } from '../../schema/invite-members.schema';
+import { UpdateInvitationSchema } from '../../schema/update-invitation-schema';
 
 const invitePath = process.env.INVITATION_PAGE_PATH;
 const siteURL = process.env.NEXT_PUBLIC_SITE_URL;
@@ -149,16 +149,14 @@ export class AccountInvitationsService {
     for (const invitation of responseInvitations) {
       const promise = async () => {
         try {
-          const { renderInviteEmail } = await import(
-            '../../../../email-templates'
-          );
+          const { renderInviteEmail } = await import('@kit/email-templates');
 
           const html = renderInviteEmail({
             link: this.getInvitationLink(invitation.invite_token),
             invitedUserEmail: invitation.email,
             inviter: user.email,
             productName: env.productName,
-            organizationName: accountResponse.data.name,
+            teamName: accountResponse.data.name,
           });
 
           await mailer.sendEmail({

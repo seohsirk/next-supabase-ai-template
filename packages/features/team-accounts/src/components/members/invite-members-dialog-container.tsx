@@ -33,9 +33,9 @@ import {
 } from '@kit/ui/tooltip';
 import { Trans } from '@kit/ui/trans';
 
-import { createInvitationsAction } from '../../actions/account-invitations-server-actions';
 import { InviteMembersSchema } from '../../schema/invite-members.schema';
-import { MembershipRoleSelector } from '../membership-role-selector';
+import { createInvitationsAction } from '../../server/actions/team-invitations-server-actions';
+import { MembershipRoleSelector } from './membership-role-selector';
 
 type InviteModel = ReturnType<typeof createEmptyInviteModel>;
 
@@ -59,8 +59,7 @@ export function InviteMembersDialogContainer({
           <DialogTitle>Invite Members to Organization</DialogTitle>
 
           <DialogDescription>
-            Invite members to your organization by entering their email and
-            role.
+            Invite members to your team by entering their email and role.
           </DialogDescription>
         </DialogHeader>
 
@@ -89,7 +88,7 @@ function InviteMembersForm({
   onSubmit: (data: { invitations: InviteModel[] }) => void;
   pending: boolean;
 }) {
-  const { t } = useTranslation('organization');
+  const { t } = useTranslation('team');
 
   const form = useForm({
     resolver: zodResolver(InviteMembersSchema),

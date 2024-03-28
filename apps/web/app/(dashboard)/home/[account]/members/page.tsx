@@ -17,7 +17,7 @@ import {
 import { PageBody, PageHeader } from '@kit/ui/page';
 import { Trans } from '@kit/ui/trans';
 
-import { loadOrganizationWorkspace } from '~/(dashboard)/home/[account]/_lib/load-workspace';
+import { loadTeamWorkspace } from '~/(dashboard)/home/[account]/_lib/load-team-account-workspace';
 import { withI18n } from '~/lib/i18n/with-i18n';
 
 interface Params {
@@ -60,7 +60,7 @@ async function OrganizationAccountMembersPage({ params }: Params) {
   const slug = params.account;
 
   const [{ account, user }, members, invitations] = await Promise.all([
-    loadOrganizationWorkspace(slug),
+    loadTeamWorkspace(slug),
     loadAccountMembers(slug),
     loadInvitations(slug),
   ]);

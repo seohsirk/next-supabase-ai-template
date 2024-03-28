@@ -6,7 +6,13 @@ import { z } from 'zod';
 
 import { Alert, AlertDescription, AlertTitle } from '@kit/ui/alert';
 import { Button } from '@kit/ui/button';
-import { Dialog, DialogContent, DialogTitle } from '@kit/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@kit/ui/dialog';
 import {
   Form,
   FormControl,
@@ -20,8 +26,8 @@ import { If } from '@kit/ui/if';
 import { Input } from '@kit/ui/input';
 import { Trans } from '@kit/ui/trans';
 
-import { createOrganizationAccountAction } from '../actions/create-team-account-server-actions';
 import { CreateTeamSchema } from '../schema/create-team.schema';
+import { createOrganizationAccountAction } from '../server/actions/create-team-account-server-actions';
 
 export function CreateTeamAccountDialog(
   props: React.PropsWithChildren<{
@@ -31,18 +37,27 @@ export function CreateTeamAccountDialog(
 ) {
   return (
     <Dialog open={props.isOpen} onOpenChange={props.setIsOpen}>
-      <DialogContent>
-        <DialogTitle>
-          <Trans i18nKey={'teams:createOrganizationModalHeading'} />
-        </DialogTitle>
+      <DialogContent
+        onEscapeKeyDown={(e) => e.preventDefault()}
+        onInteractOutside={(e) => e.preventDefault()}
+      >
+        <DialogHeader>
+          <DialogTitle>
+            <Trans i18nKey={'teams:createTeamModalHeading'} />
+          </DialogTitle>
 
-        <CreateOrganizationAccountForm />
+          <DialogDescription>
+            <Trans i18nKey={'teams:createTeamModalDescription'} />
+          </DialogDescription>
+        </DialogHeader>
+
+        <CreateOrganizationAccountForm onClose={() => props.setIsOpen(false)} />
       </DialogContent>
     </Dialog>
   );
 }
 
-function CreateOrganizationAccountForm() {
+function CreateOrganizationAccountForm(props: { onClose: () => void }) {
   const [error, setError] = useState<boolean>();
   const [pending, startTransition] = useTransition();
 
@@ -77,12 +92,12 @@ function CreateOrganizationAccountForm() {
               return (
                 <FormItem>
                   <FormLabel>
-                    <Trans i18nKey={'teams:organizationNameLabel'} />
+                    <Trans i18nKey={'teams:teamNameLabel'} />
                   </FormLabel>
 
                   <FormControl>
                     <Input
-                      data-test={'create-organization-name-input'}
+                      data-test={'create-team-name-input'}
                       required
                       minLength={2}
                       maxLength={50}
@@ -92,7 +107,7 @@ function CreateOrganizationAccountForm() {
                   </FormControl>
 
                   <FormDescription>
-                    Your organization name should be unique and descriptive.
+                    <Trans i18nKey={'teams:teamNameDescription'} />
                   </FormDescription>
 
                   <FormMessage />
@@ -101,12 +116,20 @@ function CreateOrganizationAccountForm() {
             }}
           />
 
-          <Button
-            data-test={'confirm-create-organization-button'}
-            disabled={pending}
-          >
-            <Trans i18nKey={'teams:createOrganizationSubmitLabel'} />
-          </Button>
+          <div className={'flex justify-end space-x-2'}>
+            <Button
+              variant={'outline'}
+              disabled={pending}
+              type={'button'}
+              onClick={props.onClose}
+            >
+              <Trans i18nKey={'common:cancel'} />
+            </Button>
+
+            <Button data-test={'confirm-create-team-button'} disabled={pending}>
+              <Trans i18nKey={'teams:createTeamSubmitLabel'} />
+            </Button>
+          </div>
         </div>
       </form>
     </Form>
@@ -117,11 +140,11 @@ function CreateOrganizationErrorAlert() {
   return (
     <Alert variant={'destructive'}>
       <AlertTitle>
-        <Trans i18nKey={'teams:createOrganizationErrorHeading'} />
+        <Trans i18nKey={'teams:createTeamErrorHeading'} />
       </AlertTitle>
 
       <AlertDescription>
-        <Trans i18nKey={'teams:createOrganizationErrorMessage'} />
+        <Trans i18nKey={'teams:createTeamErrorMessage'} />
       </AlertDescription>
     </Alert>
   );

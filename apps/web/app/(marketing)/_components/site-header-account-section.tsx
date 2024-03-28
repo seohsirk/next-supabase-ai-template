@@ -1,7 +1,5 @@
 'use client';
 
-import { Suspense } from 'react';
-
 import Link from 'next/link';
 
 import type { Session } from '@supabase/supabase-js';

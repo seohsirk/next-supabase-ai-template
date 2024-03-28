@@ -11,7 +11,7 @@ export class CreateTeamAccountService {
   createNewOrganizationAccount(params: { name: string; userId: string }) {
     Logger.info(
       { ...params, namespace: this.namespace },
-      `Creating new organization account...`,
+      `Creating new team account...`,
     );
 
     return this.client.rpc('create_account', {

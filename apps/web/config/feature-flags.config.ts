@@ -3,11 +3,11 @@ import { z } from 'zod';
 const FeatureFlagsSchema = z.object({
   enableThemeSwitcher: z.boolean(),
   enableAccountDeletion: z.boolean(),
-  enableOrganizationDeletion: z.boolean(),
-  enableOrganizationAccounts: z.boolean(),
-  enableOrganizationCreation: z.boolean(),
+  enableTeamDeletion: z.boolean(),
+  enableTeamAccounts: z.boolean(),
+  enableTeamCreation: z.boolean(),
   enablePersonalAccountBilling: z.boolean(),
-  enableOrganizationBilling: z.boolean(),
+  enableTeamAccountBilling: z.boolean(),
 });
 
 const featuresFlagConfig = FeatureFlagsSchema.parse({
@@ -16,23 +16,23 @@ const featuresFlagConfig = FeatureFlagsSchema.parse({
     process.env.NEXT_PUBLIC_ENABLE_ACCOUNT_DELETION,
     false,
   ),
-  enableOrganizationDeletion: getBoolean(
-    process.env.NEXT_PUBLIC_ENABLE_ORGANIZATION_DELETION,
+  enableTeamDeletion: getBoolean(
+    process.env.NEXT_PUBLIC_ENABLE_TEAM_DELETION,
     false,
   ),
-  enableOrganizationAccounts: getBoolean(
-    process.env.NEXT_PUBLIC_ENABLE_ORGANIZATION_ACCOUNTS,
+  enableTeamAccounts: getBoolean(
+    process.env.NEXT_PUBLIC_ENABLE_TEAM_ACCOUNTS,
     true,
   ),
-  enableOrganizationCreation: getBoolean(
-    process.env.NEXT_PUBLIC_ENABLE_ORGANIZATION_CREATION,
+  enableTeamCreation: getBoolean(
+    process.env.NEXT_PUBLIC_ENABLE_TEAMS_CREATION,
     true,
   ),
   enablePersonalAccountBilling: getBoolean(
     process.env.NEXT_PUBLIC_ENABLE_PERSONAL_ACCOUNT_BILLING,
     false,
   ),
-  enableOrganizationBilling: getBoolean(
+  enableTeamAccountBilling: getBoolean(
     process.env.NEXT_PUBLIC_ENABLE_ORGANIZATION_BILLING,
     false,
   ),

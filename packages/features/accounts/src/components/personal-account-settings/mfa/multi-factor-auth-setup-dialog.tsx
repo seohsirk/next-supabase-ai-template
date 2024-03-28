@@ -212,20 +212,22 @@ function MultiFactorAuthSetupForm({
                 name={'verificationCode'}
               />
 
-              <Button
-                disabled={!verificationCodeForm.formState.isValid}
-                type={'submit'}
-              >
-                {state.loading ? (
-                  <Trans i18nKey={'account:verifyingCode'} />
-                ) : (
-                  <Trans i18nKey={'account:enableMfaFactor'} />
-                )}
-              </Button>
+              <div className={'flex space-x-2'}>
+                <Button type={'button'} variant={'ghost'} onClick={onCancel}>
+                  <Trans i18nKey={'common:cancel'} />
+                </Button>
 
-              <Button type={'button'} variant={'ghost'} onClick={onCancel}>
-                <Trans i18nKey={'common:cancel'} />
-              </Button>
+                <Button
+                  disabled={!verificationCodeForm.formState.isValid}
+                  type={'submit'}
+                >
+                  {state.loading ? (
+                    <Trans i18nKey={'account:verifyingCode'} />
+                  ) : (
+                    <Trans i18nKey={'account:enableMfaFactor'} />
+                  )}
+                </Button>
+              </div>
             </div>
           </form>
         </Form>
@@ -362,13 +364,15 @@ function FactorNameForm(
             }}
           />
 
-          <Button type={'submit'}>
-            <Trans i18nKey={'account:factorNameSubmitLabel'} />
-          </Button>
+          <div className={'flex space-x-2'}>
+            <Button type={'button'} variant={'ghost'} onClick={props.onCancel}>
+              <Trans i18nKey={'common:cancel'} />
+            </Button>
 
-          <Button type={'button'} variant={'ghost'} onClick={props.onCancel}>
-            <Trans i18nKey={'common:cancel'} />
-          </Button>
+            <Button type={'submit'}>
+              <Trans i18nKey={'account:factorNameSubmitLabel'} />
+            </Button>
+          </div>
         </div>
       </form>
     </Form>

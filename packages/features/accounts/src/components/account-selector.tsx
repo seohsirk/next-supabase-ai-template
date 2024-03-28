@@ -17,6 +17,7 @@ import {
 } from '@kit/ui/command';
 import { If } from '@kit/ui/if';
 import { Popover, PopoverContent, PopoverTrigger } from '@kit/ui/popover';
+import { Trans } from '@kit/ui/trans';
 import { cn } from '@kit/ui/utils';
 
 import { CreateTeamAccountDialog } from '../../../team-accounts/src/components/create-team-account-dialog';
@@ -29,8 +30,8 @@ interface AccountSelectorProps {
   }>;
 
   features: {
-    enableOrganizationAccounts: boolean;
-    enableOrganizationCreation: boolean;
+    enableTeamAccounts: boolean;
+    enableTeamCreation: boolean;
   };
 
   selectedAccount?: string;
@@ -46,8 +47,8 @@ export function AccountSelector({
   selectedAccount,
   onAccountChange,
   features = {
-    enableOrganizationAccounts: true,
-    enableOrganizationCreation: true,
+    enableTeamAccounts: true,
+    enableTeamCreation: true,
   },
   collapsed = false,
 }: React.PropsWithChildren<AccountSelectorProps>) {
@@ -74,6 +75,10 @@ export function AccountSelector({
   };
 
   const selected = accounts.find((account) => account.value === value);
+
+  if (!features.enableTeamAccounts) {
+    return null;
+  }
 
   return (
     <>
@@ -150,9 +155,9 @@ export function AccountSelector({
 
               <CommandSeparator />
 
-              <If condition={features.enableOrganizationAccounts}>
+              <If condition={features.enableTeamAccounts}>
                 <If condition={accounts.length > 0}>
-                  <CommandGroup heading={'Your Organizations'}>
+                  <CommandGroup heading={<Trans i18nKey={'teams:yourTeams'} />}>
                     {(accounts ?? []).map((account) => (
                       <CommandItem
                         key={account.value}
@@ -185,7 +190,7 @@ export function AccountSelector({
                 </If>
               </If>
 
-              <If condition={features.enableOrganizationCreation}>
+              <If condition={features.enableTeamCreation}>
                 <CommandGroup>
                   <Button
                     size={'sm'}
@@ -198,7 +203,9 @@ export function AccountSelector({
                   >
                     <Plus className="mr-2 h-4 w-4" />
 
-                    <span>Create Organization</span>
+                    <span>
+                      <Trans i18nKey={'teams:createTeam'} />
+                    </span>
                   </Button>
                 </CommandGroup>
               </If>
@@ -207,7 +214,7 @@ export function AccountSelector({
         </PopoverContent>
       </Popover>
 
-      <If condition={features.enableOrganizationCreation}>
+      <If condition={features.enableTeamCreation}>
         <CreateTeamAccountDialog
           isOpen={isCreatingAccount}
           setIsOpen={setIsCreatingAccount}

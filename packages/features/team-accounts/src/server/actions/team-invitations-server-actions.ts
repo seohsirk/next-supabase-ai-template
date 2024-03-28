@@ -9,9 +9,9 @@ import { z } from 'zod';
 import { Database } from '@kit/supabase/database';
 import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
 
-import { DeleteInvitationSchema } from '../schema/delete-invitation.schema';
-import { InviteMembersSchema } from '../schema/invite-members.schema';
-import { UpdateInvitationSchema } from '../schema/update-invitation-schema';
+import { DeleteInvitationSchema } from '../../schema/delete-invitation.schema';
+import { InviteMembersSchema } from '../../schema/invite-members.schema';
+import { UpdateInvitationSchema } from '../../schema/update-invitation-schema';
 import { AccountInvitationsService } from '../services/account-invitations.service';
 
 /**

@@ -1,27 +1,28 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 
-import { BillingGatewayService } from '@kit/billing-gateway';
+import { AccountBillingService } from '@kit/billing-gateway';
 import { Mailer } from '@kit/mailers';
 import { Logger } from '@kit/shared/logger';
 import { Database } from '@kit/supabase/database';
 
 /**
- * @name PersonalAccountsService
+ * @name DeletePersonalAccountService
  * @description Service for managing accounts in the application
  * @param Database - The Supabase database type to use
  * @example
  * const client = getSupabaseClient();
- * const accountsService = new AccountsService(client);
+ * const accountsService = new DeletePersonalAccountService();
  */
-export class PersonalAccountsService {
-  private namespace = 'account';
-
-  constructor(private readonly client: SupabaseClient<Database>) {}
+export class DeletePersonalAccountService {
+  private namespace = 'accounts.delete';
 
   /**
    * @name deletePersonalAccount
    * Delete personal account of a user.
    * This will delete the user from the authentication provider and cancel all subscriptions.
+   *
+   * Permissions are not checked here, as they are checked in the server action.
+   * USE WITH CAUTION. THE USER MUST HAVE THE NECESSARY PERMISSIONS.
    */
   async deletePersonalAccount(params: {
     adminClient: SupabaseClient<Database>;
@@ -39,6 +40,11 @@ export class PersonalAccountsService {
       'User requested deletion. Processing...',
     );
 
+    // Cancel all user subscriptions
+    const billingService = new AccountBillingService(params.adminClient);
+
+    await billingService.cancelAllAccountSubscriptions(params.userId);
+
     // execute the deletion of the user
     try {
       await params.adminClient.auth.admin.deleteUser(params.userId);
@@ -53,17 +59,6 @@ export class PersonalAccountsService {
       );
 
       throw new Error('Error deleting user');
-    }
-
-    // Cancel all user subscriptions
-    try {
-      await this.cancelAllUserSubscriptions(params.userId);
-    } catch (error) {
-      Logger.error({
-        userId: params.userId,
-        error,
-        name: this.namespace,
-      });
     }
 
     // Send account deletion email
@@ -116,54 +111,5 @@ export class PersonalAccountsService {
       subject: 'Account Deletion Request',
       html,
     });
-  }
-
-  private async cancelAllUserSubscriptions(userId: string) {
-    Logger.info(
-      {
-        userId,
-        name: this.namespace,
-      },
-      'Cancelling all subscriptions for user...',
-    );
-
-    const { data: subscriptions } = await this.client
-      .from('subscriptions')
-      .select('*')
-      .eq('account_id', userId);
-
-    const cancellationRequests = [];
-
-    Logger.info(
-      {
-        userId,
-        subscriptions: subscriptions?.length ?? 0,
-        name: this.namespace,
-      },
-      'Cancelling subscriptions...',
-    );
-
-    for (const subscription of subscriptions ?? []) {
-      const gateway = new BillingGatewayService(subscription.billing_provider);
-
-      cancellationRequests.push(
-        gateway.cancelSubscription({
-          subscriptionId: subscription.id,
-          invoiceNow: true,
-        }),
-      );
-    }
-
-    // execute all cancellation requests
-    await Promise.all(cancellationRequests);
-
-    Logger.info(
-      {
-        userId,
-        subscriptions: subscriptions?.length ?? 0,
-        name: this.namespace,
-      },
-      'Subscriptions cancelled successfully',
-    );
   }
 }

@@ -1,14 +1,11 @@
 'use client';
 
-import { useCallback } from 'react';
+import { useTransition } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
-import { toast } from 'sonner';
 import { z } from 'zod';
 
-import { useUpdateAccountData } from '@kit/accounts/hooks/use-update-account';
 import { Button } from '@kit/ui/button';
 import {
   Form,
@@ -20,36 +17,28 @@ import {
 import { Input } from '@kit/ui/input';
 import { Trans } from '@kit/ui/trans';
 
+import { updateTeamAccountName } from '../../server/actions/team-details-server-actions';
+
 const Schema = z.object({
   name: z.string().min(1).max(255),
 });
 
-export const UpdateOrganizationForm = (props: {
-  accountId: string;
-  accountName: string;
+export const UpdateTeamAccountNameForm = (props: {
+  account: {
+    name: string;
+    slug: string;
+  };
+
+  path: string;
 }) => {
-  const updateAccountData = useUpdateAccountData(props.accountId);
-  const { t } = useTranslation('organization');
+  const [pending, startTransition] = useTransition();
 
   const form = useForm({
     resolver: zodResolver(Schema),
     defaultValues: {
-      name: props.accountName,
+      name: props.account.name,
     },
   });
-
-  const updateOrganizationData = useCallback(
-    (data: { name: string }) => {
-      const promise = updateAccountData.mutateAsync(data);
-
-      toast.promise(promise, {
-        loading: t(`updateOrganizationLoadingMessage`),
-        success: t(`updateOrganizationSuccessMessage`),
-        error: t(`updateOrganizationErrorMessage`),
-      });
-    },
-    [t, updateAccountData],
-  );
 
   return (
     <div className={'space-y-8'}>
@@ -57,7 +46,13 @@ export const UpdateOrganizationForm = (props: {
         <form
           className={'flex flex-col space-y-4'}
           onSubmit={form.handleSubmit((data) => {
-            updateOrganizationData(data);
+            startTransition(async () => {
+              await updateTeamAccountName({
+                slug: props.account.slug,
+                name: data.name,
+                path: props.path,
+              });
+            });
           })}
         >
           <FormField
@@ -66,12 +61,12 @@ export const UpdateOrganizationForm = (props: {
               return (
                 <FormItem>
                   <FormLabel>
-                    <Trans i18nKey={'teams:organizationNameInputLabel'} />
+                    <Trans i18nKey={'teams:teamNameInputLabel'} />
                   </FormLabel>
 
                   <FormControl>
                     <Input
-                      data-test={'organization-name-input'}
+                      data-test={'team-name-input'}
                       required
                       placeholder={''}
                       {...field}
@@ -80,15 +75,15 @@ export const UpdateOrganizationForm = (props: {
                 </FormItem>
               );
             }}
-          ></FormField>
+          />
 
           <div>
             <Button
               className={'w-full md:w-auto'}
-              data-test={'update-organization-submit-button'}
-              disabled={updateAccountData.isPending}
+              data-test={'update-team-submit-button'}
+              disabled={pending}
             >
-              <Trans i18nKey={'teams:updateOrganizationSubmitLabel'} />
+              <Trans i18nKey={'teams:updateTeamSubmitLabel'} />
             </Button>
           </div>
         </form>

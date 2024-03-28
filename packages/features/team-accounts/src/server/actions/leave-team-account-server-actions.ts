@@ -2,7 +2,7 @@
 
 import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
 
-import { LeaveTeamAccountSchema } from '../schema/leave-team-account.schema';
+import { LeaveTeamAccountSchema } from '../../schema/leave-team-account.schema';
 import { LeaveAccountService } from '../services/leave-account.service';
 
 export async function leaveTeamAccountAction(formData: FormData) {

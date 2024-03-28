@@ -30,8 +30,8 @@ type AccountModel = {
 };
 
 const features = {
-  enableOrganizationAccounts: featureFlagsConfig.enableOrganizationAccounts,
-  enableOrganizationCreation: featureFlagsConfig.enableOrganizationCreation,
+  enableTeamAccounts: featureFlagsConfig.enableTeamAccounts,
+  enableTeamCreation: featureFlagsConfig.enableTeamCreation,
 };
 
 export function AppSidebar(props: {

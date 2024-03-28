@@ -12,7 +12,7 @@ import {
 import { If } from '@kit/ui/if';
 import { Trans } from '@kit/ui/trans';
 
-import { deleteInvitationAction } from '../../actions/account-invitations-server-actions';
+import { deleteInvitationAction } from '../../server/actions/team-invitations-server-actions';
 
 export const DeleteInvitationDialog: React.FC<{
   isOpen: boolean;
@@ -24,7 +24,7 @@ export const DeleteInvitationDialog: React.FC<{
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            <Trans i18nKey="organization:deleteInvitationDialogTitle" />
+            <Trans i18nKey="team:deleteInvitationDialogTitle" />
           </DialogTitle>
 
           <DialogDescription>

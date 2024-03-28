@@ -23,13 +23,12 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const i18n = await createI18nServerInstance();
-  const lang = i18n.language;
+  const { language } = await createI18nServerInstance();
 
   return (
-    <html lang={lang} className={getClassName()}>
+    <html lang={language} className={getClassName()}>
       <body>
-        <RootProviders lang={lang}>{children}</RootProviders>
+        <RootProviders lang={language}>{children}</RootProviders>
         <Toaster richColors={false} />
       </body>
     </html>

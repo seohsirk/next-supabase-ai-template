@@ -18,8 +18,8 @@ import {
 } from '@react-email/components';
 
 interface Props {
-  organizationName: string;
-  organizationLogo?: string;
+  teamName: string;
+  teamLogo?: string;
   inviter: string | undefined;
   invitedUserEmail: string;
   link: string;
@@ -38,7 +38,7 @@ export function renderInviteEmail(props: Props) {
         <Body className="mx-auto my-auto bg-gray-50 font-sans">
           <Container className="mx-auto my-[40px] w-[465px] rounded-lg border border-solid border-[#eaeaea] bg-white p-[20px]">
             <Heading className="mx-0 my-[30px] p-0 text-center text-[24px] font-normal text-black">
-              Join <strong>{props.organizationName}</strong> on{' '}
+              Join <strong>{props.teamName}</strong> on{' '}
               <strong>{props.productName}</strong>
             </Heading>
             <Text className="text-[14px] leading-[24px] text-black">
@@ -46,16 +46,16 @@ export function renderInviteEmail(props: Props) {
             </Text>
             <Text className="text-[14px] leading-[24px] text-black">
               <strong>{props.inviter}</strong> has invited you to the{' '}
-              <strong>{props.organizationName}</strong> team on{' '}
+              <strong>{props.teamName}</strong> team on{' '}
               <strong>{props.productName}</strong>.
             </Text>
-            {props.organizationLogo && (
+            {props.teamLogo && (
               <Section>
                 <Row>
                   <Column align="center">
                     <Img
                       className="rounded-full"
-                      src={props.organizationLogo}
+                      src={props.teamLogo}
                       width="64"
                       height="64"
                     />
@@ -68,7 +68,7 @@ export function renderInviteEmail(props: Props) {
                 className="rounded bg-[#000000] px-[20px] py-[12px] text-center text-[12px] font-semibold text-white no-underline"
                 href={props.link}
               >
-                Join {props.organizationName}
+                Join {props.teamName}
               </Button>
             </Section>
             <Text className="text-[14px] leading-[24px] text-black">

@@ -14,6 +14,6 @@
     "typegen": "supabase gen types typescript --local > ../packages/supabase/src/database.types.ts"
   },
   "dependencies": {
-    "supabase": "^1.150.0"
+    "supabase": "^1.151.1"
   }
 }

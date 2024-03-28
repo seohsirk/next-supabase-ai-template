@@ -18,6 +18,7 @@ import {
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
+  AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@kit/ui/alert-dialog';
@@ -166,18 +167,20 @@ function ConfirmUnenrollFactorModal(
           </AlertDialogDescription>
         </AlertDialogHeader>
 
-        <AlertDialogAction
-          className={'w-full'}
-          type={'button'}
-          disabled={unEnroll.isPending}
-          onClick={() => onUnenrollRequested(props.factorId)}
-        >
-          <Trans i18nKey={'account:unenrollFactorModalButtonLabel'} />
-        </AlertDialogAction>
+        <AlertDialogFooter>
+          <AlertDialogCancel>
+            <Trans i18nKey={'common:cancel'} />
+          </AlertDialogCancel>
 
-        <AlertDialogCancel>
-          <Trans i18nKey={'common:cancel'} />
-        </AlertDialogCancel>
+          <AlertDialogAction
+            className={'w-full'}
+            type={'button'}
+            disabled={unEnroll.isPending}
+            onClick={() => onUnenrollRequested(props.factorId)}
+          >
+            <Trans i18nKey={'account:unenrollFactorModalButtonLabel'} />
+          </AlertDialogAction>
+        </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
   );

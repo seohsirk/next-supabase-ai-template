@@ -27,8 +27,8 @@ import { If } from '@kit/ui/if';
 import { Input } from '@kit/ui/input';
 import { Trans } from '@kit/ui/trans';
 
-import { transferOwnershipAction } from '../../actions/account-members-server-actions';
 import { TransferOwnershipConfirmationSchema } from '../../schema/transfer-ownership-confirmation.schema';
+import { transferOwnershipAction } from '../../server/actions/team-members-server-actions';
 
 export const TransferOwnershipDialog: React.FC<{
   isOpen: boolean;
@@ -42,11 +42,11 @@ export const TransferOwnershipDialog: React.FC<{
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            <Trans i18nKey="organization:transferOwnership" />
+            <Trans i18nKey="team:transferOwnership" />
           </DialogTitle>
 
           <DialogDescription>
-            Transfer ownership of the organization to another member.
+            Transfer ownership of the team to another member.
           </DialogDescription>
         </DialogHeader>
 

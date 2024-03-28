@@ -25,9 +25,9 @@ import {
 import { If } from '@kit/ui/if';
 import { Trans } from '@kit/ui/trans';
 
-import { updateMemberRoleAction } from '../../actions/account-members-server-actions';
 import { UpdateRoleSchema } from '../../schema/update-role-schema';
-import { MembershipRoleSelector } from '../membership-role-selector';
+import { updateMemberRoleAction } from '../../server/actions/team-members-server-actions';
+import { MembershipRoleSelector } from './membership-role-selector';
 
 type Role = Database['public']['Enums']['account_role'];
 

@@ -12,18 +12,21 @@
     "./components": "./src/components/index.ts"
   },
   "devDependencies": {
-    "@kit/accounts": "*",
-    "@kit/email-templates": "*",
-    "@kit/eslint-config": "0.2.0",
-    "@kit/mailers": "*",
-    "@kit/prettier-config": "0.1.0",
-    "@kit/shared": "*",
-    "@kit/supabase": "*",
-    "@kit/tailwind-config": "0.1.0",
-    "@kit/tsconfig": "0.1.0",
-    "@kit/ui": "*",
     "@hookform/resolvers": "^3.3.4",
-    "lucide-react": "^0.363.0"
+    "@kit/accounts": "^0.1.0",
+    "@kit/billing-gateway": "workspace:*",
+    "@kit/email-templates": "^0.1.0",
+    "@kit/eslint-config": "workspace:*",
+    "@kit/mailers": "^0.1.0",
+    "@kit/prettier-config": "workspace:*",
+    "@kit/shared": "^0.1.0",
+    "@kit/supabase": "^0.1.0",
+    "@kit/tailwind-config": "workspace:*",
+    "@kit/tsconfig": "workspace:*",
+    "@kit/ui": "^0.1.0",
+    "@tanstack/react-query": "5.28.6",
+    "lucide-react": "^0.363.0",
+    "react-i18next": "^14.1.0"
   },
   "peerDependencies": {
     "@kit/accounts": "0.1.0",
