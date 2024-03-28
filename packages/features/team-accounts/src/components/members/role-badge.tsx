@@ -9,8 +9,9 @@ type Role = Database['public']['Enums']['account_role'];
 const roleClassNameBuilder = cva('font-medium capitalize', {
   variants: {
     role: {
-      owner: 'bg-primary',
-      member: 'bg-blue-50 text-blue-500 dark:bg-blue-500/10',
+      owner: '',
+      member:
+        'bg-blue-50 hover:bg-blue-50 text-blue-500 dark:bg-blue-500/10 dark:hover:bg-blue-500/10',
     },
   },
 });

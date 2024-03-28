@@ -6,6 +6,7 @@ import { z } from 'zod';
 import { Mailer } from '@kit/mailers';
 import { Logger } from '@kit/shared/logger';
 import { Database } from '@kit/supabase/database';
+import { requireAuth } from '@kit/supabase/require-auth';
 
 import { DeleteInvitationSchema } from '../../schema/delete-invitation.schema';
 import { InviteMembersSchema } from '../../schema/invite-members.schema';
@@ -206,8 +207,28 @@ export class AccountInvitationsService {
     );
   }
 
+  /**
+   * Accepts an invitation to join a team.
+   */
+  async acceptInvitationToTeam(params: {
+    userId: string;
+    inviteToken: string;
+    adminClient: SupabaseClient<Database>;
+  }) {
+    const { error, data } = await params.adminClient.rpc('accept_invitation', {
+      token: params.inviteToken,
+      user_id: params.userId,
+    });
+
+    if (error) {
+      throw error;
+    }
+
+    return data;
+  }
+
   private async getUser() {
-    const { data, error } = await this.client.auth.getUser();
+    const { data, error } = await requireAuth(this.client);
 
     if (error ?? !data) {
       throw new Error('Authentication required');
@@ -217,6 +238,6 @@ export class AccountInvitationsService {
   }
 
   private getInvitationLink(token: string) {
-    return new URL(env.invitePath, env.siteURL).href + `?token=${token}`;
+    return new URL(env.siteURL, env.siteURL).href + `?invite_token=${token}`;
   }
 }

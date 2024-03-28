@@ -22,6 +22,7 @@ import {
   DropdownMenuTrigger,
 } from '@kit/ui/dropdown-menu';
 import { If } from '@kit/ui/if';
+import { SubMenuModeToggle } from '@kit/ui/mode-toggle';
 import { ProfileAvatar } from '@kit/ui/profile-avatar';
 import { Trans } from '@kit/ui/trans';
 import { cn } from '@kit/ui/utils';
@@ -34,6 +35,7 @@ export function PersonalAccountDropdown({
   signOutRequested,
   showProfileName,
   paths,
+  features,
 }: {
   className?: string;
   session: Session | null;
@@ -41,6 +43,9 @@ export function PersonalAccountDropdown({
   showProfileName?: boolean;
   paths: {
     home: string;
+  };
+  features: {
+    enableThemeToggle: boolean;
   };
 }) {
   const { data: personalAccountData } = usePersonalAccountData();
@@ -152,6 +157,12 @@ export function PersonalAccountDropdown({
               <span>Admin</span>
             </Link>
           </DropdownMenuItem>
+        </If>
+
+        <DropdownMenuSeparator />
+
+        <If condition={features.enableThemeToggle}>
+          <SubMenuModeToggle />
         </If>
 
         <DropdownMenuSeparator />

@@ -119,7 +119,8 @@
     "./auth-change-listener": "./src/makerkit/auth-change-listener.tsx",
     "./loading-overlay": "./src/makerkit/loading-overlay.tsx",
     "./profile-avatar": "./src/makerkit/profile-avatar.tsx",
-    "./mdx": "./src/makerkit/mdx/mdx-renderer.tsx"
+    "./mdx": "./src/makerkit/mdx/mdx-renderer.tsx",
+    "./mode-toggle": "./src/makerkit/mode-toggle.tsx"
   },
   "typesVersions": {
     "*": {

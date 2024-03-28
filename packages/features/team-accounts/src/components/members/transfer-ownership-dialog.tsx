@@ -6,14 +6,16 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
 import { Alert, AlertDescription, AlertTitle } from '@kit/ui/alert';
-import { Button } from '@kit/ui/button';
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@kit/ui/dialog';
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@kit/ui/alert-dialog';
+import { Button } from '@kit/ui/button';
 import {
   Form,
   FormControl,
@@ -38,17 +40,17 @@ export const TransferOwnershipDialog: React.FC<{
   targetDisplayName: string;
 }> = ({ isOpen, setIsOpen, targetDisplayName, accountId, userId }) => {
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>
+    <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>
             <Trans i18nKey="team:transferOwnership" />
-          </DialogTitle>
+          </AlertDialogTitle>
 
-          <DialogDescription>
+          <AlertDialogDescription>
             <Trans i18nKey="team:transferOwnershipDescription" />
-          </DialogDescription>
-        </DialogHeader>
+          </AlertDialogDescription>
+        </AlertDialogHeader>
 
         <TransferOrganizationOwnershipForm
           accountId={accountId}
@@ -56,8 +58,8 @@ export const TransferOwnershipDialog: React.FC<{
           targetDisplayName={targetDisplayName}
           setIsOpen={setIsOpen}
         />
-      </DialogContent>
-    </Dialog>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 };
 
@@ -100,7 +102,7 @@ function TransferOrganizationOwnershipForm({
   return (
     <Form {...form}>
       <form
-        className={'flex flex-col space-y-2 text-sm'}
+        className={'flex flex-col space-y-4 text-sm'}
         onSubmit={form.handleSubmit(onSubmit)}
       >
         <If condition={error}>
@@ -115,10 +117,6 @@ function TransferOrganizationOwnershipForm({
             }}
             components={{ b: <b /> }}
           />
-        </p>
-
-        <p>
-          <Trans i18nKey={'common:modalConfirmationQuestion'} />
         </p>
 
         <FormField
@@ -144,19 +142,31 @@ function TransferOrganizationOwnershipForm({
           }}
         />
 
-        <Button
-          type={'submit'}
-          data-test={'confirm-transfer-ownership-button'}
-          variant={'destructive'}
-          disabled={pending}
-        >
-          <If
-            condition={pending}
-            fallback={<Trans i18nKey={'teams:transferOwnership'} />}
+        <div>
+          <p className={'text-muted-foreground'}>
+            <Trans i18nKey={'common:modalConfirmationQuestion'} />
+          </p>
+        </div>
+
+        <AlertDialogFooter>
+          <AlertDialogCancel>
+            <Trans i18nKey={'common:cancel'} />
+          </AlertDialogCancel>
+
+          <Button
+            type={'submit'}
+            data-test={'confirm-transfer-ownership-button'}
+            variant={'destructive'}
+            disabled={pending}
           >
-            <Trans i18nKey={'teams:transferringOwnership'} />
-          </If>
-        </Button>
+            <If
+              condition={pending}
+              fallback={<Trans i18nKey={'teams:transferOwnership'} />}
+            >
+              <Trans i18nKey={'teams:transferringOwnership'} />
+            </If>
+          </Button>
+        </AlertDialogFooter>
       </form>
     </Form>
   );

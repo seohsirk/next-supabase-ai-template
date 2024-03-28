@@ -3,8 +3,8 @@
 import type { Provider } from '@supabase/supabase-js';
 
 import { isBrowser } from '@kit/shared/utils';
-import { Divider } from '@kit/ui/divider';
 import { If } from '@kit/ui/if';
+import { Separator } from '@kit/ui/separator';
 
 import { MagicLinkAuthContainer } from './magic-link-auth-container';
 import { OauthProviders } from './oauth-providers';
@@ -24,9 +24,7 @@ export function SignUpMethodsContainer(props: {
 
   inviteToken?: string;
 }) {
-  const redirectUrl = isBrowser()
-    ? new URL(props.paths.callback, window?.location.origin).toString()
-    : '';
+  const redirectUrl = getCallbackUrl(props);
 
   return (
     <>
@@ -42,7 +40,7 @@ export function SignUpMethodsContainer(props: {
       </If>
 
       <If condition={props.providers.oAuth.length}>
-        <Divider />
+        <Separator />
 
         <OauthProviders
           enabledProviders={props.providers.oAuth}
@@ -55,4 +53,27 @@ export function SignUpMethodsContainer(props: {
       </If>
     </>
   );
+}
+
+function getCallbackUrl(props: {
+  paths: {
+    callback: string;
+    appHome: string;
+  };
+
+  inviteToken?: string;
+}) {
+  if (!isBrowser()) {
+    return '';
+  }
+
+  const redirectPath = props.paths.callback;
+  const origin = window.location.origin;
+  const url = new URL(redirectPath, origin);
+
+  if (props.inviteToken) {
+    url.searchParams.set('invite_token', props.inviteToken);
+  }
+
+  return url.href;
 }

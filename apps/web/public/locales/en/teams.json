@@ -121,5 +121,12 @@
   "updateRoleErrorMessage": "We encountered an error updating the role of the selected member. Please try again.",
   "searchInvitations": "Search Invitations",
   "updateInvitation": "Update Invitation",
-  "removeInvitation": "Remove Invitation"
+  "removeInvitation": "Remove Invitation",
+  "acceptInvitation": "Accept Invitation",
+  "signInWithDifferentAccount": "Sign in with a different account",
+  "signInWithDifferentAccountDescription": "If you wish to accept the invitation with a different account, please sign out and back in with the account you wish to use.",
+  "acceptInvitationHeading": "Accept Invitation to join {{accountName}}",
+  "acceptInvitationDescription": "You have been invited to join the team {{accountName}}. If you wish to accept the invitation, please click the button below.",
+  "joinTeam": "Join {{accountName}}",
+  "joiningTeam": "Joining team..."
 }

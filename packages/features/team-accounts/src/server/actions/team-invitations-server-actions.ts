@@ -1,14 +1,17 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 
 import { SupabaseClient } from '@supabase/supabase-js';
 
 import { z } from 'zod';
 
 import { Database } from '@kit/supabase/database';
+import { requireAuth } from '@kit/supabase/require-auth';
 import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
 
+import { AcceptInvitationSchema } from '../../schema/accept-invitation.schema';
 import { DeleteInvitationSchema } from '../../schema/delete-invitation.schema';
 import { InviteMembersSchema } from '../../schema/invite-members.schema';
 import { UpdateInvitationSchema } from '../../schema/update-invitation-schema';
@@ -80,10 +83,32 @@ export async function updateInvitationAction(
   return { success: true };
 }
 
-async function assertSession(client: SupabaseClient<Database>) {
-  const { data, error } = await client.auth.getUser();
+export async function acceptInvitationAction(data: FormData) {
+  const client = getSupabaseServerActionClient();
 
-  if (error ?? !data.user) {
+  const { inviteToken, nextPath } = AcceptInvitationSchema.parse(
+    Object.fromEntries(data),
+  );
+
+  const { user } = await assertSession(client);
+
+  const service = new AccountInvitationsService(client);
+
+  await service.acceptInvitationToTeam({
+    adminClient: getSupabaseServerActionClient({ admin: true }),
+    inviteToken,
+    userId: user.id,
+  });
+
+  return redirect(nextPath);
+}
+
+async function assertSession(client: SupabaseClient<Database>) {
+  const { error, data } = await requireAuth(client);
+
+  if (error) {
     throw new Error(`Authentication required`);
   }
+
+  return data;
 }

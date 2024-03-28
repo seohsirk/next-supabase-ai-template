@@ -1,5 +1,7 @@
 import type { Session } from '@supabase/supabase-js';
 
+import { ModeToggle } from '@kit/ui/mode-toggle';
+
 import { SiteHeaderAccountSection } from '~/(marketing)/_components/site-header-account-section';
 import { SiteNavigation } from '~/(marketing)/_components/site-navigation';
 import { AppLogo } from '~/components/app-logo';
@@ -17,13 +19,11 @@ export function SiteHeader(props: { session?: Session | null }) {
         </div>
 
         <div className={'flex flex-1 items-center justify-end space-x-4'}>
-          <div className={'flex items-center'}></div>
+          <div className={'flex items-center'}>
+            <ModeToggle />
+          </div>
 
           <SiteHeaderAccountSection session={props.session ?? null} />
-
-          <div className={'flex lg:hidden'}>
-            <SiteNavigation />
-          </div>
         </div>
       </div>
     </div>

@@ -735,6 +735,41 @@ insert
     has_role_on_account (account_id)
     and public.has_permission (auth.uid (), account_id, 'invites.manage'::app_permissions));
 
+-- Functions
+-- Function to accept an invitation to an account
+create or replace function accept_invitation(token text, user_id uuid) returns void as $$
+declare
+  target_account_id uuid;
+  target_role public.account_role;
+begin
+    select
+        account_id,
+        role
+    into
+        target_account_id,
+        target_role
+    from
+        public.invitations
+    where
+        invite_token = token;
+
+    insert into
+        public.accounts_memberships(
+        user_id,
+        account_id,
+        account_role)
+    values
+        (accept_invitation.user_id, target_account_id, target_role);
+
+    delete from
+        public.invitations
+    where
+        invite_token = token;
+    end;
+$$ language plpgsql;
+
+grant execute on function accept_invitation (uuid) to service_role;
+
 /*
  * -------------------------------------------------------
  * Section: Billing Customers

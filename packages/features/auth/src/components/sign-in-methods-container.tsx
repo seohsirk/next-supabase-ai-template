@@ -5,8 +5,8 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import type { Provider } from '@supabase/supabase-js';
 
 import { isBrowser } from '@kit/shared/utils';
-import { Divider } from '@kit/ui/divider';
 import { If } from '@kit/ui/if';
+import { Separator } from '@kit/ui/separator';
 
 import { MagicLinkAuthContainer } from './magic-link-auth-container';
 import { OauthProviders } from './oauth-providers';
@@ -46,7 +46,7 @@ export function SignInMethodsContainer(props: {
       </If>
 
       <If condition={props.providers.oAuth.length}>
-        <Divider />
+        <Separator />
 
         <OauthProviders
           enabledProviders={props.providers.oAuth}

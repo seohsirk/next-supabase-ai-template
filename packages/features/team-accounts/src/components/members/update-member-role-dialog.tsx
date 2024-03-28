@@ -124,7 +124,7 @@ function UpdateMemberForm({
           render={({ field }) => {
             return (
               <FormItem>
-                <FormLabel>{t('memberRole')}</FormLabel>
+                <FormLabel>{t('roleLabel')}</FormLabel>
 
                 <FormControl>
                   <MembershipRoleSelector

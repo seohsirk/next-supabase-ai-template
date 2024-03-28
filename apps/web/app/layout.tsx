@@ -40,7 +40,7 @@ function getClassName() {
   const theme = themeCookie ?? appConfig.theme;
   const dark = theme === 'dark';
 
-  return cn('antialiased', {
+  return cn('min-h-screen bg-background antialiased', {
     dark,
     [sans.className]: true,
   });
