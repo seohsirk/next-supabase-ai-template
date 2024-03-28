@@ -1,18 +1,15 @@
 'use client';
 
-import type { Session } from '@supabase/supabase-js';
-
 import { PersonalAccountDropdown } from '@kit/accounts/personal-account-dropdown';
 import { useSignOut } from '@kit/supabase/hooks/use-sign-out';
+import { useUser } from '@kit/supabase/hooks/use-user';
 
 import featuresFlagConfig from '~/config/feature-flags.config';
 import pathsConfig from '~/config/paths.config';
 
-export function ProfileAccountDropdownContainer(props: {
-  collapsed: boolean;
-  session: Session | null;
-}) {
+export function ProfileAccountDropdownContainer(props: { collapsed: boolean }) {
   const signOut = useSignOut();
+  const user = useUser();
 
   return (
     <div className={props.collapsed ? '' : 'w-full'}>
@@ -25,7 +22,7 @@ export function ProfileAccountDropdownContainer(props: {
         }}
         className={'w-full'}
         showProfileName={!props.collapsed}
-        session={props.session}
+        user={user.data ?? null}
         signOutRequested={() => signOut.mutateAsync()}
       />
     </div>

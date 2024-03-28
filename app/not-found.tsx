@@ -19,12 +19,12 @@ const NotFoundPage = async () => {
   const client = getSupabaseServerComponentClient();
 
   const {
-    data: { session },
-  } = await client.auth.getSession();
+    data: { user },
+  } = await client.auth.getUser();
 
   return (
     <div className={'flex h-screen flex-1 flex-col'}>
-      <SiteHeader session={session} />
+      <SiteHeader user={user} />
 
       <div
         className={

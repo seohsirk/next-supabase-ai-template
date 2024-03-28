@@ -11,7 +11,7 @@ import { personalAccountSidebarConfig } from '~/config/personal-account-sidebar.
 
 export function HomeSidebar() {
   const collapsed = getSidebarCollapsed();
-  const { session, accounts } = use(loadUserWorkspace());
+  const { accounts } = use(loadUserWorkspace());
 
   return (
     <Sidebar collapsed={collapsed}>
@@ -25,10 +25,7 @@ export function HomeSidebar() {
 
       <div className={'absolute bottom-4 left-0 w-full'}>
         <SidebarContent>
-          <ProfileAccountDropdownContainer
-            session={session}
-            collapsed={collapsed}
-          />
+          <ProfileAccountDropdownContainer collapsed={collapsed} />
         </SidebarContent>
       </div>
     </Sidebar>

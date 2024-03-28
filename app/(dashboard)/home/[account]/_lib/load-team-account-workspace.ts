@@ -25,12 +25,10 @@ export const loadTeamWorkspace = cache(async (accountSlug: string) => {
   });
 
   const accountsPromise = client.from('user_accounts').select('*');
-  const userSessionPromise = client.auth.getSession();
 
-  const [accountResult, accountsResult, sessionResult] = await Promise.all([
+  const [accountResult, accountsResult] = await Promise.all([
     accountPromise,
     accountsPromise,
-    userSessionPromise,
   ]);
 
   if (accountResult.error) {
@@ -53,13 +51,8 @@ export const loadTeamWorkspace = cache(async (accountSlug: string) => {
     throw accountsResult.error;
   }
 
-  if (sessionResult.error ?? !sessionResult.data.session?.user) {
-    throw new Error('User session not found');
-  }
-
   return {
     account: accountData,
     accounts: accountsResult.data,
-    user: sessionResult.data.session.user,
   };
 });

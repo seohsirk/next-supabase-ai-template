@@ -2,7 +2,6 @@ import { use } from 'react';
 
 import { parseSidebarStateCookie } from '@kit/shared/cookies/sidebar-state.cookie';
 import { parseThemeCookie } from '@kit/shared/cookies/theme.cookie';
-import { getSupabaseServerComponentClient } from '@kit/supabase/server-component-client';
 import { Page } from '@kit/ui/page';
 
 import { AppSidebar } from '~/(dashboard)/home/[account]/_components/app-sidebar';
@@ -19,10 +18,7 @@ function TeamWorkspaceLayout({
 }: React.PropsWithChildren<{
   params: Params;
 }>) {
-  const [data, session] = use(
-    Promise.all([loadTeamWorkspace(params.account), loadSession()]),
-  );
-
+  const data = use(loadTeamWorkspace(params.account));
   const ui = getUIStateCookies();
   const sidebarCollapsed = ui.sidebarState === 'collapsed';
 
@@ -38,7 +34,6 @@ function TeamWorkspaceLayout({
         <AppSidebar
           collapsed={sidebarCollapsed}
           account={params.account}
-          session={session}
           accounts={accounts}
         />
       }
@@ -55,19 +50,4 @@ function getUIStateCookies() {
     theme: parseThemeCookie(),
     sidebarState: parseSidebarStateCookie(),
   };
-}
-
-async function loadSession() {
-  const client = getSupabaseServerComponentClient();
-
-  const {
-    data: { session },
-    error,
-  } = await client.auth.getSession();
-
-  if (error) {
-    throw error;
-  }
-
-  return session;
 }
