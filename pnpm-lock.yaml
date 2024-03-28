@@ -82,10 +82,10 @@ importers:
         version: 1.3.0(react@18.2.0)
       '@supabase/ssr':
         specifier: ^0.1.0
-        version: 0.1.0(@supabase/supabase-js@2.40.0)
+        version: 0.1.0(@supabase/supabase-js@2.41.1)
       '@supabase/supabase-js':
-        specifier: ^2.40.0
-        version: 2.40.0
+        specifier: ^2.41.1
+        version: 2.41.1
       '@tanstack/react-query':
         specifier: 5.28.6
         version: 5.28.6(react@18.2.0)
@@ -182,7 +182,7 @@ importers:
         version: 18.2.22
       autoprefixer:
         specifier: ^10.4.19
-        version: 10.4.19(postcss@8.4.33)
+        version: 10.4.19(postcss@8.4.38)
       dotenv-cli:
         specifier: ^7.4.1
         version: 7.4.1
@@ -229,7 +229,7 @@ importers:
   packages/billing-gateway:
     devDependencies:
       '@kit/billing':
-        specifier: ^0.1.0
+        specifier: workspace:^
         version: link:../billing
       '@kit/eslint-config':
         specifier: workspace:*
@@ -238,13 +238,13 @@ importers:
         specifier: workspace:*
         version: link:../../tooling/prettier
       '@kit/shared':
-        specifier: ^0.1.0
+        specifier: workspace:^
         version: link:../shared
       '@kit/stripe':
-        specifier: ^0.1.0
+        specifier: workspace:^
         version: link:../stripe
       '@kit/supabase':
-        specifier: ^0.1.0
+        specifier: workspace:^
         version: link:../supabase
       '@kit/tailwind-config':
         specifier: workspace:*
@@ -253,11 +253,11 @@ importers:
         specifier: workspace:*
         version: link:../../tooling/typescript
       '@kit/ui':
-        specifier: ^0.1.0
+        specifier: workspace:^
         version: link:../ui
       '@supabase/supabase-js':
-        specifier: ^2.40.0
-        version: 2.40.0
+        specifier: ^2.41.1
+        version: 2.41.1
       lucide-react:
         specifier: ^0.363.0
         version: 0.363.0(react@18.2.0)
@@ -290,25 +290,25 @@ importers:
         specifier: ^3.3.4
         version: 3.3.4(react-hook-form@7.51.2)
       '@kit/billing-gateway':
-        specifier: ^0.1.0
+        specifier: workspace:^
         version: link:../../billing-gateway
       '@kit/email-templates':
-        specifier: ^0.1.0
+        specifier: workspace:^
         version: link:../../email-templates
       '@kit/eslint-config':
         specifier: workspace:*
         version: link:../../../tooling/eslint
       '@kit/mailers':
-        specifier: ^0.1.0
+        specifier: workspace:^
         version: link:../../mailers
       '@kit/prettier-config':
         specifier: workspace:*
         version: link:../../../tooling/prettier
       '@kit/shared':
-        specifier: ^0.1.0
+        specifier: workspace:^
         version: link:../../shared
       '@kit/supabase':
-        specifier: ^0.1.0
+        specifier: workspace:^
         version: link:../../supabase
       '@kit/tailwind-config':
         specifier: workspace:*
@@ -317,7 +317,7 @@ importers:
         specifier: workspace:*
         version: link:../../../tooling/typescript
       '@kit/ui':
-        specifier: ^0.1.0
+        specifier: workspace:^
         version: link:../../ui
       '@radix-ui/react-icons':
         specifier: ^1.3.0
@@ -353,7 +353,7 @@ importers:
         specifier: workspace:*
         version: link:../../../tooling/prettier
       '@kit/supabase':
-        specifier: ^0.1.0
+        specifier: workspace:^
         version: link:../../supabase
       '@kit/tailwind-config':
         specifier: workspace:*
@@ -362,11 +362,11 @@ importers:
         specifier: workspace:*
         version: link:../../../tooling/typescript
       '@kit/ui':
-        specifier: ^0.1.0
+        specifier: workspace:^
         version: link:../../ui
       '@supabase/supabase-js':
-        specifier: ^2.40.0
-        version: 2.40.0
+        specifier: ^2.41.1
+        version: 2.41.1
       lucide-react:
         specifier: ^0.363.0
         version: 0.363.0(react@18.2.0)
@@ -419,28 +419,28 @@ importers:
         specifier: ^3.3.4
         version: 3.3.4(react-hook-form@7.51.2)
       '@kit/accounts':
-        specifier: ^0.1.0
+        specifier: workspace:^
         version: link:../accounts
       '@kit/billing-gateway':
         specifier: workspace:*
         version: link:../../billing-gateway
       '@kit/email-templates':
-        specifier: ^0.1.0
+        specifier: workspace:^
         version: link:../../email-templates
       '@kit/eslint-config':
         specifier: workspace:*
         version: link:../../../tooling/eslint
       '@kit/mailers':
-        specifier: ^0.1.0
+        specifier: workspace:^
         version: link:../../mailers
       '@kit/prettier-config':
         specifier: workspace:*
         version: link:../../../tooling/prettier
       '@kit/shared':
-        specifier: ^0.1.0
+        specifier: workspace:^
         version: link:../../shared
       '@kit/supabase':
-        specifier: ^0.1.0
+        specifier: workspace:^
         version: link:../../supabase
       '@kit/tailwind-config':
         specifier: workspace:*
@@ -449,7 +449,7 @@ importers:
         specifier: workspace:*
         version: link:../../../tooling/typescript
       '@kit/ui':
-        specifier: ^0.1.0
+        specifier: workspace:^
         version: link:../../ui
       '@tanstack/react-query':
         specifier: 5.28.6
@@ -545,7 +545,7 @@ importers:
         version: 14.22.0
     devDependencies:
       '@kit/billing':
-        specifier: ^0.1.0
+        specifier: workspace:^
         version: link:../billing
       '@kit/eslint-config':
         specifier: workspace:*
@@ -554,10 +554,10 @@ importers:
         specifier: workspace:*
         version: link:../../tooling/prettier
       '@kit/shared':
-        specifier: ^0.1.0
+        specifier: workspace:^
         version: link:../shared
       '@kit/supabase':
-        specifier: ^0.1.0
+        specifier: workspace:^
         version: link:../supabase
       '@kit/tailwind-config':
         specifier: workspace:*
@@ -566,7 +566,7 @@ importers:
         specifier: workspace:*
         version: link:../../tooling/typescript
       '@kit/ui':
-        specifier: ^0.1.0
+        specifier: workspace:^
         version: link:../ui
 
   packages/supabase:
@@ -588,10 +588,10 @@ importers:
         version: link:../../tooling/typescript
       '@supabase/ssr':
         specifier: ^0.1.0
-        version: 0.1.0(@supabase/supabase-js@2.40.0)
+        version: 0.1.0(@supabase/supabase-js@2.41.1)
       '@supabase/supabase-js':
-        specifier: ^2.40.0
-        version: 2.40.0
+        specifier: ^2.41.1
+        version: 2.41.1
       '@tanstack/react-query':
         specifier: 5.28.6
         version: 5.28.6(react@18.2.0)
@@ -3976,13 +3976,13 @@ packages:
     engines: {node: '>=12.16'}
     dev: false
 
-  /@supabase/functions-js@2.1.5:
-    resolution: {integrity: sha512-BNzC5XhCzzCaggJ8s53DP+WeHHGT/NfTsx2wUSSGKR2/ikLFQTBCDzMvGz/PxYMqRko/LwncQtKXGOYp1PkPaw==}
+  /@supabase/auth-js@2.63.0:
+    resolution: {integrity: sha512-yIgcHnlgv24GxHtVGUhwGqAFDyJkPIC/xjx7HostN08A8yCy8HIfl4JEkTKyBqD1v1L05jNEJOUke4Lf4O1+Qg==}
     dependencies:
       '@supabase/node-fetch': 2.6.15
 
-  /@supabase/gotrue-js@2.62.2:
-    resolution: {integrity: sha512-AP6e6W9rQXFTEJ7sTTNYQrNf0LCcnt1hUW+RIgUK+Uh3jbWvcIST7wAlYyNZiMlS9+PYyymWQ+Ykz/rOYSO0+A==}
+  /@supabase/functions-js@2.2.2:
+    resolution: {integrity: sha512-sJGq1nludmi7pY/fdtCpyY/pYonx7MfHdN408bqb736guWcVI1AChYVbI4kUM978EuOE4Ci6l7bUudfGg07QRw==}
     dependencies:
       '@supabase/node-fetch': 2.6.15
 
@@ -4008,12 +4008,12 @@ packages:
       - bufferutil
       - utf-8-validate
 
-  /@supabase/ssr@0.1.0(@supabase/supabase-js@2.40.0):
+  /@supabase/ssr@0.1.0(@supabase/supabase-js@2.41.1):
     resolution: {integrity: sha512-bIVrkqjAK5G3KjkIMKYKtAOlCgRRplEWjrlyRyXSOYtgDieiOhk2ZyNAPsEOa1By9OZVxuX5eAW1fitdnuxayw==}
     peerDependencies:
       '@supabase/supabase-js': ^2.33.1
     dependencies:
-      '@supabase/supabase-js': 2.40.0
+      '@supabase/supabase-js': 2.41.1
       cookie: 0.5.0
       ramda: 0.29.1
 
@@ -4022,11 +4022,11 @@ packages:
     dependencies:
       '@supabase/node-fetch': 2.6.15
 
-  /@supabase/supabase-js@2.40.0:
-    resolution: {integrity: sha512-XF8OrsA13DYBL074sHH4M0NhXJCWhQ0R5JbVeVUytZ0coPMS9krRdzxl+0c4z4LLjqbm/Wdz0UYlTYM9MgnDag==}
+  /@supabase/supabase-js@2.41.1:
+    resolution: {integrity: sha512-xmECLhYugMo/6SObpsOhu5xaxVfsk+JK/d4JSh055bpESmgmN3PLpzbfqejKCpaUeeUNF21+lrJp/U9HQzT9mA==}
     dependencies:
-      '@supabase/functions-js': 2.1.5
-      '@supabase/gotrue-js': 2.62.2
+      '@supabase/auth-js': 2.63.0
+      '@supabase/functions-js': 2.2.2
       '@supabase/node-fetch': 2.6.15
       '@supabase/postgrest-js': 1.9.2
       '@supabase/realtime-js': 2.9.3
@@ -5103,6 +5103,23 @@ packages:
       picocolors: 1.0.0
       postcss: 8.4.33
       postcss-value-parser: 4.2.0
+    dev: false
+
+  /autoprefixer@10.4.19(postcss@8.4.38):
+    resolution: {integrity: sha512-BaENR2+zBZ8xXhM4pUaKUxlVdxZ0EZhjvbopwnXmxRUfqDmwSpC2lAi/QXvx7NRdPCo1WKEcEF6mV64si1z4Ew==}
+    engines: {node: ^10 || ^12 || >=14}
+    hasBin: true
+    peerDependencies:
+      postcss: ^8.1.0
+    dependencies:
+      browserslist: 4.23.0
+      caniuse-lite: 1.0.30001600
+      fraction.js: 4.3.7
+      normalize-range: 0.1.2
+      picocolors: 1.0.0
+      postcss: 8.4.38
+      postcss-value-parser: 4.2.0
+    dev: true
 
   /available-typed-arrays@1.0.7:
     resolution: {integrity: sha512-wvUjBtSGN7+7SjNpq/9M2Tg350UZD3q62IFZLbRAR1bSMlCo1ZaeW+BJ+D090e4hIIZLBcTDWe4Mh4jvUDajzQ==}
@@ -9424,13 +9441,13 @@ packages:
     engines: {node: '>= 0.4'}
     dev: false
 
-  /postcss-import@15.1.0(postcss@8.4.33):
+  /postcss-import@15.1.0(postcss@8.4.35):
     resolution: {integrity: sha512-hpr+J05B2FVYUAXHeK1YyI267J/dDDhMU6B6civm8hSY1jYJnBXxzKDKDswzJmtLHryrjhnDjqqp/49t8FALew==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
       postcss: ^8.0.0
     dependencies:
-      postcss: 8.4.33
+      postcss: 8.4.35
       postcss-value-parser: 4.2.0
       read-cache: 1.0.0
       resolve: 1.22.8
@@ -9447,14 +9464,14 @@ packages:
       read-cache: 1.0.0
       resolve: 1.22.8
 
-  /postcss-js@4.0.1(postcss@8.4.33):
+  /postcss-js@4.0.1(postcss@8.4.35):
     resolution: {integrity: sha512-dDLF8pEO191hJMtlHFPRa8xsizHaM82MLfNkUHdUtVEV3tgTp5oj+8qbEqYM57SLfc74KSbw//4SeJma2LRVIw==}
     engines: {node: ^12 || ^14 || >= 16}
     peerDependencies:
       postcss: ^8.4.21
     dependencies:
       camelcase-css: 2.0.1
-      postcss: 8.4.33
+      postcss: 8.4.35
     dev: false
 
   /postcss-js@4.0.1(postcss@8.4.38):
@@ -9466,7 +9483,7 @@ packages:
       camelcase-css: 2.0.1
       postcss: 8.4.38
 
-  /postcss-load-config@4.0.2(postcss@8.4.33):
+  /postcss-load-config@4.0.2(postcss@8.4.35):
     resolution: {integrity: sha512-bSVhyJGL00wMVoPUzAVAnbEoWyqRxkjv64tUl427SKnPrENtq6hJwUojroMz2VB+Q1edmi4IfrAPpami5VVgMQ==}
     engines: {node: '>= 14'}
     peerDependencies:
@@ -9479,7 +9496,7 @@ packages:
         optional: true
     dependencies:
       lilconfig: 3.1.1
-      postcss: 8.4.33
+      postcss: 8.4.35
       yaml: 2.4.1
     dev: false
 
@@ -9499,13 +9516,13 @@ packages:
       postcss: 8.4.38
       yaml: 2.4.1
 
-  /postcss-nested@6.0.1(postcss@8.4.33):
+  /postcss-nested@6.0.1(postcss@8.4.35):
     resolution: {integrity: sha512-mEp4xPMi5bSWiMbsgoPfcP74lsWLHkQbZc3sY+jWYd65CUwXrUaTp0fmNpa01ZcETKlIgUdFN/MpS2xZtqL9dQ==}
     engines: {node: '>=12.0'}
     peerDependencies:
       postcss: ^8.2.14
     dependencies:
-      postcss: 8.4.33
+      postcss: 8.4.35
       postcss-selector-parser: 6.0.16
     dev: false
 
@@ -9544,6 +9561,7 @@ packages:
       nanoid: 3.3.7
       picocolors: 1.0.0
       source-map-js: 1.2.0
+    dev: false
 
   /postcss@8.4.35:
     resolution: {integrity: sha512-u5U8qYpBCpN13BsiEB0CbR1Hhh4Gc0zLFuedrHJKMctHCHAGrMdG0PRM/KErzAL3CU6/eckEtmHNB3x6e3c0vA==}
@@ -9551,7 +9569,7 @@ packages:
     dependencies:
       nanoid: 3.3.7
       picocolors: 1.0.0
-      source-map-js: 1.2.0
+      source-map-js: 1.0.2
     dev: false
 
   /postcss@8.4.38:
@@ -10917,7 +10935,7 @@ packages:
     dependencies:
       '@alloc/quick-lru': 5.2.0
       arg: 5.0.2
-      chokidar: 3.6.0
+      chokidar: 3.5.3
       didyoumean: 1.2.2
       dlv: 1.1.3
       fast-glob: 3.3.2
@@ -10929,11 +10947,11 @@ packages:
       normalize-path: 3.0.0
       object-hash: 3.0.0
       picocolors: 1.0.0
-      postcss: 8.4.33
-      postcss-import: 15.1.0(postcss@8.4.33)
-      postcss-js: 4.0.1(postcss@8.4.33)
-      postcss-load-config: 4.0.2(postcss@8.4.33)
-      postcss-nested: 6.0.1(postcss@8.4.33)
+      postcss: 8.4.35
+      postcss-import: 15.1.0(postcss@8.4.35)
+      postcss-js: 4.0.1(postcss@8.4.35)
+      postcss-load-config: 4.0.2(postcss@8.4.35)
+      postcss-nested: 6.0.1(postcss@8.4.35)
       postcss-selector-parser: 6.0.16
       resolve: 1.22.8
       sucrase: 3.35.0
