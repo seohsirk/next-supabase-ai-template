@@ -9,8 +9,10 @@
     "dangerZone": "Danger Zone",
     "dangerZoneDescription": "This section contains actions that are irreversible"
   },
-  "yourTeam": "Your Teams",
-  "createTeam": "Create Team",
+  "yourTeams": "Your Teams",
+  "createTeam": "Create a Team",
+  "personalAccount": "Personal Account",
+  "searchAccount": "Search Account...",
   "membersTabLabel": "Members",
   "memberName": "Name",
   "youLabel": "You",

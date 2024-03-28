@@ -3,7 +3,7 @@
 import { SidebarDivider, SidebarGroup, SidebarItem } from '@kit/ui/sidebar';
 import { Trans } from '@kit/ui/trans';
 
-import { getOrganizationAccountSidebarConfig } from '~/config/organization-account-sidebar.config';
+import { getOrganizationAccountSidebarConfig } from '~/config/team-account-sidebar.config';
 
 export function AppSidebarNavigation({
   account,
