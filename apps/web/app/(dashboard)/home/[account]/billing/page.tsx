@@ -77,7 +77,7 @@ async function loadAccountData(accountId: string) {
 
   const subscription = client
     .from('subscriptions')
-    .select<string, Database['public']['Tables']['subscriptions']['Row']>('*')
+    .select('*')
     .eq('account_id', accountId)
     .maybeSingle()
     .then(({ data }) => data);
@@ -86,7 +86,8 @@ async function loadAccountData(accountId: string) {
     .from('billing_customers')
     .select('customer_id')
     .eq('account_id', accountId)
-    .maybeSingle();
+    .maybeSingle()
+    .then(({ data }) => data?.customer_id);
 
   return Promise.all([subscription, customerId]);
 }
