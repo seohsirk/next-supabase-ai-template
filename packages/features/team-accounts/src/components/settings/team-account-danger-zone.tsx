@@ -232,7 +232,7 @@ function LeaveTeamContainer(props: {
 }) {
   return (
     <div className={'flex flex-col space-y-4'}>
-      <p>
+      <p className={'text-muted-foreground text-sm'}>
         <Trans
           i18nKey={'teams:leaveTeamDescription'}
           values={{
@@ -241,9 +241,9 @@ function LeaveTeamContainer(props: {
         />
       </p>
 
-      <div>
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
+      <AlertDialog>
+        <AlertDialogTrigger asChild>
+          <div>
             <Button
               data-test={'leave-team-button'}
               type={'button'}
@@ -251,34 +251,25 @@ function LeaveTeamContainer(props: {
             >
               <Trans i18nKey={'teams:leaveTeam'} />
             </Button>
-          </AlertDialogTrigger>
+          </div>
+        </AlertDialogTrigger>
 
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>
-                <Trans i18nKey={'teams:leavingTeamModalHeading'} />
-              </AlertDialogTitle>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              <Trans i18nKey={'teams:leavingTeamModalHeading'} />
+            </AlertDialogTitle>
 
-              <AlertDialogDescription>
-                <Trans i18nKey={'teams:leavingTeamModalDescription'} />
-              </AlertDialogDescription>
-            </AlertDialogHeader>
+            <AlertDialogDescription>
+              <Trans i18nKey={'teams:leavingTeamModalDescription'} />
+            </AlertDialogDescription>
+          </AlertDialogHeader>
 
-            <ErrorBoundary fallback={<LeaveTeamErrorAlert />}>
-              <form action={leaveTeamAccountAction}>
-                <input type={'hidden'} value={props.account.id} name={'id'} />
-
-                <div className={'my-2 flex flex-col space-y-4'}>
-                  <Trans
-                    i18nKey={'teams:leaveTeamDisclaimer'}
-                    values={{
-                      teamName: props.account?.name,
-                    }}
-                  />
-                </div>
-              </form>
-            </ErrorBoundary>
-          </AlertDialogContent>
+          <ErrorBoundary fallback={<LeaveTeamErrorAlert />}>
+            <form action={leaveTeamAccountAction}>
+              <input type={'hidden'} value={props.account.id} name={'id'} />
+            </form>
+          </ErrorBoundary>
 
           <AlertDialogFooter>
             <AlertDialogCancel>
@@ -287,8 +278,8 @@ function LeaveTeamContainer(props: {
 
             <LeaveTeamSubmitButton />
           </AlertDialogFooter>
-        </AlertDialog>
-      </div>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
@@ -302,7 +293,7 @@ function LeaveTeamSubmitButton() {
       disabled={pending}
       variant={'destructive'}
     >
-      <Trans i18nKey={'teams:leaveOrganization'} />
+      <Trans i18nKey={'teams:leaveTeam'} />
     </Button>
   );
 }

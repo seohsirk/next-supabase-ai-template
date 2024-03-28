@@ -3,6 +3,7 @@
 import type { Provider } from '@supabase/supabase-js';
 
 import { isBrowser } from '@kit/shared/utils';
+import { Alert, AlertDescription, AlertTitle } from '@kit/ui/alert';
 import { If } from '@kit/ui/if';
 import { Separator } from '@kit/ui/separator';
 
@@ -28,6 +29,16 @@ export function SignUpMethodsContainer(props: {
 
   return (
     <>
+      <If condition={props.inviteToken}>
+        <Alert variant={'info'}>
+          <AlertTitle>You have been invited to join a team</AlertTitle>
+          <AlertDescription>
+            Please sign up to continue with the invitation and create your
+            account.
+          </AlertDescription>
+        </Alert>
+      </If>
+
       <If condition={props.providers.password}>
         <EmailPasswordSignUpContainer emailRedirectTo={redirectUrl} />
       </If>

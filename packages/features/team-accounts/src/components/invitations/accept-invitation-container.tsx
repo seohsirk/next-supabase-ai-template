@@ -28,7 +28,7 @@ export function AcceptInvitationContainer(props: {
   };
 }) {
   return (
-    <div className={'flex flex-col items-center space-y-8'}>
+    <div className={'flex flex-col items-center space-y-4'}>
       <Heading className={'text-center'} level={5}>
         <Trans
           i18nKey={'teams:acceptInvitationHeading'}

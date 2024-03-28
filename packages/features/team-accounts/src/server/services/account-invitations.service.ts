@@ -238,6 +238,6 @@ export class AccountInvitationsService {
   }
 
   private getInvitationLink(token: string) {
-    return new URL(env.siteURL, env.siteURL).href + `?invite_token=${token}`;
+    return new URL(env.invitePath, env.siteURL).href + `?invite_token=${token}`;
   }
 }
