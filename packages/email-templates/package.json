@@ -1,5 +1,5 @@
 {
-  "name": "@kit/emails",
+  "name": "@kit/email-templates",
   "private": true,
   "version": "0.1.0",
   "scripts": {

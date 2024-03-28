@@ -1,4 +1,4 @@
-# Emails - @kit/emails
+# Emails - @kit/email-templates
 
 This package is responsible for managing email templates using the react.email library.
 

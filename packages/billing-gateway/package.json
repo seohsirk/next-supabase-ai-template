@@ -19,7 +19,7 @@
     "@kit/stripe": "0.1.0",
     "@kit/supabase": "^0.1.0",
     "@kit/ui": "0.1.0",
-    "@supabase/supabase-js": "^2.39.8",
+    "@supabase/supabase-js": "^2.40.0",
     "lucide-react": "^0.363.0",
     "zod": "^3.22.4"
   },
@@ -33,7 +33,7 @@
     "@kit/tailwind-config": "0.1.0",
     "@kit/tsconfig": "0.1.0",
     "@kit/ui": "*",
-    "@supabase/supabase-js": "^2.39.8",
+    "@supabase/supabase-js": "^2.40.0",
     "lucide-react": "^0.363.0",
     "zod": "^3.22.4"
   },

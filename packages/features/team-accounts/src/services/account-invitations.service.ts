@@ -149,7 +149,9 @@ export class AccountInvitationsService {
     for (const invitation of responseInvitations) {
       const promise = async () => {
         try {
-          const { renderInviteEmail } = await import('@kit/emails');
+          const { renderInviteEmail } = await import(
+            '../../../../email-templates'
+          );
 
           const html = renderInviteEmail({
             link: this.getInvitationLink(invitation.invite_token),

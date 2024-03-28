@@ -5,6 +5,8 @@ import { useState } from 'react';
 import type { User } from '@supabase/gotrue-js';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
+import { Check } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
@@ -15,6 +17,7 @@ import { Button } from '@kit/ui/button';
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -37,16 +40,6 @@ export const UpdatePasswordForm = ({
   const { t } = useTranslation('account');
   const updateUserMutation = useUpdateUser();
   const [needsReauthentication, setNeedsReauthentication] = useState(false);
-
-  const form = useForm({
-    resolver: zodResolver(
-      PasswordUpdateSchema.withTranslation(t('passwordNotMatching')),
-    ),
-    defaultValues: {
-      newPassword: '',
-      repeatPassword: '',
-    },
-  });
 
   const updatePasswordFromCredential = (password: string) => {
     const redirectTo = [window.location.origin, callbackPath].join('');
@@ -87,6 +80,16 @@ export const UpdatePasswordForm = ({
     updatePasswordFromCredential(newPassword);
   };
 
+  const form = useForm({
+    resolver: zodResolver(
+      PasswordUpdateSchema.withTranslation(t('passwordNotMatching')),
+    ),
+    defaultValues: {
+      newPassword: '',
+      repeatPassword: '',
+    },
+  });
+
   return (
     <Form {...form}>
       <form
@@ -95,27 +98,11 @@ export const UpdatePasswordForm = ({
       >
         <div className={'flex flex-col space-y-4'}>
           <If condition={updateUserMutation.data}>
-            <Alert variant={'success'}>
-              <AlertTitle>
-                <Trans i18nKey={'account:updatePasswordSuccess'} />
-              </AlertTitle>
-
-              <AlertDescription>
-                <Trans i18nKey={'account:updatePasswordSuccessMessage'} />
-              </AlertDescription>
-            </Alert>
+            <SuccessAlert />
           </If>
 
           <If condition={needsReauthentication}>
-            <Alert variant={'warning'}>
-              <AlertTitle>
-                <Trans i18nKey={'account:needsReauthentication'} />
-              </AlertTitle>
-
-              <AlertDescription>
-                <Trans i18nKey={'account:needsReauthenticationDescription'} />
-              </AlertDescription>
-            </Alert>
+            <NeedsReauthenticationAlert />
           </If>
 
           <FormField
@@ -164,6 +151,10 @@ export const UpdatePasswordForm = ({
                     />
                   </FormControl>
 
+                  <FormDescription>
+                    <Trans i18nKey={'account:repeatPasswordDescription'} />
+                  </FormDescription>
+
                   <FormMessage />
                 </FormItem>
               );
@@ -180,3 +171,35 @@ export const UpdatePasswordForm = ({
     </Form>
   );
 };
+
+function SuccessAlert() {
+  return (
+    <Alert variant={'success'}>
+      <Check className={'h-4'} />
+
+      <AlertTitle>
+        <Trans i18nKey={'account:updatePasswordSuccess'} />
+      </AlertTitle>
+
+      <AlertDescription>
+        <Trans i18nKey={'account:updatePasswordSuccessMessage'} />
+      </AlertDescription>
+    </Alert>
+  );
+}
+
+function NeedsReauthenticationAlert() {
+  return (
+    <Alert variant={'warning'}>
+      <ExclamationTriangleIcon className={'h-4'} />
+
+      <AlertTitle>
+        <Trans i18nKey={'account:needsReauthentication'} />
+      </AlertTitle>
+
+      <AlertDescription>
+        <Trans i18nKey={'account:needsReauthenticationDescription'} />
+      </AlertDescription>
+    </Alert>
+  );
+}

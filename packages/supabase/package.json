@@ -29,13 +29,13 @@
     "@kit/tailwind-config": "0.1.0",
     "@kit/tsconfig": "0.1.0",
     "@supabase/ssr": "^0.1.0",
-    "@supabase/supabase-js": "^2.39.8",
+    "@supabase/supabase-js": "^2.40.0",
     "@tanstack/react-query": "5.28.6"
   },
   "peerDependencies": {
     "@epic-web/invariant": "^1.0.0",
     "@supabase/ssr": "^0.1.0",
-    "@supabase/supabase-js": "^2.39.8",
+    "@supabase/supabase-js": "^2.40.0",
     "@tanstack/react-query": "^5.28.6"
   },
   "eslintConfig": {

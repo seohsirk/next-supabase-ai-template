@@ -64,7 +64,6 @@ export function UpdateAccountDetailsForm({
         >
           <FormField
             name={'displayName'}
-            control={form.control}
             render={({ field }) => (
               <FormItem>
                 <FormLabel>

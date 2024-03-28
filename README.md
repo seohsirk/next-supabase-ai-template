@@ -81,7 +81,7 @@ Below are the reusable packages that can be shared across multiple applications 
 - **`@kit/billing-gateway`**: Billing gateway package that defines the schema and logic for managing payment gateways
 - **`@kit/stripe`**: Stripe package that defines the schema and logic for managing Stripe. This is used by the `@kit/billing-gateway` package and abstracts the Stripe API.
 - **`@kit/lemon-squeezy`**: Lemon Squeezy package that defines the schema and logic for managing Lemon Squeezy. This is used by the `@kit/billing-gateway` package and abstracts the Lemon Squeezy API.
-- **`@kit/emails`**: Here we define the email templates using the `react.email` package.
+- **`@kit/email-templates`**: Here we define the email templates using the `react.email` package.
 - **`@kit/mailers`**: Mailer package that abstracts the email service provider (e.g., Resend, Cloudflare, SendGrid, Mailgun, etc.)
 
 And features that can be added to the application:

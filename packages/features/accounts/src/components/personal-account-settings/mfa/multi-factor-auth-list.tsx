@@ -4,7 +4,7 @@ import type { Factor } from '@supabase/gotrue-js';
 
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { X } from 'lucide-react';
+import { ShieldCheck, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
@@ -15,6 +15,7 @@ import { Alert, AlertDescription, AlertTitle } from '@kit/ui/alert';
 import {
   AlertDialog,
   AlertDialogAction,
+  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogHeader,
@@ -84,6 +85,8 @@ export function MultiFactorAuthFactorsList() {
     return (
       <div className={'flex flex-col space-y-4'}>
         <Alert variant={'info'}>
+          <ShieldCheck className={'h-4'} />
+
           <AlertTitle>
             <Trans i18nKey={'account:multiFactorAuthHeading'} />
           </AlertTitle>
@@ -171,6 +174,10 @@ function ConfirmUnenrollFactorModal(
         >
           <Trans i18nKey={'account:unenrollFactorModalButtonLabel'} />
         </AlertDialogAction>
+
+        <AlertDialogCancel>
+          <Trans i18nKey={'common:cancel'} />
+        </AlertDialogCancel>
       </AlertDialogContent>
     </AlertDialog>
   );

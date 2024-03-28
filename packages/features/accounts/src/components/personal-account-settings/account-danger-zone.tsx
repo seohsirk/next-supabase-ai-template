@@ -1,17 +1,23 @@
 'use client';
 
+import { useFormStatus } from 'react-dom';
+
+import { zodResolver } from '@hookform/resolvers/zod';
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
 import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 
 import { Alert, AlertDescription, AlertTitle } from '@kit/ui/alert';
-import { Button } from '@kit/ui/button';
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@kit/ui/dialog';
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@kit/ui/alert-dialog';
+import { Button } from '@kit/ui/button';
 import { ErrorBoundary } from '@kit/ui/error-boundary';
 import { Form, FormControl, FormItem, FormLabel } from '@kit/ui/form';
 import { Input } from '@kit/ui/input';
@@ -20,10 +26,6 @@ import { Trans } from '@kit/ui/trans';
 import { deletePersonalAccountAction } from '../../server/personal-accounts-server-actions';
 
 export function AccountDangerZone() {
-  return <DeleteAccountContainer />;
-}
-
-function DeleteAccountContainer() {
   return (
     <div className={'flex flex-col space-y-4'}>
       <div className={'flex flex-col space-y-1'}>
@@ -45,30 +47,39 @@ function DeleteAccountContainer() {
 
 function DeleteAccountModal() {
   return (
-    <Dialog>
-      <DialogTrigger asChild>
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
         <Button data-test={'delete-account-button'} variant={'destructive'}>
           <Trans i18nKey={'account:deleteAccount'} />
         </Button>
-      </DialogTrigger>
+      </AlertDialogTrigger>
 
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>
+      <AlertDialogContent onEscapeKeyDown={(e) => e.preventDefault()}>
+        <AlertDialogHeader>
+          <AlertDialogTitle>
             <Trans i18nKey={'account:deleteAccount'} />
-          </DialogTitle>
-        </DialogHeader>
+          </AlertDialogTitle>
+        </AlertDialogHeader>
 
         <ErrorBoundary fallback={<DeleteAccountErrorAlert />}>
           <DeleteAccountForm />
         </ErrorBoundary>
-      </DialogContent>
-    </Dialog>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }
 
 function DeleteAccountForm() {
-  const form = useForm();
+  const form = useForm({
+    resolver: zodResolver(
+      z.object({
+        confirmation: z.string().refine((value) => value === 'DELETE'),
+      }),
+    ),
+    defaultValues: {
+      confirmation: '',
+    },
+  });
 
   return (
     <Form {...form}>
@@ -110,17 +121,25 @@ function DeleteAccountForm() {
           </FormItem>
         </div>
 
-        <div className={'flex justify-end space-x-2.5'}>
+        <AlertDialogFooter>
+          <AlertDialogCancel>
+            <Trans i18nKey={'common:cancel'} />
+          </AlertDialogCancel>
+
           <DeleteAccountSubmitButton />
-        </div>
+        </AlertDialogFooter>
       </form>
     </Form>
   );
 }
 
 function DeleteAccountSubmitButton() {
+  const { pending } = useFormStatus();
+
   return (
     <Button
+      type={'submit'}
+      disabled={pending}
       data-test={'confirm-delete-account-button'}
       name={'action'}
       value={'delete'}

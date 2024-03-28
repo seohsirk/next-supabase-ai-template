@@ -36,7 +36,7 @@ const AppConfigSchema = z.object({
 });
 
 const appConfig = AppConfigSchema.parse({
-  name: 'Awesomely',
+  name: process.env.NEXT_PUBLIC_PRODUCT_NAME,
   title: 'Awesomely - Your SaaS Title',
   description: 'Your SaaS Description',
   url: process.env.NEXT_PUBLIC_SITE_URL,

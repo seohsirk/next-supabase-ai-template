@@ -34,7 +34,7 @@ importers:
         version: 1.0.0
       '@hookform/resolvers':
         specifier: ^3.3.4
-        version: 3.3.4(react-hook-form@7.51.1)
+        version: 3.3.4(react-hook-form@7.51.2)
       '@kit/accounts':
         specifier: ^0.1.0
         version: link:../../packages/features/accounts
@@ -50,9 +50,9 @@ importers:
       '@kit/billing-gateway':
         specifier: ^0.1.0
         version: link:../../packages/billing-gateway
-      '@kit/emails':
+      '@kit/email-templates':
         specifier: ^0.1.0
-        version: link:../../packages/emails
+        version: link:../../packages/email-templates
       '@kit/i18n':
         specifier: ^0.1.0
         version: link:../../packages/i18n
@@ -81,7 +81,7 @@ importers:
         specifier: ^0.1.0
         version: 0.1.0(@supabase/supabase-js@2.40.0)
       '@supabase/supabase-js':
-        specifier: ^2.39.8
+        specifier: ^2.40.0
         version: 2.40.0
       '@tanstack/react-query':
         specifier: 5.28.6
@@ -126,8 +126,8 @@ importers:
         specifier: 18.2.0
         version: 18.2.0(react@18.2.0)
       react-hook-form:
-        specifier: ^7.51.1
-        version: 7.51.1(react@18.2.0)
+        specifier: ^7.51.2
+        version: 7.51.2(react@18.2.0)
       react-i18next:
         specifier: ^14.1.0
         version: 14.1.0(i18next@23.10.1)(react-dom@18.2.0)(react@18.2.0)
@@ -253,7 +253,7 @@ importers:
         specifier: '*'
         version: link:../ui
       '@supabase/supabase-js':
-        specifier: ^2.39.8
+        specifier: ^2.40.0
         version: 2.40.0
       lucide-react:
         specifier: ^0.363.0
@@ -262,7 +262,7 @@ importers:
         specifier: ^3.22.4
         version: 3.22.4
 
-  packages/emails:
+  packages/email-templates:
     dependencies:
       '@react-email/components':
         specifier: 0.0.15
@@ -283,12 +283,21 @@ importers:
 
   packages/features/accounts:
     devDependencies:
+      '@hookform/resolvers':
+        specifier: ^3.3.4
+        version: 3.3.4(react-hook-form@7.51.2)
       '@kit/billing-gateway':
         specifier: '*'
         version: link:../../billing-gateway
+      '@kit/email-templates':
+        specifier: '*'
+        version: link:../../email-templates
       '@kit/eslint-config':
         specifier: 0.2.0
         version: link:../../../tooling/eslint
+      '@kit/mailers':
+        specifier: '*'
+        version: link:../../mailers
       '@kit/prettier-config':
         specifier: 0.1.0
         version: link:../../../tooling/prettier
@@ -313,6 +322,12 @@ importers:
       lucide-react:
         specifier: ^0.363.0
         version: 0.363.0(react@18.2.0)
+      react-hook-form:
+        specifier: ^7.51.2
+        version: 7.51.2(react@18.2.0)
+      zod:
+        specifier: ^3.22.4
+        version: 3.22.4
 
   packages/features/admin:
     devDependencies:
@@ -382,12 +397,15 @@ importers:
 
   packages/features/team-accounts:
     devDependencies:
+      '@hookform/resolvers':
+        specifier: ^3.3.4
+        version: 3.3.4(react-hook-form@7.51.2)
       '@kit/accounts':
         specifier: '*'
         version: link:../accounts
-      '@kit/emails':
+      '@kit/email-templates':
         specifier: '*'
-        version: link:../../emails
+        version: link:../../email-templates
       '@kit/eslint-config':
         specifier: 0.2.0
         version: link:../../../tooling/eslint
@@ -545,7 +563,7 @@ importers:
         specifier: ^0.1.0
         version: 0.1.0(@supabase/supabase-js@2.40.0)
       '@supabase/supabase-js':
-        specifier: ^2.39.8
+        specifier: ^2.40.0
         version: 2.40.0
       '@tanstack/react-query':
         specifier: 5.28.6
@@ -553,6 +571,9 @@ importers:
 
   packages/ui:
     dependencies:
+      '@hookform/resolvers':
+        specifier: ^3.3.4
+        version: 3.3.4(react-hook-form@7.51.2)
       '@radix-ui/react-accordion':
         specifier: 1.1.2
         version: 1.1.2(@types/react-dom@18.2.22)(@types/react@18.2.71)(react-dom@18.2.0)(react@18.2.0)
@@ -663,8 +684,8 @@ importers:
         specifier: ^8.10.0
         version: 8.10.0(date-fns@3.6.0)(react@18.2.0)
       react-hook-form:
-        specifier: ^7.51.1
-        version: 7.51.1(react@18.2.0)
+        specifier: ^7.51.2
+        version: 7.51.2(react@18.2.0)
       react-i18next:
         specifier: ^14.1.0
         version: 14.1.0(i18next@23.10.1)(react-dom@18.2.0)(react@18.2.0)
@@ -1770,13 +1791,12 @@ packages:
       yargs: 17.7.2
     dev: false
 
-  /@hookform/resolvers@3.3.4(react-hook-form@7.51.1):
+  /@hookform/resolvers@3.3.4(react-hook-form@7.51.2):
     resolution: {integrity: sha512-o5cgpGOuJYrd+iMKvkttOclgwRW86EsWJZZRC23prf0uU2i48Htq4PuT73AVb9ionFyZrwYEITuOFGF+BydEtQ==}
     peerDependencies:
       react-hook-form: ^7.0.0
     dependencies:
-      react-hook-form: 7.51.1(react@18.2.0)
-    dev: false
+      react-hook-form: 7.51.2(react@18.2.0)
 
   /@humanwhocodes/config-array@0.11.14:
     resolution: {integrity: sha512-3T8LkOmg45BV5FICb15QQMsyUSWrQ8AygVfC7ZG32zOalnqrilm018ZVCw0eapXux8FtA33q8PSRSstjee3jSg==}
@@ -9911,8 +9931,8 @@ packages:
       - webpack-cli
     dev: false
 
-  /react-hook-form@7.51.1(react@18.2.0):
-    resolution: {integrity: sha512-ifnBjl+kW0ksINHd+8C/Gp6a4eZOdWyvRv0UBaByShwU8JbVx5hTcTWEcd5VdybvmPTATkVVXk9npXArHmo56w==}
+  /react-hook-form@7.51.2(react@18.2.0):
+    resolution: {integrity: sha512-y++lwaWjtzDt/XNnyGDQy6goHskFualmDlf+jzEZvjvz6KWDf7EboL7pUvRCzPTJd0EOPpdekYaQLEvvG6m6HA==}
     engines: {node: '>=12.22.0'}
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18

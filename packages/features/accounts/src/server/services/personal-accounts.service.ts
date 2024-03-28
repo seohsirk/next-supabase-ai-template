@@ -1,6 +1,7 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 
 import { BillingGatewayService } from '@kit/billing-gateway';
+import { Mailer } from '@kit/mailers';
 import { Logger } from '@kit/shared/logger';
 import { Database } from '@kit/supabase/database';
 
@@ -22,17 +23,25 @@ export class PersonalAccountsService {
    * Delete personal account of a user.
    * This will delete the user from the authentication provider and cancel all subscriptions.
    */
-  async deletePersonalAccount(
-    adminClient: SupabaseClient<Database>,
-    params: { userId: string },
-  ) {
+  async deletePersonalAccount(params: {
+    adminClient: SupabaseClient<Database>;
+
+    userId: string;
+    userEmail: string | null;
+
+    emailSettings: {
+      fromEmail: string;
+      productName: string;
+    };
+  }) {
     Logger.info(
       { userId: params.userId, name: this.namespace },
       'User requested deletion. Processing...',
     );
 
+    // execute the deletion of the user
     try {
-      await adminClient.auth.admin.deleteUser(params.userId);
+      await params.adminClient.auth.admin.deleteUser(params.userId);
     } catch (error) {
       Logger.error(
         {
@@ -46,6 +55,7 @@ export class PersonalAccountsService {
       throw new Error('Error deleting user');
     }
 
+    // Cancel all user subscriptions
     try {
       await this.cancelAllUserSubscriptions(params.userId);
     } catch (error) {
@@ -55,6 +65,57 @@ export class PersonalAccountsService {
         name: this.namespace,
       });
     }
+
+    // Send account deletion email
+    if (params.userEmail) {
+      try {
+        Logger.info(
+          {
+            userId: params.userId,
+            name: this.namespace,
+          },
+          `Sending account deletion email...`,
+        );
+
+        await this.sendAccountDeletionEmail({
+          fromEmail: params.emailSettings.fromEmail,
+          productName: params.emailSettings.productName,
+          userDisplayName: params.userEmail,
+          userEmail: params.userEmail,
+        });
+      } catch (error) {
+        Logger.error(
+          {
+            userId: params.userId,
+            name: this.namespace,
+            error,
+          },
+          `Error sending account deletion email`,
+        );
+      }
+    }
+  }
+
+  private async sendAccountDeletionEmail(params: {
+    fromEmail: string;
+    userEmail: string;
+    userDisplayName: string;
+    productName: string;
+  }) {
+    const { renderAccountDeleteEmail } = await import('@kit/email-templates');
+    const mailer = new Mailer();
+
+    const html = await renderAccountDeleteEmail({
+      userDisplayName: params.userDisplayName,
+      productName: params.productName,
+    });
+
+    await mailer.sendEmail({
+      to: params.userEmail,
+      from: params.fromEmail,
+      subject: 'Account Deletion Request',
+      html,
+    });
   }
 
   private async cancelAllUserSubscriptions(userId: string) {
@@ -93,6 +154,7 @@ export class PersonalAccountsService {
       );
     }
 
+    // execute all cancellation requests
     await Promise.all(cancellationRequests);
 
     Logger.info(
