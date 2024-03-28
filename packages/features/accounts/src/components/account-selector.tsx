@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 
 import { CaretSortIcon, PersonIcon } from '@radix-ui/react-icons';
-import { Check, Plus } from 'lucide-react';
+import { CheckCircle, Plus } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@kit/ui/avatar';
@@ -22,6 +22,7 @@ import { Trans } from '@kit/ui/trans';
 import { cn } from '@kit/ui/utils';
 
 import { CreateTeamAccountDialog } from '../../../team-accounts/src/components/create-team-account-dialog';
+import { usePersonalAccountData } from '../hooks/use-personal-account-data';
 
 interface AccountSelectorProps {
   accounts: Array<{
@@ -61,6 +62,7 @@ export function AccountSelector({
   );
 
   const { t } = useTranslation('teams');
+  const personalData = usePersonalAccountData();
 
   useEffect(() => {
     setValue(selectedAccount ?? PERSONAL_ACCOUNT_SLUG);
@@ -68,7 +70,7 @@ export function AccountSelector({
 
   const Icon = (props: { item: string }) => {
     return (
-      <Check
+      <CheckCircle
         className={cn(
           'ml-auto h-4 w-4',
           value === props.item ? 'opacity-100' : 'opacity-0',
@@ -77,11 +79,19 @@ export function AccountSelector({
     );
   };
 
-  const selected = accounts.find((account) => account.value === value);
-
   if (!features.enableTeamAccounts) {
     return null;
   }
+
+  const selected = accounts.find((account) => account.value === value);
+  const pictureUrl = personalData.data?.picture_url;
+
+  const PersonalAccountAvatar = () =>
+    pictureUrl ? (
+      <UserAvatar pictureUrl={pictureUrl} />
+    ) : (
+      <PersonIcon className="h-4 w-4" />
+    );
 
   return (
     <>
@@ -101,7 +111,7 @@ export function AccountSelector({
               condition={selected}
               fallback={
                 <span className={'flex items-center space-x-2'}>
-                  <PersonIcon className="h-4 w-4" />
+                  <PersonalAccountAvatar />
 
                   <span
                     className={cn({
@@ -148,9 +158,9 @@ export function AccountSelector({
                   onSelect={() => onAccountChange(undefined)}
                   value={PERSONAL_ACCOUNT_SLUG}
                 >
-                  <PersonIcon className="mr-2 h-4 w-4" />
+                  <PersonalAccountAvatar />
 
-                  <span>
+                  <span className={'ml-2'}>
                     <Trans i18nKey={'teams:personalAccount'} />
                   </span>
 
@@ -200,13 +210,13 @@ export function AccountSelector({
                   <Button
                     size={'sm'}
                     variant="ghost"
-                    className="w-full"
+                    className="w-full justify-start"
                     onClick={() => {
                       setIsCreatingAccount(true);
                       setOpen(false);
                     }}
                   >
-                    <Plus className="mr-2 h-4 w-4" />
+                    <Plus className="mr-3 h-4 w-4" />
 
                     <span>
                       <Trans i18nKey={'teams:createTeam'} />
@@ -226,5 +236,13 @@ export function AccountSelector({
         />
       </If>
     </>
+  );
+}
+
+function UserAvatar(props: { pictureUrl?: string }) {
+  return (
+    <Avatar className={'h-6 w-6'}>
+      <AvatarImage src={props.pictureUrl} />
+    </Avatar>
   );
 }

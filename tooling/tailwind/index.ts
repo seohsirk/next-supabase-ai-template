@@ -3,7 +3,11 @@ import { fontFamily } from 'tailwindcss/defaultTheme';
 
 export default {
   darkMode: ['class'],
-  content: ['../../packages/**/*.tsx', '../../apps/**/*.tsx'],
+  content: [
+    '../../packages/**/*.tsx',
+    '../../apps/**/*.tsx',
+    '!./**/node_modules/**',
+  ],
   theme: {
     container: {
       center: true,
