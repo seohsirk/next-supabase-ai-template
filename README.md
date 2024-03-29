@@ -4,6 +4,19 @@ This is a Starter Kit for building SaaS applications using Supabase, Next.js, an
 
 This version uses Turborepo to manage multiple packages in a single repository.
 
+**This project is currently under development. Please wait for the stable release before using it in production.**
+
+### Roadmap
+
+The roadmap for the project is as follows:
+
+1. **March 31**: Alpha release - authentication, personal accounts, team accounts (memberships)
+2. **April 7**: Beta release - billing, Stripe, Lemon Squeezy, and more
+3. **April 14**: Release candidate - admin dashboard, translations, and more
+4. **April 21**: Final Release candidate - final features and improvements
+5. **April 28**: Stable release - final features and improvements
+6. **May 4**: Post-release - documentation, tutorials, and more
+
 ## Features
 
 - **Authentication**: Sign up, sign in, sign out, forgot password, update profile, and more.
