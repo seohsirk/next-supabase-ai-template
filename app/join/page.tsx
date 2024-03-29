@@ -1,9 +1,15 @@
+import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
+
+import { ArrowLeft } from 'lucide-react';
 
 import { Logger } from '@kit/shared/logger';
 import { requireAuth } from '@kit/supabase/require-auth';
 import { getSupabaseServerComponentClient } from '@kit/supabase/server-component-client';
 import { AcceptInvitationContainer } from '@kit/team-accounts/components';
+import { Button } from '@kit/ui/button';
+import { Heading } from '@kit/ui/heading';
+import { Trans } from '@kit/ui/trans';
 
 import pathsConfig from '~/config/paths.config';
 import { withI18n } from '~/lib/i18n/with-i18n';
@@ -42,7 +48,7 @@ async function JoinTeamAccountPage({ searchParams }: Context) {
   const invitation = await getInviteDataFromInviteToken(token);
 
   if (!invitation) {
-    notFound();
+    return <InviteNotFoundOrExpired />;
   }
 
   // we need to verify the user isn't already in the account
@@ -124,13 +130,39 @@ async function getInviteDataFromInviteToken(token: string) {
           picture_url: string;
         };
       }
-    >('id, account: account_id !inner (id, name, slug, picture_url)')
+    >(
+      'id, expires_at, account: account_id !inner (id, name, slug, picture_url)',
+    )
     .eq('invite_token', token)
+    .rangeLt('expires_at', new Date().toISOString())
     .single();
+
+  console.log(invitation, error);
 
   if (!invitation ?? error) {
     return null;
   }
 
   return invitation;
+}
+
+function InviteNotFoundOrExpired() {
+  return (
+    <div className={'flex flex-col space-y-4'}>
+      <Heading level={6}>
+        <Trans i18nKey={'teams:inviteNotFoundOrExpired'} />
+      </Heading>
+
+      <p className={'text-sm text-muted-foreground'}>
+        <Trans i18nKey={'teams:inviteNotFoundOrExpiredDescription'} />
+      </p>
+
+      <Link href={pathsConfig.app.home}>
+        <Button className={'w-full'} variant={'outline'}>
+          <ArrowLeft className={'mr-2 w-4'} />
+          <Trans i18nKey={'teams:backToHome'} />
+        </Button>
+      </Link>
+    </div>
+  );
 }

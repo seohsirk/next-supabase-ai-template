@@ -2,11 +2,10 @@
 
 import { useRouter } from 'next/navigation';
 
-import type { Session } from '@supabase/supabase-js';
-
 import { ArrowLeftCircle, ArrowRightCircle } from 'lucide-react';
 
 import { AccountSelector } from '@kit/accounts/account-selector';
+import { If } from '@kit/ui/if';
 import { Sidebar, SidebarContent } from '@kit/ui/sidebar';
 import {
   Tooltip,
@@ -58,6 +57,7 @@ function SidebarContainer(props: {
   accounts: AccountModel[];
   collapsed: boolean;
   setCollapsed: (collapsed: boolean) => void;
+  collapsible?: boolean;
 }) {
   const { account, accounts } = props;
   const router = useRouter();
@@ -88,10 +88,12 @@ function SidebarContainer(props: {
         <SidebarContent>
           <ProfileAccountDropdownContainer collapsed={props.collapsed} />
 
-          <AppSidebarFooterMenu
-            collapsed={props.collapsed}
-            setCollapsed={props.setCollapsed}
-          />
+          <If condition={props.collapsible}>
+            <AppSidebarFooterMenu
+              collapsed={props.collapsed}
+              setCollapsed={props.setCollapsed}
+            />
+          </If>
         </SidebarContent>
       </div>
     </>

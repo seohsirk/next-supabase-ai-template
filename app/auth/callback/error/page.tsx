@@ -10,15 +10,18 @@ import pathsConfig from '~/config/paths.config';
 interface Params {
   searchParams: {
     error: string;
+    invite_token: string;
   };
 }
 
 function AuthCallbackErrorPage({ searchParams }: Params) {
-  const { error } = searchParams;
+  const { error, invite_token } = searchParams;
+  const queryParam = invite_token ? `?invite_token=${invite_token}` : '';
+  const signInPath = pathsConfig.auth.signIn + queryParam;
 
   // if there is no error, redirect the user to the sign-in page
   if (!error) {
-    redirect(pathsConfig.auth.signIn);
+    redirect(signInPath);
   }
 
   return (
@@ -36,7 +39,7 @@ function AuthCallbackErrorPage({ searchParams }: Params) {
       </div>
 
       <Button>
-        <Link href={pathsConfig.auth.signIn}>
+        <Link href={signInPath}>
           <Trans i18nKey={'auth:signIn'} />
         </Link>
       </Button>
