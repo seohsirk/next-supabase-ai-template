@@ -56,7 +56,7 @@ export function TeamAccountDangerZone({
   const userIsPrimaryOwner = user?.id === primaryOwnerUserId;
 
   if (userIsPrimaryOwner) {
-    return <DeleteTeamContainer account={account} />;
+    return <LeaveTeamContainer account={account} />;
   }
 
   return <LeaveTeamContainer account={account} />;
@@ -240,6 +240,20 @@ function LeaveTeamContainer(props: {
     id: string;
   };
 }) {
+  const form = useForm({
+    resolver: zodResolver(
+      z.object({
+        confirmation: z.string().refine((value) => value === 'LEAVE', {
+          message: 'Confirmation required to leave team',
+          path: ['confirmation'],
+        }),
+      }),
+    ),
+    defaultValues: {
+      confirmation: '',
+    },
+  });
+
   return (
     <div className={'flex flex-col space-y-4'}>
       <p className={'text-muted-foreground text-sm'}>
@@ -276,18 +290,58 @@ function LeaveTeamContainer(props: {
           </AlertDialogHeader>
 
           <ErrorBoundary fallback={<LeaveTeamErrorAlert />}>
-            <form action={leaveTeamAccountAction}>
-              <input type={'hidden'} value={props.account.id} name={'id'} />
-            </form>
+            <Form {...form}>
+              <form
+                className={'flex flex-col space-y-4'}
+                action={leaveTeamAccountAction}
+              >
+                <input
+                  type={'hidden'}
+                  value={props.account.id}
+                  name={'accountId'}
+                />
+
+                <FormField
+                  name={'confirmation'}
+                  render={({ field }) => {
+                    return (
+                      <FormItem>
+                        <FormLabel>
+                          <Trans i18nKey={'teams:leaveTeamInputLabel'} />
+                        </FormLabel>
+
+                        <FormControl>
+                          <Input
+                            data-test="leave-team-input-field"
+                            type="text"
+                            className="w-full"
+                            placeholder=""
+                            pattern="LEAVE"
+                            required
+                            {...field}
+                          />
+                        </FormControl>
+
+                        <FormDescription>
+                          <Trans i18nKey={'teams:leaveTeamInputDescription'} />
+                        </FormDescription>
+
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  }}
+                />
+
+                <AlertDialogFooter>
+                  <AlertDialogCancel>
+                    <Trans i18nKey={'common:cancel'} />
+                  </AlertDialogCancel>
+
+                  <LeaveTeamSubmitButton />
+                </AlertDialogFooter>
+              </form>
+            </Form>
           </ErrorBoundary>
-
-          <AlertDialogFooter>
-            <AlertDialogCancel>
-              <Trans i18nKey={'common:cancel'} />
-            </AlertDialogCancel>
-
-            <LeaveTeamSubmitButton />
-          </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
     </div>
@@ -310,15 +364,23 @@ function LeaveTeamSubmitButton() {
 
 function LeaveTeamErrorAlert() {
   return (
-    <Alert variant={'destructive'}>
-      <AlertTitle>
-        <Trans i18nKey={'teams:leaveTeamErrorHeading'} />
-      </AlertTitle>
+    <>
+      <Alert variant={'destructive'}>
+        <AlertTitle>
+          <Trans i18nKey={'teams:leaveTeamErrorHeading'} />
+        </AlertTitle>
 
-      <AlertDescription>
-        <Trans i18nKey={'common:genericError'} />
-      </AlertDescription>
-    </Alert>
+        <AlertDescription>
+          <Trans i18nKey={'common:genericError'} />
+        </AlertDescription>
+      </Alert>
+
+      <AlertDialogFooter>
+        <AlertDialogCancel>
+          <Trans i18nKey={'common:cancel'} />
+        </AlertDialogCancel>
+      </AlertDialogFooter>
+    </>
   );
 }
 

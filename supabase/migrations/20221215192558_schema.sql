@@ -453,6 +453,22 @@ delete on table public.accounts_memberships to service_role;
 -- Enable RLS on the accounts_memberships table
 alter table public.accounts_memberships enable row level security;
 
+-- Trigger to prevent a primary owner from being removed from an account
+create
+or replace function kit.prevent_account_owner_membership_delete () returns trigger as $$
+begin
+  if exists (select 1 from public.accounts where id = old.account_id and primary_owner_user_id = old.user_id) then
+    raise exception 'The primary account owner cannot be removed from the account membership list';
+  end if;
+
+  return old;
+end;
+$$ language plpgsql;
+
+create or replace trigger prevent_account_owner_membership_delete_check before delete
+ on public.accounts_memberships for each row
+execute function kit.prevent_account_owner_membership_delete ();
+
 create
 or replace function public.has_role_on_account (
   account_id uuid,
@@ -571,6 +587,8 @@ using (
     where public.is_team_member(membership.account_id, id)
   )
 );
+
+
 
 /*
  * -------------------------------------------------------
