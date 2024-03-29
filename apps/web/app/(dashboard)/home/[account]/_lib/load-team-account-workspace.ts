@@ -43,6 +43,8 @@ export const loadTeamWorkspace = cache(async (accountSlug: string) => {
 
   const accountData = accountResult.data[0];
 
+  // we cannot find any record for the selected organization
+  // so we redirect the user to the home page
   if (!accountData) {
     return redirect(pathsConfig.app.home);
   }

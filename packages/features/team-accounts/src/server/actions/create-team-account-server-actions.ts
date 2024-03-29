@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
 import { Logger } from '@kit/shared/logger';
-import { requireAuth } from '@kit/supabase/require-auth';
+import { requireUser } from '@kit/supabase/require-user';
 import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
 
 import { CreateTeamSchema } from '../../schema/create-team.schema';
@@ -25,13 +25,13 @@ export async function createOrganizationAccountAction(
 
   const client = getSupabaseServerActionClient();
   const service = new CreateTeamAccountService(client);
-  const session = await requireAuth(client);
+  const auth = await requireUser(client);
 
-  if (session.error) {
-    redirect(session.redirectTo);
+  if (auth.error) {
+    redirect(auth.redirectTo);
   }
 
-  const userId = session.data.user.id;
+  const userId = auth.data.id;
 
   const createAccountResponse = await service.createNewOrganizationAccount({
     name: accountName,

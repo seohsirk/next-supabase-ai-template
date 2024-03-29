@@ -8,7 +8,7 @@ import { SupabaseClient } from '@supabase/supabase-js';
 import { z } from 'zod';
 
 import { Database } from '@kit/supabase/database';
-import { requireAuth } from '@kit/supabase/require-auth';
+import { requireUser } from '@kit/supabase/require-user';
 import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
 
 import { AcceptInvitationSchema } from '../../schema/accept-invitation.schema';
@@ -94,7 +94,7 @@ export async function acceptInvitationAction(data: FormData) {
     Object.fromEntries(data),
   );
 
-  const { user } = await assertSession(client);
+  const user = await assertSession(client);
 
   const service = new AccountInvitationsService(client);
 
@@ -123,7 +123,7 @@ export async function renewInvitationAction(params: { invitationId: number }) {
 }
 
 async function assertSession(client: SupabaseClient<Database>) {
-  const { error, data } = await requireAuth(client);
+  const { error, data } = await requireUser(client);
 
   if (error) {
     throw new Error(`Authentication required`);

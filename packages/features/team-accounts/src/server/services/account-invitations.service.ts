@@ -7,7 +7,7 @@ import { z } from 'zod';
 import { Mailer } from '@kit/mailers';
 import { Logger } from '@kit/shared/logger';
 import { Database } from '@kit/supabase/database';
-import { requireAuth } from '@kit/supabase/require-auth';
+import { requireUser } from '@kit/supabase/require-user';
 
 import { DeleteInvitationSchema } from '../../schema/delete-invitation.schema';
 import { InviteMembersSchema } from '../../schema/invite-members.schema';
@@ -102,8 +102,7 @@ export class AccountInvitationsService {
     );
 
     const mailer = new Mailer();
-
-    const { user } = await this.getUser();
+    const user = await this.getUser();
 
     const accountResponse = await this.client
       .from('accounts')
@@ -258,7 +257,7 @@ export class AccountInvitationsService {
   }
 
   private async getUser() {
-    const { data, error } = await requireAuth(this.client);
+    const { data, error } = await requireUser(this.client);
 
     if (error ?? !data) {
       throw new Error('Authentication required');

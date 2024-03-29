@@ -152,5 +152,6 @@
   "acceptInvitationHeading": "Accept Invitation to join {{accountName}}",
   "acceptInvitationDescription": "You have been invited to join the team {{accountName}}. If you wish to accept the invitation, please click the button below.",
   "joinTeam": "Join {{accountName}}",
+  "joinTeamAccount": "Join Team",
   "joiningTeam": "Joining team..."
 }

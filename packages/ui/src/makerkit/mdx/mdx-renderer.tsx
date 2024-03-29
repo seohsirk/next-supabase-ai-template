@@ -2,7 +2,7 @@ import type { MDXComponents } from 'mdx/types';
 import { getMDXComponent } from 'next-contentlayer/hooks';
 
 import Components from './mdx-components';
-// @ts-expect-error: weird typescript error with css modules
+// @ts-ignore: ignore weird error
 import styles from './mdx-renderer.module.css';
 
 export function Mdx({

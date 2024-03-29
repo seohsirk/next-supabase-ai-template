@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation';
 import { SupabaseClient } from '@supabase/supabase-js';
 
 import { Database } from '@kit/supabase/database';
-import { requireAuth } from '@kit/supabase/require-auth';
+import { requireUser } from '@kit/supabase/require-user';
 import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
 
 import { DeleteTeamAccountSchema } from '../../schema/delete-team-account.schema';
@@ -17,7 +17,7 @@ export async function deleteTeamAccountAction(formData: FormData) {
   );
 
   const client = getSupabaseServerActionClient();
-  const auth = await requireAuth(client);
+  const auth = await requireUser(client);
 
   if (auth.error) {
     throw new Error('Authentication required');
@@ -36,7 +36,7 @@ export async function deleteTeamAccountAction(formData: FormData) {
     }),
     {
       accountId: params.accountId,
-      userId: auth.data.user.id,
+      userId: auth.data.id,
     },
   );
 
@@ -47,13 +47,13 @@ async function assertUserPermissionsToDeleteTeamAccount(
   client: SupabaseClient<Database>,
   accountId: string,
 ) {
-  const auth = await requireAuth(client);
+  const auth = await requireUser(client);
 
-  if (auth.error ?? !auth.data.user.id) {
+  if (auth.error ?? !auth.data.id) {
     throw new Error('Authentication required');
   }
 
-  const userId = auth.data.user.id;
+  const userId = auth.data.id;
 
   const { data, error } = await client
     .from('accounts')

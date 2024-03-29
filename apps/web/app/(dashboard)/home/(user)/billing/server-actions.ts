@@ -7,7 +7,7 @@ import { z } from 'zod';
 import { getLineItemsFromPlanId } from '@kit/billing';
 import { getBillingGatewayProvider } from '@kit/billing-gateway';
 import { Logger } from '@kit/shared/logger';
-import { requireAuth } from '@kit/supabase/require-auth';
+import { requireUser } from '@kit/supabase/require-user';
 import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
 
 import appConfig from '~/config/app.config';
@@ -25,9 +25,9 @@ export async function createPersonalAccountCheckoutSession(params: {
   productId: string;
 }) {
   const client = getSupabaseServerActionClient();
-  const { data, error } = await requireAuth(client);
+  const { data: user, error } = await requireUser(client);
 
-  if (error ?? !data.user) {
+  if (error ?? !user) {
     throw new Error('Authentication required');
   }
 
@@ -50,7 +50,7 @@ export async function createPersonalAccountCheckoutSession(params: {
 
   // in the case of personal accounts
   // the account ID is the same as the user ID
-  const accountId = data.user.id;
+  const accountId = user.id;
 
   // the return URL for the checkout session
   const returnUrl = getCheckoutSessionReturnUrl();
@@ -74,13 +74,13 @@ export async function createPersonalAccountCheckoutSession(params: {
     accountId,
     trialDays,
     paymentType: product.paymentType,
-    customerEmail: data.user.email,
+    customerEmail: user.email,
     customerId,
   });
 
   Logger.info(
     {
-      userId: data.user.id,
+      userId: user.id,
     },
     `Checkout session created. Returning checkout token to client...`,
   );

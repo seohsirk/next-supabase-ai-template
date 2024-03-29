@@ -5,7 +5,7 @@ import { RedirectType, redirect } from 'next/navigation';
 import { z } from 'zod';
 
 import { Logger } from '@kit/shared/logger';
-import { requireAuth } from '@kit/supabase/require-auth';
+import { requireUser } from '@kit/supabase/require-user';
 import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
 
 import { DeletePersonalAccountService } from './services/delete-personal-account.service';
@@ -28,17 +28,17 @@ export async function deletePersonalAccountAction(formData: FormData) {
   }
 
   const client = getSupabaseServerActionClient();
-  const session = await requireAuth(client);
+  const auth = await requireUser(client);
 
-  if (session.error) {
+  if (auth.error) {
     Logger.error(`User is not authenticated. Redirecting to login page`);
 
-    redirect(session.redirectTo);
+    redirect(auth.redirectTo);
   }
 
   // retrieve user ID and email
-  const userId = session.data.user.id;
-  const userEmail = session.data.user.email ?? null;
+  const userId = auth.data.id;
+  const userEmail = auth.data.email ?? null;
 
   // create a new instance of the personal accounts service
   const service = new DeletePersonalAccountService();

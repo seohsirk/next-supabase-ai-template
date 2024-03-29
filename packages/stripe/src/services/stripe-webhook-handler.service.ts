@@ -195,7 +195,7 @@ export class StripeWebhookHandlerService
       cancel_at_period_end: subscription.cancel_at_period_end ?? false,
       interval: interval as string,
       currency: (price as Stripe.Price).currency,
-      product_id: (price as Stripe.Price).product,
+      product_id: (price as Stripe.Price).product as string,
       variant_id: priceId,
       interval_count: price?.recurring?.interval_count ?? 1,
       period_starts_at: getISOString(subscription.current_period_start),

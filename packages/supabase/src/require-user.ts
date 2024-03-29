@@ -1,4 +1,4 @@
-import type { Session, SupabaseClient } from '@supabase/supabase-js';
+import type { SupabaseClient, User } from '@supabase/supabase-js';
 
 import { z } from 'zod';
 
@@ -15,18 +15,14 @@ const SIGN_IN_PATH = z
   .parse(process.env.SIGN_IN_PATH);
 
 /**
- * @name requireAuth
+ * @name requireUser
  * @description Require a session to be present in the request
  * @param client
- * @param verifyFromServer
  */
-export async function requireAuth(
-  client: SupabaseClient,
-  verifyFromServer = true,
-): Promise<
+export async function requireUser(client: SupabaseClient): Promise<
   | {
       error: null;
-      data: Session;
+      data: User;
     }
   | (
       | {
@@ -41,9 +37,9 @@ export async function requireAuth(
         }
     )
 > {
-  const { data, error } = await client.auth.getSession();
+  const { data, error } = await client.auth.getUser();
 
-  if (!data.session || error) {
+  if (!data.user || error) {
     return {
       data: null,
       error: new AuthenticationError(),
@@ -63,21 +59,9 @@ export async function requireAuth(
     };
   }
 
-  if (verifyFromServer) {
-    const { data: user, error } = await client.auth.getUser();
-
-    if (!user || error) {
-      return {
-        data: null,
-        error: new AuthenticationError(),
-        redirectTo: SIGN_IN_PATH,
-      };
-    }
-  }
-
   return {
     error: null,
-    data: data.session,
+    data: data.user,
   };
 }
 

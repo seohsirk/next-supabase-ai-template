@@ -17,7 +17,7 @@
     "./server-component-client": "./src/clients/server-component.client.ts",
     "./browser-client": "./src/clients/browser.client.ts",
     "./check-requires-mfa": "./src/check-requires-mfa.ts",
-    "./require-auth": "./src/require-auth.ts",
+    "./require-user": "./src/require-user.ts",
     "./hooks/*": "./src/hooks/*.ts",
     "./components/*": "./src/components/*.tsx",
     "./database": "./src/database.types.ts"
