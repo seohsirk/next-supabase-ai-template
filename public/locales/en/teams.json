@@ -49,7 +49,7 @@
   "inviteMembersLoading": "Inviting members...",
   "removeInviteButtonLabel": "Remove invite",
   "addAnotherMemberButtonLabel": "Add another one",
-  "inviteMembersSubmitLabel": "Send Invites",
+  "inviteMembersButtonLabel": "Send Invites",
   "removeMemberModalHeading": "You are removing this user",
   "removeMemberModalDescription": "Remove this member from the team. They will no longer have access to the team.",
   "removeMemberSuccessMessage": "Member removed successfully",
@@ -153,5 +153,7 @@
   "acceptInvitationDescription": "You have been invited to join the team {{accountName}}. If you wish to accept the invitation, please click the button below.",
   "joinTeam": "Join {{accountName}}",
   "joinTeamAccount": "Join Team",
-  "joiningTeam": "Joining team..."
+  "joiningTeam": "Joining team...",
+  "leaveTeamInputLabel": "Please type LEAVE to confirm leaving the team.",
+  "leaveTeamInputDescription": "By leaving the team, you will no longer have access to it."
 }
