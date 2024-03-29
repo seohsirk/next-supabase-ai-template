@@ -4,7 +4,7 @@ This is a Starter Kit for building SaaS applications using Supabase, Next.js, an
 
 This version uses Turborepo to manage multiple packages in a single repository.
 
-**This project is currently under development. Please wait for the stable release before using it in production.**
+**This project is currently under development. Please wait for the stable release before using it in production. It will undergo big changes and improvements.**
 
 ### Roadmap
 
@@ -13,7 +13,7 @@ The roadmap for the project is as follows:
 1. **March 31**: Alpha release - authentication, personal accounts, team accounts (memberships)
 2. **April 7**: Beta release - billing, Stripe, Lemon Squeezy, and more
 3. **April 14**: Release candidate - admin dashboard, translations, and more
-4. **April 21**: Final Release candidate - final features and improvements
+4. **April 21**: Final Release candidate - in-app notifications, final features and improvements
 5. **April 28**: Stable release - final features and improvements
 6. **May 4**: Post-release - documentation, tutorials, and more
 
@@ -117,7 +117,7 @@ The configuration is defined in the `apps/web/config` folder. Here you can find 
 - **`feature-flags.config.ts`**: Feature flags configuration
 - **`paths.config.ts`**: Paths configuration (e.g., routes, API paths, etc.)
 - **`personal-account-sidebar.config.ts`**: Personal account sidebar configuration (e.g., links, icons, etc.)
-- **`organization-account-sidebar.config.ts`**: Team account sidebar configuration (e.g., links, icons, etc.)
+- **`team-account-sidebar.config.ts`**: Team account sidebar configuration (e.g., links, icons, etc.)
 
 ## Installing a Shadcn UI component
 
@@ -133,4 +133,4 @@ For example, to install the `Button` component, you can use the following comman
 npx shadcn-ui@latest add button --path=packages/src/ui/shadcn
 ```
 
-We pass the `--path` flag to specify the path where the component should be installed.
+We pass the `--path` flag to specify the path where the component should be installed. You may need to adjust the path based on your project structure.
