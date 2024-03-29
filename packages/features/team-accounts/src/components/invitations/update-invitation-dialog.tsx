@@ -25,7 +25,7 @@ import {
 import { If } from '@kit/ui/if';
 import { Trans } from '@kit/ui/trans';
 
-import { UpdateMemberRoleSchema } from '../../schema/update-member-role-schema';
+import { UpdateMemberRoleSchema } from '../../schema/update-member-role.schema';
 import { updateInvitationAction } from '../../server/actions/team-invitations-server-actions';
 import { MembershipRoleSelector } from '../members/membership-role-selector';
 import { RolesDataProvider } from '../members/roles-data-provider';

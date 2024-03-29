@@ -12,8 +12,8 @@ import { LeaveTeamAccountService } from '../services/leave-team-account.service'
 export async function leaveTeamAccountAction(formData: FormData) {
   const body = Object.fromEntries(formData.entries());
   const params = LeaveTeamAccountSchema.parse(body);
-  const client = getSupabaseServerActionClient();
 
+  const client = getSupabaseServerActionClient();
   const auth = await requireUser(client);
 
   if (auth.error) {

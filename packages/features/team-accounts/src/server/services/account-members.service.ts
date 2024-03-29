@@ -8,7 +8,7 @@ import { Database } from '@kit/supabase/database';
 
 import { RemoveMemberSchema } from '../../schema/remove-member.schema';
 import { TransferOwnershipConfirmationSchema } from '../../schema/transfer-ownership-confirmation.schema';
-import { UpdateMemberRoleSchema } from '../../schema/update-member-role-schema';
+import { UpdateMemberRoleSchema } from '../../schema/update-member-role.schema';
 
 export class AccountMembersService {
   private readonly namespace = 'account-members';

@@ -11,7 +11,7 @@ import { requireUser } from '@kit/supabase/require-user';
 
 import { DeleteInvitationSchema } from '../../schema/delete-invitation.schema';
 import { InviteMembersSchema } from '../../schema/invite-members.schema';
-import { UpdateInvitationSchema } from '../../schema/update-invitation-schema';
+import { UpdateInvitationSchema } from '../../schema/update-invitation.schema';
 
 const invitePath = process.env.INVITATION_PAGE_PATH;
 const siteURL = process.env.NEXT_PUBLIC_SITE_URL;

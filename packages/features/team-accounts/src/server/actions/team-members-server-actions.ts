@@ -11,7 +11,7 @@ import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-clie
 
 import { RemoveMemberSchema } from '../../schema/remove-member.schema';
 import { TransferOwnershipConfirmationSchema } from '../../schema/transfer-ownership-confirmation.schema';
-import { UpdateMemberRoleSchema } from '../../schema/update-member-role-schema';
+import { UpdateMemberRoleSchema } from '../../schema/update-member-role.schema';
 import { AccountMembersService } from '../services/account-members.service';
 
 export async function removeMemberFromAccountAction(

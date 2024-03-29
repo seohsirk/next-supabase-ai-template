@@ -2,23 +2,26 @@
 
 import { redirect } from 'next/navigation';
 
+import { z } from 'zod';
+
 import { getSupabaseServerComponentClient } from '@kit/supabase/server-component-client';
 
-export async function updateTeamAccountName(params: {
-  name: string;
-  slug: string;
-  path: string;
-}) {
+import { UpdateTeamNameSchema } from '../../schema/update-team-name.schema';
+
+export async function updateTeamAccountName(
+  params: z.infer<typeof UpdateTeamNameSchema>,
+) {
   const client = getSupabaseServerComponentClient();
+  const { name, slug, path } = UpdateTeamNameSchema.parse(params);
 
   const { error, data } = await client
     .from('accounts')
     .update({
-      name: params.name,
-      slug: params.slug,
+      name,
+      slug,
     })
     .match({
-      slug: params.slug,
+      slug,
     })
     .select('slug')
     .single();
@@ -30,9 +33,9 @@ export async function updateTeamAccountName(params: {
   const newSlug = data.slug;
 
   if (newSlug) {
-    const path = params.path.replace('[account]', newSlug);
+    const nextPath = path.replace('[account]', newSlug);
 
-    redirect(path);
+    redirect(nextPath);
   }
 
   return { success: true };

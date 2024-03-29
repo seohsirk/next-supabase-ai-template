@@ -4,7 +4,6 @@ import { useTransition } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 
 import { Button } from '@kit/ui/button';
 import {
@@ -17,11 +16,8 @@ import {
 import { Input } from '@kit/ui/input';
 import { Trans } from '@kit/ui/trans';
 
+import { TeamNameFormSchema } from '../../schema/update-team-name.schema';
 import { updateTeamAccountName } from '../../server/actions/team-details-server-actions';
-
-const Schema = z.object({
-  name: z.string().min(1).max(255),
-});
 
 export const UpdateTeamAccountNameForm = (props: {
   account: {
@@ -34,7 +30,7 @@ export const UpdateTeamAccountNameForm = (props: {
   const [pending, startTransition] = useTransition();
 
   const form = useForm({
-    resolver: zodResolver(Schema),
+    resolver: zodResolver(TeamNameFormSchema),
     defaultValues: {
       name: props.account.name,
     },

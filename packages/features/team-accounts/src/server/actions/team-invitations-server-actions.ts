@@ -14,7 +14,8 @@ import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-clie
 import { AcceptInvitationSchema } from '../../schema/accept-invitation.schema';
 import { DeleteInvitationSchema } from '../../schema/delete-invitation.schema';
 import { InviteMembersSchema } from '../../schema/invite-members.schema';
-import { UpdateInvitationSchema } from '../../schema/update-invitation-schema';
+import { RenewInvitationSchema } from '../../schema/renew-invitation.schema';
+import { UpdateInvitationSchema } from '../../schema/update-invitation.schema';
 import { AccountInvitationsService } from '../services/account-invitations.service';
 
 /**
@@ -107,9 +108,11 @@ export async function acceptInvitationAction(data: FormData) {
   return redirect(nextPath);
 }
 
-export async function renewInvitationAction(params: { invitationId: number }) {
+export async function renewInvitationAction(
+  params: z.infer<typeof RenewInvitationSchema>,
+) {
   const client = getSupabaseServerActionClient();
-  const { invitationId } = params;
+  const { invitationId } = RenewInvitationSchema.parse(params);
 
   await assertSession(client);
 
