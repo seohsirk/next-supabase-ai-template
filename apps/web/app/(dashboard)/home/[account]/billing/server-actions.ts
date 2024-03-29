@@ -62,7 +62,11 @@ export async function createTeamAccountCheckoutSession(params: {
     throw new Error('Product not found');
   }
 
-  const { lineItems, trialDays } = getLineItemsFromPlanId(product, planId);
+  const plan = product?.plans.find((plan) => plan.id === planId);
+
+  if (!plan) {
+    throw new Error('Plan not found');
+  }
 
   // find the customer ID for the account if it exists
   // (eg. if the account has been billed before)
@@ -75,12 +79,10 @@ export async function createTeamAccountCheckoutSession(params: {
   // call the payment gateway to create the checkout session
   const { checkoutToken } = await service.createCheckoutSession({
     accountId,
-    lineItems,
+    plan,
     returnUrl,
     customerEmail,
     customerId,
-    trialDays,
-    paymentType: product.paymentType,
   });
 
   // return the checkout token to the client

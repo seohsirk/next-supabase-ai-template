@@ -1,10 +1,13 @@
 import { z } from 'zod';
 
-import { BillingProvider, BillingStrategyProviderService } from '@kit/billing';
+import {
+  BillingProviderSchema,
+  BillingStrategyProviderService,
+} from '@kit/billing';
 
 export class BillingGatewayFactoryService {
   static async GetProviderStrategy(
-    provider: z.infer<typeof BillingProvider>,
+    provider: z.infer<typeof BillingProviderSchema>,
   ): Promise<BillingStrategyProviderService> {
     switch (provider) {
       case 'stripe': {

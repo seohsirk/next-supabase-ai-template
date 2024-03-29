@@ -8,12 +8,13 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import {
-  BillingSchema,
-  RecurringPlanSchema,
+  BillingConfig,
+  getBaseLineItem,
   getPlanIntervals,
-  getProductPlanPairFromId,
+  getProductPlanPair,
 } from '@kit/billing';
 import { formatCurrency } from '@kit/shared/utils';
+import { Badge } from '@kit/ui/badge';
 import { Button } from '@kit/ui/button';
 import {
   Form,
@@ -23,6 +24,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@kit/ui/form';
+import { If } from '@kit/ui/if';
 import { Label } from '@kit/ui/label';
 import {
   RadioGroup,
@@ -34,7 +36,7 @@ import { cn } from '@kit/ui/utils';
 
 export function PlanPicker(
   props: React.PropsWithChildren<{
-    config: z.infer<typeof BillingSchema>;
+    config: BillingConfig;
     onSubmit: (data: { planId: string; productId: string }) => void;
     pending?: boolean;
   }>,
@@ -42,7 +44,7 @@ export function PlanPicker(
   const intervals = useMemo(
     () => getPlanIntervals(props.config),
     [props.config],
-  );
+  ) as string[];
 
   const form = useForm({
     reValidateMode: 'onChange',
@@ -50,17 +52,21 @@ export function PlanPicker(
     resolver: zodResolver(
       z
         .object({
-          planId: z.string().min(1),
+          planId: z.string(),
           interval: z.string().min(1),
         })
         .refine(
           (data) => {
-            const { product, plan } = getProductPlanPairFromId(
-              props.config,
-              data.planId,
-            );
+            try {
+              const { product, plan } = getProductPlanPair(
+                props.config,
+                data.planId,
+              );
 
-            return product && plan;
+              return product && plan;
+            } catch {
+              return false;
+            }
           },
           { message: `Please pick a plan to continue`, path: ['planId'] },
         ),
@@ -73,6 +79,15 @@ export function PlanPicker(
   });
 
   const { interval: selectedInterval } = form.watch();
+  const planId = form.getValues('planId');
+
+  const selectedPlan = useMemo(() => {
+    try {
+      return getProductPlanPair(props.config, planId).plan;
+    } catch {
+      return;
+    }
+  }, [form, props.config, planId]);
 
   return (
     <Form {...form}>
@@ -147,22 +162,15 @@ export function PlanPicker(
               <FormControl>
                 <RadioGroup name={field.name}>
                   {props.config.products.map((product) => {
-                    const plan =
-                      product.paymentType === 'one-time'
-                        ? product.plans[0]
-                        : product.plans.find((item) => {
-                            if (
-                              'recurring' in item &&
-                              (item as z.infer<typeof RecurringPlanSchema>)
-                                .recurring.interval === selectedInterval
-                            ) {
-                              return item;
-                            }
-                          });
+                    const plan = product.plans.find(
+                      (item) => item.interval === selectedInterval,
+                    );
 
                     if (!plan) {
-                      throw new Error('Plan not found');
+                      return null;
                     }
+
+                    const baseLineItem = getBaseLineItem(props.config, plan.id);
 
                     return (
                       <RadioGroupItemLabel
@@ -197,22 +205,32 @@ export function PlanPicker(
                             </span>
                           </Label>
 
-                          <div className={'text-right'}>
+                          <div
+                            className={'flex items-center space-x-4 text-right'}
+                          >
+                            <If condition={plan.trialPeriod}>
+                              <div>
+                                <Badge variant={'success'}>
+                                  {plan.trialPeriod} day trial
+                                </Badge>
+                              </div>
+                            </If>
+
                             <div>
                               <Price key={plan.id}>
                                 <span>
                                   {formatCurrency(
                                     product.currency.toLowerCase(),
-                                    plan.price,
+                                    baseLineItem.cost,
                                   )}
                                 </span>
                               </Price>
-                            </div>
 
-                            <div>
-                              <span className={'text-muted-foreground'}>
-                                per {selectedInterval}
-                              </span>
+                              <div>
+                                <span className={'text-muted-foreground'}>
+                                  per {selectedInterval}
+                                </span>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -233,7 +251,13 @@ export function PlanPicker(
               'Processing...'
             ) : (
               <>
-                <span>Proceed to payment</span>
+                <If
+                  condition={selectedPlan?.trialPeriod}
+                  fallback={'Proceed to payment'}
+                >
+                  <span>Start {selectedPlan?.trialPeriod} day trial</span>
+                </If>
+
                 <ArrowRight className={'ml-2 h-4 w-4'} />
               </>
             )}

@@ -5,23 +5,14 @@ import { useState } from 'react';
 import Link from 'next/link';
 
 import { CheckCircle, Sparkles } from 'lucide-react';
-import { z } from 'zod';
 
-import {
-  BillingSchema,
-  RecurringPlanInterval,
-  RecurringPlanSchema,
-  getPlanIntervals,
-} from '@kit/billing';
+import { BillingConfig, getBaseLineItem, getPlanIntervals } from '@kit/billing';
 import { formatCurrency } from '@kit/shared/utils';
 import { Button } from '@kit/ui/button';
 import { Heading } from '@kit/ui/heading';
 import { If } from '@kit/ui/if';
 import { Trans } from '@kit/ui/trans';
 import { cn } from '@kit/ui/utils';
-
-type Config = z.infer<typeof BillingSchema>;
-type Interval = z.infer<typeof RecurringPlanInterval>;
 
 interface Paths {
   signUp: string;
@@ -32,7 +23,7 @@ export function PricingTable({
   paths,
   CheckoutButtonRenderer,
 }: {
-  config: Config;
+  config: BillingConfig;
   paths: Paths;
 
   CheckoutButtonRenderer?: React.ComponentType<{
@@ -40,9 +31,8 @@ export function PricingTable({
     highlighted?: boolean;
   }>;
 }) {
-  const intervals = getPlanIntervals(config).filter(Boolean);
-
-  const [interval, setInterval] = useState<Interval>(intervals[0]!);
+  const intervals = getPlanIntervals(config).filter(Boolean) as string[];
+  const [interval, setInterval] = useState(intervals[0]!);
 
   return (
     <div className={'flex flex-col space-y-12'}>
@@ -63,12 +53,7 @@ export function PricingTable({
         }
       >
         {config.products.map((product) => {
-          const plan = product.plans.find((item) =>
-            'recurring' in item
-              ? (item as z.infer<typeof RecurringPlanSchema>).recurring
-                  .interval === interval
-              : true,
-          );
+          const plan = product.plans.find((plan) => plan.interval === interval);
 
           if (!plan) {
             console.warn(`No plan found for ${product.name}`);
@@ -76,15 +61,14 @@ export function PricingTable({
             return;
           }
 
-          if (product.hidden) {
-            return null;
-          }
+          const basePlan = getBaseLineItem(config, plan.id);
 
           return (
             <PricingItem
               selectable
               key={plan.id}
               plan={{ ...plan, interval }}
+              baseLineItem={basePlan}
               product={product}
               paths={paths}
               CheckoutButton={CheckoutButtonRenderer}
@@ -104,9 +88,13 @@ function PricingItem(
 
     selectable: boolean;
 
+    baseLineItem: {
+      id: string;
+      cost: number;
+    };
+
     plan: {
       id: string;
-      price: number;
       interval: string;
       name?: string;
       href?: string;
@@ -172,7 +160,7 @@ function PricingItem(
 
       <div className={'flex items-center space-x-1'}>
         <Price>
-          {formatCurrency(props.product.currency, props.plan.price)}
+          {formatCurrency(props.product.currency, props.baseLineItem.cost)}
         </Price>
 
         <If condition={props.plan.name}>
@@ -262,9 +250,9 @@ function ListItem({ children }: React.PropsWithChildren) {
 
 function PlanIntervalSwitcher(
   props: React.PropsWithChildren<{
-    intervals: Interval[];
-    interval: Interval;
-    setInterval: (interval: Interval) => void;
+    intervals: string[];
+    interval: string;
+    setInterval: (interval: string) => void;
   }>,
 ) {
   return (

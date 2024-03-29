@@ -24,7 +24,7 @@ export async function createStripeCheckout(
 
   // docs: https://stripe.com/docs/billing/subscriptions/build-subscription
   const mode: Stripe.Checkout.SessionCreateParams.Mode =
-    params.paymentType === 'recurring' ? 'subscription' : 'payment';
+    params.plan.paymentType === 'recurring' ? 'subscription' : 'payment';
 
   // this should only be set if the mode is 'subscription'
   const subscriptionData:
@@ -54,8 +54,8 @@ export async function createStripeCheckout(
         customer_email: params.customerEmail,
       };
 
-  const lineItems = params.lineItems.map((item) => {
-    if (item.usageType === 'metered') {
+  const lineItems = params.plan.lineItems.map((item) => {
+    if (item.type === 'metered') {
       return {
         price: item.id,
       };
@@ -63,7 +63,7 @@ export async function createStripeCheckout(
 
     return {
       price: item.id,
-      quantity: item.quantity,
+      quantity: 1,
     };
   });
 

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { BillingProvider } from '@kit/billing';
+import { BillingProviderSchema } from '@kit/billing';
 import {
   CancelSubscriptionParamsSchema,
   CreateBillingCheckoutSchema,
@@ -20,7 +20,9 @@ import { BillingGatewayFactoryService } from './billing-gateway-factory.service'
  * const billingGatewayService = new BillingGatewayService(provider);
  */
 export class BillingGatewayService {
-  constructor(private readonly provider: z.infer<typeof BillingProvider>) {}
+  constructor(
+    private readonly provider: z.infer<typeof BillingProviderSchema>,
+  ) {}
 
   /**
    * Creates a checkout session for billing.

@@ -6,7 +6,7 @@ import {
   CreateBillingPortalSessionSchema,
   RetrieveCheckoutSessionSchema,
 } from '../schema';
-import { ReportBillingUsageSchema } from '../schema/report-billing-usage.schema';
+import { ReportBillingUsageSchema } from '../schema';
 
 export abstract class BillingStrategyProviderService {
   abstract createBillingPortalSession(

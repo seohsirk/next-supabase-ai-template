@@ -1,8 +1,7 @@
 import { formatDate } from 'date-fns';
 import { BadgeCheck, CheckCircle2 } from 'lucide-react';
-import { z } from 'zod';
 
-import { BillingSchema, getProductPlanPairFromId } from '@kit/billing';
+import { BillingConfig, getProductPlanPair } from '@kit/billing';
 import { formatCurrency } from '@kit/shared/utils';
 import { Database } from '@kit/supabase/database';
 import {
@@ -29,12 +28,9 @@ export function CurrentPlanCard({
   config,
 }: React.PropsWithChildren<{
   subscription: Database['public']['Tables']['subscriptions']['Row'];
-  config: z.infer<typeof BillingSchema>;
+  config: BillingConfig;
 }>) {
-  const { plan, product } = getProductPlanPairFromId(
-    config,
-    subscription.variant_id,
-  );
+  const { plan, product } = getProductPlanPair(config, subscription.variant_id);
 
   return (
     <Card>
