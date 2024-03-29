@@ -134,7 +134,7 @@ async function getInviteDataFromInviteToken(token: string) {
       'id, expires_at, account: account_id !inner (id, name, slug, picture_url)',
     )
     .eq('invite_token', token)
-    .rangeLt('expires_at', new Date().toISOString())
+    .gte('expires_at', new Date().toISOString())
     .single();
 
   console.log(invitation, error);
