@@ -6,7 +6,7 @@ import { z } from 'zod';
 
 import { getLineItemsFromPlanId } from '@kit/billing';
 import { getBillingGatewayProvider } from '@kit/billing-gateway';
-import { requireAuth } from '@kit/supabase/require-auth';
+import { requireUser } from '@kit/supabase/require-user';
 import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
 
 import appConfig from '~/config/app.config';
@@ -33,13 +33,13 @@ export async function createTeamAccountCheckoutSession(params: {
   const productId = z.string().min(1).parse(params.productId);
 
   // we require the user to be authenticated
-  const { data: session } = await requireAuth(client);
+  const { data: user } = await requireUser(client);
 
-  if (!session) {
+  if (!user) {
     throw new Error('Authentication required');
   }
 
-  const userId = session.user.id;
+  const userId = user.id;
   const accountId = params.accountId;
 
   const hasPermission = await getPermissionsForAccountId(userId, accountId);
@@ -67,7 +67,7 @@ export async function createTeamAccountCheckoutSession(params: {
   // find the customer ID for the account if it exists
   // (eg. if the account has been billed before)
   const customerId = await getCustomerIdFromAccountId(client, accountId);
-  const customerEmail = session.user.email;
+  const customerEmail = user.email;
 
   // the return URL for the checkout session
   const returnUrl = getCheckoutSessionReturnUrl(params.slug);
@@ -100,13 +100,13 @@ export async function createBillingPortalSession(formData: FormData) {
     })
     .parse(Object.fromEntries(formData));
 
-  const { data: session, error } = await requireAuth(client);
+  const { data: user, error } = await requireUser(client);
 
-  if (error ?? !session) {
+  if (error ?? !user) {
     throw new Error('Authentication required');
   }
 
-  const userId = session.user.id;
+  const userId = user.id;
 
   // we require the user to have permissions to manage billing for the account
   const hasPermission = await getPermissionsForAccountId(userId, accountId);

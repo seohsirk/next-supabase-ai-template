@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 
 import { getBillingGatewayProvider } from '@kit/billing-gateway';
 import { BillingSessionStatus } from '@kit/billing-gateway/components';
-import { requireAuth } from '@kit/supabase/require-auth';
+import { requireUser } from '@kit/supabase/require-user';
 import { getSupabaseServerComponentClient } from '@kit/supabase/server-component-client';
 
 import billingConfig from '~/config/billing.config';
@@ -66,8 +66,11 @@ export default withI18n(ReturnStripeSessionPage);
 
 export async function loadCheckoutSession(sessionId: string) {
   const client = getSupabaseServerComponentClient();
+  const { error } = await requireUser(client);
 
-  await requireAuth(client);
+  if (error) {
+    throw new Error('Authentication required');
+  }
 
   const gateway = await getBillingGatewayProvider(client);
 
