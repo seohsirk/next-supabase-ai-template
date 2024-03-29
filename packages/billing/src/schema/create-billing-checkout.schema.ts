@@ -5,7 +5,7 @@ import { LineItemUsageType, PaymentType } from '../create-billing-schema';
 export const CreateBillingCheckoutSchema = z
   .object({
     returnUrl: z.string().url(),
-    accountId: z.string(),
+    accountId: z.string().uuid(),
     paymentType: PaymentType,
     lineItems: z.array(
       z.object({
@@ -16,7 +16,7 @@ export const CreateBillingCheckoutSchema = z
     ),
     trialDays: z.number().optional(),
     customerId: z.string().optional(),
-    customerEmail: z.string().optional(),
+    customerEmail: z.string().email().optional(),
   })
   .refine(
     (schema) => {

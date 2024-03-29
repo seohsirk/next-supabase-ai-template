@@ -7,8 +7,8 @@ import { Logger } from '@kit/shared/logger';
 import { Database } from '@kit/supabase/database';
 
 const Schema = z.object({
-  accountId: z.string(),
-  userId: z.string(),
+  accountId: z.string().uuid(),
+  userId: z.string().uuid(),
 });
 
 export class LeaveTeamAccountService {

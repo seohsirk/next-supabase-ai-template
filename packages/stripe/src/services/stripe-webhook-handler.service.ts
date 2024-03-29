@@ -32,9 +32,9 @@ export class StripeWebhookHandlerService
     const signatureKey = `stripe-signature`;
     const signature = request.headers.get(signatureKey)!;
 
-    const { STRIPE_WEBHOOK_SECRET } = StripeServerEnvSchema.parse({
-      STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
-      STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
+    const { webhooksSecret } = StripeServerEnvSchema.parse({
+      secretKey: process.env.STRIPE_SECRET_KEY,
+      webhooksSecret: process.env.STRIPE_WEBHOOK_SECRET,
     });
 
     const stripe = await this.loadStripe();
@@ -42,7 +42,7 @@ export class StripeWebhookHandlerService
     const event = stripe.webhooks.constructEvent(
       body,
       signature,
-      STRIPE_WEBHOOK_SECRET,
+      webhooksSecret,
     );
 
     if (!event) {

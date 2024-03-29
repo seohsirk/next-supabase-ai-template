@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 
-import { invariant } from '@epic-web/invariant';
 import {
   EmbeddedCheckout,
   EmbeddedCheckoutProvider,
@@ -16,11 +15,13 @@ import {
   DialogTitle,
 } from '@kit/ui/dialog';
 
-const STRIPE_PUBLISHABLE_KEY = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
+import { StripeClientEnvSchema } from '../schema/stripe-client-env.schema';
 
-invariant(STRIPE_PUBLISHABLE_KEY, 'Stripe publishable key is required');
+const { publishableKey } = StripeClientEnvSchema.parse({
+  publishableKey: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
+});
 
-const stripePromise = loadStripe(STRIPE_PUBLISHABLE_KEY);
+const stripePromise = loadStripe(publishableKey);
 
 export function StripeCheckout({
   checkoutToken,
