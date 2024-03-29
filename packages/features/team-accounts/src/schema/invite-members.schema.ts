@@ -1,10 +1,8 @@
 import { z } from 'zod';
 
-type Role = string;
-
 const InviteSchema = z.object({
   email: z.string().email(),
-  role: z.custom<Role>(() => z.string().min(1)),
+  role: z.string().min(1),
 });
 
 export const InviteMembersSchema = z

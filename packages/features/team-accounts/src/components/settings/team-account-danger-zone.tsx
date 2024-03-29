@@ -189,6 +189,7 @@ function DeleteTeamConfirmationForm({
                       data-test={'delete-team-input-field'}
                       required
                       type={'text'}
+                      autoComplete={'off'}
                       className={'w-full'}
                       placeholder={''}
                       pattern={name}
@@ -315,6 +316,7 @@ function LeaveTeamContainer(props: {
                             data-test="leave-team-input-field"
                             type="text"
                             className="w-full"
+                            autoComplete={'off'}
                             placeholder=""
                             pattern="LEAVE"
                             required

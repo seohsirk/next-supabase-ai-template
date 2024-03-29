@@ -109,6 +109,7 @@ function DeleteAccountForm() {
 
             <FormControl>
               <Input
+                autoComplete={'off'}
                 data-test={'delete-account-input-field'}
                 required
                 name={'confirmation'}

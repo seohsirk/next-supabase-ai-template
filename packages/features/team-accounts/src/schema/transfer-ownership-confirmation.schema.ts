@@ -2,11 +2,8 @@ import { z } from 'zod';
 
 const confirmationString = 'TRANSFER';
 
-export const TransferOwnershipConfirmationSchema = z
-  .object({
-    confirmation: z.string(),
-  })
-  .refine((data) => data.confirmation === confirmationString, {
-    message: `Confirmation must be ${confirmationString}`,
-    path: ['confirmation'],
-  });
+export const TransferOwnershipConfirmationSchema = z.object({
+  userId: z.string().uuid(),
+  confirmation: z.custom((value) => value === confirmationString),
+  accountId: z.string().uuid(),
+});

@@ -147,6 +147,7 @@ async function TeamAccountMembersPage({ params }: Params) {
               <AccountMembersTable
                 userRoleHierarchy={currentUserRoleHierarchy}
                 currentUserId={user.id}
+                currentAccountId={account.id}
                 members={members}
                 isPrimaryOwner={isPrimaryOwner}
                 canManageRoles={canManageRoles}

@@ -314,6 +314,35 @@ with
   check (auth.uid () = primary_owner_user_id);
 
 -- Functions
+-- Function to transfer team account ownership to another user
+create or replace function public.transfer_team_account_ownership (target_account_id uuid, new_owner_id uuid) returns void as $$
+begin
+  if current_user not in('service_role') then
+    raise exception 'You do not have permission to transfer account ownership';
+  end if;
+
+  -- update the primary owner of the account
+  update public.accounts
+  set primary_owner_user_id = new_owner_id
+  where id = target_account_id and is_personal_account = false;
+
+  -- update membership assigning it the hierarchy role
+  update public.accounts_memberships
+  set account_role = (
+    select
+      name
+    from
+      public.roles
+    where
+      hierarchy_level = 1
+  )
+  where target_account_id = account_id and user_id = new_owner_id;
+
+end;
+$$ language plpgsql;
+
+grant execute on function public.transfer_team_account_ownership (uuid, uuid) to service_role;
+
 create function public.is_account_owner (account_id uuid) returns boolean as $$
   select
     exists(
@@ -325,6 +354,8 @@ create function public.is_account_owner (account_id uuid) returns boolean as $$
         id = is_account_owner.account_id
         and primary_owner_user_id = auth.uid());
 $$ language sql;
+
+grant execute on function public.is_account_owner (uuid) to authenticated, service_role;
 
 create
 or replace function kit.protect_account_fields () returns trigger as $$

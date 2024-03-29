@@ -77,25 +77,12 @@ function TransferOrganizationOwnershipForm({
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<boolean>();
 
-  const onSubmit = () => {
-    startTransition(async () => {
-      try {
-        await transferOwnershipAction({
-          accountId,
-          userId,
-        });
-
-        setIsOpen(false);
-      } catch (error) {
-        setError(true);
-      }
-    });
-  };
-
   const form = useForm({
     resolver: zodResolver(TransferOwnershipConfirmationSchema),
     defaultValues: {
       confirmation: '',
+      accountId,
+      userId,
     },
   });
 
@@ -103,7 +90,17 @@ function TransferOrganizationOwnershipForm({
     <Form {...form}>
       <form
         className={'flex flex-col space-y-4 text-sm'}
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={form.handleSubmit((data) => {
+          startTransition(async () => {
+            try {
+              await transferOwnershipAction(data);
+
+              setIsOpen(false);
+            } catch (error) {
+              setError(true);
+            }
+          });
+        })}
       >
         <If condition={error}>
           <TransferOwnershipErrorAlert />
@@ -129,7 +126,12 @@ function TransferOrganizationOwnershipForm({
                 </FormLabel>
 
                 <FormControl>
-                  <Input type={'text'} required {...field} />
+                  <Input
+                    autoComplete={'off'}
+                    type={'text'}
+                    required
+                    {...field}
+                  />
                 </FormControl>
 
                 <FormDescription>
@@ -176,11 +178,11 @@ function TransferOwnershipErrorAlert() {
   return (
     <Alert variant={'destructive'}>
       <AlertTitle>
-        <Trans i18nKey={'teams:transferOrganizationErrorHeading'} />
+        <Trans i18nKey={'teams:transferTeamErrorHeading'} />
       </AlertTitle>
 
       <AlertDescription>
-        <Trans i18nKey={'teams:transferOrganizationErrorMessage'} />
+        <Trans i18nKey={'teams:transferTeamErrorMessage'} />
       </AlertDescription>
     </Alert>
   );

@@ -37,6 +37,7 @@ interface Permissions {
 type AccountMembersTableProps = {
   members: Members;
   currentUserId: string;
+  currentAccountId: string;
   userRoleHierarchy: number;
   isPrimaryOwner: boolean;
   canManageRoles: boolean;
@@ -45,6 +46,7 @@ type AccountMembersTableProps = {
 export function AccountMembersTable({
   members,
   currentUserId,
+  currentAccountId,
   isPrimaryOwner,
   userRoleHierarchy,
   canManageRoles,
@@ -60,7 +62,10 @@ export function AccountMembersTable({
     canTransferOwnership: isPrimaryOwner,
   };
 
-  const columns = useGetColumns(permissions, currentUserId);
+  const columns = useGetColumns(permissions, {
+    currentUserId,
+    currentAccountId,
+  });
 
   const filteredMembers = members.filter((member) => {
     const searchString = search.toLowerCase();
@@ -87,7 +92,10 @@ export function AccountMembersTable({
 
 function useGetColumns(
   permissions: Permissions,
-  currentUserId: string,
+  params: {
+    currentUserId: string;
+    currentAccountId: string;
+  },
 ): ColumnDef<Members[0]>[] {
   const { t } = useTranslation('teams');
 
@@ -99,7 +107,7 @@ function useGetColumns(
         cell: ({ row }) => {
           const member = row.original;
           const displayName = member.name ?? member.email.split('@')[0];
-          const isSelf = member.user_id === currentUserId;
+          const isSelf = member.user_id === params.currentUserId;
 
           return (
             <span className={'flex items-center space-x-4 text-left'}>
@@ -168,12 +176,13 @@ function useGetColumns(
           <ActionsDropdown
             permissions={permissions}
             member={row.original}
-            currentUserId={currentUserId}
+            currentUserId={params.currentUserId}
+            accountId={params.currentAccountId}
           />
         ),
       },
     ],
-    [permissions, currentUserId, t],
+    [t, params, permissions],
   );
 }
 
@@ -181,10 +190,12 @@ function ActionsDropdown({
   permissions,
   member,
   currentUserId,
+  accountId,
 }: {
   permissions: Permissions;
   member: Members[0];
   currentUserId: string;
+  accountId: string;
 }) {
   const [isRemoving, setIsRemoving] = useState(false);
   const [isTransferring, setIsTransferring] = useState(false);
@@ -268,7 +279,7 @@ function ActionsDropdown({
           isOpen
           setIsOpen={setIsTransferring}
           targetDisplayName={member.name ?? member.email}
-          accountId={member.id}
+          accountId={accountId}
           userId={member.user_id}
         />
       </If>
