@@ -23,7 +23,7 @@
     "supabase:typegen": "pnpm --filter '@kit/supabase-config' typegen"
   },
   "prettier": "@kit/prettier-config",
-  "packageManager": "npm@10.2.3",
+  "packageManager": "pnpm@8.15.5",
   "workspaces": [
     "apps/*",
     "packages/*",

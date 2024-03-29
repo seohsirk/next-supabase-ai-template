@@ -30,6 +30,7 @@ export function ModeToggle() {
           key={mode}
           onClick={() => {
             setTheme(mode);
+            setCookeTheme(mode);
           }}
         >
           <Trans i18nKey={`common:${mode}Theme`} />
@@ -57,18 +58,19 @@ export function SubMenuModeToggle() {
 
   const MenuItems = useMemo(
     () =>
-      ['light', 'dark', 'system'].map((item) => {
+      ['light', 'dark', 'system'].map((mode) => {
         return (
           <DropdownMenuItem
             className={'justify-between'}
-            key={item}
+            key={mode}
             onClick={() => {
-              setTheme(item);
+              setTheme(mode);
+              setCookeTheme(mode);
             }}
           >
-            <Trans i18nKey={`common:${item}Theme`} />
+            <Trans i18nKey={`common:${mode}Theme`} />
 
-            <If condition={theme === item}>
+            <If condition={theme === mode}>
               <CheckCircle className={'mr-2 h-3'} />
             </If>
           </DropdownMenuItem>
@@ -96,4 +98,8 @@ export function SubMenuModeToggle() {
       <DropdownMenuSubContent>{MenuItems}</DropdownMenuSubContent>
     </DropdownMenuSub>
   );
+}
+
+function setCookeTheme(theme: string) {
+  document.cookie = `theme=${theme}; path=/; max-age=31536000`;
 }
