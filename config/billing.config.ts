@@ -1,7 +1,11 @@
-import { createBillingSchema } from '@kit/billing';
+import { BillingProviderSchema, createBillingSchema } from '@kit/billing';
+
+const provider = BillingProviderSchema.parse(
+  process.env.NEXT_PUBLIC_BILLING_PROVIDER,
+);
 
 export default createBillingSchema({
-  provider: 'stripe',
+  provider,
   products: [
     {
       id: 'starter',
@@ -9,23 +13,37 @@ export default createBillingSchema({
       description: 'The perfect plan to get started',
       currency: 'USD',
       badge: `Value`,
-      paymentType: 'recurring',
       plans: [
         {
           name: 'Starter Monthly',
-          id: 'price_1NNwYHI1i3VnbZTqI2UzaHIe',
-          price: 9.99,
-          recurring: {
-            interval: 'month',
-          },
+          id: 'starter-monthly',
+          trialPeriod: 7,
+          paymentType: 'recurring',
+          interval: 'month',
+          lineItems: [
+            {
+              id: 'price_1NNwYHI1i3VnbZTqI2UzaHIe',
+              name: 'Base',
+              description: 'Base plan',
+              cost: 9.99,
+              type: 'base',
+            },
+          ],
         },
         {
           name: 'Starter Yearly',
           id: 'starter-yearly',
-          price: 99.99,
-          recurring: {
-            interval: 'year',
-          },
+          paymentType: 'recurring',
+          interval: 'year',
+          lineItems: [
+            {
+              id: 'price_1NNwYHI1i3VnbZTqI2UzaHIe1',
+              name: 'Base',
+              description: 'Base plan',
+              cost: 99.99,
+              type: 'base',
+            },
+          ],
         },
       ],
       features: ['Feature 1', 'Feature 2', 'Feature 3'],
@@ -37,23 +55,36 @@ export default createBillingSchema({
       highlighted: true,
       description: 'The perfect plan for professionals',
       currency: 'USD',
-      paymentType: 'recurring',
       plans: [
         {
           name: 'Pro Monthly',
           id: 'pro-monthly',
-          price: 19.99,
-          recurring: {
-            interval: 'month',
-          },
+          paymentType: 'recurring',
+          interval: 'month',
+          lineItems: [
+            {
+              id: 'price_1NNwYHI1i3VnbZTqI2UzaHIe2',
+              name: 'Base',
+              description: 'Base plan',
+              cost: 19.99,
+              type: 'base',
+            },
+          ],
         },
         {
           name: 'Pro Yearly',
           id: 'pro-yearly',
-          price: 199.99,
-          recurring: {
-            interval: 'year',
-          },
+          paymentType: 'recurring',
+          interval: 'year',
+          lineItems: [
+            {
+              id: 'price_1NNwYHI1i3VnbZTqI2UzaHIe3',
+              name: 'Base',
+              description: 'Base plan',
+              cost: 199.99,
+              type: 'base',
+            },
+          ],
         },
       ],
       features: [
@@ -69,23 +100,36 @@ export default createBillingSchema({
       name: 'Enterprise',
       description: 'The perfect plan for enterprises',
       currency: 'USD',
-      paymentType: 'recurring',
       plans: [
         {
           name: 'Enterprise Monthly',
           id: 'enterprise-monthly',
-          price: 99.99,
-          recurring: {
-            interval: 'month',
-          },
+          paymentType: 'recurring',
+          interval: 'month',
+          lineItems: [
+            {
+              id: 'price_1NNwYHI1i3VnbZTqI2UzaHIe4',
+              name: 'Base',
+              description: 'Base plan',
+              cost: 29.99,
+              type: 'base',
+            },
+          ],
         },
         {
           name: 'Enterprise Yearly',
           id: 'enterprise-yearly',
-          price: 999.99,
-          recurring: {
-            interval: 'year',
-          },
+          paymentType: 'recurring',
+          interval: 'year',
+          lineItems: [
+            {
+              id: 'price_1NNwYHI1i3VnbZTqI2UzaHIe5',
+              name: 'Base',
+              description: 'Base plan',
+              cost: 299.99,
+              type: 'base',
+            },
+          ],
         },
       ],
       features: [

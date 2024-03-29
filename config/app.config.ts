@@ -2,11 +2,6 @@ import { z } from 'zod';
 
 const production = process.env.NODE_ENV === 'production';
 
-enum Themes {
-  Light = 'light',
-  Dark = 'dark',
-}
-
 const AppConfigSchema = z.object({
   name: z
     .string({
@@ -29,7 +24,7 @@ const AppConfigSchema = z.object({
       description: `This is the default locale of your SaaS.`,
     })
     .default('en'),
-  theme: z.nativeEnum(Themes),
+  theme: z.enum(['light', 'dark', 'system']),
   production: z.boolean(),
   themeColor: z.string(),
   themeColorDark: z.string(),
@@ -37,14 +32,14 @@ const AppConfigSchema = z.object({
 
 const appConfig = AppConfigSchema.parse({
   name: process.env.NEXT_PUBLIC_PRODUCT_NAME,
-  title: 'Awesomely - Your SaaS Title',
-  description: 'Your SaaS Description',
+  title: process.env.NEXT_PUBLIC_SITE_TITLE,
+  description: process.env.NEXT_PUBLIC_SITE_DESCRIPTION,
   url: process.env.NEXT_PUBLIC_SITE_URL,
   locale: process.env.NEXT_PUBLIC_DEFAULT_LOCALE,
-  theme: Themes.Light,
+  theme: process.env.NEXT_PUBLIC_DEFAULT_THEME_MODE,
+  themeColor: process.env.NEXT_PUBLIC_THEME_COLOR,
+  themeColorDark: process.env.NEXT_PUBLIC_THEME_COLOR_DARK,
   production,
-  themeColor: '#ffffff',
-  themeColorDark: '#0a0a0a',
 });
 
 export default appConfig;

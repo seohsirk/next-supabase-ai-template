@@ -20,8 +20,8 @@ const authConfig = AuthConfigSchema.parse({
   // NB: Enable the providers below in the Supabase Console
   // in your production project
   providers: {
-    password: true,
-    magicLink: false,
+    password: process.env.NEXT_PUBLIC_AUTH_PASSWORD === 'true',
+    magicLink: process.env.NEXT_PUBLIC_AUTH_MAGIC_LINK === 'true',
     oAuth: ['google'],
   },
 } satisfies z.infer<typeof AuthConfigSchema>);
