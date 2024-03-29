@@ -70,6 +70,8 @@ pnpm dev
 
 This command will run both the web application and the Supabase container. If the Supabase container is already running, it will only start the web application.
 
+Please refer to `apps/web/README.md` for more information about the web application.
+
 ## Architecture
 
 This project uses Turborepo to manage multiple packages in a single repository.
@@ -109,6 +111,12 @@ And billing packages that can be added to the application:
 - **`@kit/stripe`**: Stripe package that defines the schema and logic for managing Stripe. This is used by the `@kit/billing-gateway` package and abstracts the Stripe API.
 - **`@kit/lemon-squeezy`**: Lemon Squeezy package that defines the schema and logic for managing Lemon Squeezy. This is used by the `@kit/billing-gateway` package and abstracts the Lemon Squeezy API. (Coming soon)
 - **`@kit/paddle`**: Paddle package that defines the schema and logic for managing Paddle. This is used by the `@kit/billing-gateway` package and abstracts the Paddle API. (Coming soon
+
+Also planned (post-release):
+- **`@kit/notifications`**: Notifications package that defines the schema and logic for managing notifications
+- **`@kit/monitoring`**: A unified monitoring package that defines the schema and logic for monitoring the application with third party services (e.g., Sentry, Baselime, etc.)
+- **`@kit/plugins`**: Move the existing plugins to a separate package here
+- **`@kit/analytics`**: A unified analytics package to track user behavior
 
 ### Application Configuration
 
