@@ -408,8 +408,8 @@ create table if not exists
     user_id uuid references auth.users on delete cascade not null,
     account_id uuid references public.accounts (id) on delete cascade not null,
     account_role public.account_role not null,
-    created_at timestamp default current_timestamp not null,
-    updated_at timestamp default current_timestamp not null,
+    created_at timestamptz default current_timestamp not null,
+    updated_at timestamptz default current_timestamp not null,
     created_by uuid references auth.users,
     updated_by uuid references auth.users,
     primary key (user_id, account_id)
@@ -674,9 +674,9 @@ create table if not exists
     invited_by uuid references auth.users on delete cascade not null,
     role public.account_role not null,
     invite_token varchar(255) unique not null,
-    created_at timestamp default current_timestamp not null,
-    updated_at timestamp default current_timestamp not null,
-    expires_at timestamp default current_timestamp + interval '7 days' not null
+    created_at timestamptz default current_timestamp not null,
+    updated_at timestamptz default current_timestamp not null,
+    expires_at timestamptz default current_timestamp + interval '7 days' not null
   );
 
 comment on table public.invitations is 'The invitations for an account';
@@ -735,6 +735,27 @@ insert
     has_role_on_account (account_id)
     and public.has_permission (auth.uid (), account_id, 'invites.manage'::app_permissions));
 
+-- UPDATE: Users can update invitations to users of an account they are a member of
+-- and have the 'invites.manage' permission
+create policy invitations_update on public.invitations for
+update
+  to authenticated using (
+    has_role_on_account (account_id)
+    and public.has_permission (auth.uid (), account_id, 'invites.manage'::app_permissions)
+  ) with check (
+    has_role_on_account (account_id)
+    and public.has_permission (auth.uid (), account_id, 'invites.manage'::app_permissions)
+  );
+
+-- DELETE: Users can delete invitations to users of an account they are a member of
+-- and have the 'invites.manage' permission
+create policy invitations_delete on public.invitations for
+delete
+  to authenticated using (
+    has_role_on_account (account_id)
+    and public.has_permission (auth.uid (), account_id, 'invites.manage'::app_permissions)
+  );
+
 -- Functions
 -- Function to accept an invitation to an account
 create or replace function accept_invitation(token text, user_id uuid) returns void as $$
@@ -751,7 +772,12 @@ begin
     from
         public.invitations
     where
-        invite_token = token;
+        invite_token = token
+        and expires_at > now();
+
+    if not found then
+        raise exception 'Invalid or expired invitation token';
+    end if;
 
     insert into
         public.accounts_memberships(
@@ -768,7 +794,7 @@ begin
     end;
 $$ language plpgsql;
 
-grant execute on function accept_invitation (uuid) to service_role;
+grant execute on function accept_invitation (text, uuid) to service_role;
 
 /*
  * -------------------------------------------------------
@@ -1303,8 +1329,8 @@ OR REPLACE FUNCTION public.get_account_members (account_slug text) RETURNS TABLE
   name varchar,
   email varchar,
   picture_url varchar,
-  created_at timestamp,
-  updated_at timestamp
+  created_at timestamptz,
+  updated_at timestamptz
 ) LANGUAGE plpgsql AS $$
 BEGIN
     RETURN QUERY
@@ -1326,8 +1352,9 @@ create or replace function public.get_account_invitations(account_slug text) ret
   account_id uuid,
   invited_by uuid,
   role public.account_role,
-  created_at timestamp,
-  updated_at timestamp,
+  created_at timestamptz,
+  updated_at timestamptz,
+  expires_at timestamptz,
   inviter_name varchar,
   inviter_email varchar
 ) as $$
@@ -1341,6 +1368,7 @@ begin
     invitation.role,
     invitation.created_at,
     invitation.updated_at,
+    invitation.expires_at,
     account.name,
     account.email
   from

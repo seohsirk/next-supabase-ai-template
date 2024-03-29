@@ -481,20 +481,13 @@ export type Database = {
       };
     };
     Functions: {
-      accept_invitation:
-        | {
-            Args: {
-              invite_token: string;
-            };
-            Returns: undefined;
-          }
-        | {
-            Args: {
-              token: string;
-              user_id: string;
-            };
-            Returns: undefined;
-          };
+      accept_invitation: {
+        Args: {
+          token: string;
+          user_id: string;
+        };
+        Returns: undefined;
+      };
       add_invitations_to_account: {
         Args: {
           account_slug: string;
@@ -592,6 +585,7 @@ export type Database = {
           role: Database['public']['Enums']['account_role'];
           created_at: string;
           updated_at: string;
+          expires_at: string;
           inviter_name: string;
           inviter_email: string;
         }[];

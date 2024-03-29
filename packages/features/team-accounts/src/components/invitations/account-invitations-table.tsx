@@ -7,6 +7,7 @@ import { Ellipsis } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 import { Database } from '@kit/supabase/database';
+import { Badge } from '@kit/ui/badge';
 import { Button } from '@kit/ui/button';
 import { DataTable } from '@kit/ui/data-table';
 import {
@@ -22,6 +23,7 @@ import { Trans } from '@kit/ui/trans';
 
 import { RoleBadge } from '../members/role-badge';
 import { DeleteInvitationDialog } from './delete-invitation-dialog';
+import { RenewInvitationDialog } from './renew-invitation-dialog';
 import { UpdateInvitationDialog } from './update-invitation-dialog';
 
 type Invitations =
@@ -108,6 +110,24 @@ function useGetColumns(permissions: {
         },
       },
       {
+        header: t('expiresAtLabel'),
+        cell: ({ row }) => {
+          return new Date(row.original.expires_at).toLocaleDateString();
+        },
+      },
+      {
+        header: t('inviteStatus'),
+        cell: ({ row }) => {
+          const isExpired = getIsInviteExpired(row.original.expires_at);
+
+          if (isExpired) {
+            return <Badge variant={'warning'}>{t('expired')}</Badge>;
+          }
+
+          return <Badge variant={'success'}>{t('active')}</Badge>;
+        },
+      },
+      {
         header: '',
         id: 'actions',
         cell: ({ row }) => (
@@ -131,6 +151,7 @@ function ActionsDropdown({
 }) {
   const [isDeletingInvite, setIsDeletingInvite] = useState(false);
   const [isUpdatingRole, setIsUpdatingRole] = useState(false);
+  const [iRenewingInvite, setIsRenewingInvite] = useState(false);
 
   return (
     <>
@@ -146,6 +167,12 @@ function ActionsDropdown({
             <DropdownMenuItem onClick={() => setIsUpdatingRole(true)}>
               <Trans i18nKey={'teams:updateInvitation'} />
             </DropdownMenuItem>
+
+            <If condition={getIsInviteExpired(invitation.expires_at)}>
+              <DropdownMenuItem onClick={() => setIsRenewingInvite(true)}>
+                <Trans i18nKey={'teams:renewInvitation'} />
+              </DropdownMenuItem>
+            </If>
           </If>
 
           <If condition={permissions.canRemoveInvitation}>
@@ -172,6 +199,24 @@ function ActionsDropdown({
           userRole={invitation.role}
         />
       </If>
+
+      <If condition={iRenewingInvite}>
+        <RenewInvitationDialog
+          isOpen
+          setIsOpen={setIsRenewingInvite}
+          invitationId={invitation.id}
+          email={invitation.email}
+        />
+      </If>
     </>
   );
+}
+
+function getIsInviteExpired(isoExpiresAt: string) {
+  const currentIsoTime = new Date().toISOString();
+
+  const isoExpiresAtDate = new Date(isoExpiresAt);
+  const currentIsoTimeDate = new Date(currentIsoTime);
+
+  return isoExpiresAtDate < currentIsoTimeDate;
 }

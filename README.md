@@ -53,6 +53,8 @@ pnpm i
 pnpm dev
 ```
 
+This command will run both the web application and the Supabase container. If the Supabase container is already running, it will only start the web application.
+
 ## Architecture
 
 This project uses Turborepo to manage multiple packages in a single repository.
@@ -73,14 +75,12 @@ The main application defines the following:
 
 Below are the reusable packages that can be shared across multiple applications (or packages).
 
-- **`@kit/ui`**: Shared UI components and styles (using Shadcn UI)
+- **`@kit/ui`**: Shared UI components and styles (using Shadcn UI and some custom components)
 - **`@kit/shared`**: Shared code and utilities
 - **`@kit/supabase`**: Supabase package that defines the schema and logic for managing Supabase
 - **`@kit/i18n`**: Internationalization package that defines utilities for managing translations
 - **`@kit/billing`**: Billing package that defines the schema and logic for managing subscriptions
 - **`@kit/billing-gateway`**: Billing gateway package that defines the schema and logic for managing payment gateways
-- **`@kit/stripe`**: Stripe package that defines the schema and logic for managing Stripe. This is used by the `@kit/billing-gateway` package and abstracts the Stripe API.
-- **`@kit/lemon-squeezy`**: Lemon Squeezy package that defines the schema and logic for managing Lemon Squeezy. This is used by the `@kit/billing-gateway` package and abstracts the Lemon Squeezy API.
 - **`@kit/email-templates`**: Here we define the email templates using the `react.email` package.
 - **`@kit/mailers`**: Mailer package that abstracts the email service provider (e.g., Resend, Cloudflare, SendGrid, Mailgun, etc.)
 
@@ -89,6 +89,11 @@ And features that can be added to the application:
 - **`@kit/accounts`**: Package that defines components and logic for managing personal accounts
 - **`@kit/team-accounts`**: Package that defines components and logic for managing team
 - **`@kit/admin`**: Admin package that defines the schema and logic for managing users, subscriptions, and more.
+
+And billing packages that can be added to the application:
+- **`@kit/stripe`**: Stripe package that defines the schema and logic for managing Stripe. This is used by the `@kit/billing-gateway` package and abstracts the Stripe API.
+- **`@kit/lemon-squeezy`**: Lemon Squeezy package that defines the schema and logic for managing Lemon Squeezy. This is used by the `@kit/billing-gateway` package and abstracts the Lemon Squeezy API. (Coming soon)
+- **`@kit/paddle`**: Paddle package that defines the schema and logic for managing Paddle. This is used by the `@kit/billing-gateway` package and abstracts the Paddle API. (Coming soon
 
 ### Application Configuration
 

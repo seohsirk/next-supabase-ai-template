@@ -1,5 +1,6 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 
+import { addDays, formatISO } from 'date-fns';
 import 'server-only';
 import { z } from 'zod';
 
@@ -223,6 +224,35 @@ export class AccountInvitationsService {
     if (error) {
       throw error;
     }
+
+    return data;
+  }
+
+  async renewInvitation(invitationId: number) {
+    Logger.info('Renewing invitation', {
+      invitationId,
+      name: this.namespace,
+    });
+
+    const sevenDaysFromNow = formatISO(addDays(new Date(), 7));
+
+    const { data, error } = await this.client
+      .from('invitations')
+      .update({
+        expires_at: sevenDaysFromNow,
+      })
+      .match({
+        id: invitationId,
+      });
+
+    if (error) {
+      throw error;
+    }
+
+    Logger.info('Invitation successfully renewed', {
+      invitationId,
+      name: this.namespace,
+    });
 
     return data;
   }

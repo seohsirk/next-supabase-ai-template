@@ -36,7 +36,7 @@ export async function createInvitationsAction(params: {
 
   await service.sendInvitations({ invitations, account: params.account });
 
-  revalidatePath('/home/[account]/members', 'page');
+  revalidateMemberPage();
 
   return { success: true };
 }
@@ -65,6 +65,8 @@ export async function deleteInvitationAction(
 
   await service.deleteInvitation(invitation);
 
+  revalidateMemberPage();
+
   return { success: true };
 }
 
@@ -79,6 +81,8 @@ export async function updateInvitationAction(
   const service = new AccountInvitationsService(client);
 
   await service.updateInvitation(invitation);
+
+  revalidateMemberPage();
 
   return { success: true };
 }
@@ -103,6 +107,21 @@ export async function acceptInvitationAction(data: FormData) {
   return redirect(nextPath);
 }
 
+export async function renewInvitationAction(params: { invitationId: number }) {
+  const client = getSupabaseServerActionClient();
+  const { invitationId } = params;
+
+  await assertSession(client);
+
+  const service = new AccountInvitationsService(client);
+
+  await service.renewInvitation(invitationId);
+
+  revalidateMemberPage();
+
+  return { success: true };
+}
+
 async function assertSession(client: SupabaseClient<Database>) {
   const { error, data } = await requireAuth(client);
 
@@ -111,4 +130,8 @@ async function assertSession(client: SupabaseClient<Database>) {
   }
 
   return data;
+}
+
+function revalidateMemberPage() {
+  revalidatePath('/home/[account]/members', 'page');
 }
