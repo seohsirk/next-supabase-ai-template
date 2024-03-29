@@ -78,7 +78,7 @@ function buildLazyComponent<
 
     return (
       <Suspense fallback={fallback}>
-        {/* @ts-expect-error */}
+        {/* @ts-expect-error: weird TS */}
         <LoadedComponent
           onClose={props.onClose}
           checkoutToken={props.checkoutToken}

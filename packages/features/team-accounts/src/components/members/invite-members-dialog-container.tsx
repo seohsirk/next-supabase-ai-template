@@ -7,7 +7,6 @@ import { Plus, X } from 'lucide-react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { Database } from '@kit/supabase/database';
 import { Button } from '@kit/ui/button';
 import {
   Dialog,
@@ -36,16 +35,19 @@ import { Trans } from '@kit/ui/trans';
 import { InviteMembersSchema } from '../../schema/invite-members.schema';
 import { createInvitationsAction } from '../../server/actions/team-invitations-server-actions';
 import { MembershipRoleSelector } from './membership-role-selector';
+import { RolesDataProvider } from './roles-data-provider';
 
 type InviteModel = ReturnType<typeof createEmptyInviteModel>;
 
-type Role = Database['public']['Enums']['account_role'];
+type Role = string;
 
 export function InviteMembersDialogContainer({
   account,
+  userRoleHierarchy,
   children,
 }: React.PropsWithChildren<{
   account: string;
+  userRoleHierarchy: number;
 }>) {
   const [pending, startTransition] = useTransition();
   const [isOpen, setIsOpen] = useState(false);
@@ -65,19 +67,24 @@ export function InviteMembersDialogContainer({
           </DialogDescription>
         </DialogHeader>
 
-        <InviteMembersForm
-          pending={pending}
-          onSubmit={(data) => {
-            startTransition(async () => {
-              await createInvitationsAction({
-                account,
-                invitations: data.invitations,
-              });
+        <RolesDataProvider maxRoleHierarchy={userRoleHierarchy}>
+          {(roles) => (
+            <InviteMembersForm
+              pending={pending}
+              roles={roles}
+              onSubmit={(data) => {
+                startTransition(async () => {
+                  await createInvitationsAction({
+                    account,
+                    invitations: data.invitations,
+                  });
 
-              setIsOpen(false);
-            });
-          }}
-        />
+                  setIsOpen(false);
+                });
+              }}
+            />
+          )}
+        </RolesDataProvider>
       </DialogContent>
     </Dialog>
   );
@@ -85,10 +92,12 @@ export function InviteMembersDialogContainer({
 
 function InviteMembersForm({
   onSubmit,
+  roles,
   pending,
 }: {
   onSubmit: (data: { invitations: InviteModel[] }) => void;
   pending: boolean;
+  roles: string[];
 }) {
   const { t } = useTranslation('teams');
 
@@ -156,6 +165,7 @@ function InviteMembersForm({
 
                             <FormControl>
                               <MembershipRoleSelector
+                                roles={roles}
                                 value={field.value}
                                 onChange={(role) => {
                                   form.setValue(field.name, role);

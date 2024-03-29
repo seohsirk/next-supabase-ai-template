@@ -12,6 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@kit/ui/card';
+import { Trans } from '@kit/ui/trans';
 
 import billingConfig from '~/config/billing.config';
 
@@ -36,9 +37,13 @@ export function TeamAccountCheckoutForm(params: { accountId: string }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Manage your Team Plan</CardTitle>
+        <CardTitle>
+          <Trans i18nKey={'billing.manageTeamPlan'} />
+        </CardTitle>
 
-        <CardDescription>You can change your plan at any time.</CardDescription>
+        <CardDescription>
+          <Trans i18nKey={'billing.manageTeamPlanDescription'} />
+        </CardDescription>
       </CardHeader>
 
       <CardContent>

@@ -4,7 +4,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { Database } from '@kit/supabase/database';
 import { Alert, AlertDescription, AlertTitle } from '@kit/ui/alert';
 import { Button } from '@kit/ui/button';
 import {
@@ -29,15 +28,17 @@ import { Trans } from '@kit/ui/trans';
 import { UpdateRoleSchema } from '../../schema/update-role-schema';
 import { updateInvitationAction } from '../../server/actions/team-invitations-server-actions';
 import { MembershipRoleSelector } from '../members/membership-role-selector';
+import { RolesDataProvider } from '../members/roles-data-provider';
 
-type Role = Database['public']['Enums']['account_role'];
+type Role = string;
 
 export const UpdateInvitationDialog: React.FC<{
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
   invitationId: number;
   userRole: Role;
-}> = ({ isOpen, setIsOpen, invitationId, userRole }) => {
+  userRoleHierarchy: number;
+}> = ({ isOpen, setIsOpen, invitationId, userRole, userRoleHierarchy }) => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent>
@@ -51,11 +52,16 @@ export const UpdateInvitationDialog: React.FC<{
           </DialogDescription>
         </DialogHeader>
 
-        <UpdateInvitationForm
-          setIsOpen={setIsOpen}
-          invitationId={invitationId}
-          userRole={userRole}
-        />
+        <RolesDataProvider maxRoleHierarchy={userRoleHierarchy}>
+          {(roles) => (
+            <UpdateInvitationForm
+              invitationId={invitationId}
+              userRole={userRole}
+              userRoleHierarchy={roles.length}
+              setIsOpen={setIsOpen}
+            />
+          )}
+        </RolesDataProvider>
       </DialogContent>
     </Dialog>
   );
@@ -64,10 +70,12 @@ export const UpdateInvitationDialog: React.FC<{
 function UpdateInvitationForm({
   invitationId,
   userRole,
+  userRoleHierarchy,
   setIsOpen,
 }: React.PropsWithChildren<{
   invitationId: number;
   userRole: Role;
+  userRoleHierarchy: number;
   setIsOpen: (isOpen: boolean) => void;
 }>) {
   const { t } = useTranslation('teams');
@@ -128,11 +136,18 @@ function UpdateInvitationForm({
                 </FormLabel>
 
                 <FormControl>
-                  <MembershipRoleSelector
-                    currentUserRole={userRole}
-                    value={field.value}
-                    onChange={(newRole) => form.setValue('role', newRole)}
-                  />
+                  <RolesDataProvider maxRoleHierarchy={userRoleHierarchy}>
+                    {(roles) => (
+                      <MembershipRoleSelector
+                        roles={roles}
+                        currentUserRole={userRole}
+                        value={field.value}
+                        onChange={(newRole) =>
+                          form.setValue(field.name, newRole)
+                        }
+                      />
+                    )}
+                  </RolesDataProvider>
                 </FormControl>
 
                 <FormDescription>

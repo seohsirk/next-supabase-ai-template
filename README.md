@@ -20,11 +20,13 @@ The roadmap for the project is as follows:
 ## Features
 
 - **Authentication**: Sign up, sign in, sign out, forgot password, update profile, and more.
-- **Billing**: Subscription management, payment methods, invoices, and more.
+- **Billing**: Subscription management, one-off payments, flat subscriptions, per-seat subscriptions, and more.
 - **Personal Account**: Manage your account, profile picture, and more.
-- **Team Accounts**: Invite members, manage roles, and more.
+- **Team Accounts**: Invite members, manage roles, and more. Manage resources within a team.
+- **RBAC**: Simple-to-use role-based access control. Customize roles and permissions (coming soon).
 - **Admin Dashboard**: Manage users, subscriptions, and more.
 - **Pluggable**: Easily add new features and packages to your SaaS application.
+- **Super UI**: Beautiful UI using Shadcn UI and Tailwind CSS.
 
 The most notable difference between this version and the original version is the use of Turborepo to manage multiple packages in a single repository.
 

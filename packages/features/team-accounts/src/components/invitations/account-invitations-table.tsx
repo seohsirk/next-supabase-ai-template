@@ -35,6 +35,7 @@ type AccountInvitationsTableProps = {
   permissions: {
     canUpdateInvitation: boolean;
     canRemoveInvitation: boolean;
+    currentUserRoleHierarchy: number;
   };
 };
 
@@ -72,6 +73,7 @@ export function AccountInvitationsTable({
 function useGetColumns(permissions: {
   canUpdateInvitation: boolean;
   canRemoveInvitation: boolean;
+  currentUserRoleHierarchy: number;
 }): ColumnDef<Invitations[0]>[] {
   const { t } = useTranslation('teams');
 
@@ -197,6 +199,7 @@ function ActionsDropdown({
           setIsOpen={setIsUpdatingRole}
           invitationId={invitation.id}
           userRole={invitation.role}
+          userRoleHierarchy={permissions.currentUserRoleHierarchy}
         />
       </If>
 

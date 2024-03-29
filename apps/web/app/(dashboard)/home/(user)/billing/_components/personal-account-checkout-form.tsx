@@ -5,7 +5,7 @@ import { useState, useTransition } from 'react';
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
 
 import { EmbeddedCheckout, PlanPicker } from '@kit/billing-gateway/components';
-import { Alert, AlertDescription, AlertTitle } from '@kit/ui/alert';
+import { Alert, AlertTitle } from '@kit/ui/alert';
 import {
   Card,
   CardContent,
@@ -14,6 +14,7 @@ import {
   CardTitle,
 } from '@kit/ui/card';
 import { If } from '@kit/ui/if';
+import { Trans } from '@kit/ui/trans';
 
 import billingConfig from '~/config/billing.config';
 
@@ -79,13 +80,11 @@ export function PersonalAccountCheckoutForm() {
 function ErrorAlert() {
   return (
     <Alert variant={'destructive'}>
-      <ExclamationTriangleIcon />
+      <ExclamationTriangleIcon className={'h-4'} />
 
-      <AlertTitle>Sorry, we encountered an error.</AlertTitle>
-
-      <AlertDescription>
-        We couldn't process your request. Please try again.
-      </AlertDescription>
+      <AlertTitle>
+        <Trans i18nKey={'common:genericError'} />
+      </AlertTitle>
     </Alert>
   );
 }

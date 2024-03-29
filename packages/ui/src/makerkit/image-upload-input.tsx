@@ -138,7 +138,6 @@ export const ImageUploadInput = forwardRef<React.ElementRef<'input'>, Props>(
     }
 
     return (
-      // eslint-disable-next-line jsx-a11y/label-has-associated-control
       <label
         id={'image-upload-input'}
         className={`relative flex h-10 w-full cursor-pointer rounded-md border border-dashed border-input

@@ -180,7 +180,7 @@ export class StripeWebhookHandlerService
     const { subscription } = params;
     const lineItem = subscription.items.data[0];
     const price = lineItem?.price;
-    const priceId = price?.id!;
+    const priceId = price?.id as string;
     const interval = price?.recurring?.interval ?? null;
 
     const active =
@@ -194,8 +194,8 @@ export class StripeWebhookHandlerService
       price_amount: params.amount,
       cancel_at_period_end: subscription.cancel_at_period_end ?? false,
       interval: interval as string,
-      currency: price?.currency as string,
-      product_id: price?.product as string,
+      currency: (price as Stripe.Price).currency,
+      product_id: (price as Stripe.Price).product,
       variant_id: priceId,
       interval_count: price?.recurring?.interval_count ?? 1,
       period_starts_at: getISOString(subscription.current_period_start),

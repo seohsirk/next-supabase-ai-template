@@ -31,7 +31,7 @@ export async function removeMemberFromAccountAction(params: {
 export async function updateMemberRoleAction(params: {
   accountId: string;
   userId: string;
-  role: Database['public']['Enums']['account_role'];
+  role: string;
 }) {
   const client = getSupabaseServerActionClient();
 

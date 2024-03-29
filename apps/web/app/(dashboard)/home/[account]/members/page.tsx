@@ -17,6 +17,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@kit/ui/card';
+import { If } from '@kit/ui/if';
 import { PageBody, PageHeader } from '@kit/ui/page';
 import { Trans } from '@kit/ui/trans';
 
@@ -99,13 +100,10 @@ async function TeamAccountMembersPage({ params }: Params) {
   );
 
   const canManageRoles = account.permissions.includes('roles.manage');
-  const isPrimaryOwner = account.primary_owner_user_id === user.id;
+  const canManageInvitations = account.permissions.includes('invites.manage');
 
-  const permissions = {
-    canUpdateRole: canManageRoles,
-    canRemoveFromAccount: canManageRoles,
-    canTransferOwnership: isPrimaryOwner,
-  };
+  const isPrimaryOwner = account.primary_owner_user_id === user.id;
+  const currentUserRoleHierarchy = account.role_hierarchy_level;
 
   return (
     <>
@@ -126,23 +124,32 @@ async function TeamAccountMembersPage({ params }: Params) {
                 </CardTitle>
 
                 <CardDescription>
-                  Here you can manage the members of your organization.
+                  <Trans i18nKey={'common:membersTabDescription'} />
                 </CardDescription>
               </div>
 
-              <InviteMembersDialogContainer account={account.slug}>
-                <Button size={'sm'}>
-                  <PlusCircle className={'mr-2 w-4'} />
-                  <span>Add Member</span>
-                </Button>
-              </InviteMembersDialogContainer>
+              <If condition={canManageInvitations}>
+                <InviteMembersDialogContainer
+                  userRoleHierarchy={currentUserRoleHierarchy}
+                  account={account.slug}
+                >
+                  <Button size={'sm'}>
+                    <PlusCircle className={'mr-2 w-4'} />
+                    <span>
+                      <Trans i18nKey={'teams:inviteMembersButton'} />
+                    </span>
+                  </Button>
+                </InviteMembersDialogContainer>
+              </If>
             </CardHeader>
 
             <CardContent>
               <AccountMembersTable
+                userRoleHierarchy={currentUserRoleHierarchy}
                 currentUserId={user.id}
-                permissions={permissions}
                 members={members}
+                isPrimaryOwner={isPrimaryOwner}
+                canManageRoles={canManageRoles}
               />
             </CardContent>
           </Card>
@@ -150,11 +157,12 @@ async function TeamAccountMembersPage({ params }: Params) {
           <Card>
             <CardHeader className={'flex flex-row justify-between'}>
               <div className={'flex flex-col space-y-1.5'}>
-                <CardTitle>Pending Invitations</CardTitle>
+                <CardTitle>
+                  <Trans i18nKey={'teams:pendingInvitesHeading'} />
+                </CardTitle>
 
                 <CardDescription>
-                  Here you can manage the pending invitations to your
-                  organization.
+                  <Trans i18nKey={'teams:pendingInvitesDescription'} />
                 </CardDescription>
               </div>
             </CardHeader>
@@ -164,6 +172,7 @@ async function TeamAccountMembersPage({ params }: Params) {
                 permissions={{
                   canUpdateInvitation: canManageRoles,
                   canRemoveInvitation: canManageRoles,
+                  currentUserRoleHierarchy,
                 }}
                 invitations={invitations}
               />

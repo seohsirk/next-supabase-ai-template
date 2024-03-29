@@ -25,6 +25,7 @@ export const buildDocumentationTree = cache(
       .filter(
         (_) =>
           _.pathSegments.length === level + 1 &&
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-call
           _.pathSegments
             .map(({ pathName }: { pathName: string }) => pathName)
             .join('/')
@@ -37,6 +38,7 @@ export const buildDocumentationTree = cache(
     return pages.map((doc, index) => {
       const children = buildDocumentationTree(
         docs,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         doc.pathSegments.map(({ pathName }: { pathName: string }) => pathName),
       );
 
@@ -44,7 +46,7 @@ export const buildDocumentationTree = cache(
         ...doc,
         pathSegments: doc.pathSegments || ([] as string[]),
         collapsible: children.length > 0,
-        nextPage: children[0] || pages[index + 1],
+        nextPage: children[0] ?? pages[index + 1],
         previousPage: pages[index - 1],
         children,
       };

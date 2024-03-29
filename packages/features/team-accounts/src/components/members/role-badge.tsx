@@ -1,10 +1,9 @@
 import { cva } from 'class-variance-authority';
 
-import { Database } from '@kit/supabase/database';
 import { Badge } from '@kit/ui/badge';
 import { Trans } from '@kit/ui/trans';
 
-type Role = Database['public']['Enums']['account_role'];
+type Role = string;
 
 const roleClassNameBuilder = cva('font-medium capitalize', {
   variants: {
@@ -19,6 +18,7 @@ const roleClassNameBuilder = cva('font-medium capitalize', {
 export const RoleBadge: React.FC<{
   role: Role;
 }> = ({ role }) => {
+  // @ts-expect-error: hard to type this since users can add custom roles
   const className = roleClassNameBuilder({ role });
 
   return (

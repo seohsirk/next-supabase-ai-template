@@ -23,7 +23,7 @@ export async function generateMetadata({
   const { title, date, description, image, slug } = post;
   const url = [appConfig.url, 'blog', slug].join('/');
 
-  return {
+  return Promise.resolve({
     title,
     description,
     openGraph: {
@@ -46,7 +46,7 @@ export async function generateMetadata({
       description,
       images: image ? [image] : [],
     },
-  };
+  });
 }
 
 function BlogPost({ params }: { params: { slug: string } }) {

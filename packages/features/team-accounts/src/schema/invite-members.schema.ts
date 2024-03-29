@@ -1,8 +1,6 @@
 import { z } from 'zod';
 
-import { Database } from '@kit/supabase/database';
-
-type Role = Database['public']['Enums']['account_role'];
+type Role = string;
 
 const InviteSchema = z.object({
   email: z.string().email(),

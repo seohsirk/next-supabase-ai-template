@@ -26,7 +26,7 @@ export class AccountMembersService {
   async updateMemberRole(params: {
     accountId: string;
     userId: string;
-    role: Database['public']['Enums']['account_role'];
+    role: string;
   }) {
     const { data, error } = await this.client
       .from('accounts_memberships')

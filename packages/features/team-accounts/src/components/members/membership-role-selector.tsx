@@ -1,4 +1,3 @@
-import { Database } from '@kit/supabase/database';
 import {
   Select,
   SelectContent,
@@ -8,15 +7,14 @@ import {
 } from '@kit/ui/select';
 import { Trans } from '@kit/ui/trans';
 
-type Role = Database['public']['Enums']['account_role'];
+type Role = string;
 
 export const MembershipRoleSelector: React.FC<{
+  roles: Role[];
   value: Role;
   currentUserRole?: Role;
   onChange: (role: Role) => unknown;
-}> = ({ value, currentUserRole, onChange }) => {
-  const rolesList: Role[] = ['owner', 'member'];
-
+}> = ({ roles, value, currentUserRole, onChange }) => {
   return (
     <Select value={value} onValueChange={onChange}>
       <SelectTrigger data-test={'role-selector-trigger'}>
@@ -24,12 +22,12 @@ export const MembershipRoleSelector: React.FC<{
       </SelectTrigger>
 
       <SelectContent>
-        {rolesList.map((role) => {
+        {roles.map((role) => {
           return (
             <SelectItem
               key={role}
               data-test={`role-item-${role}`}
-              disabled={currentUserRole && currentUserRole === role}
+              disabled={currentUserRole === role}
               value={role}
             >
               <span className={'text-sm capitalize'}>

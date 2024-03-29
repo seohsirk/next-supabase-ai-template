@@ -38,17 +38,17 @@ export type Database = {
         Row: {
           account_id: string;
           id: number;
-          role: Database['public']['Enums']['account_role'];
+          role: string;
         };
         Insert: {
           account_id: string;
           id?: number;
-          role: Database['public']['Enums']['account_role'];
+          role: string;
         };
         Update: {
           account_id?: string;
           id?: number;
-          role?: Database['public']['Enums']['account_role'];
+          role?: string;
         };
         Relationships: [
           {
@@ -71,6 +71,13 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: 'user_accounts';
             referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'account_roles_role_fkey';
+            columns: ['role'];
+            isOneToOne: false;
+            referencedRelation: 'roles';
+            referencedColumns: ['name'];
           },
         ];
       };
@@ -141,7 +148,7 @@ export type Database = {
       accounts_memberships: {
         Row: {
           account_id: string;
-          account_role: Database['public']['Enums']['account_role'];
+          account_role: string;
           created_at: string;
           created_by: string | null;
           updated_at: string;
@@ -150,7 +157,7 @@ export type Database = {
         };
         Insert: {
           account_id: string;
-          account_role: Database['public']['Enums']['account_role'];
+          account_role: string;
           created_at?: string;
           created_by?: string | null;
           updated_at?: string;
@@ -159,7 +166,7 @@ export type Database = {
         };
         Update: {
           account_id?: string;
-          account_role?: Database['public']['Enums']['account_role'];
+          account_role?: string;
           created_at?: string;
           created_by?: string | null;
           updated_at?: string;
@@ -187,6 +194,13 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: 'user_accounts';
             referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'accounts_memberships_account_role_fkey';
+            columns: ['account_role'];
+            isOneToOne: false;
+            referencedRelation: 'roles';
+            referencedColumns: ['name'];
           },
           {
             foreignKeyName: 'accounts_memberships_created_by_fkey';
@@ -287,7 +301,7 @@ export type Database = {
           id: number;
           invite_token: string;
           invited_by: string;
-          role: Database['public']['Enums']['account_role'];
+          role: string;
           updated_at: string;
         };
         Insert: {
@@ -298,7 +312,7 @@ export type Database = {
           id?: number;
           invite_token: string;
           invited_by: string;
-          role: Database['public']['Enums']['account_role'];
+          role: string;
           updated_at?: string;
         };
         Update: {
@@ -309,7 +323,7 @@ export type Database = {
           id?: number;
           invite_token?: string;
           invited_by?: string;
-          role?: Database['public']['Enums']['account_role'];
+          role?: string;
           updated_at?: string;
         };
         Relationships: [
@@ -341,25 +355,83 @@ export type Database = {
             referencedRelation: 'users';
             referencedColumns: ['id'];
           },
+          {
+            foreignKeyName: 'invitations_role_fkey';
+            columns: ['role'];
+            isOneToOne: false;
+            referencedRelation: 'roles';
+            referencedColumns: ['name'];
+          },
         ];
       };
       role_permissions: {
         Row: {
           id: number;
           permission: Database['public']['Enums']['app_permissions'];
-          role: Database['public']['Enums']['account_role'];
+          role: string;
         };
         Insert: {
           id?: number;
           permission: Database['public']['Enums']['app_permissions'];
-          role: Database['public']['Enums']['account_role'];
+          role: string;
         };
         Update: {
           id?: number;
           permission?: Database['public']['Enums']['app_permissions'];
-          role?: Database['public']['Enums']['account_role'];
+          role?: string;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: 'role_permissions_role_fkey';
+            columns: ['role'];
+            isOneToOne: false;
+            referencedRelation: 'roles';
+            referencedColumns: ['name'];
+          },
+        ];
+      };
+      roles: {
+        Row: {
+          account_id: string | null;
+          hierarchy_level: number;
+          is_custom: boolean;
+          name: string;
+        };
+        Insert: {
+          account_id?: string | null;
+          hierarchy_level: number;
+          is_custom?: boolean;
+          name: string;
+        };
+        Update: {
+          account_id?: string | null;
+          hierarchy_level?: number;
+          is_custom?: boolean;
+          name?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'roles_account_id_fkey';
+            columns: ['account_id'];
+            isOneToOne: false;
+            referencedRelation: 'accounts';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'roles_account_id_fkey';
+            columns: ['account_id'];
+            isOneToOne: false;
+            referencedRelation: 'user_account_workspace';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'roles_account_id_fkey';
+            columns: ['account_id'];
+            isOneToOne: false;
+            referencedRelation: 'user_accounts';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       subscriptions: {
         Row: {
@@ -474,10 +546,18 @@ export type Database = {
           id: string | null;
           name: string | null;
           picture_url: string | null;
-          role: Database['public']['Enums']['account_role'] | null;
+          role: string | null;
           slug: string | null;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: 'accounts_memberships_account_role_fkey';
+            columns: ['role'];
+            isOneToOne: false;
+            referencedRelation: 'roles';
+            referencedColumns: ['name'];
+          },
+        ];
       };
     };
     Functions: {
@@ -559,7 +639,7 @@ export type Database = {
         Args: {
           account_id: string;
           email: string;
-          role: Database['public']['Enums']['account_role'];
+          role: string;
         };
         Returns: {
           account_id: string;
@@ -569,7 +649,7 @@ export type Database = {
           id: number;
           invite_token: string;
           invited_by: string;
-          role: Database['public']['Enums']['account_role'];
+          role: string;
           updated_at: string;
         };
       };
@@ -582,7 +662,7 @@ export type Database = {
           email: string;
           account_id: string;
           invited_by: string;
-          role: Database['public']['Enums']['account_role'];
+          role: string;
           created_at: string;
           updated_at: string;
           expires_at: string;
@@ -598,7 +678,8 @@ export type Database = {
           id: string;
           user_id: string;
           account_id: string;
-          role: Database['public']['Enums']['account_role'];
+          role: string;
+          role_hierarchy_level: number;
           primary_owner_user_id: string;
           name: string;
           email: string;
@@ -627,6 +708,14 @@ export type Database = {
           updated_by: string | null;
         }[];
       };
+      has_more_elevated_role: {
+        Args: {
+          target_user_id: string;
+          target_account_id: string;
+          role_name: string;
+        };
+        Returns: boolean;
+      };
       has_permission: {
         Args: {
           user_id: string;
@@ -638,7 +727,7 @@ export type Database = {
       has_role_on_account: {
         Args: {
           account_id: string;
-          account_role?: Database['public']['Enums']['account_role'];
+          account_role?: string;
         };
         Returns: boolean;
       };
@@ -670,7 +759,8 @@ export type Database = {
           name: string;
           picture_url: string;
           slug: string;
-          role: Database['public']['Enums']['account_role'];
+          role: string;
+          role_hierarchy_level: number;
           primary_owner_user_id: string;
           subscription_status: Database['public']['Enums']['subscription_status'];
           permissions: Database['public']['Enums']['app_permissions'][];
@@ -690,7 +780,6 @@ export type Database = {
       };
     };
     Enums: {
-      account_role: 'owner' | 'member';
       app_permissions:
         | 'roles.manage'
         | 'billing.manage'

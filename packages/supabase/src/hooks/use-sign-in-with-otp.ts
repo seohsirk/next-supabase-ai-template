@@ -1,7 +1,4 @@
-import type {
-  AuthError,
-  SignInWithPasswordlessCredentials,
-} from '@supabase/gotrue-js';
+import type { SignInWithPasswordlessCredentials } from '@supabase/gotrue-js';
 
 import { useMutation } from '@tanstack/react-query';
 
@@ -15,7 +12,7 @@ export function useSignInWithOtp() {
     const result = await client.auth.signInWithOtp(credentials);
 
     if (result.error) {
-      if (shouldIgnoreError(result.error)) {
+      if (shouldIgnoreError(result.error.message)) {
         console.warn(
           `Ignoring error during development: ${result.error.message}`,
         );
@@ -37,10 +34,10 @@ export function useSignInWithOtp() {
 
 export default useSignInWithOtp;
 
-function shouldIgnoreError(error: AuthError) {
+function shouldIgnoreError(error: string) {
   return isSmsProviderNotSetupError(error);
 }
 
-function isSmsProviderNotSetupError(error: AuthError) {
-  return error.message.includes(`sms Provider could not be found`);
+function isSmsProviderNotSetupError(error: string) {
+  return error.includes(`sms Provider could not be found`);
 }

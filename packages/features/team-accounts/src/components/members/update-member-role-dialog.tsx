@@ -4,7 +4,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { Database } from '@kit/supabase/database';
 import { Alert, AlertDescription, AlertTitle } from '@kit/ui/alert';
 import { Button } from '@kit/ui/button';
 import {
@@ -29,8 +28,9 @@ import { Trans } from '@kit/ui/trans';
 import { UpdateRoleSchema } from '../../schema/update-role-schema';
 import { updateMemberRoleAction } from '../../server/actions/team-members-server-actions';
 import { MembershipRoleSelector } from './membership-role-selector';
+import { RolesDataProvider } from './roles-data-provider';
 
-type Role = Database['public']['Enums']['account_role'];
+type Role = string;
 
 export const UpdateMemberRoleDialog: React.FC<{
   isOpen: boolean;
@@ -38,7 +38,15 @@ export const UpdateMemberRoleDialog: React.FC<{
   userId: string;
   accountId: string;
   userRole: Role;
-}> = ({ isOpen, setIsOpen, userId, accountId, userRole }) => {
+  userRoleHierarchy: number;
+}> = ({
+  isOpen,
+  setIsOpen,
+  userId,
+  accountId,
+  userRole,
+  userRoleHierarchy,
+}) => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent>
@@ -52,12 +60,17 @@ export const UpdateMemberRoleDialog: React.FC<{
           </DialogDescription>
         </DialogHeader>
 
-        <UpdateMemberForm
-          setIsOpen={setIsOpen}
-          userId={userId}
-          accountId={accountId}
-          userRole={userRole}
-        />
+        <RolesDataProvider maxRoleHierarchy={userRoleHierarchy}>
+          {(data) => (
+            <UpdateMemberForm
+              setIsOpen={setIsOpen}
+              userId={userId}
+              accountId={accountId}
+              userRole={userRole}
+              roles={data}
+            />
+          )}
+        </RolesDataProvider>
       </DialogContent>
     </Dialog>
   );
@@ -68,11 +81,13 @@ function UpdateMemberForm({
   userRole,
   accountId,
   setIsOpen,
+  roles,
 }: React.PropsWithChildren<{
   userId: string;
   userRole: Role;
   accountId: string;
   setIsOpen: (isOpen: boolean) => void;
+  roles: Role[];
 }>) {
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<boolean>();
@@ -128,6 +143,7 @@ function UpdateMemberForm({
 
                 <FormControl>
                   <MembershipRoleSelector
+                    roles={roles}
                     currentUserRole={userRole}
                     value={field.value}
                     onChange={(newRole) => form.setValue('role', newRole)}

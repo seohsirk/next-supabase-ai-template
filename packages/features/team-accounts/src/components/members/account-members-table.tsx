@@ -28,25 +28,38 @@ import { UpdateMemberRoleDialog } from './update-member-role-dialog';
 type Members =
   Database['public']['Functions']['get_account_members']['Returns'];
 
+interface Permissions {
+  canUpdateRole: (roleHierarchy: number) => boolean;
+  canRemoveFromAccount: (roleHierarchy: number) => boolean;
+  canTransferOwnership: boolean;
+}
+
 type AccountMembersTableProps = {
   members: Members;
-
   currentUserId: string;
-
-  permissions: {
-    canUpdateRole: boolean;
-    canTransferOwnership: boolean;
-    canRemoveFromAccount: boolean;
-  };
+  userRoleHierarchy: number;
+  isPrimaryOwner: boolean;
+  canManageRoles: boolean;
 };
 
 export function AccountMembersTable({
   members,
-  permissions,
   currentUserId,
+  isPrimaryOwner,
+  userRoleHierarchy,
+  canManageRoles,
 }: AccountMembersTableProps) {
   const [search, setSearch] = useState('');
   const { t } = useTranslation('teams');
+
+  const permissions = {
+    canUpdateRole: (targetRole: number) =>
+      canManageRoles && targetRole < userRoleHierarchy,
+    canRemoveFromAccount: (targetRole: number) =>
+      canManageRoles && targetRole < userRoleHierarchy,
+    canTransferOwnership: isPrimaryOwner,
+  };
+
   const columns = useGetColumns(permissions, currentUserId);
 
   const filteredMembers = members.filter((member) => {
@@ -73,11 +86,7 @@ export function AccountMembersTable({
 }
 
 function useGetColumns(
-  permissions: {
-    canUpdateRole: boolean;
-    canTransferOwnership: boolean;
-    canRemoveFromAccount: boolean;
-  },
+  permissions: Permissions,
   currentUserId: string,
 ): ColumnDef<Members[0]>[] {
   const { t } = useTranslation('teams');
@@ -173,7 +182,7 @@ function ActionsDropdown({
   member,
   currentUserId,
 }: {
-  permissions: AccountMembersTableProps['permissions'];
+  permissions: Permissions;
   member: Members[0];
   currentUserId: string;
 }) {
@@ -188,6 +197,22 @@ function ActionsDropdown({
     return null;
   }
 
+  const memberRoleHierarchy = member.role_hierarchy_level;
+  const canUpdateRole = permissions.canUpdateRole(memberRoleHierarchy);
+
+  const canRemoveFromAccount =
+    permissions.canRemoveFromAccount(memberRoleHierarchy);
+
+  // if has no permission to update role, transfer ownership or remove from account
+  // do not render the dropdown menu
+  if (
+    !canUpdateRole &&
+    !permissions.canTransferOwnership &&
+    !canRemoveFromAccount
+  ) {
+    return null;
+  }
+
   return (
     <>
       <DropdownMenu>
@@ -198,7 +223,7 @@ function ActionsDropdown({
         </DropdownMenuTrigger>
 
         <DropdownMenuContent>
-          <If condition={permissions.canUpdateRole}>
+          <If condition={canUpdateRole}>
             <DropdownMenuItem onClick={() => setIsUpdatingRole(true)}>
               <Trans i18nKey={'teams:updateRole'} />
             </DropdownMenuItem>
@@ -210,7 +235,7 @@ function ActionsDropdown({
             </DropdownMenuItem>
           </If>
 
-          <If condition={permissions.canRemoveFromAccount}>
+          <If condition={canRemoveFromAccount}>
             <DropdownMenuItem onClick={() => setIsRemoving(true)}>
               <Trans i18nKey={'teams:removeMember'} />
             </DropdownMenuItem>
@@ -234,6 +259,7 @@ function ActionsDropdown({
           accountId={member.id}
           userId={member.user_id}
           userRole={member.role}
+          userRoleHierarchy={memberRoleHierarchy}
         />
       </If>
 
