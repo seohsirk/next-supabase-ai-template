@@ -1,4 +1,3 @@
-import type { DocumentationPage } from 'contentlayer/generated';
 import { allDocumentationPages } from 'contentlayer/generated';
 
 import DocsNavigation from '~/(marketing)/docs/_components/docs-navigation';

@@ -2,14 +2,13 @@
 
 import Link from 'next/link';
 
-import { Session, User } from '@supabase/supabase-js';
+import type { User } from '@supabase/supabase-js';
 
 import { ChevronRight } from 'lucide-react';
 
 import { PersonalAccountDropdown } from '@kit/accounts/personal-account-dropdown';
 import { useSignOut } from '@kit/supabase/hooks/use-sign-out';
 import { useUser } from '@kit/supabase/hooks/use-user';
-import { useUserSession } from '@kit/supabase/hooks/use-user-session';
 import { Button } from '@kit/ui/button';
 import { If } from '@kit/ui/if';
 import { Trans } from '@kit/ui/trans';

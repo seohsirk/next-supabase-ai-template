@@ -3,6 +3,7 @@ import {
   CurrentPlanCard,
 } from '@kit/billing-gateway/components';
 import { getSupabaseServerComponentClient } from '@kit/supabase/server-component-client';
+import { Alert, AlertDescription, AlertTitle } from '@kit/ui/alert';
 import { If } from '@kit/ui/if';
 import { PageBody, PageHeader } from '@kit/ui/page';
 import { Trans } from '@kit/ui/trans';
@@ -34,6 +35,8 @@ async function TeamAccountBillingPage({ params }: Params) {
   const workspace = await loadTeamWorkspace(params.account);
   const accountId = workspace.account.id;
   const [subscription, customerId] = await loadAccountData(accountId);
+  const canManageBilling =
+    workspace.account.permissions.includes('billing.manage');
 
   return (
     <>
@@ -44,17 +47,25 @@ async function TeamAccountBillingPage({ params }: Params) {
 
       <PageBody>
         <div className={'mx-auto w-full max-w-2xl'}>
+          <If condition={!canManageBilling}>
+            <CannotManageBillingAlert />
+          </If>
+
           <div className={'flex flex-col space-y-4'}>
             <If
               condition={subscription}
-              fallback={<TeamAccountCheckoutForm accountId={accountId} />}
+              fallback={
+                <If condition={canManageBilling}>
+                  <TeamAccountCheckoutForm accountId={accountId} />
+                </If>
+              }
             >
               {(data) => (
                 <CurrentPlanCard subscription={data} config={billingConfig} />
               )}
             </If>
 
-            <If condition={customerId}>
+            <If condition={customerId && canManageBilling}>
               <form action={createBillingPortalSession}>
                 <input type="hidden" name={'accountId'} value={accountId} />
                 <input type="hidden" name={'slug'} value={params.account} />
@@ -70,6 +81,19 @@ async function TeamAccountBillingPage({ params }: Params) {
 }
 
 export default withI18n(TeamAccountBillingPage);
+
+function CannotManageBillingAlert() {
+  return (
+    <Alert>
+      <AlertTitle>
+        <Trans i18nKey={'billing:cannotManageBillingAlertTitle'} />
+      </AlertTitle>
+      <AlertDescription>
+        <Trans i18nKey={'billing:cannotManageBillingAlertDescription'} />
+      </AlertDescription>
+    </Alert>
+  );
+}
 
 async function loadAccountData(accountId: string) {
   const client = getSupabaseServerComponentClient();
