@@ -1,10 +1,13 @@
 import { z } from 'zod';
 
-import { BillingProvider, BillingWebhookHandlerService } from '@kit/billing';
+import {
+  BillingProviderSchema,
+  BillingWebhookHandlerService,
+} from '@kit/billing';
 
 export class BillingEventHandlerFactoryService {
   static async GetProviderStrategy(
-    provider: z.infer<typeof BillingProvider>,
+    provider: z.infer<typeof BillingProviderSchema>,
   ): Promise<BillingWebhookHandlerService> {
     switch (provider) {
       case 'stripe': {

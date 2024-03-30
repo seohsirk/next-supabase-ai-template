@@ -1,6 +1,5 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 
-import { AccountBillingService } from '@kit/billing-gateway';
 import { Mailer } from '@kit/mailers';
 import { Logger } from '@kit/shared/logger';
 import { Database } from '@kit/supabase/database';
@@ -41,14 +40,6 @@ export class DeletePersonalAccountService {
       { name: this.namespace, userId },
       'User requested deletion. Processing...',
     );
-
-    // Cancel all user subscriptions
-    const billingService = new AccountBillingService(params.adminClient);
-
-    await billingService.cancelAllAccountSubscriptions({
-      userId,
-      accountId: userId,
-    });
 
     // execute the deletion of the user
     try {

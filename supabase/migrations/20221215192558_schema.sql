@@ -437,11 +437,15 @@ create table if not exists public.roles (
   primary key (name)
 );
 
+grant select on table public.roles to authenticated, service_role;
+
 -- Seed the roles table with default roles 'owner' and 'member'
 insert into public.roles (name, hierarchy_level) values ('owner', 1);
 insert into public.roles (name, hierarchy_level) values ('member', 2);
 
 -- RLS
+alter table public.roles enable row level security;
+
 -- SELECT: authenticated users can query roles
 create policy roles_read on public.roles for
 select

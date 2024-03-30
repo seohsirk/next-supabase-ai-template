@@ -1,7 +1,11 @@
 import { formatDate } from 'date-fns';
 import { BadgeCheck, CheckCircle2 } from 'lucide-react';
 
-import { BillingConfig, getProductPlanPair } from '@kit/billing';
+import {
+  BillingConfig,
+  getBaseLineItem,
+  getProductPlanPair,
+} from '@kit/billing';
 import { formatCurrency } from '@kit/shared/utils';
 import { Database } from '@kit/supabase/database';
 import {
@@ -31,6 +35,7 @@ export function CurrentPlanCard({
   config: BillingConfig;
 }>) {
   const { plan, product } = getProductPlanPair(config, subscription.variant_id);
+  const baseLineItem = getBaseLineItem(config, plan.id);
 
   return (
     <Card>
@@ -62,7 +67,7 @@ export function CurrentPlanCard({
               i18nKey="billing:planRenewal"
               values={{
                 interval: subscription.interval,
-                price: formatCurrency(product.currency, plan.price),
+                price: formatCurrency(product.currency, baseLineItem.price),
               }}
             />
           </div>
@@ -107,19 +112,6 @@ export function CurrentPlanCard({
                       <span>
                         {formatDate(subscription.period_ends_at ?? '', 'P')}
                       </span>
-                    </div>
-                  </div>
-                </If>
-
-                <If condition={!subscription.cancel_at_period_end}>
-                  <div className="flex flex-col space-y-1">
-                    <span className="font-medium">Your next bill</span>
-
-                    <div className={'text-muted-foreground'}>
-                      Your next bill is for {product.currency} {plan.price} on{' '}
-                      <span>
-                        {formatDate(subscription.period_ends_at ?? '', 'P')}
-                      </span>{' '}
                     </div>
                   </div>
                 </If>

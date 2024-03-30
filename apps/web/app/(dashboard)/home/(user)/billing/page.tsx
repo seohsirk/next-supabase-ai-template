@@ -40,26 +40,24 @@ async function PersonalAccountBillingPage() {
       />
 
       <PageBody>
-        <div className={'mx-auto w-full max-w-2xl'}>
-          <div className={'flex flex-col space-y-8'}>
-            <If
-              condition={subscription}
-              fallback={<PersonalAccountCheckoutForm />}
-            >
-              {(subscription) => (
-                <CurrentPlanCard
-                  subscription={subscription}
-                  config={billingConfig}
-                />
-              )}
-            </If>
+        <div className={'flex flex-col space-y-8'}>
+          <If
+            condition={subscription}
+            fallback={<PersonalAccountCheckoutForm />}
+          >
+            {(subscription) => (
+              <CurrentPlanCard
+                subscription={subscription}
+                config={billingConfig}
+              />
+            )}
+          </If>
 
-            <If condition={customerId}>
-              <form action={createPersonalAccountBillingPortalSession}>
-                <BillingPortalCard />
-              </form>
-            </If>
-          </div>
+          <If condition={customerId}>
+            <form action={createPersonalAccountBillingPortalSession}>
+              <BillingPortalCard />
+            </form>
+          </If>
         </div>
       </PageBody>
     </>

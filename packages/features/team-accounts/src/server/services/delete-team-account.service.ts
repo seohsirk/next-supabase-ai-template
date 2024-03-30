@@ -2,7 +2,6 @@ import { SupabaseClient } from '@supabase/supabase-js';
 
 import 'server-only';
 
-import { AccountBillingService } from '@kit/billing-gateway';
 import { Logger } from '@kit/shared/logger';
 import { Database } from '@kit/supabase/database';
 
@@ -34,21 +33,7 @@ export class DeleteTeamAccountService {
       `Requested team account deletion. Processing...`,
     );
 
-    Logger.info(
-      {
-        name: this.namespace,
-        accountId: params.accountId,
-        userId: params.userId,
-      },
-      `Deleting all account subscriptions...`,
-    );
-
-    // First - we want to cancel all Stripe active subscriptions
-    const billingService = new AccountBillingService(adminClient);
-
-    await billingService.cancelAllAccountSubscriptions(params);
-
-    // now we can use the admin client to delete the account.
+    // we can use the admin client to delete the account.
     const { error } = await adminClient
       .from('accounts')
       .delete()

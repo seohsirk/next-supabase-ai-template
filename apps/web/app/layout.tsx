@@ -1,5 +1,5 @@
 import { Inter as SansFont } from 'next/font/google';
-import { cookies } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 
 import { Toaster } from '@kit/ui/sonner';
 import { cn } from '@kit/ui/utils';
@@ -27,6 +27,8 @@ export default async function RootLayout({
 
   return (
     <html lang={language} className={getClassName()}>
+      <CsrfTokenMeta />
+
       <body>
         <RootProviders lang={language}>{children}</RootProviders>
         <Toaster richColors={false} />
@@ -70,3 +72,9 @@ export const metadata = {
     },
   },
 };
+
+function CsrfTokenMeta() {
+  const csrf = headers().get('x-csrf-token') ?? '';
+
+  return <meta content={csrf} name="csrf-token" />;
+}

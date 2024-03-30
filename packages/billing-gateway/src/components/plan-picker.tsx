@@ -3,7 +3,7 @@
 import { useMemo } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, CheckCircle } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -24,6 +24,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@kit/ui/form';
+import { Heading } from '@kit/ui/heading';
 import { If } from '@kit/ui/if';
 import { Label } from '@kit/ui/label';
 import {
@@ -31,6 +32,7 @@ import {
   RadioGroupItem,
   RadioGroupItemLabel,
 } from '@kit/ui/radio-group';
+import { Separator } from '@kit/ui/separator';
 import { Trans } from '@kit/ui/trans';
 import { cn } from '@kit/ui/utils';
 
@@ -81,189 +83,240 @@ export function PlanPicker(
   const { interval: selectedInterval } = form.watch();
   const planId = form.getValues('planId');
 
-  const selectedPlan = useMemo(() => {
+  const { plan: selectedPlan, product: selectedProduct } = useMemo(() => {
     try {
-      return getProductPlanPair(props.config, planId).plan;
+      return getProductPlanPair(props.config, planId);
     } catch {
-      return;
+      return {
+        plan: null,
+        product: null,
+      };
     }
-  }, [form, props.config, planId]);
+  }, [props.config, planId]);
 
   return (
     <Form {...form}>
-      <form
-        className={'flex flex-col space-y-4'}
-        onSubmit={form.handleSubmit(props.onSubmit)}
-      >
-        <FormField
-          name={'interval'}
-          render={({ field }) => {
-            return (
-              <FormItem className={'rounded-md border p-4'}>
-                <FormLabel htmlFor={'plan-picker-id'}>
-                  Choose your billing interval
-                </FormLabel>
+      <div className={'flex space-x-4'}>
+        <form
+          className={'flex w-full max-w-xl flex-col space-y-4'}
+          onSubmit={form.handleSubmit(props.onSubmit)}
+        >
+          <FormField
+            name={'interval'}
+            render={({ field }) => {
+              return (
+                <FormItem className={'rounded-md border p-4'}>
+                  <FormLabel htmlFor={'plan-picker-id'}>
+                    Choose your billing interval
+                  </FormLabel>
 
-                <FormControl id={'plan-picker-id'}>
-                  <RadioGroup name={field.name} value={field.value}>
-                    <div className={'flex space-x-2.5'}>
-                      {intervals.map((interval) => {
-                        const selected = field.value === interval;
+                  <FormControl id={'plan-picker-id'}>
+                    <RadioGroup name={field.name} value={field.value}>
+                      <div className={'flex space-x-2.5'}>
+                        {intervals.map((interval) => {
+                          const selected = field.value === interval;
 
-                        return (
-                          <label
-                            htmlFor={interval}
-                            key={interval}
-                            className={cn(
-                              'hover:bg-muted flex items-center space-x-2 rounded-md border border-transparent px-4 py-2',
-                              {
-                                ['border-border']: selected,
-                                ['hover:bg-muted']: !selected,
-                              },
-                            )}
-                          >
-                            <RadioGroupItem
-                              id={interval}
-                              value={interval}
-                              onClick={() => {
-                                form.setValue('planId', '', {
-                                  shouldValidate: true,
-                                });
+                          return (
+                            <label
+                              htmlFor={interval}
+                              key={interval}
+                              className={cn(
+                                'hover:bg-muted flex items-center space-x-2 rounded-md border border-transparent px-4 py-2',
+                                {
+                                  ['border-border']: selected,
+                                  ['hover:bg-muted']: !selected,
+                                },
+                              )}
+                            >
+                              <RadioGroupItem
+                                id={interval}
+                                value={interval}
+                                onClick={() => {
+                                  form.setValue('planId', '', {
+                                    shouldValidate: true,
+                                  });
 
-                                form.setValue('interval', interval, {
-                                  shouldValidate: true,
-                                });
-                              }}
-                            />
-
-                            <span className={'text-sm font-bold'}>
-                              <Trans
-                                i18nKey={`common:billingInterval.${interval}`}
+                                  form.setValue('interval', interval, {
+                                    shouldValidate: true,
+                                  });
+                                }}
                               />
-                            </span>
-                          </label>
-                        );
-                      })}
-                    </div>
-                  </RadioGroup>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            );
-          }}
-        />
 
-        <FormField
-          name={'planId'}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Pick your preferred plan</FormLabel>
+                              <span className={'text-sm font-bold'}>
+                                <Trans
+                                  i18nKey={`common:billingInterval.${interval}`}
+                                />
+                              </span>
+                            </label>
+                          );
+                        })}
+                      </div>
+                    </RadioGroup>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
+          />
 
-              <FormControl>
-                <RadioGroup name={field.name}>
-                  {props.config.products.map((product) => {
-                    const plan = product.plans.find(
-                      (item) => item.interval === selectedInterval,
-                    );
+          <FormField
+            name={'planId'}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Pick your preferred plan</FormLabel>
 
-                    if (!plan) {
-                      return null;
-                    }
+                <FormControl>
+                  <RadioGroup name={field.name}>
+                    {props.config.products.map((product) => {
+                      const plan = product.plans.find(
+                        (item) => item.interval === selectedInterval,
+                      );
 
-                    const baseLineItem = getBaseLineItem(props.config, plan.id);
+                      if (!plan) {
+                        return null;
+                      }
 
-                    return (
-                      <RadioGroupItemLabel
-                        selected={field.value === plan.id}
-                        key={plan.id}
-                      >
-                        <RadioGroupItem
-                          id={plan.id}
-                          value={plan.id}
-                          onClick={() => {
-                            form.setValue('planId', plan.id, {
-                              shouldValidate: true,
-                            });
+                      const baseLineItem = getBaseLineItem(
+                        props.config,
+                        plan.id,
+                      );
 
-                            form.setValue('productId', product.id, {
-                              shouldValidate: true,
-                            });
-                          }}
-                        />
-
-                        <div
-                          className={'flex w-full items-center justify-between'}
+                      return (
+                        <RadioGroupItemLabel
+                          selected={field.value === plan.id}
+                          key={plan.id}
                         >
-                          <Label
-                            htmlFor={plan.id}
-                            className={'flex flex-col justify-center space-y-2'}
-                          >
-                            <span className="font-bold">{product.name}</span>
+                          <RadioGroupItem
+                            id={plan.id}
+                            value={plan.id}
+                            onClick={() => {
+                              form.setValue('planId', plan.id, {
+                                shouldValidate: true,
+                              });
 
-                            <span className={'text-muted-foreground'}>
-                              {product.description}
-                            </span>
-                          </Label>
+                              form.setValue('productId', product.id, {
+                                shouldValidate: true,
+                              });
+                            }}
+                          />
 
                           <div
-                            className={'flex items-center space-x-4 text-right'}
+                            className={
+                              'flex w-full items-center justify-between'
+                            }
                           >
-                            <If condition={plan.trialPeriod}>
-                              <div>
-                                <Badge variant={'success'}>
-                                  {plan.trialPeriod} day trial
-                                </Badge>
-                              </div>
-                            </If>
+                            <Label
+                              htmlFor={plan.id}
+                              className={
+                                'flex flex-col justify-center space-y-2'
+                              }
+                            >
+                              <span className="font-bold">{product.name}</span>
 
-                            <div>
-                              <Price key={plan.id}>
-                                <span>
-                                  {formatCurrency(
-                                    product.currency.toLowerCase(),
-                                    baseLineItem.cost,
-                                  )}
-                                </span>
-                              </Price>
+                              <span className={'text-muted-foreground'}>
+                                {product.description}
+                              </span>
+                            </Label>
+
+                            <div
+                              className={
+                                'flex items-center space-x-4 text-right'
+                              }
+                            >
+                              <If condition={plan.trialPeriod}>
+                                <div>
+                                  <Badge variant={'success'}>
+                                    {plan.trialPeriod} day trial
+                                  </Badge>
+                                </div>
+                              </If>
 
                               <div>
-                                <span className={'text-muted-foreground'}>
-                                  per {selectedInterval}
-                                </span>
+                                <Price key={plan.id}>
+                                  <span>
+                                    {formatCurrency(
+                                      product.currency.toLowerCase(),
+                                      baseLineItem.cost,
+                                    )}
+                                  </span>
+                                </Price>
+
+                                <div>
+                                  <span className={'text-muted-foreground'}>
+                                    per {selectedInterval}
+                                  </span>
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      </RadioGroupItemLabel>
-                    );
-                  })}
-                </RadioGroup>
-              </FormControl>
+                        </RadioGroupItemLabel>
+                      );
+                    })}
+                  </RadioGroup>
+                </FormControl>
 
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <div>
-          <Button disabled={props.pending ?? !form.formState.isValid}>
-            {props.pending ? (
-              'Processing...'
-            ) : (
-              <>
-                <If
-                  condition={selectedPlan?.trialPeriod}
-                  fallback={'Proceed to payment'}
-                >
-                  <span>Start {selectedPlan?.trialPeriod} day trial</span>
-                </If>
-
-                <ArrowRight className={'ml-2 h-4 w-4'} />
-              </>
+                <FormMessage />
+              </FormItem>
             )}
-          </Button>
-        </div>
-      </form>
+          />
+
+          <div>
+            <Button disabled={props.pending ?? !form.formState.isValid}>
+              {props.pending ? (
+                'Processing...'
+              ) : (
+                <>
+                  <If
+                    condition={selectedPlan?.trialPeriod}
+                    fallback={'Proceed to payment'}
+                  >
+                    <span>Start {selectedPlan?.trialPeriod} day trial</span>
+                  </If>
+
+                  <ArrowRight className={'ml-2 h-4 w-4'} />
+                </>
+              )}
+            </Button>
+          </div>
+        </form>
+
+        <If condition={selectedPlan && selectedProduct}>
+          <div
+            className={
+              'fade-in animate-in zoom-in-90 flex w-full flex-col space-y-4 rounded-lg border p-4'
+            }
+          >
+            <div className={'flex flex-col space-y-0.5'}>
+              <Heading level={5}>
+                <b>{selectedProduct?.name}</b>
+              </Heading>
+
+              <p>
+                <span className={'text-muted-foreground'}>
+                  {selectedProduct?.description}
+                </span>
+              </p>
+            </div>
+
+            <div className={'flex flex-col'}>
+              {selectedProduct?.features.map((item) => {
+                return (
+                  <div
+                    key={item}
+                    className={'flex items-center space-x-2 text-sm'}
+                  >
+                    <CheckCircle className={'h-4 text-green-500'} />
+
+                    <span className={'text-muted-foreground'}>{item}</span>
+                  </div>
+                );
+              })}
+            </div>
+
+            <Separator />
+          </div>
+        </If>
+      </div>
     </Form>
   );
 }
