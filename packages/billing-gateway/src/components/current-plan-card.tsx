@@ -67,7 +67,7 @@ export function CurrentPlanCard({
               i18nKey="billing:planRenewal"
               values={{
                 interval: subscription.interval,
-                price: formatCurrency(product.currency, baseLineItem.price),
+                price: formatCurrency(product.currency, baseLineItem.cost),
               }}
             />
           </div>
