@@ -37,7 +37,7 @@ export function PersonalAccountCheckoutForm() {
 
   // Otherwise, render the plan picker component
   return (
-    <div className={'mx-auto w-full max-w-2xl'}>
+    <div>
       <Card>
         <CardHeader>
           <CardTitle>Manage your Plan</CardTitle>

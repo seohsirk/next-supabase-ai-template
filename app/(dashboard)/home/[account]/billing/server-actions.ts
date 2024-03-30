@@ -4,7 +4,6 @@ import { redirect } from 'next/navigation';
 
 import { z } from 'zod';
 
-import { getLineItemsFromPlanId } from '@kit/billing';
 import { getBillingGatewayProvider } from '@kit/billing-gateway';
 import { requireUser } from '@kit/supabase/require-user';
 import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';

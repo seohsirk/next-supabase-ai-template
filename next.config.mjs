@@ -16,6 +16,7 @@ const INTERNAL_PACKAGES = [
   '@kit/billing-gateway',
   '@kit/stripe',
   '@kit/email-templates',
+  '@kit/database-webhooks'
 ];
 
 /** @type {import('next').NextConfig} */
