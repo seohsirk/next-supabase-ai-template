@@ -1,8 +1,8 @@
 import { PageHeader } from '@kit/ui/page';
 
-import { MobileAppNavigation } from '~/(dashboard)/home/[account]/_components/mobile-app-navigation';
+import { AccountLayoutMobileNavigation } from '~/(dashboard)/home/[account]/_components/account-layout-mobile-navigation';
 
-export function AppHeader({
+export function AccountLayoutHeader({
   children,
   title,
   description,
@@ -16,7 +16,7 @@ export function AppHeader({
     <PageHeader
       title={title}
       description={description}
-      mobileNavigation={<MobileAppNavigation slug={account} />}
+      mobileNavigation={<AccountLayoutMobileNavigation account={account} />}
     >
       {children}
     </PageHeader>

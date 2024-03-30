@@ -20,7 +20,7 @@ import { ProfileAccountDropdownContainer } from '~/(dashboard)/home/_components/
 import featureFlagsConfig from '~/config/feature-flags.config';
 import pathsConfig from '~/config/paths.config';
 
-import { AppSidebarNavigation } from './app-sidebar-navigation';
+import { AccountLayoutSidebarNavigation } from './account-layout-sidebar-navigation';
 
 type AccountModel = {
   label: string | null;
@@ -33,7 +33,7 @@ const features = {
   enableTeamCreation: featureFlagsConfig.enableTeamCreation,
 };
 
-export function AppSidebar(props: {
+export function AccountLayoutSidebar(props: {
   account: string;
   accounts: AccountModel[];
   collapsed: boolean;
@@ -81,7 +81,7 @@ function SidebarContainer(props: {
       </SidebarContent>
 
       <SidebarContent className={`h-[calc(100%-160px)] overflow-y-auto`}>
-        <AppSidebarNavigation account={account} />
+        <AccountLayoutSidebarNavigation account={account} />
       </SidebarContent>
 
       <div className={'absolute bottom-4 left-0 w-full'}>
