@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation';
 
 import { z } from 'zod';
 
-import { getLineItemsFromPlanId } from '@kit/billing';
+import { getProductPlanPair } from '@kit/billing';
 import { getBillingGatewayProvider } from '@kit/billing-gateway';
 import { Logger } from '@kit/shared/logger';
 import { requireUser } from '@kit/supabase/require-user';
@@ -65,17 +65,15 @@ export async function createPersonalAccountCheckoutSession(params: {
     throw new Error('Product not found');
   }
 
-  const { lineItems, trialDays } = getLineItemsFromPlanId(product, planId);
+  const { plan } = getProductPlanPair(billingConfig, planId);
 
   // call the payment gateway to create the checkout session
   const { checkoutToken } = await service.createCheckoutSession({
-    lineItems,
     returnUrl,
     accountId,
-    trialDays,
-    paymentType: product.paymentType,
     customerEmail: user.email,
     customerId,
+    plan,
   });
 
   Logger.info(
