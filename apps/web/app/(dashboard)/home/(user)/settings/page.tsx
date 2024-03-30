@@ -26,11 +26,7 @@ export const generateMetadata = async () => {
 function PersonalAccountSettingsPage() {
   return (
     <PageBody>
-      <div
-        className={
-          'container mx-auto flex max-w-2xl flex-1 flex-col items-center'
-        }
-      >
+      <div className={'mx-auto flex w-full flex-1 flex-col lg:max-w-2xl'}>
         <PersonalAccountSettingsContainer features={features} paths={paths} />
       </div>
     </PageBody>

@@ -47,7 +47,7 @@ export function PageHeader({
     <div className={'flex items-start justify-between p-4'}>
       <div
         className={
-          'flex items-center space-x-2 lg:flex-col lg:items-start lg:space-x-0'
+          'flex items-center space-x-4 lg:flex-col lg:items-start lg:space-x-0'
         }
       >
         <div className={'flex items-center lg:hidden'}>{mobileNavigation}</div>

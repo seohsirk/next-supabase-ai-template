@@ -25,21 +25,21 @@ import { Trans } from '@kit/ui/trans';
 
 import featureFlagsConfig from '~/config/feature-flags.config';
 import pathsConfig from '~/config/paths.config';
-import { getOrganizationAccountSidebarConfig } from '~/config/team-account-sidebar.config';
+import { getTeamAccountSidebarConfig } from '~/config/team-account-sidebar.config';
 
 const features = {
   enableTeamAccounts: featureFlagsConfig.enableTeamAccounts,
   enableTeamCreation: featureFlagsConfig.enableTeamCreation,
 };
 
-export const MobileAppNavigation = (
+export const AccountLayoutMobileNavigation = (
   props: React.PropsWithChildren<{
-    slug: string;
+    account: string;
   }>,
 ) => {
   const signOut = useSignOut();
 
-  const Links = getOrganizationAccountSidebarConfig(props.slug).routes.map(
+  const Links = getTeamAccountSidebarConfig(props.account).routes.map(
     (item, index) => {
       if ('children' in item) {
         return item.children.map((child) => {

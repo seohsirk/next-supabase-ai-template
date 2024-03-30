@@ -4,7 +4,7 @@ import { parseSidebarStateCookie } from '@kit/shared/cookies/sidebar-state.cooki
 import { parseThemeCookie } from '@kit/shared/cookies/theme.cookie';
 import { Page } from '@kit/ui/page';
 
-import { AppSidebar } from '~/(dashboard)/home/[account]/_components/app-sidebar';
+import { AccountLayoutSidebar } from '~/(dashboard)/home/[account]/_components/account-layout-sidebar';
 import { loadTeamWorkspace } from '~/(dashboard)/home/[account]/_lib/load-team-account-workspace';
 import { withI18n } from '~/lib/i18n/with-i18n';
 
@@ -31,7 +31,7 @@ function TeamWorkspaceLayout({
   return (
     <Page
       sidebar={
-        <AppSidebar
+        <AccountLayoutSidebar
           collapsed={sidebarCollapsed}
           account={params.account}
           accounts={accounts}

@@ -39,7 +39,7 @@ const getRoutes = (account: string) => [
   },
 ];
 
-export function getOrganizationAccountSidebarConfig(account: string) {
+export function getTeamAccountSidebarConfig(account: string) {
   return SidebarConfigSchema.parse({
     routes: getRoutes(account),
   });

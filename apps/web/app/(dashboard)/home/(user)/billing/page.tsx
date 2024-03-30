@@ -7,9 +7,10 @@ import {
 import { Database } from '@kit/supabase/database';
 import { getSupabaseServerComponentClient } from '@kit/supabase/server-component-client';
 import { If } from '@kit/ui/if';
-import { PageBody, PageHeader } from '@kit/ui/page';
+import { PageBody } from '@kit/ui/page';
 import { Trans } from '@kit/ui/trans';
 
+import { UserAccountHeader } from '~/(dashboard)/home/(user)/_components/user-account-header';
 import { createPersonalAccountBillingPortalSession } from '~/(dashboard)/home/(user)/billing/server-actions';
 import billingConfig from '~/config/billing.config';
 import { createI18nServerInstance } from '~/lib/i18n/i18n.server';
@@ -34,7 +35,7 @@ async function PersonalAccountBillingPage() {
 
   return (
     <>
-      <PageHeader
+      <UserAccountHeader
         title={<Trans i18nKey={'common:billingTabLabel'} />}
         description={<Trans i18nKey={'common:billingTabDescription'} />}
       />

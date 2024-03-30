@@ -7,7 +7,7 @@ import { PageBody } from '@kit/ui/page';
 import Spinner from '@kit/ui/spinner';
 import { Trans } from '@kit/ui/trans';
 
-import { AppHeader } from '~/(dashboard)/home/[account]/_components/app-header';
+import { AccountLayoutHeader } from '~/(dashboard)/home/[account]/_components/account-layout-header';
 import { createI18nServerInstance } from '~/lib/i18n/i18n.server';
 import { withI18n } from '~/lib/i18n/with-i18n';
 
@@ -50,7 +50,7 @@ function TeamAccountHomePage({
 }) {
   return (
     <>
-      <AppHeader
+      <AccountLayoutHeader
         title={<Trans i18nKey={'common:dashboardTabLabel'} />}
         description={<Trans i18nKey={'common:dashboardTabDescription'} />}
         account={params.account}
@@ -59,7 +59,7 @@ function TeamAccountHomePage({
           <Plus className={'mr-2 h-4'} />
           <span>Add Widget</span>
         </Button>
-      </AppHeader>
+      </AccountLayoutHeader>
 
       <PageBody>
         <DashboardDemo />

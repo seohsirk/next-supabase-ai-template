@@ -1,3 +1,5 @@
+import 'server-only';
+
 import { Logger } from '@kit/shared/logger';
 import { getSupabaseRouteHandlerClient } from '@kit/supabase/route-handler-client';
 
@@ -18,9 +20,21 @@ export class DatabaseWebhookHandlerService {
     // check if the signature is valid
     this.assertSignatureIsAuthentic(request, webhooksSecret);
 
+    // all good, handle the webhook
     const json = await request.json();
 
     await this.handleWebhookBody(json);
+
+    const { table, type } = json as RecordChange<keyof Tables>;
+
+    Logger.info(
+      {
+        name: this.namespace,
+        table,
+        type,
+      },
+      'Webhook processed successfully',
+    );
   }
 
   private handleWebhookBody(body: RecordChange<keyof Tables>) {
