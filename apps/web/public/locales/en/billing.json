@@ -20,6 +20,23 @@
   "cannotManageBillingAlertDescription": "You do not have permissions to manage billing. Please contact your organization owner.",
   "manageTeamPlan": "Manage your Team Plan",
   "manageTeamPlanDescription": "Choose a plan that fits your team's needs. You can upgrade or downgrade your plan at any time.",
+  "flatSubscription": "Flat Subscription",
+  "billingInterval": {
+    "label": "Choose your billing interval",
+    "month": "Billed monthly",
+    "year": "Billed yearly"
+  },
+  "trialPeriod": "{{period}} day trial",
+  "perPeriod": "per {{period}}",
+  "processing": "Processing...",
+  "proceedToPayment": "Proceed to Payment",
+  "startTrial": "Start Trial",
+  "perTeamMember": "Per team member",
+  "perUnitIncluded": "({{included}} included)",
+  "featuresLabel": "Features",
+  "detailsLabel": "Details",
+  "planPickerLabel": "Pick your preferred plan",
+  "planCardLabel": "Manage your Plan",
   "status": {
     "free": {
       "badge": "Free Plan",

@@ -5,6 +5,7 @@ import { useMemo } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowRight, CheckCircle } from 'lucide-react';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import {
@@ -32,7 +33,6 @@ import {
   RadioGroupItem,
   RadioGroupItemLabel,
 } from '@kit/ui/radio-group';
-import { Separator } from '@kit/ui/separator';
 import { Trans } from '@kit/ui/trans';
 import { cn } from '@kit/ui/utils';
 
@@ -40,6 +40,7 @@ export function PlanPicker(
   props: React.PropsWithChildren<{
     config: BillingConfig;
     onSubmit: (data: { planId: string; productId: string }) => void;
+    canStartTrial?: boolean;
     pending?: boolean;
   }>,
 ) {
@@ -94,6 +95,8 @@ export function PlanPicker(
     }
   }, [props.config, planId]);
 
+  const { t } = useTranslation(`billing`);
+
   return (
     <Form {...form}>
       <div
@@ -111,7 +114,7 @@ export function PlanPicker(
               return (
                 <FormItem className={'rounded-md border p-4'}>
                   <FormLabel htmlFor={'plan-picker-id'}>
-                    Choose your billing interval
+                    <Trans i18nKey={'common:billingInterval.label'} />
                   </FormLabel>
 
                   <FormControl id={'plan-picker-id'}>
@@ -148,7 +151,7 @@ export function PlanPicker(
 
                               <span className={'text-sm font-bold'}>
                                 <Trans
-                                  i18nKey={`common:billingInterval.${interval}`}
+                                  i18nKey={`billing:billingInterval.${interval}`}
                                 />
                               </span>
                             </label>
@@ -167,7 +170,9 @@ export function PlanPicker(
             name={'planId'}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Pick your preferred plan</FormLabel>
+                <FormLabel>
+                  <Trans i18nKey={'common:planPickerLabel'} />
+                </FormLabel>
 
                 <FormControl>
                   <RadioGroup name={field.name}>
@@ -215,10 +220,18 @@ export function PlanPicker(
                                 'flex flex-col justify-center space-y-2'
                               }
                             >
-                              <span className="font-bold">{product.name}</span>
+                              <span className="font-bold">
+                                <Trans
+                                  i18nKey={`billing:products.${product.id}.name`}
+                                  defaults={product.name}
+                                />
+                              </span>
 
                               <span className={'text-muted-foreground'}>
-                                {product.description}
+                                <Trans
+                                  i18nKey={`billing:products.${product.id}.description`}
+                                  defaults={product.description}
+                                />
                               </span>
                             </Label>
 
@@ -227,10 +240,19 @@ export function PlanPicker(
                                 'flex items-center space-x-4 text-right'
                               }
                             >
-                              <If condition={plan.trialPeriod}>
+                              <If
+                                condition={
+                                  plan.trialPeriod && props.canStartTrial
+                                }
+                              >
                                 <div>
                                   <Badge variant={'success'}>
-                                    {plan.trialPeriod} day trial
+                                    <Trans
+                                      i18nKey={`billing:trialPeriod`}
+                                      values={{
+                                        period: plan.trialPeriod,
+                                      }}
+                                    />
                                   </Badge>
                                 </div>
                               </If>
@@ -247,7 +269,12 @@ export function PlanPicker(
 
                                 <div>
                                   <span className={'text-muted-foreground'}>
-                                    per {selectedInterval}
+                                    <Trans
+                                      i18nKey={`billing:perPeriod`}
+                                      values={{
+                                        period: selectedInterval,
+                                      }}
+                                    />
                                   </span>
                                 </div>
                               </div>
@@ -267,14 +294,14 @@ export function PlanPicker(
           <div>
             <Button disabled={props.pending ?? !form.formState.isValid}>
               {props.pending ? (
-                'Processing...'
+                t('processing')
               ) : (
                 <>
                   <If
-                    condition={selectedPlan?.trialPeriod}
-                    fallback={'Proceed to payment'}
+                    condition={selectedPlan?.trialPeriod && props.canStartTrial}
+                    fallback={t(`proceedToPayment`)}
                   >
-                    <span>Start {selectedPlan?.trialPeriod} day trial</span>
+                    <span>{t(`startTrial`)}</span>
                   </If>
 
                   <ArrowRight className={'ml-2 h-4 w-4'} />
@@ -292,18 +319,32 @@ export function PlanPicker(
           >
             <div className={'flex flex-col space-y-0.5'}>
               <Heading level={5}>
-                <b>{selectedProduct?.name}</b>
+                <b>
+                  <Trans
+                    i18nKey={`billing:products.${selectedProduct?.id}.name`}
+                    defaults={selectedProduct?.name}
+                  />
+                </b>{' '}
+                /{' '}
+                <Trans
+                  i18nKey={`billing:billingInterval.${selectedInterval}`}
+                />
               </Heading>
 
               <p>
                 <span className={'text-muted-foreground'}>
-                  {selectedProduct?.description}
+                  <Trans
+                    i18nKey={`billing:products.${selectedProduct?.id}.description`}
+                    defaults={selectedProduct?.description}
+                  />
                 </span>
               </p>
             </div>
 
             <div className={'flex flex-col space-y-1'}>
-              <span className={'font-semibold'}>Details</span>
+              <span className={'font-semibold'}>
+                <Trans i18nKey={'billing:detailsLabel'} />
+              </span>
 
               <div className={'flex flex-col divide-y'}>
                 {selectedPlan?.lineItems.map((item) => {
@@ -316,7 +357,20 @@ export function PlanPicker(
                             'flex items-center justify-between py-1.5 text-sm'
                           }
                         >
-                          <span>{item.name}</span>
+                          <span className={'flex space-x-2'}>
+                            <span>
+                              <Trans i18nKey={'billing:flatSubscription'} />
+                            </span>
+
+                            <span>/</span>
+
+                            <span>
+                              <Trans
+                                i18nKey={`billing:billingInterval.${selectedInterval}`}
+                              />
+                            </span>
+                          </span>
+
                           <span className={'font-semibold'}>
                             {formatCurrency(
                               selectedProduct?.currency.toLowerCase(),
@@ -334,7 +388,10 @@ export function PlanPicker(
                             'flex items-center justify-between py-1.5 text-sm'
                           }
                         >
-                          <span>Per team member</span>
+                          <span>
+                            <Trans i18nKey={'billing:perTeamMember'} />
+                          </span>
+
                           <span className={'font-semibold'}>
                             {formatCurrency(
                               selectedProduct?.currency.toLowerCase(),
@@ -353,11 +410,25 @@ export function PlanPicker(
                           }
                         >
                           <span>
-                            Per {item.unit}
-                            {item.included
-                              ? ` (${item.included} included)`
-                              : ''}
+                            <Trans
+                              i18nKey={'billing:perUnit'}
+                              values={{
+                                unit: item.unit,
+                              }}
+                            />
+
+                            {item.included ? (
+                              <Trans
+                                i18nKey={'billing:perUnitIncluded'}
+                                values={{
+                                  included: item.included,
+                                }}
+                              />
+                            ) : (
+                              ''
+                            )}
                           </span>
+
                           <span className={'font-semibold'}>
                             {formatCurrency(
                               selectedProduct?.currency.toLowerCase(),
@@ -372,7 +443,9 @@ export function PlanPicker(
             </div>
 
             <div className={'flex flex-col space-y-2'}>
-              <span className={'font-semibold'}>Features</span>
+              <span className={'font-semibold'}>
+                <Trans i18nKey={'billing:featuresLabel'} />
+              </span>
 
               {selectedProduct?.features.map((item) => {
                 return (
@@ -382,7 +455,12 @@ export function PlanPicker(
                   >
                     <CheckCircle className={'h-4 text-green-500'} />
 
-                    <span className={'text-muted-foreground'}>{item}</span>
+                    <span className={'text-muted-foreground'}>
+                      <Trans
+                        i18nKey={`billing:features.${item}`}
+                        defaults={item}
+                      />
+                    </span>
                   </div>
                 );
               })}

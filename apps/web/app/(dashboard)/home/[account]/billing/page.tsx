@@ -57,7 +57,10 @@ async function TeamAccountBillingPage({ params }: Params) {
               condition={subscription}
               fallback={
                 <If condition={canManageBilling}>
-                  <TeamAccountCheckoutForm accountId={accountId} />
+                  <TeamAccountCheckoutForm
+                    customerId={customerId}
+                    accountId={accountId}
+                  />
                 </If>
               }
             >
@@ -89,6 +92,7 @@ function CannotManageBillingAlert() {
       <AlertTitle>
         <Trans i18nKey={'billing:cannotManageBillingAlertTitle'} />
       </AlertTitle>
+
       <AlertDescription>
         <Trans i18nKey={'billing:cannotManageBillingAlertDescription'} />
       </AlertDescription>

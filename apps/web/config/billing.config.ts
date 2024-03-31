@@ -28,22 +28,6 @@ export default createBillingSchema({
               cost: 9.99,
               type: 'base',
             },
-            {
-              id: 'price_1NNwYHI1i3VnbZTqI2UzaHIe6',
-              name: 'Per Seat',
-              description: 'Add-on plan',
-              cost: 1.99,
-              type: 'per-seat',
-            },
-            {
-              id: 'price_1NNwYHI1i3VnbZTqI2UzaHIe7',
-              name: 'Metered',
-              description: 'Metered plan',
-              cost: 0.99,
-              type: 'metered',
-              unit: 'GB',
-              included: 10,
-            },
           ],
         },
         {

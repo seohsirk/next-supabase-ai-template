@@ -13,13 +13,39 @@ export const PaymentTypeSchema = z.enum(['one-time', 'recurring']);
 
 export const LineItemSchema = z
   .object({
-    id: z.string().min(1),
-    name: z.string().min(1),
-    description: z.string().optional(),
-    cost: z.number().positive(),
+    id: z
+      .string({
+        description:
+          'Unique identifier for the line item. Defined by the Provider.',
+      })
+      .min(1),
+    name: z
+      .string({
+        description: 'Name of the line item. Displayed to the user.',
+      })
+      .min(1),
+    description: z
+      .string({
+        description: 'Description of the line item. Displayed to the user.',
+      })
+      .optional(),
+    cost: z
+      .number({
+        description: 'Cost of the line item. Displayed to the user.',
+      })
+      .min(0),
     type: LineItemTypeSchema,
-    unit: z.string().optional(),
-    included: z.number().optional(),
+    unit: z
+      .string({
+        description:
+          'Unit of the line item. Displayed to the user. Example "seat" or "GB"',
+      })
+      .optional(),
+    included: z
+      .number({
+        description: 'Included amount of the line item. Displayed to the user.',
+      })
+      .optional(),
   })
   .refine((data) => data.type !== 'metered' || (data.unit && data.included), {
     message: 'Metered line items must have a unit and included amount',
@@ -28,12 +54,25 @@ export const LineItemSchema = z
 
 export const PlanSchema = z
   .object({
-    id: z.string().min(1),
-    name: z.string().min(1),
-    description: z.string().optional(),
+    id: z
+      .string({
+        description: 'Unique identifier for the plan. Defined by yourself.',
+      })
+      .min(1),
+    name: z
+      .string({
+        description: 'Name of the plan. Displayed to the user.',
+      })
+      .min(1),
     interval: BillingIntervalSchema.optional(),
     lineItems: z.array(LineItemSchema),
-    trialPeriod: z.number().optional(),
+    trialPeriod: z
+      .number({
+        description:
+          'Number of days for the trial period. Leave empty for no trial.',
+      })
+      .positive()
+      .optional(),
     paymentType: PaymentTypeSchema,
   })
   .refine((data) => data.lineItems.length > 0, {
@@ -68,13 +107,40 @@ export const PlanSchema = z
 
 const ProductSchema = z
   .object({
-    id: z.string().min(1),
-    name: z.string().min(1),
-    description: z.string().min(1),
-    currency: z.string().min(1),
-    badge: z.string().optional(),
+    id: z
+      .string({
+        description:
+          'Unique identifier for the product. Defined by th Provider.',
+      })
+      .min(1),
+    name: z
+      .string({
+        description: 'Name of the product. Displayed to the user.',
+      })
+      .min(1),
+    description: z
+      .string({
+        description: 'Description of the product. Displayed to the user.',
+      })
+      .min(1),
+    currency: z
+      .string({
+        description: 'Currency code for the product. Displayed to the user.',
+      })
+      .min(3)
+      .max(3),
+    badge: z
+      .string({
+        description:
+          'Badge for the product. Displayed to the user. Example: "Popular"',
+      })
+      .optional(),
     features: z.array(z.string()).nonempty(),
-    highlighted: z.boolean().optional(),
+    highlighted: z
+      .boolean({
+        description: 'Highlight this product. Displayed to the user.',
+      })
+      .optional(),
     plans: z.array(PlanSchema),
   })
   .refine((data) => data.plans.length > 0, {
