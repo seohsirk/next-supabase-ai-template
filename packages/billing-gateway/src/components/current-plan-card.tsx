@@ -34,8 +34,7 @@ export function CurrentPlanCard({
   subscription: Database['public']['Tables']['subscriptions']['Row'];
   config: BillingConfig;
 }>) {
-  const { plan, product } = getProductPlanPair(config, subscription.variant_id);
-  const baseLineItem = getBaseLineItem(config, plan.id);
+  const { plan, product } = getProductPlanPair(config, subscription);
 
   return (
     <Card>
@@ -60,16 +59,6 @@ export function CurrentPlanCard({
 
             <span>{product.name}</span>
             <CurrentPlanBadge status={subscription.status} />
-          </div>
-
-          <div className={'text-muted-foreground'}>
-            <Trans
-              i18nKey="billing:planRenewal"
-              values={{
-                interval: subscription.interval,
-                price: formatCurrency(product.currency, baseLineItem.cost),
-              }}
-            />
           </div>
         </div>
 

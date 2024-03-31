@@ -118,6 +118,16 @@ create type public.subscription_status as ENUM(
   'paused'
 );
 
+/* Subscription Type
+- We create the subscription type for the Supabase MakerKit. These types are used to manage the type of the subscriptions
+- The types are 'ONE_OFF' and 'RECURRING'.
+- You can add more types as needed.
+*/
+create type public.subscription_type as enum (
+  'one-off',
+  'recurring'
+);
+
 /*
 * Billing Provider
 - We create the billing provider for the Supabase MakerKit. These providers are used to manage the billing provider for the accounts and organizations
@@ -944,28 +954,24 @@ select
  * -------------------------------------------------------
  */
 -- Subscriptions table
-create table if not exists
-  public.subscriptions (
-    account_id uuid references public.accounts (id) on delete cascade not null,
-    billing_customer_id int references public.billing_customers on delete cascade not null,
-    id text not null primary key,
-    status public.subscription_status not null,
-    active bool not null,
-    billing_provider public.billing_provider not null,
-    product_id varchar(255) not null,
-    variant_id varchar(255) not null,
-    price_amount numeric,
-    cancel_at_period_end bool not null,
-    currency varchar(3) not null,
-    interval varchar(255) not null,
-    interval_count integer not null check (interval_count > 0),
-    created_at timestamptz not null default current_timestamp,
-    updated_at timestamptz not null default current_timestamp,
-    period_starts_at timestamptz,
-    period_ends_at timestamptz,
-    trial_starts_at timestamptz,
-    trial_ends_at timestamptz
-  );
+create table if not exists public.subscriptions (
+  id text not null primary key,
+  account_id uuid references public.accounts (id) on delete cascade not null,
+  billing_customer_id int references public.billing_customers on delete cascade not null,
+  status public.subscription_status not null,
+  type public.subscription_type not null default 'recurring',
+  total_amount numeric not null,
+  active bool not null,
+  billing_provider public.billing_provider not null,
+  cancel_at_period_end bool not null,
+  currency varchar(3) not null,
+  created_at timestamptz not null default current_timestamp,
+  updated_at timestamptz not null default current_timestamp,
+  period_starts_at timestamptz not null,
+  period_ends_at timestamptz not null,
+  trial_starts_at timestamptz,
+  trial_ends_at timestamptz
+);
 
 comment on table public.subscriptions is 'The subscriptions for an account';
 
@@ -973,21 +979,15 @@ comment on column public.subscriptions.account_id is 'The account the subscripti
 
 comment on column public.subscriptions.billing_provider is 'The provider of the subscription';
 
-comment on column public.subscriptions.product_id is 'The product ID for the subscription';
-
-comment on column public.subscriptions.variant_id is 'The variant ID for the subscription';
-
-comment on column public.subscriptions.price_amount is 'The price amount for the subscription';
+comment on column public.subscriptions.total_amount is 'The total price amount for the subscription';
 
 comment on column public.subscriptions.cancel_at_period_end is 'Whether the subscription will be canceled at the end of the period';
 
 comment on column public.subscriptions.currency is 'The currency for the subscription';
 
-comment on column public.subscriptions.interval is 'The interval for the subscription';
-
-comment on column public.subscriptions.interval_count is 'The interval count for the subscription';
-
 comment on column public.subscriptions.status is 'The status of the subscription';
+
+comment on column public.subscriptions.type is 'The type of the subscription, either one-off or recurring';
 
 comment on column public.subscriptions.period_starts_at is 'The start of the current period for the subscription';
 
@@ -1017,102 +1017,176 @@ select
   to authenticated using (has_role_on_account (account_id) or account_id = auth.uid ());
 
 -- Functions
-
-create or replace function public.add_subscription (
+create or replace function public.upsert_subscription (
   account_id uuid,
   subscription_id text,
   active bool,
+  total_amount numeric,
   status public.subscription_status,
   billing_provider public.billing_provider,
-  product_id varchar(255),
-  variant_id varchar(255),
-  price_amount numeric,
   cancel_at_period_end bool,
   currency varchar(3),
-  "interval" varchar(255),
-  interval_count integer,
   period_starts_at timestamptz,
   period_ends_at timestamptz,
-  trial_starts_at timestamptz,
-  trial_ends_at timestamptz,
-  customer_id varchar(255)
+  customer_id varchar(255),
+  line_items jsonb,
+  trial_starts_at timestamptz default null,
+  trial_ends_at timestamptz default null,
+  type public.subscription_type default 'recurring'
 ) returns public.subscriptions as $$
 declare
   new_subscription public.subscriptions;
   new_billing_customer_id int;
 begin
-    insert into public.billing_customers(
-        account_id,
-        provider,
-        customer_id)
-    values (
-        account_id,
-        billing_provider,
-        customer_id)
-    returning
-        id into new_billing_customer_id;
+  insert into public.billing_customers(account_id, provider, customer_id)
+  values (account_id, billing_provider, customer_id)
+  on conflict (account_id, provider, customer_id) do update
+  set provider = excluded.provider
+  returning id into new_billing_customer_id;
 
-    insert into public.subscriptions(
-        account_id,
-        billing_customer_id,
-        id,
-        active,
-        status,
-        billing_provider,
-        product_id,
-        variant_id,
-        price_amount,
-        cancel_at_period_end,
-        currency,
-        interval,
-        interval_count,
-        period_starts_at,
-        period_ends_at,
-        trial_starts_at,
-        trial_ends_at)
-    values (
-        account_id,
-        new_billing_customer_id,
-        subscription_id,
-        active,
-        status,
-        billing_provider,
-        product_id,
-        variant_id,
-        price_amount,
-        cancel_at_period_end,
-        currency,
-        interval,
-        interval_count,
-        period_starts_at,
-        period_ends_at,
-        trial_starts_at,
-        trial_ends_at)
-    returning
-        * into new_subscription;
-    return new_subscription;
-    end;
+  insert into public.subscriptions(
+    account_id,
+    billing_customer_id,
+    id,
+    active,
+    total_amount,
+    status,
+    type,
+    billing_provider,
+    cancel_at_period_end,
+    currency,
+    period_starts_at,
+    period_ends_at,
+    trial_starts_at,
+    trial_ends_at)
+  values (
+    account_id,
+    new_billing_customer_id,
+    subscription_id,
+    active,
+    total_amount,
+    status,
+    type,
+    billing_provider,
+    cancel_at_period_end,
+    currency,
+    period_starts_at,
+    period_ends_at,
+    trial_starts_at,
+    trial_ends_at)
+  on conflict (id) do update
+  set active = excluded.active,
+      status = excluded.status,
+      cancel_at_period_end = excluded.cancel_at_period_end,
+      currency = excluded.currency,
+      period_starts_at = excluded.period_starts_at,
+      period_ends_at = excluded.period_ends_at,
+      trial_starts_at = excluded.trial_starts_at,
+      trial_ends_at = excluded.trial_ends_at
+  returning * into new_subscription;
+
+  -- Upsert subscription items
+  with item_data as (
+    select
+      (line_item ->> 'product_id')::varchar as prod_id,
+      (line_item ->> 'variant_id')::varchar as var_id,
+      (line_item ->> 'price_amount')::numeric as price_amt,
+      (line_item ->> 'quantity')::integer as qty,
+      (line_item ->> 'interval')::varchar as intv,
+      (line_item ->> 'interval_count')::integer as intv_count
+    from jsonb_array_elements(line_items) as line_item
+  )
+  insert into public.subscription_items(
+    subscription_id,
+    product_id,
+    variant_id,
+    price_amount,
+    quantity,
+    interval,
+    interval_count)
+  select
+    subscription_id,
+    prod_id,
+    var_id,
+    price_amt,
+    qty,
+    intv,
+    intv_count
+  from item_data
+  on conflict (subscription_id, product_id, variant_id) do update
+  set price_amount = excluded.price_amount,
+      quantity = excluded.quantity,
+      interval = excluded.interval,
+      interval_count = excluded.interval_count;
+
+  return new_subscription;
+end;
 $$ language plpgsql;
 
-grant execute on function public.add_subscription (
-  uuid,
-  text,
-  boolean,
-  public.subscription_status,
-  public.billing_provider,
-  varchar,
-  varchar,
-  numeric,
-  boolean,
-  varchar,
-  varchar,
-  integer,
-  timestamptz,
-  timestamptz,
-  timestamptz,
-  timestamptz,
-  varchar
+grant execute on function public.upsert_subscription (
+    uuid,
+    text,
+    bool,
+    numeric,
+    public.subscription_status,
+    public.billing_provider,
+    bool,
+    varchar,
+    timestamptz,
+    timestamptz,
+    varchar,
+    jsonb,
+    timestamptz,
+    timestamptz,
+    public.subscription_type
 ) to service_role;
+
+
+/* -------------------------------------------------------
+ * Section: Subscription Items
+ * We create the schema for the subscription items. Subscription items are the items in a subscription.
+ * For example, a subscription might have a subscription item with the product ID 'prod_123' and the variant ID 'var_123'.
+ * -------------------------------------------------------
+ */
+create table if not exists public.subscription_items (
+  id text not null primary key,
+  subscription_id text references public.subscriptions (id) on delete cascade not null,
+  product_id varchar(255) not null,
+  variant_id varchar(255) not null,
+  price_amount numeric,
+  quantity integer not null default 1,
+  interval varchar(255) not null,
+  interval_count integer not null check (interval_count > 0),
+  created_at timestamptz not null default current_timestamp,
+  updated_at timestamptz not null default current_timestamp
+);
+
+comment on table public.subscription_items is 'The items in a subscription';
+comment on column public.subscription_items.subscription_id is 'The subscription the item is for';
+comment on column public.subscription_items.product_id is 'The product ID for the item';
+comment on column public.subscription_items.variant_id is 'The variant ID for the item';
+comment on column public.subscription_items.price_amount is 'The price amount for the item';
+comment on column public.subscription_items.quantity is 'The quantity of the item';
+comment on column public.subscription_items.interval is 'The interval for the item';
+comment on column public.subscription_items.interval_count is 'The interval count for the item';
+comment on column public.subscription_items.created_at is 'The creation date of the item';
+comment on column public.subscription_items.updated_at is 'The last update date of the item';
+
+-- Open up access to subscription_items table for authenticated users and service_role
+grant select on table public.subscription_items to authenticated, service_role;
+grant insert, update, delete on table public.subscription_items to service_role;
+
+-- RLS
+alter table public.subscription_items enable row level security;
+
+-- SELECT: Users can read subscription items on a subscription they are a member of
+create policy subscription_items_read_self on public.subscription_items for
+select
+  to authenticated using (
+  exists (
+      select 1 from public.subscriptions where id = subscription_id and (account_id = auth.uid () or has_role_on_account (account_id))
+    )
+  );
 
 /*
  * -------------------------------------------------------

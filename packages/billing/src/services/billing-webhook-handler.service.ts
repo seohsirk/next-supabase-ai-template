@@ -1,8 +1,7 @@
 import { Database } from '@kit/supabase/database';
 
-type SubscriptionObject = Database['public']['Tables']['subscriptions'];
-
-type SubscriptionUpdateParams = SubscriptionObject['Update'];
+type UpsertSubscriptionParams =
+  Database['public']['Functions']['upsert_subscription']['Args'];
 
 /**
  * Represents an abstract class for handling billing webhook events.
@@ -14,12 +13,13 @@ export abstract class BillingWebhookHandlerService {
     event: unknown,
     params: {
       onCheckoutSessionCompleted: (
-        subscription: SubscriptionObject['Row'],
+        subscription: UpsertSubscriptionParams,
         customerId: string,
       ) => Promise<unknown>;
 
       onSubscriptionUpdated: (
-        subscription: SubscriptionUpdateParams,
+        subscription: UpsertSubscriptionParams,
+        customerId: string,
       ) => Promise<unknown>;
 
       onSubscriptionDeleted: (subscriptionId: string) => Promise<unknown>;

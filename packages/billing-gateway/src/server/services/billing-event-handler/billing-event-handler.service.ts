@@ -53,19 +53,21 @@ export class BillingEventHandlerService {
 
         const ctx = {
           namespace: 'billing',
-          subscriptionId: subscription.id,
+          subscriptionId: subscription.subscription_id,
           provider: subscription.billing_provider,
           accountId: subscription.account_id,
+          customerId: subscription.customer_id,
         };
 
         Logger.info(ctx, 'Processing subscription updated event');
 
         // Handle the subscription updated event
         // here we update the subscription in the database
-        const { error } = await client
-          .from('subscriptions')
-          .update(subscription)
-          .match({ id: subscription.id });
+        const { error } = await client.rpc('upsert_subscription', {
+          ...subscription,
+          customer_id: subscription.customer_id,
+          account_id: subscription.account_id,
+        });
 
         if (error) {
           Logger.error(
@@ -88,24 +90,16 @@ export class BillingEventHandlerService {
 
         const ctx = {
           namespace: 'billing',
-          subscriptionId: subscription.id,
+          subscriptionId: subscription.subscription_id,
           provider: subscription.billing_provider,
           accountId: subscription.account_id,
         };
 
         Logger.info(ctx, 'Processing checkout session completed event...');
 
-        const { id: _, ...data } = subscription;
-
-        const { error } = await client.rpc('add_subscription', {
-          ...data,
-          subscription_id: subscription.id,
+        const { error } = await client.rpc('upsert_subscription', {
+          ...subscription,
           customer_id: customerId,
-          price_amount: subscription.price_amount ?? 0,
-          period_starts_at: subscription.period_starts_at!,
-          period_ends_at: subscription.period_ends_at!,
-          trial_starts_at: subscription.trial_starts_at!,
-          trial_ends_at: subscription.trial_ends_at!,
         });
 
         if (error) {

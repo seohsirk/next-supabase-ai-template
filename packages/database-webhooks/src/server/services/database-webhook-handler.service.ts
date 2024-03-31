@@ -10,9 +10,14 @@ export class DatabaseWebhookHandlerService {
   private readonly namespace = 'database-webhook-handler';
 
   async handleWebhook(request: Request, webhooksSecret: string) {
+    const json = await request.clone().json();
+    const { table, type } = json as RecordChange<keyof Tables>;
+
     Logger.info(
       {
         name: this.namespace,
+        table,
+        type,
       },
       'Received webhook from DB. Processing...',
     );
@@ -21,11 +26,17 @@ export class DatabaseWebhookHandlerService {
     this.assertSignatureIsAuthentic(request, webhooksSecret);
 
     // all good, handle the webhook
-    const json = await request.json();
 
-    await this.handleWebhookBody(json);
+    // create a client with admin access since we are handling webhooks
+    // and no user is authenticated
+    const client = getSupabaseRouteHandlerClient({
+      admin: true,
+    });
 
-    const { table, type } = json as RecordChange<keyof Tables>;
+    // handle the webhook
+    const service = new DatabaseWebhookRouterService(client);
+
+    await service.handleWebhook(json);
 
     Logger.info(
       {
@@ -35,16 +46,6 @@ export class DatabaseWebhookHandlerService {
       },
       'Webhook processed successfully',
     );
-  }
-
-  private handleWebhookBody(body: RecordChange<keyof Tables>) {
-    const client = getSupabaseRouteHandlerClient({
-      admin: true,
-    });
-
-    const service = new DatabaseWebhookRouterService(client);
-
-    return service.handleWebhook(body);
   }
 
   private assertSignatureIsAuthentic(request: Request, webhooksSecret: string) {

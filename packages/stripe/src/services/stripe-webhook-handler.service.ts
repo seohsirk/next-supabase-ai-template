@@ -7,12 +7,8 @@ import { Database } from '@kit/supabase/database';
 import { StripeServerEnvSchema } from '../schema/stripe-server-env.schema';
 import { createStripeClient } from './stripe-sdk';
 
-type Subscription = Database['public']['Tables']['subscriptions'];
-
-type InsertSubscriptionParams = Omit<
-  Subscription['Insert'],
-  'billing_customer_id'
->;
+type UpsertSubscriptionParams =
+  Database['public']['Functions']['upsert_subscription']['Args'];
 
 export class StripeWebhookHandlerService
   implements BillingWebhookHandlerService
@@ -64,11 +60,12 @@ export class StripeWebhookHandlerService
     event: Stripe.Event,
     params: {
       onCheckoutSessionCompleted: (
-        data: InsertSubscriptionParams,
-        customerId: string,
+        data: UpsertSubscriptionParams,
       ) => Promise<unknown>;
 
-      onSubscriptionUpdated: (data: Subscription['Update']) => Promise<unknown>;
+      onSubscriptionUpdated: (
+        data: UpsertSubscriptionParams,
+      ) => Promise<unknown>;
       onSubscriptionDeleted: (subscriptionId: string) => Promise<unknown>;
     },
   ) {
@@ -111,8 +108,7 @@ export class StripeWebhookHandlerService
   private async handleCheckoutSessionCompleted(
     event: Stripe.CheckoutSessionCompletedEvent,
     onCheckoutCompletedCallback: (
-      data: Omit<Subscription['Insert'], 'billing_customer_id'>,
-      customerId: string,
+      data: UpsertSubscriptionParams,
     ) => Promise<unknown>,
   ) {
     const stripe = await this.loadStripe();
@@ -134,20 +130,23 @@ export class StripeWebhookHandlerService
 
     const payload = this.buildSubscriptionPayload({
       subscription,
-      accountId,
       amount,
-    }) as InsertSubscriptionParams;
+      accountId,
+      customerId,
+    });
 
-    return onCheckoutCompletedCallback(payload, customerId);
+    return onCheckoutCompletedCallback(payload);
   }
 
   private async handleSubscriptionUpdatedEvent(
     event: Stripe.CustomerSubscriptionUpdatedEvent,
     onSubscriptionUpdatedCallback: (
-      data: Subscription['Update'],
+      data: UpsertSubscriptionParams,
     ) => Promise<unknown>,
   ) {
     const subscription = event.data.object;
+    const accountId = subscription.metadata.account_id as string;
+    const customerId = subscription.customer as string;
 
     const amount = subscription.items.data.reduce((acc, item) => {
       return (acc + (item.plan.amount ?? 0)) * (item.quantity ?? 1);
@@ -156,6 +155,8 @@ export class StripeWebhookHandlerService
     const payload = this.buildSubscriptionPayload({
       subscription,
       amount,
+      accountId,
+      customerId,
     });
 
     return onSubscriptionUpdatedCallback(payload);
@@ -173,52 +174,53 @@ export class StripeWebhookHandlerService
   private buildSubscriptionPayload(params: {
     subscription: Stripe.Subscription;
     amount: number;
-    // we only need the account id if we
-    // are creating a subscription for an account
-    accountId?: string;
-  }) {
+    accountId: string;
+    customerId: string;
+  }): UpsertSubscriptionParams {
     const { subscription } = params;
-    const lineItem = subscription.items.data[0];
-    const price = lineItem?.price;
-    const priceId = price?.id as string;
-    const interval = price?.recurring?.interval ?? null;
+    const currency = subscription.currency;
 
     const active =
       subscription.status === 'active' || subscription.status === 'trialing';
 
-    const data = {
-      billing_provider: this.provider,
-      id: subscription.id,
-      status: subscription.status,
-      active,
-      price_amount: params.amount,
-      cancel_at_period_end: subscription.cancel_at_period_end ?? false,
-      interval: interval as string,
-      currency: (price as Stripe.Price).currency,
-      product_id: (price as Stripe.Price).product as string,
-      variant_id: priceId,
-      interval_count: price?.recurring?.interval_count ?? 1,
-      period_starts_at: getISOString(subscription.current_period_start),
-      period_ends_at: getISOString(subscription.current_period_end),
-      trial_starts_at: getISOString(subscription.trial_start),
-      trial_ends_at: getISOString(subscription.trial_end),
-    } satisfies Omit<InsertSubscriptionParams, 'account_id'>;
+    const lineItems = subscription.items.data.map((item) => {
+      const quantity = item.quantity ?? 1;
 
-    // when we are creating a subscription for an account
-    // we need to include the account id
-    if (params.accountId !== undefined) {
       return {
-        ...data,
-        account_id: params.accountId,
+        id: item.id,
+        subscription_id: subscription.id,
+        product_id: item.price.product as string,
+        variant_id: item.price.id,
+        price_amount: item.price.unit_amount,
+        quantity,
+        interval: item.price.recurring?.interval as string,
+        interval_count: item.price.recurring?.interval_count as number,
       };
-    }
+    });
 
     // otherwise we are updating a subscription
     // and we only need to return the update payload
-    return data;
+    return {
+      line_items: lineItems,
+      billing_provider: this.provider,
+      subscription_id: subscription.id,
+      status: subscription.status,
+      total_amount: params.amount,
+      active,
+      currency,
+      cancel_at_period_end: subscription.cancel_at_period_end ?? false,
+      period_starts_at: getISOString(
+        subscription.current_period_start,
+      ) as string,
+      period_ends_at: getISOString(subscription.current_period_end) as string,
+      trial_starts_at: getISOString(subscription.trial_start),
+      trial_ends_at: getISOString(subscription.trial_end),
+      account_id: params.accountId,
+      customer_id: params.customerId,
+    };
   }
 }
 
 function getISOString(date: number | null) {
-  return date ? new Date(date * 1000).toISOString() : null;
+  return date ? new Date(date * 1000).toISOString() : undefined;
 }
