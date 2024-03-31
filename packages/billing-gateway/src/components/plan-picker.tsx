@@ -302,7 +302,78 @@ export function PlanPicker(
               </p>
             </div>
 
-            <div className={'flex flex-col'}>
+            <div className={'flex flex-col space-y-1'}>
+              <span className={'font-semibold'}>Details</span>
+
+              <div className={'flex flex-col divide-y'}>
+                {selectedPlan?.lineItems.map((item) => {
+                  switch (item.type) {
+                    case 'base':
+                      return (
+                        <div
+                          key={item.id}
+                          className={
+                            'flex items-center justify-between py-1.5 text-sm'
+                          }
+                        >
+                          <span>{item.name}</span>
+                          <span className={'font-semibold'}>
+                            {formatCurrency(
+                              selectedProduct?.currency.toLowerCase(),
+                              item.cost,
+                            )}
+                          </span>
+                        </div>
+                      );
+
+                    case 'per-seat':
+                      return (
+                        <div
+                          key={item.id}
+                          className={
+                            'flex items-center justify-between py-1.5 text-sm'
+                          }
+                        >
+                          <span>Per team member</span>
+                          <span className={'font-semibold'}>
+                            {formatCurrency(
+                              selectedProduct?.currency.toLowerCase(),
+                              item.cost,
+                            )}
+                          </span>
+                        </div>
+                      );
+
+                    case 'metered':
+                      return (
+                        <div
+                          key={item.id}
+                          className={
+                            'flex items-center justify-between py-1.5 text-sm'
+                          }
+                        >
+                          <span>
+                            Per {item.unit}
+                            {item.included
+                              ? ` (${item.included} included)`
+                              : ''}
+                          </span>
+                          <span className={'font-semibold'}>
+                            {formatCurrency(
+                              selectedProduct?.currency.toLowerCase(),
+                              item.cost,
+                            )}
+                          </span>
+                        </div>
+                      );
+                  }
+                })}
+              </div>
+            </div>
+
+            <div className={'flex flex-col space-y-2'}>
+              <span className={'font-semibold'}>Features</span>
+
               {selectedProduct?.features.map((item) => {
                 return (
                   <div
@@ -316,8 +387,6 @@ export function PlanPicker(
                 );
               })}
             </div>
-
-            <Separator />
           </div>
         </If>
       </div>

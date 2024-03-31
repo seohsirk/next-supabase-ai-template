@@ -40,10 +40,6 @@ export const PlanSchema = z
     message: 'Plans must have at least one line item',
     path: ['lineItems'],
   })
-  .refine((data) => data.lineItems.some((item) => item.type === 'base'), {
-    message: 'Plans must include a base line item',
-    path: ['lineItems'],
-  })
   .refine(
     (data) => data.paymentType !== 'one-time' || data.interval === undefined,
     {
