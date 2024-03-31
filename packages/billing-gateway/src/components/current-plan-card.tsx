@@ -27,14 +27,33 @@ import { Trans } from '@kit/ui/trans';
 import { CurrentPlanAlert } from './current-plan-alert';
 import { CurrentPlanBadge } from './current-plan-badge';
 
+type Subscription = Database['public']['Tables']['subscriptions']['Row'];
+type LineItem = Database['public']['Tables']['subscription_items']['Row'];
+
+interface Props {
+  subscription: Subscription & {
+    items: LineItem[];
+  };
+
+  config: BillingConfig;
+}
+
 export function CurrentPlanCard({
   subscription,
   config,
-}: React.PropsWithChildren<{
-  subscription: Database['public']['Tables']['subscriptions']['Row'];
-  config: BillingConfig;
-}>) {
-  const { plan, product } = getProductPlanPair(config, subscription);
+}: React.PropsWithChildren<Props>) {
+  // line items have the same product id
+  const lineItem = subscription.items[0] as LineItem;
+
+  const product = config.products.find(
+    (product) => product.id === lineItem.product_id,
+  );
+
+  if (!product) {
+    throw new Error(
+      'Product not found. Make sure the product exists in the billing config.',
+    );
+  }
 
   return (
     <Card>
@@ -58,6 +77,7 @@ export function CurrentPlanCard({
             />
 
             <span>{product.name}</span>
+
             <CurrentPlanBadge status={subscription.status} />
           </div>
         </div>

@@ -96,7 +96,11 @@ export function PlanPicker(
 
   return (
     <Form {...form}>
-      <div className={'flex space-x-4'}>
+      <div
+        className={
+          'flex flex-col space-y-4 lg:flex-row lg:space-x-4 lg:space-y-0'
+        }
+      >
         <form
           className={'flex w-full max-w-xl flex-col space-y-4'}
           onSubmit={form.handleSubmit(props.onSubmit)}

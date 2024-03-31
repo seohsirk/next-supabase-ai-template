@@ -18,8 +18,6 @@ import { withI18n } from '~/lib/i18n/with-i18n';
 
 import { PersonalAccountCheckoutForm } from './_components/personal-account-checkout-form';
 
-type Subscription = Database['public']['Tables']['subscriptions']['Row'];
-
 export const generateMetadata = async () => {
   const i18n = await createI18nServerInstance();
   const title = i18n.t('account:billingTab');
@@ -78,7 +76,7 @@ async function loadData(client: SupabaseClient<Database>) {
 
   const subscription = client
     .from('subscriptions')
-    .select<string, Subscription>('*')
+    .select('*, items: subscription_items !inner (*)')
     .eq('account_id', user.id)
     .maybeSingle()
     .then(({ data }) => data);

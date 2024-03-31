@@ -35,6 +35,7 @@ async function TeamAccountBillingPage({ params }: Params) {
   const workspace = await loadTeamWorkspace(params.account);
   const accountId = workspace.account.id;
   const [subscription, customerId] = await loadAccountData(accountId);
+
   const canManageBilling =
     workspace.account.permissions.includes('billing.manage');
 
@@ -46,7 +47,7 @@ async function TeamAccountBillingPage({ params }: Params) {
       />
 
       <PageBody>
-        <div className={'mx-auto w-full max-w-2xl'}>
+        <div className={'mx-auto w-full'}>
           <If condition={!canManageBilling}>
             <CannotManageBillingAlert />
           </If>
@@ -100,7 +101,7 @@ async function loadAccountData(accountId: string) {
 
   const subscription = client
     .from('subscriptions')
-    .select('*')
+    .select('*, items: subscription_items !inner (*)')
     .eq('account_id', accountId)
     .maybeSingle()
     .then(({ data }) => data);
