@@ -9,9 +9,9 @@ const webhooksSecret = z
   .min(1)
   .parse(process.env.SUPABASE_DB_WEBHOOK_SECRET);
 
-export async function POST(request: Request) {
-  const service = new DatabaseWebhookHandlerService();
+const service = new DatabaseWebhookHandlerService();
 
+export async function POST(request: Request) {
   await service.handleWebhook(request, webhooksSecret);
 
   return new Response(null, {
