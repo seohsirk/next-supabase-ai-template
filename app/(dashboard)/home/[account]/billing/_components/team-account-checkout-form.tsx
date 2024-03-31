@@ -18,7 +18,10 @@ import billingConfig from '~/config/billing.config';
 
 import { createTeamAccountCheckoutSession } from '../server-actions';
 
-export function TeamAccountCheckoutForm(params: { accountId: string }) {
+export function TeamAccountCheckoutForm(params: {
+  accountId: string;
+  customerId: string | null | undefined;
+}) {
   const routeParams = useParams();
   const [pending, startTransition] = useTransition();
   const [checkoutToken, setCheckoutToken] = useState<string | null>(null);
@@ -32,6 +35,9 @@ export function TeamAccountCheckoutForm(params: { accountId: string }) {
       />
     );
   }
+
+  // only allow trial if the user is not already a customer
+  const canStartTrial = !params.customerId;
 
   // Otherwise, render the plan picker component
   return (
@@ -50,6 +56,7 @@ export function TeamAccountCheckoutForm(params: { accountId: string }) {
         <PlanPicker
           pending={pending}
           config={billingConfig}
+          canStartTrial={canStartTrial}
           onSubmit={({ planId, productId }) => {
             startTransition(async () => {
               const slug = routeParams.account as string;

@@ -20,10 +20,15 @@ import billingConfig from '~/config/billing.config';
 
 import { createPersonalAccountCheckoutSession } from '../server-actions';
 
-export function PersonalAccountCheckoutForm() {
+export function PersonalAccountCheckoutForm(props: {
+  customerId: string | null | undefined;
+}) {
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState(false);
   const [checkoutToken, setCheckoutToken] = useState<string>();
+
+  // only allow trial if the user is not already a customer
+  const canStartTrial = !props.customerId;
 
   // If the checkout token is set, render the embedded checkout component
   if (checkoutToken) {
@@ -40,10 +45,12 @@ export function PersonalAccountCheckoutForm() {
     <div>
       <Card>
         <CardHeader>
-          <CardTitle>Manage your Plan</CardTitle>
+          <CardTitle>
+            <Trans i18nKey={'common:planCardLabel'} />
+          </CardTitle>
 
           <CardDescription>
-            You can change your plan at any time.
+            <Trans i18nKey={'common:planCardDescription'} />
           </CardDescription>
         </CardHeader>
 
@@ -55,6 +62,7 @@ export function PersonalAccountCheckoutForm() {
           <PlanPicker
             pending={pending}
             config={billingConfig}
+            canStartTrial={canStartTrial}
             onSubmit={({ planId, productId }) => {
               startTransition(async () => {
                 try {
