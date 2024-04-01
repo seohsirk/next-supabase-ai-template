@@ -73,6 +73,7 @@ export async function createStripeCheckout(
     line_items: lineItems,
     client_reference_id: clientReferenceId,
     subscription_data: subscriptionData,
+    customer_creation: 'always',
     ...customerData,
     ...urls,
   });

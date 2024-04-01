@@ -2,9 +2,13 @@ import { Database } from '@kit/supabase/database';
 import { Badge } from '@kit/ui/badge';
 import { Trans } from '@kit/ui/trans';
 
+type Status =
+  | Database['public']['Enums']['subscription_status']
+  | Database['public']['Enums']['payment_status'];
+
 export function CurrentPlanBadge(
   props: React.PropsWithoutRef<{
-    status: Database['public']['Enums']['subscription_status'];
+    status: Status;
   }>,
 ) {
   let variant: 'success' | 'warning' | 'destructive';
@@ -12,12 +16,14 @@ export function CurrentPlanBadge(
 
   switch (props.status) {
     case 'active':
+    case 'succeeded':
       variant = 'success';
       break;
     case 'trialing':
       variant = 'success';
       break;
     case 'past_due':
+    case 'failed':
       variant = 'destructive';
       break;
     case 'canceled':
@@ -27,6 +33,7 @@ export function CurrentPlanBadge(
       variant = 'destructive';
       break;
     case 'incomplete':
+    case 'pending':
       variant = 'warning';
       break;
     case 'incomplete_expired':

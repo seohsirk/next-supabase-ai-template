@@ -25,7 +25,10 @@ export function PersonalAccountCheckoutForm(props: {
 }) {
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState(false);
-  const [checkoutToken, setCheckoutToken] = useState<string>();
+
+  const [checkoutToken, setCheckoutToken] = useState<string | undefined>(
+    undefined,
+  );
 
   // only allow trial if the user is not already a customer
   const canStartTrial = !props.customerId;
@@ -36,6 +39,7 @@ export function PersonalAccountCheckoutForm(props: {
       <EmbeddedCheckout
         checkoutToken={checkoutToken}
         provider={billingConfig.provider}
+        onClose={() => setCheckoutToken(undefined)}
       />
     );
   }

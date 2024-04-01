@@ -186,9 +186,9 @@ export type BillingConfig = z.infer<typeof BillingSchema>;
 export type ProductSchema = z.infer<typeof ProductSchema>;
 
 export function getPlanIntervals(config: z.infer<typeof BillingSchema>) {
-  const intervals = config.products.flatMap((product) =>
-    product.plans.map((plan) => plan.interval),
-  );
+  const intervals = config.products
+    .flatMap((product) => product.plans.map((plan) => plan.interval))
+    .filter(Boolean);
 
   return Array.from(new Set(intervals));
 }

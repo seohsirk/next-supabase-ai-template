@@ -2,13 +2,14 @@ import { z } from 'zod';
 
 import { LineItemSchema } from '@kit/billing';
 import { formatCurrency } from '@kit/shared/utils';
+import { If } from '@kit/ui/if';
 import { Trans } from '@kit/ui/trans';
 
 export function LineItemDetails(
   props: React.PropsWithChildren<{
     lineItems: z.infer<typeof LineItemSchema>[];
     currency: string;
-    selectedInterval: string;
+    selectedInterval?: string | undefined;
   }>,
 ) {
   return (
@@ -23,15 +24,20 @@ export function LineItemDetails(
               >
                 <span className={'flex space-x-2'}>
                   <span>
-                    <Trans i18nKey={'billing:flatSubscription'} />
+                    <Trans i18nKey={'billing:basePlan'} />
                   </span>
 
                   <span>/</span>
 
                   <span>
-                    <Trans
-                      i18nKey={`billing:billingInterval.${props.selectedInterval}`}
-                    />
+                    <If
+                      condition={props.selectedInterval}
+                      fallback={<Trans i18nKey={'billing:lifetime'} />}
+                    >
+                      <Trans
+                        i18nKey={`billing:billingInterval.${props.selectedInterval}`}
+                      />
+                    </If>
                   </span>
                 </span>
 

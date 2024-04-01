@@ -101,6 +101,10 @@ export function PlanPicker(
 
   const { t } = useTranslation(`billing`);
 
+  // display the period picker if the selected plan is recurring or if no plan is selected
+  const isRecurringPlan =
+    selectedPlan?.paymentType === 'recurring' || !selectedPlan;
+
   return (
     <Form {...form}>
       <div
@@ -112,67 +116,74 @@ export function PlanPicker(
           className={'flex w-full max-w-xl flex-col space-y-4'}
           onSubmit={form.handleSubmit(props.onSubmit)}
         >
-          <FormField
-            name={'interval'}
-            render={({ field }) => {
-              return (
-                <FormItem className={'rounded-md border p-4'}>
-                  <FormLabel htmlFor={'plan-picker-id'}>
-                    <Trans i18nKey={'common:billingInterval.label'} />
-                  </FormLabel>
+          <div
+            className={cn('transition-all', {
+              ['pointer-events-none opacity-50']: !isRecurringPlan,
+            })}
+          >
+            <FormField
+              name={'interval'}
+              render={({ field }) => {
+                return (
+                  <FormItem className={'rounded-md border p-4'}>
+                    <FormLabel htmlFor={'plan-picker-id'}>
+                      <Trans i18nKey={'common:billingInterval.label'} />
+                    </FormLabel>
 
-                  <FormControl id={'plan-picker-id'}>
-                    <RadioGroup name={field.name} value={field.value}>
-                      <div className={'flex space-x-2.5'}>
-                        {intervals.map((interval) => {
-                          const selected = field.value === interval;
+                    <FormControl id={'plan-picker-id'}>
+                      <RadioGroup name={field.name} value={field.value}>
+                        <div className={'flex space-x-2.5'}>
+                          {intervals.map((interval) => {
+                            const selected = field.value === interval;
 
-                          return (
-                            <label
-                              htmlFor={interval}
-                              key={interval}
-                              className={cn(
-                                'hover:bg-muted flex items-center space-x-2 rounded-md border border-transparent px-4 py-2',
-                                {
-                                  ['border-border']: selected,
-                                  ['hover:bg-muted']: !selected,
-                                },
-                              )}
-                            >
-                              <RadioGroupItem
-                                id={interval}
-                                value={interval}
-                                onClick={() => {
-                                  form.setValue('planId', '', {
-                                    shouldValidate: true,
-                                  });
+                            return (
+                              <label
+                                htmlFor={interval}
+                                key={interval}
+                                className={cn(
+                                  'hover:bg-muted flex items-center space-x-2 rounded-md border border-transparent px-4 py-2',
+                                  {
+                                    ['border-border']: selected,
+                                    ['hover:bg-muted']: !selected,
+                                  },
+                                )}
+                              >
+                                <RadioGroupItem
+                                  id={interval}
+                                  value={interval}
+                                  onClick={() => {
+                                    form.setValue('planId', '', {
+                                      shouldValidate: true,
+                                    });
 
-                                  form.setValue('productId', '', {
-                                    shouldValidate: true,
-                                  });
+                                    form.setValue('productId', '', {
+                                      shouldValidate: true,
+                                    });
 
-                                  form.setValue('interval', interval, {
-                                    shouldValidate: true,
-                                  });
-                                }}
-                              />
-
-                              <span className={'text-sm font-bold'}>
-                                <Trans
-                                  i18nKey={`billing:billingInterval.${interval}`}
+                                    form.setValue('interval', interval, {
+                                      shouldValidate: true,
+                                    });
+                                  }}
                                 />
-                              </span>
-                            </label>
-                          );
-                        })}
-                      </div>
-                    </RadioGroup>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              );
-            }}
-          />
+
+                                <span className={'text-sm font-bold'}>
+                                  <Trans
+                                    i18nKey={`billing:billingInterval.${interval}`}
+                                  />
+                                </span>
+                              </label>
+                            );
+                          })}
+                        </div>
+                      </RadioGroup>
+                    </FormControl>
+
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
+            />
+          </div>
 
           <FormField
             name={'planId'}
@@ -185,9 +196,13 @@ export function PlanPicker(
                 <FormControl>
                   <RadioGroup name={field.name}>
                     {props.config.products.map((product) => {
-                      const plan = product.plans.find(
-                        (item) => item.interval === selectedInterval,
-                      );
+                      const plan = product.plans.find((item) => {
+                        if (item.paymentType === 'one-time') {
+                          return true;
+                        }
+
+                        return item.interval === selectedInterval;
+                      });
 
                       if (!plan) {
                         return null;
@@ -277,12 +292,21 @@ export function PlanPicker(
 
                                 <div>
                                   <span className={'text-muted-foreground'}>
-                                    <Trans
-                                      i18nKey={`billing:perPeriod`}
-                                      values={{
-                                        period: selectedInterval,
-                                      }}
-                                    />
+                                    <If
+                                      condition={
+                                        plan.paymentType === 'recurring'
+                                      }
+                                      fallback={
+                                        <Trans i18nKey={`billing:lifetime`} />
+                                      }
+                                    >
+                                      <Trans
+                                        i18nKey={`billing:perPeriod`}
+                                        values={{
+                                          period: selectedInterval,
+                                        }}
+                                      />
+                                    </If>
                                   </span>
                                 </div>
                               </div>
@@ -348,8 +372,11 @@ function PlanDetails({
 
   selectedPlan: {
     lineItems: z.infer<typeof LineItemSchema>[];
+    paymentType: string;
   };
 }) {
+  const isRecurring = selectedPlan.paymentType === 'recurring';
+
   return (
     <div
       className={
@@ -364,7 +391,9 @@ function PlanDetails({
               defaults={selectedProduct.name}
             />
           </b>{' '}
-          / <Trans i18nKey={`billing:billingInterval.${selectedInterval}`} />
+          <If condition={isRecurring}>
+            / <Trans i18nKey={`billing:billingInterval.${selectedInterval}`} />
+          </If>
         </Heading>
 
         <p>
@@ -384,7 +413,7 @@ function PlanDetails({
 
         <LineItemDetails
           lineItems={selectedPlan.lineItems ?? []}
-          selectedInterval={selectedInterval}
+          selectedInterval={isRecurring ? selectedInterval : undefined}
           currency={selectedProduct.currency}
         />
       </div>

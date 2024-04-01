@@ -8,6 +8,29 @@ export default createBillingSchema({
   provider,
   products: [
     {
+      id: 'lifetime',
+      name: 'Lifetime',
+      description: 'The perfect plan for a lifetime',
+      currency: 'USD',
+      features: ['Feature 1', 'Feature 2', 'Feature 3'],
+      plans: [
+        {
+          name: 'Lifetime',
+          id: 'lifetime',
+          paymentType: 'one-time',
+          lineItems: [
+            {
+              id: 'price_1P0jgcI1i3VnbZTqXVXaZkMP',
+              name: 'Base',
+              description: 'Base plan',
+              cost: 999.99,
+              type: 'base',
+            },
+          ],
+        },
+      ],
+    },
+    {
       id: 'starter',
       name: 'Starter',
       description: 'The perfect plan to get started',

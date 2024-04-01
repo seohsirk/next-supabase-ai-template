@@ -1249,7 +1249,7 @@ select
 create or replace function public.upsert_order(
   target_account_id uuid,
   target_customer_id varchar(255),
-  order_id text,
+  target_order_id text,
   status public.payment_status,
   billing_provider public.billing_provider,
   total_amount numeric,
@@ -1261,7 +1261,7 @@ declare
   new_billing_customer_id int;
 begin
     insert into public.billing_customers(account_id, provider, customer_id)
-    values (target_account_id, target_billing_provider, target_customer_id)
+    values (target_account_id, billing_provider, target_customer_id)
     on conflict (account_id, provider, customer_id) do update
     set provider = excluded.provider
     returning id into new_billing_customer_id;
@@ -1277,7 +1277,7 @@ begin
     values (
         target_account_id,
         new_billing_customer_id,
-        order_id,
+        target_order_id,
         status,
         billing_provider,
         total_amount,

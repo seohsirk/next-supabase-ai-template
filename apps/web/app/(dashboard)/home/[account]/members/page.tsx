@@ -114,7 +114,7 @@ async function TeamAccountMembersPage({ params }: Params) {
 
       <PageBody>
         <div
-          className={'mx-auto flex w-full max-w-3xl flex-col space-y-4 pb-32'}
+          className={'mx-auto flex w-full max-w-3xl flex-col space-y-6 pb-32'}
         >
           <Card>
             <CardHeader className={'flex flex-row justify-between'}>

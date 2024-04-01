@@ -63,10 +63,6 @@ function EmbeddedCheckoutPopup({
         setOpen(open);
       }}
     >
-      <DialogHeader>
-        <DialogTitle>Complete your purchase</DialogTitle>
-      </DialogHeader>
-
       <DialogContent
         className={className}
         onOpenAutoFocus={(e) => e.preventDefault()}

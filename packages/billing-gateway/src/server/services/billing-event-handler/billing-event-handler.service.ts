@@ -81,20 +81,20 @@ export class BillingEventHandlerService {
 
         Logger.info(ctx, 'Successfully updated subscription');
       },
-      onCheckoutSessionCompleted: async (payload, customerId) => {
+      onCheckoutSessionCompleted: async (payload) => {
         // Handle the checkout session completed event
         // here we add the subscription to the database
         const client = this.clientProvider();
 
         // Check if the payload contains an order_id
         // if it does, we add an order, otherwise we add a subscription
-        if ('order_id' in payload) {
+        if ('target_order_id' in payload) {
           const ctx = {
             namespace: this.namespace,
-            orderId: payload.order_id,
+            orderId: payload.target_order_id,
             provider: payload.billing_provider,
             accountId: payload.target_account_id,
-            customerId,
+            customerId: payload.target_customer_id,
           };
 
           Logger.info(ctx, 'Processing order completed event...');
@@ -114,7 +114,7 @@ export class BillingEventHandlerService {
             subscriptionId: payload.target_subscription_id,
             provider: payload.billing_provider,
             accountId: payload.target_account_id,
-            customerId,
+            customerId: payload.target_customer_id,
           };
 
           Logger.info(ctx, 'Processing checkout session completed event...');

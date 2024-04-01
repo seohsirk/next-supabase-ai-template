@@ -1,14 +1,10 @@
 import { formatDate } from 'date-fns';
-import { BadgeCheck, CheckCircle2 } from 'lucide-react';
+import { BadgeCheck } from 'lucide-react';
 
 import { BillingConfig, getProductPlanPairByVariantId } from '@kit/billing';
 import { Database } from '@kit/supabase/database';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@kit/ui/accordion';
+
+
 import {
   Card,
   CardContent,
@@ -34,7 +30,7 @@ interface Props {
   config: BillingConfig;
 }
 
-export function CurrentPlanCard({
+export function CurrentSubscriptionCard({
   subscription,
   config,
 }: React.PropsWithChildren<Props>) {

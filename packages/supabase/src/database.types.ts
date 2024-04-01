@@ -410,11 +410,9 @@ export type Database = {
           created_at: string
           currency: string
           id: string
-          product_id: string
           status: Database["public"]["Enums"]["payment_status"]
           total_amount: number
           updated_at: string
-          variant_id: string
         }
         Insert: {
           account_id: string
@@ -423,11 +421,9 @@ export type Database = {
           created_at?: string
           currency: string
           id: string
-          product_id: string
           status: Database["public"]["Enums"]["payment_status"]
           total_amount: number
           updated_at?: string
-          variant_id: string
         }
         Update: {
           account_id?: string
@@ -436,11 +432,9 @@ export type Database = {
           created_at?: string
           currency?: string
           id?: string
-          product_id?: string
           status?: Database["public"]["Enums"]["payment_status"]
           total_amount?: number
           updated_at?: string
-          variant_id?: string
         }
         Relationships: [
           {
@@ -891,7 +885,7 @@ export type Database = {
         Args: {
           target_account_id: string
           target_customer_id: string
-          order_id: string
+          target_order_id: string
           status: Database["public"]["Enums"]["payment_status"]
           billing_provider: Database["public"]["Enums"]["billing_provider"]
           total_amount: number
@@ -905,11 +899,9 @@ export type Database = {
           created_at: string
           currency: string
           id: string
-          product_id: string
           status: Database["public"]["Enums"]["payment_status"]
           total_amount: number
           updated_at: string
-          variant_id: string
         }
       }
       upsert_subscription: {

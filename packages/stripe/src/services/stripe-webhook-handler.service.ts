@@ -171,7 +171,7 @@ export class StripeWebhookHandlerService
       const payload: UpsertOrderParams = {
         target_account_id: accountId,
         target_customer_id: customerId,
-        order_id: sessionId,
+        target_order_id: sessionId,
         billing_provider: this.provider,
         status: status,
         currency: currency,
