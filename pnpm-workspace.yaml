@@ -2,6 +2,7 @@ packages:
   - apps/*
   - packages/*
   - packages/features/*
+  - packages/billing/*
   - packages/cms/*
   - tooling/*
   - supabase

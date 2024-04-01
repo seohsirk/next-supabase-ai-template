@@ -16,12 +16,16 @@ export class BillingGatewayFactoryService {
         return new StripeBillingStrategyService();
       }
 
-      case 'paddle': {
-        throw new Error('Paddle is not supported yet');
+      case 'lemon-squeezy': {
+        const { LemonSqueezyBillingStrategyService } = await import(
+          '@kit/lemon-squeezy'
+        );
+
+        return new LemonSqueezyBillingStrategyService();
       }
 
-      case 'lemon-squeezy': {
-        throw new Error('Lemon Squeezy is not supported yet');
+      case 'paddle': {
+        throw new Error('Paddle is not supported yet');
       }
 
       default:

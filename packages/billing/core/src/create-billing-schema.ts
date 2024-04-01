@@ -176,7 +176,23 @@ const BillingSchema = z
       message: 'Line item IDs must be unique',
       path: ['products'],
     },
-  );
+  )
+  .refine((schema) => {
+    if (schema.provider === 'lemon-squeezy') {
+      for (const product of schema.products) {
+        for (const plan of product.plans) {
+          if (plan.lineItems.length > 1) {
+            return {
+              message: 'Only one line item is allowed for Lemon Squeezy',
+              path: ['products', 'plans'],
+            };
+          }
+        }
+      }
+    }
+
+    return true;
+  });
 
 export function createBillingSchema(config: z.infer<typeof BillingSchema>) {
   return BillingSchema.parse(config);
