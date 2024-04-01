@@ -5,7 +5,7 @@ import { useState, useTransition } from 'react';
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
 
 import { EmbeddedCheckout, PlanPicker } from '@kit/billing-gateway/components';
-import { Alert, AlertTitle } from '@kit/ui/alert';
+import { Alert, AlertDescription, AlertTitle } from '@kit/ui/alert';
 import {
   Card,
   CardContent,
@@ -91,8 +91,12 @@ function ErrorAlert() {
       <ExclamationTriangleIcon className={'h-4'} />
 
       <AlertTitle>
-        <Trans i18nKey={'common:genericError'} />
+        <Trans i18nKey={'common:planPickerAlertErrorTitle'} />
       </AlertTitle>
+
+      <AlertDescription>
+        <Trans i18nKey={'common:planPickerAlertErrorDescription'} />
+      </AlertDescription>
     </Alert>
   );
 }
