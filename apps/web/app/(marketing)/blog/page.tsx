@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-import { allPosts } from 'contentlayer/generated';
+import { createCmsClient } from '@kit/cms';
 
 import { GridList } from '~/(marketing)/_components/grid-list';
 import { SitePageHeader } from '~/(marketing)/_components/site-page-header';
@@ -13,11 +13,11 @@ export const metadata: Metadata = {
   description: `Tutorials, Guides and Updates from our team`,
 };
 
-function BlogPage() {
-  const livePosts = allPosts.filter((post) => {
-    const isProduction = appConfig.production;
+async function BlogPage() {
+  const cms = await createCmsClient();
 
-    return isProduction ? post.live : true;
+  const posts = await cms.getContentItems({
+    type: 'post',
   });
 
   return (
@@ -29,7 +29,7 @@ function BlogPage() {
         />
 
         <GridList>
-          {livePosts.map((post, idx) => {
+          {posts.map((post, idx) => {
             return <PostPreview key={idx} post={post} />;
           })}
         </GridList>

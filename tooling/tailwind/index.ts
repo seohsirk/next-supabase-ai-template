@@ -6,7 +6,8 @@ export default {
   content: [
     '../../packages/**/*.tsx',
     '../../apps/**/*.tsx',
-    '!**/node_modules',
+    '!../../packages/**/node_modules',
+    '!../../apps/**/node_modules',
   ],
   theme: {
     container: {

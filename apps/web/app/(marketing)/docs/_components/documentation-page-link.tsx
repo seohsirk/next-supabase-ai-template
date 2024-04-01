@@ -1,7 +1,5 @@
 import Link from 'next/link';
 
-import type { DocumentationPage } from 'contentlayer/generated';
-
 import { If } from '@kit/ui/if';
 import { cn } from '@kit/ui/utils';
 
@@ -10,7 +8,10 @@ export function DocumentationPageLink({
   before,
   after,
 }: React.PropsWithChildren<{
-  page: DocumentationPage;
+  page: {
+    url: string;
+    title: string;
+  };
   before?: React.ReactNode;
   after?: React.ReactNode;
 }>) {
@@ -23,7 +24,7 @@ export function DocumentationPageLink({
           'justify-end self-end': after,
         },
       )}
-      href={`/docs/${page.resolvedPath}`}
+      href={page.url}
     >
       <If condition={before}>{(node) => <>{node}</>}</If>
 

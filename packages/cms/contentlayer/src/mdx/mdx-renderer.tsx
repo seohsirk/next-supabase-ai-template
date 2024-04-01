@@ -1,7 +1,8 @@
-import type { MDXComponents } from 'mdx/types';
+import type { MDXComponents as MDXComponentsType } from 'mdx/types';
 import { getMDXComponent } from 'next-contentlayer/hooks';
 
-import Components from './mdx-components';
+import { MDXComponents } from '@kit/ui/mdx-components';
+
 // @ts-ignore: ignore weird error
 import styles from './mdx-renderer.module.css';
 
@@ -14,7 +15,7 @@ export function Mdx({
 
   return (
     <div className={styles.MDX}>
-      <Component components={Components as unknown as MDXComponents} />
+      <Component components={MDXComponents as unknown as MDXComponentsType} />
     </div>
   );
 }

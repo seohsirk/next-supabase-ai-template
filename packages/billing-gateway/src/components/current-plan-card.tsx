@@ -70,7 +70,7 @@ export function CurrentPlanCard({
         </CardDescription>
       </CardHeader>
 
-      <CardContent className={'space-y-2.5 text-sm'}>
+      <CardContent className={'space-y-3 text-sm'}>
         <div className={'flex flex-col space-y-1'}>
           <div className={'flex items-center space-x-2 text-lg font-semibold'}>
             <BadgeCheck
@@ -85,85 +85,58 @@ export function CurrentPlanCard({
           </div>
         </div>
 
-        <div>
-          <CurrentPlanAlert status={subscription.status} />
-        </div>
+        {/*
+         Only show the alert if the subscription requires action
+          (e.g. trial ending soon, subscription canceled, etc.)
+        */}
+        <If condition={!subscription.active}>
+          <div>
+            <CurrentPlanAlert status={subscription.status} />
+          </div>
+        </If>
 
         <div>
-          <Accordion type="single" collapsible>
-            <AccordionItem value="features">
-              <AccordionTrigger>
-                <Trans i18nKey="billing:planDetails" />
-              </AccordionTrigger>
+          <If condition={subscription.status === 'trialing'}>
+            <div className="flex flex-col space-y-0.5">
+              <span className="font-semibold">
+                <Trans i18nKey="billing:trialEndsOn" />
+              </span>
 
-              <AccordionContent className="space-y-2.5">
-                <If condition={subscription.status === 'trialing'}>
-                  <div className="flex flex-col">
-                    <span className="font-medium">
-                      <Trans i18nKey="billing:trialEndsOn" />
-                    </span>
+              <div className={'text-muted-foreground'}>
+                <span>
+                  {subscription.trial_ends_at
+                    ? formatDate(subscription.trial_ends_at, 'P')
+                    : ''}
+                </span>
+              </div>
+            </div>
+          </If>
 
-                    <div className={'text-muted-foreground'}>
-                      <span>
-                        {subscription.trial_ends_at
-                          ? formatDate(subscription.trial_ends_at, 'P')
-                          : ''}
-                      </span>
-                    </div>
-                  </div>
-                </If>
+          <If condition={subscription.cancel_at_period_end}>
+            <div className="flex flex-col space-y-0.5">
+              <span className="font-semibold">
+                <Trans i18nKey="billing:cancelSubscriptionDate" />
+              </span>
 
-                <If condition={subscription.cancel_at_period_end}>
-                  <div className="flex flex-col">
-                    <span className="font-medium">
-                      <Trans i18nKey="billing:cancelSubscriptionDate" />
-                    </span>
+              <div className={'text-muted-foreground'}>
+                <span>
+                  {formatDate(subscription.period_ends_at ?? '', 'P')}
+                </span>
+              </div>
+            </div>
+          </If>
 
-                    <div className={'text-muted-foreground'}>
-                      <span>
-                        {formatDate(subscription.period_ends_at ?? '', 'P')}
-                      </span>
-                    </div>
-                  </div>
-                </If>
+          <div className="flex flex-col space-y-0.5">
+            <span className="font-semibold">
+              <Trans i18nKey="billing:detailsLabel" />
+            </span>
 
-                <div className="flex flex-col space-y-1">
-                  <span className="font-semibold">
-                    <Trans i18nKey="billing:detailsLabel" />
-                  </span>
-
-                  <LineItemDetails
-                    lineItems={productLineItems}
-                    currency={subscription.currency}
-                    selectedInterval={firstLineItem.interval}
-                  />
-                </div>
-
-                <div className="flex flex-col space-y-1">
-                  <span className="font-semibold">
-                    <Trans i18nKey="billing:featuresLabel" />
-                  </span>
-
-                  <ul className={'flex flex-col space-y-0.5'}>
-                    {product.features.map((item) => {
-                      return (
-                        <li
-                          key={item}
-                          className="flex items-center space-x-0.5"
-                        >
-                          <CheckCircle2 className="h-4 text-green-500" />
-
-                          <span className={'text-muted-foreground'}>
-                            <Trans i18nKey={item} defaults={item} />
-                          </span>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </div>
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
+            <LineItemDetails
+              lineItems={productLineItems}
+              currency={subscription.currency}
+              selectedInterval={firstLineItem.interval}
+            />
+          </div>
         </div>
       </CardContent>
     </Card>

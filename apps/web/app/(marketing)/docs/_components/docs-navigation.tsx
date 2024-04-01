@@ -5,33 +5,21 @@ import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-import { ChevronDown, Menu } from 'lucide-react';
+import { Menu } from 'lucide-react';
 
+import { Cms } from '@kit/cms';
 import { isBrowser } from '@kit/shared/utils';
 import { Button } from '@kit/ui/button';
 import { Heading } from '@kit/ui/heading';
 import { If } from '@kit/ui/if';
 import { cn } from '@kit/ui/utils';
 
-import type { ProcessedDocumentationPage } from '~/(marketing)/docs/_lib/build-documentation-tree';
-
 const DocsNavLink: React.FC<{
   label: string;
   url: string;
   level: number;
   activePath: string;
-  collapsible: boolean;
-  collapsed: boolean;
-  toggleCollapsed: () => void;
-}> = ({
-  label,
-  url,
-  level,
-  activePath,
-  collapsible,
-  collapsed,
-  toggleCollapsed,
-}) => {
+}> = ({ label, url, level, activePath }) => {
   const isCurrent = url == activePath;
   const isFirstLevel = level === 0;
 
@@ -39,76 +27,51 @@ const DocsNavLink: React.FC<{
     <div className={getNavLinkClassName(isCurrent, isFirstLevel)}>
       <Link
         className="flex h-full max-w-full grow items-center space-x-2"
-        href={`/docs/${url}`}
+        href={url}
       >
         <span className="block max-w-full truncate">{label}</span>
       </Link>
-
-      {collapsible && (
-        <button
-          aria-label="Toggle children"
-          onClick={toggleCollapsed}
-          className="mr-2 shrink-0 px-2 py-1"
-        >
-          <span
-            className={`block w-2.5 ${collapsed ? '-rotate-90 transform' : ''}`}
-          >
-            <ChevronDown className="h-4 w-4" />
-          </span>
-        </button>
-      )}
     </div>
   );
 };
 
 const Node: React.FC<{
-  node: ProcessedDocumentationPage;
+  node: Cms.ContentItem;
   level: number;
   activePath: string;
 }> = ({ node, level, activePath }) => {
-  const [collapsed, setCollapsed] = useState<boolean>(node.collapsed ?? false);
-  const toggleCollapsed = () => setCollapsed(!collapsed);
-
-  useEffect(() => {
-    if (
-      activePath == node.resolvedPath ||
-      node.children.map((_) => _.resolvedPath).includes(activePath)
-    ) {
-      setCollapsed(false);
-    }
-  }, [activePath, node.children, node.resolvedPath]);
-
   return (
     <>
       <DocsNavLink
-        label={node.label}
-        url={node.resolvedPath}
+        label={node.title}
+        url={node.url}
         level={level}
         activePath={activePath}
-        collapsible={node.collapsible}
-        collapsed={collapsed}
-        toggleCollapsed={toggleCollapsed}
       />
 
-      {node.children.length > 0 && !collapsed && (
-        <Tree tree={node.children} level={level + 1} activePath={activePath} />
+      {(node.children ?? []).length > 0 && (
+        <Tree
+          pages={node.children ?? []}
+          level={level + 1}
+          activePath={activePath}
+        />
       )}
     </>
   );
 };
 
 function Tree({
-  tree,
+  pages,
   level,
   activePath,
 }: {
-  tree: ProcessedDocumentationPage[];
+  pages: Cms.ContentItem[];
   level: number;
   activePath: string;
 }) {
   return (
     <div className={cn('w-full space-y-2.5 pl-3', level > 0 ? 'border-l' : '')}>
-      {tree.map((treeNode, index) => (
+      {pages.map((treeNode, index) => (
         <Node
           key={index}
           node={treeNode}
@@ -120,11 +83,7 @@ function Tree({
   );
 }
 
-export default function DocsNavigation({
-  tree,
-}: {
-  tree: ProcessedDocumentationPage[];
-}) {
+export function DocsNavigation({ pages }: { pages: Cms.ContentItem[] }) {
   const activePath = usePathname().replace('/docs/', '');
 
   return (
@@ -135,11 +94,14 @@ export default function DocsNavigation({
         }}
         className="sticky top-2 hidden w-80 shrink-0 border-r p-4 lg:flex"
       >
-        <Tree tree={tree} level={0} activePath={activePath} />
+        <Tree pages={pages} level={0} activePath={activePath} />
       </aside>
 
       <div className={'lg:hidden'}>
-        <FloatingDocumentationNavigation tree={tree} activePath={activePath} />
+        <FloatingDocumentationNavigation
+          pages={pages}
+          activePath={activePath}
+        />
       </div>
     </>
   );
@@ -159,10 +121,10 @@ function getNavLinkClassName(isCurrent: boolean, isFirstLevel: boolean) {
 }
 
 function FloatingDocumentationNavigation({
-  tree,
+  pages,
   activePath,
 }: React.PropsWithChildren<{
-  tree: ProcessedDocumentationPage[];
+  pages: Cms.ContentItem[];
   activePath: string;
 }>) {
   const body = useMemo(() => {
@@ -210,7 +172,7 @@ function FloatingDocumentationNavigation({
         >
           <Heading level={1}>Table of Contents</Heading>
 
-          <Tree tree={tree} level={0} activePath={activePath} />
+          <Tree pages={pages} level={0} activePath={activePath} />
         </div>
       </If>
 

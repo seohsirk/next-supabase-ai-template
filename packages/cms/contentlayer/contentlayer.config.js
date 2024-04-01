@@ -19,6 +19,11 @@ export const Post = defineDocumentType(() => ({
       description: 'The date of the post',
       required: true,
     },
+    author: {
+      type: 'string',
+      description: 'The author of the post',
+      required: true,
+    },
     live: {
       type: 'boolean',
       description: 'Whether the post is live or not',
@@ -33,12 +38,22 @@ export const Post = defineDocumentType(() => ({
       type: 'string',
       description: 'The description of the post',
     },
+    tags: {
+      type: 'list',
+      required: false,
+      of: {
+        type: 'string',
+      },
+    },
+    categories: {
+      type: 'list',
+      required: false,
+      of: {
+        type: 'string',
+      },
+    },
   },
   computedFields: {
-    url: {
-      type: 'string',
-      resolve: (post) => `/blog/${getSlug(post._raw.sourceFileName)}`,
-    },
     readingTime: {
       type: 'number',
       resolve: (post) => calculateReadingTime(post.body.raw),
@@ -46,6 +61,10 @@ export const Post = defineDocumentType(() => ({
     slug: {
       type: 'string',
       resolve: (post) => getSlug(post._raw.sourceFileName),
+    },
+    url: {
+      type: 'string',
+      resolve: (post) => `/blog/${getSlug(post._raw.sourceFileName)}`,
     },
     structuredData: {
       type: 'object',
@@ -57,7 +76,6 @@ export const Post = defineDocumentType(() => ({
         dateModified: doc.date,
         description: doc.description,
         image: [siteUrl, doc.image].join(''),
-        url: [siteUrl, 'blog', doc._raw.flattenedPath].join('/'),
         author: {
           '@type': 'Organization',
           name: `Makerkit`,
@@ -82,42 +100,29 @@ export const DocumentationPage = defineDocumentType(() => ({
       description: 'The label of the page in the sidebar',
       required: true,
     },
-    cardCTA: {
-      type: 'string',
-      description: 'The label of the CTA link on the card',
-      required: false,
-    },
     description: {
       type: 'string',
       description: 'The description of the post',
     },
-    show_child_cards: {
-      type: 'boolean',
-      default: false,
-    },
-    collapsible: {
-      type: 'boolean',
+    tags: {
+      type: 'list',
       required: false,
-      default: false,
+      of: {
+        type: 'string',
+      },
     },
-    collapsed: {
-      type: 'boolean',
+    categories: {
+      type: 'list',
       required: false,
-      default: false,
+      of: {
+        type: 'string',
+      },
     },
   },
   computedFields: {
-    url: {
-      type: 'string',
-      resolve: (post) => `/blog/${getSlug(post._raw.sourceFileName)}`,
-    },
     readingTime: {
       type: 'number',
       resolve: (post) => calculateReadingTime(post.body.raw),
-    },
-    slug: {
-      type: 'string',
-      resolve: (post) => getSlug(post._raw.sourceFileName),
     },
     structuredData: {
       type: 'object',
@@ -150,13 +155,24 @@ export const DocumentationPage = defineDocumentType(() => ({
       type: 'json',
       resolve: (doc) => getPathSegments(doc).map(getMetaFromFolderName),
     },
-    resolvedPath: {
+    slug: {
       type: 'string',
-      resolve: (doc) => {
-        return getPathSegments(doc)
+      resolve: (doc) =>
+        getPathSegments(doc)
           .map(getMetaFromFolderName)
           .map(({ pathName }) => pathName)
-          .join('/');
+          .join('/'),
+    },
+    url: {
+      type: 'string',
+      resolve: (doc) => {
+        return (
+          '/docs/' +
+          getPathSegments(doc)
+            .map(getMetaFromFolderName)
+            .map(({ pathName }) => pathName)
+            .join('/')
+        );
       },
     },
   },

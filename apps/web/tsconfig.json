@@ -6,8 +6,7 @@
       "~/*": ["./app/*"],
       "~/config/*": ["./config/*"],
       "~/components/*": ["./components/*"],
-      "~/lib/*": ["./lib/*"],
-      "contentlayer/generated": ["./.contentlayer/generated"]
+      "~/lib/*": ["./lib/*"]
     },
     "plugins": [
       {
@@ -22,7 +21,7 @@
     "*.ts",
     "*.tsx",
     "*.mjs",
-    "config/**/*.ts",
+    "./config/**/*.ts",
     "components/**/*.{tsx|ts}",
     "lib/**/*.ts",
     "app"

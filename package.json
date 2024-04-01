@@ -28,6 +28,7 @@
     "apps/*",
     "packages/*",
     "packages/features/*",
+    "packages/cms/*",
     "tooling/*",
     "supabase"
   ],

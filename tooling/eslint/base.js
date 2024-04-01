@@ -37,6 +37,7 @@ const config = {
     '**/.eslintrc.cjs',
     '**/*.config.js',
     '**/*.config.cjs',
+    '**/node_modules',
     '.next',
     'dist',
     'pnpm-lock.yaml',

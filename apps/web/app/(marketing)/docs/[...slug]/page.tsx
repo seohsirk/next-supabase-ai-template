@@ -2,20 +2,20 @@ import { cache } from 'react';
 
 import { notFound } from 'next/navigation';
 
-import { allDocumentationPages } from 'contentlayer/generated';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
+import { ContentRenderer, createCmsClient } from '@kit/cms';
 import { If } from '@kit/ui/if';
-import { Mdx } from '@kit/ui/mdx';
 
 import { SitePageHeader } from '~/(marketing)/_components/site-page-header';
 import { DocsCards } from '~/(marketing)/docs/_components/docs-cards';
 import { DocumentationPageLink } from '~/(marketing)/docs/_components/documentation-page-link';
-import { getDocumentationPageTree } from '~/(marketing)/docs/_lib/get-documentation-page-tree';
 import { withI18n } from '~/lib/i18n/with-i18n';
 
-const getPageBySlug = cache((slug: string) => {
-  return allDocumentationPages.find((post) => post.resolvedPath === slug);
+const getPageBySlug = cache(async (slug: string) => {
+  const client = await createCmsClient();
+
+  return client.getContentItemById(slug);
 });
 
 interface PageParams {
@@ -24,8 +24,8 @@ interface PageParams {
   };
 }
 
-export const generateMetadata = ({ params }: PageParams) => {
-  const page = getPageBySlug(params.slug.join('/'));
+export const generateMetadata = async ({ params }: PageParams) => {
+  const page = await getPageBySlug(params.slug.join('/'));
 
   if (!page) {
     notFound();
@@ -39,15 +39,12 @@ export const generateMetadata = ({ params }: PageParams) => {
   };
 };
 
-function DocumentationPage({ params }: PageParams) {
-  const page = getPageBySlug(params.slug.join('/'));
+async function DocumentationPage({ params }: PageParams) {
+  const page = await getPageBySlug(params.slug.join('/'));
 
   if (!page) {
     notFound();
   }
-
-  const { nextPage, previousPage, children } =
-    getDocumentationPageTree(page.resolvedPath) ?? {};
 
   const description = page?.description ?? '';
 
@@ -60,40 +57,11 @@ function DocumentationPage({ params }: PageParams) {
           className={'items-start'}
         />
 
-        <Mdx code={page.body.code} />
+        <ContentRenderer content={page.content} />
 
-        <If condition={children}>
-          <DocsCards pages={children ?? []} />
+        <If condition={page.children}>
+          <DocsCards pages={page.children ?? []} />
         </If>
-
-        <div
-          className={
-            'flex flex-col justify-between space-y-4 md:flex-row md:space-x-8' +
-            ' md:space-y-0'
-          }
-        >
-          <div className={'w-full'}>
-            <If condition={previousPage}>
-              {(page) => (
-                <DocumentationPageLink
-                  page={page}
-                  before={<ChevronLeft className={'w-4'} />}
-                />
-              )}
-            </If>
-          </div>
-
-          <div className={'w-full'}>
-            <If condition={nextPage}>
-              {(page) => (
-                <DocumentationPageLink
-                  page={page}
-                  after={<ChevronRight className={'w-4'} />}
-                />
-              )}
-            </If>
-          </div>
-        </div>
       </div>
     </div>
   );

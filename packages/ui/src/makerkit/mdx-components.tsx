@@ -2,8 +2,8 @@ import { forwardRef } from 'react';
 
 import Image from 'next/image';
 
-import { cn } from '../../utils';
-import { LazyRender } from '../lazy-render';
+import { cn } from '../utils';
+import { LazyRender } from './lazy-render';
 
 const NextImage: React.FC<{
   width: number;
@@ -72,11 +72,9 @@ const Video: React.FC<{
   );
 };
 
-const Components = {
+export const MDXComponents = {
   img: NextImage,
   a: ExternalLink,
   Video,
   Image: NextImage,
 };
-
-export default Components;
