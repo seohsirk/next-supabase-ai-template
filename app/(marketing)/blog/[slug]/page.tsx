@@ -1,12 +1,10 @@
 import type { Metadata } from 'next';
 
 import { notFound } from 'next/navigation';
-import Script from 'next/script';
 
-import { allPosts } from 'contentlayer/generated';
+import { createCmsClient } from '@kit/cms';
 
 import Post from '~/(marketing)/blog/_components/post';
-import appConfig from '~/config/app.config';
 import { withI18n } from '~/lib/i18n/with-i18n';
 
 export async function generateMetadata({
@@ -14,14 +12,14 @@ export async function generateMetadata({
 }: {
   params: { slug: string };
 }): Promise<Metadata | undefined> {
-  const post = allPosts.find((post) => post.slug === params.slug);
+  const cms = await createCmsClient();
+  const post = await cms.getContentItemById(params.slug);
 
   if (!post) {
     notFound();
   }
 
-  const { title, date, description, image, slug } = post;
-  const url = [appConfig.url, 'blog', slug].join('/');
+  const { title, publishedAt, description, image } = post;
 
   return Promise.resolve({
     title,
@@ -30,8 +28,8 @@ export async function generateMetadata({
       title,
       description,
       type: 'article',
-      publishedTime: date,
-      url,
+      publishedTime: publishedAt.toDateString(),
+      url: post.url,
       images: image
         ? [
             {
@@ -49,8 +47,9 @@ export async function generateMetadata({
   });
 }
 
-function BlogPost({ params }: { params: { slug: string } }) {
-  const post = allPosts.find((post) => post.slug === params.slug);
+async function BlogPost({ params }: { params: { slug: string } }) {
+  const cms = await createCmsClient();
+  const post = await cms.getContentItemById(params.slug);
 
   if (!post) {
     notFound();
@@ -58,11 +57,7 @@ function BlogPost({ params }: { params: { slug: string } }) {
 
   return (
     <div className={'container mx-auto'}>
-      <Script id={'ld-json'} type="application/ld+json">
-        {JSON.stringify(post.structuredData)}
-      </Script>
-
-      <Post post={post} content={post.body.code} />
+      <Post post={post} content={post.content} />
     </div>
   );
 }

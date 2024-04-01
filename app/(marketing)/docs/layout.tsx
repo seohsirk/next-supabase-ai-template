@@ -1,15 +1,22 @@
-import { allDocumentationPages } from 'contentlayer/generated';
+import { createCmsClient } from '@kit/cms';
 
-import DocsNavigation from '~/(marketing)/docs/_components/docs-navigation';
-import { buildDocumentationTree } from '~/(marketing)/docs/_lib/build-documentation-tree';
+import { DocsNavigation } from '~/(marketing)/docs/_components/docs-navigation';
 
-function DocsLayout({ children }: React.PropsWithChildren) {
-  const tree = buildDocumentationTree(allDocumentationPages);
+async function DocsLayout({ children }: React.PropsWithChildren) {
+  const cms = await createCmsClient();
+
+  const pages = await cms.getContentItems({
+    type: 'page',
+    categories: ['documentation'],
+    depth: 1,
+  });
+
+  console.log(pages);
 
   return (
     <div className={'container mx-auto'}>
       <div className={'flex'}>
-        <DocsNavigation tree={tree} />
+        <DocsNavigation pages={pages} />
 
         <div className={'flex w-full flex-col items-center'}>{children}</div>
       </div>

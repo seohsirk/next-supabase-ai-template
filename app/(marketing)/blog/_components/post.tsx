@@ -1,15 +1,10 @@
-import dynamic from 'next/dynamic';
-
-import type { Post as PostType } from 'contentlayer/generated';
+import type { Cms } from '@kit/cms';
+import { ContentRenderer } from '@kit/cms';
 
 import { PostHeader } from './post-header';
 
-const Mdx = dynamic(() =>
-  import('@kit/ui/mdx').then((mod) => ({ default: mod.Mdx })),
-);
-
 export const Post: React.FC<{
-  post: PostType;
+  post: Cms.ContentItem;
   content: string;
 }> = ({ post, content }) => {
   return (
@@ -17,7 +12,7 @@ export const Post: React.FC<{
       <PostHeader post={post} />
 
       <article className={'mx-auto flex justify-center'}>
-        <Mdx code={content} />
+        <ContentRenderer content={content} />
       </article>
     </div>
   );

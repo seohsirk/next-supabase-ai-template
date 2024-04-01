@@ -1,14 +1,13 @@
 import Link from 'next/link';
 
-import type { Post } from 'contentlayer/generated';
-
+import { Cms } from '@kit/cms';
 import { If } from '@kit/ui/if';
 
 import { CoverImage } from '~/(marketing)/blog/_components/cover-image';
 import { DateFormatter } from '~/(marketing)/blog/_components/date-formatter';
 
 type Props = {
-  post: Post;
+  post: Cms.ContentItem;
   preloadImage?: boolean;
   imageHeight?: string | number;
 };
@@ -20,15 +19,16 @@ export function PostPreview({
   preloadImage,
   imageHeight,
 }: React.PropsWithChildren<Props>) {
-  const { title, image, date, readingTime, description } = post;
+  const { title, image, publishedAt, description } = post;
   const height = imageHeight ?? DEFAULT_IMAGE_HEIGHT;
+  const url = post.url;
 
   return (
-    <div className="rounded-xl transition-shadow duration-500 dark:text-gray-800">
+    <div className="rounded-xl transition-shadow duration-500">
       <If condition={image}>
         {(imageUrl) => (
           <div className="relative mb-2 w-full" style={{ height }}>
-            <Link href={post.url}>
+            <Link href={url}>
               <CoverImage
                 preloadImage={preloadImage}
                 title={title}
@@ -40,27 +40,21 @@ export function PostPreview({
       </If>
 
       <div className={'px-1'}>
-        <div className="flex flex-col space-y-1 px-1 py-2">
-          <h3 className="px-1 text-2xl font-bold leading-snug dark:text-white">
-            <Link href={post.url} className="hover:underline">
+        <div className="flex flex-col space-y-1 py-2">
+          <h3 className="text-2xl font-bold leading-snug dark:text-white">
+            <Link href={url} className="hover:underline">
               {title}
             </Link>
           </h3>
         </div>
 
-        <div className="mb-2 flex flex-row items-center space-x-2 px-1 text-sm">
-          <div className="text-gray-600 dark:text-gray-300">
-            <DateFormatter dateString={date} />
+        <div className="mb-2 flex flex-row items-center space-x-2 text-sm">
+          <div className="text-muted-foreground">
+            <DateFormatter dateString={publishedAt.toISOString()} />
           </div>
-
-          <span className="text-gray-600 dark:text-gray-300">·</span>
-
-          <span className="text-gray-600 dark:text-gray-300">
-            {readingTime} mins reading
-          </span>
         </div>
 
-        <p className="mb-4 px-1 text-sm leading-relaxed dark:text-gray-300">
+        <p className="mb-4 text-sm leading-relaxed text-muted-foreground">
           {description}
         </p>
       </div>

@@ -4,18 +4,18 @@ import { ChevronRight } from 'lucide-react';
 
 export const DocsCard: React.FC<
   React.PropsWithChildren<{
-    label: string;
+    title: string;
     subtitle?: string | null;
     link?: { url: string; label: string };
   }>
-> = ({ label, subtitle, children, link }) => {
+> = ({ title, subtitle, children, link }) => {
   return (
     <div className="flex flex-col">
       <div
         className={`flex grow flex-col space-y-2.5 border bg-background p-6
         ${link ? 'rounded-t-2xl border-b-0' : 'rounded-2xl'}`}
       >
-        <h3 className="mt-0 text-lg font-semibold dark:text-white">{label}</h3>
+        <h3 className="mt-0 text-lg font-semibold dark:text-white">{title}</h3>
 
         {subtitle && (
           <div className="text-sm text-gray-500 dark:text-gray-400">
@@ -31,7 +31,7 @@ export const DocsCard: React.FC<
           <span className={'flex items-center space-x-2'}>
             <Link
               className={'text-sm font-medium hover:underline'}
-              href={`/docs/${link.url}`}
+              href={link.url}
             >
               {link.label}
             </Link>

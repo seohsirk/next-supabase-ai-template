@@ -1,6 +1,7 @@
 import { invariant } from '@epic-web/invariant';
-import { allDocumentationPages, allPosts } from 'contentlayer/generated';
 import { getServerSideSitemap } from 'next-sitemap';
+
+import { createCmsClient } from '@kit/cms';
 
 import appConfig from '~/config/app.config';
 
@@ -8,10 +9,18 @@ invariant(appConfig.url, 'No NEXT_PUBLIC_SITE_URL environment variable found');
 
 export async function GET() {
   const urls = getSiteUrls();
-  const posts = getPostsSitemap();
-  const docs = getDocsSitemap();
+  const client = await createCmsClient();
+  const contentItems = await client.getContentItems();
 
-  return getServerSideSitemap([...urls, ...posts, ...docs]);
+  return getServerSideSitemap([
+    ...urls,
+    ...contentItems.map((item) => {
+      return {
+        loc: new URL(item.url, appConfig.url).href,
+        lastmod: new Date().toISOString(),
+      };
+    }),
+  ]);
 }
 
 function getSiteUrls() {
@@ -20,24 +29,6 @@ function getSiteUrls() {
   return urls.map((url) => {
     return {
       loc: new URL(url, appConfig.url).href,
-      lastmod: new Date().toISOString(),
-    };
-  });
-}
-
-function getPostsSitemap() {
-  return allPosts.map((post) => {
-    return {
-      loc: new URL(post.url, appConfig.url).href,
-      lastmod: new Date().toISOString(),
-    };
-  });
-}
-
-function getDocsSitemap() {
-  return allDocumentationPages.map((page) => {
-    return {
-      loc: new URL(page.url, appConfig.url).href,
       lastmod: new Date().toISOString(),
     };
   });
