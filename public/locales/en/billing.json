@@ -20,12 +20,13 @@
   "cannotManageBillingAlertDescription": "You do not have permissions to manage billing. Please contact your organization owner.",
   "manageTeamPlan": "Manage your Team Plan",
   "manageTeamPlanDescription": "Choose a plan that fits your team's needs. You can upgrade or downgrade your plan at any time.",
-  "flatSubscription": "Flat Subscription",
+  "basePlan": "Base Plan",
   "billingInterval": {
     "label": "Choose your billing interval",
     "month": "Billed monthly",
     "year": "Billed yearly"
   },
+  "lifetime": "Lifetime",
   "trialPeriod": "{{period}} day trial",
   "perPeriod": "per {{period}}",
   "processing": "Processing...",
@@ -85,6 +86,21 @@
       "badge": "Paused",
       "heading": "Your subscription is paused",
       "description": "Your subscription is paused. You can resume it at any time."
+    },
+    "succeeded": {
+      "badge": "Succeeded",
+      "heading": "Your payment was successful",
+      "description": "Your payment was successful. Thank you for subscribing!"
+    },
+    "pending": {
+      "badge": "Pending",
+      "heading": "Your payment is pending",
+      "description": "Your payment is pending. Please bear with us."
+    },
+    "failed": {
+      "badge": "Failed",
+      "heading": "Your payment failed",
+      "description": "Your payment failed. Please update your payment method."
     }
   }
 }

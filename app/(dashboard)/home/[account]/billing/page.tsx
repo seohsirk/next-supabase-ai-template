@@ -1,6 +1,6 @@
 import {
   BillingPortalCard,
-  CurrentPlanCard,
+  CurrentSubscriptionCard,
 } from '@kit/billing-gateway/components';
 import { getSupabaseServerComponentClient } from '@kit/supabase/server-component-client';
 import { Alert, AlertDescription, AlertTitle } from '@kit/ui/alert';
@@ -53,7 +53,7 @@ async function TeamAccountBillingPage({ params }: Params) {
           </If>
 
           <div>
-            <div className={'flex flex-col space-y-2'}>
+            <div className={'flex flex-col space-y-6'}>
               <If
                 condition={subscription}
                 fallback={
@@ -66,7 +66,10 @@ async function TeamAccountBillingPage({ params }: Params) {
                 }
               >
                 {(data) => (
-                  <CurrentPlanCard subscription={data} config={billingConfig} />
+                  <CurrentSubscriptionCard
+                    subscription={data}
+                    config={billingConfig}
+                  />
                 )}
               </If>
 

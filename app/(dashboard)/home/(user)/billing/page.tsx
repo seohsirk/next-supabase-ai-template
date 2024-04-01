@@ -2,7 +2,7 @@ import { SupabaseClient } from '@supabase/supabase-js';
 
 import {
   BillingPortalCard,
-  CurrentPlanCard,
+  CurrentSubscriptionCard,
 } from '@kit/billing-gateway/components';
 import { Database } from '@kit/supabase/database';
 import { getSupabaseServerComponentClient } from '@kit/supabase/server-component-client';
@@ -51,9 +51,9 @@ async function PersonalAccountBillingPage() {
           <If condition={subscription}>
             {(subscription) => (
               <div
-                className={'mx-auto flex w-full max-w-2xl flex-col space-y-4'}
+                className={'mx-auto flex w-full max-w-2xl flex-col space-y-6'}
               >
-                <CurrentPlanCard
+                <CurrentSubscriptionCard
                   subscription={subscription}
                   config={billingConfig}
                 />

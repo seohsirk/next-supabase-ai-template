@@ -24,7 +24,10 @@ export function TeamAccountCheckoutForm(params: {
 }) {
   const routeParams = useParams();
   const [pending, startTransition] = useTransition();
-  const [checkoutToken, setCheckoutToken] = useState<string | null>(null);
+
+  const [checkoutToken, setCheckoutToken] = useState<string | undefined>(
+    undefined,
+  );
 
   // If the checkout token is set, render the embedded checkout component
   if (checkoutToken) {
@@ -32,6 +35,7 @@ export function TeamAccountCheckoutForm(params: {
       <EmbeddedCheckout
         checkoutToken={checkoutToken}
         provider={billingConfig.provider}
+        onClose={() => setCheckoutToken(undefined)}
       />
     );
   }
