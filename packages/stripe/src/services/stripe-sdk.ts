@@ -12,8 +12,8 @@ export async function createStripeClient() {
 
   // Parse the environment variables and validate them
   const stripeServerEnv = StripeServerEnvSchema.parse({
-    STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
-    STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
+    secretKey: process.env.STRIPE_SECRET_KEY,
+    webhooksSecret: process.env.STRIPE_WEBHOOK_SECRET,
   });
 
   return new Stripe(stripeServerEnv.secretKey, {

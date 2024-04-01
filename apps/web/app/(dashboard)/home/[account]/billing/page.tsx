@@ -52,31 +52,33 @@ async function TeamAccountBillingPage({ params }: Params) {
             <CannotManageBillingAlert />
           </If>
 
-          <div className={'flex flex-col space-y-4'}>
-            <If
-              condition={subscription}
-              fallback={
-                <If condition={canManageBilling}>
-                  <TeamAccountCheckoutForm
-                    customerId={customerId}
-                    accountId={accountId}
-                  />
-                </If>
-              }
-            >
-              {(data) => (
-                <CurrentPlanCard subscription={data} config={billingConfig} />
-              )}
-            </If>
+          <div>
+            <div className={'flex flex-col space-y-2'}>
+              <If
+                condition={subscription}
+                fallback={
+                  <If condition={canManageBilling}>
+                    <TeamAccountCheckoutForm
+                      customerId={customerId}
+                      accountId={accountId}
+                    />
+                  </If>
+                }
+              >
+                {(data) => (
+                  <CurrentPlanCard subscription={data} config={billingConfig} />
+                )}
+              </If>
 
-            <If condition={customerId && canManageBilling}>
-              <form action={createBillingPortalSession}>
-                <input type="hidden" name={'accountId'} value={accountId} />
-                <input type="hidden" name={'slug'} value={params.account} />
+              <If condition={customerId && canManageBilling}>
+                <form action={createBillingPortalSession}>
+                  <input type="hidden" name={'accountId'} value={accountId} />
+                  <input type="hidden" name={'slug'} value={params.account} />
 
-                <BillingPortalCard />
-              </form>
-            </If>
+                  <BillingPortalCard />
+                </form>
+              </If>
+            </div>
           </div>
         </div>
       </PageBody>

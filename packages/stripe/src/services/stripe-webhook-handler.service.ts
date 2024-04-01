@@ -10,6 +10,9 @@ import { createStripeClient } from './stripe-sdk';
 type UpsertSubscriptionParams =
   Database['public']['Functions']['upsert_subscription']['Args'];
 
+type UpsertOrderParams =
+  Database['public']['Functions']['upsert_order']['Args'];
+
 export class StripeWebhookHandlerService
   implements BillingWebhookHandlerService
 {
@@ -60,13 +63,14 @@ export class StripeWebhookHandlerService
     event: Stripe.Event,
     params: {
       onCheckoutSessionCompleted: (
-        data: UpsertSubscriptionParams,
+        data: UpsertSubscriptionParams | UpsertOrderParams,
       ) => Promise<unknown>;
-
       onSubscriptionUpdated: (
         data: UpsertSubscriptionParams,
       ) => Promise<unknown>;
       onSubscriptionDeleted: (subscriptionId: string) => Promise<unknown>;
+      onPaymentSucceeded: (sessionId: string) => Promise<unknown>;
+      onPaymentFailed: (sessionId: string) => Promise<unknown>;
     },
   ) {
     switch (event.type) {
@@ -80,7 +84,7 @@ export class StripeWebhookHandlerService
       case 'customer.subscription.updated': {
         return this.handleSubscriptionUpdatedEvent(
           event,
-          params.onSubscriptionUpdated,
+          params.onCheckoutSessionCompleted,
         );
       }
 
@@ -88,6 +92,17 @@ export class StripeWebhookHandlerService
         return this.handleSubscriptionDeletedEvent(
           event,
           params.onSubscriptionDeleted,
+        );
+      }
+
+      case 'checkout.session.async_payment_failed': {
+        return this.handleAsyncPaymentFailed(event, params.onPaymentFailed);
+      }
+
+      case 'checkout.session.async_payment_succeeded': {
+        return this.handleAsyncPaymentSucceeded(
+          event,
+          params.onPaymentSucceeded,
         );
       }
 
@@ -108,55 +123,116 @@ export class StripeWebhookHandlerService
   private async handleCheckoutSessionCompleted(
     event: Stripe.CheckoutSessionCompletedEvent,
     onCheckoutCompletedCallback: (
-      data: UpsertSubscriptionParams,
+      data: UpsertSubscriptionParams | UpsertOrderParams,
     ) => Promise<unknown>,
   ) {
     const stripe = await this.loadStripe();
 
     const session = event.data.object;
-
-    // TODO: handle one-off payments
-    // is subscription there?
-    const subscriptionId = session.subscription as string;
-    const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+    const isSubscription = session.mode === 'subscription';
 
     const accountId = session.client_reference_id!;
     const customerId = session.customer as string;
 
-    // TODO: support tiered pricing calculations
-    // the amount total is amount in cents (e.g. 1000 = $10.00)
-    // TODO: convert or store the amount in cents?
-    const amount = session.amount_total ?? 0;
+    if (isSubscription) {
+      const subscriptionId = session.subscription as string;
+      const subscription = await stripe.subscriptions.retrieve(subscriptionId);
 
-    const payload = this.buildSubscriptionPayload({
-      subscription,
-      amount,
-      accountId,
-      customerId,
-    });
+      const payload = this.buildSubscriptionPayload({
+        accountId,
+        customerId,
+        id: subscription.id,
+        lineItems: subscription.items.data,
+        status: subscription.status,
+        currency: subscription.currency,
+        periodStartsAt: subscription.current_period_start,
+        periodEndsAt: subscription.current_period_end,
+        cancelAtPeriodEnd: subscription.cancel_at_period_end,
+        trialStartsAt: subscription.trial_start,
+        trialEndsAt: subscription.trial_end,
+      });
 
-    return onCheckoutCompletedCallback(payload);
+      return onCheckoutCompletedCallback(payload);
+    } else {
+      const sessionId = event.data.object.id;
+
+      const sessionWithLineItems = await stripe.checkout.sessions.retrieve(
+        event.data.object.id,
+        {
+          expand: ['line_items'],
+        },
+      );
+
+      const lineItems = sessionWithLineItems.line_items?.data ?? [];
+      const paymentStatus = sessionWithLineItems.payment_status;
+      const status = paymentStatus === 'unpaid' ? 'pending' : 'succeeded';
+      const currency = event.data.object.currency as string;
+
+      const payload: UpsertOrderParams = {
+        target_account_id: accountId,
+        target_customer_id: customerId,
+        order_id: sessionId,
+        billing_provider: this.provider,
+        status: status,
+        currency: currency,
+        total_amount: sessionWithLineItems.amount_total ?? 0,
+        line_items: lineItems.map((item) => {
+          const price = item.price as Stripe.Price;
+
+          return {
+            id: item.id,
+            product_id: price.product as string,
+            variant_id: price.id,
+            price_amount: price.unit_amount,
+            quantity: item.quantity,
+          };
+        }),
+      };
+
+      return onCheckoutCompletedCallback(payload);
+    }
   }
 
-  private async handleSubscriptionUpdatedEvent(
+  private handleAsyncPaymentFailed(
+    event: Stripe.CheckoutSessionAsyncPaymentFailedEvent,
+    onPaymentFailed: (sessionId: string) => Promise<unknown>,
+  ) {
+    const sessionId = event.data.object.id;
+
+    return onPaymentFailed(sessionId);
+  }
+
+  private handleAsyncPaymentSucceeded(
+    event: Stripe.CheckoutSessionAsyncPaymentSucceededEvent,
+    onPaymentSucceeded: (sessionId: string) => Promise<unknown>,
+  ) {
+    const sessionId = event.data.object.id;
+
+    return onPaymentSucceeded(sessionId);
+  }
+
+  private handleSubscriptionUpdatedEvent(
     event: Stripe.CustomerSubscriptionUpdatedEvent,
     onSubscriptionUpdatedCallback: (
-      data: UpsertSubscriptionParams,
+      subscription: UpsertSubscriptionParams,
     ) => Promise<unknown>,
   ) {
     const subscription = event.data.object;
+    const subscriptionId = subscription.id;
     const accountId = subscription.metadata.account_id as string;
-    const customerId = subscription.customer as string;
-
-    const amount = subscription.items.data.reduce((acc, item) => {
-      return (acc + (item.plan.amount ?? 0)) * (item.quantity ?? 1);
-    }, 0);
 
     const payload = this.buildSubscriptionPayload({
-      subscription,
-      amount,
+      customerId: subscription.customer as string,
+      id: subscriptionId,
       accountId,
-      customerId,
+      lineItems: subscription.items.data,
+      status: subscription.status,
+      currency: subscription.currency,
+      periodStartsAt: subscription.current_period_start,
+      periodEndsAt: subscription.current_period_end,
+      cancelAtPeriodEnd: subscription.cancel_at_period_end,
+      trialStartsAt: subscription.trial_start,
+      trialEndsAt: subscription.trial_end,
     });
 
     return onSubscriptionUpdatedCallback(payload);
@@ -171,52 +247,58 @@ export class StripeWebhookHandlerService
     return onSubscriptionDeletedCallback(subscription.id);
   }
 
-  private buildSubscriptionPayload(params: {
-    subscription: Stripe.Subscription;
-    amount: number;
+  private buildSubscriptionPayload<
+    LineItem extends {
+      id: string;
+      quantity?: number;
+      price?: Stripe.Price;
+    },
+  >(params: {
+    id: string;
     accountId: string;
     customerId: string;
+    lineItems: LineItem[];
+    status: Stripe.Subscription.Status;
+    currency: string;
+    cancelAtPeriodEnd: boolean;
+    periodStartsAt: number;
+    periodEndsAt: number;
+    trialStartsAt: number | null;
+    trialEndsAt: number | null;
   }): UpsertSubscriptionParams {
-    const { subscription } = params;
-    const currency = subscription.currency;
+    const active = params.status === 'active' || params.status === 'trialing';
 
-    const active =
-      subscription.status === 'active' || subscription.status === 'trialing';
-
-    const lineItems = subscription.items.data.map((item) => {
+    const lineItems = params.lineItems.map((item) => {
       const quantity = item.quantity ?? 1;
 
       return {
         id: item.id,
-        subscription_id: subscription.id,
-        product_id: item.price.product as string,
-        variant_id: item.price.id,
-        price_amount: item.price.unit_amount,
         quantity,
-        interval: item.price.recurring?.interval as string,
-        interval_count: item.price.recurring?.interval_count as number,
+        subscription_id: params.id,
+        product_id: item.price?.product as string,
+        variant_id: item.price?.id,
+        price_amount: item.price?.unit_amount,
+        interval: item.price?.recurring?.interval as string,
+        interval_count: item.price?.recurring?.interval_count as number,
       };
     });
 
     // otherwise we are updating a subscription
     // and we only need to return the update payload
     return {
-      line_items: lineItems,
+      target_subscription_id: params.id,
+      target_account_id: params.accountId,
+      target_customer_id: params.customerId,
       billing_provider: this.provider,
-      subscription_id: subscription.id,
-      status: subscription.status,
-      total_amount: params.amount,
+      status: params.status,
+      line_items: lineItems,
       active,
-      currency,
-      cancel_at_period_end: subscription.cancel_at_period_end ?? false,
-      period_starts_at: getISOString(
-        subscription.current_period_start,
-      ) as string,
-      period_ends_at: getISOString(subscription.current_period_end) as string,
-      trial_starts_at: getISOString(subscription.trial_start),
-      trial_ends_at: getISOString(subscription.trial_end),
-      account_id: params.accountId,
-      customer_id: params.customerId,
+      currency: params.currency,
+      cancel_at_period_end: params.cancelAtPeriodEnd ?? false,
+      period_starts_at: getISOString(params.periodStartsAt) as string,
+      period_ends_at: getISOString(params.periodEndsAt) as string,
+      trial_starts_at: getISOString(params.trialStartsAt),
+      trial_ends_at: getISOString(params.trialEndsAt),
     };
   }
 }

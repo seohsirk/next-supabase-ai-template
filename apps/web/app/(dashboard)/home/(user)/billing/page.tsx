@@ -40,22 +40,29 @@ async function PersonalAccountBillingPage() {
 
       <PageBody>
         <div className={'flex flex-col space-y-8'}>
-          <If
-            condition={subscription}
-            fallback={<PersonalAccountCheckoutForm customerId={customerId} />}
-          >
-            {(subscription) => (
-              <CurrentPlanCard
-                subscription={subscription}
-                config={billingConfig}
-              />
-            )}
+          <If condition={!subscription}>
+            <PersonalAccountCheckoutForm customerId={customerId} />
+
+            <If condition={customerId}>
+              <CustomerBillingPortalForm />
+            </If>
           </If>
 
-          <If condition={customerId}>
-            <form action={createPersonalAccountBillingPortalSession}>
-              <BillingPortalCard />
-            </form>
+          <If condition={subscription}>
+            {(subscription) => (
+              <div
+                className={'mx-auto flex w-full max-w-2xl flex-col space-y-4'}
+              >
+                <CurrentPlanCard
+                  subscription={subscription}
+                  config={billingConfig}
+                />
+
+                <If condition={customerId}>
+                  <CustomerBillingPortalForm />
+                </If>
+              </div>
+            )}
           </If>
         </div>
       </PageBody>
@@ -64,6 +71,14 @@ async function PersonalAccountBillingPage() {
 }
 
 export default withI18n(PersonalAccountBillingPage);
+
+function CustomerBillingPortalForm() {
+  return (
+    <form action={createPersonalAccountBillingPortalSession}>
+      <BillingPortalCard />
+    </form>
+  );
+}
 
 async function loadData(client: SupabaseClient<Database>) {
   const { data, error } = await client.auth.getUser();

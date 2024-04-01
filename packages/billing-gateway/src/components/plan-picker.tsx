@@ -10,6 +10,7 @@ import { z } from 'zod';
 
 import {
   BillingConfig,
+  LineItemSchema,
   getBaseLineItem,
   getPlanIntervals,
   getProductPlanPair,
@@ -36,6 +37,8 @@ import {
 import { Trans } from '@kit/ui/trans';
 import { cn } from '@kit/ui/utils';
 
+import { LineItemDetails } from './line-item-details';
+
 export function PlanPicker(
   props: React.PropsWithChildren<{
     config: BillingConfig;
@@ -55,7 +58,8 @@ export function PlanPicker(
     resolver: zodResolver(
       z
         .object({
-          planId: z.string(),
+          planId: z.string().min(1),
+          productId: z.string().min(1),
           interval: z.string().min(1),
         })
         .refine(
@@ -140,6 +144,10 @@ export function PlanPicker(
                                 value={interval}
                                 onClick={() => {
                                   form.setValue('planId', '', {
+                                    shouldValidate: true,
+                                  });
+
+                                  form.setValue('productId', '', {
                                     shouldValidate: true,
                                   });
 
@@ -311,164 +319,94 @@ export function PlanPicker(
           </div>
         </form>
 
-        <If condition={selectedPlan && selectedProduct}>
-          <div
-            className={
-              'fade-in animate-in zoom-in-90 flex w-full flex-col space-y-4 rounded-lg border p-4'
-            }
-          >
-            <div className={'flex flex-col space-y-0.5'}>
-              <Heading level={5}>
-                <b>
-                  <Trans
-                    i18nKey={`billing:products.${selectedProduct?.id}.name`}
-                    defaults={selectedProduct?.name}
-                  />
-                </b>{' '}
-                /{' '}
-                <Trans
-                  i18nKey={`billing:billingInterval.${selectedInterval}`}
-                />
-              </Heading>
-
-              <p>
-                <span className={'text-muted-foreground'}>
-                  <Trans
-                    i18nKey={`billing:products.${selectedProduct?.id}.description`}
-                    defaults={selectedProduct?.description}
-                  />
-                </span>
-              </p>
-            </div>
-
-            <div className={'flex flex-col space-y-1'}>
-              <span className={'font-semibold'}>
-                <Trans i18nKey={'billing:detailsLabel'} />
-              </span>
-
-              <div className={'flex flex-col divide-y'}>
-                {selectedPlan?.lineItems.map((item) => {
-                  switch (item.type) {
-                    case 'base':
-                      return (
-                        <div
-                          key={item.id}
-                          className={
-                            'flex items-center justify-between py-1.5 text-sm'
-                          }
-                        >
-                          <span className={'flex space-x-2'}>
-                            <span>
-                              <Trans i18nKey={'billing:flatSubscription'} />
-                            </span>
-
-                            <span>/</span>
-
-                            <span>
-                              <Trans
-                                i18nKey={`billing:billingInterval.${selectedInterval}`}
-                              />
-                            </span>
-                          </span>
-
-                          <span className={'font-semibold'}>
-                            {formatCurrency(
-                              selectedProduct?.currency.toLowerCase(),
-                              item.cost,
-                            )}
-                          </span>
-                        </div>
-                      );
-
-                    case 'per-seat':
-                      return (
-                        <div
-                          key={item.id}
-                          className={
-                            'flex items-center justify-between py-1.5 text-sm'
-                          }
-                        >
-                          <span>
-                            <Trans i18nKey={'billing:perTeamMember'} />
-                          </span>
-
-                          <span className={'font-semibold'}>
-                            {formatCurrency(
-                              selectedProduct?.currency.toLowerCase(),
-                              item.cost,
-                            )}
-                          </span>
-                        </div>
-                      );
-
-                    case 'metered':
-                      return (
-                        <div
-                          key={item.id}
-                          className={
-                            'flex items-center justify-between py-1.5 text-sm'
-                          }
-                        >
-                          <span>
-                            <Trans
-                              i18nKey={'billing:perUnit'}
-                              values={{
-                                unit: item.unit,
-                              }}
-                            />
-
-                            {item.included ? (
-                              <Trans
-                                i18nKey={'billing:perUnitIncluded'}
-                                values={{
-                                  included: item.included,
-                                }}
-                              />
-                            ) : (
-                              ''
-                            )}
-                          </span>
-
-                          <span className={'font-semibold'}>
-                            {formatCurrency(
-                              selectedProduct?.currency.toLowerCase(),
-                              item.cost,
-                            )}
-                          </span>
-                        </div>
-                      );
-                  }
-                })}
-              </div>
-            </div>
-
-            <div className={'flex flex-col space-y-2'}>
-              <span className={'font-semibold'}>
-                <Trans i18nKey={'billing:featuresLabel'} />
-              </span>
-
-              {selectedProduct?.features.map((item) => {
-                return (
-                  <div
-                    key={item}
-                    className={'flex items-center space-x-2 text-sm'}
-                  >
-                    <CheckCircle className={'h-4 text-green-500'} />
-
-                    <span className={'text-muted-foreground'}>
-                      <Trans
-                        i18nKey={`billing:features.${item}`}
-                        defaults={item}
-                      />
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </If>
+        {selectedPlan && selectedInterval && selectedProduct ? (
+          <PlanDetails
+            selectedInterval={selectedInterval}
+            selectedPlan={selectedPlan}
+            selectedProduct={selectedProduct}
+          />
+        ) : null}
       </div>
     </Form>
+  );
+}
+
+function PlanDetails({
+  selectedProduct,
+  selectedInterval,
+  selectedPlan,
+}: {
+  selectedProduct: {
+    id: string;
+    name: string;
+    description: string;
+    currency: string;
+    features: string[];
+  };
+
+  selectedInterval: string;
+
+  selectedPlan: {
+    lineItems: z.infer<typeof LineItemSchema>[];
+  };
+}) {
+  return (
+    <div
+      className={
+        'fade-in animate-in zoom-in-90 flex w-full flex-col space-y-4 rounded-lg border p-4'
+      }
+    >
+      <div className={'flex flex-col space-y-0.5'}>
+        <Heading level={5}>
+          <b>
+            <Trans
+              i18nKey={`billing:products.${selectedProduct.id}.name`}
+              defaults={selectedProduct.name}
+            />
+          </b>{' '}
+          / <Trans i18nKey={`billing:billingInterval.${selectedInterval}`} />
+        </Heading>
+
+        <p>
+          <span className={'text-muted-foreground'}>
+            <Trans
+              i18nKey={`billing:products.${selectedProduct.id}.description`}
+              defaults={selectedProduct.description}
+            />
+          </span>
+        </p>
+      </div>
+
+      <div className={'flex flex-col space-y-1'}>
+        <span className={'font-semibold'}>
+          <Trans i18nKey={'billing:detailsLabel'} />
+        </span>
+
+        <LineItemDetails
+          lineItems={selectedPlan.lineItems ?? []}
+          selectedInterval={selectedInterval}
+          currency={selectedProduct.currency}
+        />
+      </div>
+
+      <div className={'flex flex-col space-y-2'}>
+        <span className={'font-semibold'}>
+          <Trans i18nKey={'billing:featuresLabel'} />
+        </span>
+
+        {selectedProduct.features.map((item) => {
+          return (
+            <div key={item} className={'flex items-center space-x-2 text-sm'}>
+              <CheckCircle className={'h-4 text-green-500'} />
+
+              <span className={'text-muted-foreground'}>
+                <Trans i18nKey={`billing:features.${item}`} defaults={item} />
+              </span>
+            </div>
+          );
+        })}
+      </div>
+    </div>
   );
 }
 

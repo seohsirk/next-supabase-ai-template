@@ -5,6 +5,8 @@ import { Logger } from '@kit/shared/logger';
 import { Database } from '@kit/supabase/database';
 
 export class BillingEventHandlerService {
+  private readonly namespace = 'billing';
+
   constructor(
     private readonly clientProvider: () => SupabaseClient<Database>,
     private readonly strategy: BillingWebhookHandlerService,
@@ -25,7 +27,7 @@ export class BillingEventHandlerService {
         // here we delete the subscription from the database
         Logger.info(
           {
-            namespace: 'billing',
+            namespace: this.namespace,
             subscriptionId,
           },
           'Processing subscription deleted event',
@@ -42,7 +44,7 @@ export class BillingEventHandlerService {
 
         Logger.info(
           {
-            namespace: 'billing',
+            namespace: this.namespace,
             subscriptionId,
           },
           'Successfully deleted subscription',
@@ -52,22 +54,18 @@ export class BillingEventHandlerService {
         const client = this.clientProvider();
 
         const ctx = {
-          namespace: 'billing',
-          subscriptionId: subscription.subscription_id,
+          namespace: this.namespace,
+          subscriptionId: subscription.target_subscription_id,
           provider: subscription.billing_provider,
-          accountId: subscription.account_id,
-          customerId: subscription.customer_id,
+          accountId: subscription.target_account_id,
+          customerId: subscription.target_customer_id,
         };
 
         Logger.info(ctx, 'Processing subscription updated event');
 
         // Handle the subscription updated event
         // here we update the subscription in the database
-        const { error } = await client.rpc('upsert_subscription', {
-          ...subscription,
-          customer_id: subscription.customer_id,
-          account_id: subscription.account_id,
-        });
+        const { error } = await client.rpc('upsert_subscription', subscription);
 
         if (error) {
           Logger.error(
@@ -83,32 +81,114 @@ export class BillingEventHandlerService {
 
         Logger.info(ctx, 'Successfully updated subscription');
       },
-      onCheckoutSessionCompleted: async (subscription, customerId) => {
+      onCheckoutSessionCompleted: async (payload, customerId) => {
         // Handle the checkout session completed event
         // here we add the subscription to the database
         const client = this.clientProvider();
 
-        const ctx = {
-          namespace: 'billing',
-          subscriptionId: subscription.subscription_id,
-          provider: subscription.billing_provider,
-          accountId: subscription.account_id,
-        };
+        // Check if the payload contains an order_id
+        // if it does, we add an order, otherwise we add a subscription
+        if ('order_id' in payload) {
+          const ctx = {
+            namespace: this.namespace,
+            orderId: payload.order_id,
+            provider: payload.billing_provider,
+            accountId: payload.target_account_id,
+            customerId,
+          };
 
-        Logger.info(ctx, 'Processing checkout session completed event...');
+          Logger.info(ctx, 'Processing order completed event...');
 
-        const { error } = await client.rpc('upsert_subscription', {
-          ...subscription,
-          customer_id: customerId,
-        });
+          const { error } = await client.rpc('upsert_order', payload);
+
+          if (error) {
+            Logger.error({ ...ctx, error }, 'Failed to add order');
+
+            throw new Error('Failed to add order');
+          }
+
+          Logger.info(ctx, 'Successfully added order');
+        } else {
+          const ctx = {
+            namespace: this.namespace,
+            subscriptionId: payload.target_subscription_id,
+            provider: payload.billing_provider,
+            accountId: payload.target_account_id,
+            customerId,
+          };
+
+          Logger.info(ctx, 'Processing checkout session completed event...');
+
+          const { error } = await client.rpc('upsert_subscription', payload);
+
+          if (error) {
+            Logger.error({ ...ctx, error }, 'Failed to add subscription');
+
+            throw new Error('Failed to add subscription');
+          }
+
+          Logger.info(ctx, 'Successfully added subscription');
+        }
+      },
+      onPaymentSucceeded: async (sessionId: string) => {
+        const client = this.clientProvider();
+
+        // Handle the payment succeeded event
+        // here we update the payment status in the database
+        Logger.info(
+          {
+            namespace: this.namespace,
+            sessionId,
+          },
+          'Processing payment succeeded event',
+        );
+
+        const { error } = await client
+          .from('orders')
+          .update({ status: 'succeeded' })
+          .match({ session_id: sessionId });
 
         if (error) {
-          Logger.error({ ...ctx, error }, 'Failed to add subscription');
-
-          throw new Error('Failed to add subscription');
+          throw new Error('Failed to update payment status');
         }
 
-        Logger.info(ctx, 'Successfully added subscription');
+        Logger.info(
+          {
+            namespace: 'billing',
+            sessionId,
+          },
+          'Successfully updated payment status',
+        );
+      },
+      onPaymentFailed: async (sessionId: string) => {
+        const client = this.clientProvider();
+
+        // Handle the payment failed event
+        // here we update the payment status in the database
+        Logger.info(
+          {
+            namespace: this.namespace,
+            sessionId,
+          },
+          'Processing payment failed event',
+        );
+
+        const { error } = await client
+          .from('orders')
+          .update({ status: 'failed' })
+          .match({ session_id: sessionId });
+
+        if (error) {
+          throw new Error('Failed to update payment status');
+        }
+
+        Logger.info(
+          {
+            namespace: this.namespace,
+            sessionId,
+          },
+          'Successfully updated payment status',
+        );
       },
     });
   }

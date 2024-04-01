@@ -1,12 +1,7 @@
 import { formatDate } from 'date-fns';
 import { BadgeCheck, CheckCircle2 } from 'lucide-react';
 
-import {
-  BillingConfig,
-  getBaseLineItem,
-  getProductPlanPair,
-} from '@kit/billing';
-import { formatCurrency } from '@kit/shared/utils';
+import { BillingConfig, getProductPlanPairByVariantId } from '@kit/billing';
 import { Database } from '@kit/supabase/database';
 import {
   Accordion,
@@ -26,6 +21,7 @@ import { Trans } from '@kit/ui/trans';
 
 import { CurrentPlanAlert } from './current-plan-alert';
 import { CurrentPlanBadge } from './current-plan-badge';
+import { LineItemDetails } from './line-item-details';
 
 type Subscription = Database['public']['Tables']['subscriptions']['Row'];
 type LineItem = Database['public']['Tables']['subscription_items']['Row'];
@@ -42,18 +38,25 @@ export function CurrentPlanCard({
   subscription,
   config,
 }: React.PropsWithChildren<Props>) {
-  // line items have the same product id
-  const lineItem = subscription.items[0] as LineItem;
+  const lineItems = subscription.items;
+  const firstLineItem = lineItems[0];
 
-  const product = config.products.find(
-    (product) => product.id === lineItem.product_id,
+  if (!firstLineItem) {
+    throw new Error('No line items found in subscription');
+  }
+
+  const { product, plan } = getProductPlanPairByVariantId(
+    config,
+    firstLineItem.variant_id,
   );
 
-  if (!product) {
+  if (!product || !plan) {
     throw new Error(
-      'Product not found. Make sure the product exists in the billing config.',
+      'Product or plan not found. Did you forget to add it to the billing config?',
     );
   }
+
+  const productLineItems = plan.lineItems;
 
   return (
     <Card>
@@ -113,8 +116,7 @@ export function CurrentPlanCard({
                 <If condition={subscription.cancel_at_period_end}>
                   <div className="flex flex-col">
                     <span className="font-medium">
-                      Your subscription will be cancelled at the end of the
-                      period
+                      <Trans i18nKey="billing:cancelSubscriptionDate" />
                     </span>
 
                     <div className={'text-muted-foreground'}>
@@ -126,7 +128,21 @@ export function CurrentPlanCard({
                 </If>
 
                 <div className="flex flex-col space-y-1">
-                  <span className="font-medium">Features</span>
+                  <span className="font-semibold">
+                    <Trans i18nKey="billing:detailsLabel" />
+                  </span>
+
+                  <LineItemDetails
+                    lineItems={productLineItems}
+                    currency={subscription.currency}
+                    selectedInterval={firstLineItem.interval}
+                  />
+                </div>
+
+                <div className="flex flex-col space-y-1">
+                  <span className="font-semibold">
+                    <Trans i18nKey="billing:featuresLabel" />
+                  </span>
 
                   <ul className={'flex flex-col space-y-0.5'}>
                     {product.features.map((item) => {

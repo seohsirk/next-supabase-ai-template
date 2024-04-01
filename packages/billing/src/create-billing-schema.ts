@@ -226,3 +226,20 @@ export function getProductPlanPair(
 
   throw new Error('Plan not found');
 }
+
+export function getProductPlanPairByVariantId(
+  config: z.infer<typeof BillingSchema>,
+  planId: string,
+) {
+  for (const product of config.products) {
+    for (const plan of product.plans) {
+      for (const lineItem of plan.lineItems) {
+        if (lineItem.id === planId) {
+          return { product, plan };
+        }
+      }
+    }
+  }
+
+  throw new Error('Plan not found');
+}

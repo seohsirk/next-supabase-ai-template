@@ -364,6 +364,115 @@ export type Database = {
           },
         ]
       }
+      order_items: {
+        Row: {
+          created_at: string
+          order_id: string
+          price_amount: number | null
+          product_id: string
+          quantity: number
+          updated_at: string
+          variant_id: string
+        }
+        Insert: {
+          created_at?: string
+          order_id: string
+          price_amount?: number | null
+          product_id: string
+          quantity?: number
+          updated_at?: string
+          variant_id: string
+        }
+        Update: {
+          created_at?: string
+          order_id?: string
+          price_amount?: number | null
+          product_id?: string
+          quantity?: number
+          updated_at?: string
+          variant_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_items_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      orders: {
+        Row: {
+          account_id: string
+          billing_customer_id: number
+          billing_provider: Database["public"]["Enums"]["billing_provider"]
+          created_at: string
+          currency: string
+          id: string
+          product_id: string
+          status: Database["public"]["Enums"]["payment_status"]
+          total_amount: number
+          updated_at: string
+          variant_id: string
+        }
+        Insert: {
+          account_id: string
+          billing_customer_id: number
+          billing_provider: Database["public"]["Enums"]["billing_provider"]
+          created_at?: string
+          currency: string
+          id: string
+          product_id: string
+          status: Database["public"]["Enums"]["payment_status"]
+          total_amount: number
+          updated_at?: string
+          variant_id: string
+        }
+        Update: {
+          account_id?: string
+          billing_customer_id?: number
+          billing_provider?: Database["public"]["Enums"]["billing_provider"]
+          created_at?: string
+          currency?: string
+          id?: string
+          product_id?: string
+          status?: Database["public"]["Enums"]["payment_status"]
+          total_amount?: number
+          updated_at?: string
+          variant_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "orders_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "orders_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "user_account_workspace"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "orders_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "user_accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "orders_billing_customer_id_fkey"
+            columns: ["billing_customer_id"]
+            isOneToOne: false
+            referencedRelation: "billing_customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       role_permissions: {
         Row: {
           id: number
@@ -436,7 +545,6 @@ export type Database = {
       subscription_items: {
         Row: {
           created_at: string
-          id: string
           interval: string
           interval_count: number
           price_amount: number | null
@@ -448,7 +556,6 @@ export type Database = {
         }
         Insert: {
           created_at?: string
-          id: string
           interval: string
           interval_count: number
           price_amount?: number | null
@@ -460,7 +567,6 @@ export type Database = {
         }
         Update: {
           created_at?: string
-          id?: string
           interval?: string
           interval_count?: number
           price_amount?: number | null
@@ -781,19 +887,43 @@ export type Database = {
         }
         Returns: unknown
       }
+      upsert_order: {
+        Args: {
+          target_account_id: string
+          target_customer_id: string
+          order_id: string
+          status: Database["public"]["Enums"]["payment_status"]
+          billing_provider: Database["public"]["Enums"]["billing_provider"]
+          total_amount: number
+          currency: string
+          line_items: Json
+        }
+        Returns: {
+          account_id: string
+          billing_customer_id: number
+          billing_provider: Database["public"]["Enums"]["billing_provider"]
+          created_at: string
+          currency: string
+          id: string
+          product_id: string
+          status: Database["public"]["Enums"]["payment_status"]
+          total_amount: number
+          updated_at: string
+          variant_id: string
+        }
+      }
       upsert_subscription: {
         Args: {
-          account_id: string
-          subscription_id: string
+          target_account_id: string
+          target_customer_id: string
+          target_subscription_id: string
           active: boolean
-          total_amount: number
           status: Database["public"]["Enums"]["subscription_status"]
           billing_provider: Database["public"]["Enums"]["billing_provider"]
           cancel_at_period_end: boolean
           currency: string
           period_starts_at: string
           period_ends_at: string
-          customer_id: string
           line_items: Json
           trial_starts_at?: string
           trial_ends_at?: string
@@ -827,6 +957,7 @@ export type Database = {
         | "members.manage"
         | "invites.manage"
       billing_provider: "stripe" | "lemon-squeezy" | "paddle"
+      payment_status: "pending" | "succeeded" | "failed"
       subscription_status:
         | "active"
         | "trialing"

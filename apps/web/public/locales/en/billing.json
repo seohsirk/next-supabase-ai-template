@@ -37,6 +37,9 @@
   "detailsLabel": "Details",
   "planPickerLabel": "Pick your preferred plan",
   "planCardLabel": "Manage your Plan",
+  "planPickerAlertErrorTitle": "Error requesting checkout",
+    "planPickerAlertErrorDescription": "There was an error requesting checkout. Please try again later.",
+  "cancelSubscriptionDate": "Your subscription will be cancelled at the end of the period",
   "status": {
     "free": {
       "badge": "Free Plan",

@@ -14,29 +14,30 @@ import appConfig from '~/config/app.config';
 import billingConfig from '~/config/billing.config';
 import pathsConfig from '~/config/paths.config';
 
+const CreateCheckoutSchema = z.object({
+  planId: z.string(),
+  productId: z.string(),
+});
+
 /**
  * Creates a checkout session for a personal account.
  *
  * @param {object} params - The parameters for creating the checkout session.
  * @param {string} params.planId - The ID of the plan to be associated with the account.
  */
-export async function createPersonalAccountCheckoutSession(params: {
-  planId: string;
-  productId: string;
-}) {
+export async function createPersonalAccountCheckoutSession(
+  params: z.infer<typeof CreateCheckoutSchema>,
+) {
+  // parse the parameters
+  const { planId, productId } = CreateCheckoutSchema.parse(params);
+
+  // get the authenticated user
   const client = getSupabaseServerActionClient();
   const { data: user, error } = await requireUser(client);
 
   if (error ?? !user) {
     throw new Error('Authentication required');
   }
-
-  const { planId, productId } = z
-    .object({
-      planId: z.string().min(1),
-      productId: z.string().min(1),
-    })
-    .parse(params);
 
   Logger.info(
     {
