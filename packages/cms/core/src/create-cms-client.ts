@@ -24,13 +24,13 @@ export async function createCmsClient(
 }
 
 async function getContentLayerClient() {
-  const { ContentlayerClient } = await import('@kit/contentlayer');
+  const { ContentlayerClient } = await import('../../contentlayer');
 
   return new ContentlayerClient();
 }
 
 async function getWordpressClient() {
-  const { WordpressClient } = await import('@kit/wordpress');
+  const { WordpressClient } = await import('../../wordpress');
 
   return new WordpressClient();
 }

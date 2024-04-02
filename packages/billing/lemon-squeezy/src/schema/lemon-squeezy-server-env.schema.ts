@@ -5,10 +5,10 @@ export const getLemonSqueezyEnv = () =>
     .object({
       secretKey: z.string().min(1),
       webhooksSecret: z.string().min(1),
-      storeId: z.number().positive(),
+      storeId: z.string(),
     })
     .parse({
       secretKey: process.env.LEMON_SQUEEZY_SECRET_KEY,
-      webhooksSecret: process.env.LEMON_SQUEEZY_WEBHOOK_SECRET,
+      webhooksSecret: process.env.LEMON_SQUEEZY_SIGNING_SECRET,
       storeId: process.env.LEMON_SQUEEZY_STORE_ID,
     });

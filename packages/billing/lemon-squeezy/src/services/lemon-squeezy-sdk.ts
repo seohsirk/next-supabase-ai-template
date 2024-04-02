@@ -19,7 +19,7 @@ export async function initializeLemonSqueezyClient() {
           name: `billing.lemon-squeezy`,
           error: error.message,
         },
-        'Error in Lemon Squeezy SDK',
+        'Encountered an error using the Lemon Squeezy SDK',
       );
     },
   });

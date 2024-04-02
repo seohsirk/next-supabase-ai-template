@@ -13,15 +13,12 @@
     ".": "./src/index.ts"
   },
   "peerDependencies": {
-    "@kit/contentlayer": "workspace:*",
-    "@kit/wordpress": "workspace:*"
+    "@kit/contentlayer": "workspace:*"
   },
   "devDependencies": {
-    "@kit/contentlayer": "*",
     "@kit/eslint-config": "workspace:*",
     "@kit/prettier-config": "workspace:*",
-    "@kit/tsconfig": "workspace:*",
-    "@kit/wordpress": "*"
+    "@kit/tsconfig": "workspace:*"
   },
   "eslintConfig": {
     "root": true,

@@ -359,10 +359,11 @@ importers:
         version: link:../../ui
 
   packages/cms/core:
-    devDependencies:
+    dependencies:
       '@kit/contentlayer':
-        specifier: '*'
+        specifier: workspace:*
         version: link:../contentlayer
+    devDependencies:
       '@kit/eslint-config':
         specifier: workspace:*
         version: link:../../../tooling/eslint
@@ -372,9 +373,6 @@ importers:
       '@kit/tsconfig':
         specifier: workspace:*
         version: link:../../../tooling/typescript
-      '@kit/wordpress':
-        specifier: '*'
-        version: link:../wordpress
 
   packages/cms/wordpress:
     devDependencies:
