@@ -25,7 +25,7 @@ export default createBillingSchema({
           paymentType: 'one-time',
           lineItems: [
             {
-              id: 'price_1P0jgcI1i3VnbZTqXVXaZkMP',
+              id: '324643',
               name: 'Base',
               description: 'Base plan',
               cost: 999.99,

@@ -1676,7 +1676,7 @@ create policy create_org_account on public.accounts
     for insert to authenticated
         with check (
 public.is_set(
-        'enable_organization_accounts')
+        'enable_team_accounts')
         and public.accounts.is_personal_account = false);
 
 create or replace function public.create_invitation(account_id uuid,

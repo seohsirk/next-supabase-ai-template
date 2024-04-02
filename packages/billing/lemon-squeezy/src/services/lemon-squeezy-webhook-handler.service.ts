@@ -1,4 +1,4 @@
-import { getOrder } from '@lemonsqueezy/lemonsqueezy.js';
+import { getOrder, getVariant } from '@lemonsqueezy/lemonsqueezy.js';
 import { createHmac, timingSafeEqual } from 'crypto';
 
 import { BillingWebhookHandlerService } from '@kit/billing';
@@ -139,10 +139,15 @@ export class LemonSqueezyWebhookHandlerService
   ) {
     await initializeLemonSqueezyClient();
 
-    const subscription = event.data.relationships.subscriptions.links.self;
+    // we fetch the variant to check if the order is a subscription
+    // if Lemon Squeezy was able to discriminate between orders and subscriptions
+    // it would be better to use that information. But for now, we need to fetch the variant
+    const variantId = event.data.attributes.first_order_item.variant_id;
+    const { data } = await getVariant(variantId);
 
-    if (subscription) {
-      // we handle the subscription created event instead
+    // if the order is a subscription
+    // we handle it in the subscription created event
+    if (data?.data.attributes.is_subscription) {
       return;
     }
 
