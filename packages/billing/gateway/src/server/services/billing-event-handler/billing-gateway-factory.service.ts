@@ -16,12 +16,16 @@ export class BillingEventHandlerFactoryService {
         return new StripeWebhookHandlerService();
       }
 
-      case 'paddle': {
-        throw new Error('Paddle is not supported yet');
+      case 'lemon-squeezy': {
+        const { LemonSqueezyWebhookHandlerService } = await import(
+          '@kit/lemon-squeezy'
+        );
+
+        return new LemonSqueezyWebhookHandlerService();
       }
 
-      case 'lemon-squeezy': {
-        throw new Error('Lemon Squeezy is not supported yet');
+      case 'paddle': {
+        throw new Error('Paddle is not supported yet');
       }
 
       default:
