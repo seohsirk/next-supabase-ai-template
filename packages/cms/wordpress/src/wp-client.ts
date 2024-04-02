@@ -25,15 +25,15 @@ export class WordpressClient implements CmsClient {
 
     switch (options?.type) {
       case 'post':
-        endpoint = '/wp-json/wp/v2/posts';
+        endpoint = '/wp-json/wp/v2/posts?_embed';
         break;
 
       case 'page':
-        endpoint = '/wp-json/wp/v2/pages';
+        endpoint = '/wp-json/wp/v2/pages?_embed';
         break;
 
       default:
-        endpoint = '/wp-json/wp/v2/posts';
+        endpoint = '/wp-json/wp/v2/posts?_embed';
     }
 
     const url = new URL(this.apiUrl + endpoint);
@@ -88,15 +88,15 @@ export class WordpressClient implements CmsClient {
                 id: child.id.toString(),
                 title: child.title.rendered,
                 type: child.type as Cms.ContentType,
-                image: child.featured_media,
+                image: this.getFeaturedMedia(child),
                 description: child.excerpt.rendered,
                 url: child.link,
                 content: child.content.rendered,
                 slug: child.slug,
                 publishedAt: new Date(child.date),
                 author: childAuthor?.name,
-                categories: childCategories.map((category) => category.name),
-                tags: childTags.map((tag) => tag.name),
+                categories: childCategories,
+                tags: childTags,
                 parentId: child.parent?.toString(),
               };
             }),
@@ -106,19 +106,20 @@ export class WordpressClient implements CmsClient {
         const author = await this.getAuthor(item.author);
         const categories = await this.getCategoriesByIds(item.categories ?? []);
         const tags = await this.getTagsByIds(item.tags ?? []);
+        const image = item.featured_media ? this.getFeaturedMedia(item) : '';
 
         return {
           id: item.id.toString(),
           title: item.title.rendered,
           content: item.content.rendered,
           description: item.excerpt.rendered,
-          image: item.featured_media,
+          image,
           url: item.link,
           slug: item.slug,
           publishedAt: new Date(item.date),
           author: author?.name,
-          categories: categories.map((category) => category.name),
-          tags: tags.map((tag) => tag.name),
+          categories: categories,
+          tags: tags,
           type: item.type as Cms.ContentType,
           parentId,
           children,
@@ -140,10 +141,11 @@ export class WordpressClient implements CmsClient {
     const author = await this.getAuthor(item.author);
     const categories = await this.getCategoriesByIds(item.categories ?? []);
     const tags = await this.getTagsByIds(item.tags ?? []);
+    const image = item.featured_media ? this.getFeaturedMedia(item) : '';
 
     return {
-      id: item.id,
-      image: item.featured_media,
+      id: item.id.toString(),
+      image,
       url: item.link,
       description: item.excerpt.rendered,
       type: item.type as Cms.ContentType,
@@ -153,8 +155,8 @@ export class WordpressClient implements CmsClient {
       slug: item.slug,
       publishedAt: new Date(item.date),
       author: author?.name,
-      categories: categories.map((category) => category.name),
-      tags: tags.map((tag) => tag.name),
+      categories,
+      tags,
     };
   }
 
@@ -253,7 +255,11 @@ export class WordpressClient implements CmsClient {
       responses.map((response) => response.json()),
     )) as WP_REST_API_Tag[];
 
-    return data.map((item) => ({ id: item.id, name: item.name }));
+    return data.map((item) => ({
+      id: item.id.toString(),
+      name: item.name,
+      slug: item.slug,
+    }));
   }
 
   private async getCategoriesByIds(ids: number[]) {
@@ -267,7 +273,11 @@ export class WordpressClient implements CmsClient {
       responses.map((response) => response.json()),
     )) as WP_REST_API_Category[];
 
-    return data.map((item) => ({ id: item.id, name: item.name }));
+    return data.map((item) => ({
+      id: item.id.toString(),
+      name: item.name,
+      slug: item.slug,
+    }));
   }
 
   private async getAuthor(id: number) {
@@ -280,5 +290,22 @@ export class WordpressClient implements CmsClient {
     const data = await response.json();
 
     return { name: data.name };
+  }
+
+  private getFeaturedMedia(post: WP_REST_API_Post) {
+    const embedded = post._embedded ?? {
+      'wp:featuredmedia': [],
+    };
+
+    const media = embedded['wp:featuredmedia'] ?? [];
+    const item = media?.length > 0 ? media[0] : null;
+
+    return item
+      ? (
+          item as {
+            source_url: string;
+          }
+        ).source_url
+      : '';
   }
 }
