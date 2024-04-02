@@ -29,7 +29,7 @@ const LazyEmbeddedCheckout = dynamic(
   },
 );
 
-async function ReturnStripeSessionPage({ searchParams }: SessionPageProps) {
+async function ReturnCheckoutSessionPage({ searchParams }: SessionPageProps) {
   const { customerEmail, checkoutToken } = await loadCheckoutSession(
     searchParams.session_id,
   );
@@ -62,7 +62,7 @@ async function ReturnStripeSessionPage({ searchParams }: SessionPageProps) {
   );
 }
 
-export default withI18n(ReturnStripeSessionPage);
+export default withI18n(ReturnCheckoutSessionPage);
 
 export async function loadCheckoutSession(sessionId: string) {
   const client = getSupabaseServerComponentClient();
