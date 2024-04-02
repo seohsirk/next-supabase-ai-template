@@ -102,7 +102,7 @@ export function AccountSelector({
             variant="ghost"
             role="combobox"
             aria-expanded={open}
-            className={cn('w-full shadow', {
+            className={cn('group w-full shadow', {
               'justify-between': !collapsed,
               'justify-center': collapsed,
             })}
@@ -125,7 +125,11 @@ export function AccountSelector({
             >
               {(account) => (
                 <span className={'flex items-center space-x-2'}>
-                  <Avatar className={'h-6 w-6'}>
+                  <Avatar
+                    className={
+                      'group-hover:border-border mr-2 h-6 w-6 border border-transparent'
+                    }
+                  >
                     <AvatarImage src={account.image ?? undefined} />
 
                     <AvatarFallback>
@@ -175,6 +179,7 @@ export function AccountSelector({
                   <CommandGroup heading={<Trans i18nKey={'teams:yourTeams'} />}>
                     {(accounts ?? []).map((account) => (
                       <CommandItem
+                        className={'group'}
                         key={account.value}
                         value={account.value ?? ''}
                         onSelect={(currentValue) => {
@@ -186,7 +191,16 @@ export function AccountSelector({
                           }
                         }}
                       >
-                        <Avatar className={'mr-2 h-6 w-6'}>
+                        <Avatar
+                          className={cn(
+                            'mr-2 h-6 w-6 border border-transparent',
+                            {
+                              ['border-border']: value === account.value,
+                              ['group-hover:border-border ']:
+                                value !== account.value,
+                            },
+                          )}
+                        >
                           <AvatarImage src={account.image ?? undefined} />
 
                           <AvatarFallback>
@@ -194,7 +208,9 @@ export function AccountSelector({
                           </AvatarFallback>
                         </Avatar>
 
-                        <span>{account.label}</span>
+                        <span className={'mr-2 max-w-[165px] truncate'}>
+                          {account.label}
+                        </span>
 
                         <Icon item={account.value ?? ''} />
                       </CommandItem>
