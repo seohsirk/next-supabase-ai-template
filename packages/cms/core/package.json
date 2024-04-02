@@ -17,9 +17,11 @@
     "@kit/wordpress": "workspace:*"
   },
   "devDependencies": {
+    "@kit/contentlayer": "*",
     "@kit/eslint-config": "workspace:*",
     "@kit/prettier-config": "workspace:*",
-    "@kit/tsconfig": "workspace:*"
+    "@kit/tsconfig": "workspace:*",
+    "@kit/wordpress": "*"
   },
   "eslintConfig": {
     "root": true,

@@ -19,9 +19,11 @@
     "@kit/ui": "workspace:^"
   },
   "devDependencies": {
+    "@kit/cms": "*",
     "@kit/eslint-config": "workspace:*",
     "@kit/prettier-config": "workspace:*",
     "@kit/tsconfig": "workspace:*",
+    "@kit/ui": "*",
     "wp-types": "^3.64.0"
   },
   "eslintConfig": {
