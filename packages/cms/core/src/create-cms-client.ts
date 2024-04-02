@@ -19,18 +19,18 @@ export async function createCmsClient(
       return getWordpressClient();
 
     default:
-      throw new Error(`Unknown CMS type: ${type}`);
+      throw new Error(`Unknown CMS type`);
   }
 }
 
 async function getContentLayerClient() {
-  const { ContentlayerClient } = await import('../../contentlayer');
+  const { ContentlayerClient } = await import('../../contentlayer/src/client');
 
   return new ContentlayerClient();
 }
 
 async function getWordpressClient() {
-  const { WordpressClient } = await import('../../wordpress');
+  const { WordpressClient } = await import('../../wordpress/src/wp-client');
 
   return new WordpressClient();
 }

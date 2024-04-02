@@ -36,16 +36,30 @@ export class DatabaseWebhookHandlerService {
     // handle the webhook
     const service = new DatabaseWebhookRouterService(client);
 
-    await service.handleWebhook(json);
+    try {
+      await service.handleWebhook(json);
 
-    Logger.info(
-      {
-        name: this.namespace,
-        table,
-        type,
-      },
-      'Webhook processed successfully',
-    );
+      Logger.info(
+        {
+          name: this.namespace,
+          table,
+          type,
+        },
+        'Webhook processed successfully',
+      );
+    } catch (error) {
+      Logger.error(
+        {
+          name: this.namespace,
+          table,
+          type,
+          error,
+        },
+        'Failed to process webhook',
+      );
+
+      throw error;
+    }
   }
 
   private assertSignatureIsAuthentic(request: Request, webhooksSecret: string) {
