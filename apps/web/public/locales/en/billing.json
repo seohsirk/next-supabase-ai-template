@@ -65,7 +65,7 @@
     "canceled": {
       "badge": "Canceled",
       "heading": "Your subscription is canceled",
-      "description": "Your subscription is canceled. It is scheduled to end on {{- endDate }}."
+      "description": "Your subscription is canceled. It is scheduled to end at end of the billing period."
     },
     "unpaid": {
       "badge": "Unpaid",

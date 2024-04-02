@@ -296,6 +296,8 @@ export class LemonSqueezyWebhookHandlerService
       return {
         id: item.id,
         quantity,
+        interval: params.interval,
+        interval_count: params.intervalCount,
         subscription_id: params.id,
         product_id: item.product,
         variant_id: item.variant,
@@ -317,8 +319,12 @@ export class LemonSqueezyWebhookHandlerService
       cancel_at_period_end: params.cancelAtPeriodEnd ?? false,
       period_starts_at: getISOString(params.periodStartsAt) as string,
       period_ends_at: getISOString(params.periodEndsAt) as string,
-      trial_starts_at: getISOString(params.trialStartsAt),
-      trial_ends_at: getISOString(params.trialEndsAt),
+      trial_starts_at: params.trialStartsAt
+        ? getISOString(params.trialStartsAt)
+        : undefined,
+      trial_ends_at: params.trialEndsAt
+        ? getISOString(params.trialEndsAt)
+        : undefined,
     };
   }
 
@@ -360,7 +366,7 @@ export class LemonSqueezyWebhookHandlerService
 }
 
 function getISOString(date: number | null) {
-  return date ? new Date(date * 1000).toISOString() : undefined;
+  return date ? new Date(date).toISOString() : undefined;
 }
 
 function isSigningSecretValid(rawBody: Buffer, signatureHeader: string) {

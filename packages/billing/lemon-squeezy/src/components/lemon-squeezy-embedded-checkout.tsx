@@ -1,3 +1,7 @@
+'use client';
+
+import { useEffect } from 'react';
+
 interface LemonSqueezyWindow extends Window {
   createLemonSqueezy: () => void;
   LemonSqueezy: {
@@ -14,16 +18,24 @@ interface LemonSqueezyWindow extends Window {
 }
 
 export function LemonSqueezyEmbeddedCheckout(props: { checkoutToken: string }) {
-  return (
-    <script
-      src="https://app.lemonsqueezy.com/js/lemon.js"
-      defer
-      onLoad={() => {
-        const win = window as unknown as LemonSqueezyWindow;
+  useLoadScript(props.checkoutToken);
 
-        win.createLemonSqueezy();
-        win.LemonSqueezy.Url.Open(props.checkoutToken);
-      }}
-    ></script>
-  );
+  return null;
+}
+
+function useLoadScript(checkoutToken: string) {
+  useEffect(() => {
+    const script = document.createElement('script');
+
+    script.src = 'https://app.lemonsqueezy.com/js/lemon.js';
+
+    script.onload = () => {
+      const win = window as unknown as LemonSqueezyWindow;
+
+      win.createLemonSqueezy();
+      win.LemonSqueezy.Url.Open(checkoutToken);
+    };
+
+    document.body.appendChild(script);
+  }, [checkoutToken]);
 }

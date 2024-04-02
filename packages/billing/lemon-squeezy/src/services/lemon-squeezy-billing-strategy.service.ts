@@ -32,7 +32,6 @@ export class LemonSqueezyBillingStrategyService
         accountId: params.accountId,
         returnUrl: params.returnUrl,
         trialDays: params.trialDays,
-        planId: params.plan.id,
       },
       'Creating checkout session...',
     );
@@ -40,6 +39,8 @@ export class LemonSqueezyBillingStrategyService
     const { data: response, error } = await createLemonSqueezyCheckout(params);
 
     if (error ?? !response?.data.id) {
+      console.log(error);
+
       Logger.error(
         {
           name: 'billing.lemon-squeezy',
@@ -62,7 +63,9 @@ export class LemonSqueezyBillingStrategyService
       'Checkout session created successfully',
     );
 
-    return { checkoutToken: response.data.id };
+    return {
+      checkoutToken: response.data.attributes.url,
+    };
   }
 
   async createBillingPortalSession(

@@ -3,8 +3,6 @@ import { BadgeCheck } from 'lucide-react';
 
 import { BillingConfig, getProductPlanPairByVariantId } from '@kit/billing';
 import { Database } from '@kit/supabase/database';
-
-
 import {
   Card,
   CardContent,
@@ -91,48 +89,44 @@ export function CurrentSubscriptionCard({
           </div>
         </If>
 
-        <div>
-          <If condition={subscription.status === 'trialing'}>
-            <div className="flex flex-col space-y-0.5">
-              <span className="font-semibold">
-                <Trans i18nKey="billing:trialEndsOn" />
-              </span>
-
-              <div className={'text-muted-foreground'}>
-                <span>
-                  {subscription.trial_ends_at
-                    ? formatDate(subscription.trial_ends_at, 'P')
-                    : ''}
-                </span>
-              </div>
-            </div>
-          </If>
-
-          <If condition={subscription.cancel_at_period_end}>
-            <div className="flex flex-col space-y-0.5">
-              <span className="font-semibold">
-                <Trans i18nKey="billing:cancelSubscriptionDate" />
-              </span>
-
-              <div className={'text-muted-foreground'}>
-                <span>
-                  {formatDate(subscription.period_ends_at ?? '', 'P')}
-                </span>
-              </div>
-            </div>
-          </If>
-
+        <If condition={subscription.status === 'trialing'}>
           <div className="flex flex-col space-y-0.5">
             <span className="font-semibold">
-              <Trans i18nKey="billing:detailsLabel" />
+              <Trans i18nKey="billing:trialEndsOn" />
             </span>
 
-            <LineItemDetails
-              lineItems={productLineItems}
-              currency={subscription.currency}
-              selectedInterval={firstLineItem.interval}
-            />
+            <div className={'text-muted-foreground'}>
+              <span>
+                {subscription.trial_ends_at
+                  ? formatDate(subscription.trial_ends_at, 'P')
+                  : ''}
+              </span>
+            </div>
           </div>
+        </If>
+
+        <If condition={subscription.cancel_at_period_end}>
+          <div className="flex flex-col space-y-0.5">
+            <span className="font-semibold">
+              <Trans i18nKey="billing:cancelSubscriptionDate" />
+            </span>
+
+            <div className={'text-muted-foreground'}>
+              <span>{formatDate(subscription.period_ends_at ?? '', 'P')}</span>
+            </div>
+          </div>
+        </If>
+
+        <div className="flex flex-col space-y-0.5">
+          <span className="font-semibold">
+            <Trans i18nKey="billing:detailsLabel" />
+          </span>
+
+          <LineItemDetails
+            lineItems={productLineItems}
+            currency={subscription.currency}
+            selectedInterval={firstLineItem.interval}
+          />
         </div>
       </CardContent>
     </Card>

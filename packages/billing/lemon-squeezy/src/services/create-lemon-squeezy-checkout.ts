@@ -29,12 +29,9 @@ export async function createLemonSqueezyCheckout(
   }
 
   const env = getLemonSqueezyEnv();
-  const storeId = env.storeId;
-  const variantId = lineItem.id;
 
-  const urls = getUrls({
-    returnUrl: params.returnUrl,
-  });
+  const storeId = Number(env.storeId);
+  const variantId = Number(lineItem.id);
 
   const customer = params.customerId
     ? await getCustomer(params.customerId)
@@ -63,7 +60,7 @@ export async function createLemonSqueezyCheckout(
       },
     },
     productOptions: {
-      redirectUrl: urls.return_url,
+      redirectUrl: params.returnUrl,
     },
     expiresAt: null,
     preview: true,
@@ -71,12 +68,4 @@ export async function createLemonSqueezyCheckout(
   };
 
   return createCheckout(storeId, variantId, newCheckout);
-}
-
-function getUrls(params: { returnUrl: string }) {
-  const returnUrl = `${params.returnUrl}?session_id={CHECKOUT_SESSION_ID}`;
-
-  return {
-    return_url: returnUrl,
-  };
 }

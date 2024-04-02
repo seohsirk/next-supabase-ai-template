@@ -40,7 +40,15 @@ function loadCheckoutComponent(provider: BillingProvider) {
     }
 
     case 'lemon-squeezy': {
-      throw new Error('Lemon Squeezy is not yet supported');
+      return buildLazyComponent(() => {
+        return import('@kit/lemon-squeezy/components').then(
+          ({ LemonSqueezyEmbeddedCheckout }) => {
+            return {
+              default: LemonSqueezyEmbeddedCheckout,
+            };
+          },
+        );
+      });
     }
 
     case 'paddle': {

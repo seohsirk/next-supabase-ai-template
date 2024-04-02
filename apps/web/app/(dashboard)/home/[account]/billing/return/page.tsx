@@ -1,5 +1,5 @@
 import dynamic from 'next/dynamic';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 
 import { getBillingGatewayProvider } from '@kit/billing-gateway';
 import { BillingSessionStatus } from '@kit/billing-gateway/components';
@@ -30,9 +30,13 @@ const LazyEmbeddedCheckout = dynamic(
 );
 
 async function ReturnCheckoutSessionPage({ searchParams }: SessionPageProps) {
-  const { customerEmail, checkoutToken } = await loadCheckoutSession(
-    searchParams.session_id,
-  );
+  const sessionId = searchParams.session_id;
+
+  if (!sessionId) {
+    redirect('../');
+  }
+
+  const { customerEmail, checkoutToken } = await loadCheckoutSession(sessionId);
 
   if (checkoutToken) {
     return (

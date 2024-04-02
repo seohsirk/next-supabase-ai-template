@@ -126,7 +126,8 @@ create type public.billing_provider as ENUM(
 create table if not exists public.config(
     enable_team_accounts boolean default true not null,
     enable_account_billing boolean default true not null,
-    enable_team_account_billing boolean default true not null
+    enable_team_account_billing boolean default true not null,
+    billing_provider public.billing_provider default 'stripe' not null
 );
 
 comment on table public.config is 'Configuration for the Supabase MakerKit.';
@@ -136,6 +137,8 @@ comment on column public.config.enable_team_accounts is 'Enable team accounts';
 comment on column public.config.enable_account_billing is 'Enable billing for individual accounts';
 
 comment on column public.config.enable_team_account_billing is 'Enable billing for team accounts';
+
+comment on column public.config.billing_provider is 'The billing provider to use';
 
 alter table public.config enable row level security;
 
@@ -1101,8 +1104,6 @@ comment on column public.subscriptions.currency is 'The currency for the subscri
 
 comment on column public.subscriptions.status is 'The status of the subscription';
 
-comment on column public.subscriptions.type is 'The type of the subscription, either one-off or recurring';
-
 comment on column public.subscriptions.period_starts_at is 'The start of the current period for the subscription';
 
 comment on column public.subscriptions.period_ends_at is 'The end of the current period for the subscription';
@@ -1128,8 +1129,8 @@ alter table public.subscriptions enable row level security;
 create policy subscriptions_read_self on public.subscriptions
     for select to authenticated
         using (
-            (has_role_on_account(account_id) and config.is_set('enable_team_account_billing'))
-            or (account_id = auth.uid() and config.is_set('enable_account_billing'))
+            (has_role_on_account(account_id) and public.is_set('enable_team_account_billing'))
+            or (account_id = auth.uid() and public.is_set('enable_account_billing'))
          );
 
 -- Functions
@@ -1140,8 +1141,7 @@ create or replace function
     public.billing_provider, cancel_at_period_end bool, currency
     varchar(3), period_starts_at timestamptz, period_ends_at
     timestamptz, line_items jsonb, trial_starts_at timestamptz
-    default null, trial_ends_at timestamptz default null, type
-    public.subscription_type default 'recurring')
+    default null, trial_ends_at timestamptz default null)
     returns public.subscriptions
     as $$
 declare
@@ -1171,7 +1171,6 @@ on conflict (
         id,
         active,
         status,
-        type,
         billing_provider,
         cancel_at_period_end,
         currency,
@@ -1182,10 +1181,9 @@ on conflict (
     values (
         target_account_id,
         new_billing_customer_id,
-        subscription_id,
+        target_subscription_id,
         active,
         status,
-        type,
         billing_provider,
         cancel_at_period_end,
         currency,
@@ -1226,7 +1224,7 @@ on conflict (
         interval,
         interval_count)
     select
-        subscription_id,
+        target_subscription_id,
         prod_id,
         var_id,
         price_amt,
@@ -1254,7 +1252,7 @@ language plpgsql;
 grant execute on function public.upsert_subscription(uuid, varchar,
     text, bool, public.subscription_status, public.billing_provider,
     bool, varchar, timestamptz, timestamptz, jsonb, timestamptz,
-    timestamptz, public.subscription_type) to service_role;
+    timestamptz) to service_role;
 
 
 /* -------------------------------------------------------
@@ -1356,8 +1354,8 @@ alter table public.orders enable row level security;
 --   account is their own
 create policy orders_read_self on public.orders
     for select to authenticated
-        using ((account_id = auth.uid() and config.is_set('enable_account_billing'))
-            or (has_role_on_account(account_id) and config.is_set('enable_team_account_billing')));
+        using ((account_id = auth.uid() and public.is_set('enable_account_billing'))
+            or (has_role_on_account(account_id) and public.is_set('enable_team_account_billing')));
 
 
 /**
