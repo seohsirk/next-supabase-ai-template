@@ -17,7 +17,7 @@ const INTERNAL_PACKAGES = [
   '@kit/stripe',
   '@kit/email-templates',
   '@kit/database-webhooks',
-  '@kit/cms'
+  '@kit/cms',
 ];
 
 /** @type {import('next').NextConfig} */
