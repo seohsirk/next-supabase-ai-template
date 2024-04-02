@@ -16,63 +16,36 @@ create extension if not exists "unaccent";
 -- Create a private Makerkit schema
 create schema if not exists kit;
 
-grant USAGE on schema kit to authenticated,
-authenticated;
+grant USAGE on schema kit to authenticated, authenticated;
 
--- We remove all default privileges from public schema on functions to prevent public access to them
-alter default privileges
-revoke
-execute on functions
-from
-  public;
+-- We remove all default privileges from public schema on functions to
+--   prevent public access to them
+alter default privileges revoke execute on functions from public;
 
-revoke all on schema public
-from
-  public;
+revoke all on schema public from public;
 
-revoke all PRIVILEGES on database "postgres"
-from
-  "anon";
+revoke all PRIVILEGES on database "postgres" from "anon";
 
-revoke all PRIVILEGES on schema "public"
-from
-  "anon";
+revoke all PRIVILEGES on schema "public" from "anon";
 
-revoke all PRIVILEGES on schema "storage"
-from
-  "anon";
+revoke all PRIVILEGES on schema "storage" from "anon";
 
-revoke all PRIVILEGES on all SEQUENCES in schema "public"
-from
-  "anon";
+revoke all PRIVILEGES on all SEQUENCES in schema "public" from "anon";
 
-revoke all PRIVILEGES on all SEQUENCES in schema "storage"
-from
-  "anon";
+revoke all PRIVILEGES on all SEQUENCES in schema "storage" from "anon";
 
-revoke all PRIVILEGES on all FUNCTIONS in schema "public"
-from
-  "anon";
+revoke all PRIVILEGES on all FUNCTIONS in schema "public" from "anon";
 
-revoke all PRIVILEGES on all FUNCTIONS in schema "storage"
-from
-  "anon";
+revoke all PRIVILEGES on all FUNCTIONS in schema "storage" from "anon";
 
-revoke all PRIVILEGES on all TABLES in schema "public"
-from
-  "anon";
+revoke all PRIVILEGES on all TABLES in schema "public" from "anon";
 
-revoke all PRIVILEGES on all TABLES in schema "storage"
-from
-  "anon";
+revoke all PRIVILEGES on all TABLES in schema "storage" from "anon";
 
--- We remove all default privileges from public schema on functions to prevent public access to them by default
-alter default privileges in schema public
-revoke
-execute on functions
-from
-  anon,
-  authenticated;
+-- We remove all default privileges from public schema on functions to
+--   prevent public access to them by default
+alter default privileges in schema public revoke execute on functions
+    from anon, authenticated;
 
 -- we allow the authenticated role to execute functions in the public schema
 grant usage on schema public to authenticated;
@@ -80,61 +53,69 @@ grant usage on schema public to authenticated;
 -- we allow the service_role role to execute functions in the public schema
 grant usage on schema public to service_role;
 
+
 /*
  * -------------------------------------------------------
  * Section: Enums
  * We create the enums for the schema
  * -------------------------------------------------------
  */
-
 /*
-* Permissions
-- We create the permissions for the Supabase MakerKit. These permissions are used to manage the permissions for the roles
-- The permissions are 'roles.manage', 'billing.manage', 'settings.manage', 'members.manage', and 'invites.manage'.
-- You can add more permissions as needed.
-*/
+ * Permissions
+ - We create the permissions for the Supabase MakerKit. These permissions are used to manage the permissions for the roles
+ - The permissions are 'roles.manage', 'billing.manage', 'settings.manage', 'members.manage', and 'invites.manage'.
+ - You can add more permissions as needed.
+ */
 create type public.app_permissions as enum(
-  'roles.manage',
-  'billing.manage',
-  'settings.manage',
-  'members.manage',
-  'invites.manage'
+    'roles.manage',
+    'billing.manage',
+    'settings.manage',
+    'members.manage',
+    'invites.manage'
 );
 
+
 /*
-* Subscription Status
-- We create the subscription status for the Supabase MakerKit. These statuses are used to manage the status of the subscriptions
-- The statuses are 'active', 'trialing', 'past_due', 'canceled', 'unpaid', 'incomplete', 'incomplete_expired', and 'paused'.
-- You can add more statuses as needed.
-*/
+ * Subscription Status
+ - We create the subscription status for the Supabase MakerKit. These statuses are used to manage the status of the subscriptions
+ - The statuses are 'active', 'trialing', 'past_due', 'canceled', 'unpaid', 'incomplete', 'incomplete_expired', and 'paused'.
+ - You can add more statuses as needed.
+ */
 create type public.subscription_status as ENUM(
-  'active',
-  'trialing',
-  'past_due',
-  'canceled',
-  'unpaid',
-  'incomplete',
-  'incomplete_expired',
-  'paused'
+    'active',
+    'trialing',
+    'past_due',
+    'canceled',
+    'unpaid',
+    'incomplete',
+    'incomplete_expired',
+    'paused'
 );
 
+
 /*
-Payment Status
-- We create the payment status for the Supabase MakerKit. These statuses are used to manage the status of the payments
-*/
+ Payment Status
+ - We create the payment status for the Supabase MakerKit. These statuses are used to manage the status of the payments
+ */
 create type public.payment_status as ENUM(
-  'pending',
-  'succeeded',
-  'failed'
+    'pending',
+    'succeeded',
+    'failed'
 );
 
+
 /*
-* Billing Provider
-- We create the billing provider for the Supabase MakerKit. These providers are used to manage the billing provider for the accounts and organizations
-- The providers are 'stripe', 'lemon-squeezy', and 'paddle'.
-- You can add more providers as needed.
-*/
-create type public.billing_provider as ENUM('stripe', 'lemon-squeezy', 'paddle');
+ * Billing Provider
+ - We create the billing provider for the Supabase MakerKit. These providers are used to manage the billing provider for the accounts and organizations
+ - The providers are 'stripe', 'lemon-squeezy', and 'paddle'.
+ - You can add more providers as needed.
+ */
+create type public.billing_provider as ENUM(
+    'stripe',
+    'lemon-squeezy',
+    'paddle'
+);
+
 
 /*
  * -------------------------------------------------------
@@ -142,108 +123,126 @@ create type public.billing_provider as ENUM('stripe', 'lemon-squeezy', 'paddle')
  * We create the configuration for the Supabase MakerKit to enable or disable features
  * -------------------------------------------------------
  */
-create table if not exists
-  public.config (
-    enable_organization_accounts boolean default true not null,
+create table if not exists public.config(
+    enable_team_accounts boolean default true not null,
     enable_account_billing boolean default true not null,
-    enable_organization_billing boolean default true not null,
-    billing_provider public.billing_provider default 'stripe' not null
-  );
+    enable_team_account_billing boolean default true not null
+);
 
 comment on table public.config is 'Configuration for the Supabase MakerKit.';
 
+comment on column public.config.enable_team_accounts is 'Enable team accounts';
+
 comment on column public.config.enable_account_billing is 'Enable billing for individual accounts';
 
-comment on column public.config.enable_organization_accounts is 'Enable organization accounts';
-
-comment on column public.config.enable_organization_billing is 'Enable billing for organizations';
-
-comment on column public.config.billing_provider is 'The billing provider to use for accounts and organizations';
+comment on column public.config.enable_team_account_billing is 'Enable billing for team accounts';
 
 alter table public.config enable row level security;
 
 -- create config row
-insert into
-  public.config (
-    enable_organization_accounts,
+insert into public.config(
+    enable_team_accounts,
     enable_account_billing,
-    enable_organization_billing
-  )
-values
-  (true, true, true);
+    enable_team_account_billing)
+values (
+    true,
+    true,
+    true);
 
 -- Open up access to config table for authenticated users and service_role
-grant
-select
-  on public.config to authenticated,
-  service_role;
+grant select on public.config to authenticated, service_role;
 
 -- RLS on the config table
 -- Authenticated users can read the config
-create policy "public config can be read by authenticated users" on public.config for
-select
-  to authenticated using (true);
-
-create
-or replace function public.get_config () returns json as $$
-declare
-  result record;
-begin
-  select
-    *
-  from
+create policy "public config can be read by authenticated users" on
     public.config
-  limit 1 into result;
-  return row_to_json(result);
+    for select to authenticated
+        using (true);
+
+create or replace function public.get_config()
+    returns json
+    as $$
+declare
+    result record;
+begin
+    select
+        *
+    from
+        public.config
+    limit 1 into result;
+
+    return row_to_json(result);
+
 end;
-$$ language plpgsql;
+
+$$
+language plpgsql;
 
 -- Automatically set timestamps on tables when a row is inserted or updated
-create
-or replace function public.trigger_set_timestamps () returns trigger as $$
+create or replace function public.trigger_set_timestamps()
+    returns trigger
+    as $$
 begin
-  if TG_OP = 'INSERT' then
-    new.created_at = now();
-    new.updated_at = now();
-  else
-    new.updated_at = now();
-    new.created_at = old.created_at;
-  end if;
-  return NEW;
-end
-$$ language plpgsql;
+    if TG_OP = 'INSERT' then
+        new.created_at = now();
 
--- Automatically set user tracking on tables when a row is inserted or updated
-create
-or replace function public.trigger_set_user_tracking () returns trigger as $$
+        new.updated_at = now();
+
+    else
+        new.updated_at = now();
+
+        new.created_at = old.created_at;
+
+    end if;
+
+    return NEW;
+
+end
+$$
+language plpgsql;
+
+-- Automatically set user tracking on tables when a row is inserted or
+--   updated
+create or replace function public.trigger_set_user_tracking()
+    returns trigger
+    as $$
 begin
-  if TG_OP = 'INSERT' then
-    new.created_by = auth.uid();
-    new.updated_by = auth.uid();
-  else
-    new.updated_by = auth.uid();
-    new.created_by = old.created_by;
-  end if;
-  return NEW;
+    if TG_OP = 'INSERT' then
+        new.created_by = auth.uid();
+        new.updated_by = auth.uid();
+
+    else
+        new.updated_by = auth.uid();
+
+        new.created_by = old.created_by;
+
+    end if;
+
+    return NEW;
+
 end
-$$ language plpgsql;
+$$
+language plpgsql;
 
-grant
-execute on function public.get_config () to authenticated,
-service_role;
+grant execute on function public.get_config() to authenticated, service_role;
 
-create
-or replace function public.is_set (field_name text) returns boolean as $$
+create or replace function public.is_set(field_name text)
+    returns boolean
+    as $$
 declare
-  result boolean;
+    result boolean;
 begin
-  execute format('select %I from public.config limit 1', field_name) into result;
-  return result;
-end;
-$$ language plpgsql;
+    execute format('select %I from public.config limit 1', field_name) into result;
 
-grant
-execute on function public.is_set (text) to authenticated;
+    return result;
+
+end;
+
+$$
+language plpgsql;
+
+grant execute on function public.is_set(text) to authenticated;
+
 
 /*
  * -------------------------------------------------------
@@ -252,10 +251,11 @@ execute on function public.is_set (text) to authenticated;
  * -------------------------------------------------------
  */
 -- Accounts table
-create table if not exists
-  public.accounts (
-    id uuid unique not null default extensions.uuid_generate_v4 (),
-    primary_owner_user_id uuid references auth.users on delete cascade not null default auth.uid (), -- Auth ID in Supabase Auth
+create table if not exists public.accounts(
+    id uuid unique not null default extensions.uuid_generate_v4(),
+    primary_owner_user_id uuid references auth.users on delete
+	cascade not null default auth.uid(),
+    -- Auth ID in Supabase Auth
     name varchar(255) not null,
     slug text unique,
     email varchar(320) unique,
@@ -266,7 +266,7 @@ create table if not exists
     updated_by uuid references auth.users,
     picture_url varchar(1000),
     primary key (id)
-  );
+);
 
 comment on table public.accounts is 'Accounts are the top level entity in the Supabase MakerKit. They can be organizations or personal accounts.';
 
@@ -284,151 +284,181 @@ comment on column public.accounts.email is 'The email of the account. For organi
 alter table "public"."accounts" enable row level security;
 
 -- Open up access to accounts
-grant
-select
-,
-  insert,
-update,
-delete on table public.accounts to authenticated,
-service_role;
+grant select, insert, update, delete on table public.accounts to
+    authenticated, service_role;
 
--- constraint that conditionally allows nulls on the slug ONLY if personal_account is true
+-- constraint that conditionally allows nulls on the slug ONLY if
+--   personal_account is true
 alter table public.accounts
-add constraint accounts_slug_null_if_personal_account_true check (
-  (
-    is_personal_account = true
-    and slug is null
-  )
-  or (
-    is_personal_account = false
-    and slug is not null
-  )
-);
+    add constraint accounts_slug_null_if_personal_account_true check
+	((is_personal_account = true and slug is null) or
+	(is_personal_account = false and slug is not null));
 
--- constraint to ensure that the primary_owner_user_id is unique for personal accounts
-create unique index unique_personal_account on public.accounts (primary_owner_user_id)
+-- constraint to ensure that the primary_owner_user_id is unique for
+--   personal accounts
+create unique index unique_personal_account on
+    public.accounts(primary_owner_user_id)
 where
-  is_personal_account = true;
+    is_personal_account = true;
 
 -- RLS on the accounts table
 -- SELECT: Users can read their own accounts
-create policy accounts_read_self on public.accounts for
-select
-  to authenticated using (auth.uid () = primary_owner_user_id);
+create policy accounts_read_self on public.accounts
+    for select to authenticated
+        using (auth.uid() = primary_owner_user_id);
 
 -- UPDATE: Team owners can update their accounts
 create policy accounts_self_update on public.accounts
-for update
-  to authenticated using (auth.uid () = primary_owner_user_id)
-with
-  check (auth.uid () = primary_owner_user_id);
+    for update to authenticated
+        using (auth.uid() = primary_owner_user_id)
+        with check (auth.uid() = primary_owner_user_id);
 
 -- Functions
 -- Function to transfer team account ownership to another user
-create or replace function public.transfer_team_account_ownership (target_account_id uuid, new_owner_id uuid) returns void as $$
+create or replace function
+    public.transfer_team_account_ownership(target_account_id uuid,
+    new_owner_id uuid)
+    returns void
+    as $$
 begin
-  if current_user not in('service_role') then
-    raise exception 'You do not have permission to transfer account ownership';
-  end if;
+    if current_user not in('service_role') then
+        raise exception 'You do not have permission to transfer account ownership';
 
-  -- update the primary owner of the account
-  update public.accounts
-  set primary_owner_user_id = new_owner_id
-  where id = target_account_id and is_personal_account = false;
-
-  -- update membership assigning it the hierarchy role
-  update public.accounts_memberships
-  set account_role = (
-    select
-      name
-    from
-      public.roles
+    end if;
+    -- update the primary owner of the account
+    update
+        public.accounts
+    set
+        primary_owner_user_id = new_owner_id
     where
-      hierarchy_level = 1
-  )
-  where target_account_id = account_id and user_id = new_owner_id;
+        id = target_account_id
+        and is_personal_account = false;
+    -- update membership assigning it the hierarchy role
+    update
+        public.accounts_memberships
+    set
+        account_role =(
+            select
+                name
+            from
+                public.roles
+            where
+                hierarchy_level = 1)
+    where
+        target_account_id = account_id
+        and user_id = new_owner_id;
 
 end;
-$$ language plpgsql;
 
-grant execute on function public.transfer_team_account_ownership (uuid, uuid) to service_role;
+$$
+language plpgsql;
 
-create function public.is_account_owner (account_id uuid) returns boolean as $$
-  select
-    exists(
-      select
-        1
-      from
-        public.accounts
-      where
-        id = is_account_owner.account_id
-        and primary_owner_user_id = auth.uid());
-$$ language sql;
+grant execute on function
+    public.transfer_team_account_ownership(uuid, uuid) to
+    service_role;
 
-grant execute on function public.is_account_owner (uuid) to authenticated, service_role;
+create function public.is_account_owner(account_id uuid)
+    returns boolean
+    as $$
+    select
+        exists(
+            select
+                1
+            from
+                public.accounts
+            where
+                id = is_account_owner.account_id
+                and primary_owner_user_id = auth.uid());
+$$
+language sql;
 
-create
-or replace function kit.protect_account_fields () returns trigger as $$
+grant execute on function public.is_account_owner(uuid) to
+    authenticated, service_role;
+
+create or replace function kit.protect_account_fields()
+    returns trigger
+    as $$
 begin
-  if current_user in('authenticated', 'anon') then
-    if new.id <> old.id
-      or new.is_personal_account <> old.is_personal_account
-      or new.primary_owner_user_id <> old.primary_owner_user_id
-      or new.email <> old.email then
-      raise exception 'You do not have permission to update this field';
-    end if;
-  end if;
+    if current_user in('authenticated', 'anon') then
+	if new.id <> old.id or new.is_personal_account <>
+	    old.is_personal_account or new.primary_owner_user_id <>
+	    old.primary_owner_user_id or new.email <> old.email then
+            raise exception 'You do not have permission to update this field';
 
-  return NEW;
+        end if;
+
+    end if;
+
+    return NEW;
+
 end
-$$ language plpgsql;
+$$
+language plpgsql;
 
 -- trigger to protect account fields
-create trigger protect_account_fields before
-update on public.accounts for each row
-execute function kit.protect_account_fields ();
+create trigger protect_account_fields
+    before update on public.accounts for each row
+    execute function kit.protect_account_fields();
 
-create
-or replace function kit.add_current_user_to_new_account () returns trigger language plpgsql security definer
-set
-  search_path = public as $$
+create or replace function kit.add_current_user_to_new_account()
+    returns trigger
+    language plpgsql
+    security definer
+    set search_path = public
+    as $$
 begin
-  if new.primary_owner_user_id = auth.uid() then
-    insert into public.accounts_memberships(
-      account_id,
-      user_id,
-      account_role)
-    values(
-      new.id,
-      auth.uid(),
-      'owner');
-  end if;
-  return NEW;
+    if new.primary_owner_user_id = auth.uid() then
+        insert into public.accounts_memberships(
+            account_id,
+            user_id,
+            account_role)
+        values(
+            new.id,
+            auth.uid(),
+            'owner');
+
+    end if;
+
+    return NEW;
+
 end;
+
 $$;
 
 -- trigger the function whenever a new account is created
 create trigger "add_current_user_to_new_account"
-after insert on public.accounts for each row
-execute function kit.add_current_user_to_new_account ();
+    after insert on public.accounts for each row
+    execute function kit.add_current_user_to_new_account();
 
--- create a trigger to update the account email when the primary owner email is updated
-create
-or replace function kit.handle_update_user_email () returns trigger language plpgsql security definer
-set
-  search_path = public as $$
+-- create a trigger to update the account email when the primary owner
+--   email is updated
+create or replace function kit.handle_update_user_email()
+    returns trigger
+    language plpgsql
+    security definer
+    set search_path = public
+    as $$
 begin
-  update public.accounts set email = new.email where primary_owner_user_id = new.id and is_personal_account = true;
-  return new;
+    update
+        public.accounts
+    set
+        email = new.email
+    where
+        primary_owner_user_id = new.id
+        and is_personal_account = true;
+
+    return new;
+
 end;
+
 $$;
 
 -- trigger the function every time a user email is updated
--- only if the user is the primary owner of the account and the account is personal account
+--     only if the user is the primary owner of the account and the
+--   account is personal account
 create trigger "on_auth_user_updated"
-after
-update of email on auth.users for each row
-execute procedure kit.handle_update_user_email ();
+    after update of email on auth.users for each row
+    execute procedure kit.handle_update_user_email();
 
 
 /*
@@ -438,29 +468,41 @@ execute procedure kit.handle_update_user_email ();
  * -------------------------------------------------------
  */
 -- Account Memberships table
-create table if not exists public.roles (
-  name varchar(50) not null,
-  hierarchy_level int not null,
-  account_id uuid references public.accounts (id) on delete cascade,
-  is_custom boolean not null default false,
-  unique (hierarchy_level, account_id, is_custom),
-  primary key (name)
+create table if not exists public.roles(
+    name varchar(50) not null,
+    hierarchy_level int not null,
+    account_id uuid references public.accounts(id) on delete cascade,
+    is_custom boolean not null default false,
+    unique (hierarchy_level, account_id, is_custom),
+    primary key (name)
 );
 
 grant select on table public.roles to authenticated, service_role;
 
--- Seed the roles table with default roles 'owner' and 'member'
-insert into public.roles (name, hierarchy_level) values ('owner', 1);
-insert into public.roles (name, hierarchy_level) values ('member', 2);
+-- Seed the roles table with default roles 'owner' and
+--   'member'
+insert into public.roles(
+    name,
+    hierarchy_level)
+values (
+    'owner',
+    1);
+
+insert into public.roles(
+    name,
+    hierarchy_level)
+values (
+    'member',
+    2);
 
 -- RLS
 alter table public.roles enable row level security;
 
 -- SELECT: authenticated users can query roles
-create policy roles_read on public.roles for
-select
-  to authenticated
-  using (true);
+create policy roles_read on public.roles
+    for select to authenticated
+        using (true);
+
 
 /*
  * -------------------------------------------------------
@@ -469,17 +511,16 @@ select
  * -------------------------------------------------------
  */
 -- Account Memberships table
-create table if not exists
-  public.accounts_memberships (
+create table if not exists public.accounts_memberships(
     user_id uuid references auth.users on delete cascade not null,
-    account_id uuid references public.accounts (id) on delete cascade not null,
-    account_role varchar(50) references public.roles (name) not null,
+    account_id uuid references public.accounts(id) on delete cascade not null,
+    account_role varchar(50) references public.roles(name) not null,
     created_at timestamptz default current_timestamp not null,
     updated_at timestamptz default current_timestamp not null,
     created_by uuid references auth.users,
     updated_by uuid references auth.users,
     primary key (user_id, account_id)
-  );
+);
 
 comment on table public.accounts_memberships is 'The memberships for an account';
 
@@ -487,151 +528,191 @@ comment on column public.accounts_memberships.account_id is 'The account the mem
 
 comment on column public.accounts_memberships.account_role is 'The role for the membership';
 
--- Open up access to accounts_memberships table for authenticated users and service_role
-grant
-select
-,
-  insert,
-update,
-delete on table public.accounts_memberships to service_role;
+-- Open up access to accounts_memberships table for authenticated users
+--   and service_role
+grant select, insert, update, delete on table
+    public.accounts_memberships to service_role;
 
 -- Enable RLS on the accounts_memberships table
 alter table public.accounts_memberships enable row level security;
 
 -- Trigger to prevent a primary owner from being removed from an account
-create
-or replace function kit.prevent_account_owner_membership_delete () returns trigger as $$
+create or replace function kit.prevent_account_owner_membership_delete()
+    returns trigger
+    as $$
 begin
-  if exists (select 1 from public.accounts where id = old.account_id and primary_owner_user_id = old.user_id) then
+    if exists(
+        select
+            1
+        from
+            public.accounts
+        where
+            id = old.account_id
+            and primary_owner_user_id = old.user_id) then
     raise exception 'The primary account owner cannot be removed from the account membership list';
-  end if;
 
-  return old;
+end if;
+
+    return old;
+
 end;
-$$ language plpgsql;
 
-create or replace trigger prevent_account_owner_membership_delete_check before delete
- on public.accounts_memberships for each row
-execute function kit.prevent_account_owner_membership_delete ();
+$$
+language plpgsql;
 
-create
-or replace function public.has_role_on_account (
-  account_id uuid,
-  account_role varchar(50) default null
-) returns boolean language sql security definer
-set
-  search_path = public as $$
-  select
-    exists(
-      select
-        1
-      from
-        public.accounts_memberships membership
-      where
-        membership.user_id = auth.uid()
-        and membership.account_id = has_role_on_account.account_id
-        and(membership.account_role = has_role_on_account.account_role
-          or has_role_on_account.account_role is null));
+create or replace trigger prevent_account_owner_membership_delete_check
+    before delete on public.accounts_memberships for each row
+    execute function kit.prevent_account_owner_membership_delete();
+
+create or replace function public.has_role_on_account(account_id
+    uuid, account_role varchar(50) default null)
+    returns boolean
+    language sql
+    security definer
+    set search_path = public
+    as $$
+    select
+        exists(
+            select
+                1
+            from
+                public.accounts_memberships membership
+            where
+                membership.user_id = auth.uid()
+                and membership.account_id = has_role_on_account.account_id
+                and(membership.account_role = has_role_on_account.account_role
+                    or has_role_on_account.account_role is null));
 $$;
 
-grant
-execute on function public.has_role_on_account (uuid, varchar) to authenticated;
+grant execute on function public.has_role_on_account(uuid, varchar)
+    to authenticated;
 
-create
-or replace function public.is_team_member (account_id uuid, user_id uuid) returns boolean language sql security definer
-set
-  search_path = public as $$
-  select
-    exists(
-      select
-        1
-      from
-        public.accounts_memberships membership
-      where
-        public.has_role_on_account(account_id) and
-        membership.user_id = is_team_member.user_id and
-        membership.account_id = is_team_member.account_id);
+create or replace function public.is_team_member(account_id uuid,
+    user_id uuid)
+    returns boolean
+    language sql
+    security definer
+    set search_path = public
+    as $$
+    select
+        exists(
+            select
+                1
+            from
+                public.accounts_memberships membership
+            where
+                public.has_role_on_account(account_id)
+                and membership.user_id = is_team_member.user_id
+                and membership.account_id = is_team_member.account_id);
 $$;
 
-grant
-execute on function public.is_team_member (uuid, uuid) to authenticated;
+grant execute on function public.is_team_member(uuid, uuid) to authenticated;
 
 -- Functions
--- Function to check if a user can remove a member from an account
-create or replace function kit.can_remove_account_member (target_team_account_id uuid, user_id uuid) returns boolean as $$
+--    Function to check if a user can remove a member from an account
+create or replace function
+    kit.can_remove_account_member(target_team_account_id uuid,
+    user_id uuid)
+    returns boolean
+    as $$
 declare
-  permission_granted boolean;
-  target_user_hierarchy_level int;
-  current_user_hierarchy_level int;
+    permission_granted boolean;
+    target_user_hierarchy_level int;
+    current_user_hierarchy_level int;
 begin
     -- validate the auth user has the required permission on the account
-    -- to manage members of the account
-    select public.has_permission (auth.uid (), target_team_account_id, 'members.manage'::app_permissions) into permission_granted;
+    --    to manage members of the account
+    select
+	public.has_permission(auth.uid(), target_team_account_id,
+	    'members.manage'::app_permissions) into
+	    permission_granted;
 
     if not permission_granted then
         raise exception 'You do not have permission to remove a member from this account';
-    end if;
 
+    end if;
     -- users cannot remove themselves from the account with this function
-    if can_remove_account_member.user_id = auth.uid () then
+    if can_remove_account_member.user_id = auth.uid() then
         raise exception 'You cannot remove yourself from the account';
+
     end if;
 
-    select hierarchy_level into target_user_hierarchy_level from public.roles where name = target_user_role;
-    select hierarchy_level into current_user_hierarchy_level from public.roles where name = (select account_role from public.accounts_memberships where account_id = target_team_account_id and user_id = auth.uid());
+    select
+        hierarchy_level into target_user_hierarchy_level
+    from
+        public.roles
+    where
+        name = target_user_role;
 
-    -- check if the current user has a higher hierarchy level than the target user
+    select
+        hierarchy_level into current_user_hierarchy_level
+    from
+        public.roles
+    where
+        name =(
+            select
+                account_role
+            from
+                public.accounts_memberships
+            where
+                account_id = target_team_account_id
+                and user_id = auth.uid());
+    -- check if the current user has a higher hierarchy level than the
+    --   target user
     if current_user_hierarchy_level <= target_user_hierarchy_level then
         raise exception 'You do not have permission to remove this user from the account';
+
     end if;
 
     return true;
 
-    end;
+end;
 
-$$ language plpgsql;
+$$
+language plpgsql;
 
-grant execute on function kit.can_remove_account_member (uuid, uuid) to authenticated, service_role;
+grant execute on function kit.can_remove_account_member(uuid, uuid)
+    to authenticated, service_role;
 
 -- RLS
 -- SELECT: Users can read their team members account memberships
-create policy accounts_memberships_read_self on public.accounts_memberships for
-select
-  to authenticated using (user_id = auth.uid ());
+create policy accounts_memberships_read_self on public.accounts_memberships
+    for select to authenticated
+        using (user_id = auth.uid());
 
 -- SELECT: Users can read their team members account memberships
-create policy accounts_memberships_team_read on public.accounts_memberships for
-select
-  to authenticated using (is_team_member (account_id, user_id));
+create policy accounts_memberships_team_read on public.accounts_memberships
+    for select to authenticated
+        using (is_team_member(account_id, user_id));
 
 -- RLS on the accounts table
--- SELECT: Users can read the team accounts they are a member of
-create policy accounts_read_team on public.accounts for
-select
-  to authenticated using (
-    has_role_on_account (id)
-  );
+--    SELECT: Users can read the team accounts they are a member of
+create policy accounts_read_team on public.accounts
+    for select to authenticated
+        using (has_role_on_account(id));
 
 -- DELETE: Users can remove themselves from an account
-create policy accounts_memberships_delete_self on public.accounts_memberships for
-delete
-  to authenticated using (user_id = auth.uid ());
+create policy accounts_memberships_delete_self on public.accounts_memberships
+    for delete to authenticated
+        using (user_id = auth.uid());
 
 -- DELETE: Users with the required role can remove members from an account
-create policy accounts_memberships_delete on public.accounts_memberships for
-delete
-  to authenticated using (kit.can_remove_account_member (account_id, user_id));
+create policy accounts_memberships_delete on public.accounts_memberships
+    for delete to authenticated
+        using (kit.can_remove_account_member(account_id, user_id));
 
--- SELECT (public.accounts): Team members can read accounts of the team they are a member of
-create policy accounts_team_read ON public.accounts
-for select
-to authenticated
-using (
-  exists (
-    select 1 from public.accounts_memberships as membership
-    where public.is_team_member(membership.account_id, id)
-  )
-);
+-- SELECT (public.accounts): Team members can read accounts of the team
+--   they are a member of
+create policy accounts_team_read on public.accounts
+    for select to authenticated
+        using (exists (
+            select
+                1
+            from
+                public.accounts_memberships as membership
+            where
+                public.is_team_member(membership.account_id, id)));
+
 
 /*
  * -------------------------------------------------------
@@ -640,13 +721,12 @@ using (
  * -------------------------------------------------------
  */
 -- Account Roles table
-create table
-  public.account_roles (
+create table public.account_roles(
     id bigint generated by default as identity primary key,
-    account_id uuid references public.accounts (id) on delete cascade not null,
+    account_id uuid references public.accounts(id) on delete cascade not null,
     role varchar(50) references public.roles(name) not null,
     unique (account_id, role)
-  );
+);
 
 comment on table public.account_roles is 'The roles for an account';
 
@@ -655,22 +735,19 @@ comment on column public.account_roles.account_id is 'The account the role is fo
 comment on column public.account_roles.role is 'The role for the account';
 
 -- Open up access to account roles
-grant
-select
-,
-  insert,
-update,
-delete on table public.account_roles to authenticated,
-service_role;
+grant select, insert, update, delete on table public.account_roles to
+    authenticated, service_role;
 
 -- Enable RLS on the account_roles table
 alter table public.account_roles enable row level security;
 
 -- RLS
--- SELECT: Users can read account roles of an account they are a member of
-create policy account_roles_read_self on public.account_roles for
-select
-  to authenticated using (has_role_on_account (account_id));
+--    SELECT: Users can read account roles of an account they are a
+--   member of
+create policy account_roles_read_self on public.account_roles
+    for select to authenticated
+        using (has_role_on_account(account_id));
+
 
 /*
  * -------------------------------------------------------
@@ -680,13 +757,12 @@ select
  * -------------------------------------------------------
  */
 -- Create table for roles permissions
-create table if not exists
-  public.role_permissions (
+create table if not exists public.role_permissions(
     id bigint generated by default as identity primary key,
     role varchar(50) references public.roles(name) not null,
     permission app_permissions not null,
     unique (role, permission)
-  );
+);
 
 comment on table public.role_permissions is 'The permissions for a role';
 
@@ -695,73 +771,103 @@ comment on column public.role_permissions.role is 'The role the permission is fo
 comment on column public.role_permissions.permission is 'The permission for the role';
 
 -- Open up access to accounts
-grant
-select
-,
-  insert,
-update,
-delete on table public.role_permissions to authenticated,
-service_role;
+grant select, insert, update, delete on table public.role_permissions
+    to authenticated, service_role;
 
 -- Create a function to check if a user has a permission
-create function public.has_permission (
-  user_id uuid,
-  account_id uuid,
-  permission_name app_permissions
-) returns boolean as $$
+create function public.has_permission(user_id uuid, account_id uuid,
+    permission_name app_permissions)
+    returns boolean
+    as $$
 begin
     return exists(
         select
-        1
+            1
         from
-        public.accounts_memberships
-        join public.role_permissions on accounts_memberships.account_role = role_permissions.role
+            public.accounts_memberships
+	    join public.role_permissions on
+		accounts_memberships.account_role =
+		role_permissions.role
         where
-        accounts_memberships.user_id = has_permission.user_id
-        and accounts_memberships.account_id = has_permission.account_id
-        and role_permissions.permission = has_permission.permission_name);
-    end;
+            accounts_memberships.user_id = has_permission.user_id
+            and accounts_memberships.account_id = has_permission.account_id
+            and role_permissions.permission = has_permission.permission_name);
 
-$$ language plpgsql;
+end;
 
-grant execute on function public.has_permission (uuid, uuid, public.app_permissions) to authenticated, service_role;
+$$
+language plpgsql;
 
-create or replace function public.has_more_elevated_role (
-  target_user_id uuid,
-  target_account_id uuid,
-  role_name varchar
-) returns boolean as $$
+grant execute on function public.has_permission(uuid, uuid,
+    public.app_permissions) to authenticated, service_role;
+
+create or replace function
+    public.has_more_elevated_role(target_user_id uuid,
+    target_account_id uuid, role_name varchar)
+    returns boolean
+    as $$
 declare
-  declare is_primary_owner boolean;
-  user_role_hierarchy_level int;
-  target_role_hierarchy_level int;
+    declare is_primary_owner boolean;
+    user_role_hierarchy_level int;
+    target_role_hierarchy_level int;
 begin
-    select exists (select 1 from public.accounts where id = target_account_id and primary_owner_user_id = target_user_id) into is_primary_owner;
-
-    -- If the user is the primary owner, they have the highest role and can perform any action
+    select
+        exists (
+            select
+                1
+            from
+                public.accounts
+            where
+                id = target_account_id
+                and primary_owner_user_id = target_user_id) into is_primary_owner;
+    -- If the user is the primary owner, they have the highest role and can
+    --   perform any action
     if is_primary_owner then
         return true;
+
     end if;
 
-    select hierarchy_level into user_role_hierarchy_level from public.roles where name = (select account_role from public.accounts_memberships where account_id = target_account_id and target_user_id = user_id);
-    select hierarchy_level into target_role_hierarchy_level from public.roles where name = role_name;
+    select
+        hierarchy_level into user_role_hierarchy_level
+    from
+        public.roles
+    where
+        name =(
+            select
+                account_role
+            from
+                public.accounts_memberships
+            where
+                account_id = target_account_id
+                and target_user_id = user_id);
 
-    -- If the user's role is higher than the target role, they can perform the action
+    select
+        hierarchy_level into target_role_hierarchy_level
+    from
+        public.roles
+    where
+        name = role_name;
+    -- If the user's role is higher than the target role, they can perform
+    --   the action
     return user_role_hierarchy_level < target_role_hierarchy_level;
 
-    end;
-$$ language plpgsql;
+end;
 
-grant execute on function public.has_more_elevated_role (uuid, uuid, varchar) to authenticated, service_role;
+$$
+language plpgsql;
+
+grant execute on function public.has_more_elevated_role(uuid, uuid,
+    varchar) to authenticated, service_role;
 
 -- Enable RLS on the role_permissions table
 alter table public.role_permissions enable row level security;
 
 -- RLS
 -- Authenticated Users can read their permissions
-create policy role_permissions_read on public.role_permissions for
-select
-  to authenticated using (true);
+create policy role_permissions_read on public.role_permissions
+    for select to authenticated
+        using (true);
+
 
 /*
  * -------------------------------------------------------
@@ -769,18 +875,18 @@ select
  * We create the schema for the invitations. Invitations are the invitations for an account sent to a user to join the account.
  * -------------------------------------------------------
  */
-create table if not exists
-  public.invitations (
+create table if not exists public.invitations(
     id serial primary key,
     email varchar(255) not null,
-    account_id uuid references public.accounts (id) on delete cascade not null,
+    account_id uuid references public.accounts(id) on delete cascade not null,
     invited_by uuid references auth.users on delete cascade not null,
-    role varchar(50) references public.roles (name) not null,
+    role varchar(50) references public.roles(name) not null,
     invite_token varchar(255) unique not null,
     created_at timestamptz default current_timestamp not null,
     updated_at timestamptz default current_timestamp not null,
-    expires_at timestamptz default current_timestamp + interval '7 days' not null
-  );
+    expires_at timestamptz default current_timestamp + interval
+	'7 days' not null
+);
 
 comment on table public.invitations is 'The invitations for an account';
 
@@ -792,86 +898,96 @@ comment on column public.invitations.role is 'The role for the invitation';
 
 comment on column public.invitations.invite_token is 'The token for the invitation';
 
--- Open up access to invitations table for authenticated users and service_role
-grant
-select
-,
-  insert,
-update,
-delete on table public.invitations to service_role;
+-- Open up access to invitations table for authenticated users and
+--   service_role
+grant select, insert, update, delete on table public.invitations to
+    service_role;
 
 -- Enable RLS on the invitations table
 alter table public.invitations enable row level security;
 
-create
-or replace function check_organization_account () returns trigger as $$
+create or replace function check_organization_account()
+    returns trigger
+    as $$
 begin
-  if(
-    select
-      is_personal_account
-    from
-      public.accounts
-    where
-      id = new.account_id) then
-    raise exception 'Account must be an organization account';
-  end if;
-  return NEW;
-end;
-$$ language plpgsql;
+    if(
+        select
+            is_personal_account
+        from
+            public.accounts
+        where
+            id = new.account_id) then
+        raise exception 'Account must be an organization account';
 
-create trigger only_organization_accounts_check before insert
-or
-update on public.invitations for each row
-execute procedure check_organization_account ();
+    end if;
+
+    return NEW;
+
+end;
+
+$$
+language plpgsql;
+
+create trigger only_organization_accounts_check
+    before insert or update on public.invitations for each row
+    execute procedure check_organization_account();
 
 -- RLS
--- SELECT: Users can read invitations to users of an account they are a member of
-create policy invitations_read_self on public.invitations for
-select
-  to authenticated using (has_role_on_account (account_id));
+--    SELECT: Users can read invitations to users of an account they
+-- are
+--   a member of
+create policy invitations_read_self on public.invitations
+    for select to authenticated
+        using (has_role_on_account(account_id));
 
--- INSERT: Users can create invitations to users of an account they are a member of
--- and have the 'invites.manage' permission AND the target role is not higher than the user's role
-create policy invitations_create_self on public.invitations for
-insert
-  to authenticated with check (
-    public.has_permission (auth.uid (), account_id, 'invites.manage'::app_permissions) and
-    public.has_more_elevated_role (auth.uid (), account_id, role)
-  );
+-- INSERT: Users can create invitations to users of an account they are
+--   a member of
+--     and have the 'invites.manage' permission AND the target role is
+--  not
+--   higher than the user's role
+create policy invitations_create_self on public.invitations
+    for insert to authenticated
+        with check (
+public.has_permission(
+        auth.uid(), account_id, 'invites.manage' ::app_permissions)
+        and public.has_more_elevated_role(
+        auth.uid(), account_id, role));
 
--- UPDATE: Users can update invitations to users of an account they are a member of
--- and have the 'invites.manage' permission AND the target role is not higher than the user's role
-create policy invitations_update on public.invitations for
-update
-  to authenticated using (
-    public.has_permission (auth.uid (), account_id, 'invites.manage'::app_permissions)
-    and public.has_more_elevated_role (auth.uid (), account_id, role)
-  ) with check (
-    public.has_permission (auth.uid (), account_id, 'invites.manage'::app_permissions)
-    and public.has_more_elevated_role (auth.uid (), account_id, role)
-  );
+-- UPDATE: Users can update invitations to users of an account they are
+--   a member of
+--     and have the 'invites.manage' permission AND the target role is
+--  not
+--   higher than the user's role
+create policy invitations_update on public.invitations
+    for update to authenticated
+	using (public.has_permission(auth.uid(), account_id,
+	    'invites.manage'::app_permissions)
+            and public.has_more_elevated_role(auth.uid(), account_id, role))
+	    with check (public.has_permission(auth.uid(), account_id,
+		'invites.manage'::app_permissions)
+            and public.has_more_elevated_role(auth.uid(), account_id, role));
 
--- DELETE: Users can delete invitations to users of an account they are a member of
--- and have the 'invites.manage' permission
-create policy invitations_delete on public.invitations for
-delete
-  to authenticated using (
-    has_role_on_account (account_id)
-    and public.has_permission (auth.uid (), account_id, 'invites.manage'::app_permissions)
-  );
+-- DELETE: Users can delete invitations to users of an account they are
+--   a member of
+--    and have the 'invites.manage' permission
+create policy invitations_delete on public.invitations
+    for delete to authenticated
+        using (has_role_on_account(account_id)
+	    and public.has_permission(auth.uid(), account_id,
+		'invites.manage'::app_permissions));
 
 -- Functions
 -- Function to accept an invitation to an account
-create or replace function accept_invitation(token text, user_id uuid) returns void as $$
+create or replace function accept_invitation(token text, user_id uuid)
+    returns void
+    as $$
 declare
-  target_account_id uuid;
-  target_role varchar(50);
+    target_account_id uuid;
+    target_role varchar(50);
 begin
     select
         account_id,
-        role
-    into
-        target_account_id,
+        role into target_account_id,
         target_role
     from
         public.invitations
@@ -881,24 +997,28 @@ begin
 
     if not found then
         raise exception 'Invalid or expired invitation token';
+
     end if;
 
-    insert into
-        public.accounts_memberships(
+    insert into public.accounts_memberships(
         user_id,
         account_id,
         account_role)
-    values
-        (accept_invitation.user_id, target_account_id, target_role);
+    values (
+        accept_invitation.user_id,
+        target_account_id,
+        target_role);
 
-    delete from
-        public.invitations
-    where
-        invite_token = token;
-    end;
-$$ language plpgsql;
+    delete from public.invitations
+    where invite_token = token;
 
-grant execute on function accept_invitation (text, uuid) to service_role;
+end;
+
+$$
+language plpgsql;
+
+grant execute on function accept_invitation(text, uuid) to service_role;
+
 
 /*
  * -------------------------------------------------------
@@ -907,15 +1027,14 @@ grant execute on function accept_invitation (text, uuid) to service_role;
  * -------------------------------------------------------
  */
 -- Account Subscriptions table
-create table
-  public.billing_customers (
-    account_id uuid references public.accounts (id) on delete cascade not null,
+create table public.billing_customers(
+    account_id uuid references public.accounts(id) on delete cascade not null,
     id serial primary key,
     email text,
     provider public.billing_provider not null,
     customer_id text not null,
     unique (account_id, customer_id, provider)
-  );
+);
 
 comment on table public.billing_customers is 'The billing customers for an account';
 
@@ -925,26 +1044,25 @@ comment on column public.billing_customers.provider is 'The provider of the bill
 
 comment on column public.billing_customers.customer_id is 'The customer ID for the billing customer';
 
--- Open up access to billing_customers table for authenticated users and service_role
-grant
-select
-,
-  insert,
-update,
-delete on table public.billing_customers to service_role;
+-- Open up access to billing_customers table for authenticated users
+--   and service_role
+grant select, insert, update, delete on table
+    public.billing_customers to service_role;
 
 -- Enable RLS on billing_customers table
 alter table public.billing_customers enable row level security;
 
-grant
-select
-  on table public.billing_customers to authenticated;
+grant select on table public.billing_customers to authenticated;
 
 -- RLS
--- SELECT: Users can read account subscriptions on an account they are a member of
-create policy billing_customers_read_self on public.billing_customers for
-select
-  to authenticated using (account_id = auth.uid() or has_role_on_account (account_id));
+--    SELECT: Users can read account subscriptions on an account they
+--  are
+--   a member of
+create policy billing_customers_read_self on public.billing_customers
+    for select to authenticated
+        using (account_id = auth.uid()
+            or has_role_on_account(account_id));
+
 
 /*
  * -------------------------------------------------------
@@ -953,21 +1071,22 @@ select
  * -------------------------------------------------------
  */
 -- Subscriptions table
-create table if not exists public.subscriptions (
-  id text not null primary key,
-  account_id uuid references public.accounts (id) on delete cascade not null,
-  billing_customer_id int references public.billing_customers on delete cascade not null,
-  status public.subscription_status not null,
-  active bool not null,
-  billing_provider public.billing_provider not null,
-  cancel_at_period_end bool not null,
-  currency varchar(3) not null,
-  created_at timestamptz not null default current_timestamp,
-  updated_at timestamptz not null default current_timestamp,
-  period_starts_at timestamptz not null,
-  period_ends_at timestamptz not null,
-  trial_starts_at timestamptz,
-  trial_ends_at timestamptz
+create table if not exists public.subscriptions(
+    id text not null primary key,
+    account_id uuid references public.accounts(id) on delete cascade not null,
+    billing_customer_id int references public.billing_customers on
+	delete cascade not null,
+    status public.subscription_status not null,
+    active bool not null,
+    billing_provider public.billing_provider not null,
+    cancel_at_period_end bool not null,
+    currency varchar(3) not null,
+    created_at timestamptz not null default current_timestamp,
+    updated_at timestamptz not null default current_timestamp,
+    period_starts_at timestamptz not null,
+    period_ends_at timestamptz not null,
+    trial_starts_at timestamptz,
+    trial_ends_at timestamptz
 );
 
 comment on table public.subscriptions is 'The subscriptions for an account';
@@ -992,13 +1111,10 @@ comment on column public.subscriptions.trial_starts_at is 'The start of the tria
 
 comment on column public.subscriptions.trial_ends_at is 'The end of the trial period for the subscription';
 
--- Open up access to subscriptions table for authenticated users and service_role
-grant
-select
-,
-  insert,
-update,
-delete on table public.subscriptions to service_role;
+-- Open up access to subscriptions table for authenticated users and
+--   service_role
+grant select, insert, update, delete on table public.subscriptions to
+    service_role;
 
 grant select on table public.subscriptions to authenticated;
 
@@ -1006,131 +1122,140 @@ grant select on table public.subscriptions to authenticated;
 alter table public.subscriptions enable row level security;
 
 -- RLS
--- SELECT: Users can read account subscriptions on an account they are a member of
-create policy subscriptions_read_self on public.subscriptions for
-select
-  to authenticated using (has_role_on_account (account_id) or account_id = auth.uid ());
+--    SELECT: Users can read account subscriptions on an account they
+--  are
+--   a member of
+create policy subscriptions_read_self on public.subscriptions
+    for select to authenticated
+        using (
+            (has_role_on_account(account_id) and config.is_set('enable_team_account_billing'))
+            or (account_id = auth.uid() and config.is_set('enable_account_billing'))
+         );
 
 -- Functions
-create or replace function public.upsert_subscription (
-  target_account_id uuid,
-  target_customer_id varchar(255),
-  target_subscription_id text,
-  active bool,
-  status public.subscription_status,
-  billing_provider public.billing_provider,
-  cancel_at_period_end bool,
-  currency varchar(3),
-  period_starts_at timestamptz,
-  period_ends_at timestamptz,
-  line_items jsonb,
-  trial_starts_at timestamptz default null,
-  trial_ends_at timestamptz default null,
-  type public.subscription_type default 'recurring'
-) returns public.subscriptions as $$
+create or replace function
+    public.upsert_subscription(target_account_id uuid,
+    target_customer_id varchar(255), target_subscription_id text,
+    active bool, status public.subscription_status, billing_provider
+    public.billing_provider, cancel_at_period_end bool, currency
+    varchar(3), period_starts_at timestamptz, period_ends_at
+    timestamptz, line_items jsonb, trial_starts_at timestamptz
+    default null, trial_ends_at timestamptz default null, type
+    public.subscription_type default 'recurring')
+    returns public.subscriptions
+    as $$
 declare
-  new_subscription public.subscriptions;
-  new_billing_customer_id int;
+    new_subscription public.subscriptions;
+    new_billing_customer_id int;
 begin
-  insert into public.billing_customers(account_id, provider, customer_id)
-  values (target_account_id, billing_provider, target_customer_id)
-  on conflict (account_id, provider, customer_id) do update
-  set provider = excluded.provider
-  returning id into new_billing_customer_id;
-
-  insert into public.subscriptions(
+    insert into public.billing_customers(
+        account_id,
+        provider,
+        customer_id)
+    values (
+        target_account_id,
+        billing_provider,
+        target_customer_id)
+on conflict (
     account_id,
-    billing_customer_id,
-    id,
-    active,
-    status,
-    type,
-    billing_provider,
-    cancel_at_period_end,
-    currency,
-    period_starts_at,
-    period_ends_at,
-    trial_starts_at,
-    trial_ends_at)
-  values (
-    target_account_id,
-    new_billing_customer_id,
-    subscription_id,
-    active,
-    status,
-    type,
-    billing_provider,
-    cancel_at_period_end,
-    currency,
-    period_starts_at,
-    period_ends_at,
-    trial_starts_at,
-    trial_ends_at)
-  on conflict (id) do update
-  set active = excluded.active,
-      status = excluded.status,
-      cancel_at_period_end = excluded.cancel_at_period_end,
-      currency = excluded.currency,
-      period_starts_at = excluded.period_starts_at,
-      period_ends_at = excluded.period_ends_at,
-      trial_starts_at = excluded.trial_starts_at,
-      trial_ends_at = excluded.trial_ends_at
-  returning * into new_subscription;
+    provider,
+    customer_id)
+    do update set
+        provider = excluded.provider
+    returning
+        id into new_billing_customer_id;
 
-  -- Upsert subscription items
-  with item_data as (
+    insert into public.subscriptions(
+        account_id,
+        billing_customer_id,
+        id,
+        active,
+        status,
+        type,
+        billing_provider,
+        cancel_at_period_end,
+        currency,
+        period_starts_at,
+        period_ends_at,
+        trial_starts_at,
+        trial_ends_at)
+    values (
+        target_account_id,
+        new_billing_customer_id,
+        subscription_id,
+        active,
+        status,
+        type,
+        billing_provider,
+        cancel_at_period_end,
+        currency,
+        period_starts_at,
+        period_ends_at,
+        trial_starts_at,
+        trial_ends_at)
+on conflict (
+    id)
+    do update set
+        active = excluded.active,
+        status = excluded.status,
+        cancel_at_period_end = excluded.cancel_at_period_end,
+        currency = excluded.currency,
+        period_starts_at = excluded.period_starts_at,
+        period_ends_at = excluded.period_ends_at,
+        trial_starts_at = excluded.trial_starts_at,
+        trial_ends_at = excluded.trial_ends_at
+    returning
+        * into new_subscription;
+    -- Upsert subscription items
+    with item_data as (
+        select
+            (line_item ->> 'product_id')::varchar as prod_id,
+(line_item ->> 'variant_id')::varchar as var_id,
+(line_item ->> 'price_amount')::numeric as price_amt,
+(line_item ->> 'quantity')::integer as qty,
+(line_item ->> 'interval')::varchar as intv,
+(line_item ->> 'interval_count')::integer as intv_count
+        from
+            jsonb_array_elements(line_items) as line_item)
+    insert into public.subscription_items(
+        subscription_id,
+        product_id,
+        variant_id,
+        price_amount,
+        quantity,
+        interval,
+        interval_count)
     select
-      (line_item ->> 'product_id')::varchar as prod_id,
-      (line_item ->> 'variant_id')::varchar as var_id,
-      (line_item ->> 'price_amount')::numeric as price_amt,
-      (line_item ->> 'quantity')::integer as qty,
-      (line_item ->> 'interval')::varchar as intv,
-      (line_item ->> 'interval_count')::integer as intv_count
-    from jsonb_array_elements(line_items) as line_item
-  )
-  insert into public.subscription_items(
-    subscription_id,
-    product_id,
-    variant_id,
-    price_amount,
-    quantity,
-    interval,
-    interval_count)
-  select
-    subscription_id,
-    prod_id,
-    var_id,
-    price_amt,
-    qty,
-    intv,
-    intv_count
-  from item_data
-  on conflict (subscription_id, product_id, variant_id) do update
-  set price_amount = excluded.price_amount,
-      quantity = excluded.quantity,
-      interval = excluded.interval,
-      interval_count = excluded.interval_count;
+        subscription_id,
+        prod_id,
+        var_id,
+        price_amt,
+        qty,
+        intv,
+        intv_count
+    from
+        item_data
+    on conflict (subscription_id,
+        product_id,
+        variant_id)
+        do update set
+            price_amount = excluded.price_amount,
+            quantity = excluded.quantity,
+            interval = excluded.interval,
+            interval_count = excluded.interval_count;
 
-  return new_subscription;
+    return new_subscription;
+
 end;
-$$ language plpgsql;
 
-grant execute on function public.upsert_subscription (
-    uuid,
-    varchar,
-    text,
-    bool,
-    public.subscription_status,
-    public.billing_provider,
-    bool,
-    varchar,
-    timestamptz,
-    timestamptz,
-    jsonb,
-    timestamptz,
-    timestamptz,
-    public.subscription_type
-) to service_role;
+$$
+language plpgsql;
+
+grant execute on function public.upsert_subscription(uuid, varchar,
+    text, bool, public.subscription_status, public.billing_provider,
+    bool, varchar, timestamptz, timestamptz, jsonb, timestamptz,
+    timestamptz, public.subscription_type) to service_role;
+
 
 /* -------------------------------------------------------
  * Section: Subscription Items
@@ -1138,98 +1263,122 @@ grant execute on function public.upsert_subscription (
  * For example, a subscription might have a subscription item with the product ID 'prod_123' and the variant ID 'var_123'.
  * -------------------------------------------------------
  */
-create table if not exists public.subscription_items (
-  subscription_id text references public.subscriptions (id) on delete cascade not null,
-  product_id varchar(255) not null,
-  variant_id varchar(255) not null,
-  price_amount numeric,
-  quantity integer not null default 1,
-  interval varchar(255) not null,
-  interval_count integer not null check (interval_count > 0),
-  created_at timestamptz not null default current_timestamp,
-  updated_at timestamptz not null default current_timestamp,
-  unique (subscription_id, product_id, variant_id)
+create table if not exists public.subscription_items(
+    subscription_id text references public.subscriptions(id) on
+	delete cascade not null,
+    product_id varchar(255) not null,
+    variant_id varchar(255) not null,
+    price_amount numeric,
+    quantity integer not null default 1,
+    interval varchar(255) not null,
+    interval_count integer not null check (interval_count > 0),
+    created_at timestamptz not null default current_timestamp,
+    updated_at timestamptz not null default current_timestamp,
+    unique (subscription_id, product_id, variant_id)
 );
 
 comment on table public.subscription_items is 'The items in a subscription';
+
 comment on column public.subscription_items.subscription_id is 'The subscription the item is for';
+
 comment on column public.subscription_items.product_id is 'The product ID for the item';
+
 comment on column public.subscription_items.variant_id is 'The variant ID for the item';
+
 comment on column public.subscription_items.price_amount is 'The price amount for the item';
+
 comment on column public.subscription_items.quantity is 'The quantity of the item';
+
 comment on column public.subscription_items.interval is 'The interval for the item';
+
 comment on column public.subscription_items.interval_count is 'The interval count for the item';
+
 comment on column public.subscription_items.created_at is 'The creation date of the item';
+
 comment on column public.subscription_items.updated_at is 'The last update date of the item';
 
--- Open up access to subscription_items table for authenticated users and service_role
-grant select on table public.subscription_items to authenticated, service_role;
-grant insert, update, delete on table public.subscription_items to service_role;
+-- Open up access to subscription_items table for authenticated users
+--   and service_role
+grant select on table public.subscription_items to authenticated,
+    service_role;
+
+grant insert, update, delete on table public.subscription_items to
+    service_role;
 
 -- RLS
 alter table public.subscription_items enable row level security;
 
--- SELECT: Users can read subscription items on a subscription they are a member of
-create policy subscription_items_read_self on public.subscription_items for
-select
-  to authenticated using (
-  exists (
-      select 1 from public.subscriptions where id = subscription_id and (account_id = auth.uid () or has_role_on_account (account_id))
-    )
-  );
+-- SELECT: Users can read subscription items on a subscription they are
+--   a member of
+create policy subscription_items_read_self on public.subscription_items
+    for select to authenticated
+        using (exists (
+            select
+                1
+            from
+                public.subscriptions
+            where
+		id = subscription_id and (account_id = auth.uid() or
+		    has_role_on_account(account_id))));
+
 
 /**
-* -------------------------------------------------------
-* Section: Orders
-* We create the schema for the subscription items. Subscription items are the items in a subscription.
-* For example, a subscription might have a subscription item with the product ID 'prod_123' and the variant ID 'var_123'.
-* -------------------------------------------------------
-*/
-create table if not exists public.orders (
-  id text not null primary key,
-  account_id uuid references public.accounts (id) on delete cascade not null,
-  billing_customer_id int references public.billing_customers on delete cascade not null,
-  status public.payment_status not null,
-  billing_provider public.billing_provider not null,
-  total_amount numeric not null,
-  currency varchar(3) not null,
-  created_at timestamptz not null default current_timestamp,
-  updated_at timestamptz not null default current_timestamp
+ * -------------------------------------------------------
+ * Section: Orders
+ * We create the schema for the subscription items. Subscription items are the items in a subscription.
+ * For example, a subscription might have a subscription item with the product ID 'prod_123' and the variant ID 'var_123'.
+ * -------------------------------------------------------
+ */
+create table if not exists public.orders(
+    id text not null primary key,
+    account_id uuid references public.accounts(id) on delete cascade not null,
+    billing_customer_id int references public.billing_customers on
+	delete cascade not null,
+    status public.payment_status not null,
+    billing_provider public.billing_provider not null,
+    total_amount numeric not null,
+    currency varchar(3) not null,
+    created_at timestamptz not null default current_timestamp,
+    updated_at timestamptz not null default current_timestamp
 );
 
--- Open up access to subscription_items table for authenticated users and service_role
-grant select on table public.orders to authenticated, service_role;
-grant insert, update, delete on table public.orders to service_role;
+-- Open up access to subscription_items table for authenticated users
+--   and service_role
+grant select on table public.orders to authenticated;
+
+grant select, insert, update, delete on table public.orders to service_role;
 
 -- RLS
 alter table public.orders enable row level security;
 
 -- SELECT
--- Users can read orders on an account they are a member of or the account is their own
-create policy orders_read_self on public.orders for
-select
-  to authenticated using (
-     account_id = auth.uid () or has_role_on_account (account_id)
-  );
+--    Users can read orders on an account they are a member of or the
+--   account is their own
+create policy orders_read_self on public.orders
+    for select to authenticated
+        using ((account_id = auth.uid() and config.is_set('enable_account_billing'))
+            or (has_role_on_account(account_id) and config.is_set('enable_team_account_billing')));
+
 
 /**
-* -------------------------------------------------------
-* Section: Order Items
-* We create the schema for the order items. Order items are the items in an order.
-* -------------------------------------------------------
-*/
-create table if not exists public.order_items (
-  order_id text references public.orders (id) on delete cascade not null,
-  product_id text not null,
-  variant_id text not null,
-  price_amount numeric,
-  quantity integer not null default 1,
-  created_at timestamptz not null default current_timestamp,
-  updated_at timestamptz not null default current_timestamp,
-  unique (order_id, product_id, variant_id)
+ * -------------------------------------------------------
+ * Section: Order Items
+ * We create the schema for the order items. Order items are the items in an order.
+ * -------------------------------------------------------
+ */
+create table if not exists public.order_items(
+    order_id text references public.orders(id) on delete cascade not null,
+    product_id text not null,
+    variant_id text not null,
+    price_amount numeric,
+    quantity integer not null default 1,
+    created_at timestamptz not null default current_timestamp,
+    updated_at timestamptz not null default current_timestamp,
+    unique (order_id, product_id, variant_id)
 );
 
--- Open up access to order_items table for authenticated users and service_role
+-- Open up access to order_items table for authenticated users and
+--   service_role
 grant select on table public.order_items to authenticated, service_role;
 
 -- RLS
@@ -1237,43 +1386,54 @@ alter table public.order_items enable row level security;
 
 -- SELECT
 -- Users can read order items on an order they are a member of
-create policy order_items_read_self on public.order_items for
-select
-  to authenticated using (
-    exists (
-      select 1 from public.orders where id = order_id and (account_id = auth.uid () or has_role_on_account (account_id))
-    )
-  );
+create policy order_items_read_self on public.order_items
+    for select to authenticated
+        using (exists (
+            select
+                1
+            from
+                public.orders
+            where
+		id = order_id and (account_id = auth.uid() or
+		    has_role_on_account(account_id))));
 
 -- Functions
-create or replace function public.upsert_order(
-  target_account_id uuid,
-  target_customer_id varchar(255),
-  target_order_id text,
-  status public.payment_status,
-  billing_provider public.billing_provider,
-  total_amount numeric,
-  currency varchar(3),
-  line_items jsonb
-) returns public.orders as $$
+create or replace function public.upsert_order(target_account_id
+    uuid, target_customer_id varchar(255), target_order_id text,
+    status public.payment_status, billing_provider
+    public.billing_provider, total_amount numeric, currency
+    varchar(3), line_items jsonb)
+    returns public.orders
+    as $$
 declare
-  new_order public.orders;
-  new_billing_customer_id int;
+    new_order public.orders;
+    new_billing_customer_id int;
 begin
-    insert into public.billing_customers(account_id, provider, customer_id)
-    values (target_account_id, billing_provider, target_customer_id)
-    on conflict (account_id, provider, customer_id) do update
-    set provider = excluded.provider
-    returning id into new_billing_customer_id;
+    insert into public.billing_customers(
+        account_id,
+        provider,
+        customer_id)
+    values (
+        target_account_id,
+        billing_provider,
+        target_customer_id)
+on conflict (
+    account_id,
+    provider,
+    customer_id)
+    do update set
+        provider = excluded.provider
+    returning
+        id into new_billing_customer_id;
 
     insert into public.orders(
-      account_id,
-      billing_customer_id,
-      id,
-      status,
-      billing_provider,
-      total_amount,
-      currency)
+        account_id,
+        billing_customer_id,
+        id,
+        status,
+        billing_provider,
+        total_amount,
+        currency)
     values (
         target_account_id,
         new_billing_customer_id,
@@ -1282,483 +1442,556 @@ begin
         billing_provider,
         total_amount,
         currency)
-    on conflict (id) do update
-    set status = excluded.status,
+on conflict (
+    id)
+    do update set
+        status = excluded.status,
         total_amount = excluded.total_amount,
         currency = excluded.currency
-    returning * into new_order;
+    returning
+        * into new_order;
 
     insert into public.order_items(
-      order_id,
-      product_id,
-      variant_id,
-      price_amount,
-      quantity)
+        order_id,
+        product_id,
+        variant_id,
+        price_amount,
+        quantity)
     select
         target_order_id,
-        (line_item ->> 'product_id')::varchar,
-        (line_item ->> 'variant_id')::varchar,
-        (line_item ->> 'price_amount')::numeric,
-        (line_item ->> 'quantity')::integer
-    from jsonb_array_elements(line_items) as line_item
-    on conflict (order_id, product_id, variant_id) do update
-    set price_amount = excluded.price_amount,
+(line_item ->> 'product_id')::varchar,
+(line_item ->> 'variant_id')::varchar,
+(line_item ->> 'price_amount')::numeric,
+(line_item ->> 'quantity')::integer
+    from
+        jsonb_array_elements(line_items) as line_item
+on conflict (order_id,
+    product_id,
+    variant_id)
+    do update set
+        price_amount = excluded.price_amount,
         quantity = excluded.quantity;
 
     return new_order;
-    end;
-$$ language plpgsql;
 
-grant execute on function public.upsert_order (
-    uuid,
-    varchar,
-    text,
-    public.payment_status,
-    public.billing_provider,
-    numeric,
-    varchar,
-    jsonb
-    ) to service_role;
+end;
+
+$$
+language plpgsql;
+
+grant execute on function public.upsert_order(uuid, varchar, text,
+    public.payment_status, public.billing_provider, numeric, varchar,
+    jsonb) to service_role;
+
+
 /*
  * -------------------------------------------------------
  * Section: Functions
  * -------------------------------------------------------
  */
 -- Create a function to slugify a string
-create
-or replace function kit.slugify ("value" text) returns text as $$
-  -- removes accents (diacritic signs) from a given string --
-  with "unaccented" as(
-    select
-      unaccent("value") as "value"
+create or replace function kit.slugify("value" text)
+    returns text
+    as $$
+    -- removes accents (diacritic signs) from a given string --
+    with "unaccented" as(
+        select
+            unaccent("value") as "value"
 ),
 -- lowercases the string
 "lowercase" as(
-  select
-    lower("value") as "value"
-  from
-    "unaccented"
+    select
+        lower("value") as "value"
+    from
+        "unaccented"
 ),
 -- remove single and double quotes
 "removed_quotes" as(
-  select
-    regexp_replace("value", '[''"]+', '', 'gi') as "value"
-  from
-    "lowercase"
+    select
+	regexp_replace("value", '[''"]+', '',
+	    'gi') as "value"
+    from
+        "lowercase"
 ),
 -- replaces anything that's not a letter, number, hyphen('-'), or underscore('_') with a hyphen('-')
 "hyphenated" as(
-  select
-    regexp_replace("value", '[^a-z0-9\\-_]+', '-', 'gi') as "value"
-  from
-    "removed_quotes"
-),
--- trims hyphens('-') if they exist on the head or tail of the string
-"trimmed" as(
-  select
-    regexp_replace(regexp_replace("value", '\-+$', ''), '^\-', '') as
-      "value" from "hyphenated"
-)
     select
-      "value"
+	regexp_replace("value", '[^a-z0-9\\-_]+', '-',
+	    'gi') as "value"
     from
-      "trimmed";
-$$ language SQL strict immutable;
+        "removed_quotes"
+),
+-- trims hyphens('-') if they exist on the head or tail of
+--   the string
+"trimmed" as(
+    select
+	regexp_replace(regexp_replace("value", '\-+$',
+	    ''), '^\-', '') as "value" from "hyphenated"
+)
+        select
+            "value"
+        from
+            "trimmed";
+$$
+language SQL
+strict immutable;
 
-grant
-execute on function kit.slugify (text) to service_role,
-authenticated;
+grant execute on function kit.slugify(text) to service_role, authenticated;
 
-create function kit.set_slug_from_account_name () returns trigger language plpgsql as $$
+create function kit.set_slug_from_account_name()
+    returns trigger
+    language plpgsql
+    as $$
 declare
-  sql_string varchar;
-  tmp_slug varchar;
-  increment integer;
-  tmp_row record;
-  tmp_row_count integer;
+    sql_string varchar;
+    tmp_slug varchar;
+    increment integer;
+    tmp_row record;
+    tmp_row_count integer;
 begin
-  tmp_row_count = 1;
-  increment = 0;
-  while tmp_row_count > 0 loop
-    if increment > 0 then
-      tmp_slug = kit.slugify(new.name || ' ' || increment::varchar);
-    else
-      tmp_slug = kit.slugify(new.name);
-    end if;
+    tmp_row_count = 1;
 
-    sql_string = format('select count(1) cnt from accounts where slug = ''' || tmp_slug || '''; ');
+    increment = 0;
 
-    for tmp_row in execute (sql_string)
-      loop
-        raise notice '%', tmp_row;
-        tmp_row_count = tmp_row.cnt;
-      end loop;
+    while tmp_row_count > 0 loop
+        if increment > 0 then
+            tmp_slug = kit.slugify(new.name || ' ' || increment::varchar);
 
-    increment = increment +1;
-  end loop;
+        else
+            tmp_slug = kit.slugify(new.name);
 
-  new.slug := tmp_slug;
-  return NEW;
+        end if;
+
+	sql_string = format('select count(1) cnt from accounts where slug = ''' || tmp_slug ||
+	    '''; ');
+
+        for tmp_row in execute (sql_string)
+            loop
+                raise notice '%', tmp_row;
+
+                tmp_row_count = tmp_row.cnt;
+
+            end loop;
+
+        increment = increment +1;
+
+    end loop;
+
+    new.slug := tmp_slug;
+
+    return NEW;
+
 end
 $$;
 
 -- Create a trigger to set the slug from the account name
-create trigger "set_slug_from_account_name" before insert on public.accounts for each row when (
-  NEW.name is not null
-  and NEW.slug is null
-  and NEW.is_personal_account = false
-)
-execute procedure kit.set_slug_from_account_name ();
+create trigger "set_slug_from_account_name"
+    before insert on public.accounts for each row
+    when(NEW.name is not null and NEW.slug is null and
+	NEW.is_personal_account = false)
+    execute procedure kit.set_slug_from_account_name();
 
 -- Create a trigger when a name is updated to update the slug
-create trigger "update_slug_from_account_name" before
-update on public.accounts for each row when (
-  NEW.name is not null
-  and NEW.name <> OLD.name
-  and NEW.is_personal_account = false
-)
-execute procedure kit.set_slug_from_account_name ();
+create trigger "update_slug_from_account_name"
+    before update on public.accounts for each row
+    when(NEW.name is not null and NEW.name <> OLD.name and
+	NEW.is_personal_account = false)
+    execute procedure kit.set_slug_from_account_name();
 
 -- Create a function to setup a new user with a personal account
-create function kit.setup_new_user () returns trigger language plpgsql security definer
-set
-  search_path = public as $$
+create function kit.setup_new_user()
+    returns trigger
+    language plpgsql
+    security definer
+    set search_path = public
+    as $$
 declare
-  user_name text;
+    user_name text;
 begin
-  if new.raw_user_meta_data ->> 'display_name' is not null then
-    user_name := new.raw_user_meta_data ->> 'display_name';
-  end if;
+    if new.raw_user_meta_data ->> 'display_name' is not null then
+        user_name := new.raw_user_meta_data ->> 'display_name';
 
-  if user_name is null and new.email is not null then
-    user_name := split_part(new.email, '@', 1);
-  end if;
+    end if;
 
-  if user_name is null then
-    user_name := '';
-  end if;
+    if user_name is null and new.email is not null then
+        user_name := split_part(new.email, '@', 1);
 
-  insert into public.accounts(
-    id,
-    primary_owner_user_id,
-    name,
-    is_personal_account,
-    email)
-  values (
-    new.id,
-    new.id,
-    user_name,
-    true,
-    new.email);
+    end if;
 
-  return new;
+    if user_name is null then
+        user_name := '';
+
+    end if;
+
+    insert into public.accounts(
+        id,
+        primary_owner_user_id,
+        name,
+        is_personal_account,
+        email)
+    values (
+        new.id,
+        new.id,
+        user_name,
+        true,
+        new.email);
+
+    return new;
+
 end;
+
 $$;
 
 -- trigger the function every time a user is created
 create trigger on_auth_user_created
-after insert on auth.users for each row
-execute procedure kit.setup_new_user ();
+    after insert on auth.users for each row
+    execute procedure kit.setup_new_user();
 
-create
-or replace function public.create_account (account_name text) returns public.accounts as $$
+create or replace function public.create_account(account_name text)
+    returns public.accounts
+    as $$
 declare
-  new_account public.accounts;
+    new_account public.accounts;
 begin
-  insert into public.accounts(
-    name,
-    is_personal_account)
-  values (
-    account_name,
-    false)
+    insert into public.accounts(
+        name,
+        is_personal_account)
+    values (
+        account_name,
+        false)
 returning
-  * into new_account;
-  return new_account;
-end;
-$$ language plpgsql;
+    * into new_account;
 
-grant
-execute on function public.create_account (text) to authenticated, service_role;
+    return new_account;
+
+end;
+
+$$
+language plpgsql;
+
+grant execute on function public.create_account(text) to
+    authenticated, service_role;
 
 -- RLS
 -- Authenticated users can create organization accounts
-create policy create_org_account on public.accounts for insert to authenticated
-with
-  check (
-    public.is_set ('enable_organization_accounts')
-    and public.accounts.is_personal_account = false
-  );
+create policy create_org_account on public.accounts
+    for insert to authenticated
+        with check (
+public.is_set(
+        'enable_organization_accounts')
+        and public.accounts.is_personal_account = false);
 
-create
-or replace function public.create_invitation (
-  account_id uuid,
-  email text,
-  role varchar(50)
-) returns public.invitations as $$
+create or replace function public.create_invitation(account_id uuid,
+    email text, role varchar(50))
+    returns public.invitations
+    as $$
 declare
-  new_invitation public.invitations;
-  invite_token text;
+    new_invitation public.invitations;
+    invite_token text;
 begin
-  invite_token := extensions.uuid_generate_v4();
-
-  insert into public.invitations(
-    email,
-    account_id,
-    invited_by,
-    role,
-    invite_token)
-  values (
-    email,
-    account_id,
-    auth.uid(),
-    role,
-    invite_token)
-returning
-  * into new_invitation;
-
-  return new_invitation;
-
-end;
-
-$$ language plpgsql;
-
-create
-or replace function public.get_user_accounts () returns setof public.accounts as $$
-begin
-  select
-    id,
-    name,
-    picture_url
-  from
-    public.accounts
-    join public.accounts_memberships on accounts.id = accounts_memberships.account_id
-  where
-    accounts_memberships.user_id = auth.uid();
-end;
-$$ language plpgsql;
-
--- we create a view to load the general app data for the authenticated user
--- which includes the user's accounts, memberships, and roles, and relative subscription status
-create or replace view
-  public.user_account_workspace as
-select
-  accounts.id as id,
-  accounts.name as name,
-  accounts.picture_url as picture_url,
-  subscriptions.status as subscription_status
-from
-  public.accounts
-  left join public.subscriptions on accounts.id = subscriptions.account_id
-where
-  primary_owner_user_id = auth.uid ()
-  and accounts.is_personal_account = true;
-
-grant
-select
-  on public.user_account_workspace to authenticated,
-  service_role;
-
-create or replace view
-  public.user_accounts as
-select
-  accounts.id as id,
-  accounts.name as name,
-  accounts.picture_url as picture_url,
-  accounts.slug as slug,
-  accounts_memberships.account_role as role
-from
-  public.accounts
-  join public.accounts_memberships on accounts.id = accounts_memberships.account_id
-where
-  accounts_memberships.user_id = auth.uid ()
-  and accounts.is_personal_account = false;
-
-grant
-select
-  on public.user_accounts to authenticated,
-  service_role;
-
-create
-or replace function public.organization_account_workspace (account_slug text) returns table (
-  id uuid,
-  name varchar(255),
-  picture_url varchar(1000),
-  slug text,
-  role varchar(50),
-  role_hierarchy_level int,
-  primary_owner_user_id uuid,
-  subscription_status public.subscription_status,
-  permissions public.app_permissions[]
-) as $$
-begin
-  return QUERY
-  select
-    accounts.id,
-    accounts.name,
-    accounts.picture_url,
-    accounts.slug,
-    accounts_memberships.account_role,
-    roles.hierarchy_level,
-    accounts.primary_owner_user_id,
-    subscriptions.status,
-    array_agg(role_permissions.permission)
-  from
-    public.accounts
-    join public.accounts_memberships on accounts.id = accounts_memberships.account_id
-    left join public.subscriptions on accounts.id = subscriptions.account_id
-    left join public.role_permissions on accounts_memberships.account_role =
-      role_permissions.role
-    left join public.roles on accounts_memberships.account_role = roles.name
-  where
-    accounts.slug = account_slug
-    and public.accounts_memberships.user_id = auth.uid()
-  group by
-    accounts.id,
-    accounts_memberships.account_role,
-    subscriptions.status,
-    roles.hierarchy_level;
-end;
-$$ language plpgsql;
-
-grant
-execute on function public.organization_account_workspace (text) to authenticated,
-service_role;
-
-CREATE
-OR REPLACE FUNCTION public.get_account_members (account_slug text) RETURNS TABLE (
-  id uuid,
-  user_id uuid,
-  account_id uuid,
-  role varchar(50),
-  role_hierarchy_level int,
-  primary_owner_user_id uuid,
-  name varchar,
-  email varchar,
-  picture_url varchar,
-  created_at timestamptz,
-  updated_at timestamptz
-) LANGUAGE plpgsql AS $$
-BEGIN
-    RETURN QUERY
-    SELECT acc.id, am.user_id, am.account_id, am.account_role, r.hierarchy_level, a.primary_owner_user_id, acc.name, acc.email, acc.picture_url, am.created_at, am.updated_at
-    FROM public.accounts_memberships am
-    JOIN public.accounts a ON a.id = am.account_id
-    JOIN public.accounts acc on acc.id = am.user_id
-    JOIN public.roles r ON r.name = am.account_role
-    WHERE a.slug = account_slug;
-END;
-$$;
-
-grant
-execute on function public.get_account_members (text) to authenticated,
-service_role;
-
-create or replace function public.get_account_invitations(account_slug text) returns table (
-  id integer,
-  email varchar(255),
-  account_id uuid,
-  invited_by uuid,
-  role varchar(50),
-  created_at timestamptz,
-  updated_at timestamptz,
-  expires_at timestamptz,
-  inviter_name varchar,
-  inviter_email varchar
-) as $$
-begin
-  return query
-  select
-    invitation.id,
-    invitation.email,
-    invitation.account_id,
-    invitation.invited_by,
-    invitation.role,
-    invitation.created_at,
-    invitation.updated_at,
-    invitation.expires_at,
-    account.name,
-    account.email
-  from
-    public.invitations as invitation
-  join public.accounts as account on invitation.account_id = account.id
-  where
-    account.slug = account_slug;
-end;
-$$ language plpgsql;
-
-grant execute on function public.get_account_invitations (text) to authenticated, service_role;
-
-CREATE TYPE kit.invitation AS (
-  email text,
-  role varchar(50)
-);
-
--- Then, modify your function to use this type
-CREATE OR REPLACE FUNCTION public.add_invitations_to_account(account_slug text, invitations kit.invitation[])
-RETURNS public.invitations[] AS $$
-DECLARE
-  new_invitation public.invitations;
-  all_invitations public.invitations[] := ARRAY[]::public.invitations[];
-  invite_token text;
-  email text;
-  role varchar(50);
-BEGIN
-  FOREACH email, role IN ARRAY invitations
-  LOOP
     invite_token := extensions.uuid_generate_v4();
 
-    INSERT INTO public.invitations(
-      email,
-      account_id,
-      invited_by,
-      role,
-      invite_token)
-    VALUES (
-      email,
-      (SELECT id FROM public.accounts WHERE slug = account_slug),
-      auth.uid(),
-      role,
-      invite_token)
-    RETURNING *
-    INTO new_invitation;
+    insert into public.invitations(
+        email,
+        account_id,
+        invited_by,
+        role,
+        invite_token)
+    values (
+        email,
+        account_id,
+        auth.uid(),
+        role,
+        invite_token)
+returning
+    * into new_invitation;
 
-    all_invitations := array_append(all_invitations, new_invitation);
-  END LOOP;
+    return new_invitation;
 
-  RETURN all_invitations;
-END;
-$$ LANGUAGE plpgsql;
+end;
 
-grant execute on function public.add_invitations_to_account (text, kit.invitation[]) to authenticated, service_role;
+$$
+language plpgsql;
+
+create or replace function public.get_user_accounts()
+    returns setof public.accounts
+    as $$
+begin
+    select
+        id,
+        name,
+        picture_url
+    from
+        public.accounts
+	join public.accounts_memberships on accounts.id =
+	    accounts_memberships.account_id
+    where
+        accounts_memberships.user_id = auth.uid();
+
+end;
+
+$$
+language plpgsql;
+
+-- we create a view to load the general app data for the authenticated
+--   user
+--     which includes the user's accounts, memberships, and roles, and
+--   relative subscription status
+create or replace view public.user_account_workspace as
+select
+    accounts.id as id,
+    accounts.name as name,
+    accounts.picture_url as picture_url,
+    subscriptions.status as subscription_status
+from
+    public.accounts
+    left join public.subscriptions on accounts.id = subscriptions.account_id
+where
+    primary_owner_user_id = auth.uid()
+    and accounts.is_personal_account = true;
+
+grant select on public.user_account_workspace to authenticated, service_role;
+
+create or replace view public.user_accounts as
+select
+    accounts.id as id,
+    accounts.name as name,
+    accounts.picture_url as picture_url,
+    accounts.slug as slug,
+    accounts_memberships.account_role as role
+from
+    public.accounts
+    join public.accounts_memberships on accounts.id =
+	accounts_memberships.account_id
+where
+    accounts_memberships.user_id = auth.uid()
+    and accounts.is_personal_account = false;
+
+grant select on public.user_accounts to authenticated, service_role;
+
+create or replace function
+    public.organization_account_workspace(account_slug text)
+    returns table(
+        id uuid,
+        name varchar(255),
+        picture_url varchar(1000),
+        slug text,
+        role varchar(50),
+        role_hierarchy_level int,
+        primary_owner_user_id uuid,
+        subscription_status public.subscription_status,
+        permissions public.app_permissions[]
+    )
+    as $$
+begin
+    return QUERY
+    select
+        accounts.id,
+        accounts.name,
+        accounts.picture_url,
+        accounts.slug,
+        accounts_memberships.account_role,
+        roles.hierarchy_level,
+        accounts.primary_owner_user_id,
+        subscriptions.status,
+        array_agg(role_permissions.permission)
+    from
+        public.accounts
+	join public.accounts_memberships on accounts.id =
+	    accounts_memberships.account_id
+        left join public.subscriptions on accounts.id = subscriptions.account_id
+	left join public.role_permissions on
+	    accounts_memberships.account_role = role_permissions.role
+        left join public.roles on accounts_memberships.account_role = roles.name
+    where
+        accounts.slug = account_slug
+        and public.accounts_memberships.user_id = auth.uid()
+    group by
+        accounts.id,
+        accounts_memberships.account_role,
+        subscriptions.status,
+        roles.hierarchy_level;
+
+end;
+
+$$
+language plpgsql;
+
+grant execute on function public.organization_account_workspace(text)
+    to authenticated, service_role;
+
+create or replace function public.get_account_members(account_slug text)
+    returns table(
+        id uuid,
+        user_id uuid,
+        account_id uuid,
+        role varchar(50),
+        role_hierarchy_level int,
+        primary_owner_user_id uuid,
+        name varchar,
+        email varchar,
+        picture_url varchar,
+        created_at timestamptz,
+        updated_at timestamptz)
+    language plpgsql
+    as $$
+begin
+    return QUERY
+    select
+        acc.id,
+        am.user_id,
+        am.account_id,
+        am.account_role,
+        r.hierarchy_level,
+        a.primary_owner_user_id,
+        acc.name,
+        acc.email,
+        acc.picture_url,
+        am.created_at,
+        am.updated_at
+    from
+        public.accounts_memberships am
+        join public.accounts a on a.id = am.account_id
+        join public.accounts acc on acc.id = am.user_id
+        join public.roles r on r.name = am.account_role
+    where
+        a.slug = account_slug;
+
+end;
+
+$$;
+
+grant execute on function public.get_account_members(text) to
+    authenticated, service_role;
+
+create or replace function public.get_account_invitations(account_slug text)
+    returns table(
+        id integer,
+        email varchar(255),
+        account_id uuid,
+        invited_by uuid,
+        role varchar(50),
+        created_at timestamptz,
+        updated_at timestamptz,
+        expires_at timestamptz,
+        inviter_name varchar,
+        inviter_email varchar
+    )
+    as $$
+begin
+    return query
+    select
+        invitation.id,
+        invitation.email,
+        invitation.account_id,
+        invitation.invited_by,
+        invitation.role,
+        invitation.created_at,
+        invitation.updated_at,
+        invitation.expires_at,
+        account.name,
+        account.email
+    from
+        public.invitations as invitation
+        join public.accounts as account on invitation.account_id = account.id
+    where
+        account.slug = account_slug;
+
+end;
+
+$$
+language plpgsql;
+
+grant execute on function public.get_account_invitations(text) to
+    authenticated, service_role;
+
+create type kit.invitation as (
+    email text,
+    role varchar( 50));
+
+-- Then, modify your function to use this type
+create or replace function
+    public.add_invitations_to_account(account_slug text, invitations
+    kit.invitation[])
+    returns public.invitations[]
+    as $$
+declare
+    new_invitation public.invitations;
+    all_invitations public.invitations[] := array[]::public.invitations[];
+    invite_token text;
+    email text;
+    role varchar(50);
+begin
+    FOREACH email,
+    role in array invitations loop
+        invite_token := extensions.uuid_generate_v4();
+
+        insert into public.invitations(
+            email,
+            account_id,
+            invited_by,
+            role,
+            invite_token)
+        values (
+            email,
+(
+                select
+                    id
+                from
+                    public.accounts
+                where
+                    slug = account_slug), auth.uid(), role, invite_token)
+    returning
+        * into new_invitation;
+
+        all_invitations := array_append(all_invitations, new_invitation);
+
+    end loop;
+
+    return all_invitations;
+
+end;
+
+$$
+language plpgsql;
+
+grant execute on function public.add_invitations_to_account(text,
+    kit.invitation[]) to authenticated, service_role;
 
 -- Storage
 -- Account Image
-insert into
-  storage.buckets (id, name, PUBLIC)
-values
-  ('account_image', 'account_image', true);
+insert into storage.buckets(
+    id,
+    name,
+    PUBLIC)
+values (
+    'account_image',
+    'account_image',
+    true);
 
-create or replace function kit.get_storage_filename_as_uuid (name text) returns uuid as $$
+create or replace function kit.get_storage_filename_as_uuid(name text)
+    returns uuid
+    as $$
 begin
-  return replace(
-    storage.filename (name),
-    concat('.', storage.extension (name)),
-    ''
-  )::uuid;
-end;
-$$ language plpgsql;
+    return replace(storage.filename(name), concat('.',
+	storage.extension(name)), '')::uuid;
 
-grant execute on function kit.get_storage_filename_as_uuid (text) to authenticated, service_role;
+end;
+
+$$
+language plpgsql;
+
+grant execute on function kit.get_storage_filename_as_uuid(text) to
+    authenticated, service_role;
 
 -- RLS policies for storage
-create policy account_image on storage.objects for all using (
-  bucket_id = 'account_image'
-  and kit.get_storage_filename_as_uuid(name) = auth.uid () or
-    public.has_role_on_account(kit.get_storage_filename_as_uuid(name))
-)
-with
-  check (
-    bucket_id = 'account_image'
-    and kit.get_storage_filename_as_uuid(name) = auth.uid () or
-     public.has_permission(auth.uid(), kit.get_storage_filename_as_uuid(name), 'settings.manage')
-  );
+create policy account_image on storage.objects
+    for all
+        using (bucket_id = 'account_image'
+            and kit.get_storage_filename_as_uuid(name) = auth.uid()
+            or public.has_role_on_account(kit.get_storage_filename_as_uuid(name)))
+            with check (bucket_id = 'account_image'
+            and kit.get_storage_filename_as_uuid(name) = auth.uid()
+	    or public.has_permission(auth.uid(),
+		kit.get_storage_filename_as_uuid(name),
+		'settings.manage'));
