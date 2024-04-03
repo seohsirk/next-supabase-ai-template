@@ -20,93 +20,83 @@ export class WordpressClient implements CmsClient {
     this.apiUrl = apiUrl;
   }
 
+  /**
+   * Retrieves content items from a CMS based on the provided options.
+   *
+   * @param {Cms.GetContentItemsOptions} options - The options to customize the retrieval of content items.
+   */
   async getContentItems(options?: Cms.GetContentItemsOptions) {
-    let endpoint: string;
-
-    switch (options?.type) {
-      case 'post':
-        endpoint = '/wp-json/wp/v2/posts?_embed';
-        break;
-
-      case 'page':
-        endpoint = '/wp-json/wp/v2/pages?_embed';
-        break;
-
-      default:
-        endpoint = '/wp-json/wp/v2/posts?_embed';
-    }
-
-    const url = new URL(this.apiUrl + endpoint);
+    const queryParams = new URLSearchParams({
+      _embed: 'true',
+    });
 
     if (options?.limit) {
-      url.searchParams.append('per_page', options.limit.toString());
+      queryParams.append('per_page', options.limit.toString());
     }
 
     if (options?.offset) {
-      url.searchParams.append('offset', options.offset.toString());
+      queryParams.append('offset', options.offset.toString());
     }
 
     if (options?.categories) {
-      url.searchParams.append('categories', options.categories.join(','));
+      const ids = await this.getCategories({
+        slugs: options.categories,
+      }).then((categories) => categories.map((category) => category.id));
+
+      if (ids.length) {
+        queryParams.append('categories', ids.join(','));
+      } else {
+        console.warn(
+          'No categories found for the provided slugs',
+          options.categories,
+        );
+      }
     }
 
     if (options?.tags) {
-      url.searchParams.append('tags', options.tags.join(','));
+      const ids = await this.getCategories({
+        slugs: options.tags,
+      }).then((tags) => tags.map((tag) => tag.id));
+
+      if (ids.length) {
+        queryParams.append('tags', ids.join(','));
+      } else {
+        console.warn('No tags found for the provided slugs', options.tags);
+      }
     }
 
-    const response = await fetch(url.toString());
-    const data = (await response.json()) as WP_REST_API_Post[];
+    if (options?.parentIds && options.parentIds.length > 0) {
+      queryParams.append('parent', options.parentIds.join(','));
+    }
 
-    return Promise.all(
-      data.map(async (item) => {
-        // Fetch author, categories, and tags as before...
+    const endpoints = [
+      `/wp-json/wp/v2/pages?${queryParams.toString()}`,
+      `/wp-json/wp/v2/posts?${queryParams.toString()}`,
+    ];
 
+    const urls = endpoints.map((endpoint) => `${this.apiUrl}${endpoint}`);
+
+    const responses = await Promise.all(
+      urls.map((url) => fetch(url).then((value) => value.json())),
+    ).then((values) => values.flat().filter(Boolean));
+
+    return await Promise.all(
+      responses.map(async (item: WP_REST_API_Post) => {
         let parentId: string | undefined;
+
+        if (!item) {
+          throw new Error('Failed to fetch content items');
+        }
 
         if (item.parent) {
           parentId = item.parent.toString();
-        }
-
-        let children: Cms.ContentItem[] = [];
-
-        const embeddedChildren = (
-          item._embedded ? item._embedded['wp:children'] ?? [] : []
-        ) as WP_REST_API_Post[];
-
-        if (options?.depth && options.depth > 0) {
-          children = await Promise.all(
-            embeddedChildren.map(async (child) => {
-              const childAuthor = await this.getAuthor(child.author);
-
-              const childCategories = await this.getCategoriesByIds(
-                child.categories ?? [],
-              );
-
-              const childTags = await this.getTagsByIds(child.tags ?? []);
-
-              return {
-                id: child.id.toString(),
-                title: child.title.rendered,
-                type: child.type as Cms.ContentType,
-                image: this.getFeaturedMedia(child),
-                description: child.excerpt.rendered,
-                url: child.link,
-                content: child.content.rendered,
-                slug: child.slug,
-                publishedAt: new Date(child.date),
-                author: childAuthor?.name,
-                categories: childCategories,
-                tags: childTags,
-                parentId: child.parent?.toString(),
-              };
-            }),
-          );
         }
 
         const author = await this.getAuthor(item.author);
         const categories = await this.getCategoriesByIds(item.categories ?? []);
         const tags = await this.getTagsByIds(item.tags ?? []);
         const image = item.featured_media ? this.getFeaturedMedia(item) : '';
+        const order = item.menu_order ?? 0;
 
         return {
           id: item.id.toString(),
@@ -120,19 +110,34 @@ export class WordpressClient implements CmsClient {
           author: author?.name,
           categories: categories,
           tags: tags,
-          type: item.type as Cms.ContentType,
           parentId,
-          children,
+          order,
+          children: [],
         };
       }),
     );
   }
 
-  async getContentItemById(slug: string, type: 'posts' | 'pages' = 'posts') {
-    const url = `${this.apiUrl}/wp-json/wp/v2/${type}?slug=${slug}&_embed`;
-    const response = await fetch(url);
-    const data = (await response.json()) as WP_REST_API_Post[];
-    const item = data[0];
+  async getContentItemById(slug: string) {
+    const searchParams = new URLSearchParams({
+      _embed: 'true',
+      slug,
+    });
+
+    const endpoints = [
+      `/wp-json/wp/v2/pages?${searchParams.toString()}`,
+      `/wp-json/wp/v2/posts?${searchParams.toString()}`,
+    ];
+
+    const promises = endpoints.map((endpoint) =>
+      fetch(this.apiUrl + endpoint).then((res) => res.json()),
+    );
+
+    const responses = await Promise.all(promises).then((values) =>
+      values.filter(Boolean),
+    );
+
+    const item = responses[0][0] as WP_REST_API_Post;
 
     if (!item) {
       return;
@@ -146,9 +151,9 @@ export class WordpressClient implements CmsClient {
     return {
       id: item.id.toString(),
       image,
+      order: item.menu_order ?? 0,
       url: item.link,
       description: item.excerpt.rendered,
-      type: item.type as Cms.ContentType,
       children: [],
       title: item.title.rendered,
       content: item.content.rendered,
@@ -157,6 +162,7 @@ export class WordpressClient implements CmsClient {
       author: author?.name,
       categories,
       tags,
+      parentId: item.parent?.toString(),
     };
   }
 
@@ -207,9 +213,21 @@ export class WordpressClient implements CmsClient {
       queryParams.append('offset', options.offset.toString());
     }
 
+    if (options?.slugs) {
+      const slugs = options.slugs.join(',');
+
+      queryParams.append('slug', slugs);
+    }
+
     const response = await fetch(
       `${this.apiUrl}/wp-json/wp/v2/categories?${queryParams.toString()}`,
     );
+
+    if (!response.ok) {
+      console.error('Failed to fetch categories', await response.json());
+
+      throw new Error('Failed to fetch categories');
+    }
 
     const data = (await response.json()) as WP_REST_API_Category[];
 
@@ -231,9 +249,20 @@ export class WordpressClient implements CmsClient {
       queryParams.append('offset', options.offset.toString());
     }
 
+    if (options?.slugs) {
+      const slugs = options.slugs.join(',');
+      queryParams.append('slug', slugs);
+    }
+
     const response = await fetch(
       `${this.apiUrl}/wp-json/wp/v2/tags?${queryParams.toString()}`,
     );
+
+    if (!response.ok) {
+      console.error('Failed to fetch tags', await response.json());
+
+      throw new Error('Failed to fetch tags');
+    }
 
     const data = (await response.json()) as WP_REST_API_Tag[];
 

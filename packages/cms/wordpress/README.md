@@ -42,3 +42,22 @@ You will be asked to set up the Wordpress instance when you visit `http://localh
 ## Note for Wordpress REST API
 
 To make the REST API in your Wordpress instance work, please change the permalink structure to `/%post%/` from the Wordpress admin panel.
+
+## Blog
+
+To include Blog Posts from Wordpress - please create a **post** with category named `blog` and add posts to it.
+
+## Documentation
+
+To include Documentation from Wordpress - please create a **page** with category named `documentation` and add posts to it.
+
+This involves enabling categories for pages. To do this, add the following code to your theme's `functions.php` file:
+
+```php
+function add_categories_to_pages() {
+    register_taxonomy_for_object_type('category', 'page');
+}
+add_action('init', 'add_categories_to_pages');
+```
+
+Please refer to `wp-content/themes/twentytwentyfour/functions.php` for an example of a theme that includes this code.

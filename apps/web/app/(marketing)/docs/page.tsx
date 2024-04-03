@@ -19,10 +19,11 @@ async function DocsPage() {
   const { t } = await createI18nServerInstance();
 
   const docs = await client.getContentItems({
-    type: 'page',
     categories: ['documentation'],
-    depth: 1,
   });
+
+  // Filter out any docs that have a parentId, as these are children of other docs
+  const cards = docs.filter((item) => !item.parentId);
 
   return (
     <div className={'my-8 flex flex-col space-y-16'}>
@@ -32,7 +33,7 @@ async function DocsPage() {
       />
 
       <PageBody>
-        <DocsCards pages={docs} />
+        <DocsCards cards={cards} />
       </PageBody>
     </div>
   );

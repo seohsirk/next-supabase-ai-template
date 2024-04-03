@@ -66,6 +66,13 @@ export const Post = defineDocumentType(() => ({
       type: 'string',
       resolve: (post) => `/blog/${getSlug(post._raw.sourceFileName)}`,
     },
+    parentId: {
+      type: 'string',
+      resolve: (doc) => {
+        const segments = getPathSegments(doc);
+        return segments.length > 1 ? segments.slice(0, -1).join('/') : 'blog';
+      },
+    },
     structuredData: {
       type: 'object',
       resolve: (doc) => ({
@@ -123,6 +130,33 @@ export const DocumentationPage = defineDocumentType(() => ({
     readingTime: {
       type: 'number',
       resolve: (post) => calculateReadingTime(post.body.raw),
+    },
+    parentId: {
+      type: 'string',
+      resolve: (doc) => {
+        const segments = getPathSegments(doc);
+
+        if (segments.length > 1) {
+          const { pathName } = getMetaFromFolderName(segments[0]);
+
+          if (pathName === 'index') {
+            return undefined;
+          }
+
+          return pathName;
+        }
+
+        return undefined;
+      },
+    },
+    order: {
+      type: 'number',
+      resolve: (doc) => {
+        const segments = getPathSegments(doc);
+        const { order } = getMetaFromFolderName(segments[segments.length - 1]);
+
+        return order;
+      },
     },
     structuredData: {
       type: 'object',

@@ -7,14 +7,7 @@ async function getAllContentItems() {
     '../.contentlayer/generated'
   );
 
-  return [
-    ...allPosts.map((item) => {
-      return { ...item, type: 'post' };
-    }),
-    ...allDocumentationPages.map((item) => {
-      return { ...item, type: 'page', categories: ['documentation'] };
-    }),
-  ];
+  return [...allPosts, ...allDocumentationPages];
 }
 
 /**
@@ -41,29 +34,14 @@ export class ContentlayerClient implements CmsClient {
             )
           : true;
 
-        const typeMatch = options?.type ? item.type === options.type : true;
-        const path = item._raw.flattenedPath;
-        const splitPath = path.split('/');
+        const matchesParentIds = options?.parentIds
+          ? options.parentIds.includes(item.parentId ?? '')
+          : true;
 
-        const depthMatch =
-          options?.depth !== undefined
-            ? splitPath.length - 1 === options.depth
-            : true;
-
-        return tagMatch && categoryMatch && typeMatch && depthMatch;
+        return tagMatch && categoryMatch && matchesParentIds;
       })
-      .slice(startOffset, endOffset)
-      .map((post) => {
-        const children: Cms.ContentItem[] = [];
-
-        for (const item of allContentItems) {
-          if (item.url.startsWith(post.url + '/')) {
-            children.push(this.mapPost(item));
-          }
-        }
-
-        return this.mapPost(post, children);
-      });
+      .map((post) => this.mapPost(post))
+      .slice(startOffset, endOffset);
 
     return Promise.resolve(promise);
   }
@@ -76,15 +54,7 @@ export class ContentlayerClient implements CmsClient {
       return Promise.resolve(undefined);
     }
 
-    const children: Cms.ContentItem[] = [];
-
-    for (const item of allContentItems) {
-      if (item.url.startsWith(post.url + '/')) {
-        children.push(this.mapPost(item));
-      }
-    }
-
-    return Promise.resolve(post ? this.mapPost(post, children) : undefined);
+    return Promise.resolve(post ? this.mapPost(post) : undefined);
   }
 
   async getCategoryBySlug(slug: string) {
@@ -108,13 +78,6 @@ export class ContentlayerClient implements CmsClient {
     const allContentItems = await getAllContentItems();
 
     const categories = allContentItems
-      .filter((item) => {
-        if (options?.type) {
-          return item.type === options.type;
-        }
-
-        return true;
-      })
       .slice(startOffset, endOffset)
       .flatMap((post) => post.categories)
       .filter((category): category is string => !!category)
@@ -132,13 +95,6 @@ export class ContentlayerClient implements CmsClient {
     const allContentItems = await getAllContentItems();
 
     const tags = allContentItems
-      .filter((item) => {
-        if (options?.type) {
-          return item.type === options.type;
-        }
-
-        return true;
-      })
       .slice(startOffset, endOffset)
       .flatMap((post) => post.tags)
       .filter((tag): tag is string => !!tag)
@@ -167,9 +123,10 @@ export class ContentlayerClient implements CmsClient {
       title: post.title,
       description: post.description ?? '',
       content: post.body?.code,
+      order: 'order' in post ? post.order : 0,
       image: 'image' in post ? post.image : undefined,
       publishedAt: 'date' in post ? new Date(post.date) : new Date(),
-      parentId: 'parentId' in post ? post.parentId : undefined,
+      parentId: 'parentId' in post ? (post.parentId as string) : undefined,
       url: post.url,
       slug: post.slug,
       author: 'author' in post ? post.author : '',

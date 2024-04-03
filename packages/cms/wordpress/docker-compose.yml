@@ -21,10 +21,28 @@ services:
     ports:
       - 8080:80
     restart: always
+    working_dir: /var/www/html
+    volumes:
+      - ./wp-content:/var/www/html/wp-content
     environment:
       - WORDPRESS_DB_HOST=db
       - WORDPRESS_DB_USER=wordpress
       - WORDPRESS_DB_PASSWORD=wordpress
       - WORDPRESS_DB_NAME=wordpress
+      - WORDPRESS_DEBUG=1
+      - WORDPRESS_CONFIG_EXTRA = |
+            define('FS_METHOD', 'direct');        
+            /** disable wp core auto update */
+            define('WP_AUTO_UPDATE_CORE', false);
+            
+            /** local environment settings */
+            define('WP_CACHE', false);
+            define('ENVIRONMENT', 'local');
+        
+            /** force site home url */
+            if(!defined('WP_HOME')) {
+              define('WP_HOME', 'http://localhost');
+              define('WP_SITEURL', WP_HOME);
+            }
 volumes:
   db_data:

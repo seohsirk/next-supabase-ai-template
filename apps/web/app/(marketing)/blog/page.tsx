@@ -20,7 +20,7 @@ async function BlogPage() {
   const cms = await createCmsClient();
 
   const posts = await cms.getContentItems({
-    type: 'post',
+    categories: ['blog'],
   });
 
   return (
