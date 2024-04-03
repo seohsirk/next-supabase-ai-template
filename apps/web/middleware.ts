@@ -3,7 +3,6 @@ import { NextResponse, URLPattern } from 'next/server';
 
 import csrf from 'edge-csrf';
 
-import { Logger } from '@kit/shared/logger';
 import { checkRequiresMultiFactorAuthentication } from '@kit/supabase/check-requires-mfa';
 import { createMiddlewareClient } from '@kit/supabase/middleware-client';
 
@@ -21,8 +20,6 @@ export const config = {
 
 export async function middleware(request: NextRequest) {
   const response = NextResponse.next();
-
-  Logger.info({ name: `middleware`, message: `middleware` });
 
   // apply CSRF and session middleware
   const csrfResponse = await withCsrfMiddleware(request, response);
