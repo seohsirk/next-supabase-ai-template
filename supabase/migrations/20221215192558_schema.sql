@@ -463,7 +463,6 @@ create trigger "on_auth_user_updated"
     after update of email on auth.users for each row
     execute procedure kit.handle_update_user_email();
 
-
 /*
  * -------------------------------------------------------
  * Section: Roles
@@ -475,12 +474,50 @@ create table if not exists public.roles(
     name varchar(50) not null,
     hierarchy_level int not null,
     account_id uuid references public.accounts(id) on delete cascade,
-    is_custom boolean not null default false,
-    unique (hierarchy_level, account_id, is_custom),
+    unique(name, account_id),
     primary key (name)
 );
 
 grant select on table public.roles to authenticated, service_role;
+
+-- define the system role uuid as a static UUID to be used as a default
+-- account_id for system roles when the account_id is null. Useful for constraints.
+create or replace function kit.get_system_role_uuid()
+    returns uuid
+    as $$
+begin
+    return 'fd4f287c-762e-42b7-8207-b1252f799670';
+end; $$ language plpgsql immutable;
+
+grant execute on function kit.get_system_role_uuid() to authenticated, service_role;
+
+create unique index idx_unique_hierarchy_per_account
+    on public.roles (hierarchy_level, coalesce(account_id, kit.get_system_role_uuid()));
+
+create unique index idx_unique_name_per_account
+    on public.roles (name, coalesce(account_id, kit.get_system_role_uuid()));
+
+create or replace function kit.check_non_personal_account_roles()
+    returns trigger
+    as $$
+begin
+    if new.account_id is not null and(
+        select
+            is_personal_account
+        from
+            public.accounts
+        where
+            id = new.account_id) then
+        raise exception 'Roles cannot be created for personal accounts';
+    end if;
+
+    return new;
+end; $$ language plpgsql;
+
+create constraint trigger tr_check_non_personal_account_roles
+    after insert or update on public.roles
+    for each row
+    execute procedure kit.check_non_personal_account_roles();
 
 -- Seed the roles table with default roles 'owner' and
 --   'member'
@@ -500,12 +537,6 @@ values (
 
 -- RLS
 alter table public.roles enable row level security;
-
--- SELECT: authenticated users can query roles
-create policy roles_read on public.roles
-    for select to authenticated
-        using (true);
-
 
 /*
  * -------------------------------------------------------
@@ -567,6 +598,7 @@ create or replace trigger prevent_account_owner_membership_delete_check
     before delete on public.accounts_memberships for each row
     execute function kit.prevent_account_owner_membership_delete();
 
+-- Functions
 create or replace function public.has_role_on_account(account_id
     uuid, account_role varchar(50) default null)
     returns boolean
@@ -590,6 +622,7 @@ $$;
 grant execute on function public.has_role_on_account(uuid, varchar)
     to authenticated;
 
+-- Function to check if a user is a team member of an account or not
 create or replace function public.is_team_member(account_id uuid,
     user_id uuid)
     returns boolean
@@ -611,7 +644,16 @@ $$;
 
 grant execute on function public.is_team_member(uuid, uuid) to authenticated;
 
--- Functions
+
+-- SELECT(roles): authenticated users can query roles if the role is public
+--  or the user has a role on the account the role is for
+create policy roles_read on public.roles
+    for select to authenticated
+        using (
+            account_id is null
+            or public.has_role_on_account(account_id)
+        );
+
 --    Function to check if a user can remove a member from an account
 create or replace function
     kit.can_remove_account_member(target_team_account_id uuid,
@@ -715,7 +757,6 @@ create policy accounts_team_read on public.accounts
                 public.accounts_memberships as membership
             where
                 public.is_team_member(membership.account_id, id)));
-
 
 /*
  * -------------------------------------------------------

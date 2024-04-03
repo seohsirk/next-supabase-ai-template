@@ -22,7 +22,7 @@ import { AccountInvitationsService } from '../services/account-invitations.servi
  * Creates invitations for inviting members.
  */
 export async function createInvitationsAction(params: {
-  account: string;
+  accountSlug: string;
   invitations: z.infer<typeof InviteMembersSchema>['invitations'];
 }) {
   const client = getSupabaseServerActionClient();
@@ -35,7 +35,10 @@ export async function createInvitationsAction(params: {
 
   const service = new AccountInvitationsService(client);
 
-  await service.sendInvitations({ invitations, account: params.account });
+  await service.sendInvitations({
+    invitations,
+    accountSlug: params.accountSlug,
+  });
 
   revalidateMemberPage();
 

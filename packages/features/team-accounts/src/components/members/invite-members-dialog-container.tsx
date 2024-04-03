@@ -42,11 +42,13 @@ type InviteModel = ReturnType<typeof createEmptyInviteModel>;
 type Role = string;
 
 export function InviteMembersDialogContainer({
-  account,
+  accountSlug,
+  accountId,
   userRoleHierarchy,
   children,
 }: React.PropsWithChildren<{
-  account: string;
+  accountSlug: string;
+  accountId: string;
   userRoleHierarchy: number;
 }>) {
   const [pending, startTransition] = useTransition();
@@ -67,7 +69,10 @@ export function InviteMembersDialogContainer({
           </DialogDescription>
         </DialogHeader>
 
-        <RolesDataProvider maxRoleHierarchy={userRoleHierarchy}>
+        <RolesDataProvider
+          accountId={accountId}
+          maxRoleHierarchy={userRoleHierarchy}
+        >
           {(roles) => (
             <InviteMembersForm
               pending={pending}
@@ -75,7 +80,7 @@ export function InviteMembersDialogContainer({
               onSubmit={(data) => {
                 startTransition(async () => {
                   await createInvitationsAction({
-                    account,
+                    accountSlug,
                     invitations: data.invitations,
                   });
 

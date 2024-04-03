@@ -69,21 +69,21 @@ export class AccountInvitationsService {
   }
 
   async sendInvitations({
-    account,
+    accountSlug,
     invitations,
   }: {
     invitations: z.infer<typeof InviteMembersSchema>['invitations'];
-    account: string;
+    accountSlug: string;
   }) {
     Logger.info(
-      { account, invitations, name: this.namespace },
+      { account: accountSlug, invitations, name: this.namespace },
       'Storing invitations',
     );
 
     const accountResponse = await this.client
       .from('accounts')
       .select('name')
-      .eq('slug', account)
+      .eq('slug', accountSlug)
       .single();
 
     if (!accountResponse.data) {
@@ -92,7 +92,7 @@ export class AccountInvitationsService {
 
     const response = await this.client.rpc('add_invitations_to_account', {
       invitations,
-      account_slug: account,
+      account_slug: accountSlug,
     });
 
     if (response.error) {
@@ -105,7 +105,7 @@ export class AccountInvitationsService {
 
     Logger.info(
       {
-        account,
+        account: accountSlug,
         count: responseInvitations.length,
         name: this.namespace,
       },

@@ -197,6 +197,7 @@ function ActionsDropdown({
         <UpdateInvitationDialog
           isOpen
           setIsOpen={setIsUpdatingRole}
+          account={invitation.account_id}
           invitationId={invitation.id}
           userRole={invitation.role}
           userRoleHierarchy={permissions.currentUserRoleHierarchy}

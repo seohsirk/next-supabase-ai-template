@@ -6,7 +6,7 @@
 create trigger "accounts_memberships_insert" after insert
 on "public"."accounts_memberships" for each row
 execute function "supabase_functions"."http_request"(
-  'http://host.docker.internal:3000/api/database/webhook',
+  'http://host.docker.internal:3000/api/db/webhook',
   'POST',
   '{"Content-Type":"application/json", "X-Supabase-Event-Signature":"WEBHOOKSECRET"}',
   '{}',
@@ -17,7 +17,7 @@ execute function "supabase_functions"."http_request"(
 create trigger "account_membership_delete" after delete
 on "public"."accounts_memberships" for each row
 execute function "supabase_functions"."http_request"(
-  'http://host.docker.internal:3000/api/database/webhook',
+  'http://host.docker.internal:3000/api/db/webhook',
   'POST',
   '{"Content-Type":"application/json", "X-Supabase-Event-Signature":"WEBHOOKSECRET"}',
   '{}',
@@ -29,7 +29,7 @@ execute function "supabase_functions"."http_request"(
 create trigger "account_delete" after delete
 on "public"."subscriptions" for each row
 execute function "supabase_functions"."http_request"(
-  'http://host.docker.internal:3000/api/database/webhook',
+  'http://host.docker.internal:3000/api/db/webhook',
   'POST',
   '{"Content-Type":"application/json", "X-Supabase-Event-Signature":"WEBHOOKSECRET"}',
   '{}',
@@ -41,7 +41,7 @@ execute function "supabase_functions"."http_request"(
 create trigger "invitations_insert" after insert
 on "public"."invitations" for each row
 execute function "supabase_functions"."http_request"(
-  'http://host.docker.internal:3000/api/database/webhook',
+  'http://host.docker.internal:3000/api/db/webhook',
   'POST',
   '{"Content-Type":"application/json", "X-Supabase-Event-Signature":"WEBHOOKSECRET"}',
   '{}',

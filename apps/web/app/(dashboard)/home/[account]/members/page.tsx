@@ -131,10 +131,12 @@ async function TeamAccountMembersPage({ params }: Params) {
               <If condition={canManageInvitations}>
                 <InviteMembersDialogContainer
                   userRoleHierarchy={currentUserRoleHierarchy}
-                  account={account.slug}
+                  accountId={account.id}
+                  accountSlug={account.slug}
                 >
                   <Button size={'sm'}>
                     <PlusCircle className={'mr-2 w-4'} />
+
                     <span>
                       <Trans i18nKey={'teams:inviteMembersButton'} />
                     </span>
