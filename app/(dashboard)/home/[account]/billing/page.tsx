@@ -1,3 +1,5 @@
+import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
+
 import {
   BillingPortalCard,
   CurrentSubscriptionCard,
@@ -39,6 +41,31 @@ async function TeamAccountBillingPage({ params }: Params) {
   const canManageBilling =
     workspace.account.permissions.includes('billing.manage');
 
+  const Checkout = () => {
+    if (!canManageBilling) {
+      return <CannotManageBillingAlert />;
+    }
+
+    return (
+      <TeamAccountCheckoutForm customerId={customerId} accountId={accountId} />
+    );
+  };
+
+  const BillingPortal = () => {
+    if (!canManageBilling || !customerId) {
+      return null;
+    }
+
+    return (
+      <form action={createBillingPortalSession}>
+        <input type="hidden" name={'accountId'} value={accountId} />
+        <input type="hidden" name={'slug'} value={params.account} />
+
+        <BillingPortalCard />
+      </form>
+    );
+  };
+
   return (
     <>
       <PageHeader
@@ -48,39 +75,25 @@ async function TeamAccountBillingPage({ params }: Params) {
 
       <PageBody>
         <div className={'mx-auto w-full'}>
-          <If condition={!canManageBilling}>
-            <CannotManageBillingAlert />
-          </If>
-
           <div>
             <div className={'flex flex-col space-y-6'}>
               <If
                 condition={subscription}
                 fallback={
-                  <If condition={canManageBilling}>
-                    <TeamAccountCheckoutForm
-                      customerId={customerId}
-                      accountId={accountId}
-                    />
-                  </If>
+                  <>
+                    <Checkout />
+                  </>
                 }
               >
-                {(data) => (
+                {(subscription) => (
                   <CurrentSubscriptionCard
-                    subscription={data}
+                    subscription={subscription}
                     config={billingConfig}
                   />
                 )}
               </If>
 
-              <If condition={customerId && canManageBilling}>
-                <form action={createBillingPortalSession}>
-                  <input type="hidden" name={'accountId'} value={accountId} />
-                  <input type="hidden" name={'slug'} value={params.account} />
-
-                  <BillingPortalCard />
-                </form>
-              </If>
+              <BillingPortal />
             </div>
           </div>
         </div>
@@ -93,7 +106,9 @@ export default withI18n(TeamAccountBillingPage);
 
 function CannotManageBillingAlert() {
   return (
-    <Alert>
+    <Alert variant={'warning'}>
+      <ExclamationTriangleIcon className={'h-4'} />
+
       <AlertTitle>
         <Trans i18nKey={'billing:cannotManageBillingAlertTitle'} />
       </AlertTitle>
