@@ -16,16 +16,16 @@ import { Trans } from '@kit/ui/trans';
 import featuresFlagConfig from '~/config/feature-flags.config';
 import pathsConfig from '~/config/paths.config';
 
-export function SiteHeaderAccountSection(
-  props: React.PropsWithChildren<{
-    user: User | null;
-  }>,
-) {
-  if (!props.user) {
+export function SiteHeaderAccountSection({
+  user,
+}: React.PropsWithChildren<{
+  user: User | null;
+}>) {
+  if (!user) {
     return <AuthButtons />;
   }
 
-  return <SuspendedPersonalAccountDropdown user={props.user} />;
+  return <SuspendedPersonalAccountDropdown user={user} />;
 }
 
 function SuspendedPersonalAccountDropdown(props: { user: User | null }) {
