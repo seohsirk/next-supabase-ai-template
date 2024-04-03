@@ -12,7 +12,7 @@ export function DocsCards({ pages }: { pages: Cms.ContentItem[] }) {
             title={item.title}
             subtitle={item.description}
             link={{
-              url: item.url,
+              url: `/docs/${item.slug}`,
               label: 'Read more',
             }}
           />

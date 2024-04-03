@@ -41,7 +41,7 @@ export default function DashboardDemo() {
           </CardHeader>
 
           <CardContent>
-            <div className={'flex justify-between'}>
+            <div className={'flex items-center justify-between'}>
               <Figure>{`$${mrr[1]}`}</Figure>
               <Trend trend={'up'}>20%</Trend>
             </div>
@@ -56,7 +56,7 @@ export default function DashboardDemo() {
           </CardHeader>
 
           <CardContent>
-            <div className={'flex justify-between'}>
+            <div className={'flex items-center justify-between'}>
               <Figure>{`$${netRevenue[1]}`}</Figure>
               <Trend trend={'up'}>12%</Trend>
             </div>
@@ -71,7 +71,7 @@ export default function DashboardDemo() {
           </CardHeader>
 
           <CardContent>
-            <div className={'flex justify-between'}>
+            <div className={'flex items-center justify-between'}>
               <Figure>{`$${fees[1]}`}</Figure>
               <Trend trend={'up'}>9%</Trend>
             </div>
@@ -86,7 +86,7 @@ export default function DashboardDemo() {
           </CardHeader>
 
           <CardContent>
-            <div className={'flex justify-between'}>
+            <div className={'flex items-center justify-between'}>
               <Figure>{`${newCustomers[1]}`}</Figure>
               <Trend trend={'down'}>-25%</Trend>
             </div>
@@ -101,7 +101,7 @@ export default function DashboardDemo() {
           </CardHeader>
 
           <CardContent>
-            <div className={'flex justify-between'}>
+            <div className={'flex items-center justify-between'}>
               <Figure>{visitors[1]}</Figure>
               <Trend trend={'down'}>-4.3%</Trend>
             </div>
@@ -116,7 +116,7 @@ export default function DashboardDemo() {
           </CardHeader>
 
           <CardContent>
-            <div className={'flex justify-between'}>
+            <div className={'flex items-center justify-between'}>
               <Figure>{returningVisitors[1]}</Figure>
               <Trend trend={'stale'}>10%</Trend>
             </div>
@@ -131,7 +131,7 @@ export default function DashboardDemo() {
           </CardHeader>
 
           <CardContent>
-            <div className={'flex justify-between'}>
+            <div className={'flex items-center justify-between'}>
               <Figure>{churn[1]}%</Figure>
               <Trend trend={'up'}>-10%</Trend>
             </div>
@@ -146,7 +146,7 @@ export default function DashboardDemo() {
           </CardHeader>
 
           <CardContent>
-            <div className={'flex justify-between'}>
+            <div className={'flex items-center justify-between'}>
               <Figure>{tickets[1]}</Figure>
               <Trend trend={'up'}>-30%</Trend>
             </div>
@@ -163,7 +163,7 @@ export default function DashboardDemo() {
           </CardHeader>
 
           <CardContent>
-            <div className={'flex justify-between'}>
+            <div className={'flex items-center justify-between'}>
               <Figure>{activeUsers[1]}</Figure>
               <Trend trend={'up'}>10%</Trend>
             </div>
@@ -217,13 +217,23 @@ function Chart(
   return (
     <div className={'h-36'}>
       <ResponsiveContainer width={'100%'} height={'100%'}>
-        <LineChart width={400} height={100} data={props.data}>
+        <LineChart
+          width={400}
+          height={100}
+          data={props.data}
+          margin={{
+            top: 10,
+            right: 10,
+            left: 10,
+            bottom: 20,
+          }}
+        >
           <Line
             className={'text-primary'}
             type="monotone"
             dataKey="value"
             stroke="currentColor"
-            strokeWidth={2.5}
+            strokeWidth={2}
             dot={false}
           />
 
@@ -319,7 +329,7 @@ function BadgeWithTrend(props: React.PropsWithChildren<{ trend: string }>) {
 }
 
 function Figure(props: React.PropsWithChildren) {
-  return <div className={'text-4xl font-bold'}>{props.children}</div>;
+  return <div className={'text-3xl font-extrabold'}>{props.children}</div>;
 }
 
 function Trend(

@@ -21,14 +21,14 @@ export function PostPreview({
 }: React.PropsWithChildren<Props>) {
   const { title, image, publishedAt, description } = post;
   const height = imageHeight ?? DEFAULT_IMAGE_HEIGHT;
-  const url = post.url;
+  const slug = `/blog/${post.slug}`;
 
   return (
     <div className="rounded-xl transition-shadow duration-500">
       <If condition={image}>
         {(imageUrl) => (
           <div className="relative mb-2 w-full" style={{ height }}>
-            <Link href={url}>
+            <Link href={slug}>
               <CoverImage
                 preloadImage={preloadImage}
                 title={title}
@@ -42,7 +42,7 @@ export function PostPreview({
       <div className={'px-1'}>
         <div className="flex flex-col space-y-1 py-2">
           <h3 className="text-2xl font-bold leading-snug dark:text-white">
-            <Link href={url} className="hover:underline">
+            <Link href={slug} className="hover:underline">
               {title}
             </Link>
           </h3>
@@ -54,9 +54,10 @@ export function PostPreview({
           </div>
         </div>
 
-        <p className="mb-4 text-sm leading-relaxed text-muted-foreground">
-          {description}
-        </p>
+        <p
+          className="mb-4 text-sm leading-relaxed text-muted-foreground"
+          dangerouslySetInnerHTML={{ __html: description ?? '' }}
+        />
       </div>
     </div>
   );

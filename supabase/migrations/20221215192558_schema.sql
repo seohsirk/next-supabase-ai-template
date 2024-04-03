@@ -1066,7 +1066,6 @@ create policy billing_customers_read_self on public.billing_customers
         using (account_id = auth.uid()
             or has_role_on_account(account_id));
 
-
 /*
  * -------------------------------------------------------
  * Section: Subscriptions
@@ -1318,7 +1317,6 @@ create policy subscription_items_read_self on public.subscription_items
             where
 		id = subscription_id and (account_id = auth.uid() or
 		    has_role_on_account(account_id))));
-
 
 /**
  * -------------------------------------------------------

@@ -58,7 +58,10 @@ export abstract class CmsClient {
     options?: Cms.GetContentItemsOptions,
   ): Promise<Cms.ContentItem[]>;
 
-  abstract getContentItemById(id: string): Promise<Cms.ContentItem | undefined>;
+  abstract getContentItemById(
+    id: string,
+    type?: string,
+  ): Promise<Cms.ContentItem | undefined>;
 
   abstract getCategories(
     options?: Cms.GetCategoriesOptions,

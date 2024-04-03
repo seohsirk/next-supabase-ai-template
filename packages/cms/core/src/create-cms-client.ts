@@ -11,6 +11,10 @@ import { CmsType } from './cms.type';
 export async function createCmsClient(
   type: CmsType = process.env.CMS_CLIENT as CmsType,
 ): Promise<CmsClient> {
+  return cmsClientFactory(type);
+}
+
+async function cmsClientFactory(type: CmsType) {
   switch (type) {
     case 'contentlayer':
       return getContentLayerClient();

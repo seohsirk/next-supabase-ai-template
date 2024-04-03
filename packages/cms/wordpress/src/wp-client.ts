@@ -70,7 +70,7 @@ export class WordpressClient implements CmsClient {
         let children: Cms.ContentItem[] = [];
 
         const embeddedChildren = (
-          item._embedded ? item._embedded['wp:children'] : []
+          item._embedded ? item._embedded['wp:children'] ?? [] : []
         ) as WP_REST_API_Post[];
 
         if (options?.depth && options.depth > 0) {
@@ -128,8 +128,8 @@ export class WordpressClient implements CmsClient {
     );
   }
 
-  async getContentItemById(slug: string) {
-    const url = `${this.apiUrl}/wp-json/wp/v2/posts?slug=${slug}`;
+  async getContentItemById(slug: string, type: 'posts' | 'pages' = 'posts') {
+    const url = `${this.apiUrl}/wp-json/wp/v2/${type}?slug=${slug}&_embed`;
     const response = await fetch(url);
     const data = (await response.json()) as WP_REST_API_Post[];
     const item = data[0];

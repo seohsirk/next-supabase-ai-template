@@ -1,24 +1,24 @@
-.MDX h1 {
+.HTML h1 {
   @apply mt-14 text-4xl font-bold;
 }
 
-.MDX h2 {
+.HTML h2 {
   @apply mb-4 mt-12 text-2xl font-semibold lg:text-3xl;
 }
 
-.MDX h3 {
+.HTML h3 {
   @apply mt-10 text-2xl font-bold;
 }
 
-.MDX h4 {
+.HTML h4 {
   @apply mt-8 text-xl font-bold;
 }
 
-.MDX h5 {
+.HTML h5 {
   @apply mt-6 text-lg font-semibold;
 }
 
-.MDX h6 {
+.HTML h6 {
   @apply mt-2 text-base font-medium;
 }
 
@@ -27,71 +27,71 @@ Tailwind "dark" variants do not work with CSS Modules
 We work it around using :global(.dark)
 For more info: https://github.com/tailwindlabs/tailwindcss/issues/3258#issuecomment-770215347
 */
-:global(.dark) .MDX h1,
-:global(.dark) .MDX h2,
-:global(.dark) .MDX h3,
-:global(.dark) .MDX h4,
-:global(.dark) .MDX h5,
-:global(.dark) .MDX h6 {
+:global(.dark) .HTML h1,
+:global(.dark) .HTML h2,
+:global(.dark) .HTML h3,
+:global(.dark) .HTML h4,
+:global(.dark) .HTML h5,
+:global(.dark) .HTML h6 {
   @apply text-white;
 }
 
-.MDX p {
+.HTML p {
   @apply mb-4 mt-2 text-base leading-7;
 }
 
-.MDX li {
+.HTML li {
   @apply relative my-1.5 text-base leading-7;
 }
 
-.MDX ul > li:before {
+.HTML ul > li:before {
   content: '-';
 
   @apply mr-2;
 }
 
-.MDX ol > li:before {
+.HTML ol > li:before {
   @apply inline-flex font-medium;
 
   content: counters(counts, '.') '. ';
   font-feature-settings: 'tnum';
 }
 
-.MDX b,
-.MDX strong {
+.HTML b,
+.HTML strong {
   @apply font-bold;
 }
 
-:global(.dark) .MDX b,
-:global(.dark) .MDX strong {
+:global(.dark) .HTML b,
+:global(.dark) .HTML strong {
   @apply text-white;
 }
 
-.MDX img,
-.MDX video {
+.HTML img,
+.HTML video {
   @apply rounded-md;
 }
 
-.MDX ul,
-.MDX ol {
+.HTML ul,
+.HTML ol {
   @apply pl-1;
 }
 
-.MDX ol > li {
+.HTML ol > li {
   counter-increment: counts;
 }
 
-.MDX ol > li:before {
+.HTML ol > li:before {
   @apply mr-2 inline-flex font-semibold;
 
   content: counters(counts, '.') '. ';
   font-feature-settings: 'tnum';
 }
 
-.MDX blockquote {
-  @apply my-4 border-l-4 border-primary bg-muted px-6 py-4 text-lg font-medium text-gray-600;
+.HTML blockquote {
+  @apply my-4 border-l-8 border border-primary px-6 py-4 text-lg font-medium text-muted-foreground;
 }
 
-.MDX pre {
+.HTML pre {
   @apply my-6 text-sm text-current;
 }

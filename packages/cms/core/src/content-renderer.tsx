@@ -9,9 +9,19 @@ export async function ContentRenderer({
 }) {
   switch (type) {
     case 'contentlayer': {
-      const { ContentRenderer } = await import('@kit/contentlayer');
+      const { MDXContentRenderer } = await import(
+        '../../contentlayer/src/content-renderer'
+      );
 
-      return ContentRenderer({ content });
+      return MDXContentRenderer({ content });
+    }
+
+    case 'wordpress': {
+      const { WordpressContentRenderer } = await import(
+        '../../wordpress/src/content-renderer'
+      );
+
+      return WordpressContentRenderer({ content });
     }
   }
 }

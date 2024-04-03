@@ -162,7 +162,6 @@ export class ContentlayerClient implements CmsClient {
     post: Post | DocumentationPage,
     children: Array<Post | DocumentationPage> = [],
   ): Cms.ContentItem {
-    console.log(post);
     return {
       id: post.slug,
       title: post.title,

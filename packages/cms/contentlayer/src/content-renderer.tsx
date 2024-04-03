@@ -1,5 +1,5 @@
-import { Mdx } from './mdx/mdx-renderer';
+import { Mdx } from './mdx-renderer';
 
-export function ContentRenderer(props: { content: string }) {
+export function MDXContentRenderer(props: { content: string }) {
   return <Mdx code={props.content} />;
 }

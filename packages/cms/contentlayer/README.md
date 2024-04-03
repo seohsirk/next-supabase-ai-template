@@ -5,5 +5,5 @@ Implementation of the CMS layer using the [Contentlayer](https://contentlayer.de
 This implementation is used when the host app's environment variable is set as:
 
 ```
-CMS_TYPE=contentlayer
+CMS_CLIENT=contentlayer
 ```

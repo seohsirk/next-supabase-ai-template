@@ -17,13 +17,9 @@ export function useUpdateUser() {
       emailRedirectTo: redirectTo,
     });
 
-    console.log(response);
-
     if (response.error) {
       throw response.error;
     }
-
-    console.log('response.data:', response.data);
 
     return response.data;
   };

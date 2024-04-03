@@ -10,35 +10,32 @@ export const PostHeader: React.FC<{
 }> = ({ post }) => {
   const { title, publishedAt, description, image } = post;
 
-  // NB: change this to display the post's image
-  const displayImage = true;
-  const preloadImage = true;
+  console.log(post);
 
   return (
-    <div className={'flex flex-col space-y-4'}>
-      <div className={'flex flex-col space-y-4'}>
+    <div className={'flex flex-col space-y-8'}>
+      <div className={'flex flex-col space-y-2'}>
         <Heading level={1}>{title}</Heading>
 
         <Heading level={3}>
-          <span className={'font-normal text-muted-foreground'}>
-            {description}
-          </span>
+          <p
+            className={'font-normal text-muted-foreground'}
+            dangerouslySetInnerHTML={{ __html: description ?? '' }}
+          />
         </Heading>
-      </div>
 
-      <div className="flex">
-        <div className="flex flex-row items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
-          <div>
+        <div className="flex flex-row items-center space-x-2 text-muted-foreground">
+          <div className={'text-sm'}>
             <DateFormatter dateString={publishedAt.toISOString()} />
           </div>
         </div>
       </div>
 
-      <If condition={displayImage && image}>
+      <If condition={image}>
         {(imageUrl) => (
           <div className="relative mx-auto h-[378px] w-full justify-center">
             <CoverImage
-              preloadImage={preloadImage}
+              preloadImage
               className="rounded-md"
               title={title}
               src={imageUrl}
