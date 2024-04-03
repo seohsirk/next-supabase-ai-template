@@ -2,30 +2,29 @@ import { cache } from 'react';
 
 import { notFound } from 'next/navigation';
 
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-
 import { ContentRenderer, createCmsClient } from '@kit/cms';
 import { If } from '@kit/ui/if';
 
 import { SitePageHeader } from '~/(marketing)/_components/site-page-header';
 import { DocsCards } from '~/(marketing)/docs/_components/docs-cards';
-import { DocumentationPageLink } from '~/(marketing)/docs/_components/documentation-page-link';
 import { withI18n } from '~/lib/i18n/with-i18n';
+
+import styles from '../../blog/_components/html-renderer.module.css';
 
 const getPageBySlug = cache(async (slug: string) => {
   const client = await createCmsClient();
 
-  return client.getContentItemById(slug);
+  return client.getContentItemById(slug, 'pages');
 });
 
 interface PageParams {
   params: {
-    slug: string[];
+    slug: string;
   };
 }
 
 export const generateMetadata = async ({ params }: PageParams) => {
-  const page = await getPageBySlug(params.slug.join('/'));
+  const page = await getPageBySlug(params.slug);
 
   if (!page) {
     notFound();
@@ -40,7 +39,7 @@ export const generateMetadata = async ({ params }: PageParams) => {
 };
 
 async function DocumentationPage({ params }: PageParams) {
-  const page = await getPageBySlug(params.slug.join('/'));
+  const page = await getPageBySlug(params.slug);
 
   if (!page) {
     notFound();
@@ -57,7 +56,9 @@ async function DocumentationPage({ params }: PageParams) {
           className={'items-start'}
         />
 
-        <ContentRenderer content={page.content} />
+        <article className={styles.HTML}>
+          <ContentRenderer content={page.content} />
+        </article>
 
         <If condition={page.children}>
           <DocsCards pages={page.children ?? []} />

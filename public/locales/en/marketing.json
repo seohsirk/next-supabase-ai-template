@@ -1,1 +1,10 @@
-{}
+{
+  "blog": "Blog",
+  "blogSubtitle": "News and updates about the platform",
+  "documentation": "Documentation",
+  "documentationSubtitle": "Tutorials and guide to get started with the platform",
+  "faq": "FAQ",
+  "faqSubtitle": "Frequently asked questions about the platform",
+  "pricing": "Pricing",
+  "pricingSubtitle": "Pricing plans and payment options"
+}

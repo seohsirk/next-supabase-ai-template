@@ -6,7 +6,7 @@ export const DocsCard: React.FC<
   React.PropsWithChildren<{
     title: string;
     subtitle?: string | null;
-    link?: { url: string; label: string };
+    link: { url: string; label: string };
   }>
 > = ({ title, subtitle, children, link }) => {
   return (
@@ -15,11 +15,13 @@ export const DocsCard: React.FC<
         className={`flex grow flex-col space-y-2.5 border bg-background p-6
         ${link ? 'rounded-t-2xl border-b-0' : 'rounded-2xl'}`}
       >
-        <h3 className="mt-0 text-lg font-semibold dark:text-white">{title}</h3>
+        <h3 className="mt-0 text-lg font-semibold dark:text-white">
+          <Link href={link.url}>{title}</Link>
+        </h3>
 
         {subtitle && (
-          <div className="text-sm text-gray-500 dark:text-gray-400">
-            <p>{subtitle}</p>
+          <div className="text-sm text-muted-foreground">
+            <p dangerouslySetInnerHTML={{ __html: subtitle }}></p>
           </div>
         )}
 

@@ -1,19 +1,22 @@
-import type { Metadata } from 'next';
-
 import { createCmsClient } from '@kit/cms';
 
 import { GridList } from '~/(marketing)/_components/grid-list';
 import { SitePageHeader } from '~/(marketing)/_components/site-page-header';
 import { PostPreview } from '~/(marketing)/blog/_components/post-preview';
-import appConfig from '~/config/app.config';
+import { createI18nServerInstance } from '~/lib/i18n/i18n.server';
 import { withI18n } from '~/lib/i18n/with-i18n';
 
-export const metadata: Metadata = {
-  title: `Blog - ${appConfig.name}`,
-  description: `Tutorials, Guides and Updates from our team`,
+export const generateMetadata = async () => {
+  const { t } = await createI18nServerInstance();
+
+  return {
+    title: t('marketing:blog'),
+    description: t('marketing:blogSubtitle'),
+  };
 };
 
 async function BlogPage() {
+  const { t } = await createI18nServerInstance();
   const cms = await createCmsClient();
 
   const posts = await cms.getContentItems({
@@ -24,8 +27,8 @@ async function BlogPage() {
     <div className={'container mx-auto'}>
       <div className={'my-8 flex flex-col space-y-16'}>
         <SitePageHeader
-          title={'Blog'}
-          subtitle={'Tutorials, Guides and Updates from our team'}
+          title={t('marketing:blog')}
+          subtitle={t('marketing:blogSubtitle')}
         />
 
         <GridList>
