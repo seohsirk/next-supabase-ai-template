@@ -12,9 +12,7 @@
   "exports": {
     ".": "./src/index.ts"
   },
-  "peerDependencies": {
-    "@kit/contentlayer": "workspace:*"
-  },
+  "peerDependencies": {},
   "devDependencies": {
     "@kit/eslint-config": "workspace:*",
     "@kit/prettier-config": "workspace:*",

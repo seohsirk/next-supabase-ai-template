@@ -23,7 +23,7 @@ docker-compose up
 or
 
 ```
-npm run dev
+pnpm run start
 ```
 
 from this package's root directory.

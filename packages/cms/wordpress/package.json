@@ -8,7 +8,7 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "build": "contentlayer build",
-    "dev": "docker compose up"
+    "start": "docker compose up"
   },
   "prettier": "@kit/prettier-config",
   "exports": {
