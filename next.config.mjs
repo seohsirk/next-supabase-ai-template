@@ -12,12 +12,11 @@ const INTERNAL_PACKAGES = [
   '@kit/supabase',
   '@kit/i18n',
   '@kit/mailers',
-  '@kit/billing',
   '@kit/billing-gateway',
-  '@kit/stripe',
   '@kit/email-templates',
   '@kit/database-webhooks',
   '@kit/cms',
+  '@kit/monitoring',
 ];
 
 /** @type {import('next').NextConfig} */
@@ -31,6 +30,7 @@ const config = {
   },
   experimental: {
     mdxRs: true,
+    instrumentationHook: true,
     optimizePackageImports: [
       'recharts',
       'lucide-react',
