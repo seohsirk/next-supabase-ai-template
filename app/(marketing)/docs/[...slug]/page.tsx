@@ -14,17 +14,17 @@ import styles from '../../blog/_components/html-renderer.module.css';
 const getPageBySlug = cache(async (slug: string) => {
   const client = await createCmsClient();
 
-  return client.getContentItemById(slug, 'pages');
+  return client.getContentItemById(slug);
 });
 
 interface PageParams {
   params: {
-    slug: string;
+    slug: string[];
   };
 }
 
 export const generateMetadata = async ({ params }: PageParams) => {
-  const page = await getPageBySlug(params.slug);
+  const page = await getPageBySlug(params.slug.join('/'));
 
   if (!page) {
     notFound();
@@ -39,7 +39,7 @@ export const generateMetadata = async ({ params }: PageParams) => {
 };
 
 async function DocumentationPage({ params }: PageParams) {
-  const page = await getPageBySlug(params.slug);
+  const page = await getPageBySlug(params.slug.join('/'));
 
   if (!page) {
     notFound();
@@ -61,7 +61,7 @@ async function DocumentationPage({ params }: PageParams) {
         </article>
 
         <If condition={page.children}>
-          <DocsCards pages={page.children ?? []} />
+          <DocsCards cards={page.children ?? []} />
         </If>
       </div>
     </div>

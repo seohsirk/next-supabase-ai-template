@@ -10,8 +10,6 @@ export const PostHeader: React.FC<{
 }> = ({ post }) => {
   const { title, publishedAt, description, image } = post;
 
-  console.log(post);
-
   return (
     <div className={'flex flex-col space-y-8'}>
       <div className={'flex flex-col space-y-2'}>
