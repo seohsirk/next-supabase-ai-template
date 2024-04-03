@@ -26,10 +26,7 @@
   "packageManager": "pnpm@8.15.5",
   "workspaces": [
     "apps/*",
-    "packages/*",
-    "packages/features/*",
-    "packages/billing/*",
-    "packages/cms/*",
+    "packages/**",
     "tooling/*",
     "supabase"
   ],

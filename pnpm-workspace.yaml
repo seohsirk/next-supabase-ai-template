@@ -1,8 +1,5 @@
 packages:
   - apps/*
-  - packages/*
-  - packages/features/*
-  - packages/billing/*
-  - packages/cms/*
+  - packages/**
   - tooling/*
   - supabase

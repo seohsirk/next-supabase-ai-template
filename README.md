@@ -100,6 +100,7 @@ Below are the reusable packages that can be shared across multiple applications 
 - **`@kit/billing-gateway`**: Billing gateway package that defines the schema and logic for managing payment gateways
 - **`@kit/email-templates`**: Here we define the email templates using the `react.email` package.
 - **`@kit/mailers`**: Mailer package that abstracts the email service provider (e.g., Resend, Cloudflare, SendGrid, Mailgun, etc.)
+- **`@kit/monitoring`**: A unified monitoring package that defines the schema and logic for monitoring the application with third party services (e.g., Sentry, Baselime, etc.)
 
 And features that can be added to the application:
 - **`@kit/auth`**: Authentication package (using Supabase)
@@ -114,7 +115,6 @@ And billing packages that can be added to the application:
 
 Also planned (post-release):
 - **`@kit/notifications`**: Notifications package that defines the schema and logic for managing notifications
-- **`@kit/monitoring`**: A unified monitoring package that defines the schema and logic for monitoring the application with third party services (e.g., Sentry, Baselime, etc.)
 - **`@kit/plugins`**: Move the existing plugins to a separate package here
 - **`@kit/analytics`**: A unified analytics package to track user behavior
 
