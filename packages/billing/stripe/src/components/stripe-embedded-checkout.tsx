@@ -8,12 +8,7 @@ import {
 } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@kit/ui/dialog';
+import { Dialog, DialogContent } from '@kit/ui/dialog';
 
 import { StripeClientEnvSchema } from '../schema/stripe-client-env.schema';
 

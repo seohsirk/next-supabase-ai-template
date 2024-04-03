@@ -5,6 +5,7 @@ export type OrderWebhook = {
       account_id: number;
     };
   };
+
   data: {
     type: string;
     id: string;
@@ -30,11 +31,12 @@ export type OrderWebhook = {
       status: string;
       status_formatted: string;
       refunded: boolean;
-      refunded_at: any;
+      refunded_at: string | null;
       subtotal_formatted: string;
       discount_total_formatted: string;
       tax_formatted: string;
       total_formatted: string;
+
       first_order_item: {
         id: number;
         order_id: number;
@@ -45,15 +47,18 @@ export type OrderWebhook = {
         price: number;
         created_at: string;
         updated_at: string;
-        deleted_at: any;
+        deleted_at: string | null;
         test_mode: boolean;
       };
+
       urls: {
         receipt: string;
       };
+
       created_at: string;
       updated_at: string;
     };
+
     relationships: {
       store: {
         links: {

@@ -16,8 +16,7 @@
     "@kit/billing-gateway": "workspace:^",
     "@kit/shared": "^0.1.0",
     "@kit/supabase": "^0.1.0",
-    "@kit/team-accounts": "workspace:^",
-    "@supabase/supabase-js": "^2.40.0"
+    "@kit/team-accounts": "workspace:^"
   },
   "devDependencies": {
     "@kit/billing": "workspace:^",
@@ -31,7 +30,7 @@
     "@kit/team-accounts": "*",
     "@kit/tsconfig": "workspace:*",
     "@kit/ui": "workspace:^",
-    "@supabase/supabase-js": "^2.41.1",
+    "@supabase/supabase-js": "^2.42.0",
     "lucide-react": "^0.363.0",
     "zod": "^3.22.4"
   },

@@ -44,7 +44,7 @@ export class LemonSqueezyWebhookHandlerService
 
     // clone the request so we can read the body twice
     const reqClone = request.clone();
-    const body = await request.json();
+    const body = (await request.json()) as SubscriptionWebhook | OrderWebhook;
     const rawBody = await reqClone.text();
 
     if (!signature) {

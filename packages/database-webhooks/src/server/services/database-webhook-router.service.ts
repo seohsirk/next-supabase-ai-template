@@ -56,6 +56,7 @@ export class DatabaseWebhookRouterService {
   private handleAccountsMembershipsWebhook(
     payload: RecordChange<'accounts_memberships'>,
   ) {
+    console.log('Accounts Memberships Webhook', payload);
     // no-op
     return Promise.resolve(undefined);
   }

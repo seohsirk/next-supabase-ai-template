@@ -7,6 +7,7 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
+import { Database } from '@kit/supabase/database';
 import { useSupabase } from '@kit/supabase/hooks/use-supabase';
 import { ImageUploader } from '@kit/ui/image-uploader';
 import { LoadingOverlay } from '@kit/ui/loading-overlay';
@@ -123,7 +124,7 @@ function UploadProfileAvatarForm(props: {
   );
 }
 
-function deleteProfilePhoto(client: SupabaseClient, url: string) {
+function deleteProfilePhoto(client: SupabaseClient<Database>, url: string) {
   const bucket = client.storage.from(AVATARS_BUCKET);
   const fileName = url.split('/').pop()?.split('?')[0];
 
@@ -135,7 +136,7 @@ function deleteProfilePhoto(client: SupabaseClient, url: string) {
 }
 
 async function uploadUserProfilePhoto(
-  client: SupabaseClient,
+  client: SupabaseClient<Database>,
   photoFile: File,
   userId: string,
 ) {
@@ -158,6 +159,9 @@ async function getAvatarFileName(
   extension: string | undefined,
 ) {
   const { nanoid } = await import('nanoid');
+
+  // we add a version to the URL to ensure
+  // the browser always fetches the latest image
   const uniqueId = nanoid(16);
 
   return `${userId}.${extension}?v=${uniqueId}`;

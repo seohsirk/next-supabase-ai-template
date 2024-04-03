@@ -77,7 +77,9 @@ export class WordpressClient implements CmsClient {
     const urls = endpoints.map((endpoint) => `${this.apiUrl}${endpoint}`);
 
     const responses = await Promise.all(
-      urls.map((url) => fetch(url).then((value) => value.json())),
+      urls.map((url) =>
+        fetch(url).then((value) => value.json() as Promise<WP_REST_API_Post[]>),
+      ),
     ).then((values) => values.flat().filter(Boolean));
 
     return await Promise.all(
@@ -130,14 +132,16 @@ export class WordpressClient implements CmsClient {
     ];
 
     const promises = endpoints.map((endpoint) =>
-      fetch(this.apiUrl + endpoint).then((res) => res.json()),
+      fetch(this.apiUrl + endpoint).then(
+        (res) => res.json() as Promise<WP_REST_API_Post[]>,
+      ),
     );
 
     const responses = await Promise.all(promises).then((values) =>
       values.filter(Boolean),
     );
 
-    const item = responses[0][0] as WP_REST_API_Post;
+    const item = responses[0] ? responses[0][0] : undefined;
 
     if (!item) {
       return;

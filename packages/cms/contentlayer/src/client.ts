@@ -126,7 +126,7 @@ export class ContentlayerClient implements CmsClient {
       order: 'order' in post ? post.order : 0,
       image: 'image' in post ? post.image : undefined,
       publishedAt: 'date' in post ? new Date(post.date) : new Date(),
-      parentId: 'parentId' in post ? (post.parentId as string) : undefined,
+      parentId: 'parentId' in post ? post.parentId : undefined,
       url: post.url,
       slug: post.slug,
       author: 'author' in post ? post.author : '',
