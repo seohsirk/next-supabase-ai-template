@@ -5,14 +5,15 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useSupabase } from '@kit/supabase/hooks/use-supabase';
 import { useUser } from '@kit/supabase/hooks/use-user';
 
-const queryKey = ['personal-account:data'];
-
 export function usePersonalAccountData() {
   const client = useSupabase();
   const user = useUser();
+  const userId = user.data?.id;
+
+  const queryKey = ['account:data', userId];
 
   const queryFn = async () => {
-    if (!user.data?.id) {
+    if (!userId) {
       return null;
     }
 
@@ -25,7 +26,7 @@ export function usePersonalAccountData() {
         picture_url
     `,
       )
-      .eq('primary_owner_user_id', user.data?.id)
+      .eq('primary_owner_user_id', userId)
       .eq('is_personal_account', true)
       .single();
 
@@ -39,7 +40,7 @@ export function usePersonalAccountData() {
   return useQuery({
     queryKey,
     queryFn,
-    enabled: !!user.data?.id,
+    enabled: !!userId,
     refetchOnWindowFocus: false,
     refetchOnMount: false,
   });
@@ -49,9 +50,9 @@ export function useRevalidatePersonalAccountDataQuery() {
   const queryClient = useQueryClient();
 
   return useCallback(
-    () =>
+    (userId: string) =>
       queryClient.invalidateQueries({
-        queryKey,
+        queryKey: ['account:data', userId],
       }),
     [queryClient],
   );

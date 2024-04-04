@@ -84,9 +84,13 @@ export function AuthChangeListener({
   );
 }
 
+/**
+ * Determines if a given path is a private route.
+ *
+ * @param {string} path - The path to check.
+ */
 function isPrivateRoute(path: string) {
-  // TODO: use config
-  const prefixes = ['/home', '/admin', '/password-reset'];
+  const prefixes = ['/home', '/admin', '/join', '/update-password'];
 
   return prefixes.some((prefix) => path.startsWith(prefix));
 }

@@ -20,11 +20,13 @@ export function UpdateAccountDetailsFormContainer() {
     return null;
   }
 
+  const userId = user.data.id;
+
   return (
     <UpdateAccountDetailsForm
       displayName={user.data.name ?? ''}
-      userId={user.data.id}
-      onUpdate={revalidateUserDataQuery}
+      userId={userId}
+      onUpdate={() => revalidateUserDataQuery(userId)}
     />
   );
 }

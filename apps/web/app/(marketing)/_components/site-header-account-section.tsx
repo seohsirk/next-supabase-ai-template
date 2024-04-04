@@ -10,11 +10,18 @@ import { PersonalAccountDropdown } from '@kit/accounts/personal-account-dropdown
 import { useSignOut } from '@kit/supabase/hooks/use-sign-out';
 import { useUser } from '@kit/supabase/hooks/use-user';
 import { Button } from '@kit/ui/button';
-import { If } from '@kit/ui/if';
 import { Trans } from '@kit/ui/trans';
 
 import featuresFlagConfig from '~/config/feature-flags.config';
 import pathsConfig from '~/config/paths.config';
+
+const paths = {
+  home: pathsConfig.app.home,
+};
+
+const features = {
+  enableThemeToggle: featuresFlagConfig.enableThemeToggle,
+};
 
 export function SiteHeaderAccountSection({
   user,
@@ -32,22 +39,18 @@ function SuspendedPersonalAccountDropdown(props: { user: User | null }) {
   const signOut = useSignOut();
   const user = useUser(props.user);
 
-  return (
-    <If condition={user.data} fallback={<AuthButtons />}>
-      {(data) => (
-        <PersonalAccountDropdown
-          paths={{
-            home: pathsConfig.app.home,
-          }}
-          features={{
-            enableThemeToggle: featuresFlagConfig.enableThemeToggle,
-          }}
-          user={data}
-          signOutRequested={() => signOut.mutateAsync()}
-        />
-      )}
-    </If>
-  );
+  if (user.data) {
+    return (
+      <PersonalAccountDropdown
+        paths={paths}
+        features={features}
+        user={user.data}
+        signOutRequested={() => signOut.mutateAsync()}
+      />
+    );
+  }
+
+  return <AuthButtons />;
 }
 
 function AuthButtons() {

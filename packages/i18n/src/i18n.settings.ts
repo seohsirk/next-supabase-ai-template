@@ -1,6 +1,7 @@
 import { InitOptions } from 'i18next';
 
 const fallbackLng = 'en';
+
 export const languages: string[] = [fallbackLng];
 
 export const I18N_COOKIE_NAME = 'lang';

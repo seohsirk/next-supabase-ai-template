@@ -83,7 +83,11 @@ export function PersonalAccountDropdown({
         />
 
         <If condition={showProfileName}>
-          <div className={'flex w-full flex-col truncate text-left'}>
+          <div
+            className={
+              'fade-in animate-in flex w-full flex-col truncate text-left'
+            }
+          >
             <span className={'truncate text-sm'}>{displayName}</span>
 
             <span className={'text-muted-foreground truncate text-xs'}>

@@ -28,11 +28,13 @@ export function UpdateAccountImageContainer() {
     return <LoadingOverlay fullPage={false} />;
   }
 
+  const userId = accountData.data.id;
+
   return (
     <UploadProfileAvatarForm
       pictureUrl={accountData.data.picture_url ?? null}
-      userId={accountData.data.id}
-      onAvatarUpdated={revalidateUserDataQuery}
+      userId={userId}
+      onAvatarUpdated={() => revalidateUserDataQuery(userId)}
     />
   );
 }
