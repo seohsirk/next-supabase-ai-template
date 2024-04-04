@@ -8,29 +8,31 @@ import billingConfig from '~/config/billing.config';
  * @description Handle the webhooks from Stripe related to checkouts
  */
 export async function POST(request: Request) {
-  // we can infer the provider from the billing config or the request
-  // for simplicity, we'll use the billing config for now
-  // TODO: use dynamic provider from request?
   const provider = billingConfig.provider;
 
   Logger.info(
     {
-      name: 'billing',
+      name: 'billing.webhook',
       provider,
     },
     `Received billing webhook. Processing...`,
   );
 
-  const clientProvider = () => getSupabaseRouteHandlerClient({ admin: true });
+  const supabaseClientProvider = () =>
+    getSupabaseRouteHandlerClient({ admin: true });
 
-  const service = await getBillingEventHandlerService(clientProvider, provider);
+  const service = await getBillingEventHandlerService(
+    supabaseClientProvider,
+    provider,
+    billingConfig,
+  );
 
   try {
     await service.handleWebhookEvent(request);
 
     Logger.info(
       {
-        name: 'billing',
+        name: 'billing.webhook',
       },
       `Successfully processed billing webhook`,
     );
