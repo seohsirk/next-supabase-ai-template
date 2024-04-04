@@ -37,6 +37,7 @@ export class DatabaseWebhookHandlerService {
     const service = new DatabaseWebhookRouterService(client);
 
     try {
+      // handle the webhook event based on the table
       await service.handleWebhook(json);
 
       Logger.info(

@@ -37,8 +37,6 @@ export class AccountInvitationsWebhookService {
   }
 
   private async dispatchInvitationEmail(invitation: Invitation) {
-    const mailer = new Mailer();
-
     const inviter = await this.client
       .from('accounts')
       .select('email, name')
@@ -70,7 +68,7 @@ export class AccountInvitationsWebhookService {
         teamName: team.data.name,
       });
 
-      await mailer.sendEmail({
+      await Mailer.sendEmail({
         from: env.emailSender,
         to: invitation.email,
         subject: 'You have been invited to join a team',

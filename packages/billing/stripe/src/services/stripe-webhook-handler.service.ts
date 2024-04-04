@@ -1,6 +1,10 @@
 import Stripe from 'stripe';
 
-import { BillingWebhookHandlerService } from '@kit/billing';
+import {
+  BillingConfig,
+  BillingWebhookHandlerService,
+  getLineItemTypeById,
+} from '@kit/billing';
 import { Logger } from '@kit/shared/logger';
 import { Database } from '@kit/supabase/database';
 
@@ -17,6 +21,8 @@ export class StripeWebhookHandlerService
   implements BillingWebhookHandlerService
 {
   private stripe: Stripe | undefined;
+
+  constructor(private readonly config: BillingConfig) {}
 
   private readonly provider: Database['public']['Enums']['billing_provider'] =
     'stripe';
@@ -134,6 +140,8 @@ export class StripeWebhookHandlerService
     const accountId = session.client_reference_id!;
     const customerId = session.customer as string;
 
+    // if it's a subscription, we need to retrieve the subscription
+    // and build the payload for the subscription
     if (isSubscription) {
       const subscriptionId = session.subscription as string;
       const subscription = await stripe.subscriptions.retrieve(subscriptionId);
@@ -154,8 +162,10 @@ export class StripeWebhookHandlerService
 
       return onCheckoutCompletedCallback(payload);
     } else {
+      // if it's a one-time payment, we need to retrieve the session
       const sessionId = event.data.object.id;
 
+      // from the session, we need to retrieve the line items
       const sessionWithLineItems = await stripe.checkout.sessions.retrieve(
         event.data.object.id,
         {
@@ -280,6 +290,7 @@ export class StripeWebhookHandlerService
         price_amount: item.price?.unit_amount,
         interval: item.price?.recurring?.interval as string,
         interval_count: item.price?.recurring?.interval_count as number,
+        type: getLineItemTypeById(this.config, item.id),
       };
     });
 

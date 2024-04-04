@@ -1,7 +1,11 @@
 import { getOrder, getVariant } from '@lemonsqueezy/lemonsqueezy.js';
 import { createHmac, timingSafeEqual } from 'crypto';
 
-import { BillingWebhookHandlerService } from '@kit/billing';
+import {
+  BillingConfig,
+  BillingWebhookHandlerService,
+  getLineItemTypeById,
+} from '@kit/billing';
 import { Logger } from '@kit/shared/logger';
 import { Database } from '@kit/supabase/database';
 
@@ -34,6 +38,8 @@ export class LemonSqueezyWebhookHandlerService
     'lemon-squeezy';
 
   private readonly namespace = 'billing.lemon-squeezy';
+
+  constructor(private readonly config: BillingConfig) {}
 
   /**
    * @description Verifies the webhook signature - should throw an error if the signature is invalid
@@ -307,6 +313,7 @@ export class LemonSqueezyWebhookHandlerService
         product_id: item.product,
         variant_id: item.variant,
         price_amount: item.unitAmount,
+        type: getLineItemTypeById(this.config, item.id),
       };
     });
 

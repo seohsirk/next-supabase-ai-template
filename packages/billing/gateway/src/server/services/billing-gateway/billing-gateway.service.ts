@@ -5,7 +5,9 @@ import {
   CancelSubscriptionParamsSchema,
   CreateBillingCheckoutSchema,
   CreateBillingPortalSessionSchema,
+  ReportBillingUsageSchema,
   RetrieveCheckoutSessionSchema,
+  UpdateSubscriptionParamsSchema,
 } from '@kit/billing/schema';
 
 import { BillingGatewayFactoryService } from './billing-gateway-factory.service';
@@ -91,5 +93,36 @@ export class BillingGatewayService {
     const payload = CancelSubscriptionParamsSchema.parse(params);
 
     return strategy.cancelSubscription(payload);
+  }
+
+  /**
+   * Reports the usage of the billing.
+   * @description This is used to report the usage of the billing to the provider.
+   * @param params
+   */
+  async reportUsage(params: z.infer<typeof ReportBillingUsageSchema>) {
+    const strategy = await BillingGatewayFactoryService.GetProviderStrategy(
+      this.provider,
+    );
+
+    const payload = ReportBillingUsageSchema.parse(params);
+
+    return strategy.reportUsage(payload);
+  }
+
+  /**
+   * Updates a subscription with the specified parameters.
+   * @param params
+   */
+  async updateSubscriptionItem(
+    params: z.infer<typeof UpdateSubscriptionParamsSchema>,
+  ) {
+    const strategy = await BillingGatewayFactoryService.GetProviderStrategy(
+      this.provider,
+    );
+
+    const payload = UpdateSubscriptionParamsSchema.parse(params);
+
+    return strategy.updateSubscription(payload);
   }
 }

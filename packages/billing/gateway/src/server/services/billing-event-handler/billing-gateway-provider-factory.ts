@@ -1,3 +1,4 @@
+import { BillingConfig } from '@kit/billing';
 import { Database } from '@kit/supabase/database';
 import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
 
@@ -12,9 +13,12 @@ import { BillingEventHandlerFactoryService } from './billing-gateway-factory.ser
 export async function getBillingEventHandlerService(
   clientProvider: () => ReturnType<typeof getSupabaseServerActionClient>,
   provider: Database['public']['Enums']['billing_provider'],
+  config: BillingConfig,
 ) {
-  const strategy =
-    await BillingEventHandlerFactoryService.GetProviderStrategy(provider);
+  const strategy = await BillingEventHandlerFactoryService.GetProviderStrategy(
+    provider,
+    config,
+  );
 
   return new BillingEventHandlerService(clientProvider, strategy);
 }

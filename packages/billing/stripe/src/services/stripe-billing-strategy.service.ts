@@ -9,6 +9,7 @@ import {
   CreateBillingPortalSessionSchema,
   ReportBillingUsageSchema,
   RetrieveCheckoutSessionSchema,
+  UpdateSubscriptionParamsSchema,
 } from '@kit/billing/schema';
 import { Logger } from '@kit/shared/logger';
 
@@ -196,6 +197,52 @@ export class StripeBillingStrategyService
     );
 
     return { success: true };
+  }
+
+  async updateSubscription(
+    params: z.infer<typeof UpdateSubscriptionParamsSchema>,
+  ) {
+    const stripe = await this.stripeProvider();
+
+    Logger.info(
+      {
+        name: 'billing.stripe',
+        ...params,
+      },
+      'Updating subscription...',
+    );
+
+    try {
+      await stripe.subscriptions.update(params.subscriptionId, {
+        items: [
+          {
+            id: params.subscriptionItemId,
+            quantity: params.quantity,
+          },
+        ],
+      });
+
+      Logger.info(
+        {
+          name: 'billing.stripe',
+          ...params,
+        },
+        'Subscription updated successfully',
+      );
+
+      return { success: true };
+    } catch (e) {
+      Logger.error(
+        {
+          name: 'billing.stripe',
+          ...params,
+          error: e,
+        },
+        'Failed to update subscription',
+      );
+
+      throw new Error('Failed to update subscription');
+    }
   }
 
   private async stripeProvider(): Promise<Stripe> {

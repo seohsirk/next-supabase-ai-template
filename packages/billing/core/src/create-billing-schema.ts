@@ -103,6 +103,34 @@ export const PlanSchema = z
       message: 'Line item IDs must be unique',
       path: ['lineItems'],
     },
+  )
+  .refine(
+    (data) => {
+      if (data.paymentType === 'one-time') {
+        const meteredItems = data.lineItems.filter(
+          (item) => item.type === 'metered',
+        );
+
+        return meteredItems.length === 0;
+      }
+    },
+    {
+      message: 'One-time plans must not have metered line items',
+      path: ['paymentType', 'lineItems'],
+    },
+  )
+  .refine(
+    (data) => {
+      if (data.paymentType === 'one-time') {
+        const baseItems = data.lineItems.filter((item) => item.type !== 'base');
+
+        return baseItems.length === 0;
+      }
+    },
+    {
+      message: 'One-time plans must not have non-base line items',
+      path: ['paymentType', 'lineItems'],
+    },
   );
 
 const ProductSchema = z
@@ -258,4 +286,21 @@ export function getProductPlanPairByVariantId(
   }
 
   throw new Error('Plan not found');
+}
+
+export function getLineItemTypeById(
+  config: z.infer<typeof BillingSchema>,
+  id: string,
+) {
+  for (const product of config.products) {
+    for (const plan of product.plans) {
+      for (const lineItem of plan.lineItems) {
+        if (lineItem.type === id) {
+          return lineItem.type;
+        }
+      }
+    }
+  }
+
+  throw new Error(`Line Item with ID ${id} not found`);
 }

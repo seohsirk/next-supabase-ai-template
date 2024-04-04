@@ -94,14 +94,13 @@ export class DeletePersonalAccountService {
     productName: string;
   }) {
     const { renderAccountDeleteEmail } = await import('@kit/email-templates');
-    const mailer = new Mailer();
 
     const html = renderAccountDeleteEmail({
       userDisplayName: params.userDisplayName,
       productName: params.productName,
     });
 
-    await mailer.sendEmail({
+    await Mailer.sendEmail({
       to: params.userEmail,
       from: params.fromEmail,
       subject: 'Account Deletion Request',

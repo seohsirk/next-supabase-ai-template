@@ -17,14 +17,20 @@ Make sure the app installs the `@kit/mailers` package before using it.
 
 ## Usage
 
+By default, the package uses `nodemailer`. 
+
+To use Cloudflare, please set the environment variable `MAILER_PROVIDER` to `cloudflare`.
+
+```
+MAILER_PROVIDER=cloudflare
+```
+
 ### Send an email
 
 ```javascript
 import { Mailer } from '@kit/mailers';
 
-const mailer = new Mailer();
-
-mailer.send({
+Mailer.sendEmail({
     to: '',
     from: '',
     subject: 'Hello',

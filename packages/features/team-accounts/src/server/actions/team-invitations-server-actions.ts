@@ -17,6 +17,7 @@ import { InviteMembersSchema } from '../../schema/invite-members.schema';
 import { RenewInvitationSchema } from '../../schema/renew-invitation.schema';
 import { UpdateInvitationSchema } from '../../schema/update-invitation.schema';
 import { AccountInvitationsService } from '../services/account-invitations.service';
+import { AccountPerSeatBillingService } from '../services/account-per-seat-billing.service';
 
 /**
  * Creates invitations for inviting members.
@@ -98,15 +99,21 @@ export async function acceptInvitationAction(data: FormData) {
     Object.fromEntries(data),
   );
 
+  const accountPerSeatBillingService = new AccountPerSeatBillingService(client);
   const user = await assertSession(client);
 
   const service = new AccountInvitationsService(client);
 
-  await service.acceptInvitationToTeam({
-    adminClient: getSupabaseServerActionClient({ admin: true }),
-    inviteToken,
-    userId: user.id,
-  });
+  // Accept the invitation
+  const accountId = await service.acceptInvitationToTeam(
+    getSupabaseServerActionClient({ admin: true }),
+    {
+      inviteToken,
+      userId: user.id,
+    },
+  );
+
+  await accountPerSeatBillingService.increaseSeats(accountId);
 
   return redirect(nextPath);
 }

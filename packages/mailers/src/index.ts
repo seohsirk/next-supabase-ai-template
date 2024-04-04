@@ -1,9 +1,9 @@
 import { z } from 'zod';
 
-const MAILER_ENV = z
+const MAILER_PROVIDER = z
   .enum(['nodemailer', 'cloudflare'])
   .default('nodemailer')
-  .parse(process.env.MAILER_ENV);
+  .parse(process.env.MAILER_PROVIDER);
 
 /**
  * @description A mailer interface that can be implemented by any mailer.
@@ -27,7 +27,7 @@ export const Mailer = await getMailer();
  * @description Get the mailer based on the environment variable.
  */
 async function getMailer() {
-  switch (MAILER_ENV) {
+  switch (MAILER_PROVIDER) {
     case 'nodemailer': {
       const { Nodemailer } = await import('./impl/nodemailer');
 
@@ -41,6 +41,6 @@ async function getMailer() {
     }
 
     default:
-      throw new Error(`Invalid mailer environment: ${MAILER_ENV as string}`);
+      throw new Error(`Invalid mailer: ${MAILER_PROVIDER as string}`);
   }
 }

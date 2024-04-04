@@ -1,5 +1,6 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 
+import { Logger } from '@kit/shared/logger';
 import { Database } from '@kit/supabase/database';
 
 import { RecordChange, Tables } from '../record-change.type';
@@ -21,14 +22,14 @@ export class DatabaseWebhookRouterService {
         return this.handleSubscriptionsWebhook(payload);
       }
 
-      case 'accounts_memberships': {
-        const payload = body as RecordChange<typeof body.table>;
-
-        return this.handleAccountsMembershipsWebhook(payload);
+      default: {
+        Logger.warn(
+          {
+            table: body.table,
+          },
+          'No handler found for table',
+        );
       }
-
-      default:
-        throw new Error('No handler for this table');
     }
   }
 
@@ -51,13 +52,5 @@ export class DatabaseWebhookRouterService {
     if (body.type === 'DELETE' && body.old_record) {
       return service.handleSubscriptionDeletedWebhook(body.old_record);
     }
-  }
-
-  private handleAccountsMembershipsWebhook(
-    payload: RecordChange<'accounts_memberships'>,
-  ) {
-    console.log('Accounts Memberships Webhook', payload);
-    // no-op
-    return Promise.resolve(undefined);
   }
 }

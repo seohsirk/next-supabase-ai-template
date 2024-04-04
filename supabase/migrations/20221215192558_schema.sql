@@ -116,6 +116,17 @@ create type public.billing_provider as ENUM(
     'paddle'
 );
 
+/*
+* Subscription Item Type
+- We create the subscription item type for the Supabase MakerKit. These types are used to manage the type of the subscription items
+- The types are 'flat', 'per_seat', and 'metered'.
+- You can add more types as needed.
+*/
+create type public.subscription_item_type as ENUM(
+    'base',
+    'per_seat',
+    'metered'
+);
 
 /*
  * -------------------------------------------------------
@@ -1023,7 +1034,7 @@ create policy invitations_delete on public.invitations
 -- Functions
 -- Function to accept an invitation to an account
 create or replace function accept_invitation(token text, user_id uuid)
-    returns void
+    returns uuid
     as $$
 declare
     target_account_id uuid;
@@ -1056,6 +1067,7 @@ begin
     delete from public.invitations
     where invite_token = token;
 
+    return target_account_id;
 end;
 
 $$
@@ -1248,17 +1260,19 @@ on conflict (
     with item_data as (
         select
             (line_item ->> 'product_id')::varchar as prod_id,
-(line_item ->> 'variant_id')::varchar as var_id,
-(line_item ->> 'price_amount')::numeric as price_amt,
-(line_item ->> 'quantity')::integer as qty,
-(line_item ->> 'interval')::varchar as intv,
-(line_item ->> 'interval_count')::integer as intv_count
+            (line_item ->> 'variant_id')::varchar as var_id,
+            (line_item ->> 'type')::public.subscription_item_type as type,
+            (line_item ->> 'price_amount')::numeric as price_amt,
+            (line_item ->> 'quantity')::integer as qty,
+            (line_item ->> 'interval')::varchar as intv,
+            (line_item ->> 'interval_count')::integer as intv_count
         from
             jsonb_array_elements(line_items) as line_item)
     insert into public.subscription_items(
         subscription_id,
         product_id,
         variant_id,
+        type,
         price_amount,
         quantity,
         interval,
@@ -1267,6 +1281,7 @@ on conflict (
         target_subscription_id,
         prod_id,
         var_id,
+        type,
         price_amt,
         qty,
         intv,
@@ -1306,6 +1321,7 @@ create table if not exists public.subscription_items(
 	delete cascade not null,
     product_id varchar(255) not null,
     variant_id varchar(255) not null,
+    type public.subscription_item_type not null,
     price_amount numeric,
     quantity integer not null default 1,
     interval varchar(255) not null,

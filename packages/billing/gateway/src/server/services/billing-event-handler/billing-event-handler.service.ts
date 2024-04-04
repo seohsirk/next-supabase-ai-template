@@ -154,7 +154,7 @@ export class BillingEventHandlerService {
 
         Logger.info(
           {
-            namespace: 'billing',
+            namespace: this.namespace,
             sessionId,
           },
           'Successfully updated payment status',

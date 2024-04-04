@@ -2,6 +2,7 @@ import {
   cancelSubscription,
   createUsageRecord,
   getCheckout,
+  updateSubscriptionItem,
 } from '@lemonsqueezy/lemonsqueezy.js';
 import 'server-only';
 import { z } from 'zod';
@@ -13,6 +14,7 @@ import {
   CreateBillingPortalSessionSchema,
   ReportBillingUsageSchema,
   RetrieveCheckoutSessionSchema,
+  UpdateSubscriptionParamsSchema,
 } from '@kit/billing/schema';
 import { Logger } from '@kit/shared/logger';
 
@@ -237,6 +239,37 @@ export class LemonSqueezyBillingStrategyService
       },
       'Usage reported successfully',
     );
+
+    return { success: true };
+  }
+
+  async updateSubscription(
+    params: z.infer<typeof UpdateSubscriptionParamsSchema>,
+  ) {
+    const ctx = {
+      name: 'billing.lemon-squeezy',
+      ...params,
+    };
+
+    Logger.info(ctx, 'Updating subscription...');
+
+    const { error } = await updateSubscriptionItem(params.subscriptionItemId, {
+      quantity: params.quantity,
+    });
+
+    if (error) {
+      Logger.error(
+        {
+          ...ctx,
+          error,
+        },
+        'Failed to update subscription',
+      );
+
+      throw error;
+    }
+
+    Logger.info(ctx, 'Subscription updated successfully');
 
     return { success: true };
   }

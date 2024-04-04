@@ -12,7 +12,7 @@ import { InviteMembersSchema } from '../../schema/invite-members.schema';
 import { UpdateInvitationSchema } from '../../schema/update-invitation.schema';
 
 export class AccountInvitationsService {
-  private namespace = 'accounts.invitations';
+  private readonly namespace = 'invitations';
 
   constructor(private readonly client: SupabaseClient<Database>) {}
 
@@ -76,7 +76,11 @@ export class AccountInvitationsService {
     accountSlug: string;
   }) {
     Logger.info(
-      { account: accountSlug, invitations, name: this.namespace },
+      {
+        account: accountSlug,
+        invitations,
+        name: this.namespace,
+      },
       'Storing invitations',
     );
 
@@ -87,6 +91,14 @@ export class AccountInvitationsService {
       .single();
 
     if (!accountResponse.data) {
+      Logger.error(
+        {
+          accountSlug,
+          name: this.namespace,
+        },
+        'Account not found in database. Cannot send invitations.',
+      );
+
       throw new Error('Account not found');
     }
 
@@ -96,6 +108,15 @@ export class AccountInvitationsService {
     });
 
     if (response.error) {
+      Logger.error(
+        {
+          accountSlug,
+          error: response.error,
+          name: this.namespace,
+        },
+        `Failed to add invitations to account ${accountSlug}`,
+      );
+
       throw response.error;
     }
 
@@ -116,12 +137,14 @@ export class AccountInvitationsService {
   /**
    * Accepts an invitation to join a team.
    */
-  async acceptInvitationToTeam(params: {
-    userId: string;
-    inviteToken: string;
-    adminClient: SupabaseClient<Database>;
-  }) {
-    const { error, data } = await params.adminClient.rpc('accept_invitation', {
+  async acceptInvitationToTeam(
+    adminClient: SupabaseClient<Database>,
+    params: {
+      userId: string;
+      inviteToken: string;
+    },
+  ) {
+    const { error, data } = await adminClient.rpc('accept_invitation', {
       token: params.inviteToken,
       user_id: params.userId,
     });

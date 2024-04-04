@@ -11,10 +11,21 @@ const webhooksSecret = z
 
 const service = new DatabaseWebhookHandlerService();
 
-export async function POST(request: Request) {
-  await service.handleWebhook(request, webhooksSecret);
+const response = (status: number) => new Response(null, { status });
 
-  return new Response(null, {
-    status: 200,
-  });
+/**
+ * @name POST
+ * @description POST handler for the webhook route that handles the webhook event
+ * @param request
+ * @constructor
+ */
+export async function POST(request: Request) {
+  try {
+    // handle the webhook event
+    await service.handleWebhook(request, webhooksSecret);
+
+    return response(200);
+  } catch {
+    return response(500);
+  }
 }

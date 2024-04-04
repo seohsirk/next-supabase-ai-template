@@ -9,6 +9,7 @@ import { Database } from '@kit/supabase/database';
 import { RemoveMemberSchema } from '../../schema/remove-member.schema';
 import { TransferOwnershipConfirmationSchema } from '../../schema/transfer-ownership-confirmation.schema';
 import { UpdateMemberRoleSchema } from '../../schema/update-member-role.schema';
+import { AccountPerSeatBillingService } from './account-per-seat-billing.service';
 
 export class AccountMembersService {
   private readonly namespace = 'account-members';
@@ -16,6 +17,13 @@ export class AccountMembersService {
   constructor(private readonly client: SupabaseClient<Database>) {}
 
   async removeMemberFromAccount(params: z.infer<typeof RemoveMemberSchema>) {
+    const ctx = {
+      namespace: this.namespace,
+      ...params,
+    };
+
+    Logger.info(ctx, `Removing member from account...`);
+
     const { data, error } = await this.client
       .from('accounts_memberships')
       .delete()
@@ -25,13 +33,37 @@ export class AccountMembersService {
       });
 
     if (error) {
+      Logger.error(
+        {
+          ...ctx,
+          error,
+        },
+        `Failed to remove member from account`,
+      );
+
       throw error;
     }
+
+    Logger.info(
+      ctx,
+      `Successfully removed member from account. Verifying seat count...`,
+    );
+
+    const service = new AccountPerSeatBillingService(this.client);
+
+    await service.decreaseSeats(params.accountId);
 
     return data;
   }
 
   async updateMemberRole(params: z.infer<typeof UpdateMemberRoleSchema>) {
+    const ctx = {
+      namespace: this.namespace,
+      ...params,
+    };
+
+    Logger.info(ctx, `Updating member role...`);
+
     const { data, error } = await this.client
       .from('accounts_memberships')
       .update({
@@ -43,8 +75,18 @@ export class AccountMembersService {
       });
 
     if (error) {
+      Logger.error(
+        {
+          ...ctx,
+          error,
+        },
+        `Failed to update member role`,
+      );
+
       throw error;
     }
+
+    Logger.info(ctx, `Successfully updated member role`);
 
     return data;
   }
@@ -57,7 +99,7 @@ export class AccountMembersService {
       ...params,
     };
 
-    Logger.info(ctx, `Transferring ownership of account`);
+    Logger.info(ctx, `Transferring ownership of account...`);
 
     const { data, error } = await this.client.rpc(
       'transfer_team_account_ownership',
