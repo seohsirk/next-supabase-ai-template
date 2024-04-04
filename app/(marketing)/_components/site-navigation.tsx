@@ -8,64 +8,47 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@kit/ui/dropdown-menu';
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuList,
-} from '@kit/ui/navigation-menu';
+import { NavigationMenu, NavigationMenuList } from '@kit/ui/navigation-menu';
+import { Trans } from '@kit/ui/trans';
+
+import { SiteNavigationItem } from '~/(marketing)/_components/site-navigation-item';
 
 const links = {
-  SignIn: {
-    label: 'Sign In',
-    path: '/auth/sign-in',
-  },
   Blog: {
-    label: 'Blog',
+    label: 'marketing:blog',
     path: '/blog',
   },
   Docs: {
-    label: 'Documentation',
+    label: 'marketing:documentation',
     path: '/docs',
   },
   Pricing: {
-    label: 'Pricing',
+    label: 'marketing:pricing',
     path: '/pricing',
   },
   FAQ: {
-    label: 'FAQ',
+    label: 'marketing:faq',
     path: '/faq',
   },
 };
 
 export function SiteNavigation() {
-  const className = `hover:underline text-sm`;
+  const NavItems = Object.values(links).map((item) => {
+    return (
+      <SiteNavigationItem key={item.path} path={item.path}>
+        <Trans i18nKey={item.label} />
+      </SiteNavigationItem>
+    );
+  });
 
   return (
     <>
       <div className={'hidden items-center lg:flex'}>
         <NavigationMenu>
-          <NavigationMenuList className={'space-x-3'}>
-            <NavigationMenuItem>
-              <Link className={className} href={links.Blog.path}>
-                {links.Blog.label}
-              </Link>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <Link className={className} href={links.Docs.path}>
-                {links.Docs.label}
-              </Link>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <Link className={className} href={links.Pricing.path}>
-                {links.Pricing.label}
-              </Link>
-            </NavigationMenuItem>
-
-            <NavigationMenuItem>
-              <Link className={className} href={links.FAQ.path}>
-                {links.FAQ.label}
-              </Link>
-            </NavigationMenuItem>
+          <NavigationMenuList
+            className={'space-x-1.5 rounded-full border px-1 py-2'}
+          >
+            {NavItems}
           </NavigationMenuList>
         </NavigationMenu>
       </div>

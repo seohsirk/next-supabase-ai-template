@@ -12,7 +12,7 @@ import { isBrowser } from '@kit/shared/utils';
 import { Button } from '@kit/ui/button';
 import { Heading } from '@kit/ui/heading';
 import { If } from '@kit/ui/if';
-import { cn } from '@kit/ui/utils';
+import { cn, isRouteActive } from '@kit/ui/utils';
 
 const DocsNavLink: React.FC<{
   label: string;
@@ -20,7 +20,7 @@ const DocsNavLink: React.FC<{
   level: number;
   activePath: string;
 }> = ({ label, url, level, activePath }) => {
-  const isCurrent = url == activePath;
+  const isCurrent = isRouteActive(url, activePath, 0);
   const isFirstLevel = level === 0;
 
   return (
@@ -70,7 +70,7 @@ function Tree({
   activePath: string;
 }) {
   return (
-    <div className={cn('w-full space-y-2.5 pl-3', level > 0 ? 'border-l' : '')}>
+    <div className={cn('w-full space-y-1 pl-3')}>
       {pages.map((treeNode, index) => (
         <Node
           key={index}
@@ -84,7 +84,7 @@ function Tree({
 }
 
 export function DocsNavigation({ pages }: { pages: Cms.ContentItem[] }) {
-  const activePath = usePathname().replace('/docs/', '');
+  const activePath = usePathname();
 
   return (
     <>
@@ -109,7 +109,7 @@ export function DocsNavigation({ pages }: { pages: Cms.ContentItem[] }) {
 
 function getNavLinkClassName(isCurrent: boolean, isFirstLevel: boolean) {
   return cn(
-    'group flex h-8 items-center justify-between space-x-2 whitespace-nowrap rounded-md px-3 text-sm leading-none transition-colors',
+    'group flex min-h-8 items-center justify-between space-x-2 whitespace-nowrap rounded-md px-3 text-sm transition-colors',
     {
       [`bg-muted`]: isCurrent,
       [`hover:bg-muted`]: !isCurrent,

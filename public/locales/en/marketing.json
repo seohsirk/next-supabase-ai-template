@@ -6,5 +6,12 @@
   "faq": "FAQ",
   "faqSubtitle": "Frequently asked questions about the platform",
   "pricing": "Pricing",
-  "pricingSubtitle": "Pricing plans and payment options"
+  "pricingSubtitle": "Pricing plans and payment options",
+  "contact": "Contact",
+  "about": "About",
+  "product": "Product",
+  "legal": "Legal",
+  "tos": "Terms of Service",
+  "cookiePolicy": "Cookie Policy",
+  "privacyPolicy": "Privacy Policy"
 }

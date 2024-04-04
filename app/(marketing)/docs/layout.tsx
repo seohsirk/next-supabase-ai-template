@@ -10,12 +10,10 @@ async function DocsLayout({ children }: React.PropsWithChildren) {
   });
 
   return (
-    <div className={'container mx-auto'}>
-      <div className={'flex'}>
-        <DocsNavigation pages={buildDocumentationTree(pages)} />
+    <div className={'flex'}>
+      <DocsNavigation pages={buildDocumentationTree(pages)} />
 
-        <div className={'flex w-full flex-col items-center'}>{children}</div>
-      </div>
+      {children}
     </div>
   );
 }

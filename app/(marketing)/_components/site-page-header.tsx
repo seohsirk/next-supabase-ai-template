@@ -12,9 +12,9 @@ export function SitePageHeader(props: {
     >
       <Heading level={1}>{props.title}</Heading>
 
-      <Heading level={2} className={'text-muted-foreground'}>
+      <h2 className={'text-center text-xl text-muted-foreground xl:text-2xl'}>
         <span className={'font-normal'}>{props.subtitle}</span>
-      </Heading>
+      </h2>
     </div>
   );
 }
