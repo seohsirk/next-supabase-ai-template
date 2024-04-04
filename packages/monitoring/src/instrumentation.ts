@@ -1,14 +1,14 @@
-/**
- * @name DEFAULT_INSTRUMENTATION_PROVIDER
- * @description Register monitoring instrumentation based on the MONITORING_INSTRUMENTATION_PROVIDER environment variable.
- */
-const DEFAULT_INSTRUMENTATION_PROVIDER =
-  process.env.MONITORING_INSTRUMENTATION_PROVIDER;
-
 enum InstrumentationProvider {
   Baselime = 'baselime',
   Sentry = 'sentry',
 }
+
+/**
+ * @name DEFAULT_INSTRUMENTATION_PROVIDER
+ * @description Register monitoring instrumentation based on the MONITORING_INSTRUMENTATION_PROVIDER environment variable.
+ */
+const DEFAULT_INSTRUMENTATION_PROVIDER = process.env
+  .MONITORING_INSTRUMENTATION_PROVIDER as InstrumentationProvider | undefined;
 
 /**
  * @name registerInstrumentation
@@ -39,8 +39,6 @@ export async function registerInstrumentation() {
     }
 
     default:
-      throw new Error(
-        `Unknown instrumentation provider: ${DEFAULT_INSTRUMENTATION_PROVIDER}`,
-      );
+      throw new Error(`Unknown instrumentation provider`);
   }
 }
