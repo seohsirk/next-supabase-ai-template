@@ -16,10 +16,9 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '../shadcn/tooltip';
-import { cn } from '../utils';
+import { cn, isRouteActive } from '../utils';
 import { SidebarContext } from './context/sidebar.context';
 import { If } from './if';
-import isRouteActive from './is-route-active';
 import { SidebarConfigSchema } from './sidebar-schema';
 import { Trans } from './trans';
 

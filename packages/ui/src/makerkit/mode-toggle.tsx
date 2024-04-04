@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react';
 
-import { CheckCircle, Moon, Sun } from 'lucide-react';
+import { Computer, Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
 
 import { Button } from '../shadcn/button';
@@ -15,39 +15,49 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from '../shadcn/dropdown-menu';
-import { If } from './if';
+import { cn } from '../utils';
 import { Trans } from './trans';
 
 const MODES = ['light', 'dark', 'system'];
 
 export function ModeToggle() {
-  const { setTheme } = useTheme();
+  const { setTheme, theme } = useTheme();
 
   const Items = useMemo(() => {
     return MODES.map((mode) => {
+      const isSelected = theme === mode;
+
       return (
         <DropdownMenuItem
+          className={cn('space-x-2', {
+            'bg-muted': isSelected,
+          })}
           key={mode}
           onClick={() => {
             setTheme(mode);
             setCookeTheme(mode);
           }}
         >
-          <Trans i18nKey={`common:${mode}Theme`} />
+          <Icon theme={mode} />
+
+          <span>
+            <Trans i18nKey={`common:${mode}Theme`} />
+          </span>
         </DropdownMenuItem>
       );
     });
-  }, [setTheme]);
+  }, [setTheme, theme]);
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon">
+        <Button variant="ghost" size="icon" className="rounded-full">
           <Sun className="h-[1rem] w-[1rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
           <Moon className="absolute h-[1rem] w-[1rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>
+
       <DropdownMenuContent align="end">{Items}</DropdownMenuContent>
     </DropdownMenu>
   );
@@ -58,21 +68,25 @@ export function SubMenuModeToggle() {
 
   const MenuItems = useMemo(
     () =>
-      ['light', 'dark', 'system'].map((mode) => {
+      MODES.map((mode) => {
+        const isSelected = theme === mode;
+
         return (
           <DropdownMenuItem
-            className={'justify-between'}
+            className={cn('flex items-center space-x-2', {
+              'bg-muted': isSelected,
+            })}
             key={mode}
             onClick={() => {
               setTheme(mode);
               setCookeTheme(mode);
             }}
           >
-            <Trans i18nKey={`common:${mode}Theme`} />
+            <Icon theme={mode} />
 
-            <If condition={theme === mode}>
-              <CheckCircle className={'mr-2 h-3'} />
-            </If>
+            <span>
+              <Trans i18nKey={`common:${mode}Theme`} />
+            </span>
           </DropdownMenuItem>
         );
       }),
@@ -83,11 +97,7 @@ export function SubMenuModeToggle() {
     <DropdownMenuSub>
       <DropdownMenuSubTrigger>
         <span className={'flex w-full items-center space-x-2'}>
-          {resolvedTheme === 'light' ? (
-            <Sun className={'h-5'} />
-          ) : (
-            <Moon className={'h-5'} />
-          )}
+          <Icon theme={resolvedTheme} />
 
           <span>
             <Trans i18nKey={'common:theme'} />
@@ -102,4 +112,15 @@ export function SubMenuModeToggle() {
 
 function setCookeTheme(theme: string) {
   document.cookie = `theme=${theme}; path=/; max-age=31536000`;
+}
+
+function Icon({ theme }: { theme: string | undefined }) {
+  switch (theme) {
+    case 'light':
+      return <Sun className="h-4" />;
+    case 'dark':
+      return <Moon className="h-4" />;
+    case 'system':
+      return <Computer className="h-4" />;
+  }
 }
