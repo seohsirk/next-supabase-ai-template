@@ -12,7 +12,6 @@
   "exports": {
     "./server": "./src/i18n.server.ts",
     "./client": "./src/i18n.client.ts",
-    "./cookie": "./src/get-language-cookie.ts",
     "./provider": "./src/i18n-provider.tsx"
   },
   "devDependencies": {
