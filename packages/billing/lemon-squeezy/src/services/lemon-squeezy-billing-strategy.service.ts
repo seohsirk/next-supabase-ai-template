@@ -121,6 +121,15 @@ export class LemonSqueezyBillingStrategyService
       const { error } = await cancelSubscription(params.subscriptionId);
 
       if (error) {
+        Logger.error(
+          {
+            name: 'billing.lemon-squeezy',
+            subscriptionId: params.subscriptionId,
+            error: error.message,
+          },
+          'Failed to cancel subscription',
+        );
+
         throw error;
       }
 
@@ -197,21 +206,22 @@ export class LemonSqueezyBillingStrategyService
     Logger.info(
       {
         name: 'billing.lemon-squeezy',
-        subscriptionItemId: params.subscriptionId,
+        subscriptionItemId: params.subscriptionItemId,
       },
       'Reporting usage...',
     );
 
     const { error } = await createUsageRecord({
       quantity: params.usage.quantity,
-      subscriptionItemId: params.subscriptionId,
+      subscriptionItemId: params.subscriptionItemId,
+      action: params.usage.action,
     });
 
     if (error) {
       Logger.error(
         {
           name: 'billing.lemon-squeezy',
-          subscriptionItemId: params.subscriptionId,
+          subscriptionItemId: params.subscriptionItemId,
           error: error.message,
         },
         'Failed to report usage',
@@ -223,7 +233,7 @@ export class LemonSqueezyBillingStrategyService
     Logger.info(
       {
         name: 'billing.lemon-squeezy',
-        subscriptionItemId: params.subscriptionId,
+        subscriptionItemId: params.subscriptionItemId,
       },
       'Usage reported successfully',
     );

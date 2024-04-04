@@ -187,9 +187,13 @@ export class StripeBillingStrategyService
   async reportUsage(params: z.infer<typeof ReportBillingUsageSchema>) {
     const stripe = await this.stripeProvider();
 
-    await stripe.subscriptionItems.createUsageRecord(params.subscriptionId, {
-      quantity: params.usage.quantity,
-    });
+    await stripe.subscriptionItems.createUsageRecord(
+      params.subscriptionItemId,
+      {
+        quantity: params.usage.quantity,
+        action: params.usage.action,
+      },
+    );
 
     return { success: true };
   }
