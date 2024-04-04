@@ -49,7 +49,11 @@ async function DocumentationPage({ params }: PageParams) {
 
   return (
     <div className={'container mx-auto'}>
-      <div className={'relative flex grow flex-col space-y-4 px-8 py-8'}>
+      <div
+        className={
+          'relative mx-auto flex max-w-4xl grow flex-col space-y-4 px-8 py-8'
+        }
+      >
         <SitePageHeader
           title={page.title}
           subtitle={description}

@@ -8,10 +8,10 @@ const ROOT_PATH = '/';
  * @param currentRoute - the current route
  * @param depth - how far down should segments be matched?
  */
-export default function isRouteActive(
+export function isRouteActive(
   targetLink: string,
   currentRoute: string,
-  depth: number,
+  depth = 1,
 ) {
   // we remove any eventual query param from the route's URL
   const currentRoutePath = currentRoute.split('?')[0] ?? '';

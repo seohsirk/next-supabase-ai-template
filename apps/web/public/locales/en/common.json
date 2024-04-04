@@ -19,6 +19,7 @@
   "imageInputLabel": "Click here to upload an image",
   "cancel": "Cancel",
   "clear": "Clear",
+  "notFound": "Not Found",
   "backToHomePage": "Back to Home Page",
   "genericServerError": "Sorry, something went wrong.",
   "genericServerErrorHeading": "Sorry, something went wrong while processing your request. Please contact us if the issue persists.",

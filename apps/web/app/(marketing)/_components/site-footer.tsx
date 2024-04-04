@@ -1,5 +1,7 @@
 import Link from 'next/link';
 
+import { Trans } from '@kit/ui/trans';
+
 import { AppLogo } from '~/components/app-logo';
 import appConfig from '~/config/app.config';
 
@@ -22,12 +24,12 @@ export function SiteFooter() {
               </div>
 
               <div>
-                <p className={'text-sm text-gray-500 dark:text-gray-400'}>
+                <p className={'text-sm text-muted-foreground'}>
                   Add a short tagline about your product
                 </p>
               </div>
 
-              <div className={'flex text-xs text-gray-500 dark:text-gray-400'}>
+              <div className={'flex text-xs text-muted-foreground'}>
                 <p>
                   © Copyright {YEAR} {appConfig.name}. All Rights Reserved.
                 </p>
@@ -43,54 +45,63 @@ export function SiteFooter() {
             }
           >
             <div>
-              <div className={'flex flex-col space-y-4'}>
-                <FooterSectionHeading>About</FooterSectionHeading>
+              <div className={'flex flex-col space-y-2.5'}>
+                <FooterSectionHeading>
+                  <Trans i18nKey={'marketing:about'} />
+                </FooterSectionHeading>
 
                 <FooterSectionList>
                   <FooterLink>
-                    <Link href={'#'}>Who we are</Link>
+                    <Link href={'/blog'}>
+                      <Trans i18nKey={'marketing:blog'} />
+                    </Link>
                   </FooterLink>
                   <FooterLink>
-                    <Link href={'/blog'}>Blog</Link>
-                  </FooterLink>
-                  <FooterLink>
-                    <Link href={'/contact'}>Contact</Link>
+                    <Link href={'/contact'}>
+                      <Trans i18nKey={'marketing:contact'} />
+                    </Link>
                   </FooterLink>
                 </FooterSectionList>
               </div>
             </div>
 
             <div>
-              <div className={'flex flex-col space-y-4'}>
-                <FooterSectionHeading>Product</FooterSectionHeading>
+              <div className={'flex flex-col space-y-2.5'}>
+                <FooterSectionHeading>
+                  <Trans i18nKey={'marketing:product'} />
+                </FooterSectionHeading>
 
                 <FooterSectionList>
                   <FooterLink>
-                    <Link href={'/docs'}>Documentation</Link>
-                  </FooterLink>
-                  <FooterLink>
-                    <Link href={'#'}>Help Center</Link>
-                  </FooterLink>
-                  <FooterLink>
-                    <Link href={'#'}>Changelog</Link>
+                    <Link href={'/docs'}>
+                      <Trans i18nKey={'marketing:documentation'} />
+                    </Link>
                   </FooterLink>
                 </FooterSectionList>
               </div>
             </div>
 
             <div>
-              <div className={'flex flex-col space-y-4'}>
-                <FooterSectionHeading>Legal</FooterSectionHeading>
+              <div className={'flex flex-col space-y-2.5'}>
+                <FooterSectionHeading>
+                  <Trans i18nKey={'marketing:legal'} />
+                </FooterSectionHeading>
 
                 <FooterSectionList>
                   <FooterLink>
-                    <Link href={'#'}>Terms of Service</Link>
+                    <Link href={'/terms-of-service'}>
+                      <Trans i18nKey={'marketing:tos'} />
+                    </Link>
                   </FooterLink>
                   <FooterLink>
-                    <Link href={'#'}>Privacy Policy</Link>
+                    <Link href={'/privacy-policy'}>
+                      <Trans i18nKey={'marketing:privacyPolicy'} />
+                    </Link>
                   </FooterLink>
                   <FooterLink>
-                    <Link href={'#'}>Cookie Policy</Link>
+                    <Link href={'/cookie-policy'}>
+                      <Trans i18nKey={'marketing:cookiePolicy'} />
+                    </Link>
                   </FooterLink>
                 </FooterSectionList>
               </div>
@@ -111,19 +122,14 @@ function FooterSectionHeading(props: React.PropsWithChildren) {
 }
 
 function FooterSectionList(props: React.PropsWithChildren) {
-  return (
-    <ul className={'flex flex-col space-y-4 text-gray-500 dark:text-gray-400'}>
-      {props.children}
-    </ul>
-  );
+  return <ul className={'flex flex-col space-y-2.5'}>{props.children}</ul>;
 }
 
 function FooterLink(props: React.PropsWithChildren) {
   return (
     <li
       className={
-        'text-sm [&>a]:transition-colors [&>a]:hover:text-gray-800' +
-        ' dark:[&>a]:hover:text-white'
+        'text-sm text-muted-foreground hover:underline [&>a]:transition-colors'
       }
     >
       {props.children}
