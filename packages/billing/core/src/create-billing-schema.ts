@@ -26,7 +26,9 @@ export const LineItemSchema = z
       .min(1),
     description: z
       .string({
-        description: 'Description of the line item. Displayed to the user.',
+        description:
+          'Description of the line item. Displayed to the user and will replace the auto-generated description inferred' +
+          ' from the line item. This is useful if you want to provide a more detailed description to the user.',
       })
       .optional(),
     cost: z
@@ -46,11 +48,33 @@ export const LineItemSchema = z
         description: 'Included amount of the line item. Displayed to the user.',
       })
       .optional(),
+    tiers: z
+      .array(
+        z.object({
+          upTo: z
+            .number({
+              description:
+                'Up to this amount the cost is the base cost. Displayed to the user.',
+            })
+            .min(0),
+          cost: z
+            .number({
+              description:
+                'Cost of the line item after the upTo amount. Displayed to the user.',
+            })
+            .min(0),
+        }),
+      )
+      .optional(),
   })
-  .refine((data) => data.type !== 'metered' || (data.unit && data.included), {
-    message: 'Metered line items must have a unit and included amount',
-    path: ['type', 'unit', 'included'],
-  });
+  .refine(
+    (data) =>
+      data.type !== 'metered' || (data.unit && data.included !== undefined),
+    {
+      message: 'Metered line items must have a unit and included amount',
+      path: ['type', 'unit', 'included'],
+    },
+  );
 
 export const PlanSchema = z
   .object({

@@ -34,6 +34,7 @@ import {
   RadioGroupItem,
   RadioGroupItemLabel,
 } from '@kit/ui/radio-group';
+import { Separator } from '@kit/ui/separator';
 import { Trans } from '@kit/ui/trans';
 import { cn } from '@kit/ui/utils';
 
@@ -410,8 +411,10 @@ function PlanDetails({
         </p>
       </div>
 
-      <div className={'flex flex-col space-y-1'}>
-        <span className={'font-semibold'}>
+      <Separator />
+
+      <div className={'flex flex-col space-y-2'}>
+        <span className={'text-sm font-semibold'}>
           <Trans i18nKey={'billing:detailsLabel'} />
         </span>
 
@@ -423,16 +426,16 @@ function PlanDetails({
       </div>
 
       <div className={'flex flex-col space-y-2'}>
-        <span className={'font-semibold'}>
+        <span className={'text-sm font-semibold'}>
           <Trans i18nKey={'billing:featuresLabel'} />
         </span>
 
         {selectedProduct.features.map((item) => {
           return (
-            <div key={item} className={'flex items-center space-x-2 text-sm'}>
+            <div key={item} className={'flex items-center space-x-1 text-sm'}>
               <CheckCircle className={'h-4 text-green-500'} />
 
-              <span className={'text-muted-foreground'}>
+              <span className={'text-secondary-foreground'}>
                 <Trans i18nKey={`billing:features.${item}`} defaults={item} />
               </span>
             </div>

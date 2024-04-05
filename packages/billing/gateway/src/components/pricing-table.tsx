@@ -5,8 +5,14 @@ import { useState } from 'react';
 import Link from 'next/link';
 
 import { ArrowRight, CheckCircle, Sparkles } from 'lucide-react';
+import { z } from 'zod';
 
-import { BillingConfig, getBaseLineItem, getPlanIntervals } from '@kit/billing';
+import {
+  BillingConfig,
+  LineItemSchema,
+  getBaseLineItem,
+  getPlanIntervals,
+} from '@kit/billing';
 import { formatCurrency } from '@kit/shared/utils';
 import { Badge } from '@kit/ui/badge';
 import { Button } from '@kit/ui/button';
@@ -14,6 +20,8 @@ import { Heading } from '@kit/ui/heading';
 import { If } from '@kit/ui/if';
 import { Trans } from '@kit/ui/trans';
 import { cn } from '@kit/ui/utils';
+
+import { LineItemDetails } from './line-item-details';
 
 interface Paths {
   signUp: string;
@@ -23,9 +31,11 @@ export function PricingTable({
   config,
   paths,
   CheckoutButtonRenderer,
+  displayPlanDetails = true,
 }: {
   config: BillingConfig;
   paths: Paths;
+  displayPlanDetails?: boolean;
 
   CheckoutButtonRenderer?: React.ComponentType<{
     planId: string;
@@ -83,6 +93,7 @@ export function PricingTable({
               baseLineItem={basePlan}
               product={product}
               paths={paths}
+              displayPlanDetails={displayPlanDetails}
               CheckoutButton={CheckoutButtonRenderer}
             />
           );
@@ -95,6 +106,7 @@ export function PricingTable({
 function PricingItem(
   props: React.PropsWithChildren<{
     className?: string;
+    displayPlanDetails: boolean;
 
     paths: {
       signUp: string;
@@ -109,6 +121,7 @@ function PricingItem(
 
     plan: {
       id: string;
+      lineItems: z.infer<typeof LineItemSchema>[];
       interval?: string;
       name?: string;
       href?: string;
@@ -132,13 +145,19 @@ function PricingItem(
 ) {
   const highlighted = props.product.highlighted ?? false;
 
+  // we want to exclude the base plan from the list of line items
+  // since we are displaying the base plan separately as the main price
+  const lineItemsToDisplay = props.plan.lineItems.filter((item) => {
+    return item.type !== 'base';
+  });
+
   return (
     <div
       data-cy={'subscription-plan'}
       className={cn(
         props.className,
         `s-full flex flex-1 grow flex-col items-stretch
-            justify-between space-y-8 self-stretch p-8 lg:w-4/12 xl:max-w-[22rem] xl:p-10`,
+            justify-between space-y-8 self-stretch p-6 lg:w-4/12 xl:max-w-[22rem] xl:p-8`,
         {
           ['bg-primary text-primary-foreground border-primary']: highlighted,
         },
@@ -212,12 +231,30 @@ function PricingItem(
           </If>
         </div>
 
-        <div>
+        <div className={'flex flex-col space-y-2'}>
+          <h6 className={'text-sm font-semibold'}>
+            <Trans i18nKey={'billing:featuresLabel'} />
+          </h6>
+
           <FeaturesList
             highlighted={highlighted}
             features={props.product.features}
           />
         </div>
+
+        <If condition={props.displayPlanDetails && lineItemsToDisplay.length}>
+          <div className={'flex flex-col space-y-2'}>
+            <h6 className={'text-sm font-semibold'}>
+              <Trans i18nKey={'billing:detailsLabel'} />
+            </h6>
+
+            <LineItemDetails
+              selectedInterval={props.plan.interval}
+              currency={props.product.currency}
+              lineItems={lineItemsToDisplay}
+            />
+          </div>
+        </If>
       </div>
 
       <If condition={props.selectable}>
@@ -286,18 +323,16 @@ function ListItem({
 }>) {
   return (
     <li className={'flex items-center space-x-1.5'}>
-      <div>
-        <CheckCircle
-          className={cn('h-4', {
-            ['text-primary-foreground']: highlighted,
-            ['text-green-600']: !highlighted,
-          })}
-        />
-      </div>
+      <CheckCircle
+        className={cn('h-4', {
+          ['text-primary-foreground']: highlighted,
+          ['text-green-600']: !highlighted,
+        })}
+      />
 
       <span
         className={cn('text-sm', {
-          ['text-muted-foreground']: !highlighted,
+          ['text-secondary-foreground']: !highlighted,
           ['text-primary-foreground']: highlighted,
         })}
       >
