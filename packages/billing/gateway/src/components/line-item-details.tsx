@@ -12,16 +12,16 @@ export function LineItemDetails(
     selectedInterval?: string | undefined;
   }>,
 ) {
+  const className =
+    'flex items-center justify-between text-sm border-b border-dashed pb-2 last:border-transparent';
+
   return (
-    <div className={'flex flex-col divide-y'}>
+    <div className={'flex flex-col space-y-2'}>
       {props.lineItems.map((item) => {
         switch (item.type) {
           case 'base':
             return (
-              <div
-                key={item.id}
-                className={'flex items-center justify-between py-1.5 text-sm'}
-              >
+              <div key={item.id} className={className}>
                 <span className={'flex space-x-2'}>
                   <span>
                     <Trans i18nKey={'billing:basePlan'} />
@@ -49,10 +49,7 @@ export function LineItemDetails(
 
           case 'per-seat':
             return (
-              <div
-                key={item.id}
-                className={'flex items-center justify-between py-1.5 text-sm'}
-              >
+              <div key={item.id} className={className}>
                 <span>
                   <Trans i18nKey={'billing:perTeamMember'} />
                 </span>
@@ -65,25 +62,26 @@ export function LineItemDetails(
 
           case 'metered':
             return (
-              <div
-                key={item.id}
-                className={'flex items-center justify-between py-1.5 text-sm'}
-              >
-                <span>
-                  <Trans
-                    i18nKey={'billing:perUnit'}
-                    values={{
-                      unit: item.unit,
-                    }}
-                  />
-
-                  {item.included ? (
+              <div key={item.id} className={className}>
+                <span className={'flex items-center space-x-2'}>
+                  <span>
                     <Trans
-                      i18nKey={'billing:perUnitIncluded'}
+                      i18nKey={'billing:perUnit'}
                       values={{
-                        included: item.included,
+                        unit: item.unit,
                       }}
                     />
+                  </span>
+
+                  {item.included ? (
+                    <span>
+                      <Trans
+                        i18nKey={'billing:perUnitIncluded'}
+                        values={{
+                          included: item.included,
+                        }}
+                      />
+                    </span>
                   ) : (
                     ''
                   )}

@@ -377,10 +377,14 @@ function PlanDetails({
 }) {
   const isRecurring = selectedPlan.paymentType === 'recurring';
 
+  // trick to force animation on re-render
+  const key = Math.random();
+
   return (
     <div
+      key={key}
       className={
-        'fade-in animate-in zoom-in-90 flex w-full flex-col space-y-4 rounded-lg border p-4'
+        'fade-in animate-in flex w-full flex-col space-y-4 rounded-lg border p-4 duration-500'
       }
     >
       <div className={'flex flex-col space-y-0.5'}>

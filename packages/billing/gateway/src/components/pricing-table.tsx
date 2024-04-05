@@ -212,13 +212,11 @@ function PricingItem(
           </If>
         </div>
 
-        <div
-          className={cn({
-            ['text-muted-foreground']: !highlighted,
-            ['text-primary-foreground']: highlighted,
-          })}
-        >
-          <FeaturesList features={props.product.features} />
+        <div>
+          <FeaturesList
+            highlighted={highlighted}
+            features={props.product.features}
+          />
         </div>
       </div>
 
@@ -245,13 +243,14 @@ function PricingItem(
 function FeaturesList(
   props: React.PropsWithChildren<{
     features: string[];
+    highlighted?: boolean;
   }>,
 ) {
   return (
     <ul className={'flex flex-col space-y-2'}>
       {props.features.map((feature) => {
         return (
-          <ListItem key={feature}>
+          <ListItem highlighted={props.highlighted} key={feature}>
             <Trans
               i18nKey={`common:plans.features.${feature}`}
               defaults={feature}
@@ -279,14 +278,31 @@ function Price({ children }: React.PropsWithChildren) {
   );
 }
 
-function ListItem({ children }: React.PropsWithChildren) {
+function ListItem({
+  children,
+  highlighted,
+}: React.PropsWithChildren<{
+  highlighted?: boolean;
+}>) {
   return (
     <li className={'flex items-center space-x-1.5'}>
       <div>
-        <CheckCircle className={'h-4 text-green-600'} />
+        <CheckCircle
+          className={cn('h-4', {
+            ['text-primary-foreground']: highlighted,
+            ['text-green-600']: !highlighted,
+          })}
+        />
       </div>
 
-      <span className={'text-sm'}>{children}</span>
+      <span
+        className={cn('text-sm', {
+          ['text-muted-foreground']: !highlighted,
+          ['text-primary-foreground']: highlighted,
+        })}
+      >
+        {children}
+      </span>
     </li>
   );
 }

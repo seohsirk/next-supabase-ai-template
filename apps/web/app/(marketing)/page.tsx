@@ -3,9 +3,12 @@ import Link from 'next/link';
 
 import { ChevronRight } from 'lucide-react';
 
+import { PricingTable } from '@kit/billing-gateway/components';
 import { Button } from '@kit/ui/button';
 import { Heading } from '@kit/ui/heading';
 
+import billingConfig from '~/config/billing.config';
+import pathsConfig from '~/config/paths.config';
 import { withI18n } from '~/lib/i18n/with-i18n';
 
 function Home() {
@@ -198,7 +201,14 @@ function Home() {
             </div>
           </div>
 
-          <div className={'w-full'}></div>
+          <div className={'w-full'}>
+            <PricingTable
+              config={billingConfig}
+              paths={{
+                signUp: pathsConfig.auth.signUp,
+              }}
+            />
+          </div>
         </div>
       </div>
     </div>
