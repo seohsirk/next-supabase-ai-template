@@ -4,10 +4,11 @@ import { useState } from 'react';
 
 import Link from 'next/link';
 
-import { CheckCircle, Sparkles } from 'lucide-react';
+import { ArrowRight, CheckCircle, Sparkles } from 'lucide-react';
 
 import { BillingConfig, getBaseLineItem, getPlanIntervals } from '@kit/billing';
 import { formatCurrency } from '@kit/shared/utils';
+import { Badge } from '@kit/ui/badge';
 import { Button } from '@kit/ui/button';
 import { Heading } from '@kit/ui/heading';
 import { If } from '@kit/ui/if';
@@ -49,25 +50,36 @@ export function PricingTable({
       <div
         className={
           'flex flex-col items-start space-y-6 lg:space-y-0' +
-          ' justify-center space-x-2 lg:flex-row'
+          ' justify-center lg:flex-row'
         }
       >
-        {config.products.map((product) => {
-          const plan = product.plans.find((plan) => plan.interval === interval);
+        {config.products.map((product, index) => {
+          const isFirst = index === 0;
+          const isLast = index === config.products.length - 1;
+
+          const plan = product.plans.find((plan) => {
+            if (plan.paymentType === 'recurring') {
+              return plan.interval === interval;
+            }
+
+            return plan;
+          });
 
           if (!plan) {
-            console.warn(`No plan found for ${product.name}`);
-
-            return;
+            return null;
           }
 
           const basePlan = getBaseLineItem(config, plan.id);
 
           return (
             <PricingItem
+              className={cn('border-b border-r border-t', {
+                ['rounded-l-lg border-l']: isFirst,
+                ['rounded-r-lg']: isLast,
+              })}
               selectable
               key={plan.id}
-              plan={{ ...plan, interval }}
+              plan={plan}
               baseLineItem={basePlan}
               product={product}
               paths={paths}
@@ -82,6 +94,8 @@ export function PricingTable({
 
 function PricingItem(
   props: React.PropsWithChildren<{
+    className?: string;
+
     paths: {
       signUp: string;
     };
@@ -95,7 +109,7 @@ function PricingItem(
 
     plan: {
       id: string;
-      interval: string;
+      interval?: string;
       name?: string;
       href?: string;
       label?: string;
@@ -122,57 +136,80 @@ function PricingItem(
     <div
       data-cy={'subscription-plan'}
       className={cn(
-        `
-         relative flex w-full flex-col justify-between space-y-6 rounded-lg
-         border p-6 lg:w-4/12 xl:max-w-xs xl:p-8 2xl:w-3/12
-      `,
+        props.className,
+        `s-full flex flex-1 grow flex-col items-stretch justify-between space-y-8 self-stretch
+            p-8 lg:w-4/12 xl:max-w-[22rem] xl:p-10`,
+        {
+          ['border-primary border-2']: highlighted,
+        },
       )}
     >
-      <div className={'flex flex-col space-y-2.5'}>
-        <div className={'flex items-center space-x-2.5'}>
-          <Heading level={4}>
-            <b className={'font-semibold'}>{props.product.name}</b>
-          </Heading>
+      <div className={'flex flex-col space-y-6'}>
+        <div className={'flex flex-col space-y-2'}>
+          <div className={'flex items-center space-x-4'}>
+            <Heading level={4}>
+              <b className={'font-bold'}>{props.product.name}</b>
+            </Heading>
 
-          <If condition={props.product.badge}>
-            <div
+            <If condition={props.product.badge}>
+              <Badge
+                variant={'default'}
+                className={cn({
+                  ['border-primary-foreground']: highlighted,
+                })}
+              >
+                <If condition={highlighted}>
+                  <Sparkles className={'h-3'} />
+                </If>
+
+                <span>
+                  <Trans
+                    i18nKey={props.product.badge}
+                    defaults={props.product.badge}
+                  />
+                </span>
+              </Badge>
+            </If>
+          </div>
+
+          <span className={cn(`text-muted-foreground`)}>
+            <Trans
+              i18nKey={props.product.description}
+              defaults={props.product.description}
+            />
+          </span>
+        </div>
+
+        <div className={'flex items-center space-x-1'}>
+          <Price>
+            {formatCurrency(props.product.currency, props.baseLineItem.cost)}
+          </Price>
+
+          <If condition={props.plan.name}>
+            <span
               className={cn(
-                `flex space-x-1 rounded-md px-2 py-1 text-xs font-medium`,
-                {
-                  ['text-primary-foreground bg-primary']: highlighted,
-                  ['text-muted-foreground bg-gray-50']: !highlighted,
-                },
+                `text-muted-foreground flex items-center space-x-1 text-base lowercase`,
               )}
             >
-              <If condition={highlighted}>
-                <Sparkles className={'mr-1 h-4 w-4'} />
-              </If>
+              <span>/</span>
 
-              <span>{props.product.badge}</span>
-            </div>
+              <span className={'text-sm'}>
+                <If
+                  condition={props.plan.interval}
+                  fallback={<Trans i18nKey={'billing:lifetime'} />}
+                >
+                  {(interval) => (
+                    <Trans i18nKey={`billing:billingInterval.${interval}`} />
+                  )}
+                </If>
+              </span>
+            </span>
           </If>
         </div>
 
-        <span className={'text-sm text-gray-500 dark:text-gray-400'}>
-          {props.product.description}
-        </span>
-      </div>
-
-      <div className={'flex items-center space-x-1'}>
-        <Price>
-          {formatCurrency(props.product.currency, props.baseLineItem.cost)}
-        </Price>
-
-        <If condition={props.plan.name}>
-          <span className={cn(`text-muted-foreground text-base lowercase`)}>
-            <span>/</span>
-            <span>{props.plan.interval}</span>
-          </span>
-        </If>
-      </div>
-
-      <div className={'text-current'}>
-        <FeaturesList features={props.product.features} />
+        <div className={'text-current'}>
+          <FeaturesList features={props.product.features} />
+        </div>
       </div>
 
       <If condition={props.selectable}>
@@ -227,7 +264,7 @@ function Price({ children }: React.PropsWithChildren) {
     >
       <span
         className={
-          'flex items-center text-2xl font-bold lg:text-3xl xl:text-4xl 2xl:text-5xl'
+          'flex items-center text-2xl font-bold lg:text-3xl xl:text-4xl'
         }
       >
         {children}
@@ -238,12 +275,12 @@ function Price({ children }: React.PropsWithChildren) {
 
 function ListItem({ children }: React.PropsWithChildren) {
   return (
-    <li className={'flex items-center space-x-3 font-medium'}>
+    <li className={'flex items-center space-x-1.5'}>
       <div>
-        <CheckCircle className={'h-5 text-green-500'} />
+        <CheckCircle className={'h-4 text-green-600'} />
       </div>
 
-      <span className={'text-muted-foreground text-sm'}>{children}</span>
+      <span className={'text-secondary-foreground text-sm'}>{children}</span>
     </li>
   );
 }
@@ -312,15 +349,18 @@ function DefaultCheckoutButton(
   const label = props.plan.label ?? 'common:getStarted';
 
   return (
-    <div className={'bottom-0 left-0 w-full p-0'}>
-      <Link className={'w-full'} href={linkHref}>
-        <Button
-          className={'w-full'}
-          variant={props.highlighted ? 'default' : 'outline'}
-        >
+    <Link className={'w-full'} href={linkHref}>
+      <Button
+        size={'lg'}
+        className={'w-full'}
+        variant={props.highlighted ? 'default' : 'outline'}
+      >
+        <span>
           <Trans i18nKey={label} defaults={label} />
-        </Button>
-      </Link>
-    </div>
+        </span>
+
+        <ArrowRight className={'ml-2 h-4'} />
+      </Button>
+    </Link>
   );
 }

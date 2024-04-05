@@ -107,25 +107,12 @@ export const PlanSchema = z
   .refine(
     (data) => {
       if (data.paymentType === 'one-time') {
-        const meteredItems = data.lineItems.filter(
-          (item) => item.type === 'metered',
-        );
-
-        return meteredItems.length === 0;
-      }
-    },
-    {
-      message: 'One-time plans must not have metered line items',
-      path: ['paymentType', 'lineItems'],
-    },
-  )
-  .refine(
-    (data) => {
-      if (data.paymentType === 'one-time') {
         const baseItems = data.lineItems.filter((item) => item.type !== 'base');
 
         return baseItems.length === 0;
       }
+
+      return true;
     },
     {
       message: 'One-time plans must not have non-base line items',
