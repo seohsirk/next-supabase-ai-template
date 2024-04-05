@@ -12,6 +12,7 @@ import { Badge } from '@kit/ui/badge';
 import { Button } from '@kit/ui/button';
 import { Heading } from '@kit/ui/heading';
 import { If } from '@kit/ui/if';
+import { Separator } from '@kit/ui/separator';
 import { Trans } from '@kit/ui/trans';
 import { cn } from '@kit/ui/utils';
 
@@ -172,7 +173,7 @@ function PricingItem(
             </If>
           </div>
 
-          <span className={cn(`text-muted-foreground`)}>
+          <span className={cn(`text-muted-foreground text-sm`)}>
             <Trans
               i18nKey={props.product.description}
               defaults={props.product.description}
@@ -180,19 +181,13 @@ function PricingItem(
           </span>
         </div>
 
-        <div className={'flex items-center space-x-1'}>
+        <div className={'flex flex-col space-y-1'}>
           <Price>
             {formatCurrency(props.product.currency, props.baseLineItem.cost)}
           </Price>
 
           <If condition={props.plan.name}>
-            <span
-              className={cn(
-                `text-muted-foreground flex items-center space-x-1 text-base lowercase`,
-              )}
-            >
-              <span>/</span>
-
+            <span className={cn(`text-muted-foreground capitalize`)}>
               <span className={'text-sm'}>
                 <If
                   condition={props.plan.interval}
@@ -280,7 +275,7 @@ function ListItem({ children }: React.PropsWithChildren) {
         <CheckCircle className={'h-4 text-green-600'} />
       </div>
 
-      <span className={'text-secondary-foreground text-sm'}>{children}</span>
+      <span className={'text-muted-foreground text-sm'}>{children}</span>
     </li>
   );
 }
