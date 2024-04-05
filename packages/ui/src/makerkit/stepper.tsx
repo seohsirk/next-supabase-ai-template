@@ -98,7 +98,7 @@ function getClassNameBuilder() {
       {
         variant: 'default',
         selected: false,
-        className: 'text-gray-400 dark:text-gray-500',
+        className: 'text-muted-foreground',
       },
       {
         variant: 'default',
@@ -108,7 +108,7 @@ function getClassNameBuilder() {
       {
         variant: 'default',
         selected: false,
-        className: 'bg-gray-300 dark:bg-gray-800',
+        className: 'bg-muted',
       },
       {
         variant: 'numbers',
@@ -118,7 +118,7 @@ function getClassNameBuilder() {
       {
         variant: 'numbers',
         selected: false,
-        className: 'text-gray-400 dark:text-gray-500',
+        className: 'text-muted-foreground',
       },
     ],
     defaultVariants: {
@@ -135,7 +135,7 @@ function StepDivider({
   selected: boolean;
 }>) {
   const spanClassName = cn('font-medium text-sm', {
-    ['text-gray-400 dark:text-gray-500']: !selected,
+    ['text-muted-foreground']: !selected,
     ['text-primary']: selected,
   });
 

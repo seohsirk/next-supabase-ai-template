@@ -110,7 +110,7 @@ export function PersonalAccountDropdown({
           <div
             className={'flex flex-col justify-start truncate text-left text-xs'}
           >
-            <div className={'text-gray-500'}>
+            <div className={'text-muted-foreground'}>
               <Trans i18nKey={'common:signedInAs'} />
             </div>
 

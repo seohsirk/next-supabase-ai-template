@@ -123,8 +123,7 @@ function CollapsibleButton({
     `bg-background absolute -right-[10.5px] bottom-4 cursor-pointer block`,
   );
 
-  const iconClassName =
-    'bg-background text-gray-300 dark:text-gray-600 h-5 w-5';
+  const iconClassName = 'bg-background text-muted-foreground h-5 w-5';
 
   return (
     <TooltipProvider>

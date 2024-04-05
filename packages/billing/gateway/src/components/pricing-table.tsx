@@ -12,7 +12,6 @@ import { Badge } from '@kit/ui/badge';
 import { Button } from '@kit/ui/button';
 import { Heading } from '@kit/ui/heading';
 import { If } from '@kit/ui/if';
-import { Separator } from '@kit/ui/separator';
 import { Trans } from '@kit/ui/trans';
 import { cn } from '@kit/ui/utils';
 

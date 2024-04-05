@@ -30,10 +30,7 @@ export function DocsPageLink({
 
       <span className={'flex flex-col space-y-1.5'}>
         <span
-          className={
-            'text-xs font-semibold uppercase dark:text-gray-400' +
-            ' text-gray-500'
-          }
+          className={'text-xs font-semibold uppercase text-muted-foreground'}
         >
           {before ? `Previous` : ``}
           {after ? `Next` : ``}

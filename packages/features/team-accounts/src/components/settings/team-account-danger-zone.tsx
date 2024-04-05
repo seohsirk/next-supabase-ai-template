@@ -78,7 +78,7 @@ function DeleteTeamContainer(props: {
           <Trans i18nKey={'teams:deleteTeam'} />
         </span>
 
-        <p className={'text-sm text-gray-500'}>
+        <p className={'text-muted-foreground text-sm'}>
           <Trans
             i18nKey={'teams:deleteTeamDescription'}
             values={{

@@ -148,7 +148,7 @@ export const ImageUploadInput = forwardRef<React.ElementRef<'input'>, Props>(
         <div className={'flex items-center space-x-4'}>
           <div className={'flex'}>
             <If condition={!state.image}>
-              <UploadCloud className={'dark:text-dark-500 h-5 text-gray-500'} />
+              <UploadCloud className={'h-5 text-muted-foreground'} />
             </If>
 
             <If condition={state.image}>

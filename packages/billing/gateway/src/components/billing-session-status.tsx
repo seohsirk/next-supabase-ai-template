@@ -69,9 +69,7 @@ function SuccessSessionStatus({
           🎉
         </Heading>
 
-        <div
-          className={'flex flex-col space-y-4 text-gray-500 dark:text-gray-400'}
-        >
+        <div className={'text-muted-foreground flex flex-col space-y-4'}>
           <p>
             <Trans
               i18nKey={'billing:checkoutSuccessDescription'}
