@@ -215,7 +215,11 @@ function Chart(
   props: React.PropsWithChildren<{ data: { value: string; name: string }[] }>,
 ) {
   return (
-    <div className={'h-36'}>
+    <div
+      className={
+        'h-36 duration-200 animate-in fade-in slide-in-from-left-4 slide-in-from-top-4'
+      }
+    >
       <ResponsiveContainer width={'100%'} height={'100%'}>
         <LineChart
           width={400}

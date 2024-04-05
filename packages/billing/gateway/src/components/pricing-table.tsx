@@ -36,7 +36,7 @@ export function PricingTable({
   const [interval, setInterval] = useState(intervals[0]!);
 
   return (
-    <div className={'flex flex-col space-y-12'}>
+    <div className={'flex flex-col space-y-8'}>
       <div className={'flex justify-center'}>
         {intervals.length ? (
           <PlanIntervalSwitcher
@@ -137,10 +137,10 @@ function PricingItem(
       data-cy={'subscription-plan'}
       className={cn(
         props.className,
-        `s-full flex flex-1 grow flex-col items-stretch justify-between space-y-8 self-stretch
-            p-8 lg:w-4/12 xl:max-w-[22rem] xl:p-10`,
+        `s-full flex flex-1 grow flex-col items-stretch
+            justify-between space-y-8 self-stretch p-8 lg:w-4/12 xl:max-w-[22rem] xl:p-10`,
         {
-          ['border-primary border-2']: highlighted,
+          ['bg-primary text-primary-foreground border-primary']: highlighted,
         },
       )}
     >
@@ -172,7 +172,11 @@ function PricingItem(
             </If>
           </div>
 
-          <span className={cn(`text-muted-foreground text-sm`)}>
+          <span
+            className={cn(`text-sm text-current`, {
+              ['text-muted-foreground']: !highlighted,
+            })}
+          >
             <Trans
               i18nKey={props.product.description}
               defaults={props.product.description}
@@ -186,7 +190,14 @@ function PricingItem(
           </Price>
 
           <If condition={props.plan.name}>
-            <span className={cn(`text-muted-foreground capitalize`)}>
+            <span
+              className={cn(
+                `animate-in slide-in-from-left-4 fade-in capitalize`,
+                {
+                  ['text-muted-foreground']: !highlighted,
+                },
+              )}
+            >
               <span className={'text-sm'}>
                 <If
                   condition={props.plan.interval}
@@ -201,7 +212,12 @@ function PricingItem(
           </If>
         </div>
 
-        <div className={'text-current'}>
+        <div
+          className={cn({
+            ['text-muted-foreground']: !highlighted,
+            ['text-primary-foreground']: highlighted,
+          })}
+        >
           <FeaturesList features={props.product.features} />
         </div>
       </div>
@@ -248,12 +264,8 @@ function FeaturesList(
 }
 
 function Price({ children }: React.PropsWithChildren) {
-  // little trick to re-animate the price when switching plans
-  const key = Math.random();
-
   return (
     <div
-      key={key}
       className={`animate-in slide-in-from-left-4 fade-in items-center duration-500`}
     >
       <span
@@ -274,7 +286,7 @@ function ListItem({ children }: React.PropsWithChildren) {
         <CheckCircle className={'h-4 text-green-600'} />
       </div>
 
-      <span className={'text-muted-foreground text-sm'}>{children}</span>
+      <span className={'text-sm'}>{children}</span>
     </li>
   );
 }
@@ -294,9 +306,9 @@ function PlanIntervalSwitcher(
         const className = cn('focus:!ring-0 !outline-none', {
           'rounded-r-none border-r-transparent': index === 0,
           'rounded-l-none': index === props.intervals.length - 1,
-          ['hover:bg-gray-50 dark:hover:bg-background/80']: !selected,
-          ['text-primary-800 dark:text-primary-500 font-semibold' +
-          ' hover:bg-background hover:text-initial']: selected,
+          ['hover:bg-muted']: !selected,
+          ['font-semibold cursor-default bg-muted hover:bg-muted hover:text-initial']:
+            selected,
         });
 
         return (
@@ -308,7 +320,7 @@ function PlanIntervalSwitcher(
           >
             <span className={'flex items-center space-x-1'}>
               <If condition={selected}>
-                <CheckCircle className={'h-4 text-green-500'} />
+                <CheckCircle className={'animate-in fade-in h-4'} />
               </If>
 
               <span className={'capitalize'}>
@@ -347,7 +359,7 @@ function DefaultCheckoutButton(
       <Button
         size={'lg'}
         className={'w-full'}
-        variant={props.highlighted ? 'default' : 'outline'}
+        variant={props.highlighted ? 'secondary' : 'outline'}
       >
         <span>
           <Trans i18nKey={label} defaults={label} />
