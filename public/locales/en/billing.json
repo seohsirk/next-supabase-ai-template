@@ -33,6 +33,7 @@
   "proceedToPayment": "Proceed to Payment",
   "startTrial": "Start Trial",
   "perTeamMember": "Per team member",
+  "perUnit": "For each {{unit}}",
   "perUnitIncluded": "({{included}} included)",
   "featuresLabel": "Features",
   "detailsLabel": "Details",
