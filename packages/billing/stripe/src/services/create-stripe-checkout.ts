@@ -61,9 +61,16 @@ export async function createStripeCheckout(
       };
     }
 
+    // if we pass a custom quantity for the item ID
+    // we use that - otherwise we set it to 1 by default
+    const quantity =
+      params.variantQuantities.find((variant) => {
+        return variant.variantId === item.id;
+      })?.quantity ?? 1;
+
     return {
       price: item.id,
-      quantity: 1,
+      quantity,
     };
   });
 

@@ -75,6 +75,7 @@ export async function createPersonalAccountCheckoutSession(
     customerEmail: user.email,
     customerId,
     plan,
+    variantQuantities: [],
   });
 
   Logger.info(

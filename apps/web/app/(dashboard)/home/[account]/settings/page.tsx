@@ -5,7 +5,7 @@ import { Trans } from '@kit/ui/trans';
 import pathsConfig from '~/config/paths.config';
 import { createI18nServerInstance } from '~/lib/i18n/i18n.server';
 
-import { loadTeamWorkspace } from '../_lib/load-team-account-workspace';
+import { loadTeamWorkspace } from '../_lib/server/team-account-workspace.loader';
 
 export const generateMetadata = async () => {
   const i18n = await createI18nServerInstance();

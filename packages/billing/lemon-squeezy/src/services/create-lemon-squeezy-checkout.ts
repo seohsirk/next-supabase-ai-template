@@ -55,6 +55,12 @@ export async function createLemonSqueezyCheckout(
     },
     checkoutData: {
       email: customerEmail,
+      variantQuantities: params.variantQuantities.map((item) => {
+        return {
+          quantity: item.quantity,
+          variantId: Number(item.variantId),
+        };
+      }),
       custom: {
         account_id: params.accountId,
       },

@@ -5,7 +5,7 @@ import { Page } from '@kit/ui/page';
 import { withI18n } from '~/lib/i18n/with-i18n';
 
 import { AccountLayoutSidebar } from './_components/account-layout-sidebar';
-import { loadTeamWorkspace } from './_lib/load-team-account-workspace';
+import { loadTeamWorkspace } from './_lib/server/team-account-workspace.loader';
 
 interface Params {
   account: string;
