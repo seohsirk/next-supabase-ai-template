@@ -26,9 +26,16 @@ export const loadTeamWorkspace = cache(async (accountSlug: string) => {
 
   const accountsPromise = client.from('user_accounts').select('*');
 
-  const [accountResult, accountsResult] = await Promise.all([
+  const [
+    accountResult,
+    accountsResult,
+    {
+      data: { session },
+    },
+  ] = await Promise.all([
     accountPromise,
     accountsPromise,
+    client.auth.getSession(),
   ]);
 
   if (accountResult.error) {
@@ -56,5 +63,6 @@ export const loadTeamWorkspace = cache(async (accountSlug: string) => {
   return {
     account: accountData,
     accounts: accountsResult.data,
+    session,
   };
 });
