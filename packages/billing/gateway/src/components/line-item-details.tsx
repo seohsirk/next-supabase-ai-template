@@ -1,4 +1,4 @@
-import { Plus, PlusCircle } from 'lucide-react';
+import { PlusSquare } from 'lucide-react';
 import { z } from 'zod';
 
 import { LineItemSchema } from '@kit/billing';
@@ -26,7 +26,7 @@ export function LineItemDetails(
           return (
             <div key={item.id} className={className}>
               <span className={'flex items-center space-x-1.5'}>
-                <Plus className={'w-4'} />
+                <PlusSquare className={'w-4'} />
 
                 <Trans
                   i18nKey={item.description}
@@ -38,94 +38,186 @@ export function LineItemDetails(
           );
         }
 
+        const BaseFee = () => (
+          <div key={item.id} className={className}>
+            <span className={'flex items-center space-x-1'}>
+              <span className={'flex items-center space-x-1.5'}>
+                <PlusSquare className={'w-4'} />
+
+                <span>
+                  <Trans i18nKey={'billing:basePlan'} />
+                </span>
+              </span>
+
+              <span>-</span>
+
+              <span>
+                <If
+                  condition={props.selectedInterval}
+                  fallback={<Trans i18nKey={'billing:lifetime'} />}
+                >
+                  <Trans
+                    i18nKey={`billing:billingInterval.${props.selectedInterval}`}
+                  />
+                </If>
+              </span>
+            </span>
+
+            <span className={'font-semibold'}>
+              {formatCurrency(props?.currency.toLowerCase(), item.cost)}
+            </span>
+          </div>
+        );
+
         switch (item.type) {
           case 'base':
-            return (
-              <div key={item.id} className={className}>
-                <span className={'flex items-center space-x-1'}>
-                  <span className={'flex items-center space-x-1.5'}>
-                    <PlusCircle className={'w-4'} />
-
-                    <span>
-                      <Trans i18nKey={'billing:basePlan'} />
-                    </span>
-                  </span>
-
-                  <span>-</span>
-
-                  <span>
-                    <If
-                      condition={props.selectedInterval}
-                      fallback={<Trans i18nKey={'billing:lifetime'} />}
-                    >
-                      <Trans
-                        i18nKey={`billing:billingInterval.${props.selectedInterval}`}
-                      />
-                    </If>
-                  </span>
-                </span>
-
-                <span className={'font-semibold'}>
-                  {formatCurrency(props?.currency.toLowerCase(), item.cost)}
-                </span>
-              </div>
-            );
+            return <BaseFee />;
 
           case 'per-seat':
             return (
-              <div key={item.id} className={className}>
-                <span className={'flex items-center space-x-1.5'}>
-                  <PlusCircle className={'w-4'} />
-
-                  <span>
-                    <Trans i18nKey={'billing:perTeamMember'} />
-                  </span>
-                </span>
-
-                <span className={'font-semibold'}>
-                  {formatCurrency(props.currency.toLowerCase(), item.cost)}
-                </span>
-              </div>
-            );
-
-          case 'metered':
-            return (
-              <div key={item.id} className={className}>
-                <span className={'flex items-center space-x-1'}>
+              <div className={'flex flex-col'}>
+                <div key={item.id} className={className}>
                   <span className={'flex items-center space-x-1.5'}>
-                    <PlusCircle className={'w-4'} />
+                    <PlusSquare className={'w-4'} />
 
                     <span>
-                      <Trans
-                        i18nKey={'billing:perUnit'}
-                        values={{
-                          unit: item.unit,
-                        }}
-                      />
+                      <Trans i18nKey={'billing:perTeamMember'} />
                     </span>
                   </span>
 
-                  {item.included ? (
-                    <span>
-                      <Trans
-                        i18nKey={'billing:perUnitIncluded'}
-                        values={{
-                          included: item.included,
-                        }}
-                      />
+                  <If condition={!item.tiers?.length}>
+                    <span className={'font-semibold'}>
+                      {formatCurrency(props.currency.toLowerCase(), item.cost)}
                     </span>
-                  ) : (
-                    ''
-                  )}
-                </span>
+                  </If>
+                </div>
 
-                <span className={'font-semibold'}>
-                  {formatCurrency(props?.currency.toLowerCase(), item.cost)}
-                </span>
+                <If condition={item.tiers?.length}>
+                  <Tiers item={item} currency={props.currency} />
+                </If>
               </div>
             );
+
+          case 'metered': {
+            return (
+              <div className={'flex flex-col'}>
+                <div key={item.id} className={className}>
+                  <span className={'flex items-center space-x-1'}>
+                    <span className={'flex items-center space-x-1.5'}>
+                      <PlusSquare className={'w-4'} />
+
+                      <span className={'flex space-x-1'}>
+                        <span>
+                          <Trans
+                            i18nKey={'billing:perUnit'}
+                            values={{
+                              unit: item.unit,
+                            }}
+                          />
+                        </span>
+
+                        <If condition={item.setupFee}>
+                          {(fee) => (
+                            <span>
+                              <Trans
+                                i18nKey={'billing:setupFee'}
+                                values={{
+                                  setupFee: formatCurrency(props.currency, fee),
+                                }}
+                              />
+                            </span>
+                          )}
+                        </If>
+                      </span>
+                    </span>
+                  </span>
+
+                  {/* If there are no tiers, there is a flat cost for usage */}
+                  <If condition={!item.tiers?.length}>
+                    <span className={'font-semibold'}>
+                      {formatCurrency(props?.currency.toLowerCase(), item.cost)}
+                    </span>
+                  </If>
+                </div>
+
+                {/* If there are tiers, we render them as a list */}
+                <If condition={item.tiers?.length}>
+                  <Tiers item={item} currency={props.currency} />
+                </If>
+              </div>
+            );
+          }
         }
       })}
     </div>
   );
+}
+
+function Tiers({
+  currency,
+  item,
+}: {
+  currency: string;
+  item: z.infer<typeof LineItemSchema>;
+}) {
+  const tiers = item.tiers?.map((tier, index) => {
+    const previousTier = item.tiers?.[index - 1];
+    const isNoLimit = tier.upTo === 'unlimited';
+
+    const previousTierFrom =
+      tier.upTo === 'unlimited'
+        ? 'unlimited'
+        : previousTier === undefined
+          ? 0
+          : (previousTier?.upTo as number) + 1 || 0;
+
+    const upTo = tier.upTo;
+    const isIncluded = tier.cost === 0;
+    const unit = item.unit;
+
+    return (
+      <span
+        className={'text-secondary-foreground flex space-x-1 text-xs'}
+        key={tier.upTo}
+      >
+        <span>-</span>
+
+        <If condition={isNoLimit}>
+          <span className={'font-bold'}>
+            {formatCurrency(currency.toLowerCase(), tier.cost)}
+          </span>
+
+          <span>
+            <Trans
+              i18nKey={'billing:andAbove'}
+              values={{ unit, previousTier: (previousTierFrom as number) - 1 }}
+            />
+          </span>
+        </If>
+
+        <If condition={!isNoLimit}>
+          <If condition={isIncluded}>
+            <span>
+              <Trans i18nKey={'billing:includedUpTo'} values={{ unit, upTo }} />
+            </span>
+          </If>
+
+          <If condition={!isIncluded}>
+            <span className={'font-bold'}>
+              {formatCurrency(currency.toLowerCase(), tier.cost)}
+            </span>
+
+            <span>
+              <Trans
+                i18nKey={'billing:fromPreviousTierUpTo'}
+                values={{ previousTierFrom, unit, upTo }}
+              />
+            </span>
+          </If>
+        </If>
+      </span>
+    );
+  });
+
+  return <div className={'my-2.5 flex flex-col space-y-1.5'}>{tiers}</div>;
 }

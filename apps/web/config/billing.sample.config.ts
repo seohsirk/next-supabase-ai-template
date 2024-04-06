@@ -64,14 +64,44 @@ export default createBillingSchema({
               cost: 99.99,
               type: 'metered',
               unit: 'GB',
-              included: 10,
+              tiers: [
+                {
+                  upTo: 10,
+                  cost: 0.99,
+                },
+                {
+                  upTo: 100,
+                  cost: 0.49,
+                },
+                {
+                  upTo: 1000,
+                  cost: 0.29,
+                },
+                {
+                  upTo: 'unlimited',
+                  cost: 0.19,
+                },
+              ],
             },
             {
               id: '324645',
               name: 'Addon 2',
               cost: 9.99,
               type: 'per-seat',
-              included: 5,
+              tiers: [
+                {
+                  upTo: 5,
+                  cost: 0,
+                },
+                {
+                  upTo: 10,
+                  cost: 6.99,
+                },
+                {
+                  upTo: 'unlimited',
+                  cost: 0.49,
+                },
+              ],
             },
           ],
         },

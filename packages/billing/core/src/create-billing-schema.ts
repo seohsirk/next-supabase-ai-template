@@ -43,36 +43,27 @@ export const LineItemSchema = z
           'Unit of the line item. Displayed to the user. Example "seat" or "GB"',
       })
       .optional(),
-    included: z
+    setupFee: z
       .number({
-        description: 'Included amount of the line item. Displayed to the user.',
+        description: `Lemon Squeezy only: If true, in addition to the cost, a setup fee will be charged.`,
       })
+      .positive()
       .optional(),
     tiers: z
       .array(
         z.object({
-          upTo: z
-            .number({
-              description:
-                'Up to this amount the cost is the base cost. Displayed to the user.',
-            })
-            .min(0),
-          cost: z
-            .number({
-              description:
-                'Cost of the line item after the upTo amount. Displayed to the user.',
-            })
-            .min(0),
+          cost: z.number().min(0),
+          upTo: z.union([z.number().min(0), z.literal('unlimited')]),
         }),
       )
       .optional(),
   })
   .refine(
     (data) =>
-      data.type !== 'metered' || (data.unit && data.included !== undefined),
+      data.type !== 'metered' || (data.unit && data.tiers !== undefined),
     {
-      message: 'Metered line items must have a unit and included amount',
-      path: ['type', 'unit', 'included'],
+      message: 'Metered line items must have a unit and tiers',
+      path: ['type', 'unit', 'tiers'],
     },
   );
 
@@ -216,22 +207,49 @@ const BillingSchema = z
       path: ['products'],
     },
   )
-  .refine((schema) => {
-    if (schema.provider === 'lemon-squeezy') {
-      for (const product of schema.products) {
-        for (const plan of product.plans) {
-          if (plan.lineItems.length > 1) {
-            return {
-              message: 'Only one line item is allowed for Lemon Squeezy',
-              path: ['products', 'plans'],
-            };
+  .refine(
+    (schema) => {
+      if (schema.provider === 'lemon-squeezy') {
+        for (const product of schema.products) {
+          for (const plan of product.plans) {
+            if (plan.lineItems.length > 1) {
+              return true;
+            }
           }
         }
-      }
-    }
 
-    return true;
-  });
+        return true;
+      }
+    },
+    {
+      message: 'Lemon Squeezy only supports one line item per plan',
+      path: ['provider', 'products'],
+    },
+  )
+  .refine(
+    (schema) => {
+      if (schema.provider !== 'lemon-squeezy') {
+        // Check if there are any flat fee metered items
+        const setupFeeItems = schema.products.flatMap((product) =>
+          product.plans.flatMap((plan) =>
+            plan.lineItems.filter((item) => item.setupFee),
+          ),
+        );
+
+        // If there are any flat fee metered items, return an error
+        if (setupFeeItems.length > 0) {
+          return false;
+        }
+      }
+
+      return true;
+    },
+    {
+      message:
+        'Setup fee metered items are only supported by Lemon Squeezy. For Stripe and Paddle, please use a separate line item for the setup fee.',
+      path: ['products', 'plans', 'lineItems'],
+    },
+  );
 
 export function createBillingSchema(config: z.infer<typeof BillingSchema>) {
   return BillingSchema.parse(config);
@@ -255,6 +273,11 @@ export function getBaseLineItem(
   for (const product of config.products) {
     for (const plan of product.plans) {
       if (plan.id === planId) {
+        // Lemon Squeezy only supports one line item per plan
+        if (config.provider === 'lemon-squeezy') {
+          return plan.lineItems[0];
+        }
+
         const item = plan.lineItems.find((item) => item.type === 'base');
 
         if (item) {

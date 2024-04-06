@@ -79,7 +79,11 @@ export function PricingTable({
             return null;
           }
 
-          const basePlan = getBaseLineItem(config, plan.id);
+          const baseLineItem = getBaseLineItem(config, plan.id);
+
+          if (!baseLineItem) {
+            throw new Error(`Base line item was not found`);
+          }
 
           return (
             <PricingItem
@@ -90,7 +94,7 @@ export function PricingTable({
               selectable
               key={plan.id}
               plan={plan}
-              baseLineItem={basePlan}
+              baseLineItem={baseLineItem}
               product={product}
               paths={paths}
               displayPlanDetails={displayPlanDetails}

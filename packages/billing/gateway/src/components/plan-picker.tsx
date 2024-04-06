@@ -214,6 +214,10 @@ export function PlanPicker(
                         plan.id,
                       );
 
+                      if (!baseLineItem) {
+                        throw new Error(`Base line item was not found`);
+                      }
+
                       return (
                         <RadioGroupItemLabel
                           selected={field.value === plan.id}
