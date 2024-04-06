@@ -16,6 +16,8 @@ import billingConfig from '~/config/billing.config';
 import pathsConfig from '~/config/paths.config';
 
 export class TeamBillingService {
+  private readonly namespace = 'billing.team-account';
+
   constructor(private readonly client: SupabaseClient<Database>) {}
 
   async createCheckout(params: z.infer<typeof TeamCheckoutSchema>) {
@@ -29,6 +31,15 @@ export class TeamBillingService {
     const userId = user.id;
     const accountId = params.accountId;
 
+    Logger.info(
+      {
+        userId,
+        accountId,
+        name: this.namespace,
+      },
+      `Requested checkout session. Processing...`,
+    );
+
     // verify permissions to manage billing
     const hasPermission = await getBillingPermissionsForAccountId(
       userId,
@@ -38,6 +49,15 @@ export class TeamBillingService {
     // if the user does not have permission to manage billing for the account
     // then we should not proceed
     if (!hasPermission) {
+      Logger.warn(
+        {
+          userId,
+          accountId,
+          name: this.namespace,
+        },
+        `User without permissions attempted to create checkout.`,
+      );
+
       throw new Error('Permission denied');
     }
 
@@ -65,21 +85,45 @@ export class TeamBillingService {
       accountId,
     );
 
-    // call the payment gateway to create the checkout session
-    const { checkoutToken } = await service.createCheckoutSession({
-      accountId,
-      plan,
-      returnUrl,
-      customerEmail,
-      customerId,
-      variantQuantities,
-    });
+    Logger.info(
+      {
+        userId,
+        accountId,
+        planId: plan.id,
+        namespace: this.namespace,
+      },
+      `Creating checkout session...`,
+    );
 
-    // return the checkout token to the client
-    // so we can call the payment gateway to complete the checkout
-    return {
-      checkoutToken,
-    };
+    try {
+      // call the payment gateway to create the checkout session
+      const { checkoutToken } = await service.createCheckoutSession({
+        accountId,
+        plan,
+        returnUrl,
+        customerEmail,
+        customerId,
+        variantQuantities,
+      });
+
+      // return the checkout token to the client
+      // so we can call the payment gateway to complete the checkout
+      return {
+        checkoutToken,
+      };
+    } catch (error) {
+      Logger.error(
+        {
+          name: this.namespace,
+          error,
+          accountId,
+          planId: plan.id,
+        },
+        `Error creating the checkout session`,
+      );
+
+      throw new Error(`Checkout not created`);
+    }
   }
 
   async createBillingPortalSession({
@@ -90,6 +134,14 @@ export class TeamBillingService {
     slug: string;
   }) {
     const client = getSupabaseServerActionClient();
+
+    Logger.info(
+      {
+        accountId,
+        name: this.namespace,
+      },
+      `Billing portal session requested. Processing...`,
+    );
 
     const { data: user, error } = await requireUser(client);
 
@@ -108,24 +160,58 @@ export class TeamBillingService {
     // if the user does not have permission to manage billing for the account
     // then we should not proceed
     if (!hasPermission) {
+      Logger.warn(
+        {
+          userId,
+          accountId,
+          name: this.namespace,
+        },
+        `User without permissions attempted to create billing portal session.`,
+      );
+
       throw new Error('Permission denied');
     }
 
     const service = await getBillingGatewayProvider(client);
     const customerId = await getCustomerIdFromAccountId(client, accountId);
-    const returnUrl = getBillingPortalReturnUrl(slug);
 
     if (!customerId) {
       throw new Error('Customer not found');
     }
 
-    const { url } = await service.createBillingPortalSession({
-      customerId,
-      returnUrl,
-    });
+    Logger.info(
+      {
+        userId,
+        customerId,
+        accountId,
+        name: this.namespace,
+      },
+      `Creating billing portal session...`,
+    );
 
-    // redirect the user to the billing portal
-    return url;
+    try {
+      const returnUrl = getBillingPortalReturnUrl(slug);
+
+      const { url } = await service.createBillingPortalSession({
+        customerId,
+        returnUrl,
+      });
+
+      // redirect the user to the billing portal
+      return url;
+    } catch (error) {
+      Logger.error(
+        {
+          userId,
+          customerId,
+          accountId,
+          name: this.namespace,
+        },
+        `Billing Portal session was not created`,
+      );
+
+      throw new Error(`Error creating Billing Portal`);
+    }
   }
 
   /**
