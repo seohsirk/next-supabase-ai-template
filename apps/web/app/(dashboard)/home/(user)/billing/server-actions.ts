@@ -39,14 +39,6 @@ export async function createPersonalAccountCheckoutSession(
     throw new Error('Authentication required');
   }
 
-  Logger.info(
-    {
-      planId,
-      productId,
-    },
-    `Creating checkout session for plan ID`,
-  );
-
   const service = await getBillingGatewayProvider(client);
 
   // in the case of personal accounts
@@ -68,28 +60,53 @@ export async function createPersonalAccountCheckoutSession(
 
   const { plan } = getProductPlanPair(billingConfig, planId);
 
-  // call the payment gateway to create the checkout session
-  const { checkoutToken } = await service.createCheckoutSession({
-    returnUrl,
-    accountId,
-    customerEmail: user.email,
-    customerId,
-    plan,
-    variantQuantities: [],
-  });
-
   Logger.info(
     {
-      userId: user.id,
+      name: `billing.personal-account`,
+      planId,
+      customerId,
+      accountId,
     },
-    `Checkout session created. Returning checkout token to client...`,
+    `User requested a personal account checkout session. Contacting provider...`,
   );
 
-  // return the checkout token to the client
-  // so we can call the payment gateway to complete the checkout
-  return {
-    checkoutToken,
-  };
+  try {
+    // call the payment gateway to create the checkout session
+    const { checkoutToken } = await service.createCheckoutSession({
+      returnUrl,
+      accountId,
+      customerEmail: user.email,
+      customerId,
+      plan,
+      variantQuantities: [],
+    });
+
+    Logger.info(
+      {
+        userId: user.id,
+      },
+      `Checkout session created. Returning checkout token to client...`,
+    );
+
+    // return the checkout token to the client
+    // so we can call the payment gateway to complete the checkout
+    return {
+      checkoutToken,
+    };
+  } catch (error) {
+    Logger.error(
+      {
+        name: `billing.personal-account`,
+        planId,
+        customerId,
+        accountId,
+        error,
+      },
+      `Checkout session not created due to an error`,
+    );
+
+    throw new Error(`Failed to create a checkout session`);
+  }
 }
 
 export async function createPersonalAccountBillingPortalSession() {
@@ -110,11 +127,47 @@ export async function createPersonalAccountBillingPortalSession() {
     throw new Error('Customer not found');
   }
 
-  const { url } = await service.createBillingPortalSession({
-    customerId,
-    returnUrl,
-  });
+  Logger.info(
+    {
+      name: `billing.personal-account`,
+      customerId,
+      accountId,
+    },
+    `User requested a Billing Portal session. Contacting provider...`,
+  );
 
+  let url: string;
+
+  try {
+    const session = await service.createBillingPortalSession({
+      customerId,
+      returnUrl,
+    });
+
+    url = session.url;
+  } catch (error) {
+    Logger.error(
+      {
+        error,
+        customerId,
+        accountId,
+      },
+      `Failed to create a Billing Portal session`,
+    );
+
+    throw new Error(`Encountered an error creating the Billing Portal session`);
+  }
+
+  Logger.info(
+    {
+      name: `billing.personal-account`,
+      customerId,
+      accountId,
+    },
+    `Session successfully created. Redirecting user...`,
+  );
+
+  // redirect user to billing portal
   return redirect(url);
 }
 
