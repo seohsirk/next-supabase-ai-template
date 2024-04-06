@@ -1,22 +1,24 @@
-import { SupabaseClient } from '@supabase/supabase-js';
+import { redirect } from 'next/navigation';
 
 import {
   BillingPortalCard,
   CurrentSubscriptionCard,
 } from '@kit/billing-gateway/components';
-import { Database } from '@kit/supabase/database';
+import { requireUser } from '@kit/supabase/require-user';
 import { getSupabaseServerComponentClient } from '@kit/supabase/server-component-client';
 import { If } from '@kit/ui/if';
 import { PageBody } from '@kit/ui/page';
 import { Trans } from '@kit/ui/trans';
 
 import { UserAccountHeader } from '~/(dashboard)/home/(user)/_components/user-account-header';
-import { createPersonalAccountBillingPortalSession } from '~/(dashboard)/home/(user)/billing/server-actions';
 import billingConfig from '~/config/billing.config';
 import { createI18nServerInstance } from '~/lib/i18n/i18n.server';
 import { withI18n } from '~/lib/i18n/with-i18n';
 
+import { createPersonalAccountBillingPortalSession } from '../billing/server-actions';
 import { PersonalAccountCheckoutForm } from './_components/personal-account-checkout-form';
+// user billing imports
+import { loadPersonalAccountBillingPageData } from './_lib/server/personal-account-billing-page.loader';
 
 export const generateMetadata = async () => {
   const i18n = await createI18nServerInstance();
@@ -29,7 +31,15 @@ export const generateMetadata = async () => {
 
 async function PersonalAccountBillingPage() {
   const client = getSupabaseServerComponentClient();
-  const [subscription, customerId] = await loadData(client);
+  const auth = await requireUser(client);
+
+  if (auth.error) {
+    redirect(auth.redirectTo);
+  }
+
+  const [subscription, customerId] = await loadPersonalAccountBillingPageData(
+    auth.data.id,
+  );
 
   return (
     <>
@@ -78,30 +88,4 @@ function CustomerBillingPortalForm() {
       <BillingPortalCard />
     </form>
   );
-}
-
-async function loadData(client: SupabaseClient<Database>) {
-  const { data, error } = await client.auth.getUser();
-
-  if (error ?? !data?.user) {
-    throw new Error('Authentication required');
-  }
-
-  const user = data.user;
-
-  const subscription = client
-    .from('subscriptions')
-    .select('*, items: subscription_items !inner (*)')
-    .eq('account_id', user.id)
-    .maybeSingle()
-    .then(({ data }) => data);
-
-  const customer = client
-    .from('billing_customers')
-    .select('customer_id')
-    .eq('account_id', user.id)
-    .maybeSingle()
-    .then(({ data }) => data?.customer_id);
-
-  return Promise.all([subscription, customer]);
 }

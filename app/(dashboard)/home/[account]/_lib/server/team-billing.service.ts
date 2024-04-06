@@ -1,5 +1,6 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 
+import 'server-only';
 import { z } from 'zod';
 
 import { LineItemSchema } from '@kit/billing';

@@ -4,7 +4,6 @@ import {
   BillingPortalCard,
   CurrentSubscriptionCard,
 } from '@kit/billing-gateway/components';
-import { getSupabaseServerComponentClient } from '@kit/supabase/server-component-client';
 import { Alert, AlertDescription, AlertTitle } from '@kit/ui/alert';
 import { If } from '@kit/ui/if';
 import { PageBody, PageHeader } from '@kit/ui/page';
@@ -15,6 +14,7 @@ import billingConfig from '~/config/billing.config';
 import { createI18nServerInstance } from '~/lib/i18n/i18n.server';
 import { withI18n } from '~/lib/i18n/with-i18n';
 
+import { loadTeamAccountBillingPage } from '../_lib/server/team-account-billing-page.loader';
 import { loadTeamWorkspace } from '../_lib/server/team-account-workspace.loader';
 import { TeamAccountCheckoutForm } from './_components/team-account-checkout-form';
 
@@ -36,7 +36,8 @@ export const generateMetadata = async () => {
 async function TeamAccountBillingPage({ params }: Params) {
   const workspace = await loadTeamWorkspace(params.account);
   const accountId = workspace.account.id;
-  const [subscription, customerId] = await loadAccountData(accountId);
+  const [subscription, customerId] =
+    await loadTeamAccountBillingPage(accountId);
 
   const canManageBilling =
     workspace.account.permissions.includes('billing.manage');
@@ -118,24 +119,4 @@ function CannotManageBillingAlert() {
       </AlertDescription>
     </Alert>
   );
-}
-
-async function loadAccountData(accountId: string) {
-  const client = getSupabaseServerComponentClient();
-
-  const subscription = client
-    .from('subscriptions')
-    .select('*, items: subscription_items !inner (*)')
-    .eq('account_id', accountId)
-    .maybeSingle()
-    .then(({ data }) => data);
-
-  const customerId = client
-    .from('billing_customers')
-    .select('customer_id')
-    .eq('account_id', accountId)
-    .maybeSingle()
-    .then(({ data }) => data?.customer_id);
-
-  return Promise.all([subscription, customerId]);
 }
