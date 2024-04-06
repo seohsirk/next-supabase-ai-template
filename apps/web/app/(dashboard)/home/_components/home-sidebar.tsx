@@ -4,14 +4,16 @@ import { cookies } from 'next/headers';
 
 import { Sidebar, SidebarContent, SidebarNavigation } from '@kit/ui/sidebar';
 
-import { HomeSidebarAccountSelector } from '~/(dashboard)/home/_components/home-sidebar-account-selector';
-import { ProfileAccountDropdownContainer } from '~/(dashboard)/home/_components/personal-account-dropdown-container';
-import { loadUserWorkspace } from '~/(dashboard)/home/_lib/load-user-workspace';
 import { personalAccountSidebarConfig } from '~/config/personal-account-sidebar.config';
+
+// home imports
+import { HomeSidebarAccountSelector } from '../_components/home-sidebar-account-selector';
+import { ProfileAccountDropdownContainer } from '../_components/personal-account-dropdown-container';
+import { loadUserWorkspace } from '../_lib/load-user-workspace';
 
 export function HomeSidebar() {
   const collapsed = getSidebarCollapsed();
-  const { accounts } = use(loadUserWorkspace());
+  const { accounts, session } = use(loadUserWorkspace());
 
   return (
     <Sidebar collapsed={collapsed}>
@@ -25,7 +27,10 @@ export function HomeSidebar() {
 
       <div className={'absolute bottom-4 left-0 w-full'}>
         <SidebarContent>
-          <ProfileAccountDropdownContainer collapsed={collapsed} />
+          <ProfileAccountDropdownContainer
+            collapsed={collapsed}
+            user={session?.user ?? null}
+          />
         </SidebarContent>
       </div>
     </Sidebar>
