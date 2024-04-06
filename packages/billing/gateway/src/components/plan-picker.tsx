@@ -144,7 +144,7 @@ export function PlanPicker(
                                 className={cn(
                                   'hover:bg-muted flex items-center space-x-2 rounded-md border border-transparent px-4 py-2',
                                   {
-                                    ['border-border']: selected,
+                                    ['border-primary']: selected,
                                     ['hover:bg-muted']: !selected,
                                   },
                                 )}
@@ -167,7 +167,12 @@ export function PlanPicker(
                                   }}
                                 />
 
-                                <span className={'text-sm font-bold'}>
+                                <span
+                                  className={cn('text-sm', {
+                                    ['font-semibold']: selected,
+                                    ['cursor-pointer']: !selected,
+                                  })}
+                                >
                                   <Trans
                                     i18nKey={`billing:billingInterval.${interval}`}
                                   />
@@ -248,7 +253,7 @@ export function PlanPicker(
                                 'flex flex-col justify-center space-y-2'
                               }
                             >
-                              <span className="font-bold">
+                              <span className="font-semibold">
                                 <Trans
                                   i18nKey={`billing:products.${product.id}.name`}
                                   defaults={product.name}
@@ -389,7 +394,7 @@ function PlanDetails({
     <div
       key={key}
       className={
-        'fade-in animate-in flex w-full flex-col space-y-4 rounded-lg border p-4 duration-500'
+        'fade-in animate-in zoom-in-95 flex w-full flex-col space-y-4 px-8 py-2'
       }
     >
       <div className={'flex flex-col space-y-0.5'}>
@@ -428,6 +433,8 @@ function PlanDetails({
           currency={selectedProduct.currency}
         />
       </div>
+
+      <Separator />
 
       <div className={'flex flex-col space-y-2'}>
         <span className={'text-sm font-semibold'}>

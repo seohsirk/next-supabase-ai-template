@@ -165,11 +165,11 @@ function Tiers({
     const isNoLimit = tier.upTo === 'unlimited';
 
     const previousTierFrom =
-      tier.upTo === 'unlimited'
+      previousTier?.upTo === 'unlimited'
         ? 'unlimited'
         : previousTier === undefined
           ? 0
-          : (previousTier?.upTo as number) + 1 || 0;
+          : previousTier.upTo + 1 || 0;
 
     const upTo = tier.upTo;
     const isIncluded = tier.cost === 0;
