@@ -11,11 +11,11 @@ This version uses Turborepo to manage multiple packages in a single repository.
 The roadmap for the project is as follows:
 
 - [x] - **March 31**: Alpha release - authentication, personal accounts, team accounts (memberships)
-- [] - **April 7**: Beta release - billing, Stripe, Lemon Squeezy, and more
-- [] - **April 14**: Release candidate - admin dashboard, translations, and more
-- [] - **April 21**: Final Release candidate - in-app notifications, final features and improvements
-- [] - **April 28**: Stable release - final features and improvements
-- [] - **May 4**: Post-release - documentation, tutorials, and more
+- [x] - **April 7**: Beta release - billing, Stripe, Lemon Squeezy, and more
+- [ ] - **April 14**: Release candidate - admin dashboard, translations, and more
+- [ ] - **April 21**: Final Release candidate - in-app notifications, final features and improvements
+- [ ] - **April 28**: Stable release - final features and improvements
+- [ ] - **May 4**: Post-release - documentation, tutorials, and more
 
 ## Features
 
