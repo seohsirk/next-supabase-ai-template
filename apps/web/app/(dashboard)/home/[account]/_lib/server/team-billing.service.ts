@@ -14,7 +14,7 @@ import appConfig from '~/config/app.config';
 import billingConfig from '~/config/billing.config';
 import pathsConfig from '~/config/paths.config';
 
-import { TeamCheckoutSchema } from '../../_lib/schema/team-checkout.schema';
+import { TeamCheckoutSchema } from '../../_lib/schema/team-billing.schema';
 
 export class TeamBillingService {
   private readonly namespace = 'billing.team-account';

@@ -20,7 +20,7 @@ const AuthConfigSchema = z.object({
 const authConfig = AuthConfigSchema.parse({
   // NB: This is a public key, so it's safe to expose.
   // Copy the value from the Supabase Dashboard.
-  captchaTokenSiteKey: process.env.NEXT_PUBLIC_CAPTCHA_SITE_KEY ?? '',
+  captchaTokenSiteKey: process.env.NEXT_PUBLIC_CAPTCHA_SITE_KEY,
 
   // NB: Enable the providers below in the Supabase Console
   // in your production project

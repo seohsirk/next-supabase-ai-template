@@ -8,7 +8,7 @@ import { If } from '@kit/ui/if';
 import { Separator } from '@kit/ui/separator';
 import { Trans } from '@kit/ui/trans';
 
-import { useCaptchaToken } from './captcha';
+import { useCaptchaToken } from '../captcha/client';
 import { MagicLinkAuthContainer } from './magic-link-auth-container';
 import { OauthProviders } from './oauth-providers';
 import { EmailPasswordSignUpContainer } from './password-sign-up-container';
