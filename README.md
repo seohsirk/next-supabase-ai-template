@@ -10,12 +10,12 @@ This version uses Turborepo to manage multiple packages in a single repository.
 
 The roadmap for the project is as follows:
 
-1. **March 31**: Alpha release - authentication, personal accounts, team accounts (memberships)
-2. **April 7**: Beta release - billing, Stripe, Lemon Squeezy, and more
-3. **April 14**: Release candidate - admin dashboard, translations, and more
-4. **April 21**: Final Release candidate - in-app notifications, final features and improvements
-5. **April 28**: Stable release - final features and improvements
-6. **May 4**: Post-release - documentation, tutorials, and more
+- [x] - **March 31**: Alpha release - authentication, personal accounts, team accounts (memberships)
+- [] - **April 7**: Beta release - billing, Stripe, Lemon Squeezy, and more
+- [] - **April 14**: Release candidate - admin dashboard, translations, and more
+- [] - **April 21**: Final Release candidate - in-app notifications, final features and improvements
+- [] - **April 28**: Stable release - final features and improvements
+- [] - **May 4**: Post-release - documentation, tutorials, and more
 
 ## Features
 
@@ -101,6 +101,9 @@ Below are the reusable packages that can be shared across multiple applications 
 - **`@kit/email-templates`**: Here we define the email templates using the `react.email` package.
 - **`@kit/mailers`**: Mailer package that abstracts the email service provider (e.g., Resend, Cloudflare, SendGrid, Mailgun, etc.)
 - **`@kit/monitoring`**: A unified monitoring package that defines the schema and logic for monitoring the application with third party services (e.g., Sentry, Baselime, etc.)
+- **`@kit/database-webhooks`**: Database webhooks package that defines the actions following database changes (e.g., sending an email, updating a record, etc.)
+- **`@kit/cms`**: CMS package that defines the schema and logic for managing content
+- **`@kit/next`**: Next.js specific utilities
 
 And features that can be added to the application:
 - **`@kit/auth`**: Authentication package (using Supabase)
@@ -112,6 +115,10 @@ And billing packages that can be added to the application:
 - **`@kit/stripe`**: Stripe package that defines the schema and logic for managing Stripe. This is used by the `@kit/billing-gateway` package and abstracts the Stripe API.
 - **`@kit/lemon-squeezy`**: Lemon Squeezy package that defines the schema and logic for managing Lemon Squeezy. This is used by the `@kit/billing-gateway` package and abstracts the Lemon Squeezy API. (Coming soon)
 - **`@kit/paddle`**: Paddle package that defines the schema and logic for managing Paddle. This is used by the `@kit/billing-gateway` package and abstracts the Paddle API. (Coming soon
+
+The CMSs that can be added to the application:
+- **`@kit/wordpress`**:  WordPress package that defines the schema and logic for managing WordPress. This is used by the `@kit/cms` package and abstracts the WordPress API.
+- **`@kit/contentlayer`**: Contentlayer package that defines the schema and logic for managing Contentlayer. This is used by the `@kit/cms` package and abstracts the Contentlayer API. Set to be replaced.
 
 Also planned (post-release):
 - **`@kit/notifications`**: Notifications package that defines the schema and logic for managing notifications
