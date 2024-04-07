@@ -214,12 +214,12 @@ export function PlanPicker(
                         return null;
                       }
 
-                      const baseLineItem = getPrimaryLineItem(
+                      const primaryLineItem = getPrimaryLineItem(
                         props.config,
                         plan.id,
                       );
 
-                      if (!baseLineItem) {
+                      if (!primaryLineItem) {
                         throw new Error(`Base line item was not found`);
                       }
 
@@ -295,7 +295,7 @@ export function PlanPicker(
                                   <span>
                                     {formatCurrency(
                                       product.currency.toLowerCase(),
-                                      baseLineItem.cost,
+                                      primaryLineItem.cost,
                                     )}
                                   </span>
                                 </Price>
@@ -420,19 +420,21 @@ function PlanDetails({
         </p>
       </div>
 
-      <Separator />
+      <If condition={selectedPlan.lineItems.length > 0}>
+        <Separator />
 
-      <div className={'flex flex-col space-y-2'}>
-        <span className={'text-sm font-semibold'}>
-          <Trans i18nKey={'billing:detailsLabel'} />
-        </span>
+        <div className={'flex flex-col space-y-2'}>
+          <span className={'text-sm font-semibold'}>
+            <Trans i18nKey={'billing:detailsLabel'} />
+          </span>
 
-        <LineItemDetails
-          lineItems={selectedPlan.lineItems ?? []}
-          selectedInterval={isRecurring ? selectedInterval : undefined}
-          currency={selectedProduct.currency}
-        />
-      </div>
+          <LineItemDetails
+            lineItems={selectedPlan.lineItems ?? []}
+            selectedInterval={isRecurring ? selectedInterval : undefined}
+            currency={selectedProduct.currency}
+          />
+        </div>
+      </If>
 
       <Separator />
 

@@ -386,13 +386,16 @@ function PlanIntervalSwitcher(
       {props.intervals.map((plan, index) => {
         const selected = plan === props.interval;
 
-        const className = cn('focus:!ring-0 !outline-none', {
-          'rounded-r-none border-r-transparent': index === 0,
-          'rounded-l-none': index === props.intervals.length - 1,
-          ['hover:bg-muted']: !selected,
-          ['font-semibold cursor-default bg-muted hover:bg-muted hover:text-initial']:
-            selected,
-        });
+        const className = cn(
+          'focus:!ring-0 !outline-none animate-in transition-all fade-in',
+          {
+            'rounded-r-none border-r-transparent': index === 0,
+            'rounded-l-none': index === props.intervals.length - 1,
+            ['hover:text-current hover:bg-muted']: !selected,
+            ['font-semibold cursor-default hover:text-initial hover:bg-background border-primary']:
+              selected,
+          },
+        );
 
         return (
           <Button
@@ -403,7 +406,7 @@ function PlanIntervalSwitcher(
           >
             <span className={'flex items-center space-x-1'}>
               <If condition={selected}>
-                <CheckCircle className={'animate-in fade-in h-4'} />
+                <CheckCircle className={'animate-in fade-in zoom-in-90 h-4'} />
               </If>
 
               <span className={'capitalize'}>

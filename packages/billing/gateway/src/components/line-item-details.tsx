@@ -38,114 +38,154 @@ export function LineItemDetails(
           );
         }
 
-        const BaseFee = () => (
-          <div key={item.id} className={className}>
-            <span className={'flex items-center space-x-1'}>
+        const SetupFee = () => (
+          <If condition={item.setupFee}>
+            <div className={className}>
+              <span className={'flex items-center space-x-1'}>
+                <PlusSquare className={'w-4'} />
+
+                <span>
+                  <Trans
+                    i18nKey={'billing:setupFee'}
+                    values={{
+                      setupFee: formatCurrency(
+                        props?.currency.toLowerCase(),
+                        item.setupFee as number,
+                      ),
+                    }}
+                  />
+                </span>
+              </span>
+            </div>
+          </If>
+        );
+
+        const FlatFee = () => (
+          <div key={item.id} className={'flex flex-col'}>
+            <div className={className}>
+              <span className={'flex items-center space-x-1'}>
+                <span className={'flex items-center space-x-1.5'}>
+                  <PlusSquare className={'w-4'} />
+
+                  <span>
+                    <Trans i18nKey={'billing:basePlan'} />
+                  </span>
+                </span>
+
+                <span>-</span>
+
+                <span>
+                  <If
+                    condition={props.selectedInterval}
+                    fallback={<Trans i18nKey={'billing:lifetime'} />}
+                  >
+                    <Trans
+                      i18nKey={`billing:billingInterval.${props.selectedInterval}`}
+                    />
+                  </If>
+                </span>
+              </span>
+
+              <span className={'font-semibold'}>
+                {formatCurrency(props?.currency.toLowerCase(), item.cost)}
+              </span>
+            </div>
+
+            <SetupFee />
+
+            <If condition={item.tiers?.length}>
+              <span className={'flex items-center space-x-1.5'}>
+                <PlusSquare className={'w-4'} />
+
+                <span className={'flex space-x-1 text-sm'}>
+                  <span>
+                    <Trans
+                      i18nKey={'billing:perUnit'}
+                      values={{
+                        unit: item.unit,
+                      }}
+                    />
+                  </span>
+                </span>
+              </span>
+
+              <Tiers item={item} currency={props.currency} />
+            </If>
+          </div>
+        );
+
+        const PerSeat = () => (
+          <div className={'flex flex-col'}>
+            <div key={item.id} className={className}>
               <span className={'flex items-center space-x-1.5'}>
                 <PlusSquare className={'w-4'} />
 
                 <span>
-                  <Trans i18nKey={'billing:basePlan'} />
+                  <Trans i18nKey={'billing:perTeamMember'} />
                 </span>
               </span>
 
-              <span>-</span>
+              <If condition={!item.tiers?.length}>
+                <span className={'font-semibold'}>
+                  {formatCurrency(props.currency.toLowerCase(), item.cost)}
+                </span>
+              </If>
+            </div>
 
-              <span>
-                <If
-                  condition={props.selectedInterval}
-                  fallback={<Trans i18nKey={'billing:lifetime'} />}
-                >
-                  <Trans
-                    i18nKey={`billing:billingInterval.${props.selectedInterval}`}
-                  />
-                </If>
+            <SetupFee />
+
+            <If condition={item.tiers?.length}>
+              <Tiers item={item} currency={props.currency} />
+            </If>
+          </div>
+        );
+
+        const Metered = () => (
+          <div key={item.id} className={'flex flex-col'}>
+            <div className={className}>
+              <span className={'flex items-center space-x-1'}>
+                <span className={'flex items-center space-x-1.5'}>
+                  <PlusSquare className={'w-4'} />
+
+                  <span className={'flex space-x-1'}>
+                    <span>
+                      <Trans
+                        i18nKey={'billing:perUnit'}
+                        values={{
+                          unit: item.unit,
+                        }}
+                      />
+                    </span>
+                  </span>
+                </span>
               </span>
-            </span>
 
-            <span className={'font-semibold'}>
-              {formatCurrency(props?.currency.toLowerCase(), item.cost)}
-            </span>
+              {/* If there are no tiers, there is a flat cost for usage */}
+              <If condition={!item.tiers?.length}>
+                <span className={'font-semibold'}>
+                  {formatCurrency(props?.currency.toLowerCase(), item.cost)}
+                </span>
+              </If>
+            </div>
+
+            <SetupFee />
+
+            {/* If there are tiers, we render them as a list */}
+            <If condition={item.tiers?.length}>
+              <Tiers item={item} currency={props.currency} />
+            </If>
           </div>
         );
 
         switch (item.type) {
-          case 'base':
-            return <BaseFee />;
+          case 'flat':
+            return <FlatFee />;
 
           case 'per-seat':
-            return (
-              <div className={'flex flex-col'}>
-                <div key={item.id} className={className}>
-                  <span className={'flex items-center space-x-1.5'}>
-                    <PlusSquare className={'w-4'} />
-
-                    <span>
-                      <Trans i18nKey={'billing:perTeamMember'} />
-                    </span>
-                  </span>
-
-                  <If condition={!item.tiers?.length}>
-                    <span className={'font-semibold'}>
-                      {formatCurrency(props.currency.toLowerCase(), item.cost)}
-                    </span>
-                  </If>
-                </div>
-
-                <If condition={item.tiers?.length}>
-                  <Tiers item={item} currency={props.currency} />
-                </If>
-              </div>
-            );
+            return <PerSeat />;
 
           case 'metered': {
-            return (
-              <div className={'flex flex-col'}>
-                <div key={item.id} className={className}>
-                  <span className={'flex items-center space-x-1'}>
-                    <span className={'flex items-center space-x-1.5'}>
-                      <PlusSquare className={'w-4'} />
-
-                      <span className={'flex space-x-1'}>
-                        <span>
-                          <Trans
-                            i18nKey={'billing:perUnit'}
-                            values={{
-                              unit: item.unit,
-                            }}
-                          />
-                        </span>
-
-                        <If condition={item.setupFee}>
-                          {(fee) => (
-                            <span>
-                              <Trans
-                                i18nKey={'billing:setupFee'}
-                                values={{
-                                  setupFee: formatCurrency(props.currency, fee),
-                                }}
-                              />
-                            </span>
-                          )}
-                        </If>
-                      </span>
-                    </span>
-                  </span>
-
-                  {/* If there are no tiers, there is a flat cost for usage */}
-                  <If condition={!item.tiers?.length}>
-                    <span className={'font-semibold'}>
-                      {formatCurrency(props?.currency.toLowerCase(), item.cost)}
-                    </span>
-                  </If>
-                </div>
-
-                {/* If there are tiers, we render them as a list */}
-                <If condition={item.tiers?.length}>
-                  <Tiers item={item} currency={props.currency} />
-                </If>
-              </div>
-            );
+            return <Metered />;
           }
         }
       })}
@@ -160,6 +200,8 @@ function Tiers({
   currency: string;
   item: z.infer<typeof LineItemSchema>;
 }) {
+  const unit = item.unit;
+
   const tiers = item.tiers?.map((tier, index) => {
     const previousTier = item.tiers?.[index - 1];
     const isNoLimit = tier.upTo === 'unlimited';
@@ -173,7 +215,6 @@ function Tiers({
 
     const upTo = tier.upTo;
     const isIncluded = tier.cost === 0;
-    const unit = item.unit;
 
     return (
       <span
