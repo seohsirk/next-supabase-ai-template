@@ -10,16 +10,21 @@ import { Database } from '@kit/supabase/database';
 import { requireUser } from '@kit/supabase/require-user';
 import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
 
-import { TeamCheckoutSchema } from '~/(dashboard)/home/[account]/_lib/schema/team-checkout.schema';
 import appConfig from '~/config/app.config';
 import billingConfig from '~/config/billing.config';
 import pathsConfig from '~/config/paths.config';
+
+import { TeamCheckoutSchema } from '../../_lib/schema/team-checkout.schema';
 
 export class TeamBillingService {
   private readonly namespace = 'billing.team-account';
 
   constructor(private readonly client: SupabaseClient<Database>) {}
 
+  /**
+   * @name createCheckout
+   * @description Creates a checkout session for a Team account
+   */
   async createCheckout(params: z.infer<typeof TeamCheckoutSchema>) {
     // we require the user to be authenticated
     const { data: user } = await requireUser(this.client);
@@ -126,6 +131,12 @@ export class TeamBillingService {
     }
   }
 
+  /**
+   * @name createBillingPortalSession
+   * @description Creates a new billing portal session for a team account
+   * @param accountId
+   * @param slug
+   */
   async createBillingPortalSession({
     accountId,
     slug,
