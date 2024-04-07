@@ -17,28 +17,6 @@ export default createBillingSchema({
   // products configuration
   products: [
     {
-      id: 'lifetime',
-      name: 'Lifetime',
-      description: 'The perfect plan for a lifetime',
-      currency: 'USD',
-      features: ['Feature 1', 'Feature 2', 'Feature 3'],
-      plans: [
-        {
-          name: 'Lifetime',
-          id: 'lifetime',
-          paymentType: 'one-time',
-          lineItems: [
-            {
-              id: '324643',
-              name: 'Base',
-              cost: 999.99,
-              type: 'flat',
-            },
-          ],
-        },
-      ],
-    },
-    {
       id: 'starter',
       name: 'Starter',
       description: 'The perfect plan to get started',
@@ -56,42 +34,7 @@ export default createBillingSchema({
               id: '324646',
               name: 'Addon 2',
               cost: 9.99,
-              type: 'metered',
-              unit: 'GBs',
-              tiers: [
-                {
-                  upTo: 5,
-                  cost: 0,
-                },
-                {
-                  upTo: 10,
-                  cost: 6.99,
-                },
-                {
-                  upTo: 'unlimited',
-                  cost: 0.49,
-                },
-              ],
-            },
-            {
-              id: '324645',
-              name: 'Addon 2',
-              cost: 9.99,
-              type: 'per-seat',
-              tiers: [
-                {
-                  upTo: 5,
-                  cost: 0,
-                },
-                {
-                  upTo: 10,
-                  cost: 6.99,
-                },
-                {
-                  upTo: 'unlimited',
-                  cost: 0.49,
-                },
-              ],
+              type: 'flat',
             },
           ],
         },
