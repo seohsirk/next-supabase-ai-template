@@ -215,13 +215,13 @@ const BillingSchema = z
         for (const product of schema.products) {
           for (const plan of product.plans) {
             if (plan.lineItems.length > 1) {
-              return true;
+              return false;
             }
           }
         }
-
-        return true;
       }
+
+      return true;
     },
     {
       message: 'Lemon Squeezy only supports one line item per plan',

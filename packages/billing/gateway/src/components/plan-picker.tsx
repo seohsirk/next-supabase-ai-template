@@ -15,6 +15,7 @@ import {
   getPrimaryLineItem,
   getProductPlanPair,
 } from '@kit/billing';
+import config from '@kit/prettier-config/index.mjs';
 import { formatCurrency } from '@kit/shared/utils';
 import { Badge } from '@kit/ui/badge';
 import { Button } from '@kit/ui/button';
@@ -153,13 +154,15 @@ export function PlanPicker(
                                   id={interval}
                                   value={interval}
                                   onClick={() => {
-                                    form.setValue('planId', '', {
-                                      shouldValidate: true,
-                                    });
+                                    if (selectedProduct) {
+                                      const plan = selectedProduct.plans.find(
+                                        (item) => item.interval === interval,
+                                      );
 
-                                    form.setValue('productId', '', {
-                                      shouldValidate: true,
-                                    });
+                                      form.setValue('planId', plan?.id ?? '', {
+                                        shouldValidate: true,
+                                      });
+                                    }
 
                                     form.setValue('interval', interval, {
                                       shouldValidate: true,
