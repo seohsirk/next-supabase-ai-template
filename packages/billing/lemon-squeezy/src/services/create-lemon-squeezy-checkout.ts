@@ -67,6 +67,8 @@ export async function createLemonSqueezyCheckout(
     },
     productOptions: {
       redirectUrl: params.returnUrl,
+      // only show the selected variant ID
+      enabledVariants: [variantId],
     },
     expiresAt: null,
     preview: true,

@@ -6,7 +6,9 @@ import { isBrowser } from '@kit/shared/utils';
 import { Alert, AlertDescription, AlertTitle } from '@kit/ui/alert';
 import { If } from '@kit/ui/if';
 import { Separator } from '@kit/ui/separator';
+import { Trans } from '@kit/ui/trans';
 
+import { useCaptchaToken } from './captcha';
 import { MagicLinkAuthContainer } from './magic-link-auth-container';
 import { OauthProviders } from './oauth-providers';
 import { EmailPasswordSignUpContainer } from './password-sign-up-container';
@@ -26,27 +28,26 @@ export function SignUpMethodsContainer(props: {
   inviteToken?: string;
 }) {
   const redirectUrl = getCallbackUrl(props);
+  const captchaToken = useCaptchaToken();
 
   return (
     <>
       <If condition={props.inviteToken}>
-        <Alert variant={'info'}>
-          <AlertTitle>You have been invited to join a team</AlertTitle>
-          <AlertDescription>
-            Please sign up to continue with the invitation and create your
-            account.
-          </AlertDescription>
-        </Alert>
+        <InviteAlert />
       </If>
 
       <If condition={props.providers.password}>
-        <EmailPasswordSignUpContainer emailRedirectTo={redirectUrl} />
+        <EmailPasswordSignUpContainer
+          captchaToken={captchaToken}
+          emailRedirectTo={redirectUrl}
+        />
       </If>
 
       <If condition={props.providers.magicLink}>
         <MagicLinkAuthContainer
           inviteToken={props.inviteToken}
           redirectUrl={redirectUrl}
+          captchaToken={captchaToken}
         />
       </If>
 
@@ -87,4 +88,18 @@ function getCallbackUrl(props: {
   }
 
   return url.href;
+}
+
+function InviteAlert() {
+  return (
+    <Alert variant={'info'}>
+      <AlertTitle>
+        <Trans i18nKey={'auth:inviteAlertHeading'} />
+      </AlertTitle>
+
+      <AlertDescription>
+        <Trans i18nKey={'auth:inviteAlertBody'} />
+      </AlertDescription>
+    </Alert>
+  );
 }

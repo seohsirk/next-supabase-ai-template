@@ -5,6 +5,7 @@ import { z } from 'zod';
 const providers: z.ZodType<Provider> = getProviders();
 
 const AuthConfigSchema = z.object({
+  captchaTokenSiteKey: z.string().min(1).optional(),
   providers: z.object({
     password: z.boolean({
       description: 'Enable password authentication.',
@@ -17,6 +18,10 @@ const AuthConfigSchema = z.object({
 });
 
 const authConfig = AuthConfigSchema.parse({
+  // NB: This is a public key, so it's safe to expose.
+  // Copy the value from the Supabase Dashboard.
+  captchaTokenSiteKey: process.env.NEXT_PUBLIC_CAPTCHA_SITE_KEY ?? '',
+
   // NB: Enable the providers below in the Supabase Console
   // in your production project
   providers: {

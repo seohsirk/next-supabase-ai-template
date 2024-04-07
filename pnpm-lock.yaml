@@ -83,6 +83,9 @@ importers:
       '@kit/ui':
         specifier: workspace:^
         version: link:../../packages/ui
+      '@marsidev/react-turnstile':
+        specifier: ^0.5.4
+        version: 0.5.4(react-dom@18.2.0)(react@18.2.0)
       '@radix-ui/react-icons':
         specifier: ^1.3.0
         version: 1.3.0(react@18.2.0)
@@ -574,6 +577,9 @@ importers:
       '@kit/ui':
         specifier: workspace:*
         version: link:../../ui
+      '@marsidev/react-turnstile':
+        specifier: ^0.5.4
+        version: 0.5.4(react-dom@18.2.0)(react@18.2.0)
       '@radix-ui/react-icons':
         specifier: ^1.3.0
         version: 1.3.0(react@18.2.0)
@@ -2208,6 +2214,15 @@ packages:
       jju: 1.4.0
       read-yaml-file: 1.1.0
     dev: false
+
+  /@marsidev/react-turnstile@0.5.4(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-cloUDkEcJm+G7p3J8DwPtRNNB2GZqVi/nlIbgu9o3VzNyV5K/bWcSfOyWouRiR3umAQZmsFpR3OFYa4mCmy4AQ==}
+    peerDependencies:
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
 
   /@mdx-js/esbuild@2.3.0(esbuild@0.20.2):
     resolution: {integrity: sha512-r/vsqsM0E+U4Wr0DK+0EfmABE/eg+8ITW4DjvYdh3ve/tK2safaqHArNnaqbOk1DjYGrhxtoXoGaM3BY8fGBTA==}

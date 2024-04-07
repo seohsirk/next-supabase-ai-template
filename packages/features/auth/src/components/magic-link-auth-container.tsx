@@ -1,7 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { CheckIcon } from '@radix-ui/react-icons';
+import { CheckIcon, ExclamationTriangleIcon } from '@radix-ui/react-icons';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
@@ -25,8 +25,10 @@ import { Trans } from '@kit/ui/trans';
 export function MagicLinkAuthContainer({
   inviteToken,
   redirectUrl,
+  captchaToken,
 }: {
   inviteToken?: string;
+  captchaToken?: string;
   redirectUrl: string;
 }) {
   const { t } = useTranslation();
@@ -52,6 +54,7 @@ export function MagicLinkAuthContainer({
         email,
         options: {
           emailRedirectTo,
+          captchaToken,
         },
       });
 
@@ -63,34 +66,14 @@ export function MagicLinkAuthContainer({
   };
 
   if (signInWithOtpMutation.data) {
-    return (
-      <Alert variant={'success'}>
-        <CheckIcon className={'h-4'} />
-
-        <AlertTitle>
-          <Trans i18nKey={'auth:sendLinkSuccess'} />
-        </AlertTitle>
-
-        <AlertDescription>
-          <Trans i18nKey={'auth:sendLinkSuccessDescription'} />
-        </AlertDescription>
-      </Alert>
-    );
+    return <SuccessAlert />;
   }
 
   return (
     <Form {...form}>
       <form className={'w-full'} onSubmit={form.handleSubmit(onSubmit)}>
         <If condition={signInWithOtpMutation.error}>
-          <Alert variant={'destructive'}>
-            <AlertTitle>
-              <Trans i18nKey={'auth:errors.generic'} />
-            </AlertTitle>
-
-            <AlertDescription>
-              <Trans i18nKey={'auth:errors.link'} />
-            </AlertDescription>
-          </Alert>
+          <ErrorAlert />
         </If>
 
         <div className={'flex flex-col space-y-4'}>
@@ -128,5 +111,37 @@ export function MagicLinkAuthContainer({
         </div>
       </form>
     </Form>
+  );
+}
+
+function SuccessAlert() {
+  return (
+    <Alert variant={'success'}>
+      <CheckIcon className={'h-4'} />
+
+      <AlertTitle>
+        <Trans i18nKey={'auth:sendLinkSuccess'} />
+      </AlertTitle>
+
+      <AlertDescription>
+        <Trans i18nKey={'auth:sendLinkSuccessDescription'} />
+      </AlertDescription>
+    </Alert>
+  );
+}
+
+function ErrorAlert() {
+  return (
+    <Alert variant={'destructive'}>
+      <ExclamationTriangleIcon className={'h-4'} />
+
+      <AlertTitle>
+        <Trans i18nKey={'auth:errors.generic'} />
+      </AlertTitle>
+
+      <AlertDescription>
+        <Trans i18nKey={'auth:errors.link'} />
+      </AlertDescription>
+    </Alert>
   );
 }
