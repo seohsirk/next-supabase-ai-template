@@ -79,3 +79,5 @@ export const POST = enhanceRouteHandler(({ request, body, user }) => {
   }),
 });
 ```
+
+When using a Captcha, the consumer will pass an header `x-captcha-token` with the captcha token.

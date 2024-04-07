@@ -11,8 +11,8 @@ import { z } from 'zod';
 import {
   BillingConfig,
   LineItemSchema,
-  getBaseLineItem,
   getPlanIntervals,
+  getPrimaryLineItem,
   getProductPlanPair,
 } from '@kit/billing';
 import { formatCurrency } from '@kit/shared/utils';
@@ -214,7 +214,7 @@ export function PlanPicker(
                         return null;
                       }
 
-                      const baseLineItem = getBaseLineItem(
+                      const baseLineItem = getPrimaryLineItem(
                         props.config,
                         plan.id,
                       );

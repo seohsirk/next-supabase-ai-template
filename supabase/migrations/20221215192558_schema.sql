@@ -123,7 +123,7 @@ create type public.billing_provider as ENUM(
 - You can add more types as needed.
 */
 create type public.subscription_item_type as ENUM(
-    'base',
+    'flat',
     'per_seat',
     'metered'
 );

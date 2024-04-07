@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 const BillingIntervalSchema = z.enum(['month', 'year']);
-const LineItemTypeSchema = z.enum(['base', 'per-seat', 'metered']);
+const LineItemTypeSchema = z.enum(['flat', 'per-seat', 'metered']);
 
 export const BillingProviderSchema = z.enum([
   'stripe',
@@ -122,15 +122,17 @@ export const PlanSchema = z
   .refine(
     (data) => {
       if (data.paymentType === 'one-time') {
-        const baseItems = data.lineItems.filter((item) => item.type !== 'base');
+        const nonFlatLineItems = data.lineItems.filter(
+          (item) => item.type !== 'flat',
+        );
 
-        return baseItems.length === 0;
+        return nonFlatLineItems.length === 0;
       }
 
       return true;
     },
     {
-      message: 'One-time plans must not have non-base line items',
+      message: 'One-time plans must not have non-flat line items',
       path: ['paymentType', 'lineItems'],
     },
   );
@@ -266,7 +268,17 @@ export function getPlanIntervals(config: z.infer<typeof BillingSchema>) {
   return Array.from(new Set(intervals));
 }
 
-export function getBaseLineItem(
+/**
+ * @name getPrimaryLineItem
+ * @description Get the primary line item for a plan
+ * By default, the primary line item is the first line item in the plan for Lemon Squeezy
+ * For other providers, the primary line item is the first flat line item in the plan. If there are no flat line items,
+ * the first line item is returned.
+ *
+ * @param config
+ * @param planId
+ */
+export function getPrimaryLineItem(
   config: z.infer<typeof BillingSchema>,
   planId: string,
 ) {
@@ -278,11 +290,15 @@ export function getBaseLineItem(
           return plan.lineItems[0];
         }
 
-        const item = plan.lineItems.find((item) => item.type === 'base');
+        const flatLineItem = plan.lineItems.find(
+          (item) => item.type === 'flat',
+        );
 
-        if (item) {
-          return item;
+        if (flatLineItem) {
+          return flatLineItem;
         }
+
+        return plan.lineItems[0];
       }
     }
   }

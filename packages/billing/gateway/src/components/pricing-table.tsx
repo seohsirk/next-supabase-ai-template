@@ -10,8 +10,8 @@ import { z } from 'zod';
 import {
   BillingConfig,
   LineItemSchema,
-  getBaseLineItem,
   getPlanIntervals,
+  getPrimaryLineItem,
 } from '@kit/billing';
 import { formatCurrency } from '@kit/shared/utils';
 import { Badge } from '@kit/ui/badge';
@@ -79,9 +79,9 @@ export function PricingTable({
             return null;
           }
 
-          const baseLineItem = getBaseLineItem(config, plan.id);
+          const primaryLineItem = getPrimaryLineItem(config, plan.id);
 
-          if (!baseLineItem) {
+          if (!primaryLineItem) {
             throw new Error(`Base line item was not found`);
           }
 
@@ -94,7 +94,7 @@ export function PricingTable({
               selectable
               key={plan.id}
               plan={plan}
-              baseLineItem={baseLineItem}
+              primaryLineItem={primaryLineItem}
               product={product}
               paths={paths}
               displayPlanDetails={displayPlanDetails}
@@ -118,10 +118,7 @@ function PricingItem(
 
     selectable: boolean;
 
-    baseLineItem: {
-      id: string;
-      cost: number;
-    };
+    primaryLineItem: z.infer<typeof LineItemSchema>;
 
     plan: {
       id: string;
@@ -149,10 +146,10 @@ function PricingItem(
 ) {
   const highlighted = props.product.highlighted ?? false;
 
-  // we want to exclude the base plan from the list of line items
-  // since we are displaying the base plan separately as the main price
+  // we want to exclude the primary plan from the list of line items
+  // since we are displaying the primary line item separately as the main price
   const lineItemsToDisplay = props.plan.lineItems.filter((item) => {
-    return item.type !== 'base';
+    return item.id !== props.primaryLineItem.id;
   });
 
   return (
@@ -171,7 +168,12 @@ function PricingItem(
         <div className={'flex flex-col space-y-2'}>
           <div className={'flex items-center space-x-4'}>
             <Heading level={4}>
-              <b className={'font-bold'}>{props.product.name}</b>
+              <b className={'font-bold'}>
+                <Trans
+                  i18nKey={props.product.name}
+                  defaults={props.product.name}
+                />
+              </b>
             </Heading>
 
             <If condition={props.product.badge}>
@@ -209,13 +211,13 @@ function PricingItem(
 
         <div className={'flex flex-col space-y-1'}>
           <Price>
-            {formatCurrency(props.product.currency, props.baseLineItem.cost)}
+            {formatCurrency(props.product.currency, props.primaryLineItem.cost)}
           </Price>
 
           <If condition={props.plan.name}>
             <span
               className={cn(
-                `animate-in slide-in-from-left-4 fade-in capitalize`,
+                `animate-in slide-in-from-left-4 fade-in flex items-center space-x-0.5 capitalize`,
                 {
                   ['text-muted-foreground']: !highlighted,
                 },
@@ -231,6 +233,32 @@ function PricingItem(
                   )}
                 </If>
               </span>
+
+              <If condition={props.primaryLineItem.type !== 'flat'}>
+                <span>/</span>
+
+                <span
+                  className={cn(
+                    `animate-in slide-in-from-left-4 fade-in text-sm capitalize`,
+                    {
+                      ['text-muted-foreground']: !highlighted,
+                    },
+                  )}
+                >
+                  <If condition={props.primaryLineItem.type === 'per-seat'}>
+                    <Trans i18nKey={'billing:perTeamMember'} />
+                  </If>
+
+                  <If condition={props.primaryLineItem.unit}>
+                    <Trans
+                      i18nKey={'billing:perUnit'}
+                      values={{
+                        unit: props.primaryLineItem.unit,
+                      }}
+                    />
+                  </If>
+                </span>
+              </If>
             </span>
           </If>
         </div>
