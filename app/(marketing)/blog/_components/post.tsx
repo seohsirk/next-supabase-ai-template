@@ -9,7 +9,7 @@ export const Post: React.FC<{
   content: string;
 }> = ({ post, content }) => {
   return (
-    <div className={'mx-auto my-8 flex max-w-2xl flex-col space-y-6'}>
+    <div className={'mx-auto flex max-w-2xl flex-col space-y-6'}>
       <PostHeader post={post} />
 
       <article className={styles.HTML}>

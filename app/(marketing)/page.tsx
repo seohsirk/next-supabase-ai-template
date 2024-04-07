@@ -17,7 +17,7 @@ function Home() {
       <div className={'container mx-auto'}>
         <div
           className={
-            'my-12 flex flex-col items-center md:flex-row lg:my-16' +
+            'mt-4 flex flex-col items-center md:flex-row xl:mt-12' +
             ' mx-auto flex-1 justify-center animate-in fade-in ' +
             ' duration-1000 slide-in-from-top-12'
           }
