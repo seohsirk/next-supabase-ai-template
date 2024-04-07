@@ -4,7 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryStreamedHydration } from '@tanstack/react-query-next-experimental';
 import { ThemeProvider } from 'next-themes';
 
-import { CaptchaProvider, CaptchaTokenSetter } from '@kit/auth/captcha';
+import { CaptchaProvider, CaptchaTokenSetter } from '@kit/auth/captcha/client';
 import { I18nProvider } from '@kit/i18n/provider';
 import { AuthChangeListener } from '@kit/supabase/components/auth-change-listener';
 
