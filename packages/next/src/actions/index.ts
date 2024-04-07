@@ -2,24 +2,14 @@ import { redirect } from 'next/navigation';
 
 import type { User } from '@supabase/supabase-js';
 
+import 'server-only';
 import { z } from 'zod';
 
 import { verifyCaptchaToken } from '@kit/auth/captcha/server';
 import { requireUser } from '@kit/supabase/require-user';
 import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
 
-const parseFactory =
-  <T extends z.ZodTypeAny>(schema: T) =>
-  (data: unknown): z.infer<T> => {
-    try {
-      return schema.parse(data);
-    } catch (err) {
-      console.error(err);
-
-      // handle error
-      throw new Error(`Invalid data: ${err}`);
-    }
-  };
+import { zodParseFactory } from '../utils';
 
 /**
  *
@@ -58,7 +48,7 @@ export function enhanceAction<
     }
 
     // validate the schema
-    const parsed = parseFactory(config.schema);
+    const parsed = zodParseFactory(config.schema);
     const data = parsed(params);
 
     // pass the data to the action

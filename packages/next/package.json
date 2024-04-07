@@ -10,7 +10,8 @@
   },
   "prettier": "@kit/prettier-config",
   "exports": {
-    "./actions": "./src/actions/index.ts"
+    "./actions": "./src/actions/index.ts",
+    "./routes": "./src/routes/index.ts"
   },
   "peerDependencies": {
     "@kit/auth": "workspace:*",
