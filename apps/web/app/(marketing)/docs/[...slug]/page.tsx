@@ -51,7 +51,7 @@ async function DocumentationPage({ params }: PageParams) {
     <div className={'container mx-auto'}>
       <div
         className={
-          'relative mx-auto flex max-w-4xl grow flex-col space-y-4 px-8 py-8'
+          'relative mx-auto flex max-w-4xl grow flex-col space-y-4 px-8'
         }
       >
         <SitePageHeader

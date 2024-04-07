@@ -25,7 +25,7 @@ async function BlogPage() {
 
   return (
     <div className={'container mx-auto'}>
-      <div className={'my-8 flex flex-col space-y-16'}>
+      <div className={'flex flex-col space-y-16'}>
         <SitePageHeader
           title={t('marketing:blog')}
           subtitle={t('marketing:blogSubtitle')}

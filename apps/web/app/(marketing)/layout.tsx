@@ -9,7 +9,7 @@ async function SiteLayout(props: React.PropsWithChildren) {
   const user = await getUser();
 
   return (
-    <>
+    <div className={'flex flex-col space-y-8'}>
       <SiteHeader user={user} />
 
       {props.children}
@@ -17,7 +17,7 @@ async function SiteLayout(props: React.PropsWithChildren) {
       <Separator />
 
       <SiteFooter />
-    </>
+    </div>
   );
 }
 

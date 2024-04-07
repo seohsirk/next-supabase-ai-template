@@ -27,7 +27,7 @@ async function DocsPage() {
 
   return (
     <div className={'flex flex-1 flex-col'}>
-      <PageBody className={'mt-8'}>
+      <PageBody>
         <div className={'flex flex-col items-center space-y-16'}>
           <SitePageHeader
             title={t('marketing:documentation')}
