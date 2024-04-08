@@ -56,14 +56,8 @@ function SuspendedPersonalAccountDropdown(props: { user: User | null }) {
 function AuthButtons() {
   return (
     <div className={'hidden space-x-2 lg:flex'}>
-      <Button variant={'link'}>
-        <Link href={pathsConfig.auth.signIn}>
-          <Trans i18nKey={'auth:signIn'} />
-        </Link>
-      </Button>
-
       <Link href={pathsConfig.auth.signUp}>
-        <Button className={'rounded-full'}>
+        <Button variant={'outline'}>
           <Trans i18nKey={'auth:signUp'} />
           <ChevronRight className={'h-4'} />
         </Button>
