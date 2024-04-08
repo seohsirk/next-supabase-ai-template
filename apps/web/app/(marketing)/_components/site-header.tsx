@@ -18,7 +18,7 @@ export function SiteHeader(props: { user?: User | null }) {
           <SiteNavigation />
         </div>
 
-        <div className={'flex flex-1 items-center justify-end space-x-2'}>
+        <div className={'flex flex-1 items-center justify-end space-x-4'}>
           <ModeToggle />
 
           <SiteHeaderAccountSection user={props.user ?? null} />

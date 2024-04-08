@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, Sparkle } from 'lucide-react';
 
 import { PricingTable } from '@kit/billing-gateway/components';
 import { Button } from '@kit/ui/button';
@@ -22,9 +22,7 @@ function Home() {
             ' duration-1000 slide-in-from-top-12'
           }
         >
-          <div
-            className={'flex w-full flex-1 flex-col items-center space-y-12'}
-          >
+          <div className={'flex w-full flex-1 flex-col items-center space-y-8'}>
             <Pill>
               <span>The leading SaaS Starter Kit for ambitious developers</span>
             </Pill>
@@ -33,7 +31,9 @@ function Home() {
               <HeroTitle>
                 <span>The SaaS Starter Kit</span>
 
-                <span>without compromises</span>
+                <span>
+                  <span>for ambitious developers</span>
+                </span>
               </HeroTitle>
 
               <div>
@@ -63,7 +63,7 @@ function Home() {
 
         <div
           className={
-            'mx-auto flex max-w-5xl justify-center py-12 animate-in fade-in ' +
+            'mx-auto flex max-w-6xl justify-center py-12 animate-in fade-in ' +
             ' delay-300 duration-1000 slide-in-from-top-16 fill-mode-both'
           }
         >
@@ -71,12 +71,12 @@ function Home() {
             priority
             className={
               'rounded-2xl' +
-              ' shadow-primary/40 animate-in fade-in' +
+              ' border animate-in fade-in' +
               ' delay-300 duration-1000 ease-out zoom-in-50 fill-mode-both'
             }
-            width={2688}
-            height={1824}
-            src={`/assets/images/dashboard-dark.webp`}
+            width={3069}
+            height={1916}
+            src={`/assets/images/dashboard-demo.webp`}
             alt={`App Image`}
           />
         </div>
@@ -215,7 +215,7 @@ function HeroTitle({ children }: React.PropsWithChildren) {
   return (
     <h1
       className={
-        'flex flex-col text-center text-5xl font-bold xl:text-6xl 2xl:text-7xl'
+        'flex flex-col text-center text-4xl font-bold tracking-tight sm:text-6xl'
       }
     >
       {children}
@@ -225,7 +225,8 @@ function HeroTitle({ children }: React.PropsWithChildren) {
 
 function Pill(props: React.PropsWithChildren) {
   return (
-    <h2 className={'rounded-full border-primary px-4 py-2 text-sm shadow'}>
+    <h2 className={'rounded-full border px-4 py-2 text-sm'}>
+      <Sparkle className={'inline-block h-4'} />
       {props.children}
     </h2>
   );
@@ -258,19 +259,27 @@ function RightFeatureContainer(props: React.PropsWithChildren) {
 
 function MainCallToActionButton() {
   return (
-    <Button className={'h-12 rounded-full px-5 text-[1em]'}>
-      <Link href={'/auth/sign-up'}>
-        <span className={'flex items-center space-x-0.5'}>
-          <span>Get Started</span>
+    <div className={'flex space-x-2'}>
+      <Button>
+        <Link href={'/auth/sign-up'}>
+          <span className={'flex items-center space-x-0.5'}>
+            <span>Get Started</span>
 
-          <ChevronRight
-            className={
-              'h-5 animate-in fade-in slide-in-from-left-8' +
-              ' delay-1000 duration-1000 zoom-in fill-mode-both'
-            }
-          />
-        </span>
-      </Link>
-    </Button>
+            <ChevronRight
+              className={
+                'h-5 animate-in fade-in slide-in-from-left-8' +
+                ' delay-1000 duration-1000 zoom-in fill-mode-both'
+              }
+            />
+          </span>
+        </Link>
+      </Button>
+
+      <Button variant={'ghost'}>
+        <Link href={'/auth/sign-in'}>
+          <span>Sign In</span>
+        </Link>
+      </Button>
+    </div>
   );
 }
