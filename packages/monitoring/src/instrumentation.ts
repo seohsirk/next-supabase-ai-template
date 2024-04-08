@@ -17,7 +17,6 @@ const DEFAULT_INSTRUMENTATION_PROVIDER = process.env
  * Please set the MONITORING_INSTRUMENTATION_PROVIDER environment variable to register the monitoring instrumentation provider.
  */
 export async function registerInstrumentation() {
-  // Only run instrumentation in Node.js environment
   if (
     process.env.NEXT_RUNTIME !== 'nodejs' ||
     !DEFAULT_INSTRUMENTATION_PROVIDER
@@ -39,6 +38,8 @@ export async function registerInstrumentation() {
     }
 
     default:
-      throw new Error(`Unknown instrumentation provider`);
+      throw new Error(
+        `Unknown instrumentation provider: ${DEFAULT_INSTRUMENTATION_PROVIDER as string}`,
+      );
   }
 }

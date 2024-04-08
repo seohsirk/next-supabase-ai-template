@@ -7,7 +7,6 @@
     "format": "prettier --check \"**/*.{ts,tsx}\"",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "build": "contentlayer build",
     "start": "docker compose up"
   },
   "prettier": "@kit/prettier-config",

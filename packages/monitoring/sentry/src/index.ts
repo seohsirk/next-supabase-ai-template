@@ -1,11 +1,3 @@
-import { Resource } from '@opentelemetry/resources';
-import { NodeSDK } from '@opentelemetry/sdk-node';
-import { SEMRESATTRS_SERVICE_NAME } from '@opentelemetry/semantic-conventions';
-import {
-  SentryPropagator,
-  SentrySpanProcessor,
-} from '@sentry/opentelemetry-node';
-
 const INSTRUMENTATION_SERVICE_NAME = process.env.INSTRUMENTATION_SERVICE_NAME;
 
 if (!INSTRUMENTATION_SERVICE_NAME) {
@@ -20,7 +12,18 @@ if (!INSTRUMENTATION_SERVICE_NAME) {
  *
  * Please set the MONITORING_INSTRUMENTATION_PROVIDER environment variable to 'sentry' to register Sentry instrumentation.
  */
-export function registerSentryInstrumentation() {
+export async function registerSentryInstrumentation() {
+  const { Resource } = await import('@opentelemetry/resources');
+  const { NodeSDK } = await import('@opentelemetry/sdk-node');
+
+  const { SEMRESATTRS_SERVICE_NAME } = await import(
+    '@opentelemetry/semantic-conventions'
+  );
+
+  const { SentrySpanProcessor, SentryPropagator } = await import(
+    '@sentry/opentelemetry-node'
+  );
+
   const sdk = new NodeSDK({
     resource: new Resource({
       [SEMRESATTRS_SERVICE_NAME]: INSTRUMENTATION_SERVICE_NAME,

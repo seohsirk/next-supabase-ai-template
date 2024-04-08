@@ -23,6 +23,7 @@ const INTERNAL_PACKAGES = [
 /** @type {import('next').NextConfig} */
 const config = {
   reactStrictMode: true,
+  swcMinify: true,
   /** Enables hot reloading for local packages without a build step */
   transpilePackages: INTERNAL_PACKAGES,
   pageExtensions: ['ts', 'tsx'],

@@ -1,9 +1,3 @@
-import {
-  BaselimeSDK,
-  BetterHttpInstrumentation,
-  VercelPlugin,
-} from '@baselime/node-opentelemetry';
-
 const INSTRUMENTATION_SERVICE_NAME = process.env.INSTRUMENTATION_SERVICE_NAME;
 
 if (!INSTRUMENTATION_SERVICE_NAME) {
@@ -18,7 +12,11 @@ if (!INSTRUMENTATION_SERVICE_NAME) {
  *
  * Please set the MONITORING_INSTRUMENTATION_PROVIDER environment variable to 'baselime' to register Baselime instrumentation.
  */
-export function registerBaselimeInstrumentation() {
+export async function registerBaselimeInstrumentation() {
+  const { BaselimeSDK, BetterHttpInstrumentation, VercelPlugin } = await import(
+    '@baselime/node-opentelemetry'
+  );
+
   const sdk = new BaselimeSDK({
     serverless: true,
     service: INSTRUMENTATION_SERVICE_NAME,

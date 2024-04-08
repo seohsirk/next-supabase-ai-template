@@ -28,8 +28,9 @@ function Home() {
             </Pill>
 
             <HeroTitle>
-              <span>The SaaS Solution for</span>
-              <span>developers and founders</span>
+              <span>The SaaS Starter Kit</span>
+
+              <span>straight from the future</span>
             </HeroTitle>
 
             <div>
@@ -221,8 +222,8 @@ function HeroTitle({ children }: React.PropsWithChildren) {
   return (
     <h1
       className={
-        'text-center text-4xl md:text-5xl' +
-        ' flex flex-col font-semibold xl:text-7xl'
+        'text-center font-sans text-4xl md:text-5xl' +
+        ' flex flex-col font-bold xl:text-7xl 2xl:text-[5rem]'
       }
     >
       {children}
@@ -232,14 +233,7 @@ function HeroTitle({ children }: React.PropsWithChildren) {
 
 function Pill(props: React.PropsWithChildren) {
   return (
-    <h2
-      className={
-        'inline-flex w-auto items-center space-x-2' +
-        ' rounded-full bg-gradient-to-br dark:from-gray-200 dark:via-gray-400' +
-        ' bg-clip-text px-4 py-2 text-center text-sm dark:to-gray-700' +
-        ' border font-normal text-muted-foreground shadow-sm dark:text-transparent'
-      }
-    >
+    <h2 className={'rounded-full px-4 py-2 text-sm shadow'}>
       {props.children}
     </h2>
   );
