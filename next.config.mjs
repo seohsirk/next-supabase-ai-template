@@ -7,6 +7,7 @@ const INTERNAL_PACKAGES = [
   '@kit/ui',
   '@kit/auth',
   '@kit/accounts',
+  '@kit/admin',
   '@kit/team-accounts',
   '@kit/shared',
   '@kit/supabase',
