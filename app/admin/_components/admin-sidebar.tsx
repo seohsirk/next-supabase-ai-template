@@ -1,5 +1,9 @@
+import { redirect } from 'next/navigation';
+
 import { Home, Users } from 'lucide-react';
 
+import { requireUser } from '@kit/supabase/require-user';
+import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
 import {
   Sidebar,
   SidebarContent,
@@ -7,9 +11,17 @@ import {
   SidebarItem,
 } from '@kit/ui/sidebar';
 
+import { ProfileAccountDropdownContainer } from '~/(dashboard)/home/_components/personal-account-dropdown-container';
 import { AppLogo } from '~/components/app-logo';
 
-export function AdminSidebar() {
+export async function AdminSidebar() {
+  const client = getSupabaseServerActionClient();
+  const user = await requireUser(client);
+
+  if (user.error) {
+    redirect(user.redirectTo);
+  }
+
   return (
     <Sidebar>
       <SidebarContent className={'py-4'}>
@@ -29,6 +41,10 @@ export function AdminSidebar() {
             Accounts
           </SidebarItem>
         </SidebarGroup>
+      </SidebarContent>
+
+      <SidebarContent className={'absolute bottom-4'}>
+        <ProfileAccountDropdownContainer user={user.data} collapsed={false} />
       </SidebarContent>
     </Sidebar>
   );
