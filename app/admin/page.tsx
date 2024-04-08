@@ -1,7 +1,8 @@
 import { AdminDashboard } from '@kit/admin/components/admin-dashboard';
+import { AdminGuard } from '@kit/admin/components/admin-guard';
 import { PageBody, PageHeader } from '@kit/ui/page';
 
-export default function AdminPage() {
+function AdminPage() {
   return (
     <>
       <PageHeader title={'Admin'} description={`Your SaaS stats at a glance`} />
@@ -12,3 +13,5 @@ export default function AdminPage() {
     </>
   );
 }
+
+export default AdminGuard(AdminPage);
