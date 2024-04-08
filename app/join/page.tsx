@@ -3,7 +3,6 @@ import { notFound, redirect } from 'next/navigation';
 
 import { ArrowLeft } from 'lucide-react';
 
-import { Logger } from '@kit/shared/logger';
 import { requireUser } from '@kit/supabase/require-user';
 import { getSupabaseServerComponentClient } from '@kit/supabase/server-component-client';
 import { AcceptInvitationContainer } from '@kit/team-accounts/components';
@@ -14,6 +13,8 @@ import { Trans } from '@kit/ui/trans';
 import pathsConfig from '~/config/paths.config';
 import { createI18nServerInstance } from '~/lib/i18n/i18n.server';
 import { withI18n } from '~/lib/i18n/with-i18n';
+
+import { JoinTeamService } from './_lib/server/join-team.service';
 
 interface Context {
   searchParams: {
@@ -47,19 +48,23 @@ async function JoinTeamAccountPage({ searchParams }: Context) {
     redirect(pathsConfig.auth.signUp + '?invite_token=' + token);
   }
 
+  const service = new JoinTeamService();
+
   // the user is logged in, we can now check if the token is valid
-  const invitation = await getInviteDataFromInviteToken(token);
+  const invitation = await service.getInviteDataFromInviteToken(token);
 
   if (!invitation) {
     return <InviteNotFoundOrExpired />;
   }
 
   // we need to verify the user isn't already in the account
-  const isInAccount = await isCurrentUserAlreadyInAccount(
+  const isInAccount = await service.isCurrentUserAlreadyInAccount(
     invitation.account.id,
   );
 
   if (isInAccount) {
+    const { Logger } = await import('@kit/shared/logger');
+
     Logger.warn(
       {
         name: 'join-team-account',
@@ -96,56 +101,6 @@ async function JoinTeamAccountPage({ searchParams }: Context) {
 }
 
 export default withI18n(JoinTeamAccountPage);
-
-/**
- * Verifies that the current user is not already in the account by
- * reading the document from the `accounts` table. If the user can read it
- * it means they are already in the account.
- * @param accountId
- */
-async function isCurrentUserAlreadyInAccount(accountId: string) {
-  const client = getSupabaseServerComponentClient();
-
-  const { data } = await client
-    .from('accounts')
-    .select('id')
-    .eq('id', accountId)
-    .maybeSingle();
-
-  return !!data?.id;
-}
-
-async function getInviteDataFromInviteToken(token: string) {
-  // we use an admin client to be able to read the pending membership
-  // without having to be logged in
-  const adminClient = getSupabaseServerComponentClient({ admin: true });
-
-  const { data: invitation, error } = await adminClient
-    .from('invitations')
-    .select<
-      string,
-      {
-        id: string;
-        account: {
-          id: string;
-          name: string;
-          slug: string;
-          picture_url: string;
-        };
-      }
-    >(
-      'id, expires_at, account: account_id !inner (id, name, slug, picture_url)',
-    )
-    .eq('invite_token', token)
-    .gte('expires_at', new Date().toISOString())
-    .single();
-
-  if (!invitation ?? error) {
-    return null;
-  }
-
-  return invitation;
-}
 
 function InviteNotFoundOrExpired() {
   return (
