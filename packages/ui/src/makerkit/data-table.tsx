@@ -1,6 +1,6 @@
 'use client';
 
-import { Fragment, useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 
@@ -35,7 +35,6 @@ import {
   TableHeader,
   TableRow,
 } from '../shadcn/table';
-import { cn } from '../utils';
 import { Trans } from './trans';
 
 interface ReactTableProps<T extends object> {
@@ -53,7 +52,6 @@ interface ReactTableProps<T extends object> {
 export function DataTable<T extends object>({
   data,
   columns,
-  renderSubComponent,
   pageIndex,
   pageSize,
   pageCount,
@@ -117,9 +115,7 @@ export function DataTable<T extends object>({
   });
 
   return (
-    <div
-      className={'dark:border-dark-800 rounded-md border border-gray-50 p-1'}
-    >
+    <div className={'rounded-lg border'}>
       <Table {...tableProps}>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -145,38 +141,29 @@ export function DataTable<T extends object>({
         </TableHeader>
 
         <TableBody>
-          {table.getRowModel().rows.map((row) => (
-            <Fragment key={row.id}>
+          {table.getRowModel().rows?.length ? (
+            table.getRowModel().rows.map((row) => (
               <TableRow
-                className={cn({
-                  'border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted':
-                    row.getIsExpanded(),
-                })}
+                key={row.id}
+                data-state={row.getIsSelected() && 'selected'}
               >
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell
-                    style={{
-                      width: cell.column.getSize(),
-                    }}
-                    key={cell.id}
-                  >
+                  <TableCell key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}
               </TableRow>
-
-              {renderSubComponent ? (
-                <TableRow key={row.id + '-expanded'}>
-                  <TableCell colSpan={columns.length}>
-                    {renderSubComponent({ row })}
-                  </TableCell>
-                </TableRow>
-              ) : null}
-            </Fragment>
-          ))}
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={columns.length} className="h-24 text-center">
+                <Trans i18nKey={'common:noData'} />
+              </TableCell>
+            </TableRow>
+          )}
         </TableBody>
 
-        <TableFooter>
+        <TableFooter className={'bg-background'}>
           <TableRow>
             <TableCell colSpan={columns.length}>
               <Pagination table={table} />
@@ -194,39 +181,7 @@ function Pagination<T>({
   table: ReactTable<T>;
 }>) {
   return (
-    <div className="flex w-full items-center gap-2">
-      <Button
-        size={'icon'}
-        onClick={() => table.setPageIndex(0)}
-        disabled={!table.getCanPreviousPage()}
-      >
-        <ChevronsLeft className={'h-4'} />
-      </Button>
-
-      <Button
-        size={'icon'}
-        onClick={() => table.previousPage()}
-        disabled={!table.getCanPreviousPage()}
-      >
-        <ChevronLeft className={'h-4'} />
-      </Button>
-
-      <Button
-        size={'icon'}
-        onClick={() => table.nextPage()}
-        disabled={!table.getCanNextPage()}
-      >
-        <ChevronRight className={'h-4'} />
-      </Button>
-
-      <Button
-        size={'icon'}
-        onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-        disabled={!table.getCanNextPage()}
-      >
-        <ChevronsRight className={'h-4'} />
-      </Button>
-
+    <div className="flex items-center justify-end space-x-4">
       <span className="flex items-center text-sm">
         <Trans
           i18nKey={'common:pageOfPages'}
@@ -236,6 +191,44 @@ function Pagination<T>({
           }}
         />
       </span>
+
+      <div className="flex items-center justify-end space-x-1">
+        <Button
+          size={'icon'}
+          variant={'ghost'}
+          onClick={() => table.setPageIndex(0)}
+          disabled={!table.getCanPreviousPage()}
+        >
+          <ChevronsLeft className={'h-4'} />
+        </Button>
+
+        <Button
+          size={'icon'}
+          variant={'ghost'}
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
+        >
+          <ChevronLeft className={'h-4'} />
+        </Button>
+
+        <Button
+          size={'icon'}
+          variant={'ghost'}
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+        >
+          <ChevronRight className={'h-4'} />
+        </Button>
+
+        <Button
+          size={'icon'}
+          variant={'ghost'}
+          onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+          disabled={!table.getCanNextPage()}
+        >
+          <ChevronsRight className={'h-4'} />
+        </Button>
+      </div>
     </div>
   );
 }

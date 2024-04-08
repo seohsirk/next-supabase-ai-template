@@ -120,7 +120,8 @@
     "./loading-overlay": "./src/makerkit/loading-overlay.tsx",
     "./profile-avatar": "./src/makerkit/profile-avatar.tsx",
     "./mdx-components": "./src/makerkit/mdx-components.tsx",
-    "./mode-toggle": "./src/makerkit/mode-toggle.tsx"
+    "./mode-toggle": "./src/makerkit/mode-toggle.tsx",
+    "./enhanced-data-table": "./src/makerkit/data-table.tsx"
   },
   "typesVersions": {
     "*": {

@@ -7,6 +7,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 
+import { Trans } from '../makerkit/trans';
 import {
   Table,
   TableBody,
@@ -52,6 +53,7 @@ export function DataTable<TData, TValue>({
             </TableRow>
           ))}
         </TableHeader>
+
         <TableBody>
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
@@ -69,7 +71,7 @@ export function DataTable<TData, TValue>({
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
+                <Trans i18nKey={'common:noData'} />
               </TableCell>
             </TableRow>
           )}
