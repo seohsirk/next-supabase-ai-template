@@ -26,18 +26,16 @@ async function DocsPage() {
   const cards = docs.filter((item) => !item.parentId);
 
   return (
-    <div className={'flex flex-1 flex-col'}>
-      <PageBody>
-        <div className={'flex flex-col items-center space-y-16'}>
-          <SitePageHeader
-            title={t('marketing:documentation')}
-            subtitle={t('marketing:documentationSubtitle')}
-          />
+    <PageBody>
+      <div className={'flex flex-col items-center space-y-12 xl:space-y-24'}>
+        <SitePageHeader
+          title={t('marketing:documentation')}
+          subtitle={t('marketing:documentationSubtitle')}
+        />
 
-          <DocsCards cards={cards} />
-        </div>
-      </PageBody>
-    </div>
+        <DocsCards cards={cards} />
+      </div>
+    </PageBody>
   );
 }
 

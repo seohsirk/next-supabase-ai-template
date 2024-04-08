@@ -1,4 +1,3 @@
-import { Heading } from '@kit/ui/heading';
 import { cn } from '@kit/ui/utils';
 
 export function SitePageHeader(props: {
@@ -8,9 +7,11 @@ export function SitePageHeader(props: {
 }) {
   return (
     <div
-      className={cn('flex flex-col items-center space-y-2.5', props.className)}
+      className={cn('flex flex-col items-center space-y-4', props.className)}
     >
-      <Heading level={1}>{props.title}</Heading>
+      <h1 className={'text-center text-3xl font-semibold xl:text-4xl'}>
+        {props.title}
+      </h1>
 
       <h2 className={'text-center text-xl text-muted-foreground xl:text-2xl'}>
         <span className={'font-normal'}>{props.subtitle}</span>

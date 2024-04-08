@@ -1,6 +1,6 @@
 import { ServerDataLoader } from '@makerkit/data-loader-supabase-nextjs';
 
-import { AccountsTable } from '@kit/admin/components/accounts-table';
+import { AdminAccountsTable } from '@kit/admin/components/admin-accounts-table';
 import { AdminGuard } from '@kit/admin/components/admin-guard';
 import { getSupabaseServerComponentClient } from '@kit/supabase/server-component-client';
 import { PageBody, PageHeader } from '@kit/ui/page';
@@ -8,7 +8,12 @@ import { PageBody, PageHeader } from '@kit/ui/page';
 interface SearchParams {
   page?: string;
   account_type?: 'all' | 'team' | 'personal';
+  query?: string;
 }
+
+export const metadata = {
+  title: `Accounts`,
+};
 
 function AccountsPage({ searchParams }: { searchParams: SearchParams }) {
   const client = getSupabaseServerComponentClient({
@@ -34,7 +39,7 @@ function AccountsPage({ searchParams }: { searchParams: SearchParams }) {
         >
           {({ data, page, pageSize, pageCount }) => {
             return (
-              <AccountsTable
+              <AdminAccountsTable
                 page={page}
                 pageSize={pageSize}
                 pageCount={pageCount}
@@ -54,13 +59,20 @@ function AccountsPage({ searchParams }: { searchParams: SearchParams }) {
 function getFilters(params: SearchParams) {
   const filters: {
     [key: string]: {
-      eq: boolean;
+      eq?: boolean | string;
+      like?: string;
     };
   } = {};
 
   if (params.account_type && params.account_type !== 'all') {
     filters.is_personal_account = {
       eq: params.account_type === 'personal',
+    };
+  }
+
+  if (params.query) {
+    filters.name = {
+      like: `%${params.query}%`,
     };
   }
 
