@@ -20,20 +20,27 @@ import {
   DropdownMenuTrigger,
 } from '@kit/ui/dropdown-menu';
 import { DataTable } from '@kit/ui/enhanced-data-table';
+import { Form, FormControl, FormField, FormItem } from '@kit/ui/form';
+import { If } from '@kit/ui/if';
+import { Input } from '@kit/ui/input';
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
+  SelectValue,
 } from '@kit/ui/select';
 
 type Account = Database['public']['Tables']['accounts']['Row'];
 
 const FiltersSchema = z.object({
   type: z.enum(['all', 'team', 'personal']),
+  query: z.string().optional(),
 });
 
-export function AccountsTable(
+export function AdminAccountsTable(
   props: React.PropsWithChildren<{
     data: Account[];
     pageCount: number;
@@ -66,6 +73,7 @@ function AccountsTableFilters(props: {
     resolver: zodResolver(FiltersSchema),
     defaultValues: {
       type: props.filters?.type ?? 'all',
+      query: '',
     },
     mode: 'onChange',
     reValidateMode: 'onChange',
@@ -74,9 +82,10 @@ function AccountsTableFilters(props: {
   const router = useRouter();
   const pathName = usePathname();
 
-  const onSubmit = ({ type }: z.infer<typeof FiltersSchema>) => {
+  const onSubmit = ({ type, query }: z.infer<typeof FiltersSchema>) => {
     const params = new URLSearchParams({
       account_type: type,
+      query: query ?? '',
     });
 
     const url = `${pathName}?${params.toString()}`;
@@ -85,35 +94,59 @@ function AccountsTableFilters(props: {
   };
 
   return (
-    <div className={'flex space-x-4'}>
-      <form onSubmit={form.handleSubmit((data) => onSubmit(data))}>
-        <Select
-          value={form.watch('type')}
-          onValueChange={(value) => {
-            form.setValue(
-              'type',
-              value as z.infer<typeof FiltersSchema>['type'],
-              {
-                shouldValidate: true,
-                shouldDirty: true,
-                shouldTouch: true,
-              },
-            );
-
-            return onSubmit(form.getValues());
-          }}
+    <div className={'flex justify-end space-x-4'}>
+      <Form {...form}>
+        <form
+          className={'flex space-x-4'}
+          onSubmit={form.handleSubmit((data) => onSubmit(data))}
         >
-          <SelectTrigger>
-            <span>Account Type</span>
-          </SelectTrigger>
+          <Select
+            value={form.watch('type')}
+            onValueChange={(value) => {
+              form.setValue(
+                'type',
+                value as z.infer<typeof FiltersSchema>['type'],
+                {
+                  shouldValidate: true,
+                  shouldDirty: true,
+                  shouldTouch: true,
+                },
+              );
 
-          <SelectContent>
-            <SelectItem value={'all'}>All</SelectItem>
-            <SelectItem value={'team'}>Team</SelectItem>
-            <SelectItem value={'personal'}>Personal</SelectItem>
-          </SelectContent>
-        </Select>
-      </form>
+              return onSubmit(form.getValues());
+            }}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder={'Account Type'} />
+            </SelectTrigger>
+
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Account Type</SelectLabel>
+
+                <SelectItem value={'all'}>All accounts</SelectItem>
+                <SelectItem value={'team'}>Team</SelectItem>
+                <SelectItem value={'personal'}>Personal</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+
+          <FormField
+            name={'query'}
+            render={({ field }) => (
+              <FormItem>
+                <FormControl className={'min-w-72'}>
+                  <Input
+                    className={'w-full'}
+                    placeholder={`Search account...`}
+                    {...field}
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+        </form>
+      </Form>
     </div>
   );
 }
@@ -123,7 +156,16 @@ function getColumns(): ColumnDef<Account>[] {
     {
       id: 'name',
       header: 'Name',
-      accessorKey: 'name',
+      cell: ({ row }) => {
+        return (
+          <Link
+            className={'hover:underline'}
+            href={`/admin/accounts/${row.original.id}`}
+          >
+            {row.original.name}
+          </Link>
+        );
+      },
     },
     {
       id: 'email',
@@ -151,6 +193,8 @@ function getColumns(): ColumnDef<Account>[] {
       id: 'actions',
       header: '',
       cell: ({ row }) => {
+        const isPersonalAccount = row.original.is_personal_account;
+
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -164,10 +208,18 @@ function getColumns(): ColumnDef<Account>[] {
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
 
                 <DropdownMenuItem>
-                  <Link href={`/accounts/${row.original.id}`}>View</Link>
+                  <Link href={`/admin/accounts/${row.original.id}`}>View</Link>
                 </DropdownMenuItem>
 
-                <DropdownMenuItem>Delete</DropdownMenuItem>
+                <If condition={isPersonalAccount}>
+                  <DropdownMenuItem className={'text-orange-800'}>
+                    Ban
+                  </DropdownMenuItem>
+                </If>
+
+                <DropdownMenuItem className={'text-destructive'}>
+                  Delete
+                </DropdownMenuItem>
               </DropdownMenuGroup>
             </DropdownMenuContent>
           </DropdownMenu>

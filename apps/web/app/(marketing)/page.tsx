@@ -13,57 +13,50 @@ import { withI18n } from '~/lib/i18n/with-i18n';
 
 function Home() {
   return (
-    <div className={'flex flex-col space-y-16'}>
-      <div className={'container mx-auto'}>
+    <div className={'flex flex-col space-y-24'}>
+      <div className={'container mx-auto flex flex-col space-y-24'}>
         <div
           className={
-            'mt-4 flex flex-col items-center md:flex-row xl:mt-12' +
+            'flex flex-col items-center md:flex-row' +
             ' mx-auto flex-1 justify-center animate-in fade-in ' +
             ' duration-1000 slide-in-from-top-12'
           }
         >
-          <div className={'flex w-full flex-1 flex-col items-center space-y-8'}>
+          <div
+            className={'flex w-full flex-1 flex-col items-center space-y-12'}
+          >
             <Pill>
               <span>The leading SaaS Starter Kit for ambitious developers</span>
             </Pill>
 
-            <HeroTitle>
-              <span>The SaaS Starter Kit</span>
+            <div className={'flex flex-col items-center space-y-8'}>
+              <HeroTitle>
+                <span>The SaaS Starter Kit</span>
 
-              <span>straight from the future</span>
-            </HeroTitle>
+                <span>without compromises</span>
+              </HeroTitle>
 
-            <div>
-              <Heading
-                level={3}
-                className={'text-center font-medium text-muted-foreground'}
-              >
-                <span>Here you can write a short description of your SaaS</span>
-              </Heading>
+              <div>
+                <Heading
+                  level={3}
+                  className={'text-center font-medium text-muted-foreground'}
+                >
+                  <span>Build and launch a SaaS in days, not months</span>
+                </Heading>
 
-              <Heading
-                level={3}
-                className={'text-center font-medium text-muted-foreground'}
-              >
-                <span>
-                  This subheading is usually laid out on multiple lines
-                </span>
-              </Heading>
-
-              <Heading
-                level={3}
-                className={'text-center font-medium text-muted-foreground'}
-              >
-                <span>Impress your customers, straight to the point.</span>
-              </Heading>
+                <Heading
+                  level={3}
+                  className={'text-center font-medium text-muted-foreground'}
+                >
+                  <span>
+                    <span>Focus on your business, not on the tech</span>
+                  </span>
+                </Heading>
+              </div>
             </div>
 
-            <div className={'flex flex-col items-center space-y-4'}>
+            <div>
               <MainCallToActionButton />
-
-              <span className={'text-xs text-muted-foreground'}>
-                Free plan. No credit card required.
-              </span>
             </div>
           </div>
         </div>
@@ -222,8 +215,7 @@ function HeroTitle({ children }: React.PropsWithChildren) {
   return (
     <h1
       className={
-        'text-center font-sans text-4xl md:text-5xl' +
-        ' flex flex-col font-bold xl:text-7xl 2xl:text-[5rem]'
+        'flex flex-col text-center text-5xl font-bold xl:text-6xl 2xl:text-7xl'
       }
     >
       {children}
@@ -233,7 +225,7 @@ function HeroTitle({ children }: React.PropsWithChildren) {
 
 function Pill(props: React.PropsWithChildren) {
   return (
-    <h2 className={'rounded-full px-4 py-2 text-sm shadow'}>
+    <h2 className={'rounded-full border-primary px-4 py-2 text-sm shadow'}>
       {props.children}
     </h2>
   );
@@ -266,14 +258,14 @@ function RightFeatureContainer(props: React.PropsWithChildren) {
 
 function MainCallToActionButton() {
   return (
-    <Button className={'rounded-full'}>
+    <Button className={'h-12 rounded-full px-5 text-[1em]'}>
       <Link href={'/auth/sign-up'}>
         <span className={'flex items-center space-x-0.5'}>
           <span>Get Started</span>
 
           <ChevronRight
             className={
-              'h-4 animate-in fade-in slide-in-from-left-8' +
+              'h-5 animate-in fade-in slide-in-from-left-8' +
               ' delay-1000 duration-1000 zoom-in fill-mode-both'
             }
           />

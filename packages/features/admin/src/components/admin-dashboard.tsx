@@ -70,7 +70,7 @@ export async function AdminDashboard() {
           <CardTitle>Trials</CardTitle>
 
           <CardDescription>
-            Th number of trial subscriptions currently active.
+            The number of trial subscriptions currently active.
           </CardDescription>
         </CardHeader>
 

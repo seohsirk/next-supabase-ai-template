@@ -269,7 +269,6 @@ create table if not exists public.accounts(
     id uuid unique not null default extensions.uuid_generate_v4(),
     primary_owner_user_id uuid references auth.users on delete
 	cascade not null default auth.uid(),
-    -- Auth ID in Supabase Auth
     name varchar(255) not null,
     slug text unique,
     email varchar(320) unique,
