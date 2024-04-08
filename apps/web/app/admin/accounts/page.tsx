@@ -1,6 +1,7 @@
+import { AdminGuard } from '@kit/admin/components/admin-guard';
 import { PageBody, PageHeader } from '@kit/ui/page';
 
-export default function AccountsPage() {
+function AccountsPage() {
   return (
     <>
       <PageHeader title={'Accounts'} />
@@ -8,3 +9,5 @@ export default function AccountsPage() {
     </>
   );
 }
+
+export default AdminGuard(AccountsPage);
