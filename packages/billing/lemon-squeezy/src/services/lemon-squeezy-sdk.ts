@@ -1,6 +1,6 @@
 import 'server-only';
 
-import { Logger } from '@kit/shared/logger';
+import { getLogger } from '@kit/shared/logger';
 
 import { getLemonSqueezyEnv } from '../schema/lemon-squeezy-server-env.schema';
 
@@ -10,11 +10,12 @@ import { getLemonSqueezyEnv } from '../schema/lemon-squeezy-server-env.schema';
 export async function initializeLemonSqueezyClient() {
   const { lemonSqueezySetup } = await import('@lemonsqueezy/lemonsqueezy.js');
   const env = getLemonSqueezyEnv();
+  const logger = await getLogger();
 
   lemonSqueezySetup({
     apiKey: env.secretKey,
     onError(error) {
-      Logger.error(
+      logger.error(
         {
           name: `billing.lemon-squeezy`,
           error: error.message,

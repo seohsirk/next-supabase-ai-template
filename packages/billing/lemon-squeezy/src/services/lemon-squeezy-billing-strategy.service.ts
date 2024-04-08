@@ -16,7 +16,7 @@ import {
   RetrieveCheckoutSessionSchema,
   UpdateSubscriptionParamsSchema,
 } from '@kit/billing/schema';
-import { Logger } from '@kit/shared/logger';
+import { getLogger } from '@kit/shared/logger';
 
 import { createLemonSqueezyBillingPortalSession } from './create-lemon-squeezy-billing-portal-session';
 import { createLemonSqueezyCheckout } from './create-lemon-squeezy-checkout';
@@ -27,13 +27,12 @@ export class LemonSqueezyBillingStrategyService
   async createCheckoutSession(
     params: z.infer<typeof CreateBillingCheckoutSchema>,
   ) {
-    Logger.info(
+    const logger = await getLogger();
+
+    logger.info(
       {
         name: 'billing.lemon-squeezy',
-        customerId: params.customerId,
-        accountId: params.accountId,
-        returnUrl: params.returnUrl,
-        trialDays: params.trialDays,
+        ...params,
       },
       'Creating checkout session...',
     );
@@ -43,7 +42,7 @@ export class LemonSqueezyBillingStrategyService
     if (error ?? !response?.data.id) {
       console.log(error);
 
-      Logger.error(
+      logger.error(
         {
           name: 'billing.lemon-squeezy',
           customerId: params.customerId,
@@ -56,7 +55,7 @@ export class LemonSqueezyBillingStrategyService
       throw new Error('Failed to create checkout session');
     }
 
-    Logger.info(
+    logger.info(
       {
         name: 'billing.lemon-squeezy',
         customerId: params.customerId,
@@ -73,7 +72,9 @@ export class LemonSqueezyBillingStrategyService
   async createBillingPortalSession(
     params: z.infer<typeof CreateBillingPortalSessionSchema>,
   ) {
-    Logger.info(
+    const logger = await getLogger();
+
+    logger.info(
       {
         name: 'billing.lemon-squeezy',
         customerId: params.customerId,
@@ -85,7 +86,7 @@ export class LemonSqueezyBillingStrategyService
       await createLemonSqueezyBillingPortalSession(params);
 
     if (error ?? !data) {
-      Logger.error(
+      logger.error(
         {
           name: 'billing.lemon-squeezy',
           customerId: params.customerId,
@@ -97,7 +98,7 @@ export class LemonSqueezyBillingStrategyService
       throw new Error('Failed to create billing portal session');
     }
 
-    Logger.info(
+    logger.info(
       {
         name: 'billing.lemon-squeezy',
         customerId: params.customerId,
@@ -111,7 +112,9 @@ export class LemonSqueezyBillingStrategyService
   async cancelSubscription(
     params: z.infer<typeof CancelSubscriptionParamsSchema>,
   ) {
-    Logger.info(
+    const logger = await getLogger();
+
+    logger.info(
       {
         name: 'billing.lemon-squeezy',
         subscriptionId: params.subscriptionId,
@@ -123,7 +126,7 @@ export class LemonSqueezyBillingStrategyService
       const { error } = await cancelSubscription(params.subscriptionId);
 
       if (error) {
-        Logger.error(
+        logger.error(
           {
             name: 'billing.lemon-squeezy',
             subscriptionId: params.subscriptionId,
@@ -135,7 +138,7 @@ export class LemonSqueezyBillingStrategyService
         throw error;
       }
 
-      Logger.info(
+      logger.info(
         {
           name: 'billing.lemon-squeezy',
           subscriptionId: params.subscriptionId,
@@ -145,7 +148,7 @@ export class LemonSqueezyBillingStrategyService
 
       return { success: true };
     } catch (error) {
-      Logger.error(
+      logger.error(
         {
           name: 'billing.lemon-squeezy',
           subscriptionId: params.subscriptionId,
@@ -161,7 +164,9 @@ export class LemonSqueezyBillingStrategyService
   async retrieveCheckoutSession(
     params: z.infer<typeof RetrieveCheckoutSessionSchema>,
   ) {
-    Logger.info(
+    const logger = await getLogger();
+
+    logger.info(
       {
         name: 'billing.lemon-squeezy',
         sessionId: params.sessionId,
@@ -172,7 +177,7 @@ export class LemonSqueezyBillingStrategyService
     const { data: session, error } = await getCheckout(params.sessionId);
 
     if (error ?? !session?.data) {
-      Logger.error(
+      logger.error(
         {
           name: 'billing.lemon-squeezy',
           sessionId: params.sessionId,
@@ -184,7 +189,7 @@ export class LemonSqueezyBillingStrategyService
       throw new Error('Failed to retrieve checkout session');
     }
 
-    Logger.info(
+    logger.info(
       {
         name: 'billing.lemon-squeezy',
         sessionId: params.sessionId,
@@ -205,7 +210,9 @@ export class LemonSqueezyBillingStrategyService
   }
 
   async reportUsage(params: z.infer<typeof ReportBillingUsageSchema>) {
-    Logger.info(
+    const logger = await getLogger();
+
+    logger.info(
       {
         name: 'billing.lemon-squeezy',
         subscriptionItemId: params.subscriptionItemId,
@@ -220,11 +227,11 @@ export class LemonSqueezyBillingStrategyService
     });
 
     if (error) {
-      Logger.error(
+      logger.error(
         {
           name: 'billing.lemon-squeezy',
           subscriptionItemId: params.subscriptionItemId,
-          error: error.message,
+          error,
         },
         'Failed to report usage',
       );
@@ -232,7 +239,7 @@ export class LemonSqueezyBillingStrategyService
       throw new Error('Failed to report usage');
     }
 
-    Logger.info(
+    logger.info(
       {
         name: 'billing.lemon-squeezy',
         subscriptionItemId: params.subscriptionItemId,
@@ -246,19 +253,21 @@ export class LemonSqueezyBillingStrategyService
   async updateSubscription(
     params: z.infer<typeof UpdateSubscriptionParamsSchema>,
   ) {
+    const logger = await getLogger();
+
     const ctx = {
       name: 'billing.lemon-squeezy',
       ...params,
     };
 
-    Logger.info(ctx, 'Updating subscription...');
+    logger.info(ctx, 'Updating subscription...');
 
     const { error } = await updateSubscriptionItem(params.subscriptionItemId, {
       quantity: params.quantity,
     });
 
     if (error) {
-      Logger.error(
+      logger.error(
         {
           ...ctx,
           error,
@@ -269,7 +278,7 @@ export class LemonSqueezyBillingStrategyService
       throw error;
     }
 
-    Logger.info(ctx, 'Subscription updated successfully');
+    logger.info(ctx, 'Subscription updated successfully');
 
     return { success: true };
   }

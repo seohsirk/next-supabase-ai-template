@@ -1,7 +1,7 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 
 import { BillingWebhookHandlerService } from '@kit/billing';
-import { Logger } from '@kit/shared/logger';
+import { getLogger } from '@kit/shared/logger';
 import { Database } from '@kit/supabase/database';
 
 export class BillingEventHandlerService {
@@ -22,10 +22,11 @@ export class BillingEventHandlerService {
     return this.strategy.handleWebhookEvent(event, {
       onSubscriptionDeleted: async (subscriptionId: string) => {
         const client = this.clientProvider();
+        const logger = await getLogger();
 
         // Handle the subscription deleted event
         // here we delete the subscription from the database
-        Logger.info(
+        logger.info(
           {
             namespace: this.namespace,
             subscriptionId,
@@ -42,7 +43,7 @@ export class BillingEventHandlerService {
           throw new Error('Failed to delete subscription');
         }
 
-        Logger.info(
+        logger.info(
           {
             namespace: this.namespace,
             subscriptionId,
@@ -52,6 +53,7 @@ export class BillingEventHandlerService {
       },
       onSubscriptionUpdated: async (subscription) => {
         const client = this.clientProvider();
+        const logger = await getLogger();
 
         const ctx = {
           namespace: this.namespace,
@@ -61,14 +63,14 @@ export class BillingEventHandlerService {
           customerId: subscription.target_customer_id,
         };
 
-        Logger.info(ctx, 'Processing subscription updated event');
+        logger.info(ctx, 'Processing subscription updated event');
 
         // Handle the subscription updated event
         // here we update the subscription in the database
         const { error } = await client.rpc('upsert_subscription', subscription);
 
         if (error) {
-          Logger.error(
+          logger.error(
             {
               error,
               ...ctx,
@@ -79,12 +81,13 @@ export class BillingEventHandlerService {
           throw new Error('Failed to update subscription');
         }
 
-        Logger.info(ctx, 'Successfully updated subscription');
+        logger.info(ctx, 'Successfully updated subscription');
       },
       onCheckoutSessionCompleted: async (payload) => {
         // Handle the checkout session completed event
         // here we add the subscription to the database
         const client = this.clientProvider();
+        const logger = await getLogger();
 
         // Check if the payload contains an order_id
         // if it does, we add an order, otherwise we add a subscription
@@ -97,17 +100,17 @@ export class BillingEventHandlerService {
             customerId: payload.target_customer_id,
           };
 
-          Logger.info(ctx, 'Processing order completed event...');
+          logger.info(ctx, 'Processing order completed event...');
 
           const { error } = await client.rpc('upsert_order', payload);
 
           if (error) {
-            Logger.error({ ...ctx, error }, 'Failed to add order');
+            logger.error({ ...ctx, error }, 'Failed to add order');
 
             throw new Error('Failed to add order');
           }
 
-          Logger.info(ctx, 'Successfully added order');
+          logger.info(ctx, 'Successfully added order');
         } else {
           const ctx = {
             namespace: this.namespace,
@@ -117,25 +120,26 @@ export class BillingEventHandlerService {
             customerId: payload.target_customer_id,
           };
 
-          Logger.info(ctx, 'Processing checkout session completed event...');
+          logger.info(ctx, 'Processing checkout session completed event...');
 
           const { error } = await client.rpc('upsert_subscription', payload);
 
           if (error) {
-            Logger.error({ ...ctx, error }, 'Failed to add subscription');
+            logger.error({ ...ctx, error }, 'Failed to add subscription');
 
             throw new Error('Failed to add subscription');
           }
 
-          Logger.info(ctx, 'Successfully added subscription');
+          logger.info(ctx, 'Successfully added subscription');
         }
       },
       onPaymentSucceeded: async (sessionId: string) => {
         const client = this.clientProvider();
+        const logger = await getLogger();
 
         // Handle the payment succeeded event
         // here we update the payment status in the database
-        Logger.info(
+        logger.info(
           {
             namespace: this.namespace,
             sessionId,
@@ -152,7 +156,7 @@ export class BillingEventHandlerService {
           throw new Error('Failed to update payment status');
         }
 
-        Logger.info(
+        logger.info(
           {
             namespace: this.namespace,
             sessionId,
@@ -162,10 +166,11 @@ export class BillingEventHandlerService {
       },
       onPaymentFailed: async (sessionId: string) => {
         const client = this.clientProvider();
+        const logger = await getLogger();
 
         // Handle the payment failed event
         // here we update the payment status in the database
-        Logger.info(
+        logger.info(
           {
             namespace: this.namespace,
             sessionId,
@@ -182,7 +187,7 @@ export class BillingEventHandlerService {
           throw new Error('Failed to update payment status');
         }
 
-        Logger.info(
+        logger.info(
           {
             namespace: this.namespace,
             sessionId,

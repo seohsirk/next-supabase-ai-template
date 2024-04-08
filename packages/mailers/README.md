@@ -27,13 +27,17 @@ MAILER_PROVIDER=cloudflare
 
 ### Send an email
 
-```javascript
-import { Mailer } from '@kit/mailers';
+```tsx
+import { getMailer } from '@kit/mailers';
 
-Mailer.sendEmail({
+async function sendEmail() {
+  const mailer = await getMailer();
+
+  return mailer.sendEmail({
     to: '',
     from: '',
     subject: 'Hello',
     text: 'Hello, World!'
-});
+  });
+}
 ```

@@ -5,7 +5,7 @@ import { z } from 'zod';
 
 import { getProductPlanPair } from '@kit/billing';
 import { getBillingGatewayProvider } from '@kit/billing-gateway';
-import { Logger } from '@kit/shared/logger';
+import { getLogger } from '@kit/shared/logger';
 import { Database } from '@kit/supabase/database';
 import { requireUser } from '@kit/supabase/require-user';
 import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
@@ -51,8 +51,9 @@ export class UserBillingService {
     }
 
     const { plan } = getProductPlanPair(billingConfig, planId);
+    const logger = await getLogger();
 
-    Logger.info(
+    logger.info(
       {
         name: `billing.personal-account`,
         planId,
@@ -73,7 +74,7 @@ export class UserBillingService {
         variantQuantities: [],
       });
 
-      Logger.info(
+      logger.info(
         {
           userId: user.id,
         },
@@ -86,7 +87,7 @@ export class UserBillingService {
         checkoutToken,
       };
     } catch (error) {
-      Logger.error(
+      logger.error(
         {
           name: `billing.personal-account`,
           planId,
@@ -118,7 +119,9 @@ export class UserBillingService {
       throw new Error('Customer not found');
     }
 
-    Logger.info(
+    const logger = await getLogger();
+
+    logger.info(
       {
         name: `billing.personal-account`,
         customerId,
@@ -137,7 +140,7 @@ export class UserBillingService {
 
       url = session.url;
     } catch (error) {
-      Logger.error(
+      logger.error(
         {
           error,
           customerId,
@@ -151,7 +154,7 @@ export class UserBillingService {
       );
     }
 
-    Logger.info(
+    logger.info(
       {
         name: `billing.personal-account`,
         customerId,
@@ -167,6 +170,14 @@ export class UserBillingService {
 
 async function getCustomerIdFromAccountId(accountId: string) {
   const client = getSupabaseServerActionClient();
+  const logger = await getLogger();
+
+  logger.info(
+    {
+      accountId,
+    },
+    `Getting customer ID for account ${accountId}...`,
+  );
 
   const { data, error } = await client
     .from('billing_customers')
@@ -175,6 +186,14 @@ async function getCustomerIdFromAccountId(accountId: string) {
     .maybeSingle();
 
   if (error) {
+    logger.error(
+      {
+        accountId,
+        error,
+      },
+      `Failed to get customer ID`,
+    );
+
     throw error;
   }
 

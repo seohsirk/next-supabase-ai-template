@@ -4,7 +4,7 @@ import { addDays, formatISO } from 'date-fns';
 import 'server-only';
 import { z } from 'zod';
 
-import { Logger } from '@kit/shared/logger';
+import { getLogger } from '@kit/shared/logger';
 import { Database } from '@kit/supabase/database';
 
 import { DeleteInvitationSchema } from '../../schema/delete-invitation.schema';
@@ -17,7 +17,9 @@ export class AccountInvitationsService {
   constructor(private readonly client: SupabaseClient<Database>) {}
 
   async deleteInvitation(params: z.infer<typeof DeleteInvitationSchema>) {
-    Logger.info('Removing invitation', {
+    const logger = await getLogger();
+
+    logger.info('Removing invitation', {
       name: this.namespace,
       ...params,
     });
@@ -33,7 +35,7 @@ export class AccountInvitationsService {
       throw error;
     }
 
-    Logger.info('Invitation successfully removed', {
+    logger.info('Invitation successfully removed', {
       ...params,
       name: this.namespace,
     });
@@ -42,7 +44,9 @@ export class AccountInvitationsService {
   }
 
   async updateInvitation(params: z.infer<typeof UpdateInvitationSchema>) {
-    Logger.info('Updating invitation', {
+    const logger = await getLogger();
+
+    logger.info('Updating invitation', {
       ...params,
       name: this.namespace,
     });
@@ -60,7 +64,7 @@ export class AccountInvitationsService {
       throw error;
     }
 
-    Logger.info('Invitation successfully updated', {
+    logger.info('Invitation successfully updated', {
       ...params,
       name: this.namespace,
     });
@@ -75,7 +79,9 @@ export class AccountInvitationsService {
     invitations: z.infer<typeof InviteMembersSchema>['invitations'];
     accountSlug: string;
   }) {
-    Logger.info(
+    const logger = await getLogger();
+
+    logger.info(
       {
         account: accountSlug,
         invitations,
@@ -91,7 +97,7 @@ export class AccountInvitationsService {
       .single();
 
     if (!accountResponse.data) {
-      Logger.error(
+      logger.error(
         {
           accountSlug,
           name: this.namespace,
@@ -108,7 +114,7 @@ export class AccountInvitationsService {
     });
 
     if (response.error) {
-      Logger.error(
+      logger.error(
         {
           accountSlug,
           error: response.error,
@@ -124,7 +130,7 @@ export class AccountInvitationsService {
       ? response.data
       : [response.data];
 
-    Logger.info(
+    logger.info(
       {
         account: accountSlug,
         count: responseInvitations.length,
@@ -157,7 +163,9 @@ export class AccountInvitationsService {
   }
 
   async renewInvitation(invitationId: number) {
-    Logger.info('Renewing invitation', {
+    const logger = await getLogger();
+
+    logger.info('Renewing invitation', {
       invitationId,
       name: this.namespace,
     });
@@ -177,7 +185,7 @@ export class AccountInvitationsService {
       throw error;
     }
 
-    Logger.info('Invitation successfully renewed', {
+    logger.info('Invitation successfully renewed', {
       invitationId,
       name: this.namespace,
     });

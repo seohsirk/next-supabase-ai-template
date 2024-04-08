@@ -6,7 +6,7 @@ import {
   BillingWebhookHandlerService,
   getLineItemTypeById,
 } from '@kit/billing';
-import { Logger } from '@kit/shared/logger';
+import { getLogger } from '@kit/shared/logger';
 import { Database } from '@kit/supabase/database';
 
 import { getLemonSqueezyEnv } from '../schema/lemon-squeezy-server-env.schema';
@@ -45,6 +45,9 @@ export class LemonSqueezyWebhookHandlerService
    * @description Verifies the webhook signature - should throw an error if the signature is invalid
    */
   async verifyWebhookSignature(request: Request) {
+    const logger = await getLogger();
+
+    // get the event name and signature from the headers
     const eventName = request.headers.get('x-event-name');
     const signature = request.headers.get('x-signature') as string;
 
@@ -53,8 +56,9 @@ export class LemonSqueezyWebhookHandlerService
     const body = (await request.json()) as SubscriptionWebhook | OrderWebhook;
     const rawBody = await reqClone.text();
 
+    // if no signature is found, throw an error
     if (!signature) {
-      Logger.error(
+      logger.error(
         {
           eventName,
         },
@@ -64,8 +68,9 @@ export class LemonSqueezyWebhookHandlerService
       throw new Error('Signature header not found');
     }
 
+    // if the signature is invalid, throw an error
     if (!isSigningSecretValid(Buffer.from(rawBody), signature)) {
-      Logger.error(
+      logger.error(
         {
           eventName,
         },
@@ -124,7 +129,9 @@ export class LemonSqueezyWebhookHandlerService
       }
 
       default: {
-        Logger.info(
+        const logger = await getLogger();
+
+        logger.info(
           {
             eventType: eventName,
             name: this.namespace,
@@ -211,7 +218,9 @@ export class LemonSqueezyWebhookHandlerService
     const { data: order, error } = await getOrder(orderId);
 
     if (error ?? !order) {
-      Logger.error(
+      const logger = await getLogger();
+
+      logger.error(
         {
           orderId,
           subscriptionId,

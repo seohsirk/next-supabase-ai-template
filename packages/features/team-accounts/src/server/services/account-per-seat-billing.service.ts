@@ -1,7 +1,7 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 
 import { BillingGatewayService } from '@kit/billing-gateway';
-import { Logger } from '@kit/shared/logger';
+import { getLogger } from '@kit/shared/logger';
 import { Database } from '@kit/supabase/database';
 
 export class AccountPerSeatBillingService {
@@ -10,7 +10,9 @@ export class AccountPerSeatBillingService {
   constructor(private readonly client: SupabaseClient<Database>) {}
 
   async getPerSeatSubscriptionItem(accountId: string) {
-    Logger.info(
+    const logger = await getLogger();
+
+    logger.info(
       {
         name: this.namespace,
         accountId,
@@ -36,7 +38,7 @@ export class AccountPerSeatBillingService {
       .maybeSingle();
 
     if (error) {
-      Logger.info(
+      logger.error(
         {
           name: this.namespace,
           accountId,
@@ -49,7 +51,7 @@ export class AccountPerSeatBillingService {
     }
 
     if (!data?.subscription_items) {
-      Logger.info(
+      logger.info(
         { name: this.namespace, accountId },
         `No per-seat subscription item found for account ${accountId}. Exiting...`,
       );
@@ -57,7 +59,7 @@ export class AccountPerSeatBillingService {
       return;
     }
 
-    Logger.info(
+    logger.info(
       {
         name: this.namespace,
         accountId,
@@ -69,6 +71,7 @@ export class AccountPerSeatBillingService {
   }
 
   async increaseSeats(accountId: string) {
+    const logger = await getLogger();
     const subscription = await this.getPerSeatSubscriptionItem(accountId);
 
     if (!subscription) {
@@ -85,7 +88,7 @@ export class AccountPerSeatBillingService {
 
     const billingGateway = new BillingGatewayService(subscription.provider);
 
-    Logger.info(
+    logger.info(
       {
         name: this.namespace,
         accountId,
@@ -96,7 +99,7 @@ export class AccountPerSeatBillingService {
 
     const promises = subscriptionItems.map(async (item) => {
       try {
-        Logger.info(
+        logger.info(
           {
             name: this.namespace,
             accountId,
@@ -112,7 +115,7 @@ export class AccountPerSeatBillingService {
           quantity: item.quantity + 1,
         });
 
-        Logger.info(
+        logger.info(
           {
             name: this.namespace,
             accountId,
@@ -122,7 +125,7 @@ export class AccountPerSeatBillingService {
           `Subscription item updated successfully`,
         );
       } catch (error) {
-        Logger.error(
+        logger.error(
           {
             name: this.namespace,
             accountId,
@@ -137,6 +140,7 @@ export class AccountPerSeatBillingService {
   }
 
   async decreaseSeats(accountId: string) {
+    const logger = await getLogger();
     const subscription = await this.getPerSeatSubscriptionItem(accountId);
 
     if (!subscription) {
@@ -151,7 +155,7 @@ export class AccountPerSeatBillingService {
       return;
     }
 
-    Logger.info(
+    logger.info(
       {
         name: this.namespace,
         accountId,
@@ -164,7 +168,7 @@ export class AccountPerSeatBillingService {
 
     const promises = subscriptionItems.map(async (item) => {
       try {
-        Logger.info(
+        logger.info(
           {
             name: this.namespace,
             accountId,
@@ -180,7 +184,7 @@ export class AccountPerSeatBillingService {
           quantity: item.quantity - 1,
         });
 
-        Logger.info(
+        logger.info(
           {
             name: this.namespace,
             accountId,
@@ -190,7 +194,7 @@ export class AccountPerSeatBillingService {
           `Subscription item updated successfully`,
         );
       } catch (error) {
-        Logger.error(
+        logger.error(
           {
             name: this.namespace,
             accountId,

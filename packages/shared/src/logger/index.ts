@@ -20,6 +20,4 @@ async function getLogger(): Promise<LoggerInstance> {
   }
 }
 
-const Logger = await getLogger();
-
-export { Logger };
+export { getLogger };

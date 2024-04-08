@@ -6,27 +6,9 @@ const MAILER_PROVIDER = z
   .parse(process.env.MAILER_PROVIDER);
 
 /**
- * @description A mailer interface that can be implemented by any mailer.
- * We export a single mailer implementation using Nodemailer. You can add more mailers or replace the existing one.
- * @example
- * ```ts
- * import { Mailer } from '@kit/mailers';
- *
- * const mailer = new Mailer();
- *
- * mailer.sendEmail({
- *  from: '',
- *  to: '',
- *  subject: 'Hello',
- *  text: 'Hello, World!'
- * });
- */
-export const Mailer = await getMailer();
-
-/**
  * @description Get the mailer based on the environment variable.
  */
-async function getMailer() {
+export async function getMailer() {
   switch (MAILER_PROVIDER) {
     case 'nodemailer': {
       const { Nodemailer } = await import('./impl/nodemailer');

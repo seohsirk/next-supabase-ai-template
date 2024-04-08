@@ -1,7 +1,6 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 
-import { Mailer } from '@kit/mailers';
-import { Logger } from '@kit/shared/logger';
+import { getLogger } from '@kit/shared/logger';
 import { Database } from '@kit/supabase/database';
 
 /**
@@ -35,8 +34,9 @@ export class DeletePersonalAccountService {
     };
   }) {
     const userId = params.userId;
+    const logger = await getLogger();
 
-    Logger.info(
+    logger.info(
       { name: this.namespace, userId },
       'User requested deletion. Processing...',
     );
@@ -45,7 +45,7 @@ export class DeletePersonalAccountService {
     try {
       await params.adminClient.auth.admin.deleteUser(userId);
     } catch (error) {
-      Logger.error(
+      logger.error(
         {
           name: this.namespace,
           userId,
@@ -60,7 +60,7 @@ export class DeletePersonalAccountService {
     // Send account deletion email
     if (params.userEmail) {
       try {
-        Logger.info(
+        logger.info(
           {
             name: this.namespace,
             userId,
@@ -74,8 +74,16 @@ export class DeletePersonalAccountService {
           userDisplayName: params.userEmail,
           userEmail: params.userEmail,
         });
+
+        logger.info(
+          {
+            name: this.namespace,
+            userId,
+          },
+          `Account deletion email sent`,
+        );
       } catch (error) {
-        Logger.error(
+        logger.error(
           {
             name: this.namespace,
             userId,
@@ -94,13 +102,15 @@ export class DeletePersonalAccountService {
     productName: string;
   }) {
     const { renderAccountDeleteEmail } = await import('@kit/email-templates');
+    const { getMailer } = await import('@kit/mailers');
+    const mailer = await getMailer();
 
     const html = renderAccountDeleteEmail({
       userDisplayName: params.userDisplayName,
       productName: params.productName,
     });
 
-    await Mailer.sendEmail({
+    return mailer.sendEmail({
       to: params.userEmail,
       from: params.fromEmail,
       subject: 'Account Deletion Request',

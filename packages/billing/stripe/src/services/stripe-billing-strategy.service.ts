@@ -11,7 +11,7 @@ import {
   RetrieveCheckoutSessionSchema,
   UpdateSubscriptionParamsSchema,
 } from '@kit/billing/schema';
-import { Logger } from '@kit/shared/logger';
+import { getLogger } from '@kit/shared/logger';
 
 import { createStripeBillingPortalSession } from './create-stripe-billing-portal-session';
 import { createStripeCheckout } from './create-stripe-checkout';
@@ -24,8 +24,9 @@ export class StripeBillingStrategyService
     params: z.infer<typeof CreateBillingCheckoutSchema>,
   ) {
     const stripe = await this.stripeProvider();
+    const logger = await getLogger();
 
-    Logger.info(
+    logger.info(
       {
         name: 'billing.stripe',
         customerId: params.customerId,
@@ -37,7 +38,7 @@ export class StripeBillingStrategyService
     const { client_secret } = await createStripeCheckout(stripe, params);
 
     if (!client_secret) {
-      Logger.error(
+      logger.error(
         {
           name: 'billing.stripe',
           customerId: params.customerId,
@@ -49,7 +50,7 @@ export class StripeBillingStrategyService
       throw new Error('Failed to create checkout session');
     }
 
-    Logger.info(
+    logger.info(
       {
         name: 'billing.stripe',
         customerId: params.customerId,
@@ -65,8 +66,9 @@ export class StripeBillingStrategyService
     params: z.infer<typeof CreateBillingPortalSessionSchema>,
   ) {
     const stripe = await this.stripeProvider();
+    const logger = await getLogger();
 
-    Logger.info(
+    logger.info(
       {
         name: 'billing.stripe',
         customerId: params.customerId,
@@ -77,7 +79,7 @@ export class StripeBillingStrategyService
     const session = await createStripeBillingPortalSession(stripe, params);
 
     if (!session?.url) {
-      Logger.error(
+      logger.error(
         {
           name: 'billing.stripe',
           customerId: params.customerId,
@@ -85,7 +87,7 @@ export class StripeBillingStrategyService
         'Failed to create billing portal session',
       );
     } else {
-      Logger.info(
+      logger.info(
         {
           name: 'billing.stripe',
           customerId: params.customerId,
@@ -101,8 +103,9 @@ export class StripeBillingStrategyService
     params: z.infer<typeof CancelSubscriptionParamsSchema>,
   ) {
     const stripe = await this.stripeProvider();
+    const logger = await getLogger();
 
-    Logger.info(
+    logger.info(
       {
         name: 'billing.stripe',
         subscriptionId: params.subscriptionId,
@@ -115,7 +118,7 @@ export class StripeBillingStrategyService
         invoice_now: params.invoiceNow ?? true,
       });
 
-      Logger.info(
+      logger.info(
         {
           name: 'billing.stripe',
           subscriptionId: params.subscriptionId,
@@ -125,7 +128,7 @@ export class StripeBillingStrategyService
 
       return { success: true };
     } catch (e) {
-      Logger.error(
+      logger.error(
         {
           name: 'billing.stripe',
           subscriptionId: params.subscriptionId,
@@ -142,8 +145,9 @@ export class StripeBillingStrategyService
     params: z.infer<typeof RetrieveCheckoutSessionSchema>,
   ) {
     const stripe = await this.stripeProvider();
+    const logger = await getLogger();
 
-    Logger.info(
+    logger.info(
       {
         name: 'billing.stripe',
         sessionId: params.sessionId,
@@ -155,7 +159,7 @@ export class StripeBillingStrategyService
       const session = await stripe.checkout.sessions.retrieve(params.sessionId);
       const isSessionOpen = session.status === 'open';
 
-      Logger.info(
+      logger.info(
         {
           name: 'billing.stripe',
           sessionId: params.sessionId,
@@ -172,7 +176,7 @@ export class StripeBillingStrategyService
         },
       };
     } catch (error) {
-      Logger.error(
+      logger.error(
         {
           name: 'billing.stripe',
           sessionId: params.sessionId,
@@ -203,8 +207,9 @@ export class StripeBillingStrategyService
     params: z.infer<typeof UpdateSubscriptionParamsSchema>,
   ) {
     const stripe = await this.stripeProvider();
+    const logger = await getLogger();
 
-    Logger.info(
+    logger.info(
       {
         name: 'billing.stripe',
         ...params,
@@ -222,7 +227,7 @@ export class StripeBillingStrategyService
         ],
       });
 
-      Logger.info(
+      logger.info(
         {
           name: 'billing.stripe',
           ...params,
@@ -232,7 +237,7 @@ export class StripeBillingStrategyService
 
       return { success: true };
     } catch (e) {
-      Logger.error(
+      logger.error(
         {
           name: 'billing.stripe',
           ...params,

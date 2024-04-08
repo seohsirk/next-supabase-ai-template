@@ -5,7 +5,7 @@ import { z } from 'zod';
 
 import { LineItemSchema } from '@kit/billing';
 import { getBillingGatewayProvider } from '@kit/billing-gateway';
-import { Logger } from '@kit/shared/logger';
+import { getLogger } from '@kit/shared/logger';
 import { Database } from '@kit/supabase/database';
 import { requireUser } from '@kit/supabase/require-user';
 import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
@@ -35,8 +35,9 @@ export class TeamBillingService {
 
     const userId = user.id;
     const accountId = params.accountId;
+    const logger = await getLogger();
 
-    Logger.info(
+    logger.info(
       {
         userId,
         accountId,
@@ -54,7 +55,7 @@ export class TeamBillingService {
     // if the user does not have permission to manage billing for the account
     // then we should not proceed
     if (!hasPermission) {
-      Logger.warn(
+      logger.warn(
         {
           userId,
           accountId,
@@ -90,7 +91,7 @@ export class TeamBillingService {
       accountId,
     );
 
-    Logger.info(
+    logger.info(
       {
         userId,
         accountId,
@@ -117,7 +118,7 @@ export class TeamBillingService {
         checkoutToken,
       };
     } catch (error) {
-      Logger.error(
+      logger.error(
         {
           name: this.namespace,
           error,
@@ -145,8 +146,9 @@ export class TeamBillingService {
     slug: string;
   }) {
     const client = getSupabaseServerActionClient();
+    const logger = await getLogger();
 
-    Logger.info(
+    logger.info(
       {
         accountId,
         name: this.namespace,
@@ -171,7 +173,7 @@ export class TeamBillingService {
     // if the user does not have permission to manage billing for the account
     // then we should not proceed
     if (!hasPermission) {
-      Logger.warn(
+      logger.warn(
         {
           userId,
           accountId,
@@ -190,7 +192,7 @@ export class TeamBillingService {
       throw new Error('Customer not found');
     }
 
-    Logger.info(
+    logger.info(
       {
         userId,
         customerId,
@@ -211,7 +213,7 @@ export class TeamBillingService {
       // redirect the user to the billing portal
       return url;
     } catch (error) {
-      Logger.error(
+      logger.error(
         {
           userId,
           customerId,
@@ -260,7 +262,9 @@ export class TeamBillingService {
       .eq('account_id', accountId);
 
     if (error) {
-      Logger.error(
+      const logger = await getLogger();
+
+      logger.error(
         {
           accountId,
           error,

@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation';
 
 import { z } from 'zod';
 
-import { Logger } from '@kit/shared/logger';
+import { getLogger } from '@kit/shared/logger';
 import { requireUser } from '@kit/supabase/require-user';
 import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
 
@@ -31,6 +31,7 @@ export async function createOrganizationAccountAction(
     redirect(auth.redirectTo);
   }
 
+  const logger = await getLogger();
   const userId = auth.data.id;
 
   const createAccountResponse = await service.createNewOrganizationAccount({
@@ -39,7 +40,7 @@ export async function createOrganizationAccountAction(
   });
 
   if (createAccountResponse.error) {
-    Logger.error(
+    logger.error(
       {
         userId,
         error: createAccountResponse.error,
@@ -50,6 +51,15 @@ export async function createOrganizationAccountAction(
 
     throw new Error('Error creating team account');
   }
+
+  logger.info(
+    {
+      userId,
+      accountName,
+      name: 'accounts',
+    },
+    `Team account created successfully`,
+  );
 
   const accountHomePath =
     TEAM_ACCOUNTS_HOME_PATH + '/' + createAccountResponse.data.slug;

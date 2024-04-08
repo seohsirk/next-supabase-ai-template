@@ -1,6 +1,6 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 
-import { Logger } from '@kit/shared/logger';
+import { getLogger } from '@kit/shared/logger';
 import { Database } from '@kit/supabase/database';
 
 import { RecordChange, Tables } from '../record-change.type';
@@ -8,7 +8,7 @@ import { RecordChange, Tables } from '../record-change.type';
 export class DatabaseWebhookRouterService {
   constructor(private readonly adminClient: SupabaseClient<Database>) {}
 
-  handleWebhook(body: RecordChange<keyof Tables>) {
+  async handleWebhook(body: RecordChange<keyof Tables>) {
     switch (body.table) {
       case 'invitations': {
         const payload = body as RecordChange<typeof body.table>;
@@ -23,7 +23,9 @@ export class DatabaseWebhookRouterService {
       }
 
       default: {
-        Logger.warn(
+        const logger = await getLogger();
+
+        logger.warn(
           {
             table: body.table,
           },

@@ -2,7 +2,7 @@ import { SupabaseClient } from '@supabase/supabase-js';
 
 import 'server-only';
 
-import { Logger } from '@kit/shared/logger';
+import { getLogger } from '@kit/shared/logger';
 import { Database } from '@kit/supabase/database';
 
 export class DeleteTeamAccountService {
@@ -24,7 +24,9 @@ export class DeleteTeamAccountService {
       userId: string;
     },
   ) {
-    Logger.info(
+    const logger = await getLogger();
+
+    logger.info(
       {
         name: this.namespace,
         accountId: params.accountId,
@@ -40,7 +42,7 @@ export class DeleteTeamAccountService {
       .eq('id', params.accountId);
 
     if (error) {
-      Logger.error(
+      logger.error(
         {
           name: this.namespace,
           accountId: params.accountId,
@@ -53,7 +55,7 @@ export class DeleteTeamAccountService {
       throw new Error('Failed to delete team account');
     }
 
-    Logger.info(
+    logger.info(
       {
         name: this.namespace,
         accountId: params.accountId,

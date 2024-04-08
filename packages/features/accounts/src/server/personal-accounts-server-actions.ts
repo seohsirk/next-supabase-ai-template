@@ -4,7 +4,7 @@ import { RedirectType, redirect } from 'next/navigation';
 
 import { z } from 'zod';
 
-import { Logger } from '@kit/shared/logger';
+import { getLogger } from '@kit/shared/logger';
 import { requireUser } from '@kit/supabase/require-user';
 import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
 
@@ -31,7 +31,8 @@ export async function deletePersonalAccountAction(formData: FormData) {
   const auth = await requireUser(client);
 
   if (auth.error) {
-    Logger.error(`User is not authenticated. Redirecting to login page`);
+    const logger = await getLogger();
+    logger.error(`User is not authenticated. Redirecting to login page`);
 
     redirect(auth.redirectTo);
   }

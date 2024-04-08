@@ -1,6 +1,6 @@
 import 'server-only';
 
-import { Logger } from '@kit/shared/logger';
+import { getLogger } from '@kit/shared/logger';
 import { getSupabaseRouteHandlerClient } from '@kit/supabase/route-handler-client';
 
 import { RecordChange, Tables } from '../record-change.type';
@@ -10,10 +10,12 @@ export class DatabaseWebhookHandlerService {
   private readonly namespace = 'database-webhook-handler';
 
   async handleWebhook(request: Request, webhooksSecret: string) {
+    const logger = await getLogger();
+
     const json = await request.clone().json();
     const { table, type } = json as RecordChange<keyof Tables>;
 
-    Logger.info(
+    logger.info(
       {
         name: this.namespace,
         table,
@@ -40,7 +42,7 @@ export class DatabaseWebhookHandlerService {
       // handle the webhook event based on the table
       await service.handleWebhook(json);
 
-      Logger.info(
+      logger.info(
         {
           name: this.namespace,
           table,
@@ -49,7 +51,7 @@ export class DatabaseWebhookHandlerService {
         'Webhook processed successfully',
       );
     } catch (error) {
-      Logger.error(
+      logger.error(
         {
           name: this.namespace,
           table,

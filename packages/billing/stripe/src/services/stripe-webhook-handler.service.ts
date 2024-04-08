@@ -5,7 +5,7 @@ import {
   BillingWebhookHandlerService,
   getLineItemTypeById,
 } from '@kit/billing';
-import { Logger } from '@kit/shared/logger';
+import { getLogger } from '@kit/shared/logger';
 import { Database } from '@kit/supabase/database';
 
 import { StripeServerEnvSchema } from '../schema/stripe-server-env.schema';
@@ -113,6 +113,8 @@ export class StripeWebhookHandlerService
       }
 
       default: {
+        const Logger = await getLogger();
+
         Logger.info(
           {
             eventType: event.type,

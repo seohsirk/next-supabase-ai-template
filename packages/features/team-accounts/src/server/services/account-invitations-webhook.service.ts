@@ -2,8 +2,7 @@ import { SupabaseClient } from '@supabase/supabase-js';
 
 import { z } from 'zod';
 
-import { Mailer } from '@kit/mailers';
-import { Logger } from '@kit/shared/logger';
+import { getLogger } from '@kit/shared/logger';
 import { Database } from '@kit/supabase/database';
 
 type Invitation = Database['public']['Tables']['invitations']['Row'];
@@ -57,8 +56,12 @@ export class AccountInvitationsWebhookService {
       throw team.error;
     }
 
+    const logger = await getLogger();
+
     try {
       const { renderInviteEmail } = await import('@kit/email-templates');
+      const { getMailer } = await import('@kit/mailers');
+      const mailer = await getMailer();
 
       const html = renderInviteEmail({
         link: this.getInvitationLink(invitation.invite_token),
@@ -68,26 +71,34 @@ export class AccountInvitationsWebhookService {
         teamName: team.data.name,
       });
 
-      await Mailer.sendEmail({
-        from: env.emailSender,
-        to: invitation.email,
-        subject: 'You have been invited to join a team',
-        html,
-      });
-
-      Logger.info('Invitation email sent', {
-        email: invitation.email,
-        account: invitation.account_id,
-        name: this.namespace,
-      });
+      await mailer
+        .sendEmail({
+          from: env.emailSender,
+          to: invitation.email,
+          subject: 'You have been invited to join a team',
+          html,
+        })
+        .then(() => {
+          logger.info('Invitation email sent', {
+            email: invitation.email,
+            account: invitation.account_id,
+            name: this.namespace,
+          });
+        })
+        .catch((error) => {
+          logger.warn(
+            { error, name: this.namespace },
+            'Failed to send invitation email',
+          );
+        });
 
       return {
         success: true,
       };
     } catch (error) {
-      Logger.warn(
+      logger.warn(
         { error, name: this.namespace },
-        'Failed to send invitation email',
+        'Failed to invite user to team',
       );
 
       return {
