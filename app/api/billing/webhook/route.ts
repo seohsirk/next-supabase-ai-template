@@ -1,5 +1,5 @@
 import { getBillingEventHandlerService } from '@kit/billing-gateway';
-import { Logger } from '@kit/shared/logger';
+import { getLogger } from '@kit/shared/logger';
 import { getSupabaseRouteHandlerClient } from '@kit/supabase/route-handler-client';
 
 import billingConfig from '~/config/billing.config';
@@ -9,8 +9,9 @@ import billingConfig from '~/config/billing.config';
  */
 export async function POST(request: Request) {
   const provider = billingConfig.provider;
+  const logger = await getLogger();
 
-  Logger.info(
+  logger.info(
     {
       name: 'billing.webhook',
       provider,
@@ -30,7 +31,7 @@ export async function POST(request: Request) {
   try {
     await service.handleWebhookEvent(request);
 
-    Logger.info(
+    logger.info(
       {
         name: 'billing.webhook',
       },
@@ -39,7 +40,7 @@ export async function POST(request: Request) {
 
     return new Response('OK', { status: 200 });
   } catch (e) {
-    Logger.error(
+    logger.error(
       {
         name: 'billing',
         error: e,

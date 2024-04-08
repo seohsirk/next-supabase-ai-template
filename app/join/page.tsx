@@ -63,9 +63,10 @@ async function JoinTeamAccountPage({ searchParams }: Context) {
   );
 
   if (isInAccount) {
-    const { Logger } = await import('@kit/shared/logger');
+    const { getLogger } = await import('@kit/shared/logger');
+    const logger = await getLogger();
 
-    Logger.warn(
+    logger.warn(
       {
         name: 'join-team-account',
         accountId: invitation.account.id,

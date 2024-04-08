@@ -68,7 +68,7 @@ async function ReturnCheckoutSessionPage({ searchParams }: SessionPageProps) {
 
 export default withI18n(ReturnCheckoutSessionPage);
 
-export async function loadCheckoutSession(sessionId: string) {
+async function loadCheckoutSession(sessionId: string) {
   const client = getSupabaseServerComponentClient();
   const { error } = await requireUser(client);
 

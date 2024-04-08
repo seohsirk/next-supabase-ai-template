@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 import type { NextRequest } from 'next/server';
 
-import { Logger } from '@kit/shared/logger';
+import { getLogger } from '@kit/shared/logger';
 import { getSupabaseRouteHandlerClient } from '@kit/supabase/route-handler-client';
 
 import pathsConfig from '~/config/paths.config';
@@ -38,9 +38,12 @@ export async function GET(request: NextRequest) {
         return onError({ error: error.message });
       }
     } catch (error) {
-      Logger.error(
+      const logger = await getLogger();
+
+      logger.error(
         {
           error,
+          name: `auth.callback`,
         },
         `An error occurred while exchanging code for session`,
       );
@@ -58,12 +61,14 @@ export async function GET(request: NextRequest) {
   return redirect(nextUrl);
 }
 
-function onError({ error }: { error: string }) {
+async function onError({ error }: { error: string }) {
   const errorMessage = getAuthErrorMessage(error);
+  const logger = await getLogger();
 
-  Logger.error(
+  logger.error(
     {
       error,
+      name: `auth.callback`,
     },
     `An error occurred while signing user in`,
   );

@@ -1,7 +1,12 @@
-import { registerInstrumentation } from '@kit/monitoring';
+/**
+ * This file is used to register monitoring instrumentation
+ * for your Next.js application.
+ */
+export async function register() {
+  // only run in nodejs runtime
+  if (process.env.NEXT_RUNTIME === 'nodejs') {
+    const { registerInstrumentation } = await import('@kit/monitoring');
 
-export function register() {
-  if (process.env.NEXT_RUNTIME !== 'nodejs') {
     // Register monitoring instrumentation based on the
     // MONITORING_INSTRUMENTATION_PROVIDER environment variable.
     return registerInstrumentation();
