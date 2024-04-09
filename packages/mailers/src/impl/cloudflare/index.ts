@@ -1,5 +1,5 @@
 import 'server-only';
-
+import Email from 'vercel-email';
 import { z } from 'zod';
 
 import { Mailer } from '../../mailer';
@@ -8,15 +8,23 @@ import { MailerSchema } from '../../schema/mailer.schema';
 type Config = z.infer<typeof MailerSchema>;
 
 /**
- * A class representing a mailer using Cloudflare's Workers.
+ * A class representing a mailer using Cloudflare's Workers thanks to the 'vercel-email' package.
  * @implements {Mailer}
  */
 export class CloudflareMailer implements Mailer {
   async sendEmail(config: Config) {
-    // make lint happy for now
-    await Promise.resolve();
+    const schema = {
+      to: config.to,
+      from: config.from,
+      subject: config.subject,
+    };
 
-    console.log('Sending email with Cloudflare Workers', config);
-    throw new Error('Not implemented');
+    const content =
+      'text' in config ? { text: config.text } : { html: config.html };
+
+    return Email.send({
+      ...schema,
+      ...content,
+    });
   }
 }

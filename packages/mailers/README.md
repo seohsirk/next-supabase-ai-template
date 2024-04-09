@@ -41,3 +41,5 @@ async function sendEmail() {
   });
 }
 ```
+
+If you're using the `cloudflare` provider, please also read the instructions of the package [Vercel Email](https://github.com/Sh4yy/vercel-email) to setup your Workers.

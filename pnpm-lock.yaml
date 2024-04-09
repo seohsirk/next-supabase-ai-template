@@ -712,6 +712,9 @@ importers:
       nodemailer:
         specifier: ^6.9.13
         version: 6.9.13
+      vercel-email:
+        specifier: 0.0.6
+        version: 0.0.6
     devDependencies:
       '@kit/eslint-config':
         specifier: workspace:*
@@ -967,8 +970,8 @@ importers:
         specifier: ^8.57.0
         version: 8.57.0
       lucide-react:
-        specifier: ^0.366.0
-        version: 0.366.0(react@18.2.0)
+        specifier: ^0.363.0
+        version: 0.363.0(react@18.2.0)
       prettier:
         specifier: ^3.2.5
         version: 3.2.5
@@ -9721,14 +9724,6 @@ packages:
     dependencies:
       react: 18.2.0
 
-  /lucide-react@0.366.0(react@18.2.0):
-    resolution: {integrity: sha512-iUOsp/35wOkrgEzigZlZI/OhVxQZ8CmxjebdIjfSDzNBmrNYjQfKSpeKderaEFfGt3OycF1BE+wLlaqWRuoh4w==}
-    peerDependencies:
-      react: ^16.5.1 || ^17.0.0 || ^18.0.0
-    dependencies:
-      react: 18.2.0
-    dev: true
-
   /magic-string@0.27.0:
     resolution: {integrity: sha512-8UnnX2PeRAPZuN12svgR9j7M1uWMovg/CEnIwIG0LFkXSJJe4PdfUGiTGl8V9bsBHFUtfVINcSyYxd7q+kx9fA==}
     engines: {node: '>=12'}
@@ -13163,6 +13158,10 @@ packages:
   /vary@1.1.2:
     resolution: {integrity: sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==}
     engines: {node: '>= 0.8'}
+    dev: false
+
+  /vercel-email@0.0.6:
+    resolution: {integrity: sha512-lpELZ8/B6qyLMUOzmvZiU5evo1Hv5jfSpI/rrzny5UYfOAUKFYycraXNT+fT/cC6ewUKQVJDg8/v3LwyX3cCzA==}
     dev: false
 
   /vfile-location@4.1.0:
