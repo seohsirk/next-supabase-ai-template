@@ -22,6 +22,12 @@ export class DatabaseWebhookRouterService {
         return this.handleSubscriptionsWebhook(payload);
       }
 
+      case 'accounts': {
+        const payload = body as RecordChange<typeof body.table>;
+
+        return this.handleAccountsWebhook(payload);
+      }
+
       default: {
         const logger = await getLogger();
 
@@ -53,6 +59,18 @@ export class DatabaseWebhookRouterService {
 
     if (body.type === 'DELETE' && body.old_record) {
       return service.handleSubscriptionDeletedWebhook(body.old_record);
+    }
+  }
+
+  private async handleAccountsWebhook(body: RecordChange<'accounts'>) {
+    const { AccountWebhooksService } = await import(
+      '@kit/team-accounts/webhooks'
+    );
+
+    const service = new AccountWebhooksService();
+
+    if (body.type === 'DELETE' && body.old_record) {
+      return service.handleAccountDeletedWebhook(body.old_record);
     }
   }
 }

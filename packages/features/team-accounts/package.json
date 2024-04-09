@@ -10,7 +10,7 @@
   },
   "exports": {
     "./components": "./src/components/index.ts",
-    "./webhooks": "./src/server/services/account-invitations-webhook.service.ts"
+    "./webhooks": "./src/server/services/webhooks/index.ts"
   },
   "devDependencies": {
     "@hookform/resolvers": "^3.3.4",

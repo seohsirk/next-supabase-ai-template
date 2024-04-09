@@ -16,13 +16,20 @@ export class AccountInvitationsService {
 
   constructor(private readonly client: SupabaseClient<Database>) {}
 
+  /**
+   * @name deleteInvitation
+   * @description Removes an invitation from the database.
+   * @param params
+   */
   async deleteInvitation(params: z.infer<typeof DeleteInvitationSchema>) {
     const logger = await getLogger();
 
-    logger.info('Removing invitation', {
+    const ctx = {
       name: this.namespace,
       ...params,
-    });
+    };
+
+    logger.info(ctx, 'Removing invitation');
 
     const { data, error } = await this.client
       .from('invitations')
@@ -32,13 +39,12 @@ export class AccountInvitationsService {
       });
 
     if (error) {
+      logger.error(ctx, `Failed to remove invitation`);
+
       throw error;
     }
 
-    logger.info('Invitation successfully removed', {
-      ...params,
-      name: this.namespace,
-    });
+    logger.info(ctx, 'Invitation successfully removed');
 
     return data;
   }
@@ -46,10 +52,12 @@ export class AccountInvitationsService {
   async updateInvitation(params: z.infer<typeof UpdateInvitationSchema>) {
     const logger = await getLogger();
 
-    logger.info('Updating invitation', {
-      ...params,
+    const ctx = {
       name: this.namespace,
-    });
+      ...params,
+    };
+
+    logger.info(ctx, 'Updating invitation...');
 
     const { data, error } = await this.client
       .from('invitations')
@@ -61,17 +69,28 @@ export class AccountInvitationsService {
       });
 
     if (error) {
+      logger.error(
+        {
+          ...ctx,
+          error,
+        },
+        'Failed to update invitation',
+      );
+
       throw error;
     }
 
-    logger.info('Invitation successfully updated', {
-      ...params,
-      name: this.namespace,
-    });
+    logger.info(ctx, 'Invitation successfully updated');
 
     return data;
   }
 
+  /**
+   * @name sendInvitations
+   * @description Sends invitations to join a team.
+   * @param accountSlug
+   * @param invitations
+   */
   async sendInvitations({
     accountSlug,
     invitations,
@@ -81,14 +100,12 @@ export class AccountInvitationsService {
   }) {
     const logger = await getLogger();
 
-    logger.info(
-      {
-        account: accountSlug,
-        invitations,
-        name: this.namespace,
-      },
-      'Storing invitations',
-    );
+    const ctx = {
+      accountSlug,
+      name: this.namespace,
+    };
+
+    logger.info(ctx, 'Storing invitations...');
 
     const accountResponse = await this.client
       .from('accounts')
@@ -98,10 +115,7 @@ export class AccountInvitationsService {
 
     if (!accountResponse.data) {
       logger.error(
-        {
-          accountSlug,
-          name: this.namespace,
-        },
+        ctx,
         'Account not found in database. Cannot send invitations.',
       );
 
@@ -116,9 +130,8 @@ export class AccountInvitationsService {
     if (response.error) {
       logger.error(
         {
-          accountSlug,
+          ...ctx,
           error: response.error,
-          name: this.namespace,
         },
         `Failed to add invitations to account ${accountSlug}`,
       );
@@ -132,16 +145,16 @@ export class AccountInvitationsService {
 
     logger.info(
       {
-        account: accountSlug,
+        ...ctx,
         count: responseInvitations.length,
-        name: this.namespace,
       },
       'Invitations added to account',
     );
   }
 
   /**
-   * Accepts an invitation to join a team.
+   * @name acceptInvitationToTeam
+   * @description Accepts an invitation to join a team.
    */
   async acceptInvitationToTeam(
     adminClient: SupabaseClient<Database>,
@@ -150,25 +163,50 @@ export class AccountInvitationsService {
       inviteToken: string;
     },
   ) {
+    const logger = await getLogger();
+    const ctx = {
+      name: this.namespace,
+      ...params,
+    };
+
+    logger.info(ctx, 'Accepting invitation to team');
+
     const { error, data } = await adminClient.rpc('accept_invitation', {
       token: params.inviteToken,
       user_id: params.userId,
     });
 
     if (error) {
+      logger.error(
+        {
+          ...ctx,
+          error,
+        },
+        'Failed to accept invitation to team',
+      );
+
       throw error;
     }
+
+    logger.info(ctx, 'Successfully accepted invitation to team');
 
     return data;
   }
 
+  /**
+   * @name renewInvitation
+   * @description Renews an invitation to join a team by extending the expiration date by 7 days.
+   * @param invitationId
+   */
   async renewInvitation(invitationId: number) {
     const logger = await getLogger();
 
-    logger.info('Renewing invitation', {
+    const ctx = {
       invitationId,
       name: this.namespace,
-    });
+    };
+
+    logger.info(ctx, 'Renewing invitation...');
 
     const sevenDaysFromNow = formatISO(addDays(new Date(), 7));
 
@@ -182,13 +220,18 @@ export class AccountInvitationsService {
       });
 
     if (error) {
+      logger.error(
+        {
+          ...ctx,
+          error,
+        },
+        'Failed to renew invitation',
+      );
+
       throw error;
     }
 
-    logger.info('Invitation successfully renewed', {
-      invitationId,
-      name: this.namespace,
-    });
+    logger.info(ctx, 'Invitation successfully renewed');
 
     return data;
   }

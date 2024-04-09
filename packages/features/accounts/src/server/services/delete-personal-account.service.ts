@@ -57,64 +57,6 @@ export class DeletePersonalAccountService {
       throw new Error('Error deleting user');
     }
 
-    // Send account deletion email
-    if (params.userEmail) {
-      try {
-        logger.info(
-          {
-            name: this.namespace,
-            userId,
-          },
-          `Sending account deletion email...`,
-        );
-
-        await this.sendAccountDeletionEmail({
-          fromEmail: params.emailSettings.fromEmail,
-          productName: params.emailSettings.productName,
-          userDisplayName: params.userEmail,
-          userEmail: params.userEmail,
-        });
-
-        logger.info(
-          {
-            name: this.namespace,
-            userId,
-          },
-          `Account deletion email sent`,
-        );
-      } catch (error) {
-        logger.error(
-          {
-            name: this.namespace,
-            userId,
-            error,
-          },
-          `Error sending account deletion email`,
-        );
-      }
-    }
-  }
-
-  private async sendAccountDeletionEmail(params: {
-    fromEmail: string;
-    userEmail: string;
-    userDisplayName: string;
-    productName: string;
-  }) {
-    const { renderAccountDeleteEmail } = await import('@kit/email-templates');
-    const { getMailer } = await import('@kit/mailers');
-    const mailer = await getMailer();
-
-    const html = renderAccountDeleteEmail({
-      userDisplayName: params.userDisplayName,
-      productName: params.productName,
-    });
-
-    return mailer.sendEmail({
-      to: params.userEmail,
-      from: params.fromEmail,
-      subject: 'Account Deletion Request',
-      html,
-    });
+    logger.info({ name: this.namespace, userId }, 'User deleted successfully');
   }
 }

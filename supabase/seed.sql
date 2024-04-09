@@ -2,6 +2,17 @@
 -- In production, you should manually create webhooks in the Supabase dashboard (or create a migration to do so).
 -- We don't do it because you'll need to manually add your webhook URL and secret key.
 
+-- this webhook will be triggered after deleting an account
+create trigger "accounts_teardown" after delete
+on "public"."accounts" for each row
+execute function "supabase_functions"."http_request"(
+  'http://host.docker.internal:3000/api/db/webhook',
+  'POST',
+  '{"Content-Type":"application/json", "X-Supabase-Event-Signature":"WEBHOOKSECRET"}',
+  '{}',
+  '1000'
+);
+
 -- this webhook will be triggered after every insert on the accounts_memberships table
 create trigger "accounts_memberships_insert" after insert
 on "public"."accounts_memberships" for each row
