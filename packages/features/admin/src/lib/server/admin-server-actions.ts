@@ -1,6 +1,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 
 import { enhanceAction } from '@kit/next/actions';
 import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
@@ -92,9 +93,7 @@ export const deleteUser = enhanceAdminAction(
 
       revalidateAdmin();
 
-      return {
-        success: true,
-      };
+      return redirect('/admin/accounts');
     },
     {
       schema: DeleteUserSchema,
@@ -115,9 +114,7 @@ export const deleteAccount = enhanceAdminAction(
 
       revalidateAdmin();
 
-      return {
-        success: true,
-      };
+      return redirect('/admin/accounts');
     },
     {
       schema: DeleteAccountSchema,
