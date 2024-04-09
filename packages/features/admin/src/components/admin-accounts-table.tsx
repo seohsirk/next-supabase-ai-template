@@ -33,6 +33,10 @@ import {
   SelectValue,
 } from '@kit/ui/select';
 
+import { AdminDeleteAccountDialog } from './admin-delete-account-dialog';
+import { AdminDeleteUserDialog } from './admin-delete-user-dialog';
+import { AdminImpersonateUserDialog } from './admin-impersonate-user-dialog';
+
 type Account = Database['public']['Tables']['accounts']['Row'];
 
 const FiltersSchema = z.object({
@@ -194,6 +198,7 @@ function getColumns(): ColumnDef<Account>[] {
       header: '',
       cell: ({ row }) => {
         const isPersonalAccount = row.original.is_personal_account;
+        const userId = row.original.id;
 
         return (
           <DropdownMenu>
@@ -208,18 +213,35 @@ function getColumns(): ColumnDef<Account>[] {
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
 
                 <DropdownMenuItem>
-                  <Link href={`/admin/accounts/${row.original.id}`}>View</Link>
+                  <Link
+                    className={'h-full w-full'}
+                    href={`/admin/accounts/${userId}`}
+                  >
+                    View
+                  </Link>
                 </DropdownMenuItem>
 
                 <If condition={isPersonalAccount}>
-                  <DropdownMenuItem className={'text-orange-800'}>
-                    Ban
-                  </DropdownMenuItem>
+                  <AdminImpersonateUserDialog userId={userId}>
+                    <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                      Impersonate User
+                    </DropdownMenuItem>
+                  </AdminImpersonateUserDialog>
+
+                  <AdminDeleteUserDialog userId={userId}>
+                    <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                      Delete Personal Account
+                    </DropdownMenuItem>
+                  </AdminDeleteUserDialog>
                 </If>
 
-                <DropdownMenuItem className={'text-destructive'}>
-                  Delete
-                </DropdownMenuItem>
+                <If condition={!isPersonalAccount}>
+                  <AdminDeleteAccountDialog accountId={row.original.id}>
+                    <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                      Delete Team Account
+                    </DropdownMenuItem>
+                  </AdminDeleteAccountDialog>
+                </If>
               </DropdownMenuGroup>
             </DropdownMenuContent>
           </DropdownMenu>
