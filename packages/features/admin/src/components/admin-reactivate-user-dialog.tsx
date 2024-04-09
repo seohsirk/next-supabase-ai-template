@@ -25,7 +25,7 @@ import {
 } from '@kit/ui/form';
 import { Input } from '@kit/ui/input';
 
-import { reactivateUser } from '../lib/server/admin-server-actions';
+import { reactivateUserAction } from '../lib/server/admin-server-actions';
 import { ReactivateUserSchema } from '../lib/server/schema/admin-actions.schema';
 
 export function AdminReactivateUserDialog(
@@ -58,7 +58,7 @@ export function AdminReactivateUserDialog(
           <form
             className={'flex flex-col space-y-8'}
             onSubmit={form.handleSubmit((data) => {
-              return reactivateUser(data);
+              return reactivateUserAction(data);
             })}
           >
             <FormField

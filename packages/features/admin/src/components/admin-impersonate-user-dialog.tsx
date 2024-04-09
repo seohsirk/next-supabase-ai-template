@@ -32,7 +32,7 @@ import {
 import { Input } from '@kit/ui/input';
 import { LoadingOverlay } from '@kit/ui/loading-overlay';
 
-import { impersonateUser } from '../lib/server/admin-server-actions';
+import { impersonateUserAction } from '../lib/server/admin-server-actions';
 import { ImpersonateUserSchema } from '../lib/server/schema/admin-actions.schema';
 
 export function AdminImpersonateUserDialog(
@@ -81,7 +81,7 @@ export function AdminImpersonateUserDialog(
           <form
             className={'flex flex-col space-y-8'}
             onSubmit={form.handleSubmit(async (data) => {
-              const tokens = await impersonateUser(data);
+              const tokens = await impersonateUserAction(data);
 
               setTokens(tokens);
             })}

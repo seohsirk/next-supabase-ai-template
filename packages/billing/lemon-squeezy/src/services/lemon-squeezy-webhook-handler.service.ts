@@ -1,5 +1,5 @@
 import { getOrder, getVariant } from '@lemonsqueezy/lemonsqueezy.js';
-import { createHmac, timingSafeEqual } from 'crypto';
+import { createHmac, timingSafeEqual } from 'node:crypto';
 
 import {
   BillingConfig,

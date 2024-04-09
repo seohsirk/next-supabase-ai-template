@@ -18,10 +18,10 @@ import { AdminAccountsService } from './services/admin-accounts.service';
 import { AdminAuthUserService } from './services/admin-auth-user.service';
 
 /**
- * @name banUser
+ * @name banUserAction
  * @description Ban a user from the system.
  */
-export const banUser = enhanceAdminAction(
+export const banUserAction = enhanceAdminAction(
   enhanceAction(
     async ({ userId }) => {
       const service = getAdminAuthService();
@@ -41,10 +41,10 @@ export const banUser = enhanceAdminAction(
 );
 
 /**
- * @name reactivateUser
+ * @name reactivateUserAction
  * @description Reactivate a user in the system.
  */
-export const reactivateUser = enhanceAdminAction(
+export const reactivateUserAction = enhanceAdminAction(
   enhanceAction(
     async ({ userId }) => {
       const service = getAdminAuthService();
@@ -64,10 +64,10 @@ export const reactivateUser = enhanceAdminAction(
 );
 
 /**
- * @name impersonateUser
+ * @name impersonateUserAction
  * @description Impersonate a user in the system.
  */
-export const impersonateUser = enhanceAdminAction(
+export const impersonateUserAction = enhanceAdminAction(
   enhanceAction(
     async ({ userId }) => {
       const service = getAdminAuthService();
@@ -81,10 +81,10 @@ export const impersonateUser = enhanceAdminAction(
 );
 
 /**
- * @name deleteUser
+ * @name deleteUserAction
  * @description Delete a user from the system.
  */
-export const deleteUser = enhanceAdminAction(
+export const deleteUserAction = enhanceAdminAction(
   enhanceAction(
     async ({ userId }) => {
       const service = getAdminAuthService();
@@ -102,10 +102,10 @@ export const deleteUser = enhanceAdminAction(
 );
 
 /**
- * @name deleteAccount
+ * @name deleteAccountAction
  * @description Delete an account from the system.
  */
-export const deleteAccount = enhanceAdminAction(
+export const deleteAccountAction = enhanceAdminAction(
   enhanceAction(
     async ({ accountId }) => {
       const service = getAdminAccountsService();

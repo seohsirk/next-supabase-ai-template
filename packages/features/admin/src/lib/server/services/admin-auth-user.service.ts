@@ -1,6 +1,6 @@
-import 'server-only';
-
 import { SupabaseClient } from '@supabase/supabase-js';
+
+import 'server-only';
 
 import { Database } from '@kit/supabase/database';
 
@@ -15,21 +15,10 @@ export class AdminAuthUserService {
     private readonly adminClient: SupabaseClient<Database>,
   ) {}
 
-  async assertUserIsNotCurrentSuperAdmin(targetUserId: string) {
-    const { data: user } = await this.client.auth.getUser();
-    const currentUserId = user.user?.id;
-
-    if (!currentUserId) {
-      throw new Error(`Error fetching user`);
-    }
-
-    if (currentUserId === targetUserId) {
-      throw new Error(
-        `You cannot perform a destructive action on your own account as a Super Admin`,
-      );
-    }
-  }
-
+  /**
+   * Delete a user by deleting the user record and auth record.
+   * @param userId
+   */
   async deleteUser(userId: string) {
     await this.assertUserIsNotCurrentSuperAdmin(userId);
 
@@ -41,19 +30,33 @@ export class AdminAuthUserService {
     }
   }
 
+  /**
+   * Ban a user by setting the ban duration to `876600h` (100 years).
+   * @param userId
+   */
   async banUser(userId: string) {
     await this.assertUserIsNotCurrentSuperAdmin(userId);
 
     return this.setBanDuration(userId, `876600h`);
   }
 
+  /**
+   * Reactivate a user by setting the ban duration to `none`.
+   * @param userId
+   */
   async reactivateUser(userId: string) {
     await this.assertUserIsNotCurrentSuperAdmin(userId);
 
     return this.setBanDuration(userId, `none`);
   }
 
+  /**
+   * Impersonate a user by generating a magic link and returning the access and refresh tokens.
+   * @param userId
+   */
   async impersonateUser(userId: string) {
+    await this.assertUserIsNotCurrentSuperAdmin(userId);
+
     const {
       data: { user },
       error,
@@ -108,6 +111,25 @@ export class AdminAuthUserService {
       accessToken,
       refreshToken,
     };
+  }
+
+  /**
+   * Assert that the target user is not the current user.
+   * @param targetUserId
+   */
+  private async assertUserIsNotCurrentSuperAdmin(targetUserId: string) {
+    const { data: user } = await this.client.auth.getUser();
+    const currentUserId = user.user?.id;
+
+    if (!currentUserId) {
+      throw new Error(`Error fetching user`);
+    }
+
+    if (currentUserId === targetUserId) {
+      throw new Error(
+        `You cannot perform a destructive action on your own account as a Super Admin`,
+      );
+    }
   }
 
   private async setBanDuration(userId: string, banDuration: string) {

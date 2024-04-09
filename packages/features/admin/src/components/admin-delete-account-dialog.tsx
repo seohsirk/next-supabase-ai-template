@@ -24,7 +24,7 @@ import {
 } from '@kit/ui/form';
 import { Input } from '@kit/ui/input';
 
-import { deleteAccount } from '../lib/server/admin-server-actions';
+import { deleteAccountAction } from '../lib/server/admin-server-actions';
 import { DeleteAccountSchema } from '../lib/server/schema/admin-actions.schema';
 
 export function AdminDeleteAccountDialog(
@@ -59,7 +59,7 @@ export function AdminDeleteAccountDialog(
           <form
             className={'flex flex-col space-y-8'}
             onSubmit={form.handleSubmit((data) => {
-              return deleteAccount(data);
+              return deleteAccountAction(data);
             })}
           >
             <FormField

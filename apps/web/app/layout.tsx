@@ -42,10 +42,13 @@ function getClassName() {
   const theme = themeCookie ?? appConfig.theme;
   const dark = theme === 'dark';
 
-  return cn('min-h-screen bg-background antialiased', {
-    dark,
-    [sans.className]: true,
-  });
+  return cn(
+    'min-h-screen bg-background antialiased',
+    {
+      dark,
+    },
+    sans.className,
+  );
 }
 
 export const metadata = {

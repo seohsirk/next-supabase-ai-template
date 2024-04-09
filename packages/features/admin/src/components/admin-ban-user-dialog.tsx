@@ -25,7 +25,7 @@ import {
 } from '@kit/ui/form';
 import { Input } from '@kit/ui/input';
 
-import { banUser } from '../lib/server/admin-server-actions';
+import { banUserAction } from '../lib/server/admin-server-actions';
 import { BanUserSchema } from '../lib/server/schema/admin-actions.schema';
 
 export function AdminBanUserDialog(
@@ -58,7 +58,7 @@ export function AdminBanUserDialog(
           <form
             className={'flex flex-col space-y-8'}
             onSubmit={form.handleSubmit((data) => {
-              return banUser(data);
+              return banUserAction(data);
             })}
           >
             <FormField
