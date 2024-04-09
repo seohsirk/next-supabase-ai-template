@@ -24,7 +24,7 @@ export function PostPreview({
   const slug = `/blog/${post.slug}`;
 
   return (
-    <div className="rounded-xl transition-shadow duration-500">
+    <div className="flex flex-col space-y-4 rounded-lg transition-shadow duration-500">
       <If condition={image}>
         {(imageUrl) => (
           <div className="relative mb-2 w-full" style={{ height }}>
@@ -39,23 +39,23 @@ export function PostPreview({
         )}
       </If>
 
-      <div className={'px-1'}>
-        <div className="flex flex-col space-y-1 py-2">
-          <h3 className="text-2xl font-bold leading-snug dark:text-white">
+      <div className={'flex flex-col space-y-2 px-1'}>
+        <div className={'flex flex-col space-y-1'}>
+          <h3 className="text-2xl font-semibold leading-snug">
             <Link href={slug} className="hover:underline">
               {title}
             </Link>
           </h3>
-        </div>
 
-        <div className="mb-2 flex flex-row items-center space-x-2 text-sm">
-          <div className="text-muted-foreground">
-            <DateFormatter dateString={publishedAt.toISOString()} />
+          <div className="flex flex-row items-center space-x-2 text-sm">
+            <div className="text-muted-foreground">
+              <DateFormatter dateString={publishedAt.toISOString()} />
+            </div>
           </div>
         </div>
 
         <p
-          className="mb-4 text-sm leading-relaxed text-muted-foreground"
+          className="mb-4 text-base leading-relaxed text-secondary-foreground"
           dangerouslySetInnerHTML={{ __html: description ?? '' }}
         />
       </div>

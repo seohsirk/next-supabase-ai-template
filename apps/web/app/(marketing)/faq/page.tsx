@@ -1,4 +1,9 @@
-import { ChevronDown } from 'lucide-react';
+import Link from 'next/link';
+
+import { ArrowRight, ChevronDown } from 'lucide-react';
+
+import { Button } from '@kit/ui/button';
+import { Trans } from '@kit/ui/trans';
 
 import { SitePageHeader } from '~/(marketing)/_components/site-page-header';
 import { createI18nServerInstance } from '~/lib/i18n/i18n.server';
@@ -60,34 +65,40 @@ async function FAQPage() {
   };
 
   return (
-    <div>
+    <>
       <script
         key={'ld:json'}
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
 
-      <div className={'container mx-auto'}>
-        <div className={'flex flex-col space-y-12 xl:space-y-24'}>
-          <SitePageHeader
-            title={t('marketing:faq')}
-            subtitle={t('marketing:faqSubtitle')}
-          />
+      <div className={'flex flex-col space-y-4 xl:space-y-8'}>
+        <SitePageHeader
+          title={t('marketing:faq')}
+          subtitle={t('marketing:faqSubtitle')}
+        />
 
-          <div
-            className={
-              'm-auto flex w-full max-w-xl items-center justify-center'
-            }
-          >
-            <div className="flex w-full flex-col">
-              {faqItems.map((item, index) => {
-                return <FaqItem key={index} item={item} />;
-              })}
-            </div>
+        <div className={'container flex flex-col space-y-8 pb-16'}>
+          <div className="flex w-full max-w-xl flex-col">
+            {faqItems.map((item, index) => {
+              return <FaqItem key={index} item={item} />;
+            })}
+          </div>
+
+          <div>
+            <Link href={'/contact'}>
+              <Button variant={'outline'}>
+                <span>
+                  <Trans i18nKey={'marketing:contactFaq'} />
+                </span>
+
+                <ArrowRight className={'ml-2 w-4'} />
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
@@ -102,7 +113,7 @@ function FaqItem({
   };
 }>) {
   return (
-    <details className={'group border-b px-2 py-4'}>
+    <details className={'group border-b px-2 py-4 last:border-b-transparent'}>
       <summary
         className={
           'flex items-center justify-between hover:cursor-pointer hover:underline'

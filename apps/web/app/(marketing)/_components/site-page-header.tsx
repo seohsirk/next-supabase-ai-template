@@ -6,16 +6,18 @@ export function SitePageHeader(props: {
   className?: string;
 }) {
   return (
-    <div
-      className={cn('flex flex-col items-center space-y-4', props.className)}
-    >
-      <h1 className={'text-center text-3xl font-semibold xl:text-4xl'}>
-        {props.title}
-      </h1>
+    <div className={cn('border-b py-8 xl:py-12 2xl:py-14', props.className)}>
+      <div className={'container flex flex-col space-y-4'}>
+        <h1 className={'text-3xl font-semibold xl:text-5xl'}>{props.title}</h1>
 
-      <h2 className={'text-center text-xl text-muted-foreground xl:text-2xl'}>
-        <span className={'font-normal'}>{props.subtitle}</span>
-      </h2>
+        <h2
+          className={
+            'text-base text-secondary-foreground xl:text-lg 2xl:text-xl'
+          }
+        >
+          <span className={'font-normal'}>{props.subtitle}</span>
+        </h2>
+      </div>
     </div>
   );
 }

@@ -3,7 +3,7 @@ import { withI18n } from '~/lib/i18n/with-i18n';
 
 function CookiePolicyPage() {
   return (
-    <div className={'mt-8'}>
+    <div>
       <div className={'container mx-auto'}>
         <SitePageHeader
           title={`Cookie Policy`}

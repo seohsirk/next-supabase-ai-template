@@ -63,10 +63,7 @@ export function PricingTable({
           ' justify-center lg:flex-row'
         }
       >
-        {config.products.map((product, index) => {
-          const isFirst = index === 0;
-          const isLast = index === config.products.length - 1;
-
+        {config.products.map((product) => {
           const plan = product.plans.find((plan) => {
             if (plan.paymentType === 'recurring') {
               return plan.interval === interval;
@@ -87,10 +84,7 @@ export function PricingTable({
 
           return (
             <PricingItem
-              className={cn('border-b border-r border-t', {
-                ['rounded-l-lg border-l']: isFirst,
-                ['rounded-r-lg']: isLast,
-              })}
+              className={cn('border')}
               selectable
               key={plan.id}
               plan={plan}
@@ -160,7 +154,7 @@ function PricingItem(
         `s-full flex flex-1 grow flex-col items-stretch
             justify-between space-y-8 self-stretch p-6 lg:w-4/12 xl:max-w-[22rem] xl:p-8`,
         {
-          ['bg-primary text-primary-foreground border-primary']: highlighted,
+          ['border-primary']: highlighted,
         },
       )}
     >
@@ -178,7 +172,7 @@ function PricingItem(
 
             <If condition={props.product.badge}>
               <Badge
-                variant={'default'}
+                variant={highlighted ? 'default' : 'outline'}
                 className={cn({
                   ['border-primary-foreground']: highlighted,
                 })}
@@ -218,9 +212,6 @@ function PricingItem(
             <span
               className={cn(
                 `animate-in slide-in-from-left-4 fade-in flex items-center space-x-0.5 capitalize`,
-                {
-                  ['text-muted-foreground']: !highlighted,
-                },
               )}
             >
               <span className={'text-sm'}>
@@ -240,9 +231,6 @@ function PricingItem(
                 <span
                   className={cn(
                     `animate-in slide-in-from-left-4 fade-in text-sm capitalize`,
-                    {
-                      ['text-muted-foreground']: !highlighted,
-                    },
                   )}
                 >
                   <If condition={props.primaryLineItem.type === 'per-seat'}>
@@ -319,7 +307,7 @@ function FeaturesList(
     <ul className={'flex flex-col space-y-2'}>
       {props.features.map((feature) => {
         return (
-          <ListItem highlighted={props.highlighted} key={feature}>
+          <ListItem key={feature}>
             <Trans
               i18nKey={`common:plans.features.${feature}`}
               defaults={feature}
@@ -347,25 +335,18 @@ function Price({ children }: React.PropsWithChildren) {
   );
 }
 
-function ListItem({
-  children,
-  highlighted,
-}: React.PropsWithChildren<{
-  highlighted?: boolean;
-}>) {
+function ListItem({ children }: React.PropsWithChildren) {
   return (
     <li className={'flex items-center space-x-1.5'}>
       <CheckCircle
         className={cn('h-4', {
-          ['text-primary-foreground']: highlighted,
-          ['text-green-600']: !highlighted,
+          ['text-green-600']: true,
         })}
       />
 
       <span
         className={cn('text-sm', {
-          ['text-secondary-foreground']: !highlighted,
-          ['text-primary-foreground']: highlighted,
+          ['text-secondary-foreground']: true,
         })}
       >
         {children}
@@ -391,7 +372,7 @@ function PlanIntervalSwitcher(
           {
             'rounded-r-none border-r-transparent': index === 0,
             'rounded-l-none': index === props.intervals.length - 1,
-            ['hover:text-current hover:bg-muted']: !selected,
+            ['hover:text-primary border']: !selected,
             ['font-semibold cursor-default hover:text-initial hover:bg-background border-primary']:
               selected,
           },
@@ -445,7 +426,7 @@ function DefaultCheckoutButton(
       <Button
         size={'lg'}
         className={'w-full'}
-        variant={props.highlighted ? 'secondary' : 'outline'}
+        variant={props.highlighted ? 'default' : 'outline'}
       >
         <span>
           <Trans i18nKey={label} defaults={label} />

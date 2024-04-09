@@ -45,11 +45,7 @@ export function SiteNavigation() {
     <>
       <div className={'hidden items-center lg:flex'}>
         <NavigationMenu>
-          <NavigationMenuList
-            className={
-              'space-x-1.5 rounded-full px-1 py-2 shadow-sm dark:shadow-primary/10'
-            }
-          >
+          <NavigationMenuList className={'space-x-6'}>
             {NavItems}
           </NavigationMenuList>
         </NavigationMenu>

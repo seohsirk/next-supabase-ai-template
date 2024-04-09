@@ -18,13 +18,15 @@ async function PricingPage() {
   const { t } = await createI18nServerInstance();
 
   return (
-    <div className={'container mx-auto mt-8 flex flex-col space-y-24'}>
+    <div className={'flex flex-col space-y-12'}>
       <SitePageHeader
         title={t('marketing:pricing')}
         subtitle={t('marketing:pricingSubtitle')}
       />
 
-      <PricingTable paths={pathsConfig.auth} config={billingConfig} />
+      <div className={'container mx-auto pb-8 xl:pb-16'}>
+        <PricingTable paths={pathsConfig.auth} config={billingConfig} />
+      </div>
     </div>
   );
 }
