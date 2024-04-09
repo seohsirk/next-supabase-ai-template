@@ -1,10 +1,10 @@
 import { z } from 'zod';
 
-const confirmationSchema = z.object({
-  confirmation: z.custom((value) => value === 'CONFIRM'),
+const ConfirmationSchema = z.object({
+  confirmation: z.custom<string>((value) => value === 'CONFIRM'),
 });
 
-const UserIdSchema = confirmationSchema.extend({
+const UserIdSchema = ConfirmationSchema.extend({
   userId: z.string().uuid(),
 });
 
@@ -13,6 +13,6 @@ export const ReactivateUserSchema = UserIdSchema;
 export const ImpersonateUserSchema = UserIdSchema;
 export const DeleteUserSchema = UserIdSchema;
 
-export const DeleteAccountSchema = confirmationSchema.extend({
+export const DeleteAccountSchema = ConfirmationSchema.extend({
   accountId: z.string().uuid(),
 });

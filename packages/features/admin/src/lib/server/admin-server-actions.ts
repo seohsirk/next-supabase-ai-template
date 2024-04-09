@@ -28,6 +28,10 @@ export const banUser = enhanceAdminAction(
       await service.banUser(userId);
 
       revalidateAdmin();
+
+      return {
+        success: true,
+      };
     },
     {
       schema: BanUserSchema,
@@ -47,6 +51,10 @@ export const reactivateUser = enhanceAdminAction(
       await service.reactivateUser(userId);
 
       revalidateAdmin();
+
+      return {
+        success: true,
+      };
     },
     {
       schema: ReactivateUserSchema,
@@ -83,6 +91,10 @@ export const deleteUser = enhanceAdminAction(
       await service.deleteUser(userId);
 
       revalidateAdmin();
+
+      return {
+        success: true,
+      };
     },
     {
       schema: DeleteUserSchema,
@@ -102,6 +114,10 @@ export const deleteAccount = enhanceAdminAction(
       await service.deleteAccount(accountId);
 
       revalidateAdmin();
+
+      return {
+        success: true,
+      };
     },
     {
       schema: DeleteAccountSchema,

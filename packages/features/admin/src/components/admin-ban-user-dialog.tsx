@@ -26,7 +26,7 @@ import {
 import { Input } from '@kit/ui/input';
 
 import { banUser } from '../lib/server/admin-server-actions';
-import { DeleteUserSchema } from '../lib/server/schema/admin-actions.schema';
+import { BanUserSchema } from '../lib/server/schema/admin-actions.schema';
 
 export function AdminBanUserDialog(
   props: React.PropsWithChildren<{
@@ -34,7 +34,7 @@ export function AdminBanUserDialog(
   }>,
 ) {
   const form = useForm({
-    resolver: zodResolver(DeleteUserSchema),
+    resolver: zodResolver(BanUserSchema),
     defaultValues: {
       userId: props.userId,
       confirmation: '',
@@ -57,7 +57,9 @@ export function AdminBanUserDialog(
         <Form {...form}>
           <form
             className={'flex flex-col space-y-8'}
-            onSubmit={form.handleSubmit(banUser)}
+            onSubmit={form.handleSubmit((data) => {
+              return banUser(data);
+            })}
           >
             <FormField
               name={'confirmation'}

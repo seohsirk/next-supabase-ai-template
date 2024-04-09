@@ -58,7 +58,9 @@ export function AdminDeleteAccountDialog(
         <Form {...form}>
           <form
             className={'flex flex-col space-y-8'}
-            onSubmit={form.handleSubmit(deleteAccount)}
+            onSubmit={form.handleSubmit((data) => {
+              return deleteAccount(data);
+            })}
           >
             <FormField
               name={'confirmation'}

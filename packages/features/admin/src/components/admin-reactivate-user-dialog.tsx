@@ -1,3 +1,5 @@
+'use client';
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
@@ -24,7 +26,7 @@ import {
 import { Input } from '@kit/ui/input';
 
 import { reactivateUser } from '../lib/server/admin-server-actions';
-import { DeleteUserSchema } from '../lib/server/schema/admin-actions.schema';
+import { ReactivateUserSchema } from '../lib/server/schema/admin-actions.schema';
 
 export function AdminReactivateUserDialog(
   props: React.PropsWithChildren<{
@@ -32,7 +34,7 @@ export function AdminReactivateUserDialog(
   }>,
 ) {
   const form = useForm({
-    resolver: zodResolver(DeleteUserSchema),
+    resolver: zodResolver(ReactivateUserSchema),
     defaultValues: {
       userId: props.userId,
       confirmation: '',
@@ -55,7 +57,9 @@ export function AdminReactivateUserDialog(
         <Form {...form}>
           <form
             className={'flex flex-col space-y-8'}
-            onSubmit={form.handleSubmit(reactivateUser)}
+            onSubmit={form.handleSubmit((data) => {
+              return reactivateUser(data);
+            })}
           >
             <FormField
               name={'confirmation'}

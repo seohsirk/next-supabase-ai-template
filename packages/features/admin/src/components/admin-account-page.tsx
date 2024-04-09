@@ -1,3 +1,5 @@
+import { BadgeX, Ban, ShieldPlus, Trash, VenetianMask } from 'lucide-react';
+
 import { Database } from '@kit/supabase/database';
 import { getSupabaseServerComponentClient } from '@kit/supabase/server-component-client';
 import { Alert, AlertDescription, AlertTitle } from '@kit/ui/alert';
@@ -67,28 +69,44 @@ async function PersonalAccountPage(props: { account: Account }) {
             <span>{props.account.name}</span>
 
             <Badge variant={'outline'}>Personal Account</Badge>
+
+            <If condition={isBanned}>
+              <Badge variant={'destructive'}>Banned</Badge>
+            </If>
           </div>
         }
       >
-        <div className={'flex space-x-2'}>
-          <AdminImpersonateUserDialog userId={props.account.id}>
-            <Button variant={'ghost'}>Impersonate</Button>
-          </AdminImpersonateUserDialog>
-
+        <div className={'flex space-x-1'}>
           <If condition={isBanned}>
             <AdminReactivateUserDialog userId={props.account.id}>
-              <Button variant={'ghost'}>Reactivate</Button>
+              <Button size={'sm'} variant={'ghost'}>
+                <ShieldPlus className={'mr-1 h-4'} />
+                Reactivate
+              </Button>
             </AdminReactivateUserDialog>
           </If>
 
           <If condition={!isBanned}>
             <AdminBanUserDialog userId={props.account.id}>
-              <Button variant={'ghost'}>Ban</Button>
+              <Button size={'sm'} variant={'ghost'}>
+                <Ban className={'mr-1 h-4'} />
+                Ban
+              </Button>
             </AdminBanUserDialog>
+
+            <AdminImpersonateUserDialog userId={props.account.id}>
+              <Button size={'sm'} variant={'ghost'}>
+                <VenetianMask className={'mr-1 h-4'} />
+                Impersonate
+              </Button>
+            </AdminImpersonateUserDialog>
           </If>
 
           <AdminDeleteUserDialog userId={props.account.id}>
-            <Button variant={'destructive'}>Delete</Button>
+            <Button size={'sm'} variant={'destructive'}>
+              <BadgeX className={'mr-1 h-4'} />
+              Delete
+            </Button>
           </AdminDeleteUserDialog>
         </div>
       </PageHeader>
@@ -134,7 +152,10 @@ async function TeamAccountPage(props: {
         }
       >
         <AdminDeleteAccountDialog accountId={props.account.id}>
-          <Button variant={'destructive'}>Delete</Button>
+          <Button size={'sm'} variant={'destructive'}>
+            <BadgeX className={'mr-1 h-4'} />
+            Delete
+          </Button>
         </AdminDeleteAccountDialog>
       </PageHeader>
 

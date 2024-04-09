@@ -33,7 +33,7 @@ import { Input } from '@kit/ui/input';
 import { LoadingOverlay } from '@kit/ui/loading-overlay';
 
 import { impersonateUser } from '../lib/server/admin-server-actions';
-import { DeleteUserSchema } from '../lib/server/schema/admin-actions.schema';
+import { ImpersonateUserSchema } from '../lib/server/schema/admin-actions.schema';
 
 export function AdminImpersonateUserDialog(
   props: React.PropsWithChildren<{
@@ -41,7 +41,7 @@ export function AdminImpersonateUserDialog(
   }>,
 ) {
   const form = useForm({
-    resolver: zodResolver(DeleteUserSchema),
+    resolver: zodResolver(ImpersonateUserSchema),
     defaultValues: {
       userId: props.userId,
       confirmation: '',
