@@ -1,10 +1,11 @@
+import 'server-only';
+
 import {
   cancelSubscription,
   createUsageRecord,
   getCheckout,
   updateSubscriptionItem,
 } from '@lemonsqueezy/lemonsqueezy.js';
-import 'server-only';
 import { z } from 'zod';
 
 import { BillingStrategyProviderService } from '@kit/billing';

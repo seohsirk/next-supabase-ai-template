@@ -1,3 +1,5 @@
+import 'server-only';
+
 import { BillingConfig } from '@kit/billing';
 import { Database } from '@kit/supabase/database';
 import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';

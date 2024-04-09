@@ -1,3 +1,5 @@
+import 'server-only';
+
 import { SupabaseClient } from '@supabase/supabase-js';
 
 import { getLogger } from '@kit/shared/logger';
@@ -35,11 +37,9 @@ export class DeletePersonalAccountService {
   }) {
     const userId = params.userId;
     const logger = await getLogger();
+    const ctx = { userId, name: this.namespace };
 
-    logger.info(
-      { name: this.namespace, userId },
-      'User requested deletion. Processing...',
-    );
+    logger.info(ctx, 'User requested deletion. Processing...');
 
     // execute the deletion of the user
     try {
@@ -47,8 +47,7 @@ export class DeletePersonalAccountService {
     } catch (error) {
       logger.error(
         {
-          name: this.namespace,
-          userId,
+          ...ctx,
           error,
         },
         'Error deleting user',
@@ -57,6 +56,6 @@ export class DeletePersonalAccountService {
       throw new Error('Error deleting user');
     }
 
-    logger.info({ name: this.namespace, userId }, 'User deleted successfully');
+    logger.info(ctx, 'User deleted successfully');
   }
 }

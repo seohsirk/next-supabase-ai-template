@@ -57,12 +57,13 @@ function AccountsPage({ searchParams }: { searchParams: SearchParams }) {
 }
 
 function getFilters(params: SearchParams) {
-  const filters: {
-    [key: string]: {
+  const filters: Record<
+    string,
+    {
       eq?: boolean | string;
       like?: string;
-    };
-  } = {};
+    }
+  > = {};
 
   if (params.account_type && params.account_type !== 'all') {
     filters.is_personal_account = {

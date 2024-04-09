@@ -12,6 +12,7 @@ const config = {
   arrowParens: 'always',
   importOrder: [
     '/^(?!.*\\.css).*/',
+    '^server-only$',
     '^react$',
     '^react-dom$',
     '^next$',

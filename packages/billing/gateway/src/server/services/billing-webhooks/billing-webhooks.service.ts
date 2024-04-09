@@ -1,3 +1,5 @@
+import 'server-only';
+
 import { Database } from '@kit/supabase/database';
 
 import { BillingGatewayService } from '../billing-gateway/billing-gateway.service';

@@ -1,9 +1,10 @@
+import 'server-only';
+
 import { redirect } from 'next/navigation';
 import { NextRequest, NextResponse } from 'next/server';
 
 import { User } from '@supabase/supabase-js';
 
-import 'server-only';
 import { z } from 'zod';
 
 import { verifyCaptchaToken } from '@kit/auth/captcha/server';

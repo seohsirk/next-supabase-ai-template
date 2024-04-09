@@ -1,5 +1,12 @@
+import 'server-only';
+
 import { getSupabaseServerComponentClient } from '@kit/supabase/server-component-client';
 
+/**
+ * @name loadAdminDashboard
+ * @description Load the admin dashboard data.
+ * @param params
+ */
 export async function loadAdminDashboard(params?: {
   count: 'exact' | 'estimated' | 'planned';
 }) {

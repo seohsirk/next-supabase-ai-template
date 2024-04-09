@@ -50,7 +50,7 @@ export function EmailPasswordSignUpContainer({
         console.error(error);
       }
     },
-    [emailRedirectTo, loading, onSignUp, signUpMutation],
+    [captchaToken, emailRedirectTo, loading, onSignUp, signUpMutation],
   );
 
   return (

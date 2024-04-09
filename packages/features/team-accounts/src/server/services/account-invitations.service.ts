@@ -1,7 +1,8 @@
+import 'server-only';
+
 import { SupabaseClient } from '@supabase/supabase-js';
 
 import { addDays, formatISO } from 'date-fns';
-import 'server-only';
 import { z } from 'zod';
 
 import { getLogger } from '@kit/shared/logger';

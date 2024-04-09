@@ -15,7 +15,6 @@ import {
   getPrimaryLineItem,
   getProductPlanPair,
 } from '@kit/billing';
-import config from '@kit/prettier-config/index.mjs';
 import { formatCurrency } from '@kit/shared/utils';
 import { Badge } from '@kit/ui/badge';
 import { Button } from '@kit/ui/button';

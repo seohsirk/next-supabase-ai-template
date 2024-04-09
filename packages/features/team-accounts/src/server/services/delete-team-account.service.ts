@@ -1,6 +1,6 @@
-import { SupabaseClient } from '@supabase/supabase-js';
-
 import 'server-only';
+
+import { SupabaseClient } from '@supabase/supabase-js';
 
 import { getLogger } from '@kit/shared/logger';
 import { Database } from '@kit/supabase/database';
@@ -26,14 +26,13 @@ export class DeleteTeamAccountService {
   ) {
     const logger = await getLogger();
 
-    logger.info(
-      {
-        name: this.namespace,
-        accountId: params.accountId,
-        userId: params.userId,
-      },
-      `Requested team account deletion. Processing...`,
-    );
+    const ctx = {
+      accountId: params.accountId,
+      userId: params.userId,
+      name: this.namespace,
+    };
+
+    logger.info(ctx, `Requested team account deletion. Processing...`);
 
     // we can use the admin client to delete the account.
     const { error } = await adminClient
@@ -44,9 +43,7 @@ export class DeleteTeamAccountService {
     if (error) {
       logger.error(
         {
-          name: this.namespace,
-          accountId: params.accountId,
-          userId: params.userId,
+          ...ctx,
           error,
         },
         'Failed to delete team account',
@@ -55,13 +52,6 @@ export class DeleteTeamAccountService {
       throw new Error('Failed to delete team account');
     }
 
-    logger.info(
-      {
-        name: this.namespace,
-        accountId: params.accountId,
-        userId: params.userId,
-      },
-      'Successfully deleted team account',
-    );
+    logger.info(ctx, 'Successfully deleted team account');
   }
 }

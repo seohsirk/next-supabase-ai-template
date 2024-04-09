@@ -1,4 +1,4 @@
-import { BadgeX, Ban, ShieldPlus, Trash, VenetianMask } from 'lucide-react';
+import { BadgeX, Ban, ShieldPlus, VenetianMask } from 'lucide-react';
 
 import { Database } from '@kit/supabase/database';
 import { getSupabaseServerComponentClient } from '@kit/supabase/server-component-client';

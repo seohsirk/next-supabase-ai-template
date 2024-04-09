@@ -1,3 +1,5 @@
+import 'server-only';
+
 import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
 
 import { BillingGatewayService } from './billing-gateway.service';

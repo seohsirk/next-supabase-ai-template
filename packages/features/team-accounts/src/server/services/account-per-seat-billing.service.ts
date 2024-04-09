@@ -1,3 +1,5 @@
+import 'server-only';
+
 import { SupabaseClient } from '@supabase/supabase-js';
 
 import { BillingGatewayService } from '@kit/billing-gateway';
@@ -11,12 +13,10 @@ export class AccountPerSeatBillingService {
 
   async getPerSeatSubscriptionItem(accountId: string) {
     const logger = await getLogger();
+    const ctx = { accountId, name: this.namespace };
 
     logger.info(
-      {
-        name: this.namespace,
-        accountId,
-      },
+      ctx,
       `Getting per-seat subscription item for account ${accountId}...`,
     );
 
@@ -40,8 +40,7 @@ export class AccountPerSeatBillingService {
     if (error) {
       logger.error(
         {
-          name: this.namespace,
-          accountId,
+          ...ctx,
           error,
         },
         `Failed to get per-seat subscription item for account ${accountId}`,
@@ -52,7 +51,7 @@ export class AccountPerSeatBillingService {
 
     if (!data?.subscription_items) {
       logger.info(
-        { name: this.namespace, accountId },
+        ctx,
         `No per-seat subscription item found for account ${accountId}. Exiting...`,
       );
 
@@ -60,10 +59,7 @@ export class AccountPerSeatBillingService {
     }
 
     logger.info(
-      {
-        name: this.namespace,
-        accountId,
-      },
+      ctx,
       `Per-seat subscription item found for account ${accountId}. Will update...`,
     );
 
@@ -88,14 +84,13 @@ export class AccountPerSeatBillingService {
 
     const billingGateway = new BillingGatewayService(subscription.provider);
 
-    logger.info(
-      {
-        name: this.namespace,
-        accountId,
-        subscriptionItems,
-      },
-      `Increasing seats for account ${accountId}...`,
-    );
+    const ctx = {
+      name: this.namespace,
+      accountId,
+      subscriptionItems,
+    };
+
+    logger.info(ctx, `Increasing seats for account ${accountId}...`);
 
     const promises = subscriptionItems.map(async (item) => {
       try {
@@ -127,8 +122,7 @@ export class AccountPerSeatBillingService {
       } catch (error) {
         logger.error(
           {
-            name: this.namespace,
-            accountId,
+            ...ctx,
             error,
           },
           `Failed to increase seats for account ${accountId}`,
@@ -155,14 +149,13 @@ export class AccountPerSeatBillingService {
       return;
     }
 
-    logger.info(
-      {
-        name: this.namespace,
-        accountId,
-        subscriptionItems,
-      },
-      `Decreasing seats for account ${accountId}...`,
-    );
+    const ctx = {
+      name: this.namespace,
+      accountId,
+      subscriptionItems,
+    };
+
+    logger.info(ctx, `Decreasing seats for account ${accountId}...`);
 
     const billingGateway = new BillingGatewayService(subscription.provider);
 
@@ -196,8 +189,7 @@ export class AccountPerSeatBillingService {
       } catch (error) {
         logger.error(
           {
-            name: this.namespace,
-            accountId,
+            ...ctx,
             error,
           },
           `Failed to decrease seats for account ${accountId}`,

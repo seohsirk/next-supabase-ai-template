@@ -18,7 +18,7 @@ const INTERNAL_PACKAGES = [
   '@kit/database-webhooks',
   '@kit/cms',
   '@kit/monitoring',
-  '@kit/next'
+  '@kit/next',
 ];
 
 /** @type {import('next').NextConfig} */

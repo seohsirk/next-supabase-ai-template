@@ -87,11 +87,11 @@ importers:
         specifier: workspace:^
         version: link:../../packages/ui
       '@makerkit/data-loader-supabase-core':
-        specifier: 0.0.5
-        version: 0.0.5(@supabase/postgrest-js@1.15.0)(@supabase/supabase-js@2.42.0)
-      '@makerkit/data-loader-supabase-nextjs':
         specifier: ^0.0.7
-        version: 0.0.7(@supabase/postgrest-js@1.15.0)(@supabase/supabase-js@2.42.0)(next@14.2.0-canary.62)(react@18.2.0)(swr@2.2.5)
+        version: 0.0.7(@supabase/postgrest-js@1.15.0)(@supabase/supabase-js@2.42.0)
+      '@makerkit/data-loader-supabase-nextjs':
+        specifier: ^0.0.9
+        version: 0.0.9(@supabase/postgrest-js@1.15.0)(@supabase/supabase-js@2.42.0)(next@14.2.0-canary.62)(react@18.2.0)(swr@2.2.5)
       '@marsidev/react-turnstile':
         specifier: ^0.5.4
         version: 0.5.4(react-dom@18.2.0)(react@18.2.0)
@@ -563,11 +563,11 @@ importers:
         specifier: workspace:^
         version: link:../../ui
       '@makerkit/data-loader-supabase-core':
-        specifier: 0.0.5
-        version: 0.0.5(@supabase/postgrest-js@1.15.0)(@supabase/supabase-js@2.42.0)
-      '@makerkit/data-loader-supabase-nextjs':
         specifier: ^0.0.7
-        version: 0.0.7(@supabase/postgrest-js@1.15.0)(@supabase/supabase-js@2.42.0)(next@14.1.4)(react@18.2.0)(swr@2.2.5)
+        version: 0.0.7(@supabase/postgrest-js@1.15.0)(@supabase/supabase-js@2.42.0)
+      '@makerkit/data-loader-supabase-nextjs':
+        specifier: ^0.0.9
+        version: 0.0.9(@supabase/postgrest-js@1.15.0)(@supabase/supabase-js@2.42.0)(next@14.1.4)(react@18.2.0)(swr@2.2.5)
       '@supabase/supabase-js':
         specifier: ^2.42.0
         version: 2.42.0
@@ -967,8 +967,8 @@ importers:
         specifier: ^8.57.0
         version: 8.57.0
       lucide-react:
-        specifier: ^0.363.0
-        version: 0.363.0(react@18.2.0)
+        specifier: ^0.366.0
+        version: 0.366.0(react@18.2.0)
       prettier:
         specifier: ^3.2.5
         version: 3.2.5
@@ -2226,8 +2226,8 @@ packages:
     engines: {node: '>=18'}
     dev: false
 
-  /@makerkit/data-loader-supabase-core@0.0.5(@supabase/postgrest-js@1.15.0)(@supabase/supabase-js@2.42.0):
-    resolution: {integrity: sha512-J68TcXACZpbBhFPwNX4AP8O37iPHpcqpT8PLTLeMvoCpm2HI2MK+KGV5uj2zJydHKClRi44KkNa0BUHJzg9myw==}
+  /@makerkit/data-loader-supabase-core@0.0.7(@supabase/postgrest-js@1.15.0)(@supabase/supabase-js@2.42.0):
+    resolution: {integrity: sha512-9Zi7GmBZaedHl9x+LnasUL3ztx2oLInwI1uzdw4E830gSNQr/hx5/Sodd1A9cXECn51Ub5HWEJ8kfBZwX0qCKQ==}
     peerDependencies:
       '@supabase/postgrest-js': '>1.0.0'
       '@supabase/supabase-js': '>=2.0.0'
@@ -2236,15 +2236,15 @@ packages:
       '@supabase/supabase-js': 2.42.0
       ts-case-convert: 2.0.7
 
-  /@makerkit/data-loader-supabase-nextjs@0.0.7(@supabase/postgrest-js@1.15.0)(@supabase/supabase-js@2.42.0)(next@14.1.4)(react@18.2.0)(swr@2.2.5):
-    resolution: {integrity: sha512-iPi4dWkZnv3awtlJaQIVLo7nca8XEjSMTE1HHZg1PtBAYRyLbq6vJYzhez0XVu/OSncw5QyhTzCzB1dxzOHxhw==}
+  /@makerkit/data-loader-supabase-nextjs@0.0.9(@supabase/postgrest-js@1.15.0)(@supabase/supabase-js@2.42.0)(next@14.1.4)(react@18.2.0)(swr@2.2.5):
+    resolution: {integrity: sha512-FNn0Z3zlV0W6+GVoWAkokMC4Mzx29lByCGbYBi9F11VBkmxuEH8i4KbYYbImW+r8uvs6sdth+cqjx6Jo+VuTCw==}
     peerDependencies:
       '@supabase/supabase-js': '>=2.0.0'
       next: '>=13.4.0'
       react: '>=18.0.0'
       swr: '>=2.0.0'
     dependencies:
-      '@makerkit/data-loader-supabase-core': 0.0.5(@supabase/postgrest-js@1.15.0)(@supabase/supabase-js@2.42.0)
+      '@makerkit/data-loader-supabase-core': 0.0.7(@supabase/postgrest-js@1.15.0)(@supabase/supabase-js@2.42.0)
       '@supabase/supabase-js': 2.42.0
       next: 14.1.4(@opentelemetry/api@1.8.0)(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
@@ -2253,15 +2253,15 @@ packages:
       - '@supabase/postgrest-js'
     dev: true
 
-  /@makerkit/data-loader-supabase-nextjs@0.0.7(@supabase/postgrest-js@1.15.0)(@supabase/supabase-js@2.42.0)(next@14.2.0-canary.62)(react@18.2.0)(swr@2.2.5):
-    resolution: {integrity: sha512-iPi4dWkZnv3awtlJaQIVLo7nca8XEjSMTE1HHZg1PtBAYRyLbq6vJYzhez0XVu/OSncw5QyhTzCzB1dxzOHxhw==}
+  /@makerkit/data-loader-supabase-nextjs@0.0.9(@supabase/postgrest-js@1.15.0)(@supabase/supabase-js@2.42.0)(next@14.2.0-canary.62)(react@18.2.0)(swr@2.2.5):
+    resolution: {integrity: sha512-FNn0Z3zlV0W6+GVoWAkokMC4Mzx29lByCGbYBi9F11VBkmxuEH8i4KbYYbImW+r8uvs6sdth+cqjx6Jo+VuTCw==}
     peerDependencies:
       '@supabase/supabase-js': '>=2.0.0'
       next: '>=13.4.0'
       react: '>=18.0.0'
       swr: '>=2.0.0'
     dependencies:
-      '@makerkit/data-loader-supabase-core': 0.0.5(@supabase/postgrest-js@1.15.0)(@supabase/supabase-js@2.42.0)
+      '@makerkit/data-loader-supabase-core': 0.0.7(@supabase/postgrest-js@1.15.0)(@supabase/supabase-js@2.42.0)
       '@supabase/supabase-js': 2.42.0
       next: 14.2.0-canary.62(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
@@ -9720,6 +9720,14 @@ packages:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0
     dependencies:
       react: 18.2.0
+
+  /lucide-react@0.366.0(react@18.2.0):
+    resolution: {integrity: sha512-iUOsp/35wOkrgEzigZlZI/OhVxQZ8CmxjebdIjfSDzNBmrNYjQfKSpeKderaEFfGt3OycF1BE+wLlaqWRuoh4w==}
+    peerDependencies:
+      react: ^16.5.1 || ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 18.2.0
+    dev: true
 
   /magic-string@0.27.0:
     resolution: {integrity: sha512-8UnnX2PeRAPZuN12svgR9j7M1uWMovg/CEnIwIG0LFkXSJJe4PdfUGiTGl8V9bsBHFUtfVINcSyYxd7q+kx9fA==}

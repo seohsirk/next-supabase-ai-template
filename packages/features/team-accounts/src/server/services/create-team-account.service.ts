@@ -1,3 +1,5 @@
+import 'server-only';
+
 import { SupabaseClient } from '@supabase/supabase-js';
 
 import { getLogger } from '@kit/shared/logger';
@@ -10,11 +12,9 @@ export class CreateTeamAccountService {
 
   async createNewOrganizationAccount(params: { name: string; userId: string }) {
     const logger = await getLogger();
+    const ctx = { ...params, namespace: this.namespace };
 
-    logger.info(
-      { ...params, namespace: this.namespace },
-      `Creating new team account...`,
-    );
+    logger.info(ctx, `Creating new team account...`);
 
     return await this.client.rpc('create_account', {
       account_name: params.name,
