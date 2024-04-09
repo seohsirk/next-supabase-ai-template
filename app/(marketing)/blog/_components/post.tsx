@@ -9,14 +9,14 @@ export const Post: React.FC<{
   content: string;
 }> = ({ post, content }) => {
   return (
-    <div className={'mx-auto flex max-w-2xl flex-col space-y-6'}>
+    <div>
       <PostHeader post={post} />
 
-      <article className={styles.HTML}>
-        <ContentRenderer content={content} />
-      </article>
+      <div className={'mx-auto flex max-w-2xl flex-col space-y-6'}>
+        <article className={styles.HTML}>
+          <ContentRenderer content={content} />
+        </article>
+      </div>
     </div>
   );
 };
-
-export default Post;

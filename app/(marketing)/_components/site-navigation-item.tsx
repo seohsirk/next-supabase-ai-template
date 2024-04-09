@@ -9,9 +9,8 @@ import { cn, isRouteActive } from '@kit/ui/utils';
 const getClassName = (path: string, currentPathName: string) => {
   const isActive = isRouteActive(path, currentPathName);
 
-  return cn(`text-sm transition-all px-4 py-2 rounded-full font-medium`, {
-    'bg-muted': isActive,
-    'hover:bg-muted active:bg-muted/50': !isActive,
+  return cn(`text-sm font-medium text-primary`, {
+    'hover:underline': !isActive,
   });
 };
 

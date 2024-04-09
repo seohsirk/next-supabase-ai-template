@@ -13,7 +13,7 @@ import { withI18n } from '~/lib/i18n/with-i18n';
 
 function Home() {
   return (
-    <div className={'flex flex-col space-y-24'}>
+    <div className={'flex flex-col space-y-24 py-16'}>
       <div className={'container mx-auto flex flex-col space-y-24'}>
         <div
           className={
@@ -22,7 +22,11 @@ function Home() {
             ' duration-1000 slide-in-from-top-12'
           }
         >
-          <div className={'flex w-full flex-1 flex-col items-center space-y-8'}>
+          <div
+            className={
+              'flex w-full flex-1 flex-col items-center space-y-8 xl:space-y-12 2xl:space-y-14'
+            }
+          >
             <Pill>
               <span>The leading SaaS Starter Kit for ambitious developers</span>
             </Pill>
@@ -53,9 +57,7 @@ function Home() {
                   </span>
                 </Heading>
               </div>
-            </div>
 
-            <div>
               <MainCallToActionButton />
             </div>
           </div>
@@ -70,9 +72,7 @@ function Home() {
           <Image
             priority
             className={
-              'rounded-2xl' +
-              ' border animate-in fade-in' +
-              ' delay-300 duration-1000 ease-out zoom-in-50 fill-mode-both'
+              'rounded-lg border delay-500 duration-1000 ease-out animate-in fade-in zoom-in-50 fill-mode-both'
             }
             width={3069}
             height={1916}
@@ -115,20 +115,20 @@ function Home() {
         <div className={'flex flex-col space-y-4'}>
           <FeatureShowcaseContainer>
             <LeftFeatureContainer>
-              <div className={'flex flex-col space-y-2'}>
+              <div className={'flex flex-col space-y-1'}>
                 <Heading level={2}>Authentication</Heading>
 
                 <Heading level={3} className={'text-muted-foreground'}>
                   Secure and Easy-to-Use Authentication for Your SaaS Website
                   and API
                 </Heading>
+              </div>
 
-                <div>
-                  Our authentication system is built on top of the
-                  industry-leading PaaS such as Supabase and Firebase. It is
-                  secure, easy-to-use, and fully customizable. It supports
-                  email/password, social logins, and more.
-                </div>
+              <div>
+                Our authentication system is built on top of the
+                industry-leading PaaS such as Supabase and Firebase. It is
+                secure, easy-to-use, and fully customizable. It supports
+                email/password, social logins, and more.
               </div>
             </LeftFeatureContainer>
 
@@ -155,18 +155,18 @@ function Home() {
             </LeftFeatureContainer>
 
             <RightFeatureContainer>
-              <div className={'flex flex-col space-y-2'}>
+              <div className={'flex flex-col space-y-1'}>
                 <Heading level={2}>Dashboard</Heading>
 
                 <Heading level={3} className={'text-muted-foreground'}>
                   A fantastic dashboard to manage your SaaS business
                 </Heading>
+              </div>
 
-                <div>
-                  Our dashboard offers an overview of your SaaS business. It
-                  shows at a glance all you need to know about your business. It
-                  is fully customizable and extendable.
-                </div>
+              <div>
+                Our dashboard offers an overview of your SaaS business. It shows
+                at a glance all you need to know about your business. It is
+                fully customizable and extendable.
               </div>
             </RightFeatureContainer>
           </FeatureShowcaseContainer>
@@ -247,14 +247,18 @@ function FeatureShowcaseContainer(props: React.PropsWithChildren) {
 
 function LeftFeatureContainer(props: React.PropsWithChildren) {
   return (
-    <div className={'flex w-full flex-col space-y-8 lg:w-6/12'}>
+    <div className={'flex w-full flex-col space-y-6 lg:w-6/12'}>
       {props.children}
     </div>
   );
 }
 
 function RightFeatureContainer(props: React.PropsWithChildren) {
-  return <div className={'flex w-full lg:w-6/12'}>{props.children}</div>;
+  return (
+    <div className={'flex w-full flex-col space-y-6 lg:w-6/12'}>
+      {props.children}
+    </div>
+  );
 }
 
 function MainCallToActionButton() {

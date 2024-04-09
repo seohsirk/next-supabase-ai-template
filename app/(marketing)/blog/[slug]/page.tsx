@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 
 import { createCmsClient } from '@kit/cms';
 
-import Post from '~/(marketing)/blog/_components/post';
+import { Post } from '~/(marketing)/blog/_components/post';
 import { withI18n } from '~/lib/i18n/with-i18n';
 
 export async function generateMetadata({
@@ -55,11 +55,7 @@ async function BlogPost({ params }: { params: { slug: string } }) {
     notFound();
   }
 
-  return (
-    <div className={'container mx-auto'}>
-      <Post post={post} content={post.content} />
-    </div>
-  );
+  return <Post post={post} content={post.content} />;
 }
 
 export default withI18n(BlogPost);

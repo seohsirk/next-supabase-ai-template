@@ -1,6 +1,12 @@
+import Link from 'next/link';
+
+import { ArrowLeft } from 'lucide-react';
+
 import { Cms } from '@kit/cms';
-import { Heading } from '@kit/ui/heading';
+import { Button } from '@kit/ui/button';
 import { If } from '@kit/ui/if';
+import { Trans } from '@kit/ui/trans';
+import { cn } from '@kit/ui/utils';
 
 import { CoverImage } from '~/(marketing)/blog/_components/cover-image';
 import { DateFormatter } from '~/(marketing)/blog/_components/date-formatter';
@@ -11,27 +17,37 @@ export const PostHeader: React.FC<{
   const { title, publishedAt, description, image } = post;
 
   return (
-    <div className={'flex flex-col space-y-8'}>
-      <div className={'flex flex-col space-y-2'}>
-        <Heading level={1}>{title}</Heading>
+    <div className={'flex flex-col'}>
+      <div className={'container'}>
+        <Link href={'/blog'}>
+          <Button variant={'link'}>
+            <ArrowLeft className={'h-4'} />
 
-        <Heading level={3}>
-          <p
-            className={'font-normal text-muted-foreground'}
-            dangerouslySetInnerHTML={{ __html: description ?? '' }}
-          />
-        </Heading>
+            <span>
+              <Trans i18nKey={'marketing:backToBlog'} />
+            </span>
+          </Button>
+        </Link>
+      </div>
 
-        <div className="flex flex-row items-center space-x-2 text-muted-foreground">
-          <div className={'text-sm'}>
-            <DateFormatter dateString={publishedAt.toISOString()} />
-          </div>
+      <div className={cn('border-b py-8')}>
+        <div className={'container flex flex-col space-y-4'}>
+          <h1 className={'text-3xl font-semibold xl:text-5xl'}>{title}</h1>
+
+          <h2 className={'text-base text-secondary-foreground xl:text-lg'}>
+            <span
+              className={'font-normal'}
+              dangerouslySetInnerHTML={{ __html: description ?? '' }}
+            />
+          </h2>
+
+          <DateFormatter dateString={publishedAt.toISOString()} />
         </div>
       </div>
 
       <If condition={image}>
         {(imageUrl) => (
-          <div className="relative mx-auto h-[378px] w-full justify-center">
+          <div className="relative mx-auto mt-8 flex h-[378px] w-full max-w-2xl justify-center">
             <CoverImage
               preloadImage
               className="rounded-md"

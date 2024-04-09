@@ -48,18 +48,18 @@ async function DocumentationPage({ params }: PageParams) {
   const description = page?.description ?? '';
 
   return (
-    <div className={'container mx-auto'}>
+    <div>
+      <SitePageHeader
+        title={page.title}
+        subtitle={description}
+        className={'items-start'}
+      />
+
       <div
         className={
-          'relative mx-auto flex max-w-4xl grow flex-col space-y-4 px-8'
+          'container relative mx-auto flex max-w-4xl grow flex-col space-y-4 py-6'
         }
       >
-        <SitePageHeader
-          title={page.title}
-          subtitle={description}
-          className={'items-start'}
-        />
-
         <article className={styles.HTML}>
           <ContentRenderer content={page.content} />
         </article>

@@ -1,5 +1,4 @@
 import { getSupabaseServerComponentClient } from '@kit/supabase/server-component-client';
-import { Separator } from '@kit/ui/separator';
 
 import { SiteFooter } from '~/(marketing)/_components/site-footer';
 import { SiteHeader } from '~/(marketing)/_components/site-header';
@@ -9,12 +8,10 @@ async function SiteLayout(props: React.PropsWithChildren) {
   const user = await getUser();
 
   return (
-    <div className={'flex flex-col space-y-6 xl:space-y-10 2xl:space-y-12'}>
+    <div className={'flex flex-col'}>
       <SiteHeader user={user} />
 
       {props.children}
-
-      <Separator />
 
       <SiteFooter />
     </div>

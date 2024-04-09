@@ -9,7 +9,7 @@ const YEAR = new Date().getFullYear();
 
 export function SiteFooter() {
   return (
-    <footer className={'py-8 lg:py-24'}>
+    <footer className={'border-t py-8 xl:py-12 2xl:py-14'}>
       <div className={'container mx-auto'}>
         <div className={'flex flex-col space-y-8 lg:flex-row lg:space-y-0'}>
           <div
