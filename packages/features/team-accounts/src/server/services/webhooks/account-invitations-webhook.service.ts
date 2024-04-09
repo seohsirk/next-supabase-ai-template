@@ -29,38 +29,72 @@ const env = z
 export class AccountInvitationsWebhookService {
   private namespace = 'accounts.invitations.webhook';
 
-  constructor(private readonly client: SupabaseClient<Database>) {}
+  constructor(private readonly adminClient: SupabaseClient<Database>) {}
 
+  /**
+   * @name handleInvitationWebhook
+   * @description Handles the webhook event for invitations
+   * @param invitation
+   */
   async handleInvitationWebhook(invitation: Invitation) {
     return this.dispatchInvitationEmail(invitation);
   }
 
   private async dispatchInvitationEmail(invitation: Invitation) {
-    const inviter = await this.client
+    const logger = await getLogger();
+
+    logger.info(
+      { invitation, name: this.namespace },
+      'Handling invitation webhook event...',
+    );
+
+    const inviter = await this.adminClient
       .from('accounts')
       .select('email, name')
       .eq('id', invitation.invited_by)
       .single();
 
     if (inviter.error) {
+      logger.error(
+        {
+          error: inviter.error,
+          name: this.namespace,
+        },
+        'Failed to fetch inviter details',
+      );
+
       throw inviter.error;
     }
 
-    const team = await this.client
+    const team = await this.adminClient
       .from('accounts')
       .select('name')
       .eq('id', invitation.account_id)
       .single();
 
     if (team.error) {
+      logger.error(
+        {
+          error: team.error,
+          name: this.namespace,
+        },
+        'Failed to fetch team details',
+      );
+
       throw team.error;
     }
 
-    const logger = await getLogger();
+    const ctx = {
+      invitationId: invitation.id,
+      name: this.namespace,
+    };
+
+    logger.info(ctx, 'Invite retrieved. Sending invitation email...');
 
     try {
       const { renderInviteEmail } = await import('@kit/email-templates');
       const { getMailer } = await import('@kit/mailers');
+
       const mailer = await getMailer();
 
       const html = renderInviteEmail({
@@ -79,27 +113,17 @@ export class AccountInvitationsWebhookService {
           html,
         })
         .then(() => {
-          logger.info('Invitation email sent', {
-            email: invitation.email,
-            account: invitation.account_id,
-            name: this.namespace,
-          });
+          logger.info(ctx, 'Invitation email successfully sent!');
         })
         .catch((error) => {
-          logger.warn(
-            { error, name: this.namespace },
-            'Failed to send invitation email',
-          );
+          logger.warn({ error, ...ctx }, 'Failed to send invitation email');
         });
 
       return {
         success: true,
       };
     } catch (error) {
-      logger.warn(
-        { error, name: this.namespace },
-        'Failed to invite user to team',
-      );
+      logger.warn({ error, ...ctx }, 'Failed to invite user to team');
 
       return {
         error,
