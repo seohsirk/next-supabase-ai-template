@@ -1,6 +1,6 @@
-import { cache } from 'react';
-
 import 'server-only';
+
+import { cache } from 'react';
 
 import { getSupabaseServerComponentClient } from '@kit/supabase/server-component-client';
 

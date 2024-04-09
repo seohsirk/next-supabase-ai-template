@@ -5,11 +5,11 @@ import { notFound } from 'next/navigation';
 import { ContentRenderer, createCmsClient } from '@kit/cms';
 import { If } from '@kit/ui/if';
 
-import { SitePageHeader } from '~/(marketing)/_components/site-page-header';
-import { DocsCards } from '~/(marketing)/docs/_components/docs-cards';
 import { withI18n } from '~/lib/i18n/with-i18n';
 
+import { SitePageHeader } from '../../_components/site-page-header';
 import styles from '../../blog/_components/html-renderer.module.css';
+import { DocsCards } from '../_components/docs-cards';
 
 const getPageBySlug = cache(async (slug: string) => {
   const client = await createCmsClient();
@@ -48,18 +48,10 @@ async function DocumentationPage({ params }: PageParams) {
   const description = page?.description ?? '';
 
   return (
-    <div>
-      <SitePageHeader
-        title={page.title}
-        subtitle={description}
-        className={'items-start'}
-      />
+    <div className={'flex flex-1 flex-col'}>
+      <SitePageHeader title={page.title} subtitle={description} />
 
-      <div
-        className={
-          'container relative mx-auto flex max-w-4xl grow flex-col space-y-4 py-6'
-        }
-      >
+      <div className={'container flex max-w-5xl flex-col space-y-4 py-6'}>
         <article className={styles.HTML}>
           <ContentRenderer content={page.content} />
         </article>
