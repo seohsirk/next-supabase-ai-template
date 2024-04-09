@@ -1,6 +1,6 @@
-import { SupabaseClient } from '@supabase/supabase-js';
-
 import 'server-only';
+
+import { SupabaseClient } from '@supabase/supabase-js';
 
 import { Database } from '@kit/supabase/database';
 
