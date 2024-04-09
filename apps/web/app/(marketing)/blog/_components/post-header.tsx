@@ -18,18 +18,6 @@ export const PostHeader: React.FC<{
 
   return (
     <div className={'flex flex-col'}>
-      <div className={'container'}>
-        <Link href={'/blog'}>
-          <Button variant={'link'}>
-            <ArrowLeft className={'h-4'} />
-
-            <span>
-              <Trans i18nKey={'marketing:backToBlog'} />
-            </span>
-          </Button>
-        </Link>
-      </div>
-
       <div className={cn('border-b py-8')}>
         <div className={'container flex flex-col space-y-4'}>
           <h1 className={'text-3xl font-semibold xl:text-5xl'}>{title}</h1>
