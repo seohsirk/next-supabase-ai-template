@@ -5,19 +5,17 @@ import { initReactI18next } from 'react-i18next';
 
 import { I18N_COOKIE_NAME, getI18nSettings } from './i18n.settings';
 
-let promise: Promise<i18n>;
-
 export function initializeI18nClient(
   lng: string | undefined,
   i18nResolver: (lang: string, namespace: string) => Promise<object>,
 ): Promise<i18n> {
   const settings = getI18nSettings(lng);
 
-  if (promise !== undefined) {
-    return promise;
+  if (i18next.isInitialized) {
+    return Promise.resolve(i18next);
   }
 
-  promise = new Promise<i18n>((resolve, reject) => {
+  return new Promise<i18n>((resolve, reject) => {
     void i18next
       .use(initReactI18next)
       .use(
@@ -49,6 +47,4 @@ export function initializeI18nClient(
         },
       );
   });
-
-  return promise;
 }

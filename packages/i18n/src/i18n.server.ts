@@ -17,6 +17,11 @@ export async function initializeServerI18n(
   i18nResolver: (language: string, namespace: string) => Promise<object>,
 ) {
   const i18nInstance = createInstance();
+
+  if (i18nInstance.isInitialized) {
+    return i18nInstance;
+  }
+
   const settings = getI18nSettings(lang);
 
   await i18nInstance

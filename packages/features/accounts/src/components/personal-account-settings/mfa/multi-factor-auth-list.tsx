@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 
-import type { Factor } from '@supabase/gotrue-js';
+import type { Factor } from '@supabase/supabase-js';
 
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
 import { useMutation, useQueryClient } from '@tanstack/react-query';

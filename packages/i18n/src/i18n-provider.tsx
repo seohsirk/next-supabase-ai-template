@@ -26,16 +26,12 @@ export function I18nProvider({
 
 async function withI18nClient(lang: string, resolver: Resolver) {
   if (typeof window !== 'undefined') {
-    client = await loadClientI18n(lang, resolver);
+    const { initializeI18nClient } = await import('./i18n.client');
+
+    client = await initializeI18nClient(lang, resolver);
   } else {
     const { initializeServerI18n } = await import('./i18n.server');
 
     client = await initializeServerI18n(lang, resolver);
   }
-}
-
-async function loadClientI18n(lang: string | undefined, resolver: Resolver) {
-  const { initializeI18nClient } = await import('./i18n.client');
-
-  return initializeI18nClient(lang, resolver);
 }

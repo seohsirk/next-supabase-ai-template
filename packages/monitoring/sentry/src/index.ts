@@ -28,7 +28,6 @@ export async function registerSentryInstrumentation() {
     resource: new Resource({
       [SEMRESATTRS_SERVICE_NAME]: INSTRUMENTATION_SERVICE_NAME,
     }),
-    // @ts-expect-error: an error in the lib
     spanProcessor: new SentrySpanProcessor(),
     textMapPropagator: new SentryPropagator(),
   });

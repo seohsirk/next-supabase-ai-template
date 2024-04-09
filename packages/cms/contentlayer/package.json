@@ -28,7 +28,8 @@
     "@kit/eslint-config": "workspace:*",
     "@kit/prettier-config": "workspace:*",
     "@kit/tsconfig": "workspace:*",
-    "@kit/ui": "*"
+    "@kit/ui": "*",
+    "mdx": "0.3.1"
   },
   "eslintConfig": {
     "root": true,
