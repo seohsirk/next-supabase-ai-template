@@ -18,6 +18,7 @@ import { Badge } from '@kit/ui/badge';
 import { Button } from '@kit/ui/button';
 import { Heading } from '@kit/ui/heading';
 import { If } from '@kit/ui/if';
+import { Separator } from '@kit/ui/separator';
 import { Trans } from '@kit/ui/trans';
 import { cn } from '@kit/ui/utils';
 
@@ -60,7 +61,7 @@ export function PricingTable({
       <div
         className={
           'flex flex-col items-start space-y-6 lg:space-y-0' +
-          ' justify-center lg:flex-row'
+          ' justify-center lg:flex-row lg:space-x-4'
         }
       >
         {config.products.map((product) => {
@@ -151,10 +152,11 @@ function PricingItem(
       data-cy={'subscription-plan'}
       className={cn(
         props.className,
-        `s-full flex flex-1 grow flex-col items-stretch
-            justify-between space-y-8 self-stretch p-6 lg:w-4/12 xl:max-w-[22rem] xl:p-8`,
+        `s-full bg-background flex flex-1 grow flex-col items-stretch justify-between space-y-8 self-stretch
+            rounded-lg border border-transparent p-6 lg:w-4/12 xl:max-w-[22rem] xl:p-8`,
         {
           ['border-primary']: highlighted,
+          ['dark:shadow-primary/20 shadow dark:shadow-sm']: !highlighted,
         },
       )}
     >
@@ -214,7 +216,7 @@ function PricingItem(
                 `animate-in slide-in-from-left-4 fade-in flex items-center space-x-0.5 capitalize`,
               )}
             >
-              <span className={'text-sm'}>
+              <span className={'text-muted-foreground text-sm'}>
                 <If
                   condition={props.plan.interval}
                   fallback={<Trans i18nKey={'billing:lifetime'} />}
@@ -251,6 +253,28 @@ function PricingItem(
           </If>
         </div>
 
+        <If condition={props.selectable}>
+          <If
+            condition={props.plan.id && props.CheckoutButton}
+            fallback={
+              <DefaultCheckoutButton
+                signUpPath={props.paths.signUp}
+                highlighted={highlighted}
+                plan={props.plan}
+              />
+            }
+          >
+            {(CheckoutButton) => (
+              <CheckoutButton
+                highlighted={highlighted}
+                planId={props.plan.id}
+              />
+            )}
+          </If>
+        </If>
+
+        <Separator />
+
         <div className={'flex flex-col space-y-2'}>
           <h6 className={'text-sm font-semibold'}>
             <Trans i18nKey={'billing:featuresLabel'} />
@@ -276,23 +300,6 @@ function PricingItem(
           </div>
         </If>
       </div>
-
-      <If condition={props.selectable}>
-        <If
-          condition={props.plan.id && props.CheckoutButton}
-          fallback={
-            <DefaultCheckoutButton
-              signUpPath={props.paths.signUp}
-              highlighted={highlighted}
-              plan={props.plan}
-            />
-          }
-        >
-          {(CheckoutButton) => (
-            <CheckoutButton highlighted={highlighted} planId={props.plan.id} />
-          )}
-        </If>
-      </If>
     </div>
   );
 }
@@ -373,7 +380,7 @@ function PlanIntervalSwitcher(
             'rounded-r-none border-r-transparent': index === 0,
             'rounded-l-none': index === props.intervals.length - 1,
             ['hover:text-primary border']: !selected,
-            ['font-semibold cursor-default hover:text-initial hover:bg-background border-primary']:
+            ['font-semibold cursor-default hover:text-initial hover:bg-background']:
               selected,
           },
         );

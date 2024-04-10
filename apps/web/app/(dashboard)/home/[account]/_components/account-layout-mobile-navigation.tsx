@@ -81,6 +81,7 @@ export const AccountLayoutMobileNavigation = (
         {Links}
 
         <DropdownMenuSeparator />
+
         <SignOutDropdownItem onSignOut={() => signOut.mutateAsync()} />
       </DropdownMenuContent>
     </DropdownMenu>
@@ -95,10 +96,10 @@ function DropdownLink(
   }>,
 ) {
   return (
-    <DropdownMenuItem asChild key={props.path}>
+    <DropdownMenuItem asChild>
       <Link
         href={props.path}
-        className={'flex h-12 w-full items-center space-x-4'}
+        className={'flex h-12 w-full items-center space-x-2 px-3'}
       >
         {props.Icon}
 
@@ -117,13 +118,13 @@ function SignOutDropdownItem(
 ) {
   return (
     <DropdownMenuItem
-      className={'flex h-12 w-full items-center space-x-4'}
+      className={'flex h-12 w-full items-center space-x-2'}
       onClick={props.onSignOut}
     >
-      <LogOut className={'h-6'} />
+      <LogOut className={'h-4'} />
 
       <span>
-        <Trans i18nKey={'common:signOut'} defaults={'Sign out'} />
+        <Trans i18nKey={'common:signOut'} />
       </span>
     </DropdownMenuItem>
   );
@@ -134,18 +135,16 @@ function OrganizationsModal() {
 
   return (
     <Dialog>
-      <DialogTrigger>
+      <DialogTrigger asChild>
         <DropdownMenuItem
-          className={'h-12'}
+          className={'flex h-12 w-full items-center space-x-2'}
           onSelect={(e) => e.preventDefault()}
         >
-          <button className={'flex items-center space-x-4'}>
-            <Home className={'h-6'} />
+          <Home className={'h-4'} />
 
-            <span>
-              <Trans i18nKey={'common:yourOrganizations'} />
-            </span>
-          </button>
+          <span>
+            <Trans i18nKey={'common:yourOrganizations'} />
+          </span>
         </DropdownMenuItem>
       </DialogTrigger>
 
@@ -156,7 +155,7 @@ function OrganizationsModal() {
           </DialogTitle>
         </DialogHeader>
 
-        <div className={'flex flex-col space-y-6 py-4'}>
+        <div className={'py-16'}>
           <AccountSelector
             onAccountChange={(value) => {
               const path = value

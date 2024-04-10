@@ -32,29 +32,25 @@ async function BlogPage({ searchParams }: { searchParams: { page: string } }) {
   });
 
   return (
-    <div className={'flex flex-col space-y-12'}>
+    <>
       <SitePageHeader
         title={t('marketing:blog')}
         subtitle={t('marketing:blogSubtitle')}
       />
 
-      <If
-        condition={posts.length > 0}
-        fallback={
-          <div className={'container mx-auto pb-12'}>
-            <Trans i18nKey="marketing:noPosts" />
-          </div>
-        }
-      >
-        <div className={'container mx-auto'}>
+      <div className={'container py-12'}>
+        <If
+          condition={posts.length > 0}
+          fallback={<Trans i18nKey="marketing:noPosts" />}
+        >
           <PostsGridList>
             {posts.map((post, idx) => {
               return <PostPreview key={idx} post={post} />;
             })}
           </PostsGridList>
-        </div>
-      </If>
-    </div>
+        </If>
+      </div>
+    </>
   );
 }
 

@@ -246,7 +246,7 @@ export function PlanPicker(
 
                           <div
                             className={
-                              'flex w-full items-center justify-between'
+                              'flex w-full flex-col content-center space-y-2 lg:flex-row lg:items-center lg:justify-between lg:space-y-0'
                             }
                           >
                             <Label
@@ -272,7 +272,7 @@ export function PlanPicker(
 
                             <div
                               className={
-                                'flex items-center space-x-4 text-right'
+                                'flex flex-col space-y-2 lg:flex-row lg:items-center lg:space-x-4 lg:space-y-0 lg:text-right'
                               }
                             >
                               <If
@@ -396,7 +396,7 @@ function PlanDetails({
     <div
       key={key}
       className={
-        'fade-in animate-in zoom-in-95 flex w-full flex-col space-y-4 px-8 py-2'
+        'fade-in animate-in zoom-in-95 flex w-full flex-col space-y-4 py-2 lg:px-8'
       }
     >
       <div className={'flex flex-col space-y-0.5'}>
