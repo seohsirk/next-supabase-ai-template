@@ -6,20 +6,20 @@ export async function generateMetadata() {
   const { t } = await createI18nServerInstance();
 
   return {
-    title: t('marketing.privacyPolicy'),
+    title: t('marketing.contact'),
   };
 }
 
-async function PrivacyPolicyPage() {
+async function ContactPage() {
   const { t } = await createI18nServerInstance();
 
   return (
     <div className={'mt-8'}>
       <div className={'container mx-auto'}>
-        <SitePageHeader title={t('marketing.privacyPolicy')} subtitle={``} />
+        <SitePageHeader title={t(`marketing:contact`)} subtitle={``} />
       </div>
     </div>
   );
 }
 
-export default withI18n(PrivacyPolicyPage);
+export default withI18n(ContactPage);

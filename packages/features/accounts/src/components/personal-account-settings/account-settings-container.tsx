@@ -1,5 +1,7 @@
 'use client';
 
+import { useTranslation } from 'react-i18next';
+
 import {
   Card,
   CardContent,
@@ -8,6 +10,7 @@ import {
   CardTitle,
 } from '@kit/ui/card';
 import { If } from '@kit/ui/if';
+import { LanguageSelector } from '@kit/ui/language-selector';
 import { Trans } from '@kit/ui/trans';
 
 import { AccountDangerZone } from './account-danger-zone';
@@ -28,6 +31,8 @@ export function PersonalAccountSettingsContainer(
     };
   }>,
 ) {
+  const supportsLanguageSelection = useSupportMultiLanguage();
+
   return (
     <div className={'flex w-full flex-col space-y-6 pb-32'}>
       <Card>
@@ -61,6 +66,24 @@ export function PersonalAccountSettingsContainer(
           <UpdateAccountDetailsFormContainer />
         </CardContent>
       </Card>
+
+      <If condition={supportsLanguageSelection}>
+        <Card>
+          <CardHeader>
+            <CardTitle>
+              <Trans i18nKey={'account:language'} />
+            </CardTitle>
+
+            <CardDescription>
+              <Trans i18nKey={'account:languageDescription'} />
+            </CardDescription>
+          </CardHeader>
+
+          <CardContent>
+            <LanguageSelector />
+          </CardContent>
+        </Card>
+      </If>
 
       <Card>
         <CardHeader>
@@ -129,4 +152,9 @@ export function PersonalAccountSettingsContainer(
       </If>
     </div>
   );
+}
+
+function useSupportMultiLanguage() {
+  const { i18n } = useTranslation();
+  return i18n.options.supportedLngs && i18n.options.supportedLngs.length > 1;
 }

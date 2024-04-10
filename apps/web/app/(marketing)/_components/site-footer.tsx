@@ -90,7 +90,7 @@ export function SiteFooter() {
                 <FooterSectionList>
                   <FooterLink>
                     <Link href={'/terms-of-service'}>
-                      <Trans i18nKey={'marketing:tos'} />
+                      <Trans i18nKey={'marketing:termsOfService'} />
                     </Link>
                   </FooterLink>
                   <FooterLink>
