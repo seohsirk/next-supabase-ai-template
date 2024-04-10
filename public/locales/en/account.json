@@ -5,18 +5,12 @@
   "emailTabTabSubheading": "Update your email address",
   "passwordTab": "Password",
   "passwordTabSubheading": "Update your password",
-  "manageConnectedAccounts": "Connected Accounts",
-  "manageConnectedAccountsSubheading": "Manage your connected accounts",
-  "connectedAccounts": "Connected Accounts",
   "homePage": "Home",
   "billingTab": "Billing",
   "settingsTab": "Settings",
   "authenticationTab": "Authentication",
   "multiFactorAuth": "Multi-Factor Authentication",
-  "multiFactorAuthDescription": "Set up  Multi-Factor Authentication method to further secure your account",
-  "connectedAccountsSubheading": "Below are the accounts linked to your profile",
-  "availableProviders": "Available Providers",
-  "availableProvidersSubheading": "Click on the providers below to link your profile to the provider",
+  "multiFactorAuthDescription": "Set up Multi-Factor Authentication method to further secure your account",
   "updateProfileSuccess": "Profile successfully updated",
   "updateProfileError": "Encountered an error. Please try again",
   "updatePasswordSuccess": "Password update request successful",
@@ -141,5 +135,7 @@
   "deleteProfileConfirmationInputLabel": "Type DELETE to confirm",
   "deleteAccountErrorHeading": "Sorry, we couldn't delete your account",
   "needsReauthentication": "Reauthentication Required",
-  "needsReauthenticationDescription": "You need to reauthenticate to change your password. Please sign out and sign in again to change your password."
+  "needsReauthenticationDescription": "You need to reauthenticate to change your password. Please sign out and sign in again to change your password.",
+  "language": "Language",
+  "languageDescription": "Choose your preferred language"
 }

@@ -24,7 +24,14 @@ export async function GET() {
 }
 
 function getSiteUrls() {
-  const urls = ['/', 'faq', 'pricing'];
+  const urls = [
+    '/',
+    '/faq',
+    '/pricing',
+    '/contact',
+    '/terms-of-service',
+    '/privacy-policy',
+  ];
 
   return urls.map((url) => {
     return {
