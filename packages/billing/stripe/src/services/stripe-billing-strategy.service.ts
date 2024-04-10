@@ -21,44 +21,31 @@ import { createStripeClient } from './stripe-sdk';
 export class StripeBillingStrategyService
   implements BillingStrategyProviderService
 {
+  private readonly namespace = 'billing.stripe';
+
   async createCheckoutSession(
     params: z.infer<typeof CreateBillingCheckoutSchema>,
   ) {
     const stripe = await this.stripeProvider();
     const logger = await getLogger();
 
-    logger.info(
-      {
-        name: 'billing.stripe',
-        customerId: params.customerId,
-        accountId: params.accountId,
-      },
-      'Creating checkout session...',
-    );
+    const ctx = {
+      name: this.namespace,
+      customerId: params.customerId,
+      accountId: params.accountId,
+    };
+
+    logger.info(ctx, 'Creating checkout session...');
 
     const { client_secret } = await createStripeCheckout(stripe, params);
 
     if (!client_secret) {
-      logger.error(
-        {
-          name: 'billing.stripe',
-          customerId: params.customerId,
-          accountId: params.accountId,
-        },
-        'Failed to create checkout session',
-      );
+      logger.error(ctx, 'Failed to create checkout session');
 
       throw new Error('Failed to create checkout session');
     }
 
-    logger.info(
-      {
-        name: 'billing.stripe',
-        customerId: params.customerId,
-        accountId: params.accountId,
-      },
-      'Checkout session created successfully',
-    );
+    logger.info(ctx, 'Checkout session created successfully');
 
     return { checkoutToken: client_secret };
   }
@@ -69,32 +56,19 @@ export class StripeBillingStrategyService
     const stripe = await this.stripeProvider();
     const logger = await getLogger();
 
-    logger.info(
-      {
-        name: 'billing.stripe',
-        customerId: params.customerId,
-      },
-      'Creating billing portal session...',
-    );
+    const ctx = {
+      name: this.namespace,
+      customerId: params.customerId,
+    };
+
+    logger.info(ctx, 'Creating billing portal session...');
 
     const session = await createStripeBillingPortalSession(stripe, params);
 
     if (!session?.url) {
-      logger.error(
-        {
-          name: 'billing.stripe',
-          customerId: params.customerId,
-        },
-        'Failed to create billing portal session',
-      );
+      logger.error(ctx, 'Failed to create billing portal session');
     } else {
-      logger.info(
-        {
-          name: 'billing.stripe',
-          customerId: params.customerId,
-        },
-        'Billing portal session created successfully',
-      );
+      logger.info(ctx, 'Billing portal session created successfully');
     }
 
     return session;
@@ -106,34 +80,26 @@ export class StripeBillingStrategyService
     const stripe = await this.stripeProvider();
     const logger = await getLogger();
 
-    logger.info(
-      {
-        name: 'billing.stripe',
-        subscriptionId: params.subscriptionId,
-      },
-      'Cancelling subscription...',
-    );
+    const ctx = {
+      name: this.namespace,
+      subscriptionId: params.subscriptionId,
+    };
+
+    logger.info(ctx, 'Cancelling subscription...');
 
     try {
       await stripe.subscriptions.cancel(params.subscriptionId, {
         invoice_now: params.invoiceNow ?? true,
       });
 
-      logger.info(
-        {
-          name: 'billing.stripe',
-          subscriptionId: params.subscriptionId,
-        },
-        'Subscription cancelled successfully',
-      );
+      logger.info(ctx, 'Subscription cancelled successfully');
 
       return { success: true };
-    } catch (e) {
+    } catch (error) {
       logger.error(
         {
-          name: 'billing.stripe',
-          subscriptionId: params.subscriptionId,
-          error: e,
+          ...ctx,
+          error,
         },
         'Failed to cancel subscription',
       );
@@ -148,25 +114,18 @@ export class StripeBillingStrategyService
     const stripe = await this.stripeProvider();
     const logger = await getLogger();
 
-    logger.info(
-      {
-        name: 'billing.stripe',
-        sessionId: params.sessionId,
-      },
-      'Retrieving checkout session...',
-    );
+    const ctx = {
+      name: this.namespace,
+      sessionId: params.sessionId,
+    };
+
+    logger.info(ctx, 'Retrieving checkout session...');
 
     try {
       const session = await stripe.checkout.sessions.retrieve(params.sessionId);
       const isSessionOpen = session.status === 'open';
 
-      logger.info(
-        {
-          name: 'billing.stripe',
-          sessionId: params.sessionId,
-        },
-        'Checkout session retrieved successfully',
-      );
+      logger.info(ctx, 'Checkout session retrieved successfully');
 
       return {
         checkoutToken: session.client_secret,
@@ -179,8 +138,7 @@ export class StripeBillingStrategyService
     } catch (error) {
       logger.error(
         {
-          name: 'billing.stripe',
-          sessionId: params.sessionId,
+          ...ctx,
           error,
         },
         'Failed to retrieve checkout session',
@@ -192,14 +150,35 @@ export class StripeBillingStrategyService
 
   async reportUsage(params: z.infer<typeof ReportBillingUsageSchema>) {
     const stripe = await this.stripeProvider();
+    const logger = await getLogger();
 
-    await stripe.subscriptionItems.createUsageRecord(
-      params.subscriptionItemId,
-      {
-        quantity: params.usage.quantity,
-        action: params.usage.action,
-      },
-    );
+    const ctx = {
+      name: this.namespace,
+      subscriptionItemId: params.subscriptionItemId,
+      usage: params.usage,
+    };
+
+    logger.info(ctx, 'Reporting usage...');
+
+    try {
+      await stripe.subscriptionItems.createUsageRecord(
+        params.subscriptionItemId,
+        {
+          quantity: params.usage.quantity,
+          action: params.usage.action,
+        },
+      );
+    } catch (error) {
+      logger.error(
+        {
+          ...ctx,
+          error,
+        },
+        'Failed to report usage',
+      );
+
+      throw new Error('Failed to report usage');
+    }
 
     return { success: true };
   }
@@ -210,13 +189,14 @@ export class StripeBillingStrategyService
     const stripe = await this.stripeProvider();
     const logger = await getLogger();
 
-    logger.info(
-      {
-        name: 'billing.stripe',
-        ...params,
-      },
-      'Updating subscription...',
-    );
+    const ctx = {
+      name: this.namespace,
+      subscriptionId: params.subscriptionId,
+      subscriptionItemId: params.subscriptionItemId,
+      quantity: params.quantity,
+    };
+
+    logger.info(ctx, 'Updating subscription...');
 
     try {
       await stripe.subscriptions.update(params.subscriptionId, {
@@ -228,24 +208,11 @@ export class StripeBillingStrategyService
         ],
       });
 
-      logger.info(
-        {
-          name: 'billing.stripe',
-          ...params,
-        },
-        'Subscription updated successfully',
-      );
+      logger.info(ctx, 'Subscription updated successfully');
 
       return { success: true };
-    } catch (e) {
-      logger.error(
-        {
-          name: 'billing.stripe',
-          ...params,
-          error: e,
-        },
-        'Failed to update subscription',
-      );
+    } catch (error) {
+      logger.error({ ...ctx, error }, 'Failed to update subscription');
 
       throw new Error('Failed to update subscription');
     }

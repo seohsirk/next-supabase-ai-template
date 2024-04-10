@@ -167,7 +167,18 @@ const ProductSchema = z
           'Badge for the product. Displayed to the user. Example: "Popular"',
       })
       .optional(),
-    features: z.array(z.string()).nonempty(),
+    features: z
+      .array(
+        z.string({
+          description: 'Features of the product. Displayed to the user.',
+        }),
+      )
+      .nonempty(),
+    enableDiscountField: z
+      .boolean({
+        description: 'Enable discount field for the product in the checkout.',
+      })
+      .optional(),
     highlighted: z
       .boolean({
         description: 'Highlight this product. Displayed to the user.',

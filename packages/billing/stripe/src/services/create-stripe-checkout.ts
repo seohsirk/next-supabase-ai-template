@@ -76,6 +76,7 @@ export async function createStripeCheckout(
 
   return stripe.checkout.sessions.create({
     mode,
+    allow_promotion_codes: params.enableDiscountField,
     ui_mode: uiMode,
     line_items: lineItems,
     client_reference_id: clientReferenceId,

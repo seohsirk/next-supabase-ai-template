@@ -17,6 +17,8 @@ import billingConfig from '~/config/billing.config';
 import pathsConfig from '~/config/paths.config';
 
 export class UserBillingService {
+  private readonly namespace = 'billing.personal-account';
+
   constructor(private readonly client: SupabaseClient<Database>) {}
 
   async createCheckoutSession({
@@ -73,6 +75,7 @@ export class UserBillingService {
         customerId,
         plan,
         variantQuantities: [],
+        enableDiscountField: product.enableDiscountField,
       });
 
       logger.info(
@@ -111,6 +114,7 @@ export class UserBillingService {
     }
 
     const service = await getBillingGatewayProvider(this.client);
+    const logger = await getLogger();
 
     const accountId = data.id;
     const customerId = await getCustomerIdFromAccountId(accountId);
@@ -120,14 +124,14 @@ export class UserBillingService {
       throw new Error('Customer not found');
     }
 
-    const logger = await getLogger();
+    const ctx = {
+      name: this.namespace,
+      customerId,
+      accountId,
+    };
 
     logger.info(
-      {
-        name: `billing.personal-account`,
-        customerId,
-        accountId,
-      },
+      ctx,
       `User requested a Billing Portal session. Contacting provider...`,
     );
 
@@ -144,8 +148,7 @@ export class UserBillingService {
       logger.error(
         {
           error,
-          customerId,
-          accountId,
+          ...ctx,
         },
         `Failed to create a Billing Portal session`,
       );
@@ -155,14 +158,7 @@ export class UserBillingService {
       );
     }
 
-    logger.info(
-      {
-        name: `billing.personal-account`,
-        customerId,
-        accountId,
-      },
-      `Session successfully created.`,
-    );
+    logger.info(ctx, `Session successfully created.`);
 
     // redirect user to billing portal
     return url;

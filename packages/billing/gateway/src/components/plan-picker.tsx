@@ -153,6 +153,10 @@ export function PlanPicker(
                                   id={interval}
                                   value={interval}
                                   onClick={() => {
+                                    form.setValue('interval', interval, {
+                                      shouldValidate: true,
+                                    });
+
                                     if (selectedProduct) {
                                       const plan = selectedProduct.plans.find(
                                         (item) => item.interval === interval,
@@ -160,12 +164,10 @@ export function PlanPicker(
 
                                       form.setValue('planId', plan?.id ?? '', {
                                         shouldValidate: true,
+                                        shouldDirty: true,
+                                        shouldTouch: true,
                                       });
                                     }
-
-                                    form.setValue('interval', interval, {
-                                      shouldValidate: true,
-                                    });
                                   }}
                                 />
 
@@ -202,7 +204,7 @@ export function PlanPicker(
                 </FormLabel>
 
                 <FormControl>
-                  <RadioGroup name={field.name}>
+                  <RadioGroup value={field.value} name={field.name}>
                     {props.config.products.map((product) => {
                       const plan = product.plans.find((item) => {
                         if (item.paymentType === 'one-time') {
@@ -216,9 +218,12 @@ export function PlanPicker(
                         return null;
                       }
 
+                      const planId = plan.id;
+                      const selected = field.value === planId;
+
                       const primaryLineItem = getPrimaryLineItem(
                         props.config,
-                        plan.id,
+                        planId,
                       );
 
                       if (!primaryLineItem) {
@@ -227,14 +232,19 @@ export function PlanPicker(
 
                       return (
                         <RadioGroupItemLabel
-                          selected={field.value === plan.id}
-                          key={plan.id}
+                          selected={selected}
+                          key={primaryLineItem.id}
                         >
                           <RadioGroupItem
+                            key={plan.id + selected}
                             id={plan.id}
                             value={plan.id}
                             onClick={() => {
-                              form.setValue('planId', plan.id, {
+                              if (selected) {
+                                return;
+                              }
+
+                              form.setValue('planId', planId, {
                                 shouldValidate: true,
                               });
 

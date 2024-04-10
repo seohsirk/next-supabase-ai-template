@@ -52,6 +52,7 @@ export async function createLemonSqueezyCheckout(
       embed: true,
       media: true,
       logo: true,
+      discount: params.enableDiscountField ?? false,
     },
     checkoutData: {
       email: customerEmail,

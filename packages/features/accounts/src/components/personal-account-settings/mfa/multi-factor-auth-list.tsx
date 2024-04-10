@@ -85,7 +85,7 @@ export function MultiFactorAuthFactorsList() {
   if (!allFactors.length) {
     return (
       <div className={'flex flex-col space-y-4'}>
-        <Alert variant={'info'}>
+        <Alert>
           <ShieldCheck className={'h-4'} />
 
           <AlertTitle>

@@ -9,6 +9,7 @@ export const CreateBillingCheckoutSchema = z.object({
   trialDays: z.number().optional(),
   customerId: z.string().optional(),
   customerEmail: z.string().email().optional(),
+  enableDiscountField: z.boolean().optional(),
   variantQuantities: z.array(
     z.object({
       variantId: z.string().min(1),

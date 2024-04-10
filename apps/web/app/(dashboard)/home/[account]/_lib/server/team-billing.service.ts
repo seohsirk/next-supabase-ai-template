@@ -38,14 +38,13 @@ export class TeamBillingService {
     const accountId = params.accountId;
     const logger = await getLogger();
 
-    logger.info(
-      {
-        userId,
-        accountId,
-        name: this.namespace,
-      },
-      `Requested checkout session. Processing...`,
-    );
+    const ctx = {
+      userId,
+      accountId,
+      name: this.namespace,
+    };
+
+    logger.info(ctx, `Requested checkout session. Processing...`);
 
     // verify permissions to manage billing
     const hasPermission = await getBillingPermissionsForAccountId(
@@ -57,11 +56,7 @@ export class TeamBillingService {
     // then we should not proceed
     if (!hasPermission) {
       logger.warn(
-        {
-          userId,
-          accountId,
-          name: this.namespace,
-        },
+        ctx,
         `User without permissions attempted to create checkout.`,
       );
 
@@ -74,7 +69,7 @@ export class TeamBillingService {
 
     // retrieve the plan from the configuration
     // so we can assign the correct checkout data
-    const plan = getPlan(params.productId, params.planId);
+    const { plan, product } = getPlanDetails(params.productId, params.planId);
 
     // find the customer ID for the account if it exists
     // (eg. if the account has been billed before)
@@ -94,10 +89,8 @@ export class TeamBillingService {
 
     logger.info(
       {
-        userId,
-        accountId,
+        ...ctx,
         planId: plan.id,
-        namespace: this.namespace,
       },
       `Creating checkout session...`,
     );
@@ -111,6 +104,7 @@ export class TeamBillingService {
         customerEmail,
         customerId,
         variantQuantities,
+        enableDiscountField: product.enableDiscountField,
       });
 
       // return the checkout token to the client
@@ -121,10 +115,8 @@ export class TeamBillingService {
     } catch (error) {
       logger.error(
         {
-          name: this.namespace,
+          ...ctx,
           error,
-          accountId,
-          planId: plan.id,
         },
         `Error creating the checkout session`,
       );
@@ -338,7 +330,7 @@ async function getCustomerIdFromAccountId(
   return data?.customer_id;
 }
 
-function getPlan(productId: string, planId: string) {
+function getPlanDetails(productId: string, planId: string) {
   const product = billingConfig.products.find(
     (product) => product.id === productId,
   );
@@ -353,5 +345,5 @@ function getPlan(productId: string, planId: string) {
     throw new Error('Plan not found');
   }
 
-  return plan;
+  return { plan, product };
 }
