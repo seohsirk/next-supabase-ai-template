@@ -5,10 +5,12 @@
 export async function register() {
   // only run in nodejs runtime
   if (process.env.NEXT_RUNTIME === 'nodejs') {
-    const { registerInstrumentation } = await import('@kit/monitoring');
+    const { registerMonitoringInstrumentation } = await import(
+      '@kit/monitoring'
+    );
 
     // Register monitoring instrumentation based on the
     // MONITORING_INSTRUMENTATION_PROVIDER environment variable.
-    return registerInstrumentation();
+    return registerMonitoringInstrumentation();
   }
 }

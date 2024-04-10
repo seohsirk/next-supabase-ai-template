@@ -21,6 +21,7 @@ export function PostPreview({
 }: React.PropsWithChildren<Props>) {
   const { title, image, publishedAt, description } = post;
   const height = imageHeight ?? DEFAULT_IMAGE_HEIGHT;
+
   const slug = `/blog/${post.slug}`;
 
   return (

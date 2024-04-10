@@ -6,7 +6,7 @@ import { PostHeader } from './post-header';
 
 export const Post: React.FC<{
   post: Cms.ContentItem;
-  content: string;
+  content: unknown;
 }> = ({ post, content }) => {
   return (
     <div>
