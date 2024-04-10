@@ -25,7 +25,7 @@ export class WordpressClient implements CmsClient {
    *
    * @param {Cms.GetContentItemsOptions} options - The options to customize the retrieval of content items.
    */
-  async getContentItems(options?: Cms.GetContentItemsOptions) {
+  async getContentItems(options: Cms.GetContentItemsOptions) {
     const queryParams = new URLSearchParams({
       _embed: 'true',
     });
@@ -70,20 +70,21 @@ export class WordpressClient implements CmsClient {
     }
 
     const endpoints = [
-      `/wp-json/wp/v2/pages?${queryParams.toString()}`,
       `/wp-json/wp/v2/posts?${queryParams.toString()}`,
+      `/wp-json/wp/v2/pages?${queryParams.toString()}`,
     ];
 
-    const urls = endpoints.map((endpoint) => `${this.apiUrl}${endpoint}`);
+    const endpoint =
+      options.collection === 'posts' ? endpoints[0] : endpoints[1];
 
-    const responses = await Promise.all(
-      urls.map((url) =>
-        fetch(url).then((value) => value.json() as Promise<WP_REST_API_Post[]>),
-      ),
-    ).then((values) => values.flat().filter(Boolean));
+    const url = `${this.apiUrl}${endpoint}`;
 
-    return await Promise.all(
-      responses.map(async (item: WP_REST_API_Post) => {
+    const posts = await fetch(url).then(
+      (value) => value.json() as Promise<WP_REST_API_Post[]>,
+    );
+
+    return Promise.all(
+      posts.map(async (item: WP_REST_API_Post) => {
         let parentId: string | undefined;
 
         if (!item) {
@@ -94,7 +95,6 @@ export class WordpressClient implements CmsClient {
           parentId = item.parent.toString();
         }
 
-        const author = await this.getAuthor(item.author);
         const categories = await this.getCategoriesByIds(item.categories ?? []);
         const tags = await this.getTagsByIds(item.tags ?? []);
         const image = item.featured_media ? this.getFeaturedMedia(item) : '';
@@ -109,7 +109,6 @@ export class WordpressClient implements CmsClient {
           url: item.link,
           slug: item.slug,
           publishedAt: new Date(item.date),
-          author: author?.name,
           categories: categories,
           tags: tags,
           parentId,
@@ -120,34 +119,35 @@ export class WordpressClient implements CmsClient {
     );
   }
 
-  async getContentItemById(slug: string) {
+  async getContentItemBySlug({
+    slug,
+    collection,
+  }: {
+    slug: string;
+    collection: string;
+  }) {
     const searchParams = new URLSearchParams({
       _embed: 'true',
       slug,
     });
 
     const endpoints = [
-      `/wp-json/wp/v2/pages?${searchParams.toString()}`,
       `/wp-json/wp/v2/posts?${searchParams.toString()}`,
+      `/wp-json/wp/v2/pages?${searchParams.toString()}`,
     ];
 
-    const promises = endpoints.map((endpoint) =>
-      fetch(this.apiUrl + endpoint).then(
-        (res) => res.json() as Promise<WP_REST_API_Post[]>,
-      ),
+    const endpoint = collection === 'posts' ? endpoints[0] : endpoints[1];
+
+    const responses = await fetch(this.apiUrl + endpoint).then(
+      (res) => res.json() as Promise<WP_REST_API_Post[]>,
     );
 
-    const responses = await Promise.all(promises).then((values) =>
-      values.filter(Boolean),
-    );
-
-    const item = responses[0] ? responses[0][0] : undefined;
+    const item = responses[0];
 
     if (!item) {
       return;
     }
 
-    const author = await this.getAuthor(item.author);
     const categories = await this.getCategoriesByIds(item.categories ?? []);
     const tags = await this.getTagsByIds(item.tags ?? []);
     const image = item.featured_media ? this.getFeaturedMedia(item) : '';
@@ -163,7 +163,6 @@ export class WordpressClient implements CmsClient {
       content: item.content.rendered,
       slug: item.slug,
       publishedAt: new Date(item.date),
-      author: author?.name,
       categories,
       tags,
       parentId: item.parent?.toString(),
@@ -311,18 +310,6 @@ export class WordpressClient implements CmsClient {
       name: item.name,
       slug: item.slug,
     }));
-  }
-
-  private async getAuthor(id: number) {
-    const response = await fetch(`${this.apiUrl}/wp-json/wp/v2/users/${id}`);
-
-    if (!response.ok) {
-      return undefined;
-    }
-
-    const data = await response.json();
-
-    return { name: data.name };
   }
 
   private getFeaturedMedia(post: WP_REST_API_Post) {

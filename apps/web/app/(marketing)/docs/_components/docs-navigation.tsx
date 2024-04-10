@@ -40,11 +40,14 @@ const Node: React.FC<{
   level: number;
   activePath: string;
 }> = ({ node, level, activePath }) => {
+  const pathPrefix = `/docs`;
+  const url = `${pathPrefix}/${node.url}`;
+
   return (
     <>
       <DocsNavLink
         label={node.title}
-        url={node.url}
+        url={url}
         level={level}
         activePath={activePath}
       />

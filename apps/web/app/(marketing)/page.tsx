@@ -76,7 +76,7 @@ function Home() {
             }
             width={3069}
             height={1916}
-            src={`/assets/images/dashboard-demo.webp`}
+            src={`/images/dashboard-demo.webp`}
             alt={`App Image`}
           />
         </div>
@@ -135,7 +135,7 @@ function Home() {
             <RightFeatureContainer>
               <Image
                 className="rounded-2xl"
-                src={'/assets/images/sign-in.webp'}
+                src={'/images/sign-in.webp'}
                 width={'626'}
                 height={'683'}
                 alt={'Sign In'}
@@ -147,7 +147,7 @@ function Home() {
             <LeftFeatureContainer>
               <Image
                 className="rounded-2xl"
-                src={'/assets/images/dashboard.webp'}
+                src={'/images/dashboard.webp'}
                 width={'887'}
                 height={'743'}
                 alt={'Dashboard'}

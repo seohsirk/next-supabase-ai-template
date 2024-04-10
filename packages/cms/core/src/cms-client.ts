@@ -6,7 +6,6 @@ export namespace Cms {
     url: string;
     description: string | undefined;
     content: unknown;
-    author: string;
     publishedAt: Date;
     image: string | undefined;
     slug: string;
@@ -30,6 +29,7 @@ export namespace Cms {
   }
 
   export interface GetContentItemsOptions {
+    collection: string;
     limit?: number;
     offset?: number;
     categories?: string[];
@@ -65,10 +65,12 @@ export abstract class CmsClient {
 
   /**
    * Retrieves a content item by its ID and type.
-   * @param id - The ID of the content item.
    * @returns A promise that resolves to the content item, or undefined if not found.
    */
-  abstract getContentItemById(id: string): Promise<Cms.ContentItem | undefined>;
+  abstract getContentItemBySlug(params: {
+    slug: string;
+    collection: string;
+  }): Promise<Cms.ContentItem | undefined>;
 
   /**
    * Retrieves categories based on the provided options.

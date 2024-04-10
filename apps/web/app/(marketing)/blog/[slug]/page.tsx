@@ -1,3 +1,5 @@
+import { cache } from 'react';
+
 import type { Metadata } from 'next';
 
 import { notFound } from 'next/navigation';
@@ -8,13 +10,18 @@ import { withI18n } from '~/lib/i18n/with-i18n';
 
 import { Post } from '../../blog/_components/post';
 
+const getPostBySlug = cache(async (slug: string) => {
+  const client = await createCmsClient();
+
+  return client.getContentItemBySlug({ slug, collection: 'posts' });
+});
+
 export async function generateMetadata({
   params,
 }: {
   params: { slug: string };
 }): Promise<Metadata | undefined> {
-  const cms = await createCmsClient();
-  const post = await cms.getContentItemById(params.slug);
+  const post = await getPostBySlug(params.slug);
 
   if (!post) {
     notFound();
@@ -29,7 +36,7 @@ export async function generateMetadata({
       title,
       description,
       type: 'article',
-      publishedTime: publishedAt.toDateString(),
+      publishedTime: publishedAt?.toDateString(),
       url: post.url,
       images: image
         ? [
@@ -49,8 +56,7 @@ export async function generateMetadata({
 }
 
 async function BlogPost({ params }: { params: { slug: string } }) {
-  const cms = await createCmsClient();
-  const post = await cms.getContentItemById(params.slug);
+  const post = await getPostBySlug(params.slug);
 
   if (!post) {
     notFound();

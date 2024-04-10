@@ -14,7 +14,7 @@ import { DocsCards } from '../_components/docs-cards';
 const getPageBySlug = cache(async (slug: string) => {
   const client = await createCmsClient();
 
-  return client.getContentItemById(slug);
+  return client.getContentItemBySlug({ slug, collection: 'documentation' });
 });
 
 interface PageParams {

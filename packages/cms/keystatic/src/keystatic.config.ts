@@ -27,7 +27,6 @@ function createKeyStaticConfig(path: string) {
           tags: fields.array(fields.text({ label: 'Tag' })),
           description: fields.text({ label: 'Description' }),
           publishedAt: fields.date({ label: 'Published At' }),
-          author: fields.text({ label: 'Author' }),
           parent: fields.relationship({
             label: 'Parent',
             collection: 'posts',
@@ -50,6 +49,46 @@ function createKeyStaticConfig(path: string) {
               },
             },
           }),
+        },
+      }),
+      documentation: collection({
+        label: 'Documentation',
+        slugField: 'title',
+        path: `${path}/documentation/**`,
+        format: { contentField: 'content' },
+        schema: {
+          title: fields.slug({ name: { label: 'Title' } }),
+          content: fields.document({
+            label: 'Content',
+            formatting: true,
+            dividers: true,
+            links: true,
+            images: {
+              directory: 'public/site/images',
+              publicPath: '/site/images',
+              schema: {
+                title: fields.text({
+                  label: 'Caption',
+                  description:
+                    'The text to display under the image in a caption.',
+                }),
+              },
+            },
+          }),
+          image: fields.image({
+            label: 'Image',
+            directory: 'public/site/images',
+            publicPath: '/site/images',
+          }),
+          description: fields.text({ label: 'Description' }),
+          publishedAt: fields.date({ label: 'Published At' }),
+          order: fields.number({ label: 'Order' }),
+          parent: fields.relationship({
+            label: 'Parent',
+            collection: 'documentation',
+          }),
+          categories: fields.array(fields.text({ label: 'Category' })),
+          tags: fields.array(fields.text({ label: 'Tag' })),
         },
       }),
     },

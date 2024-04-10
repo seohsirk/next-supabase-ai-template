@@ -12,7 +12,7 @@ export const Post: React.FC<{
     <div>
       <PostHeader post={post} />
 
-      <div className={'mx-auto flex max-w-2xl flex-col space-y-6'}>
+      <div className={'mx-auto flex max-w-2xl flex-col space-y-6 py-8'}>
         <article className={styles.HTML}>
           <ContentRenderer content={content} />
         </article>

@@ -31,11 +31,11 @@ function getOAuthProviderLogos(): Record<string, string | React.ReactNode> {
   return {
     password: <AtSign className={'s-[18px]'} />,
     phone: <Phone className={'s-[18px]'} />,
-    google: '/assets/images/google.webp',
-    facebook: '/assets/images/facebook.webp',
-    twitter: '/assets/images/twitter.webp',
-    github: '/assets/images/github.webp',
-    microsoft: '/assets/images/microsoft.webp',
-    apple: '/assets/images/apple.webp',
+    google: '/images/oauth/google.webp',
+    facebook: '/images/oauth/facebook.webp',
+    twitter: '/images/oauth/twitter.webp',
+    github: '/images/oauth/github.webp',
+    microsoft: '/images/oauth/microsoft.webp',
+    apple: '/images/oauth/apple.webp',
   };
 }

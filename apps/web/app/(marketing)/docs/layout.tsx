@@ -6,8 +6,10 @@ async function DocsLayout({ children }: React.PropsWithChildren) {
   const cms = await createCmsClient();
 
   const pages = await cms.getContentItems({
-    categories: ['documentation'],
+    collection: 'documentation',
   });
+
+  console.log(pages);
 
   return (
     <div className={'flex'}>

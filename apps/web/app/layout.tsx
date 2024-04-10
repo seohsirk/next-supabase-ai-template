@@ -66,9 +66,9 @@ export const metadata = {
     description: appConfig.description,
   },
   icons: {
-    icon: '/assets/images/favicon/favicon.ico',
+    icon: '/images/favicon/favicon.ico',
     shortcut: '/shortcut-icon.png',
-    apple: '/assets/images/favicon/apple-touch-icon.png',
+    apple: '/images/favicon/apple-touch-icon.png',
     other: {
       rel: 'apple-touch-icon-precomposed',
       url: '/apple-touch-icon-precomposed.png',

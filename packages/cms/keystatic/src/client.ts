@@ -9,8 +9,15 @@ const reader = createReader('.', config);
 type EntryProps = Entry<(typeof config)['collections']['posts']>;
 
 export class KeystaticClient implements CmsClient {
-  async getContentItems(options?: Cms.GetContentItemsOptions) {
-    const docs = await reader.collections.posts.all();
+  async getContentItems(options: Cms.GetContentItemsOptions) {
+    const collection =
+      options.collection as keyof (typeof config)['collections'];
+
+    if (!reader.collections[collection]) {
+      throw new Error(`Collection ${collection} not found`);
+    }
+
+    const docs = await reader.collections[collection].all();
 
     const startOffset = options?.offset ?? 0;
     const endOffset = startOffset + (options?.limit ?? 10);
@@ -44,21 +51,26 @@ export class KeystaticClient implements CmsClient {
             (item) => item.entry.parent === item.slug,
           );
 
-          console.log(item);
-
           return this.mapPost(item, children);
         }),
     );
   }
 
-  async getContentItemById(id: string) {
-    const doc = await reader.collections.posts.read(id);
+  async getContentItemBySlug(params: { slug: string; collection: string }) {
+    const collection =
+      params.collection as keyof (typeof config)['collections'];
+
+    if (!reader.collections[collection]) {
+      throw new Error(`Collection ${collection} not found`);
+    }
+
+    const doc = await reader.collections[collection].read(params.slug);
 
     if (!doc) {
       return Promise.resolve(undefined);
     }
 
-    return this.mapPost({ entry: doc, slug: id }, []);
+    return this.mapPost({ entry: doc, slug: params.slug }, []);
   }
 
   async getCategories() {
@@ -96,7 +108,6 @@ export class KeystaticClient implements CmsClient {
       slug: item.slug,
       description: item.entry.description,
       publishedAt,
-      author: item.entry.author,
       content,
       image: item.entry.image ?? undefined,
       categories:
