@@ -173,6 +173,7 @@ create policy "public config can be read by authenticated users" on
     for select to authenticated
         using (true);
 
+-- Function to get the config settings
 create or replace function public.get_config()
     returns json
     as $$
@@ -215,8 +216,7 @@ end
 $$
 language plpgsql;
 
--- Automatically set user tracking on tables when a row is inserted or
---   updated
+-- Automatically set user tracking on tables when a row is inserted or updated
 create or replace function public.trigger_set_user_tracking()
     returns trigger
     as $$
@@ -240,6 +240,7 @@ language plpgsql;
 
 grant execute on function public.get_config() to authenticated, service_role;
 
+-- check if a field is set in the config
 create or replace function public.is_set(field_name text)
     returns boolean
     as $$
@@ -278,6 +279,7 @@ create table if not exists public.accounts(
     created_by uuid references auth.users,
     updated_by uuid references auth.users,
     picture_url varchar(1000),
+    public_data jsonb default '{}'::jsonb not null,
     primary key (id)
 );
 
@@ -1733,6 +1735,7 @@ public.is_set(
         'enable_team_accounts')
         and public.accounts.is_personal_account = false);
 
+-- Function: create an invitation to an account
 create or replace function public.create_invitation(account_id uuid,
     email text, role varchar(50))
     returns public.invitations
@@ -1765,30 +1768,10 @@ end;
 $$
 language plpgsql;
 
-create or replace function public.get_user_accounts()
-    returns setof public.accounts
-    as $$
-begin
-    select
-        id,
-        name,
-        picture_url
-    from
-        public.accounts
-	join public.accounts_memberships on accounts.id =
-	    accounts_memberships.account_id
-    where
-        accounts_memberships.user_id = auth.uid();
-
-end;
-
-$$
-language plpgsql;
-
+--
+-- VIEW "user_account_workspace":
 -- we create a view to load the general app data for the authenticated
---   user
---     which includes the user's accounts, memberships, and roles, and
---   relative subscription status
+-- user which includes the user's accounts, memberships, and roles, and relative subscription status
 create or replace view public.user_account_workspace as
 select
     accounts.id as id,
@@ -1804,6 +1787,10 @@ where
 
 grant select on public.user_account_workspace to authenticated, service_role;
 
+--
+-- VIEW "user_accounts":
+-- we create a view to load the user's accounts and memberships
+-- useful to display the user's accounts in the app
 create or replace view public.user_accounts as
 select
     accounts.id as id,
@@ -1821,6 +1808,9 @@ where
 
 grant select on public.user_accounts to authenticated, service_role;
 
+--
+-- Function: get the account workspace for an organization account
+-- to load all the required data for the authenticated user within the account scope
 create or replace function
     public.organization_account_workspace(account_slug text)
     returns table(
@@ -1872,6 +1862,7 @@ language plpgsql;
 grant execute on function public.organization_account_workspace(text)
     to authenticated, service_role;
 
+-- Functions: get account members
 create or replace function public.get_account_members(account_slug text)
     returns table(
         id uuid,
@@ -1961,7 +1952,6 @@ create type kit.invitation as (
     email text,
     role varchar( 50));
 
--- Then, modify your function to use this type
 create or replace function
     public.add_invitations_to_account(account_slug text, invitations
     kit.invitation[])

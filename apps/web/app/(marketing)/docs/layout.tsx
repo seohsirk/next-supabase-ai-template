@@ -5,11 +5,9 @@ import { DocsNavigation } from '~/(marketing)/docs/_components/docs-navigation';
 async function DocsLayout({ children }: React.PropsWithChildren) {
   const cms = await createCmsClient();
 
-  const pages = await cms.getContentItems({
+  const { items: pages } = await cms.getContentItems({
     collection: 'documentation',
   });
-
-  console.log(pages);
 
   return (
     <div className={'flex'}>

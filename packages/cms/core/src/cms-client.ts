@@ -59,9 +59,10 @@ export abstract class CmsClient {
    * @param options - Options for filtering and pagination.
    * @returns A promise that resolves to an array of content items.
    */
-  abstract getContentItems(
-    options?: Cms.GetContentItemsOptions,
-  ): Promise<Cms.ContentItem[]>;
+  abstract getContentItems(options?: Cms.GetContentItemsOptions): Promise<{
+    total: number;
+    items: Cms.ContentItem[];
+  }>;
 
   /**
    * Retrieves a content item by its ID and type.

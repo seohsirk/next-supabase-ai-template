@@ -23,7 +23,7 @@ async function BlogPage({ searchParams }: { searchParams: { page: string } }) {
   const limit = 10;
   const offset = page * limit;
 
-  const posts = await cms.getContentItems({
+  const { items: posts, total } = await cms.getContentItems({
     collection: 'posts',
     limit,
     offset,

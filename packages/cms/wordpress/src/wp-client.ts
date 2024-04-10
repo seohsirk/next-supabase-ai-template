@@ -79,12 +79,14 @@ export class WordpressClient implements CmsClient {
 
     const url = `${this.apiUrl}${endpoint}`;
 
-    const posts = await fetch(url).then(
-      (value) => value.json() as Promise<WP_REST_API_Post[]>,
-    );
+    const response = await fetch(url);
+    const totalHeader = response.headers.get('X-WP-Total');
 
-    return Promise.all(
-      posts.map(async (item: WP_REST_API_Post) => {
+    const total = totalHeader ? Number(totalHeader) : 0;
+    const results = (await response.json()) as WP_REST_API_Post[];
+
+    const posts = await Promise.all(
+      results.map(async (item: WP_REST_API_Post) => {
         let parentId: string | undefined;
 
         if (!item) {
@@ -117,6 +119,11 @@ export class WordpressClient implements CmsClient {
         };
       }),
     );
+
+    return {
+      total,
+      items: posts,
+    };
   }
 
   async getContentItemBySlug({

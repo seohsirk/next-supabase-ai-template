@@ -22,38 +22,40 @@ export class KeystaticClient implements CmsClient {
     const startOffset = options?.offset ?? 0;
     const endOffset = startOffset + (options?.limit ?? 10);
 
-    return Promise.all(
-      docs
-        .filter((item) => {
-          const categoryMatch = options?.categories
-            ? options.categories.find((category) =>
-                item.entry.categories.includes(category),
-              )
-            : true;
+    const filtered = docs.filter((item) => {
+      const categoryMatch = options?.categories
+        ? options.categories.find((category) =>
+            item.entry.categories.includes(category),
+          )
+        : true;
 
-          if (!categoryMatch) {
-            return false;
-          }
+      if (!categoryMatch) {
+        return false;
+      }
 
-          const tagMatch = options?.tags
-            ? options.tags.find((tag) => item.entry.tags.includes(tag))
-            : true;
+      const tagMatch = options?.tags
+        ? options.tags.find((tag) => item.entry.tags.includes(tag))
+        : true;
 
-          if (!tagMatch) {
-            return false;
-          }
+      if (!tagMatch) {
+        return false;
+      }
 
-          return true;
-        })
-        .slice(startOffset, endOffset)
-        .map(async (item) => {
-          const children = docs.filter(
-            (item) => item.entry.parent === item.slug,
-          );
+      return true;
+    });
 
-          return this.mapPost(item, children);
-        }),
+    const items = await Promise.all(
+      filtered.slice(startOffset, endOffset).map(async (item) => {
+        const children = docs.filter((item) => item.entry.parent === item.slug);
+
+        return this.mapPost(item, children);
+      }),
     );
+
+    return {
+      total: filtered.length,
+      items,
+    };
   }
 
   async getContentItemBySlug(params: { slug: string; collection: string }) {

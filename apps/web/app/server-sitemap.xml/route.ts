@@ -9,14 +9,14 @@ invariant(appConfig.url, 'No NEXT_PUBLIC_SITE_URL environment variable found');
 
 export async function GET() {
   const urls = getSiteUrls();
-  const client = await createCmsClient();
-  const contentItems = await client.getContentItems();
+
+  const items = await getAllItems();
 
   return getServerSideSitemap([
     ...urls,
-    ...contentItems.map((item) => {
+    ...items.map((path) => {
       return {
-        loc: new URL(item.url, appConfig.url).href,
+        loc: new URL(path, appConfig.url).href,
         lastmod: new Date().toISOString(),
       };
     }),
@@ -32,4 +32,24 @@ function getSiteUrls() {
       lastmod: new Date().toISOString(),
     };
   });
+}
+
+async function getAllItems() {
+  const client = await createCmsClient();
+
+  const posts = client
+    .getContentItems({
+      collection: 'posts',
+    })
+    .then((response) => response.items)
+    .then((posts) => posts.map((post) => `/blog/${post.slug}`));
+
+  const docs = client
+    .getContentItems({
+      collection: 'documentation',
+    })
+    .then((response) => response.items)
+    .then((docs) => docs.map((doc) => `/docs/${doc.slug}`));
+
+  return Promise.all([posts, docs]).then((items) => items.flat());
 }
