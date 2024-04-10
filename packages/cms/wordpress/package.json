@@ -24,6 +24,7 @@
     "@kit/prettier-config": "workspace:*",
     "@kit/tsconfig": "workspace:*",
     "@kit/ui": "*",
+    "@types/node": "^20.12.7",
     "wp-types": "^3.64.0"
   },
   "eslintConfig": {

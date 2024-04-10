@@ -1,3 +1,3 @@
-export function WordpressContentRenderer(props: { content: string }) {
-  return <div dangerouslySetInnerHTML={{ __html: props.content }} />;
+export function WordpressContentRenderer(props: { content: unknown }) {
+  return <div dangerouslySetInnerHTML={{ __html: props.content as string }} />;
 }

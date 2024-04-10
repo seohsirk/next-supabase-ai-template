@@ -4,8 +4,9 @@ import { notFound } from 'next/navigation';
 
 import { createCmsClient } from '@kit/cms';
 
-import { Post } from '~/(marketing)/blog/_components/post';
 import { withI18n } from '~/lib/i18n/with-i18n';
+
+import { Post } from '../../blog/_components/post';
 
 export async function generateMetadata({
   params,

@@ -11,12 +11,12 @@ const DEFAULT_INSTRUMENTATION_PROVIDER = process.env
   .MONITORING_INSTRUMENTATION_PROVIDER as InstrumentationProvider | undefined;
 
 /**
- * @name registerInstrumentation
+ * @name registerMonitoringInstrumentation
  * @description Register monitoring instrumentation based on the MONITORING_INSTRUMENTATION_PROVIDER environment variable.
  *
  * Please set the MONITORING_INSTRUMENTATION_PROVIDER environment variable to register the monitoring instrumentation provider.
  */
-export async function registerInstrumentation() {
+export async function registerMonitoringInstrumentation() {
   if (!DEFAULT_INSTRUMENTATION_PROVIDER) {
     console.info(`No instrumentation provider specified. Skipping...`);
 

@@ -4,16 +4,16 @@ export async function ContentRenderer({
   content,
   type = process.env.CMS_CLIENT as CmsType,
 }: {
-  content: string;
+  content: unknown;
   type?: CmsType;
 }) {
   switch (type) {
-    case 'contentlayer': {
-      const { MDXContentRenderer } = await import(
-        '../../contentlayer/src/content-renderer'
+    case 'keystatic': {
+      const { KeystaticDocumentRenderer } = await import(
+        '../../keystatic/src/content-renderer'
       );
 
-      return MDXContentRenderer({ content });
+      return KeystaticDocumentRenderer({ content });
     }
 
     case 'wordpress': {

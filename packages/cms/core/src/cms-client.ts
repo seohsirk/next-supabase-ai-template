@@ -5,7 +5,7 @@ export namespace Cms {
     title: string;
     url: string;
     description: string | undefined;
-    content: string;
+    content: unknown;
     author: string;
     publishedAt: Date;
     image: string | undefined;

@@ -16,25 +16,25 @@ export async function createCmsClient(
 
 async function cmsClientFactory(type: CmsType) {
   switch (type) {
-    case 'contentlayer':
-      return getContentLayerClient();
-
     case 'wordpress':
       return getWordpressClient();
+
+    case 'keystatic':
+      return getKeystaticClient();
 
     default:
       throw new Error(`Unknown CMS type`);
   }
 }
 
-async function getContentLayerClient() {
-  const { ContentlayerClient } = await import('../../contentlayer/src/client');
-
-  return new ContentlayerClient();
-}
-
 async function getWordpressClient() {
   const { WordpressClient } = await import('../../wordpress/src/wp-client');
 
   return new WordpressClient();
+}
+
+async function getKeystaticClient() {
+  const { KeystaticClient } = await import('../../keystatic/src/client');
+
+  return new KeystaticClient();
 }
