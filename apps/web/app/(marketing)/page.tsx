@@ -14,12 +14,12 @@ import { withI18n } from '~/lib/i18n/with-i18n';
 function Home() {
   return (
     <div className={'flex flex-col space-y-24 py-16'}>
-      <div className={'container mx-auto flex flex-col space-y-24'}>
+      <div className={'container mx-auto flex flex-col space-y-20'}>
         <div
           className={
             'flex flex-col items-center md:flex-row' +
             ' mx-auto flex-1 justify-center animate-in fade-in ' +
-            ' duration-1000 slide-in-from-top-12'
+            ' duration-500 zoom-in-95 slide-in-from-top-24'
           }
         >
           <div
@@ -72,7 +72,7 @@ function Home() {
           <Image
             priority
             className={
-              'rounded-lg border delay-500 duration-1000 ease-out animate-in fade-in zoom-in-50 fill-mode-both'
+              'delay-250 rounded-lg border duration-1000 ease-out animate-in fade-in zoom-in-50 fill-mode-both'
             }
             width={3069}
             height={1916}
