@@ -15,12 +15,18 @@ export const generateMetadata = async () => {
   };
 };
 
-async function BlogPage() {
+async function BlogPage({ searchParams }: { searchParams: { page: string } }) {
   const { t } = await createI18nServerInstance();
   const cms = await createCmsClient();
 
+  const page = searchParams.page ? parseInt(searchParams.page) : 0;
+  const limit = 10;
+  const offset = page * limit;
+
   const posts = await cms.getContentItems({
-    categories: ['blog'],
+    collection: 'posts',
+    limit,
+    offset,
   });
 
   return (

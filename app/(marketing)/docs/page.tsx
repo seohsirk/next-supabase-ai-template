@@ -19,7 +19,7 @@ async function DocsPage() {
   const { t } = await createI18nServerInstance();
 
   const docs = await client.getContentItems({
-    categories: ['documentation'],
+    collection: 'documentation',
   });
 
   // Filter out any docs that have a parentId, as these are children of other docs
