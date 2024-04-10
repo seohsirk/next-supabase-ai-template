@@ -18,12 +18,12 @@ async function DocsPage() {
   const client = await createCmsClient();
   const { t } = await createI18nServerInstance();
 
-  const docs = await client.getContentItems({
+  const { items } = await client.getContentItems({
     collection: 'documentation',
   });
 
   // Filter out any docs that have a parentId, as these are children of other docs
-  const cards = docs.filter((item) => !item.parentId);
+  const cards = items.filter((item) => !item.parentId);
 
   return (
     <PageBody>
@@ -33,7 +33,7 @@ async function DocsPage() {
           subtitle={t('marketing:documentationSubtitle')}
         />
 
-        <div className={'flex flex-col items-center'}>
+        <div className={'container mx-auto flex flex-col items-center'}>
           <DocsCards cards={cards} />
         </div>
       </div>
