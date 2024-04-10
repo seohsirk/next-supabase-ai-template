@@ -9,7 +9,7 @@ import { cn, isRouteActive } from '@kit/ui/utils';
 const getClassName = (path: string, currentPathName: string) => {
   const isActive = isRouteActive(path, currentPathName);
 
-  return cn(`text-sm font-medium text-primary`, {
+  return cn(`text-sm font-medium`, {
     'hover:underline': !isActive,
   });
 };

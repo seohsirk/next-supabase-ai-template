@@ -152,11 +152,12 @@ function PricingItem(
       data-cy={'subscription-plan'}
       className={cn(
         props.className,
-        `s-full bg-background flex flex-1 grow flex-col items-stretch justify-between space-y-8 self-stretch
-            rounded-lg border border-transparent p-6 lg:w-4/12 xl:max-w-[22rem] xl:p-8`,
+        `s-full flex flex-1 grow flex-col items-stretch justify-between space-y-8 self-stretch
+            rounded-lg p-6 ring-2 lg:w-4/12 xl:max-w-[22rem] xl:p-8`,
         {
-          ['border-primary']: highlighted,
-          ['dark:shadow-primary/20 shadow dark:shadow-sm']: !highlighted,
+          ['ring-primary']: highlighted,
+          ['dark:shadow-primary/30 shadow-none ring-transparent dark:shadow-sm']:
+            !highlighted,
         },
       )}
     >
@@ -173,12 +174,7 @@ function PricingItem(
             </Heading>
 
             <If condition={props.product.badge}>
-              <Badge
-                variant={highlighted ? 'default' : 'outline'}
-                className={cn({
-                  ['border-primary-foreground']: highlighted,
-                })}
-              >
+              <Badge variant={highlighted ? 'default' : 'outline'}>
                 <If condition={highlighted}>
                   <Sparkles className={'h-3'} />
                 </If>
@@ -345,11 +341,7 @@ function Price({ children }: React.PropsWithChildren) {
 function ListItem({ children }: React.PropsWithChildren) {
   return (
     <li className={'flex items-center space-x-1.5'}>
-      <CheckCircle
-        className={cn('h-4', {
-          ['text-green-600']: true,
-        })}
-      />
+      <CheckCircle className={'h-4'} />
 
       <span
         className={cn('text-sm', {
