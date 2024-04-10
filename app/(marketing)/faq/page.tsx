@@ -121,7 +121,7 @@ function FaqItem({
       >
         <h2
           className={
-            'hover:underline-none cursor-pointer font-sans text-lg font-medium'
+            'hover:underline-none cursor-pointer font-sans font-medium'
           }
         >
           {item.question}

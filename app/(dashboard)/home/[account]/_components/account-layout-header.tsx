@@ -1,6 +1,6 @@
 import { PageHeader } from '@kit/ui/page';
 
-import { AccountLayoutMobileNavigation } from '~/(dashboard)/home/[account]/_components/account-layout-mobile-navigation';
+import { AccountLayoutMobileNavigation } from './account-layout-mobile-navigation';
 
 export function AccountLayoutHeader({
   children,

@@ -11,7 +11,7 @@ import {
 import { NavigationMenu, NavigationMenuList } from '@kit/ui/navigation-menu';
 import { Trans } from '@kit/ui/trans';
 
-import { SiteNavigationItem } from '~/(marketing)/_components/site-navigation-item';
+import { SiteNavigationItem } from './site-navigation-item';
 
 const links = {
   Blog: {
@@ -65,14 +65,14 @@ function MobileDropdown() {
         <Menu className={'h-9'} />
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent>
+      <DropdownMenuContent className={'w-full'}>
         {Object.values(links).map((item) => {
           const className = 'flex w-full h-full items-center';
 
           return (
             <DropdownMenuItem key={item.path}>
               <Link className={className} href={item.path}>
-                {item.label}
+                <Trans i18nKey={item.label} />
               </Link>
             </DropdownMenuItem>
           );
