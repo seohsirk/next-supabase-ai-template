@@ -40,7 +40,7 @@
     "@tanstack/react-table": "^8.15.3",
     "@types/react": "^18.2.75",
     "lucide-react": "^0.363.0",
-    "next": "14.2.0-canary.63",
+    "next": "14.2.0-canary.64",
     "react": "18.2.0",
     "react-hook-form": "^7.51.2",
     "zod": "^3.22.4"

@@ -32,7 +32,7 @@
     "@tanstack/react-query": "5.28.6",
     "@types/react": "^18.2.75",
     "lucide-react": "^0.363.0",
-    "next": "14.2.0-canary.63",
+    "next": "14.2.0-canary.64",
     "react-hook-form": "^7.51.2",
     "react-i18next": "^14.1.0",
     "sonner": "^1.4.41",
