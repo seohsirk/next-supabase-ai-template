@@ -47,6 +47,11 @@ export class Mailbox {
     const url = `http://localhost:54324/api/v1/mailbox/${mailbox}`;
 
     const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch emails: ${response.statusText}`);
+    }
+
     const json = (await response.json()) as Array<{ id: string }>;
 
     if (!json || !json.length) {

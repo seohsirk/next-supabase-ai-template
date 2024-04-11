@@ -26,6 +26,8 @@ test.describe('Auth flow', () => {
 
     await auth.visitConfirmEmailLink(email);
 
+    await page.waitForURL('http://localhost:3000/home');
+
     expect(page.url()).toContain('http://localhost:3000/home');
   });
 
@@ -40,9 +42,13 @@ test.describe('Auth flow', () => {
       password: 'password',
     });
 
-    await page.waitForTimeout(500);
+    await page.waitForURL('http://localhost:3000/home');
 
     expect(page.url()).toContain('/home');
+
+    await auth.signOut();
+
+    expect(page.url()).toContain('/');
   });
 });
 

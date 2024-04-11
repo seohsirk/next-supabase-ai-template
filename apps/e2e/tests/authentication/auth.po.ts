@@ -22,6 +22,11 @@ export class AuthPageObject {
     });
   }
 
+  async signOut() {
+    await this.page.click('[data-test="account-dropdown-trigger"]');
+    await this.page.click('[data-test="account-dropdown-sign-out"]');
+  }
+
   async signIn(params: {
     email: string,
     password: string

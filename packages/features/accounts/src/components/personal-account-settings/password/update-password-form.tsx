@@ -93,7 +93,7 @@ export const UpdatePasswordForm = ({
   return (
     <Form {...form}>
       <form
-        data-test={'update-password-form'}
+        data-test={'account-password-form'}
         onSubmit={form.handleSubmit(updatePasswordCallback)}
       >
         <div className={'flex flex-col space-y-4'}>
@@ -118,7 +118,7 @@ export const UpdatePasswordForm = ({
 
                   <FormControl>
                     <Input
-                      data-test={'new-password'}
+                      data-test={'account-password-form-password-input'}
                       required
                       type={'password'}
                       {...field}
@@ -144,7 +144,7 @@ export const UpdatePasswordForm = ({
 
                   <FormControl>
                     <Input
-                      data-test={'repeat-password'}
+                      data-test={'account-password-form-repeat-password-input'}
                       required
                       type={'password'}
                       {...field}

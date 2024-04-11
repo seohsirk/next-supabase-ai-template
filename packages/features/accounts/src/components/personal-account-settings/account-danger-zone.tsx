@@ -84,6 +84,7 @@ function DeleteAccountForm() {
   return (
     <Form {...form}>
       <form
+        data-test={'delete-account-form'}
         action={deletePersonalAccountAction}
         className={'flex flex-col space-y-4'}
       >

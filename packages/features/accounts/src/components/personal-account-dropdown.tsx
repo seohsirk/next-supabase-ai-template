@@ -67,7 +67,7 @@ export function PersonalAccountDropdown({
     <DropdownMenu>
       <DropdownMenuTrigger
         aria-label="Open your profile menu"
-        data-test={'profile-dropdown-trigger'}
+        data-test={'account-dropdown-trigger'}
         className={cn(
           'animate-in fade-in group flex cursor-pointer items-center focus:outline-none',
           className ?? '',
@@ -179,6 +179,7 @@ export function PersonalAccountDropdown({
         <DropdownMenuSeparator />
 
         <DropdownMenuItem
+          data-test={'account-dropdown-sign-out'}
           role={'button'}
           className={'cursor-pointer'}
           onClick={signOutRequested}
