@@ -23,7 +23,7 @@ export class KeystaticClient implements CmsClient {
     const endOffset = startOffset + (options?.limit ?? 10);
 
     const filtered = docs.filter((item) => {
-      const categoryMatch = options?.categories
+      const categoryMatch = options?.categories?.length
         ? options.categories.find((category) =>
             item.entry.categories.includes(category),
           )
@@ -33,7 +33,13 @@ export class KeystaticClient implements CmsClient {
         return false;
       }
 
-      const tagMatch = options?.tags
+      if (options.language) {
+        if (item.entry.language && item.entry.language !== options.language) {
+          return false;
+        }
+      }
+
+      const tagMatch = options?.tags?.length
         ? options.tags.find((tag) => item.entry.tags.includes(tag))
         : true;
 

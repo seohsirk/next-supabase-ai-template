@@ -31,6 +31,7 @@ function createKeyStaticConfig(path: string) {
             label: 'Parent',
             collection: 'posts',
           }),
+          language: fields.text({ label: 'Language' }),
           order: fields.number({ label: 'Order' }),
           content: fields.document({
             label: 'Content',
@@ -83,6 +84,7 @@ function createKeyStaticConfig(path: string) {
           description: fields.text({ label: 'Description' }),
           publishedAt: fields.date({ label: 'Published At' }),
           order: fields.number({ label: 'Order' }),
+          language: fields.text({ label: 'Language' }),
           parent: fields.relationship({
             label: 'Parent',
             collection: 'documentation',

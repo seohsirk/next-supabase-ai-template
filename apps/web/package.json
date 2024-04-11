@@ -57,7 +57,7 @@
     "i18next": "^23.11.0",
     "i18next-resources-to-backend": "^1.2.0",
     "lucide-react": "^0.363.0",
-    "next": "14.2.0-canary.64",
+    "next": "14.2.0-canary.65",
     "next-sitemap": "^4.2.3",
     "next-themes": "0.3.0",
     "react": "18.2.0",

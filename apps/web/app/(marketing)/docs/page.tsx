@@ -16,10 +16,11 @@ export const generateMetadata = async () => {
 
 async function DocsPage() {
   const client = await createCmsClient();
-  const { t } = await createI18nServerInstance();
+  const { t, resolvedLanguage } = await createI18nServerInstance();
 
   const { items } = await client.getContentItems({
     collection: 'documentation',
+    language: resolvedLanguage,
   });
 
   // Filter out any docs that have a parentId, as these are children of other docs

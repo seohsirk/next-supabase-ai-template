@@ -6,7 +6,7 @@ import { redirect } from 'next/navigation';
 import { enhanceAction } from '@kit/next/actions';
 import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
 
-import { enhanceAdminAction } from './enhance-admin-action';
+import { adminAction } from './admin-action';
 import {
   BanUserSchema,
   DeleteAccountSchema,
@@ -21,7 +21,7 @@ import { AdminAuthUserService } from './services/admin-auth-user.service';
  * @name banUserAction
  * @description Ban a user from the system.
  */
-export const banUserAction = enhanceAdminAction(
+export const banUserAction = adminAction(
   enhanceAction(
     async ({ userId }) => {
       const service = getAdminAuthService();
@@ -44,7 +44,7 @@ export const banUserAction = enhanceAdminAction(
  * @name reactivateUserAction
  * @description Reactivate a user in the system.
  */
-export const reactivateUserAction = enhanceAdminAction(
+export const reactivateUserAction = adminAction(
   enhanceAction(
     async ({ userId }) => {
       const service = getAdminAuthService();
@@ -67,7 +67,7 @@ export const reactivateUserAction = enhanceAdminAction(
  * @name impersonateUserAction
  * @description Impersonate a user in the system.
  */
-export const impersonateUserAction = enhanceAdminAction(
+export const impersonateUserAction = adminAction(
   enhanceAction(
     async ({ userId }) => {
       const service = getAdminAuthService();
@@ -84,7 +84,7 @@ export const impersonateUserAction = enhanceAdminAction(
  * @name deleteUserAction
  * @description Delete a user from the system.
  */
-export const deleteUserAction = enhanceAdminAction(
+export const deleteUserAction = adminAction(
   enhanceAction(
     async ({ userId }) => {
       const service = getAdminAuthService();
@@ -105,7 +105,7 @@ export const deleteUserAction = enhanceAdminAction(
  * @name deleteAccountAction
  * @description Delete an account from the system.
  */
-export const deleteAccountAction = enhanceAdminAction(
+export const deleteAccountAction = adminAction(
   enhanceAction(
     async ({ accountId }) => {
       const service = getAdminAccountsService();

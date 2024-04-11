@@ -35,6 +35,7 @@ export namespace Cms {
     categories?: string[];
     tags?: string[];
     parentIds?: string[];
+    language?: string | undefined;
   }
 
   export interface GetCategoriesOptions {

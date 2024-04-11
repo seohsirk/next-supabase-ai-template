@@ -54,8 +54,13 @@ export class WordpressClient implements CmsClient {
     }
 
     if (options?.tags) {
-      const ids = await this.getCategories({
-        slugs: options.tags,
+      const allTags = [
+        ...options.tags,
+        options.language ? options.language : '',
+      ].filter(Boolean);
+
+      const ids = await this.getTags({
+        slugs: allTags,
       }).then((tags) => tags.map((tag) => tag.id));
 
       if (ids.length) {
