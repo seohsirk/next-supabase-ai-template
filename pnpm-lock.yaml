@@ -117,11 +117,11 @@ importers:
         specifier: ^2.42.0
         version: 2.42.0
       '@tanstack/react-query':
-        specifier: 5.28.6
-        version: 5.28.6(react@18.2.0)
+        specifier: 5.29.0
+        version: 5.29.0(react@18.2.0)
       '@tanstack/react-query-next-experimental':
         specifier: ^5.29.0
-        version: 5.29.0(@tanstack/react-query@5.28.6)(next@14.2.0-canary.65)(react@18.2.0)
+        version: 5.29.0(@tanstack/react-query@5.29.0)(next@14.2.0-canary.65)(react@18.2.0)
       '@tanstack/react-table':
         specifier: ^8.15.3
         version: 8.15.3(react-dom@18.2.0)(react@18.2.0)
@@ -138,8 +138,8 @@ importers:
         specifier: ^1.2.0
         version: 1.2.0
       lucide-react:
-        specifier: ^0.363.0
-        version: 0.363.0(react@18.2.0)
+        specifier: ^0.367.0
+        version: 0.367.0(react@18.2.0)
       next:
         specifier: 14.2.0-canary.65
         version: 14.2.0-canary.65(react-dom@18.2.0)(react@18.2.0)
@@ -241,8 +241,8 @@ importers:
         specifier: workspace:*
         version: link:../../ui
       lucide-react:
-        specifier: ^0.363.0
-        version: 0.363.0(react@18.2.0)
+        specifier: ^0.367.0
+        version: 0.367.0(react@18.2.0)
       zod:
         specifier: ^3.22.4
         version: 3.22.4
@@ -292,8 +292,8 @@ importers:
         specifier: ^3.6.0
         version: 3.6.0
       lucide-react:
-        specifier: ^0.363.0
-        version: 0.363.0(react@18.2.0)
+        specifier: ^0.367.0
+        version: 0.367.0(react@18.2.0)
       next:
         specifier: 14.2.0-canary.65
         version: 14.2.0-canary.65(react-dom@18.2.0)(react@18.2.0)
@@ -508,8 +508,8 @@ importers:
         specifier: ^2.42.0
         version: 2.42.0
       lucide-react:
-        specifier: ^0.363.0
-        version: 0.363.0(react@18.2.0)
+        specifier: ^0.367.0
+        version: 0.367.0(react@18.2.0)
       zod:
         specifier: ^3.22.4
         version: 3.22.4
@@ -579,8 +579,8 @@ importers:
         specifier: ^2.42.0
         version: 2.42.0
       '@tanstack/react-query':
-        specifier: 5.28.6
-        version: 5.28.6(react@18.2.0)
+        specifier: 5.29.0
+        version: 5.29.0(react@18.2.0)
       '@types/react':
         specifier: ^18.2.75
         version: 18.2.75
@@ -588,8 +588,8 @@ importers:
         specifier: ^18.2.22
         version: 18.2.24
       lucide-react:
-        specifier: ^0.363.0
-        version: 0.363.0(react@18.2.0)
+        specifier: ^0.367.0
+        version: 0.367.0(react@18.2.0)
       next:
         specifier: 14.2.0-canary.65
         version: 14.2.0-canary.65(react-dom@18.2.0)(react@18.2.0)
@@ -651,8 +651,8 @@ importers:
         specifier: ^2.42.0
         version: 2.42.0
       '@tanstack/react-query':
-        specifier: 5.28.6
-        version: 5.28.6(react@18.2.0)
+        specifier: 5.29.0
+        version: 5.29.0(react@18.2.0)
       '@tanstack/react-table':
         specifier: ^8.15.3
         version: 8.15.3(react-dom@18.2.0)(react@18.2.0)
@@ -660,8 +660,8 @@ importers:
         specifier: ^18.2.75
         version: 18.2.75
       lucide-react:
-        specifier: ^0.363.0
-        version: 0.363.0(react@18.2.0)
+        specifier: ^0.367.0
+        version: 0.367.0(react@18.2.0)
       next:
         specifier: 14.2.0-canary.65
         version: 14.2.0-canary.65(react-dom@18.2.0)(react@18.2.0)
@@ -711,14 +711,14 @@ importers:
         specifier: ^2.42.0
         version: 2.42.0
       '@tanstack/react-query':
-        specifier: 5.28.6
-        version: 5.28.6(react@18.2.0)
+        specifier: 5.29.0
+        version: 5.29.0(react@18.2.0)
       '@types/react':
         specifier: ^18.2.75
         version: 18.2.75
       lucide-react:
-        specifier: ^0.363.0
-        version: 0.363.0(react@18.2.0)
+        specifier: ^0.367.0
+        version: 0.367.0(react@18.2.0)
       next:
         specifier: 14.2.0-canary.65
         version: 14.2.0-canary.65(react-dom@18.2.0)(react@18.2.0)
@@ -781,8 +781,8 @@ importers:
         specifier: ^2.42.0
         version: 2.42.0
       '@tanstack/react-query':
-        specifier: 5.28.6
-        version: 5.28.6(react@18.2.0)
+        specifier: 5.29.0
+        version: 5.29.0(react@18.2.0)
       '@tanstack/react-table':
         specifier: ^8.15.3
         version: 8.15.3(react-dom@18.2.0)(react@18.2.0)
@@ -799,8 +799,8 @@ importers:
         specifier: ^3.6.0
         version: 3.6.0
       lucide-react:
-        specifier: ^0.363.0
-        version: 0.363.0(react@18.2.0)
+        specifier: ^0.367.0
+        version: 0.367.0(react@18.2.0)
       next:
         specifier: 14.2.0-canary.65
         version: 14.2.0-canary.65(react-dom@18.2.0)(react@18.2.0)
@@ -1028,8 +1028,8 @@ importers:
         specifier: ^2.42.0
         version: 2.42.0
       '@tanstack/react-query':
-        specifier: 5.28.6
-        version: 5.28.6(react@18.2.0)
+        specifier: 5.29.0
+        version: 5.29.0(react@18.2.0)
       '@types/react':
         specifier: ^18.2.75
         version: 18.2.75
@@ -1149,8 +1149,8 @@ importers:
         specifier: ^8.57.0
         version: 8.57.0
       lucide-react:
-        specifier: ^0.363.0
-        version: 0.363.0(react@18.2.0)
+        specifier: ^0.367.0
+        version: 0.367.0(react@18.2.0)
       next:
         specifier: 14.2.0-canary.65
         version: 14.2.0-canary.65(react-dom@18.2.0)(react@18.2.0)
@@ -6645,27 +6645,27 @@ packages:
       defer-to-connect: 2.0.1
     dev: false
 
-  /@tanstack/query-core@5.28.6:
-    resolution: {integrity: sha512-hnhotV+DnQtvtR3jPvbQMPNMW4KEK0J4k7c609zJ8muiNknm+yoDyMHmxTWM5ZnlZpsz0zOxYFr+mzRJNHWJsA==}
+  /@tanstack/query-core@5.29.0:
+    resolution: {integrity: sha512-WgPTRs58hm9CMzEr5jpISe8HXa3qKQ8CxewdYZeVnA54JrPY9B1CZiwsCoLpLkf0dGRZq+LcX5OiJb0bEsOFww==}
 
-  /@tanstack/react-query-next-experimental@5.29.0(@tanstack/react-query@5.28.6)(next@14.2.0-canary.65)(react@18.2.0):
+  /@tanstack/react-query-next-experimental@5.29.0(@tanstack/react-query@5.29.0)(next@14.2.0-canary.65)(react@18.2.0):
     resolution: {integrity: sha512-PgzDSM7m1ppEsLm2uPw/Tnv8PfFDi/c5CfP2UyJq9eRZu3J50l7bHt3v6W6QaAZdJUPxum8uS9zpKx+OdgkpVA==}
     peerDependencies:
       '@tanstack/react-query': ^5.29.0
       next: ^13 || ^14
       react: ^18.0.0
     dependencies:
-      '@tanstack/react-query': 5.28.6(react@18.2.0)
+      '@tanstack/react-query': 5.29.0(react@18.2.0)
       next: 14.2.0-canary.65(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
     dev: false
 
-  /@tanstack/react-query@5.28.6(react@18.2.0):
-    resolution: {integrity: sha512-/DdYuDBSsA21Qbcder1R8Cr/3Nx0ZnA2lgtqKsLMvov8wL4+g0HBz/gWYZPlIsof7iyfQafyhg4wUVUsS3vWZw==}
+  /@tanstack/react-query@5.29.0(react@18.2.0):
+    resolution: {integrity: sha512-yxlhHB73jaBla6h5B6zPaGmQjokkzAhMHN4veotkPNiQ3Ac/mCxgABRZPsJJrgCTvhpcncBZcDBFxaR2B37vug==}
     peerDependencies:
       react: ^18.0.0
     dependencies:
-      '@tanstack/query-core': 5.28.6
+      '@tanstack/query-core': 5.29.0
       react: 18.2.0
 
   /@tanstack/react-table@8.15.3(react-dom@18.2.0)(react@18.2.0):
@@ -10484,8 +10484,8 @@ packages:
     engines: {node: '>=12'}
     dev: false
 
-  /lucide-react@0.363.0(react@18.2.0):
-    resolution: {integrity: sha512-AlsfPCsXQyQx7wwsIgzcKOL9LwC498LIMAo+c0Es5PkHJa33xwmYAkkSoKoJWWWSYQEStqu58/jT4tL2gi32uQ==}
+  /lucide-react@0.367.0(react@18.2.0):
+    resolution: {integrity: sha512-3FWiBaJiqMrx5a1sjH3CVdPqWnw/Z/PTVeeTDmOeILSs+8Ah+VhCd4FQMeHo6Z0WxHcm9piIOtilQwvceiCCKQ==}
     peerDependencies:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0
     dependencies:
