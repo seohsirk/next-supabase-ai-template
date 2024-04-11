@@ -56,7 +56,7 @@ function SuspendedPersonalAccountDropdown(props: { user: User | null }) {
 
 function AuthButtons() {
   return (
-    <div className={'flex space-x-0.5'}>
+    <div className={'flex space-x-2'}>
       <div className={'hidden space-x-0.5 md:flex'}>
         <ModeToggle />
 
