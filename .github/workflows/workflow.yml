@@ -9,9 +9,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
       - uses: actions/setup-node@v4
         with:
           node-version: lts/*
+          cache: 'pnpm'
+
+      - uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
+
       - name: Install dependencies
         run: npm install -g pnpm && pnpm install
       - name: Typecheck
@@ -20,15 +32,29 @@ jobs:
         run: pnpm run lint
 
   test:
-    timeout-minutes: 60
+    timeout-minutes: 15
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
+
       - uses: actions/setup-node@v4
         with:
           node-version: lts/*
+          cache: 'pnpm'
+
       - name: Install dependencies
         run: npm install -g pnpm && pnpm install
+      - name: Install Playwright Browsers
+        run: pnpm exec ./apps/e2e/node_modules/.bin/playwright install --with-deps
       - name: Run Playwright tests
         run: pnpm run test
       - uses: actions/upload-artifact@v4
