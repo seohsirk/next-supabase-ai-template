@@ -37,8 +37,7 @@ test.describe('Account Settings', () => {
   });
 
   test('user can update their password', async () => {
-    const password = (Math.random() * 1000).toString();
-
+    const password = (Math.random() * 100000).toString();
     await account.updatePassword(password);
 
     await page.waitForResponse((resp) => {
@@ -50,17 +49,10 @@ test.describe('Account Settings', () => {
 });
 
 test.describe('Account Deletion', () => {
-  let page: Page;
-  let account: AccountPageObject;
-
-  test.beforeAll(async ({ browser }) => {
-    page = await browser.newPage();
-    account = new AccountPageObject(page);
+  test('user can delete their own account', async ({ page }) => {
+    const account = new AccountPageObject(page);
 
     await account.setup();
-  });
-
-  test('user can delete their own account', async () => {
     await account.deleteAccount();
 
     await page.waitForURL('http://localhost:3000');

@@ -48,8 +48,6 @@ export class AuthPageObject {
   }
 
   async visitConfirmEmailLink(email: string) {
-    await this.page.waitForTimeout(300);
-
     return expect(async() => {
       const res = await this.mailbox.visitMailbox(email);
 
@@ -58,7 +56,7 @@ export class AuthPageObject {
   }
 
   createRandomEmail() {
-    const value = Math.random() * 1000;
+    const value = Math.random() * 10000000000;
 
     return `${value.toFixed(0)}@makerkit.dev`;
   }
@@ -74,6 +72,10 @@ export class AuthPageObject {
       email,
       password: 'password',
       repeatPassword: 'password',
+    });
+
+    await this.page.waitForResponse((resp) => {
+      return resp.url().includes('auth');
     });
 
     await this.visitConfirmEmailLink(email);
