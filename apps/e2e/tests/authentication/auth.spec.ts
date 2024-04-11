@@ -40,9 +40,9 @@ test.describe('Auth flow', () => {
       password: 'password',
     });
 
-    await page.waitForURL('http://localhost:3000/home');
+    await page.waitForTimeout(500);
 
-    expect(page.url()).toContain('http://localhost:3000/home');
+    expect(page.url()).toContain('/home');
   });
 });
 

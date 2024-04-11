@@ -11,19 +11,21 @@ export class AuthPageObject {
   }
 
   goToSignIn() {
-    return this.page.goto('/auth/sign-in');
+    return this.page.goto('/auth/sign-in', {
+      waitUntil: 'networkidle',
+    });
   }
 
   goToSignUp() {
-    return this.page.goto('/auth/sign-up');
+    return this.page.goto('/auth/sign-up', {
+      waitUntil: 'networkidle',
+    });
   }
 
   async signIn(params: {
     email: string,
     password: string
   }) {
-    await this.page.locator('input[name="email"]').clear();
-
     await this.page.fill('input[name="email"]', params.email);
     await this.page.fill('input[name="password"]', params.password);
     await this.page.click('button[type="submit"]');
