@@ -19,7 +19,7 @@ export const generateMetadata = async () => {
 };
 
 async function BlogPage({ searchParams }: { searchParams: { page: string } }) {
-  const { t } = await createI18nServerInstance();
+  const { t, resolvedLanguage: language } = await createI18nServerInstance();
   const cms = await createCmsClient();
 
   const page = searchParams.page ? parseInt(searchParams.page) : 0;
@@ -30,6 +30,7 @@ async function BlogPage({ searchParams }: { searchParams: { page: string } }) {
     collection: 'posts',
     limit,
     offset,
+    language,
   });
 
   return (
