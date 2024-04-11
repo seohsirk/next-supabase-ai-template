@@ -12,6 +12,10 @@ jobs:
         with:
           fetch-depth: 2
 
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 6.32.9
+
       - uses: actions/setup-node@v4
         with:
           node-version: lts/*
@@ -25,7 +29,7 @@ jobs:
             ${{ runner.os }}-turbo-
 
       - name: Install dependencies
-        run: npm install -g pnpm && pnpm install
+        run: pnpm install
       - name: Typecheck
         run: pnpm run typecheck
       - name: Lint
@@ -39,6 +43,10 @@ jobs:
         with:
           fetch-depth: 2
 
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 6.32.9
+
       - uses: actions/cache@v4
         with:
           path: .turbo
@@ -52,7 +60,7 @@ jobs:
           cache: 'pnpm'
 
       - name: Install dependencies
-        run: npm install -g pnpm && pnpm install
+        run: pnpm install
       - name: Install Playwright Browsers
         run: pnpm exec ./apps/e2e/node_modules/.bin/playwright install --with-deps
       - name: Run Playwright tests
