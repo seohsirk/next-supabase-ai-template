@@ -14,7 +14,7 @@ export function SiteFooter() {
         <div className={'flex flex-col space-y-8 lg:flex-row lg:space-y-0'}>
           <div
             className={
-              'flex w-full space-x-2 lg:w-4/12 xl:w-3/12' +
+              'flex w-full space-x-2 lg:w-4/12 xl:w-4/12' +
               ' xl:space-x-6 2xl:space-x-8'
             }
           >
@@ -23,16 +23,18 @@ export function SiteFooter() {
                 <AppLogo className={'w-[85px] md:w-[115px]'} />
               </div>
 
-              <div>
-                <p className={'text-sm text-muted-foreground'}>
-                  Add a short tagline about your product
-                </p>
-              </div>
+              <div className={'flex flex-col space-y-2'}>
+                <div>
+                  <p className={'text-sm text-muted-foreground'}>
+                    Add a short tagline about your product
+                  </p>
+                </div>
 
-              <div className={'flex text-xs text-muted-foreground'}>
-                <p>
-                  © Copyright {YEAR} {appConfig.name}. All Rights Reserved.
-                </p>
+                <div className={'flex text-xs text-muted-foreground'}>
+                  <p>
+                    © Copyright {YEAR} {appConfig.name}. All Rights Reserved.
+                  </p>
+                </div>
               </div>
             </div>
           </div>

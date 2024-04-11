@@ -1,4 +1,4 @@
-import { Page } from '@playwright/test';
+import { expect, Page } from '@playwright/test';
 import { Mailbox } from '../utils/mailbox';
 
 export class AuthPageObject {
@@ -50,7 +50,11 @@ export class AuthPageObject {
   async visitConfirmEmailLink(email: string) {
     await this.page.waitForTimeout(300);
 
-    await this.mailbox.visitMailbox(email);
+    return expect(async() => {
+      const res = await this.mailbox.visitMailbox(email);
+
+      expect(res).not.toBeNull();
+    }).toPass();
   }
 
   createRandomEmail() {
