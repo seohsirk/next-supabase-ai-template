@@ -37,6 +37,7 @@
   "collapseSidebar": "Collapse Sidebar",
   "documentation": "Documentation",
   "getStarted": "Get Started",
+  "getStartedWithPlan": "Get Started with {{plan}}",
   "retry": "Retry",
   "contactUs": "Contact Us",
   "loading": "Loading. Please wait...",

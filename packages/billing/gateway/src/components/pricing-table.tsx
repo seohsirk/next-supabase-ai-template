@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import Link from 'next/link';
 
-import { ArrowRight, CheckCircle, Sparkles } from 'lucide-react';
+import { ArrowRight, CheckCircle, Circle, Sparkles } from 'lucide-react';
 import { z } from 'zod';
 
 import {
@@ -153,7 +153,7 @@ function PricingItem(
       className={cn(
         props.className,
         `s-full flex flex-1 grow flex-col items-stretch justify-between space-y-8 self-stretch
-            rounded-lg p-6 ring-2 lg:w-4/12 xl:max-w-[19rem]`,
+            rounded-lg p-8 ring-2 lg:w-4/12 xl:max-w-[20rem]`,
         {
           ['ring-primary']: highlighted,
           ['dark:shadow-primary/30 shadow-none ring-transparent dark:shadow-sm']:
@@ -161,11 +161,11 @@ function PricingItem(
         },
       )}
     >
-      <div className={'flex flex-col space-y-6'}>
-        <div className={'flex flex-col space-y-2'}>
+      <div className={'flex flex-col space-y-8'}>
+        <div className={'flex flex-col space-y-4'}>
           <div className={'flex items-center space-x-4'}>
-            <Heading level={4}>
-              <b className={'font-bold'}>
+            <Heading level={5}>
+              <b className={'text-current-foreground font-normal uppercase'}>
                 <Trans
                   i18nKey={props.product.name}
                   defaults={props.product.name}
@@ -174,7 +174,7 @@ function PricingItem(
             </Heading>
 
             <If condition={props.product.badge}>
-              <Badge variant={highlighted ? 'default' : 'outline'}>
+              <Badge variant={'outline'}>
                 <If condition={highlighted}>
                   <Sparkles className={'h-3'} />
                 </If>
@@ -189,11 +189,7 @@ function PricingItem(
             </If>
           </div>
 
-          <span
-            className={cn(`text-sm text-current`, {
-              ['text-muted-foreground']: !highlighted,
-            })}
-          >
+          <span className={cn(`text-muted-foreground h-10 text-lg`)}>
             <Trans
               i18nKey={props.product.description}
               defaults={props.product.description}
@@ -209,10 +205,10 @@ function PricingItem(
           <If condition={props.plan.name}>
             <span
               className={cn(
-                `animate-in slide-in-from-left-4 fade-in flex items-center space-x-0.5 capitalize`,
+                `animate-in slide-in-from-left-4 fade-in flex items-center space-x-0.5 text-sm capitalize`,
               )}
             >
-              <span className={'text-muted-foreground text-sm'}>
+              <span className={'text-muted-foreground'}>
                 <If
                   condition={props.plan.interval}
                   fallback={<Trans i18nKey={'billing:lifetime'} />}
@@ -255,6 +251,7 @@ function PricingItem(
             fallback={
               <DefaultCheckoutButton
                 signUpPath={props.paths.signUp}
+                product={props.product}
                 highlighted={highlighted}
                 plan={props.plan}
               />
@@ -271,11 +268,7 @@ function PricingItem(
 
         <Separator />
 
-        <div className={'flex flex-col space-y-2'}>
-          <h6 className={'text-sm font-semibold'}>
-            <Trans i18nKey={'billing:featuresLabel'} />
-          </h6>
-
+        <div className={'flex flex-col'}>
           <FeaturesList
             highlighted={highlighted}
             features={props.product.features}
@@ -327,11 +320,7 @@ function Price({ children }: React.PropsWithChildren) {
     <div
       className={`animate-in slide-in-from-left-4 fade-in items-center duration-500`}
     >
-      <span
-        className={
-          'flex items-center text-2xl font-bold lg:text-3xl xl:text-4xl'
-        }
-      >
+      <span className={'flex items-center text-2xl font-bold lg:text-3xl'}>
         {children}
       </span>
     </div>
@@ -340,8 +329,8 @@ function Price({ children }: React.PropsWithChildren) {
 
 function ListItem({ children }: React.PropsWithChildren) {
   return (
-    <li className={'flex items-center space-x-1.5'}>
-      <CheckCircle className={'h-4'} />
+    <li className={'flex items-center space-x-2.5'}>
+      <Circle className={'fill-primary h-2 w-2'} />
 
       <span
         className={cn('text-sm', {
@@ -407,8 +396,13 @@ function DefaultCheckoutButton(
   props: React.PropsWithChildren<{
     plan: {
       id: string;
+      name?: string | undefined;
       href?: string;
       label?: string;
+    };
+
+    product: {
+      name: string;
     };
 
     signUpPath: string;
@@ -418,17 +412,23 @@ function DefaultCheckoutButton(
   const linkHref =
     props.plan.href ?? `${props.signUpPath}?utm_source=${props.plan.id}` ?? '';
 
-  const label = props.plan.label ?? 'common:getStarted';
+  const label = props.plan.label ?? 'common:getStartedWithPlan';
 
   return (
     <Link className={'w-full'} href={linkHref}>
       <Button
         size={'lg'}
-        className={'w-full'}
+        className={'ring-primary w-full ring-2'}
         variant={props.highlighted ? 'default' : 'outline'}
       >
         <span>
-          <Trans i18nKey={label} defaults={label} />
+          <Trans
+            i18nKey={label}
+            defaults={label}
+            values={{
+              plan: props.product.name,
+            }}
+          />
         </span>
 
         <ArrowRight className={'ml-2 h-4'} />
