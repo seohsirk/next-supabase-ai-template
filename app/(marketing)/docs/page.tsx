@@ -27,14 +27,16 @@ async function DocsPage() {
 
   return (
     <PageBody>
-      <div className={'flex flex-col space-y-12 xl:space-y-24'}>
+      <div className={'flex flex-col space-y-8 xl:space-y-16'}>
         <SitePageHeader
           title={t('marketing:documentation')}
           subtitle={t('marketing:documentationSubtitle')}
         />
 
-        <div className={'container mx-auto flex flex-col items-center'}>
-          <DocsCards cards={cards} />
+        <div className={'flex flex-col items-center'}>
+          <div className={'container mx-auto max-w-5xl'}>
+            <DocsCards cards={cards} />
+          </div>
         </div>
       </div>
     </PageBody>

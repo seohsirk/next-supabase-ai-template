@@ -12,6 +12,7 @@ import { isBrowser } from '@kit/shared/utils';
 import { Button } from '@kit/ui/button';
 import { Heading } from '@kit/ui/heading';
 import { If } from '@kit/ui/if';
+import { Trans } from '@kit/ui/trans';
 import { cn, isRouteActive } from '@kit/ui/utils';
 
 const DocsNavLink: React.FC<{
@@ -24,14 +25,20 @@ const DocsNavLink: React.FC<{
   const isFirstLevel = level === 0;
 
   return (
-    <div className={getNavLinkClassName(isCurrent, isFirstLevel)}>
+    <Button
+      className={cn('w-full', {
+        ['font-semibold']: isFirstLevel,
+      })}
+      variant={isCurrent ? 'secondary' : 'ghost'}
+      size={isFirstLevel ? 'default' : 'sm'}
+    >
       <Link
         className="flex h-full max-w-full grow items-center space-x-2"
         href={url}
       >
         <span className="block max-w-full truncate">{label}</span>
       </Link>
-    </div>
+    </Button>
   );
 };
 
@@ -73,7 +80,11 @@ function Tree({
   activePath: string;
 }) {
   return (
-    <div className={cn('w-full space-y-1 pl-3')}>
+    <div
+      className={cn('w-full space-y-1', {
+        ['pl-3']: level > 0,
+      })}
+    >
       {pages.map((treeNode, index) => (
         <Node
           key={index}
@@ -107,19 +118,6 @@ export function DocsNavigation({ pages }: { pages: Cms.ContentItem[] }) {
         />
       </div>
     </>
-  );
-}
-
-function getNavLinkClassName(isCurrent: boolean, isFirstLevel: boolean) {
-  return cn(
-    'group flex min-h-8 items-center justify-between space-x-2 whitespace-nowrap rounded-md px-3 text-sm transition-colors',
-    {
-      [`bg-muted`]: isCurrent,
-      [`hover:bg-muted`]: !isCurrent,
-      [`font-semibold`]: isFirstLevel,
-      [`font-normal`]: !isFirstLevel && isCurrent,
-      [`hover:text-foreground-muted`]: !isFirstLevel && !isCurrent,
-    },
   );
 }
 
@@ -173,8 +171,6 @@ function FloatingDocumentationNavigation({
             ' flex flex-col space-y-4 overflow-auto bg-white dark:bg-background'
           }
         >
-          <Heading level={1}>Table of Contents</Heading>
-
           <Tree pages={pages} level={0} activePath={activePath} />
         </div>
       </If>
