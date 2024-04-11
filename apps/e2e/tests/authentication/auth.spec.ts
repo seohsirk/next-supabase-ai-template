@@ -20,6 +20,10 @@ test.describe('Auth flow', () => {
       repeatPassword: 'password',
     });
 
+    await page.waitForResponse(resp => {
+      return resp.url().includes('auth');
+    });
+
     await auth.visitConfirmEmailLink(email);
 
     expect(page.url()).toContain('http://localhost:3000/home');
