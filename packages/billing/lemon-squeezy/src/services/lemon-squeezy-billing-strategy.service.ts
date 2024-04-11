@@ -4,6 +4,7 @@ import {
   cancelSubscription,
   createUsageRecord,
   getCheckout,
+  getVariant,
   updateSubscriptionItem,
 } from '@lemonsqueezy/lemonsqueezy.js';
 import { z } from 'zod';
@@ -25,18 +26,19 @@ import { createLemonSqueezyCheckout } from './create-lemon-squeezy-checkout';
 export class LemonSqueezyBillingStrategyService
   implements BillingStrategyProviderService
 {
+  private readonly namespace = 'billing.lemon-squeezy';
+
   async createCheckoutSession(
     params: z.infer<typeof CreateBillingCheckoutSchema>,
   ) {
     const logger = await getLogger();
 
-    logger.info(
-      {
-        name: 'billing.lemon-squeezy',
-        ...params,
-      },
-      'Creating checkout session...',
-    );
+    const ctx = {
+      name: this.namespace,
+      ...params,
+    };
+
+    logger.info(ctx, 'Creating checkout session...');
 
     const { data: response, error } = await createLemonSqueezyCheckout(params);
 
@@ -45,9 +47,7 @@ export class LemonSqueezyBillingStrategyService
 
       logger.error(
         {
-          name: 'billing.lemon-squeezy',
-          customerId: params.customerId,
-          accountId: params.accountId,
+          ...ctx,
           error: error?.message,
         },
         'Failed to create checkout session',
@@ -56,14 +56,7 @@ export class LemonSqueezyBillingStrategyService
       throw new Error('Failed to create checkout session');
     }
 
-    logger.info(
-      {
-        name: 'billing.lemon-squeezy',
-        customerId: params.customerId,
-        accountId: params.accountId,
-      },
-      'Checkout session created successfully',
-    );
+    logger.info(ctx, 'Checkout session created successfully');
 
     return {
       checkoutToken: response.data.attributes.url,
@@ -75,13 +68,12 @@ export class LemonSqueezyBillingStrategyService
   ) {
     const logger = await getLogger();
 
-    logger.info(
-      {
-        name: 'billing.lemon-squeezy',
-        customerId: params.customerId,
-      },
-      'Creating billing portal session...',
-    );
+    const ctx = {
+      name: this.namespace,
+      ...params,
+    };
+
+    logger.info(ctx, 'Creating billing portal session...');
 
     const { data, error } =
       await createLemonSqueezyBillingPortalSession(params);
@@ -89,8 +81,7 @@ export class LemonSqueezyBillingStrategyService
     if (error ?? !data) {
       logger.error(
         {
-          name: 'billing.lemon-squeezy',
-          customerId: params.customerId,
+          ...ctx,
           error: error?.message,
         },
         'Failed to create billing portal session',
@@ -99,13 +90,7 @@ export class LemonSqueezyBillingStrategyService
       throw new Error('Failed to create billing portal session');
     }
 
-    logger.info(
-      {
-        name: 'billing.lemon-squeezy',
-        customerId: params.customerId,
-      },
-      'Billing portal session created successfully',
-    );
+    logger.info(ctx, 'Billing portal session created successfully');
 
     return { url: data };
   }
@@ -115,13 +100,12 @@ export class LemonSqueezyBillingStrategyService
   ) {
     const logger = await getLogger();
 
-    logger.info(
-      {
-        name: 'billing.lemon-squeezy',
-        subscriptionId: params.subscriptionId,
-      },
-      'Cancelling subscription...',
-    );
+    const ctx = {
+      name: this.namespace,
+      subscriptionId: params.subscriptionId,
+    };
+
+    logger.info(ctx, 'Cancelling subscription...');
 
     try {
       const { error } = await cancelSubscription(params.subscriptionId);
@@ -129,8 +113,7 @@ export class LemonSqueezyBillingStrategyService
       if (error) {
         logger.error(
           {
-            name: 'billing.lemon-squeezy',
-            subscriptionId: params.subscriptionId,
+            ...ctx,
             error: error.message,
           },
           'Failed to cancel subscription',
@@ -139,20 +122,13 @@ export class LemonSqueezyBillingStrategyService
         throw error;
       }
 
-      logger.info(
-        {
-          name: 'billing.lemon-squeezy',
-          subscriptionId: params.subscriptionId,
-        },
-        'Subscription cancelled successfully',
-      );
+      logger.info(ctx, 'Subscription cancelled successfully');
 
       return { success: true };
     } catch (error) {
       logger.error(
         {
-          name: 'billing.lemon-squeezy',
-          subscriptionId: params.subscriptionId,
+          ...ctx,
           error: (error as Error)?.message,
         },
         'Failed to cancel subscription',
@@ -167,21 +143,19 @@ export class LemonSqueezyBillingStrategyService
   ) {
     const logger = await getLogger();
 
-    logger.info(
-      {
-        name: 'billing.lemon-squeezy',
-        sessionId: params.sessionId,
-      },
-      'Retrieving checkout session...',
-    );
+    const ctx = {
+      name: this.namespace,
+      sessionId: params.sessionId,
+    };
+
+    logger.info(ctx, 'Retrieving checkout session...');
 
     const { data: session, error } = await getCheckout(params.sessionId);
 
     if (error ?? !session?.data) {
       logger.error(
         {
-          name: 'billing.lemon-squeezy',
-          sessionId: params.sessionId,
+          ...ctx,
           error: error?.message,
         },
         'Failed to retrieve checkout session',
@@ -190,13 +164,7 @@ export class LemonSqueezyBillingStrategyService
       throw new Error('Failed to retrieve checkout session');
     }
 
-    logger.info(
-      {
-        name: 'billing.lemon-squeezy',
-        sessionId: params.sessionId,
-      },
-      'Checkout session retrieved successfully',
-    );
+    logger.info(ctx, 'Checkout session retrieved successfully');
 
     const { id, attributes } = session.data;
 
@@ -213,13 +181,12 @@ export class LemonSqueezyBillingStrategyService
   async reportUsage(params: z.infer<typeof ReportBillingUsageSchema>) {
     const logger = await getLogger();
 
-    logger.info(
-      {
-        name: 'billing.lemon-squeezy',
-        subscriptionItemId: params.subscriptionItemId,
-      },
-      'Reporting usage...',
-    );
+    const ctx = {
+      name: this.namespace,
+      subscriptionItemId: params.subscriptionItemId,
+    };
+
+    logger.info(ctx, 'Reporting usage...');
 
     const { error } = await createUsageRecord({
       quantity: params.usage.quantity,
@@ -230,8 +197,7 @@ export class LemonSqueezyBillingStrategyService
     if (error) {
       logger.error(
         {
-          name: 'billing.lemon-squeezy',
-          subscriptionItemId: params.subscriptionItemId,
+          ...ctx,
           error,
         },
         'Failed to report usage',
@@ -240,13 +206,7 @@ export class LemonSqueezyBillingStrategyService
       throw new Error('Failed to report usage');
     }
 
-    logger.info(
-      {
-        name: 'billing.lemon-squeezy',
-        subscriptionItemId: params.subscriptionItemId,
-      },
-      'Usage reported successfully',
-    );
+    logger.info(ctx, 'Usage reported successfully');
 
     return { success: true };
   }
@@ -257,7 +217,7 @@ export class LemonSqueezyBillingStrategyService
     const logger = await getLogger();
 
     const ctx = {
-      name: 'billing.lemon-squeezy',
+      name: this.namespace,
       ...params,
     };
 
@@ -276,11 +236,58 @@ export class LemonSqueezyBillingStrategyService
         'Failed to update subscription',
       );
 
-      throw error;
+      throw new Error('Failed to update subscription');
     }
 
     logger.info(ctx, 'Subscription updated successfully');
 
     return { success: true };
+  }
+
+  async getPlanById(planId: string) {
+    const logger = await getLogger();
+
+    const ctx = {
+      name: this.namespace,
+      planId,
+    };
+
+    logger.info(ctx, 'Retrieving plan by ID...');
+
+    const { error, data } = await getVariant(planId);
+
+    if (error) {
+      logger.error(
+        {
+          ...ctx,
+          error,
+        },
+        'Failed to retrieve plan by ID',
+      );
+
+      throw new Error('Failed to retrieve plan by ID');
+    }
+
+    if (!data) {
+      logger.error(
+        {
+          ...ctx,
+        },
+        'Plan not found',
+      );
+
+      throw new Error('Plan not found');
+    }
+
+    logger.info(ctx, 'Plan retrieved successfully');
+
+    const attrs = data.data.attributes;
+
+    return {
+      id: data.data.id,
+      name: attrs.name,
+      interval: attrs.interval ?? '',
+      amount: attrs.price,
+    };
   }
 }

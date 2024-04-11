@@ -218,6 +218,36 @@ export class StripeBillingStrategyService
     }
   }
 
+  async getPlanById(planId: string) {
+    const logger = await getLogger();
+
+    const ctx = {
+      name: this.namespace,
+      planId,
+    };
+
+    logger.info(ctx, 'Retrieving plan by id...');
+
+    const stripe = await this.stripeProvider();
+
+    try {
+      const plan = await stripe.plans.retrieve(planId);
+
+      logger.info(ctx, 'Plan retrieved successfully');
+
+      return {
+        id: plan.id,
+        name: plan.nickname ?? '',
+        amount: plan.amount ?? 0,
+        interval: plan.interval,
+      };
+    } catch (error) {
+      logger.error({ ...ctx, error }, 'Failed to retrieve plan');
+
+      throw new Error('Failed to retrieve plan');
+    }
+  }
+
   private async stripeProvider(): Promise<Stripe> {
     return createStripeClient();
   }

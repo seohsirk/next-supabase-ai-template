@@ -51,4 +51,11 @@ export abstract class BillingStrategyProviderService {
   ): Promise<{
     success: boolean;
   }>;
+
+  abstract getPlanById(planId: string): Promise<{
+    id: string;
+    name: string;
+    interval: string;
+    amount: number;
+  }>;
 }

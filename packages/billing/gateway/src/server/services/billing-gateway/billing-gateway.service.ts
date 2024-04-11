@@ -127,4 +127,16 @@ export class BillingGatewayService {
 
     return strategy.updateSubscription(payload);
   }
+
+  /**
+   * Retrieves a plan by the specified plan ID.
+   * @param planId
+   */
+  async getPlanById(planId: string) {
+    const strategy = await BillingGatewayFactoryService.GetProviderStrategy(
+      this.provider,
+    );
+
+    return strategy.getPlanById(planId);
+  }
 }

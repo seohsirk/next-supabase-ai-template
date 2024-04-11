@@ -61,7 +61,7 @@ function AuthButtons() {
         <ModeToggle />
 
         <Link href={pathsConfig.auth.signIn}>
-          <Button variant={'ghost'}>
+          <Button className={'rounded-full'} variant={'ghost'}>
             <Trans i18nKey={'auth:signIn'} />
           </Button>
         </Link>

@@ -153,7 +153,7 @@ function PricingItem(
       className={cn(
         props.className,
         `s-full flex flex-1 grow flex-col items-stretch justify-between space-y-8 self-stretch
-            rounded-lg p-6 ring-2 lg:w-4/12 xl:max-w-[22rem] xl:p-8`,
+            rounded-lg p-6 ring-2 lg:w-4/12 xl:max-w-[19rem]`,
         {
           ['ring-primary']: highlighted,
           ['dark:shadow-primary/30 shadow-none ring-transparent dark:shadow-sm']:
