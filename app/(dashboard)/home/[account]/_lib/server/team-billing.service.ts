@@ -7,13 +7,13 @@ import { z } from 'zod';
 import { LineItemSchema } from '@kit/billing';
 import { getBillingGatewayProvider } from '@kit/billing-gateway';
 import { getLogger } from '@kit/shared/logger';
-import { Database } from '@kit/supabase/database';
 import { requireUser } from '@kit/supabase/require-user';
 import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
 
 import appConfig from '~/config/app.config';
 import billingConfig from '~/config/billing.config';
 import pathsConfig from '~/config/paths.config';
+import { Database } from '~/lib/database.types';
 
 import { TeamCheckoutSchema } from '../../_lib/schema/team-billing.schema';
 
@@ -314,7 +314,7 @@ async function getBillingPermissionsForAccountId(
  * customer ID for the provided account ID
  */
 async function getCustomerIdFromAccountId(
-  client: ReturnType<typeof getSupabaseServerActionClient>,
+  client: ReturnType<typeof getSupabaseServerActionClient<Database>>,
   accountId: string,
 ) {
   const { data, error } = await client

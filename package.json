@@ -13,7 +13,17 @@
     "format": "prettier --check \"**/*.{js,cjs,mjs,ts,tsx,md,json}\"",
     "start": "pnpm with-env next start",
     "typecheck": "tsc --noEmit",
-    "with-env": "dotenv -e ./.env.local --"
+    "with-env": "dotenv -e ./.env.local --",
+    "supabase:dev": "supabase status || supabase start",
+    "supabase:stop": "supabase stop",
+    "supabase:reset": "supabase db reset || supabase start",
+    "supabase:status": "supabase status",
+    "supabase:test": "supabase db test",
+    "supabase:db:lint": "supabase db lint",
+    "supabase:deploy": "supabase link --project-ref $SUPABASE_PROJECT_REF && supabase db push",
+    "supabase:typegen": "pnpm run supabase:typegen:packages && pnpm run supabase:typegen:app",
+    "supabase:typegen:packages": "supabase gen types typescript --local > ../../packages/supabase/src/database.types.ts",
+    "supabase:typegen:app": "supabase gen types typescript --local > ./lib/database.types.ts"
   },
   "dependencies": {
     "@epic-web/invariant": "^1.0.0",
@@ -38,7 +48,6 @@
     "@makerkit/data-loader-supabase-nextjs": "^0.0.9",
     "@marsidev/react-turnstile": "^0.5.4",
     "@radix-ui/react-icons": "^1.3.0",
-    "@supabase/ssr": "^0.3.0",
     "@supabase/supabase-js": "^2.42.0",
     "@tanstack/react-query": "5.28.6",
     "@tanstack/react-query-next-experimental": "^5.29.0",
@@ -73,6 +82,7 @@
     "dotenv-cli": "^7.4.1",
     "eslint": "^8.57.0",
     "prettier": "^3.2.5",
+    "supabase": "^1.153.4",
     "tailwindcss": "3.4.1",
     "typescript": "^5.4.3"
   },
@@ -81,7 +91,8 @@
     "extends": [
       "@kit/eslint-config/base",
       "@kit/eslint-config/nextjs",
-      "@kit/eslint-config/react"
+      "@kit/eslint-config/react",
+      "@kit/eslint-config/apps"
     ]
   },
   "prettier": "@kit/prettier-config"
