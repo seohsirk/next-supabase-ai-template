@@ -2,11 +2,13 @@ import Link from 'next/link';
 
 import { ChevronRight } from 'lucide-react';
 
+import { Trans } from '@kit/ui/trans';
+
 export const DocsCard: React.FC<
   React.PropsWithChildren<{
     title: string;
     subtitle?: string | null;
-    link: { url: string; label: string };
+    link: { url: string; label?: string };
   }>
 > = ({ title, subtitle, children, link }) => {
   return (
@@ -35,7 +37,7 @@ export const DocsCard: React.FC<
               className={'text-sm font-medium hover:underline'}
               href={link.url}
             >
-              {link.label}
+              {link.label ?? <Trans i18nKey={'marketing:readMore'} />}
             </Link>
 
             <ChevronRight className={'h-4'} />

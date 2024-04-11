@@ -72,7 +72,13 @@ export class KeystaticClient implements CmsClient {
       return Promise.resolve(undefined);
     }
 
-    return this.mapPost({ entry: doc, slug: params.slug }, []);
+    const allPosts = await reader.collections[collection].all();
+
+    const children = allPosts.filter(
+      (item) => item.entry.parent === params.slug,
+    );
+
+    return this.mapPost({ entry: doc, slug: params.slug }, children);
   }
 
   async getCategories() {

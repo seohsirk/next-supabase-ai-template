@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 
 import { ContentRenderer, createCmsClient } from '@kit/cms';
 import { If } from '@kit/ui/if';
+import { Separator } from '@kit/ui/separator';
 
 import { withI18n } from '~/lib/i18n/with-i18n';
 
@@ -56,7 +57,9 @@ async function DocumentationPage({ params }: PageParams) {
           <ContentRenderer content={page.content} />
         </article>
 
-        <If condition={page.children}>
+        <If condition={page.children.length > 0}>
+          <Separator />
+
           <DocsCards cards={page.children ?? []} />
         </If>
       </div>
