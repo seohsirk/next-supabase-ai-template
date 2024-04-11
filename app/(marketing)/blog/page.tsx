@@ -6,6 +6,7 @@ import { SitePageHeader } from '~/(marketing)/_components/site-page-header';
 import { createI18nServerInstance } from '~/lib/i18n/i18n.server';
 import { withI18n } from '~/lib/i18n/with-i18n';
 
+import { BlogPagination } from './_components/blog-pagination';
 import { PostPreview } from './_components/post-preview';
 
 export const generateMetadata = async () => {
@@ -25,7 +26,7 @@ async function BlogPage({ searchParams }: { searchParams: { page: string } }) {
   const limit = 10;
   const offset = page * limit;
 
-  const { items: posts } = await cms.getContentItems({
+  const { items: posts, total } = await cms.getContentItems({
     collection: 'posts',
     limit,
     offset,
@@ -38,7 +39,7 @@ async function BlogPage({ searchParams }: { searchParams: { page: string } }) {
         subtitle={t('marketing:blogSubtitle')}
       />
 
-      <div className={'container py-12'}>
+      <div className={'container flex flex-col space-y-6 py-12'}>
         <If
           condition={posts.length > 0}
           fallback={<Trans i18nKey="marketing:noPosts" />}
@@ -48,6 +49,14 @@ async function BlogPage({ searchParams }: { searchParams: { page: string } }) {
               return <PostPreview key={idx} post={post} />;
             })}
           </PostsGridList>
+
+          <div>
+            <BlogPagination
+              currentPage={page}
+              canGoToNextPage={offset + limit < total}
+              canGoToPreviousPage={page > 0}
+            />
+          </div>
         </If>
       </div>
     </>
