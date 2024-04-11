@@ -68,9 +68,41 @@ pnpm i
 pnpm dev
 ```
 
-This command will run both the web application and the Supabase container. If the Supabase container is already running, it will only start the web application.
+This command will run the web application.
 
 Please refer to `apps/web/README.md` for more information about the web application.
+
+### 3. Start the Supabase server
+
+To start the Supabase server, you can use the following command:
+
+```bash
+# Start the Supabase server
+pnpm run supabase:web:start
+```
+
+This command runs the Supabase server locally for the app `web`.
+
+Should you add more apps, you can run the following command:
+
+```bash
+# Start the Supabase server for the app `app-name`
+pnpm run supabase:app-name:start
+```
+
+And to stop the Supabase server, you can use the following command:
+
+```bash
+# Stop the Supabase server
+pnpm run supabase:web:stop
+```
+
+To generate the Supabase schema, you can use the following command:
+
+```bash
+# Generate the Supabase schema
+pnpm run supabase:web:typegen
+```
 
 ## Architecture
 

@@ -20,6 +20,9 @@
     "lint:fix": "turbo lint --continue -- --fix --cache --cache-location 'node_modules/.cache/.eslintcache' && manypkg fix",
     "typecheck": "turbo typecheck",
     "test": "turbo test",
+    "supabase:web:start": "pnpm --filter web supabase:start",
+    "supabase:web:stop": "pnpm --filter web supabase:stop",
+    "supabase:web:typegen": "pnpm --filter web supabase:typegen",
     "stripe:listen": "pnpm --filter '@kit/stripe' start"
   },
   "prettier": "@kit/prettier-config",
