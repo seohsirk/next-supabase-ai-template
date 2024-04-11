@@ -43,12 +43,28 @@ export class AuthPageObject {
   async visitConfirmEmailLink(email: string) {
     await this.page.waitForTimeout(300);
 
-    return this.mailbox.visitMailbox(email);
+    await this.mailbox.visitMailbox(email);
   }
 
   createRandomEmail() {
     const value = Math.random() * 1000;
 
     return `${value.toFixed(0)}@makerkit.dev`;
+  }
+
+  async signUpFlow(path: string) {
+    const email = this.createRandomEmail();
+
+    await this.page.goto(`/auth/sign-up?next=${path}`, {
+      waitUntil: 'networkidle',
+    });
+
+    await this.signUp({
+      email,
+      password: 'password',
+      repeatPassword: 'password',
+    });
+
+    await this.visitConfirmEmailLink(email);
   }
 }

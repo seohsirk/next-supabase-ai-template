@@ -2,7 +2,7 @@
 
 import { useCallback, useRef, useState } from 'react';
 
-import { Check } from 'lucide-react';
+import { CheckCircledIcon } from '@radix-ui/react-icons';
 
 import { useSignUpWithEmailAndPassword } from '@kit/supabase/hooks/use-sign-up-with-email-password';
 import { Alert, AlertDescription, AlertTitle } from '@kit/ui/alert';
@@ -71,7 +71,7 @@ export function EmailPasswordSignUpContainer({
 function SuccessAlert() {
   return (
     <Alert variant={'success'}>
-      <Check className={'w-4'} />
+      <CheckCircledIcon className={'w-4'} />
 
       <AlertTitle>
         <Trans i18nKey={'auth:emailConfirmationAlertHeading'} />

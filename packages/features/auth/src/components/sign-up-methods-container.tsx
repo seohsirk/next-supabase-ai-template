@@ -87,6 +87,13 @@ function getCallbackUrl(props: {
     url.searchParams.set('invite_token', props.inviteToken);
   }
 
+  const searchParams = new URLSearchParams(window.location.search);
+  const next = searchParams.get('next');
+
+  if (next) {
+    url.searchParams.set('next', next);
+  }
+
   return url.href;
 }
 

@@ -3,6 +3,7 @@
 import type { User } from '@supabase/supabase-js';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { CheckIcon } from '@radix-ui/react-icons';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
@@ -74,11 +75,13 @@ export function UpdateEmailForm({
     <Form {...form}>
       <form
         className={'flex flex-col space-y-4'}
-        data-test={'update-email-form'}
+        data-test={'account-email-form'}
         onSubmit={form.handleSubmit(updateEmail)}
       >
         <If condition={updateUserMutation.data}>
           <Alert variant={'success'}>
+            <CheckIcon className={'h-4'} />
+
             <AlertTitle>
               <Trans i18nKey={'account:updateEmailSuccess'} />
             </AlertTitle>
@@ -99,7 +102,7 @@ export function UpdateEmailForm({
 
                 <FormControl>
                   <Input
-                    data-test={'profile-new-email-input'}
+                    data-test={'account-email-form-email-input'}
                     required
                     type={'email'}
                     placeholder={''}
@@ -123,7 +126,7 @@ export function UpdateEmailForm({
                 <FormControl>
                   <Input
                     {...field}
-                    data-test={'profile-repeat-email-input'}
+                    data-test={'account-email-form-repeat-email-input'}
                     required
                     type={'email'}
                   />

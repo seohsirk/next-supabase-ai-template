@@ -18,6 +18,12 @@ export class Mailbox {
 
     const json = await this.getInviteEmail(mailbox);
 
+    if (!json.body) {
+      console.log(json);
+
+      throw new Error('Email body was not found');
+    }
+
     const html = (json.body as { html: string }).html;
     const el = parse(html);
 

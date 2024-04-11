@@ -50,7 +50,7 @@ export function UpdateAccountDetailsForm({
     return toast.promise(() => promise, {
       success: t(`updateProfileSuccess`),
       error: t(`updateProfileError`),
-      loading: t(`:pdateProfileLoading`),
+      loading: t(`updateProfileLoading`),
     });
   };
 
@@ -58,7 +58,7 @@ export function UpdateAccountDetailsForm({
     <div className={'flex flex-col space-y-8'}>
       <Form {...form}>
         <form
-          data-test={'update-profile-form'}
+          data-test={'update-account-name-form'}
           className={'flex flex-col space-y-4'}
           onSubmit={form.handleSubmit(onSubmit)}
         >
@@ -72,7 +72,7 @@ export function UpdateAccountDetailsForm({
 
                 <FormControl>
                   <Input
-                    data-test={'profile-display-name'}
+                    data-test={'account-display-name'}
                     minLength={2}
                     placeholder={''}
                     maxLength={100}
