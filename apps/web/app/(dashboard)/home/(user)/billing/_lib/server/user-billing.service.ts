@@ -7,7 +7,6 @@ import { z } from 'zod';
 import { getProductPlanPair } from '@kit/billing';
 import { getBillingGatewayProvider } from '@kit/billing-gateway';
 import { getLogger } from '@kit/shared/logger';
-import { Database } from '@kit/supabase/database';
 import { requireUser } from '@kit/supabase/require-user';
 import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
 
@@ -15,6 +14,7 @@ import { PersonalAccountCheckoutSchema } from '~/(dashboard)/home/(user)/billing
 import appConfig from '~/config/app.config';
 import billingConfig from '~/config/billing.config';
 import pathsConfig from '~/config/paths.config';
+import { Database } from '~/lib/database.types';
 
 export class UserBillingService {
   private readonly namespace = 'billing.personal-account';

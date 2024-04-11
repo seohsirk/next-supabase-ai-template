@@ -32,6 +32,18 @@ const config = {
       2,
       { checksVoidReturn: { attributes: false } },
     ],
+    'no-restricted-imports': [
+      'error',
+      {
+        paths: [
+          {
+            name: 'react-i18next',
+            importNames: ['Trans'],
+            message: 'Please use `@kit/ui/trans` instead',
+          },
+        ],
+      },
+    ],
   },
   ignorePatterns: [
     '**/.eslintrc.cjs',

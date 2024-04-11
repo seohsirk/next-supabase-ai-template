@@ -4,6 +4,10 @@
   "engines": {
     "node": ">=v18.17.1"
   },
+  "author": {
+    "url": "https://makerkit.dev",
+    "name": "MakerKit"
+  },
   "scripts": {
     "build": "turbo build",
     "clean": "git clean -xdf node_modules dist .next",
@@ -15,20 +19,14 @@
     "lint": "turbo lint --continue -- --cache --cache-location 'node_modules/.cache/.eslintcache' && manypkg check",
     "lint:fix": "turbo lint --continue -- --fix --cache --cache-location 'node_modules/.cache/.eslintcache' && manypkg fix",
     "typecheck": "turbo typecheck",
-    "stripe:listen": "pnpm --filter '@kit/stripe' start",
-    "supabase:start": "turbo dev --filter @kit/supabase-config",
-    "supabase:stop": "pnpm --filter '@kit/supabase-config' stop",
-    "supabase:reset": "pnpm --filter '@kit/supabase-config' reset",
-    "supabase:lint": "pnpm --filter '@kit/supabase-config' lint",
-    "supabase:typegen": "pnpm --filter '@kit/supabase-config' typegen"
+    "stripe:listen": "pnpm --filter '@kit/stripe' start"
   },
   "prettier": "@kit/prettier-config",
   "packageManager": "pnpm@8.15.5",
   "workspaces": [
     "apps/*",
     "packages/**",
-    "tooling/*",
-    "supabase"
+    "tooling/*"
   ],
   "dependencies": {
     "@manypkg/cli": "^0.21.3",

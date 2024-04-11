@@ -2,7 +2,6 @@ import { SupabaseClient } from '@supabase/supabase-js';
 
 import { PlusCircle } from 'lucide-react';
 
-import { Database } from '@kit/supabase/database';
 import { getSupabaseServerComponentClient } from '@kit/supabase/server-component-client';
 import {
   AccountInvitationsTable,
@@ -21,6 +20,7 @@ import { If } from '@kit/ui/if';
 import { PageBody, PageHeader } from '@kit/ui/page';
 import { Trans } from '@kit/ui/trans';
 
+import { Database } from '~/lib/database.types';
 import { createI18nServerInstance } from '~/lib/i18n/i18n.server';
 import { withI18n } from '~/lib/i18n/with-i18n';
 

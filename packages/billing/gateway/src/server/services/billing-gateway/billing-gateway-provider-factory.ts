@@ -1,5 +1,6 @@
 import 'server-only';
 
+import { Database } from '@kit/supabase/database';
 import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
 
 import { BillingGatewayService } from './billing-gateway.service';
@@ -18,7 +19,7 @@ export async function getBillingGatewayProvider(
 }
 
 async function getBillingProvider(
-  client: ReturnType<typeof getSupabaseServerActionClient>,
+  client: ReturnType<typeof getSupabaseServerActionClient<Database>>,
 ) {
   const { data, error } = await client
     .from('config')

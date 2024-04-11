@@ -7,15 +7,17 @@ import { createServerClient } from '@supabase/ssr';
 import { Database } from '../database.types';
 import { getSupabaseClientKeys } from '../get-supabase-client-keys';
 
-const createServerSupabaseClient = () => {
+function createServerSupabaseClient() {
   const keys = getSupabaseClientKeys();
 
   return createServerClient<Database>(keys.url, keys.anonKey, {
     cookies: getCookiesStrategy(),
   });
-};
+}
 
-export const getSupabaseServerActionClient = (params?: { admin: boolean }) => {
+export function getSupabaseServerActionClient<
+  GenericSchema = Database,
+>(params?: { admin: boolean }) {
   const keys = getSupabaseClientKeys();
   const admin = params?.admin ?? false;
 
@@ -32,7 +34,7 @@ export const getSupabaseServerActionClient = (params?: { admin: boolean }) => {
       throw new Error('Supabase Service Role Key not provided');
     }
 
-    return createServerClient<Database>(keys.url, serviceRoleKey, {
+    return createServerClient<GenericSchema>(keys.url, serviceRoleKey, {
       auth: {
         persistSession: false,
       },
@@ -41,7 +43,7 @@ export const getSupabaseServerActionClient = (params?: { admin: boolean }) => {
   }
 
   return createServerSupabaseClient();
-};
+}
 
 function getCookiesStrategy() {
   const cookieStore = cookies();

@@ -11,11 +11,11 @@ import { getSupabaseClientKeys } from '../get-supabase-client-keys';
  * @name getSupabaseServerComponentClient
  * @description Get a Supabase client for use in the Server Components
  */
-export const getSupabaseServerComponentClient = (
+export function getSupabaseServerComponentClient<GenericSchema = Database>(
   params = {
     admin: false,
   },
-) => {
+) {
   const keys = getSupabaseClientKeys();
 
   if (params.admin) {
@@ -31,7 +31,7 @@ export const getSupabaseServerComponentClient = (
       throw new Error('Supabase Service Role Key not provided');
     }
 
-    return createServerClient<Database>(keys.url, serviceRoleKey, {
+    return createServerClient<GenericSchema>(keys.url, serviceRoleKey, {
       auth: {
         persistSession: false,
       },
@@ -39,10 +39,10 @@ export const getSupabaseServerComponentClient = (
     });
   }
 
-  return createServerClient<Database>(keys.url, keys.anonKey, {
+  return createServerClient<GenericSchema>(keys.url, keys.anonKey, {
     cookies: getCookiesStrategy(),
   });
-};
+}
 
 function getCookiesStrategy() {
   const cookieStore = cookies();

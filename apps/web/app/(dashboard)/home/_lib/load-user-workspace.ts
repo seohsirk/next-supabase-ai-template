@@ -2,6 +2,8 @@ import { cache } from 'react';
 
 import { getSupabaseServerComponentClient } from '@kit/supabase/server-component-client';
 
+import { Database } from '~/lib/database.types';
+
 export const loadUserWorkspace = cache(async () => {
   const client = getSupabaseServerComponentClient();
 
@@ -15,7 +17,7 @@ export const loadUserWorkspace = cache(async () => {
 });
 
 async function loadUserAccounts(
-  client: ReturnType<typeof getSupabaseServerComponentClient>,
+  client: ReturnType<typeof getSupabaseServerComponentClient<Database>>,
 ) {
   const { data: accounts, error } = await client
     .from('user_accounts')
