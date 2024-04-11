@@ -61,14 +61,14 @@ function AuthButtons() {
         <ModeToggle />
 
         <Link href={pathsConfig.auth.signIn}>
-          <Button className={'rounded-full'} variant={'ghost'}>
+          <Button variant={'link'}>
             <Trans i18nKey={'auth:signIn'} />
           </Button>
         </Link>
       </div>
 
       <Link href={pathsConfig.auth.signUp}>
-        <Button className={'rounded-full'}>
+        <Button variant={'ghost'} className={'border border-primary'}>
           <Trans i18nKey={'auth:getStarted'} />
           <ChevronRight className={'h-4'} />
         </Button>

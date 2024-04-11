@@ -264,7 +264,7 @@ function RightFeatureContainer(props: React.PropsWithChildren) {
 function MainCallToActionButton() {
   return (
     <div className={'flex space-x-2'}>
-      <Button>
+      <Button size={'lg'}>
         <Link href={'/auth/sign-up'}>
           <span className={'flex items-center space-x-0.5'}>
             <span>Get Started</span>
@@ -276,12 +276,6 @@ function MainCallToActionButton() {
               }
             />
           </span>
-        </Link>
-      </Button>
-
-      <Button variant={'ghost'}>
-        <Link href={'/auth/sign-in'}>
-          <span>Sign In</span>
         </Link>
       </Button>
     </div>

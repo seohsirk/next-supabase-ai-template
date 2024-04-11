@@ -8,7 +8,7 @@ export function SitePageHeader(props: {
   return (
     <div className={cn('border-b py-8 xl:py-12 2xl:py-14', props.className)}>
       <div className={'container flex flex-col space-y-4'}>
-        <h1 className={'text-3xl font-semibold xl:text-5xl'}>{props.title}</h1>
+        <h1 className={'font-base text-3xl xl:text-5xl'}>{props.title}</h1>
 
         <h2
           className={
