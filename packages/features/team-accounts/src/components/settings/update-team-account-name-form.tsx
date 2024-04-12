@@ -40,6 +40,7 @@ export const UpdateTeamAccountNameForm = (props: {
     <div className={'space-y-8'}>
       <Form {...form}>
         <form
+          data-test={'update-team-account-name-form'}
           className={'flex flex-col space-y-4'}
           onSubmit={form.handleSubmit((data) => {
             startTransition(async () => {

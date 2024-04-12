@@ -98,6 +98,7 @@ export function AccountSelector({
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
+            data-test={'account-selector-trigger'}
             size={collapsed ? 'icon' : 'default'}
             variant="ghost"
             role="combobox"
@@ -179,6 +180,7 @@ export function AccountSelector({
                   <CommandGroup heading={<Trans i18nKey={'teams:yourTeams'} />}>
                     {(accounts ?? []).map((account) => (
                       <CommandItem
+                        data-test={'account-selector-team-' + account.value}
                         className={'group'}
                         key={account.value}
                         value={account.value ?? ''}
@@ -224,6 +226,7 @@ export function AccountSelector({
               <If condition={features.enableTeamCreation}>
                 <CommandGroup>
                   <Button
+                    data-test={'create-team-account-trigger'}
                     variant="ghost"
                     className="w-full justify-start"
                     onClick={() => {

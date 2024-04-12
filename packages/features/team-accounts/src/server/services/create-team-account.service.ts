@@ -16,8 +16,24 @@ export class CreateTeamAccountService {
 
     logger.info(ctx, `Creating new team account...`);
 
-    return await this.client.rpc('create_account', {
+    const { error, data } = await this.client.rpc('create_team_account', {
       account_name: params.name,
     });
+
+    if (error) {
+      logger.error(
+        {
+          error,
+          ...ctx,
+        },
+        `Error creating team account`,
+      );
+
+      throw new Error('Error creating team account');
+    }
+
+    logger.info(ctx, `Team account created successfully`);
+
+    return { data, error };
   }
 }

@@ -92,7 +92,7 @@ function DeleteTeamContainer(props: {
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <Button
-              data-test={'delete-team-button'}
+              data-test={'delete-team-trigger'}
               type={'button'}
               variant={'destructive'}
             >
@@ -154,6 +154,7 @@ function DeleteTeamConfirmationForm({
     <ErrorBoundary fallback={<DeleteTeamErrorAlert />}>
       <Form {...form}>
         <form
+          data-test={'delete-team-form'}
           className={'flex flex-col space-y-4'}
           action={deleteTeamAccountAction}
         >
@@ -189,7 +190,7 @@ function DeleteTeamConfirmationForm({
 
                   <FormControl>
                     <Input
-                      data-test={'delete-team-input-field'}
+                      data-test={'delete-team-form-confirm-input'}
                       required
                       type={'text'}
                       autoComplete={'off'}
@@ -229,7 +230,7 @@ function DeleteTeamSubmitButton() {
 
   return (
     <Button
-      data-test={'confirm-delete-team-button'}
+      data-test={'delete-team-form-confirm-button'}
       disabled={pending}
       variant={'destructive'}
     >
