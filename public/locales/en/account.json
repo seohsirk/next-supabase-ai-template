@@ -131,6 +131,7 @@
   "dangerZone": "Danger Zone",
   "dangerZoneDescription": "Some actions cannot be undone. Please be careful.",
   "deleteAccount": "Delete your Account",
+  "deletingAccount": "Deleting account. Please wait...",
   "deleteAccountDescription": "This will delete your account and the organizations you own. Furthermore, we will immediately cancel any active subscriptions. This action cannot be undone. You will be asked to confirm this action in the next step.",
   "deleteProfileConfirmationInputLabel": "Type DELETE to confirm",
   "deleteAccountErrorHeading": "Sorry, we couldn't delete your account",
