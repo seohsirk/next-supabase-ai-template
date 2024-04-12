@@ -16,8 +16,6 @@ create extension if not exists "unaccent";
 -- Create a private Makerkit schema
 create schema if not exists kit;
 
-grant USAGE on schema kit to authenticated, authenticated;
-
 -- We remove all default privileges from public schema on functions to
 --   prevent public access to them
 alter default privileges revoke execute on functions from public;
@@ -1595,6 +1593,8 @@ grant execute on function kit.slugify(text) to service_role, authenticated;
 create or replace function kit.set_slug_from_account_name()
     returns trigger
     language plpgsql
+    security definer
+    set search_path = public
     as $$
 declare
     sql_string varchar;
@@ -1616,7 +1616,7 @@ begin
 
         end if;
 
-	sql_string = format('select count(1) cnt from accounts where slug = ''' || tmp_slug ||
+	sql_string = format('select count(1) cnt from public.accounts where slug = ''' || tmp_slug ||
 	    '''; ');
 
         for tmp_row in execute (sql_string)
