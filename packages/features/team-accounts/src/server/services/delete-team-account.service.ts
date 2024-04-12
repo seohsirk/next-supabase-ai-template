@@ -6,7 +6,7 @@ import { getLogger } from '@kit/shared/logger';
 import { Database } from '@kit/supabase/database';
 
 export class DeleteTeamAccountService {
-  private readonly namespace = 'accounts.delete';
+  private readonly namespace = 'accounts.delete-team-account';
 
   /**
    * Deletes a team account. Permissions are not checked here, as they are

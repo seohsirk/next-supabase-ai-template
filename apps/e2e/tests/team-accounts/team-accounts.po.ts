@@ -38,7 +38,9 @@ export class TeamAccountsPageObject {
     await this.page.fill('[data-test="create-team-form"] input', teamName);
     await this.page.click('[data-test="create-team-form"] button:last-child');
 
-    await this.page.waitForURL(`http://localhost:3000/home/${slug}`);
+    await this.page.waitForURL(`http://localhost:3000/home/${slug}`, {
+      timeout: 5000,
+    });
   }
 
   async updateName(name: string) {
@@ -56,7 +58,7 @@ export class TeamAccountsPageObject {
   }
 
    createTeamName() {
-    const random = (Math.random() * 1000000000).toFixed(0);
+    const random = (Math.random() * 10).toFixed(0);
 
     const teamName = `Team-Name-${random}`;
     const slug = `team-name-${random}`;

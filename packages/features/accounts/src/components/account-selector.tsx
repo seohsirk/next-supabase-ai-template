@@ -18,6 +18,7 @@ import {
 } from '@kit/ui/command';
 import { If } from '@kit/ui/if';
 import { Popover, PopoverContent, PopoverTrigger } from '@kit/ui/popover';
+import { Separator } from '@kit/ui/separator';
 import { Trans } from '@kit/ui/trans';
 import { cn } from '@kit/ui/utils';
 
@@ -177,7 +178,14 @@ export function AccountSelector({
 
               <If condition={features.enableTeamAccounts}>
                 <If condition={accounts.length > 0}>
-                  <CommandGroup heading={<Trans i18nKey={'teams:yourTeams'} />}>
+                  <CommandGroup
+                    heading={
+                      <Trans
+                        i18nKey={'teams:yourTeams'}
+                        values={{ teamsCount: accounts.length }}
+                      />
+                    }
+                  >
                     {(accounts ?? []).map((account) => (
                       <CommandItem
                         data-test={'account-selector-team-' + account.value}
@@ -218,32 +226,30 @@ export function AccountSelector({
                       </CommandItem>
                     ))}
                   </CommandGroup>
-
-                  <CommandSeparator />
                 </If>
-              </If>
-
-              <If condition={features.enableTeamCreation}>
-                <CommandGroup>
-                  <Button
-                    data-test={'create-team-account-trigger'}
-                    variant="ghost"
-                    className="w-full justify-start"
-                    onClick={() => {
-                      setIsCreatingAccount(true);
-                      setOpen(false);
-                    }}
-                  >
-                    <Plus className="mr-3 h-4 w-4" />
-
-                    <span>
-                      <Trans i18nKey={'teams:createTeam'} />
-                    </span>
-                  </Button>
-                </CommandGroup>
               </If>
             </CommandList>
           </Command>
+
+          <Separator />
+
+          <If condition={features.enableTeamCreation}>
+            <Button
+              data-test={'create-team-account-trigger'}
+              variant="ghost"
+              className="w-full justify-start"
+              onClick={() => {
+                setIsCreatingAccount(true);
+                setOpen(false);
+              }}
+            >
+              <Plus className="mr-3 h-4 w-4" />
+
+              <span>
+                <Trans i18nKey={'teams:createTeam'} />
+              </span>
+            </Button>
+          </If>
         </PopoverContent>
       </Popover>
 

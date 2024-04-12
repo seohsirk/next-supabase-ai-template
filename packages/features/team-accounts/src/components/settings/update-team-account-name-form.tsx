@@ -4,6 +4,8 @@ import { useTransition } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'sonner';
 
 import { Button } from '@kit/ui/button';
 import {
@@ -28,6 +30,7 @@ export const UpdateTeamAccountNameForm = (props: {
   path: string;
 }) => {
   const [pending, startTransition] = useTransition();
+  const { t } = useTranslation('teams');
 
   const form = useForm({
     resolver: zodResolver(TeamNameFormSchema),
@@ -43,11 +46,17 @@ export const UpdateTeamAccountNameForm = (props: {
           data-test={'update-team-account-name-form'}
           className={'flex flex-col space-y-4'}
           onSubmit={form.handleSubmit((data) => {
-            startTransition(async () => {
-              await updateTeamAccountName({
+            startTransition(() => {
+              const promise = updateTeamAccountName({
                 slug: props.account.slug,
                 name: data.name,
                 path: props.path,
+              });
+
+              toast.promise(promise, {
+                loading: t('updateTeamLoadingMessage'),
+                success: t('updateTeamSuccessMessage'),
+                error: t('updateTeamErrorMessage'),
               });
             });
           })}

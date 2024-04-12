@@ -5,7 +5,6 @@ import { useFormStatus } from 'react-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 
 import { Alert, AlertDescription, AlertTitle } from '@kit/ui/alert';
 import {
@@ -23,6 +22,7 @@ import { Form, FormControl, FormItem, FormLabel } from '@kit/ui/form';
 import { Input } from '@kit/ui/input';
 import { Trans } from '@kit/ui/trans';
 
+import { DeletePersonalAccountSchema } from '../../schema/delete-personal-account.schema';
 import { deletePersonalAccountAction } from '../../server/personal-accounts-server-actions';
 
 export function AccountDangerZone() {
@@ -71,11 +71,7 @@ function DeleteAccountModal() {
 
 function DeleteAccountForm() {
   const form = useForm({
-    resolver: zodResolver(
-      z.object({
-        confirmation: z.string().refine((value) => value === 'DELETE'),
-      }),
-    ),
+    resolver: zodResolver(DeletePersonalAccountSchema),
     defaultValues: {
       confirmation: '',
     },
@@ -140,11 +136,10 @@ function DeleteAccountSubmitButton() {
 
   return (
     <Button
+      data-test={'confirm-delete-account-button'}
       type={'submit'}
       disabled={pending}
-      data-test={'confirm-delete-account-button'}
       name={'action'}
-      value={'delete'}
       variant={'destructive'}
     >
       <Trans i18nKey={'account:deleteAccount'} />

@@ -1,5 +1,6 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
 import { RedirectType, redirect } from 'next/navigation';
 
 import { z } from 'zod';
@@ -8,6 +9,7 @@ import { getLogger } from '@kit/shared/logger';
 import { requireUser } from '@kit/supabase/require-user';
 import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
 
+import { DeletePersonalAccountSchema } from '../schema/delete-personal-account.schema';
 import { DeletePersonalAccountService } from './services/delete-personal-account.service';
 
 const emailSettings = getEmailSettingsFromEnvironment();
@@ -21,10 +23,13 @@ export async function refreshAuthSession() {
 }
 
 export async function deletePersonalAccountAction(formData: FormData) {
-  const confirmation = formData.get('confirmation');
+  // validate the form data
+  const { success } = DeletePersonalAccountSchema.safeParse(
+    Object.fromEntries(formData.entries()),
+  );
 
-  if (confirmation !== 'DELETE') {
-    throw new Error('Confirmation required to delete account');
+  if (!success) {
+    throw new Error('Invalid form data');
   }
 
   const client = getSupabaseServerActionClient();
@@ -32,7 +37,13 @@ export async function deletePersonalAccountAction(formData: FormData) {
 
   if (auth.error) {
     const logger = await getLogger();
-    logger.error(`User is not authenticated. Redirecting to login page`);
+
+    logger.error(
+      {
+        error: auth.error,
+      },
+      `User is not authenticated. Redirecting to login page.`,
+    );
 
     redirect(auth.redirectTo);
   }
@@ -54,6 +65,8 @@ export async function deletePersonalAccountAction(formData: FormData) {
 
   // sign out the user after deleting their account
   await client.auth.signOut();
+
+  revalidatePath('/', 'layout');
 
   // redirect to the home page
   redirect('/', RedirectType.replace);

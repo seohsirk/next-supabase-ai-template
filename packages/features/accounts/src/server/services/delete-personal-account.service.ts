@@ -35,11 +35,15 @@ export class DeletePersonalAccountService {
       productName: string;
     };
   }) {
-    const userId = params.userId;
     const logger = await getLogger();
+
+    const userId = params.userId;
     const ctx = { userId, name: this.namespace };
 
-    logger.info(ctx, 'User requested deletion. Processing...');
+    logger.info(
+      ctx,
+      'User requested to delete their personal account. Processing...',
+    );
 
     // execute the deletion of the user
     try {
@@ -50,12 +54,12 @@ export class DeletePersonalAccountService {
           ...ctx,
           error,
         },
-        'Error deleting user',
+        'Encountered an error deleting user',
       );
 
       throw new Error('Error deleting user');
     }
 
-    logger.info(ctx, 'User deleted successfully');
+    logger.info(ctx, 'User successfully deleted!');
   }
 }

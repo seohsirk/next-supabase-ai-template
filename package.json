@@ -23,6 +23,7 @@
     "supabase:web:start": "pnpm --filter web supabase:start",
     "supabase:web:stop": "pnpm --filter web supabase:stop",
     "supabase:web:typegen": "pnpm --filter web supabase:typegen",
+    "supabase:web:reset": "pnpm --filter web supabase:reset",
     "stripe:listen": "pnpm --filter '@kit/stripe' start"
   },
   "prettier": "@kit/prettier-config",

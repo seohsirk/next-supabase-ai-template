@@ -55,7 +55,9 @@ test.describe('Account Deletion', () => {
     await account.setup();
     await account.deleteAccount();
 
-    await page.waitForURL('http://localhost:3000');
+    await page.waitForURL('http://localhost:3000', {
+      timeout: 5000,
+    });
 
     expect(page.url()).toEqual('http://localhost:3000/');
   });
