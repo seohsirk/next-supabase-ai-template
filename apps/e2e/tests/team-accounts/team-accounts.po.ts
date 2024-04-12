@@ -56,7 +56,7 @@ export class TeamAccountsPageObject {
   }
 
    createTeamName() {
-    const random = (Math.random() * 100).toFixed(0);
+    const random = (Math.random() * 1000000000).toFixed(0);
 
     const teamName = `Team-Name-${random}`;
     const slug = `team-name-${random}`;

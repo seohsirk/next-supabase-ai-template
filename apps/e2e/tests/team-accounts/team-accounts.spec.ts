@@ -12,13 +12,13 @@ test.describe('Team Accounts', () => {
     await teamAccounts.setup();
   });
 
-  test('user can update their profile name', async () => {
+  test('user can update their team name (and slug)', async () => {
     const {teamName, slug} = teamAccounts.createTeamName();
 
     await teamAccounts.goToSettings();
-
     await teamAccounts.updateName(teamName);
 
+    // the slug should be updated to match the new team name
     await page.waitForURL(`http://localhost:3000/home/${slug}/settings`);
 
     await expect(await teamAccounts.getTeamFromSelector(slug)).toBeVisible();
