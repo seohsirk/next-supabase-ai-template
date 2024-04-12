@@ -133,7 +133,7 @@ function InviteMembersForm({
             const roleInputName = `invitations.${index}.role` as const;
 
             return (
-              <div key={field.id}>
+              <div data-test={'invite-member-form-item'} key={field.id}>
                 <div className={'flex items-end space-x-0.5 md:space-x-2'}>
                   <div className={'w-7/12'}>
                     <FormField
@@ -216,7 +216,7 @@ function InviteMembersForm({
 
           <div>
             <Button
-              data-test={'append-new-invite-button'}
+              data-test={'add-new-invite-button'}
               type={'button'}
               variant={'link'}
               size={'sm'}
@@ -234,7 +234,7 @@ function InviteMembersForm({
           </div>
         </div>
 
-        <Button disabled={pending}>
+        <Button type={'submit'} disabled={pending}>
           <Trans
             i18nKey={
               pending

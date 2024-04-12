@@ -26,7 +26,7 @@ export const MembershipRoleSelector: React.FC<{
           return (
             <SelectItem
               key={role}
-              data-test={`role-item-${role}`}
+              data-test={`role-option-${role}`}
               disabled={currentUserRole === role}
               value={role}
             >
