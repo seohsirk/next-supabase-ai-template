@@ -32,7 +32,13 @@ const AppConfigSchema = z
   })
   .refine(
     (schema) => {
-      return !(schema.production && schema.url.startsWith('http:'));
+      const isCI = process.env.NEXT_PUBLIC_CI;
+
+      if (isCI ?? !schema.production) {
+        return true;
+      }
+
+      return !schema.url.startsWith('http:');
     },
     {
       message: `Please use a valid HTTPS URL in production.`,

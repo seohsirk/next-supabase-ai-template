@@ -87,7 +87,9 @@ jobs:
         run: pnpm run supabase:web:start -- -x studio,migra,deno-relay,pgadmin-schema-diff,imgproxy,logflare
 
       - name: Run App
-        run: pnpm run dev &
+        run: |
+          pnpm --filter web build:test
+          pnpm --filter web start:test
 
       - name: Run Playwright tests
         run: pnpm run test
