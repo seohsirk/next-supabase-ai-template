@@ -56,6 +56,6 @@ test.describe('Account Deletion', () => {
     await account.setup();
     await account.deleteAccount();
 
-    await account.auth.goToSignIn();
+    await page.waitForURL('http://localhost:3000');
   });
 });
