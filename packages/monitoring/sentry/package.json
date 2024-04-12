@@ -19,8 +19,8 @@
     "@opentelemetry/resources": "1.23.0",
     "@opentelemetry/sdk-node": "0.50.0",
     "@opentelemetry/semantic-conventions": "^1.23.0",
-    "@sentry/nextjs": "^7.109.0",
-    "@sentry/opentelemetry-node": "^7.109.0"
+    "@sentry/nextjs": "^7.110.0",
+    "@sentry/opentelemetry-node": "^7.110.0"
   },
   "devDependencies": {
     "@kit/eslint-config": "workspace:*",

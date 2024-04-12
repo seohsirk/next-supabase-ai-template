@@ -40,8 +40,4 @@ export class AccountPageObject {
   getProfileName() {
     return this.page.locator('[data-test="account-dropdown-display-name"]');
   }
-
-  getProfileEmail() {
-    return this.page.locator('[data-test="account-dropdown-email"]');
-  }
 }

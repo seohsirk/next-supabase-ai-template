@@ -24,9 +24,9 @@
     "zod": "^3.22.4"
   },
   "dependencies": {
-    "@stripe/react-stripe-js": "^2.6.2",
-    "@stripe/stripe-js": "^3.1.0",
-    "stripe": "^14.22.0"
+    "@stripe/react-stripe-js": "^2.7.0",
+    "@stripe/stripe-js": "^3.3.0",
+    "stripe": "^14.25.0"
   },
   "devDependencies": {
     "@kit/billing": "workspace:^",
@@ -37,7 +37,7 @@
     "@kit/tailwind-config": "workspace:*",
     "@kit/tsconfig": "workspace:*",
     "@kit/ui": "workspace:^",
-    "@types/react": "^18.2.75",
+    "@types/react": "^18.2.77",
     "date-fns": "^3.6.0",
     "react": "18.2.0",
     "zod": "^3.22.4"

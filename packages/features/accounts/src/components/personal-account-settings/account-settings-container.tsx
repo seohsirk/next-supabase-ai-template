@@ -156,7 +156,7 @@ export function PersonalAccountSettingsContainer(
 
 function useSupportMultiLanguage() {
   const { i18n } = useTranslation();
-  const langs = (i18n.options.supportedLngs as string[]) ?? [];
+  const langs = (i18n?.options?.supportedLngs as string[]) ?? [];
 
   const supportedLangs = langs.filter((lang) => lang !== 'cimode');
 

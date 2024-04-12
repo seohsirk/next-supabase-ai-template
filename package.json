@@ -20,6 +20,7 @@
     "lint:fix": "turbo lint --cache-dir=.turbo --continue -- --fix --cache --cache-location 'node_modules/.cache/.eslintcache' && manypkg fix",
     "typecheck": "turbo typecheck --cache-dir=.turbo",
     "test": "turbo test --cache-dir=.turbo",
+    "update": "pnpm update -r",
     "supabase:web:start": "pnpm --filter web supabase:start",
     "supabase:web:stop": "pnpm --filter web supabase:stop",
     "supabase:web:typegen": "pnpm --filter web supabase:typegen",
@@ -40,7 +41,7 @@
     "pnpm": "^8.15.6",
     "prettier": "^3.2.5",
     "turbo": "^1.13.2",
-    "typescript": "^5.4.3",
+    "typescript": "^5.4.5",
     "yarn": "^1.22.22"
   }
 }

@@ -11,15 +11,11 @@ export class AuthPageObject {
   }
 
   goToSignIn() {
-    return this.page.goto('/auth/sign-in', {
-      waitUntil: 'networkidle',
-    });
+    return this.page.goto('/auth/sign-in');
   }
 
   goToSignUp() {
-    return this.page.goto('/auth/sign-up', {
-      waitUntil: 'networkidle',
-    });
+    return this.page.goto('/auth/sign-up');
   }
 
   async signOut() {
@@ -31,6 +27,8 @@ export class AuthPageObject {
     email: string,
     password: string
   }) {
+    await this.page.waitForTimeout(100);
+
     await this.page.fill('input[name="email"]', params.email);
     await this.page.fill('input[name="password"]', params.password);
     await this.page.click('button[type="submit"]');
@@ -41,6 +39,8 @@ export class AuthPageObject {
     password: string,
     repeatPassword: string
   }) {
+    await this.page.waitForTimeout(100);
+
     await this.page.fill('input[name="email"]', params.email);
     await this.page.fill('input[name="password"]', params.password);
     await this.page.fill('input[name="repeatPassword"]', params.repeatPassword);
@@ -64,9 +64,7 @@ export class AuthPageObject {
   async signUpFlow(path: string) {
     const email = this.createRandomEmail();
 
-    await this.page.goto(`/auth/sign-up?next=${path}`, {
-      waitUntil: 'networkidle',
-    });
+    await this.page.goto(`/auth/sign-up?next=${path}`);
 
     await this.signUp({
       email,

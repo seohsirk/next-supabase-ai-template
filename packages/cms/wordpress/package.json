@@ -13,19 +13,18 @@
   "exports": {
     ".": "./src/index.ts"
   },
-  "dependencies": {},
   "peerDependencies": {
     "@kit/cms": "workspace:^",
     "@kit/ui": "workspace:^"
   },
   "devDependencies": {
-    "@kit/cms": "*",
+    "@kit/cms": "^0.1.0",
     "@kit/eslint-config": "workspace:*",
     "@kit/prettier-config": "workspace:*",
     "@kit/tsconfig": "workspace:*",
-    "@kit/ui": "*",
+    "@kit/ui": "^0.1.0",
     "@types/node": "^20.12.7",
-    "wp-types": "^3.64.0"
+    "wp-types": "^3.65.0"
   },
   "eslintConfig": {
     "root": true,

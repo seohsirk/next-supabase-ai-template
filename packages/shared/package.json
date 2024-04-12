@@ -14,7 +14,7 @@
     "./utils": "./src/utils.ts"
   },
   "dependencies": {
-    "pino": "^8.19.0"
+    "pino": "^8.20.0"
   },
   "devDependencies": {
     "@kit/eslint-config": "workspace:*",

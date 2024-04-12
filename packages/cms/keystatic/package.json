@@ -24,11 +24,11 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@kit/cms": "*",
+    "@kit/cms": "^0.1.0",
     "@kit/eslint-config": "workspace:*",
     "@kit/prettier-config": "workspace:*",
     "@kit/tsconfig": "workspace:*",
-    "@kit/ui": "*",
+    "@kit/ui": "^0.1.0",
     "@types/node": "^20.12.7",
     "zod": "^3.22.4"
   },
