@@ -38,6 +38,7 @@ test.describe('Account Settings', () => {
 
   test('user can update their password', async () => {
     const password = (Math.random() * 100000).toString();
+
     await account.updatePassword(password);
 
     await page.waitForResponse((resp) => {

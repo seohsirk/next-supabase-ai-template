@@ -48,9 +48,6 @@
     "test": {
       "dependsOn": [
         "^topo"
-      ],
-      "outputs": [
-        "node_modules/.cache/tsbuildinfo.json"
       ]
     },
     "clean": {

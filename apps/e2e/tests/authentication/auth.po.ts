@@ -74,10 +74,6 @@ export class AuthPageObject {
       repeatPassword: 'password',
     });
 
-    await this.page.waitForResponse((resp) => {
-      return resp.url().includes('auth');
-    });
-
     await this.visitConfirmEmailLink(email);
   }
 }
