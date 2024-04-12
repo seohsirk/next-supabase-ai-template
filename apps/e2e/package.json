@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "report": "playwright show-report",
-    "test": "playwright test",
+    "test": "playwright test --max-failures=1",
     "test:ui": "playwright test --ui"
   },
   "keywords": [],
