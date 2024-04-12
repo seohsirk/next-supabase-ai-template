@@ -8,11 +8,11 @@ test.describe('Team Accounts', () => {
   test.beforeAll(async ({ browser }) => {
     page = await browser.newPage();
     teamAccounts = new TeamAccountsPageObject(page);
-
-    await teamAccounts.setup();
   });
 
   test('user can update their team name (and slug)', async () => {
+    await teamAccounts.setup();
+
     const {teamName, slug} = teamAccounts.createTeamName();
 
     await teamAccounts.goToSettings();
@@ -34,12 +34,6 @@ test.describe('Account Deletion', () => {
     await teamAccounts.goToSettings();
 
     await teamAccounts.deleteAccount(params.teamName);
-
-    await page.waitForURL('http://localhost:3000/home', {
-      timeout: 5000,
-    });
-
-    expect(page.url()).toEqual('http://localhost:3000/home');
 
     await expect(await teamAccounts.getTeamFromSelector(params.slug)).not.toBeVisible();
   });

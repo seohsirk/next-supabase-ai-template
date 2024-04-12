@@ -142,7 +142,11 @@ function DeleteAccountSubmitButton() {
       name={'action'}
       variant={'destructive'}
     >
-      <Trans i18nKey={'account:deleteAccount'} />
+      {pending ? (
+        <Trans i18nKey={'account:deletingAccount'} />
+      ) : (
+        <Trans i18nKey={'account:deleteAccount'} />
+      )}
     </Button>
   );
 }

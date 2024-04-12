@@ -1,7 +1,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { RedirectType, redirect } from 'next/navigation';
+import { redirect } from 'next/navigation';
 
 import { z } from 'zod';
 
@@ -66,10 +66,11 @@ export async function deletePersonalAccountAction(formData: FormData) {
   // sign out the user after deleting their account
   await client.auth.signOut();
 
+  // clear the cache for all pages
   revalidatePath('/', 'layout');
 
   // redirect to the home page
-  redirect('/', RedirectType.replace);
+  redirect('/');
 }
 
 function getEmailSettingsFromEnvironment() {
