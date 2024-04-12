@@ -1004,8 +1004,8 @@ create policy invitations_read_self on public.invitations
 create policy invitations_create_self on public.invitations
     for insert to authenticated
         with check (
-public.has_permission(
-        auth.uid(), account_id, 'invites.manage' ::app_permissions)
+        public.is_set('enable_team_accounts') and
+public.has_permission(auth.uid(), account_id, 'invites.manage' ::app_permissions)
         and public.has_more_elevated_role(
         auth.uid(), account_id, role));
 
@@ -1592,7 +1592,7 @@ strict immutable;
 
 grant execute on function kit.slugify(text) to service_role, authenticated;
 
-create function kit.set_slug_from_account_name()
+create or replace function kit.set_slug_from_account_name()
     returns trigger
     language plpgsql
     as $$
@@ -1621,7 +1621,7 @@ begin
 
         for tmp_row in execute (sql_string)
             loop
-                raise notice '%', tmp_row;
+                raise notice 'tmp_row %', tmp_row;
 
                 tmp_row_count = tmp_row.cnt;
 
@@ -1701,7 +1701,8 @@ create trigger on_auth_user_created
     after insert on auth.users for each row
     execute procedure kit.setup_new_user();
 
-create or replace function public.create_account(account_name text)
+-- Function: create a team account
+create or replace function public.create_team_account(account_name text)
     returns public.accounts
     as $$
 declare
@@ -1723,7 +1724,7 @@ end;
 $$
 language plpgsql;
 
-grant execute on function public.create_account(text) to
+grant execute on function public.create_team_account(text) to
     authenticated, service_role;
 
 -- RLS
