@@ -127,6 +127,14 @@ create type public.subscription_item_type as ENUM(
 );
 
 /*
+* Invitation Type
+- We create the invitation type for the Supabase MakerKit. These types are used to manage the type of the invitation
+*/
+create type public.invitation as (
+    email text,
+    role varchar( 50));
+
+/*
  * -------------------------------------------------------
  * Section: App Configuration
  * We create the configuration for the Supabase MakerKit to enable or disable features
@@ -1949,13 +1957,9 @@ language plpgsql;
 grant execute on function public.get_account_invitations(text) to
     authenticated, service_role;
 
-create type kit.invitation as (
-    email text,
-    role varchar( 50));
-
 create or replace function
     public.add_invitations_to_account(account_slug text, invitations
-    kit.invitation[])
+    public.invitation[])
     returns public.invitations[]
     as $$
 declare
@@ -1999,7 +2003,7 @@ $$
 language plpgsql;
 
 grant execute on function public.add_invitations_to_account(text,
-    kit.invitation[]) to authenticated, service_role;
+    public.invitation[]) to authenticated, service_role;
 
 -- Storage
 -- Account Image
