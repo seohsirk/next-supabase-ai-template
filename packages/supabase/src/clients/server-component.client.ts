@@ -5,8 +5,14 @@ import { cookies } from 'next/headers';
 import { createServerClient } from '@supabase/ssr';
 
 import { Database } from '../database.types';
-import { getServiceRoleKey } from '../get-service-role-key';
+import {
+  getServiceRoleKey,
+  warnServiceRoleKeyUsage,
+} from '../get-service-role-key';
 import { getSupabaseClientKeys } from '../get-supabase-client-keys';
+
+const serviceRoleKey = getServiceRoleKey();
+const keys = getSupabaseClientKeys();
 
 /**
  * @name getSupabaseServerComponentClient
@@ -17,10 +23,8 @@ export function getSupabaseServerComponentClient<GenericSchema = Database>(
     admin: false,
   },
 ) {
-  const keys = getSupabaseClientKeys();
-
   if (params.admin) {
-    const serviceRoleKey = getServiceRoleKey();
+    warnServiceRoleKeyUsage();
 
     return createServerClient<GenericSchema>(keys.url, serviceRoleKey, {
       auth: {

@@ -5,12 +5,16 @@ import { cookies } from 'next/headers';
 import { createServerClient } from '@supabase/ssr';
 
 import { Database } from '../database.types';
-import { getServiceRoleKey } from '../get-service-role-key';
+import {
+  getServiceRoleKey,
+  warnServiceRoleKeyUsage,
+} from '../get-service-role-key';
 import { getSupabaseClientKeys } from '../get-supabase-client-keys';
 
-function createServerSupabaseClient() {
-  const keys = getSupabaseClientKeys();
+const keys = getSupabaseClientKeys();
+const serviceRoleKey = getServiceRoleKey();
 
+function createServerSupabaseClient() {
   return createServerClient<Database>(keys.url, keys.anonKey, {
     cookies: getCookiesStrategy(),
   });
@@ -23,7 +27,7 @@ export function getSupabaseServerActionClient<
   const admin = params?.admin ?? false;
 
   if (admin) {
-    const serviceRoleKey = getServiceRoleKey();
+    warnServiceRoleKeyUsage();
 
     return createServerClient<GenericSchema>(keys.url, serviceRoleKey, {
       auth: {
