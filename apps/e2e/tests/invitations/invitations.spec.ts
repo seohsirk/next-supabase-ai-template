@@ -37,7 +37,7 @@ test.describe('Invitations', () => {
     await invitations.auth.signOut();
 
     await invitations.auth.visitConfirmEmailLink(invites[0]!.email, {
-      deleteAfter: false
+      deleteAfter: true
     });
 
     await invitations.auth.signUp({
