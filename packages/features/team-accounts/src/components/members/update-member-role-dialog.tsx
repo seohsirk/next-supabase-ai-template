@@ -47,37 +47,37 @@ export const UpdateMemberRoleDialog: React.FC<{
   userRole,
   userRoleHierarchy,
 }) => {
-  return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>
-            <Trans i18nKey={'teams:updateMemberRoleModalHeading'} />
-          </DialogTitle>
+    return (
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              <Trans i18nKey={'teams:updateMemberRoleModalHeading'} />
+            </DialogTitle>
 
-          <DialogDescription>
-            <Trans i18nKey={'teams:updateMemberRoleModalDescription'} />
-          </DialogDescription>
-        </DialogHeader>
+            <DialogDescription>
+              <Trans i18nKey={'teams:updateMemberRoleModalDescription'} />
+            </DialogDescription>
+          </DialogHeader>
 
-        <RolesDataProvider
-          accountId={accountId}
-          maxRoleHierarchy={userRoleHierarchy}
-        >
-          {(data) => (
-            <UpdateMemberForm
-              setIsOpen={setIsOpen}
-              userId={userId}
-              accountId={accountId}
-              userRole={userRole}
-              roles={data}
-            />
-          )}
-        </RolesDataProvider>
-      </DialogContent>
-    </Dialog>
-  );
-};
+          <RolesDataProvider
+            accountId={accountId}
+            maxRoleHierarchy={userRoleHierarchy}
+          >
+            {(data) => (
+              <UpdateMemberForm
+                setIsOpen={setIsOpen}
+                userId={userId}
+                accountId={accountId}
+                userRole={userRole}
+                roles={data}
+              />
+            )}
+          </RolesDataProvider>
+        </DialogContent>
+      </Dialog>
+    );
+  };
 
 function UpdateMemberForm({
   userId,
@@ -130,6 +130,7 @@ function UpdateMemberForm({
   return (
     <Form {...form}>
       <form
+        data-test={'update-member-role-form'}
         onSubmit={form.handleSubmit(onSubmit)}
         className={'flex flex-col space-y-6'}
       >
