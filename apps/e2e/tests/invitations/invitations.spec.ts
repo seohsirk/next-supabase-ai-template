@@ -12,9 +12,7 @@ test.describe('Invitations', () => {
     await invitations.setup();
   });
 
-  test('Full invite flow', async ({page}) => {
-    await page.waitForLoadState('networkidle');
-
+  test('Full invite flow', async () => {
     await invitations.navigateToMembers();
     await invitations.openInviteForm();
 
@@ -57,9 +55,7 @@ test.describe('Invitations', () => {
     await expect(await invitations.teamAccounts.getTeams()).toHaveCount(1);
   });
 
-  test('users can delete invites', async ({page}) => {
-    await page.waitForLoadState('networkidle');
-
+  test('users can delete invites', async () => {
     await invitations.navigateToMembers();
     await invitations.openInviteForm();
 
@@ -81,9 +77,7 @@ test.describe('Invitations', () => {
     await expect(await invitations.getInvitations()).toHaveCount(0);
   });
 
-  test('users can update invites', async ({page}) => {
-    await page.waitForLoadState('networkidle');
-
+  test('users can update invites', async () => {
     await invitations.navigateToMembers();
     await invitations.openInviteForm();
 

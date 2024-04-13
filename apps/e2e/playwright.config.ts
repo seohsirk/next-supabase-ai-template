@@ -26,10 +26,10 @@ export default defineConfig({
     baseURL: 'http://localhost:3000',
 
     // take a screenshot when a test fails
-    screenshot: "on",
+    screenshot: 'on',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
+    trace: 'on-first-retry'
   },
 
   // test timeout set to 2 minutes
@@ -43,8 +43,8 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
-    },
+      use: { ...devices['Desktop Chrome'] }
+    }
     /* Test against mobile viewports. */
     // {
     //   name: 'Mobile Chrome',
@@ -67,9 +67,11 @@ export default defineConfig({
   ],
 
   /* Run your local dev server before starting the tests */
-  // webServer: {
-  //   command: 'npm run start',
-  //   url: 'http://127.0.0.1:3000',
-  //   reuseExistingServer: !process.env.CI,
-  // },
+  webServer: {
+    command: 'cd ../../ && pnpm run dev',
+    url: 'http://localhost:3000',
+    reuseExistingServer: !process.env.CI,
+    stdout: 'pipe',
+    stderr: 'pipe'
+  }
 });

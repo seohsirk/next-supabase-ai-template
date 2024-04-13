@@ -44,6 +44,7 @@ export class AuthPageObject {
     await this.page.fill('input[name="email"]', params.email);
     await this.page.fill('input[name="password"]', params.password);
     await this.page.fill('input[name="repeatPassword"]', params.repeatPassword);
+
     await this.page.click('button[type="submit"]');
   }
 
@@ -51,7 +52,7 @@ export class AuthPageObject {
     deleteAfter: boolean
   }) {
     return expect(async() => {
-      const res = await this.mailbox.visitMailbox(email);
+      const res = await this.mailbox.visitMailbox(email, params);
 
       expect(res).not.toBeNull();
     }).toPass();
