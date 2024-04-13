@@ -88,7 +88,7 @@ export function InviteMembersDialogContainer({
               pending={pending}
               roles={roles}
               onSubmit={(data) => {
-                startTransition(async () => {
+                startTransition(() => {
                   const promise = createInvitationsAction({
                     accountSlug,
                     invitations: data.invitations,

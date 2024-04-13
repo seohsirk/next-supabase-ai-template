@@ -86,6 +86,10 @@ jobs:
       - name: Supabase Server
         run: pnpm run supabase:web:start -- -x studio,migra,deno-relay,pgadmin-schema-diff,imgproxy,logflare
 
+      - name: Run App
+        run: |
+          pnpm run dev &
+
       - name: Run Playwright tests
         run: pnpm run test
       - uses: actions/upload-artifact@v4
