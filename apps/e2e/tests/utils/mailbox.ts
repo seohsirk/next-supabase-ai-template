@@ -12,7 +12,7 @@ export class Mailbox {
   }) {
     const mailbox = email.split('@')[0];
 
-    console.log(`Visiting mailbox ${mailbox} ...`)
+    console.log(`Visiting mailbox ${email} ...`)
 
     if (!mailbox) {
       throw new Error('Invalid email');
@@ -33,7 +33,7 @@ export class Mailbox {
       throw new Error('No link found in email');
     }
 
-    console.log(`Visiting ${linkHref} ...`);
+    console.log(`Visiting ${linkHref} from mailbox ${email}...`);
 
     return this.page.goto(linkHref);
   }
@@ -41,7 +41,7 @@ export class Mailbox {
   async getInviteEmail(
     mailbox: string,
     params = {
-      deleteAfter: true
+      deleteAfter: false,
     }
   ) {
     const url = `http://localhost:54324/api/v1/mailbox/${mailbox}`;

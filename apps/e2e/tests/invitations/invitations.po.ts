@@ -1,4 +1,4 @@
-import { expect, Page } from '@playwright/test';
+import { Page } from '@playwright/test';
 import { AuthPageObject } from '../authentication/auth.po';
 import { TeamAccountsPageObject } from '../team-accounts/team-accounts.po';
 
@@ -29,6 +29,8 @@ export class InvitationsPageObject {
       if (!invite) {
         continue;
       }
+
+      console.log(`Inviting ${invite.email} with role ${invite.role}...`)
 
       const nth = index + 1;
 
@@ -91,10 +93,12 @@ export class InvitationsPageObject {
   }
 
   async acceptInvitation() {
+    console.log('Accepting invitation...');
+
     await this.page.locator('[data-test="join-team-form"] button[type="submit"]').click();
 
     await this.page.waitForResponse(response => {
       return response.url().includes('/join') && response.request().method() === 'POST';
-    })
+    });
   }
 }

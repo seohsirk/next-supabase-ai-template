@@ -10,29 +10,7 @@ execute function "supabase_functions"."http_request"(
   'POST',
   '{"Content-Type":"application/json", "X-Supabase-Event-Signature":"WEBHOOKSECRET"}',
   '{}',
-  '1000'
-);
-
--- this webhook will be triggered after every insert on the accounts_memberships table
-create trigger "accounts_memberships_insert" after insert
-on "public"."accounts_memberships" for each row
-execute function "supabase_functions"."http_request"(
-  'http://host.docker.internal:3000/api/db/webhook',
-  'POST',
-  '{"Content-Type":"application/json", "X-Supabase-Event-Signature":"WEBHOOKSECRET"}',
-  '{}',
-  '1000'
-);
-
--- this webhook will be triggered after every delete on the accounts_memberships table
-create trigger "accounts_memberships_delete" after delete
-on "public"."accounts_memberships" for each row
-execute function "supabase_functions"."http_request"(
-  'http://host.docker.internal:3000/api/db/webhook',
-  'POST',
-  '{"Content-Type":"application/json", "X-Supabase-Event-Signature":"WEBHOOKSECRET"}',
-  '{}',
-  '1000'
+  '5000'
 );
 
 -- this webhook will be triggered after a delete on the subscriptions table
@@ -44,7 +22,7 @@ execute function "supabase_functions"."http_request"(
   'POST',
   '{"Content-Type":"application/json", "X-Supabase-Event-Signature":"WEBHOOKSECRET"}',
   '{}',
-  '1000'
+  '5000'
 );
 
 -- this webhook will be triggered after every insert on the invitations table
@@ -56,5 +34,5 @@ execute function "supabase_functions"."http_request"(
   'POST',
   '{"Content-Type":"application/json", "X-Supabase-Event-Signature":"WEBHOOKSECRET"}',
   '{}',
-  '1000'
+  '5000'
 );
