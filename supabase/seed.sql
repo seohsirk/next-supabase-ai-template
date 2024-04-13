@@ -25,7 +25,7 @@ execute function "supabase_functions"."http_request"(
 );
 
 -- this webhook will be triggered after every delete on the accounts_memberships table
-create trigger "account_membership_delete" after delete
+create trigger "accounts_memberships_delete" after delete
 on "public"."accounts_memberships" for each row
 execute function "supabase_functions"."http_request"(
   'http://host.docker.internal:3000/api/db/webhook',
