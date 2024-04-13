@@ -1,10 +1,15 @@
 import { cookies, headers } from 'next/headers';
 
 import {
-  getLanguageCookie,
   initializeServerI18n,
   parseAcceptLanguageHeader,
 } from '@kit/i18n/server';
+
+import {
+  I18N_COOKIE_NAME,
+  getI18nSettings,
+  languages,
+} from '~/lib/i18n/i18n.settings';
 
 import { i18nResolver } from './i18n.resolver';
 
@@ -18,10 +23,22 @@ import { i18nResolver } from './i18n.resolver';
  */
 export function createI18nServerInstance() {
   const acceptLanguage = headers().get('accept-language');
-  const cookie = getLanguageCookie(cookies());
+  const cookie = cookies().get(I18N_COOKIE_NAME)?.value;
 
-  const language =
-    cookie ?? parseAcceptLanguageHeader(acceptLanguage)[0] ?? undefined;
+  let language =
+    cookie ??
+    parseAcceptLanguageHeader(acceptLanguage, languages)[0] ??
+    languages[0];
 
-  return initializeServerI18n(language, i18nResolver);
+  if (!languages.includes(language ?? '')) {
+    console.warn(
+      `Language "${language}" is not supported. Falling back to "${languages[0]}"`,
+    );
+
+    language = languages[0];
+  }
+
+  const settings = getI18nSettings(language);
+
+  return initializeServerI18n(settings, i18nResolver);
 }

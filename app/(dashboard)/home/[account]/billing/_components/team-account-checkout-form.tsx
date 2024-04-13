@@ -2,9 +2,10 @@
 
 import { useState, useTransition } from 'react';
 
+import dynamic from 'next/dynamic';
 import { useParams } from 'next/navigation';
 
-import { EmbeddedCheckout, PlanPicker } from '@kit/billing-gateway/components';
+import { PlanPicker } from '@kit/billing-gateway/components';
 import {
   Card,
   CardContent,
@@ -17,6 +18,19 @@ import { Trans } from '@kit/ui/trans';
 import billingConfig from '~/config/billing.config';
 
 import { createTeamAccountCheckoutSession } from '../server-actions';
+
+const EmbeddedCheckout = dynamic(
+  async () => {
+    const { EmbeddedCheckout } = await import('@kit/billing-gateway/checkout');
+
+    return {
+      default: EmbeddedCheckout,
+    };
+  },
+  {
+    ssr: false,
+  },
+);
 
 export function TeamAccountCheckoutForm(params: {
   accountId: string;
