@@ -6,6 +6,7 @@ import type { CookieOptions } from '@supabase/ssr';
 import { createServerClient } from '@supabase/ssr';
 
 import { Database } from '../database.types';
+import { getServiceRoleKey } from '../get-service-role-key';
 import { getSupabaseClientKeys } from '../get-supabase-client-keys';
 
 /**
@@ -20,17 +21,7 @@ export function getSupabaseRouteHandlerClient<GenericSchema = Database>(
   const keys = getSupabaseClientKeys();
 
   if (params.admin) {
-    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-    if (process.env.NODE_ENV !== 'production') {
-      console.warn(
-        `[Dev Only] You are using the Supabase Service Role. Make sure it's the right call.`,
-      );
-    }
-
-    if (!serviceRoleKey) {
-      throw new Error('Supabase Service Role Key not provided');
-    }
+    const serviceRoleKey = getServiceRoleKey();
 
     return createServerClient<GenericSchema>(keys.url, serviceRoleKey, {
       auth: {

@@ -23,7 +23,6 @@
     "./database": "./src/database.types.ts"
   },
   "devDependencies": {
-    "@epic-web/invariant": "^1.0.0",
     "@kit/eslint-config": "workspace:*",
     "@kit/prettier-config": "workspace:*",
     "@kit/tailwind-config": "workspace:*",
@@ -38,7 +37,6 @@
     "zod": "^3.22.4"
   },
   "peerDependencies": {
-    "@epic-web/invariant": "^1.0.0",
     "@supabase/ssr": "^0.3.0",
     "@supabase/supabase-js": "^2.42.0",
     "@tanstack/react-query": "^5.28.6",

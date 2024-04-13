@@ -29,7 +29,6 @@
     "supabase:typegen:app": "supabase gen types typescript --local > ./lib/database.types.ts"
   },
   "dependencies": {
-    "@epic-web/invariant": "^1.0.0",
     "@hookform/resolvers": "^3.3.4",
     "@kit/accounts": "workspace:^",
     "@kit/admin": "workspace:^",

@@ -47,9 +47,6 @@ importers:
 
   apps/web:
     dependencies:
-      '@epic-web/invariant':
-        specifier: ^1.0.0
-        version: 1.0.0
       '@hookform/resolvers':
         specifier: ^3.3.4
         version: 3.3.4(react-hook-form@7.51.3)
@@ -1003,9 +1000,6 @@ importers:
 
   packages/supabase:
     devDependencies:
-      '@epic-web/invariant':
-        specifier: ^1.0.0
-        version: 1.0.0
       '@kit/eslint-config':
         specifier: workspace:*
         version: link:../../tooling/eslint
@@ -1690,9 +1684,6 @@ packages:
   /@emotion/weak-memoize@0.3.1:
     resolution: {integrity: sha512-EsBwpc7hBUJWAsNPBmJy4hxWx12v6bshQsldrVmjxJoc3isbxhOrF2IcCpaXxfvq03NwkI7sbsOLXbYuqF/8Ww==}
     dev: false
-
-  /@epic-web/invariant@1.0.0:
-    resolution: {integrity: sha512-lrTPqgvfFQtR/eY/qkIzp98OGdNJu0m5ji3q/nJI8v3SXkRKEnWiOxMmbvcSoAIzv/cGiuvRy57k4suKQSAdwA==}
 
   /@esbuild/aix-ppc64@0.19.11:
     resolution: {integrity: sha512-FnzU0LyE3ySQk7UntJO4+qIiQgI7KoODnZg5xzXIrFJlKd2P2gwHsHY4927xj9y5PJmJSzULiUCWmv7iWnNa7g==}

@@ -18,9 +18,7 @@ interface SessionPageProps {
 
 const LazyEmbeddedCheckout = dynamic(
   async () => {
-    const { EmbeddedCheckout } = await import(
-      '@kit/billing-gateway/components'
-    );
+    const { EmbeddedCheckout } = await import('@kit/billing-gateway/checkout');
 
     return EmbeddedCheckout;
   },
