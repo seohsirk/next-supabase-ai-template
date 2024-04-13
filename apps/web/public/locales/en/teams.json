@@ -98,6 +98,8 @@
   "membersPageHeading": "Members",
   "inviteMembersButton": "Invite Members",
   "invitingMembers": "Inviting members...",
+  "inviteMembersSuccessMessage": "Members invited successfully",
+  "inviteMembersErrorMessage": "Sorry, members could not be invited. Please try again.",
   "pendingInvitesHeading": "Pending Invites",
   "pendingInvitesDescription": " Here you can manage the pending invitations to your team.",
   "noPendingInvites": "No pending invites found",

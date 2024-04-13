@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Plus, X } from 'lucide-react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'sonner';
 
 import { Button } from '@kit/ui/button';
 import {
@@ -22,7 +23,9 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from '@kit/ui/form';
+import { If } from '@kit/ui/if';
 import { Input } from '@kit/ui/input';
 import {
   Tooltip,
@@ -41,6 +44,12 @@ type InviteModel = ReturnType<typeof createEmptyInviteModel>;
 
 type Role = string;
 
+/**
+ * The maximum number of invites that can be sent at once.
+ * Useful to avoid spamming the server with too large payloads
+ */
+const MAX_INVITES = 5;
+
 export function InviteMembersDialogContainer({
   accountSlug,
   accountId,
@@ -53,6 +62,7 @@ export function InviteMembersDialogContainer({
 }>) {
   const [pending, startTransition] = useTransition();
   const [isOpen, setIsOpen] = useState(false);
+  const { t } = useTranslation('teams');
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen} modal>
@@ -79,9 +89,15 @@ export function InviteMembersDialogContainer({
               roles={roles}
               onSubmit={(data) => {
                 startTransition(async () => {
-                  await createInvitationsAction({
+                  const promise = createInvitationsAction({
                     accountSlug,
                     invitations: data.invitations,
+                  });
+
+                  toast.promise(() => promise, {
+                    loading: t('invitingMembers'),
+                    success: t('inviteMembersSuccessMessage'),
+                    error: t('inviteMembersErrorMessage'),
                   });
 
                   setIsOpen(false);
@@ -129,6 +145,8 @@ function InviteMembersForm({
       >
         <div className="flex flex-col space-y-4">
           {fieldArray.fields.map((field, index) => {
+            const isFirst = index === 0;
+
             const emailInputName = `invitations.${index}.email` as const;
             const roleInputName = `invitations.${index}.role` as const;
 
@@ -141,7 +159,9 @@ function InviteMembersForm({
                       render={({ field }) => {
                         return (
                           <FormItem>
-                            <FormLabel>{t('emailLabel')}</FormLabel>
+                            <If condition={isFirst}>
+                              <FormLabel>{t('emailLabel')}</FormLabel>
+                            </If>
 
                             <FormControl>
                               <Input
@@ -152,6 +172,8 @@ function InviteMembersForm({
                                 {...field}
                               />
                             </FormControl>
+
+                            <FormMessage />
                           </FormItem>
                         );
                       }}
@@ -164,9 +186,11 @@ function InviteMembersForm({
                       render={({ field }) => {
                         return (
                           <FormItem>
-                            <FormLabel>
-                              <Trans i18nKey={'teams:roleLabel'} />
-                            </FormLabel>
+                            <If condition={isFirst}>
+                              <FormLabel>
+                                <Trans i18nKey={'teams:roleLabel'} />
+                              </FormLabel>
+                            </If>
 
                             <FormControl>
                               <MembershipRoleSelector
@@ -177,18 +201,20 @@ function InviteMembersForm({
                                 }}
                               />
                             </FormControl>
+
+                            <FormMessage />
                           </FormItem>
                         );
                       }}
                     />
                   </div>
 
-                  <div className={'flex w-[60px] justify-end'}>
+                  <div className={'flex w-[40px] justify-end'}>
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger asChild>
                           <Button
-                            variant={'outline'}
+                            variant={'ghost'}
                             size={'icon'}
                             type={'button'}
                             disabled={fieldArray.fields.length <= 1}
@@ -214,24 +240,26 @@ function InviteMembersForm({
             );
           })}
 
-          <div>
-            <Button
-              data-test={'add-new-invite-button'}
-              type={'button'}
-              variant={'link'}
-              size={'sm'}
-              disabled={pending}
-              onClick={() => {
-                fieldArray.append(createEmptyInviteModel());
-              }}
-            >
-              <Plus className={'mr-1 h-3'} />
+          <If condition={fieldArray.fields.length < MAX_INVITES}>
+            <div>
+              <Button
+                data-test={'add-new-invite-button'}
+                type={'button'}
+                variant={'link'}
+                size={'sm'}
+                disabled={pending}
+                onClick={() => {
+                  fieldArray.append(createEmptyInviteModel());
+                }}
+              >
+                <Plus className={'mr-1 h-3'} />
 
-              <span>
-                <Trans i18nKey={'teams:addAnotherMemberButtonLabel'} />
-              </span>
-            </Button>
-          </div>
+                <span>
+                  <Trans i18nKey={'teams:addAnotherMemberButtonLabel'} />
+                </span>
+              </Button>
+            </div>
+          </If>
         </div>
 
         <Button type={'submit'} disabled={pending}>
