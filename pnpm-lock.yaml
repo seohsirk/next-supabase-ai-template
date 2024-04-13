@@ -36,8 +36,8 @@ importers:
   apps/e2e:
     devDependencies:
       '@playwright/test':
-        specifier: ^1.43.0
-        version: 1.43.0
+        specifier: ^1.43.1
+        version: 1.43.1
       '@types/node':
         specifier: ^20.12.7
         version: 20.12.7
@@ -123,8 +123,8 @@ importers:
         specifier: ^5.29.2
         version: 5.29.2(@tanstack/react-query@5.29.0)(next@14.2.0)(react@18.2.0)
       '@tanstack/react-table':
-        specifier: ^8.15.3
-        version: 8.15.3(react-dom@18.2.0)(react@18.2.0)
+        specifier: ^8.16.0
+        version: 8.16.0(react-dom@18.2.0)(react@18.2.0)
       date-fns:
         specifier: ^3.6.0
         version: 3.6.0
@@ -424,7 +424,7 @@ importers:
         version: 5.0.0(@keystatic/core@0.5.11)(next@14.2.0)(react-dom@18.2.0)(react@18.2.0)
     devDependencies:
       '@kit/cms':
-        specifier: ^0.1.0
+        specifier: workspace:^
         version: link:../core
       '@kit/eslint-config':
         specifier: workspace:*
@@ -436,7 +436,7 @@ importers:
         specifier: workspace:*
         version: link:../../../tooling/typescript
       '@kit/ui':
-        specifier: ^0.1.0
+        specifier: workspace:^
         version: link:../../ui
       '@types/node':
         specifier: ^20.12.7
@@ -448,7 +448,7 @@ importers:
   packages/cms/wordpress:
     devDependencies:
       '@kit/cms':
-        specifier: ^0.1.0
+        specifier: workspace:^
         version: link:../core
       '@kit/eslint-config':
         specifier: workspace:*
@@ -460,7 +460,7 @@ importers:
         specifier: workspace:*
         version: link:../../../tooling/typescript
       '@kit/ui':
-        specifier: ^0.1.0
+        specifier: workspace:^
         version: link:../../ui
       '@types/node':
         specifier: ^20.12.7
@@ -475,7 +475,7 @@ importers:
         specifier: workspace:^
         version: link:../billing/core
       '@kit/billing-gateway':
-        specifier: ^0.1.0
+        specifier: workspace:^
         version: link:../billing/gateway
       '@kit/eslint-config':
         specifier: workspace:*
@@ -496,7 +496,7 @@ importers:
         specifier: workspace:*
         version: link:../../tooling/tailwind
       '@kit/team-accounts':
-        specifier: ^0.1.0
+        specifier: workspace:^
         version: link:../features/team-accounts
       '@kit/tsconfig':
         specifier: workspace:*
@@ -543,25 +543,25 @@ importers:
         specifier: ^3.3.4
         version: 3.3.4(react-hook-form@7.51.3)
       '@kit/billing-gateway':
-        specifier: ^0.1.0
+        specifier: workspace:^
         version: link:../../billing/gateway
       '@kit/email-templates':
-        specifier: ^0.1.0
+        specifier: workspace:^
         version: link:../../email-templates
       '@kit/eslint-config':
         specifier: workspace:*
         version: link:../../../tooling/eslint
       '@kit/mailers':
-        specifier: ^0.1.0
+        specifier: workspace:^
         version: link:../../mailers
       '@kit/prettier-config':
         specifier: workspace:*
         version: link:../../../tooling/prettier
       '@kit/shared':
-        specifier: ^0.1.0
+        specifier: workspace:^
         version: link:../../shared
       '@kit/supabase':
-        specifier: ^0.1.0
+        specifier: workspace:^
         version: link:../../supabase
       '@kit/tailwind-config':
         specifier: workspace:*
@@ -570,7 +570,7 @@ importers:
         specifier: workspace:*
         version: link:../../../tooling/typescript
       '@kit/ui':
-        specifier: ^0.1.0
+        specifier: workspace:^
         version: link:../../ui
       '@radix-ui/react-icons':
         specifier: ^1.3.0
@@ -624,7 +624,7 @@ importers:
         specifier: workspace:*
         version: link:../../../tooling/eslint
       '@kit/next':
-        specifier: ^0.1.0
+        specifier: workspace:^
         version: link:../../next
       '@kit/prettier-config':
         specifier: workspace:*
@@ -646,7 +646,7 @@ importers:
         version: 0.0.7(@supabase/postgrest-js@1.15.2)(@supabase/supabase-js@2.42.3)
       '@makerkit/data-loader-supabase-nextjs':
         specifier: ^1.0.0
-        version: 1.0.0(@supabase/postgrest-js@1.15.2)(@supabase/supabase-js@2.42.3)(@tanstack/react-query@5.29.0)(next@14.2.0)(react@18.2.0)
+        version: 1.1.0(@supabase/postgrest-js@1.15.2)(@supabase/supabase-js@2.42.3)(@tanstack/react-query@5.29.0)(next@14.2.0)(react@18.2.0)
       '@supabase/supabase-js':
         specifier: ^2.42.3
         version: 2.42.3
@@ -654,8 +654,8 @@ importers:
         specifier: 5.29.0
         version: 5.29.0(react@18.2.0)
       '@tanstack/react-table':
-        specifier: ^8.15.3
-        version: 8.15.3(react-dom@18.2.0)(react@18.2.0)
+        specifier: ^8.16.0
+        version: 8.16.0(react-dom@18.2.0)(react@18.2.0)
       '@types/react':
         specifier: ^18.2.77
         version: 18.2.77
@@ -687,10 +687,10 @@ importers:
         specifier: workspace:*
         version: link:../../../tooling/prettier
       '@kit/shared':
-        specifier: ^0.1.0
+        specifier: workspace:^
         version: link:../../shared
       '@kit/supabase':
-        specifier: ^0.1.0
+        specifier: workspace:^
         version: link:../../supabase
       '@kit/tailwind-config':
         specifier: workspace:*
@@ -699,7 +699,7 @@ importers:
         specifier: workspace:*
         version: link:../../../tooling/typescript
       '@kit/ui':
-        specifier: ^0.1.0
+        specifier: workspace:^
         version: link:../../ui
       '@marsidev/react-turnstile':
         specifier: ^0.5.4
@@ -745,28 +745,28 @@ importers:
         specifier: ^3.3.4
         version: 3.3.4(react-hook-form@7.51.3)
       '@kit/accounts':
-        specifier: ^0.1.0
+        specifier: workspace:^
         version: link:../accounts
       '@kit/billing-gateway':
         specifier: workspace:*
         version: link:../../billing/gateway
       '@kit/email-templates':
-        specifier: ^0.1.0
+        specifier: workspace:^
         version: link:../../email-templates
       '@kit/eslint-config':
         specifier: workspace:*
         version: link:../../../tooling/eslint
       '@kit/mailers':
-        specifier: ^0.1.0
+        specifier: workspace:^
         version: link:../../mailers
       '@kit/prettier-config':
         specifier: workspace:*
         version: link:../../../tooling/prettier
       '@kit/shared':
-        specifier: ^0.1.0
+        specifier: workspace:^
         version: link:../../shared
       '@kit/supabase':
-        specifier: ^0.1.0
+        specifier: workspace:^
         version: link:../../supabase
       '@kit/tailwind-config':
         specifier: workspace:*
@@ -775,7 +775,7 @@ importers:
         specifier: workspace:*
         version: link:../../../tooling/typescript
       '@kit/ui':
-        specifier: ^0.1.0
+        specifier: workspace:^
         version: link:../../ui
       '@supabase/supabase-js':
         specifier: ^2.42.3
@@ -784,8 +784,8 @@ importers:
         specifier: 5.29.0
         version: 5.29.0(react@18.2.0)
       '@tanstack/react-table':
-        specifier: ^8.15.3
-        version: 8.15.3(react-dom@18.2.0)(react@18.2.0)
+        specifier: ^8.16.0
+        version: 8.16.0(react-dom@18.2.0)(react@18.2.0)
       '@types/react':
         specifier: ^18.2.77
         version: 18.2.77
@@ -955,7 +955,7 @@ importers:
   packages/next:
     devDependencies:
       '@kit/auth':
-        specifier: ^0.1.0
+        specifier: workspace:^
         version: link:../features/auth
       '@kit/eslint-config':
         specifier: workspace:*
@@ -964,7 +964,7 @@ importers:
         specifier: workspace:*
         version: link:../../tooling/prettier
       '@kit/supabase':
-        specifier: ^0.1.0
+        specifier: workspace:^
         version: link:../supabase
       '@kit/tailwind-config':
         specifier: workspace:*
@@ -1131,8 +1131,8 @@ importers:
         specifier: ^1.3.0
         version: 1.3.0(react@18.2.0)
       '@tanstack/react-table':
-        specifier: ^8.15.3
-        version: 8.15.3(react-dom@18.2.0)(react@18.2.0)
+        specifier: ^8.16.0
+        version: 8.16.0(react-dom@18.2.0)(react@18.2.0)
       '@types/react':
         specifier: ^18.2.77
         version: 18.2.77
@@ -1188,8 +1188,8 @@ importers:
   tooling/eslint:
     dependencies:
       '@next/eslint-plugin-next':
-        specifier: ^14.2.0
-        version: 14.2.0
+        specifier: ^14.2.1
+        version: 14.2.1
       '@trivago/prettier-plugin-sort-imports':
         specifier: ^4.3.0
         version: 4.3.0(prettier@3.2.5)
@@ -1355,7 +1355,7 @@ packages:
     resolution: {integrity: sha512-oLcVCTeIFadUoArDTwpluncplrYBmTCCZZgXCbgNGvOBBiSDDK3eWO4b/+eOTli5tKv1lg+a5/NAXg+nTcei1w==}
     engines: {node: '>=6.9.0'}
     dependencies:
-      '@babel/types': 7.17.0
+      '@babel/types': 7.24.0
       jsesc: 2.5.2
       source-map: 0.5.7
     dev: false
@@ -1485,7 +1485,7 @@ packages:
     engines: {node: '>=6.0.0'}
     hasBin: true
     dependencies:
-      '@babel/types': 7.17.0
+      '@babel/types': 7.24.0
     dev: false
 
   /@babel/runtime-corejs3@7.24.4:
@@ -2381,23 +2381,6 @@ packages:
       '@supabase/supabase-js': 2.42.3
       ts-case-convert: 2.0.7
 
-  /@makerkit/data-loader-supabase-nextjs@1.0.0(@supabase/postgrest-js@1.15.2)(@supabase/supabase-js@2.42.3)(@tanstack/react-query@5.29.0)(next@14.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-+gma4JSLi7ChJ0fU5Q5CKqzTpzehEJuoAo8OSwuHIfYYtOggg3gYH6DcOYj4tiz8uCSgKNr9ORi0rnk1XfqMsQ==}
-    peerDependencies:
-      '@supabase/supabase-js': '>=2.0.0'
-      '@tanstack/react-query': '>=5.0.0'
-      next: '>=13.4.0'
-      react: '>=18.0.0'
-    dependencies:
-      '@makerkit/data-loader-supabase-core': 0.0.7(@supabase/postgrest-js@1.15.2)(@supabase/supabase-js@2.42.3)
-      '@supabase/supabase-js': 2.42.3
-      '@tanstack/react-query': 5.29.0(react@18.2.0)
-      next: 14.2.0(@opentelemetry/api@1.8.0)(react-dom@18.2.0)(react@18.2.0)
-      react: 18.2.0
-    transitivePeerDependencies:
-      - '@supabase/postgrest-js'
-    dev: true
-
   /@makerkit/data-loader-supabase-nextjs@1.1.0(@supabase/postgrest-js@1.15.2)(@supabase/supabase-js@2.42.3)(@tanstack/react-query@5.29.0)(next@14.2.0)(react@18.2.0):
     resolution: {integrity: sha512-4+QtHMXeOCPFKnP14a/K0mVUGr/809WE1J7RF5Eue45xdXMbvhyWIHqRNvvpUo9N6MnDO7u9IaYKO0aneMPFrw==}
     peerDependencies:
@@ -2413,7 +2396,6 @@ packages:
       react: 18.2.0
     transitivePeerDependencies:
       - '@supabase/postgrest-js'
-    dev: false
 
   /@manypkg/cli@0.21.3:
     resolution: {integrity: sha512-ro6j5b+44dN2AfId23voWxdlOqUCSbCwUHrUwq0LpoN/oZy6zQFAHDwYHbw50j2nL9EgpwIA03ZjaBceuUcMrw==}
@@ -2509,8 +2491,8 @@ packages:
   /@next/env@14.2.0:
     resolution: {integrity: sha512-4+70ELtSbRtYUuyRpAJmKC8NHBW2x1HMje9KO2Xd7IkoyucmV9SjgO+qeWMC0JWkRQXgydv1O7yKOK8nu/rITQ==}
 
-  /@next/eslint-plugin-next@14.2.0:
-    resolution: {integrity: sha512-QkM01VPhwcupezVevy9Uyl1rmpg2PimhMjkb+ySmnPgSKUUM/PGGRQxdFgMpHv/JzQoC8kRySgKeM441GiizcA==}
+  /@next/eslint-plugin-next@14.2.1:
+    resolution: {integrity: sha512-Fp+mthEBjkn8r9qd6o4JgxKp0IDEzW0VYHD8ZC05xS5/lFNwHKuOdr2kVhWG7BQCO9L6eeepshM1Wbs2T+LgSg==}
     dependencies:
       glob: 10.3.10
     dev: false
@@ -2989,12 +2971,12 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@playwright/test@1.43.0:
-    resolution: {integrity: sha512-Ebw0+MCqoYflop7wVKj711ccbNlrwTBCtjY5rlbiY9kHL2bCYxq+qltK6uPsVBGGAOb033H2VO0YobcQVxoW7Q==}
+  /@playwright/test@1.43.1:
+    resolution: {integrity: sha512-HgtQzFgNEEo4TE22K/X7sYTYNqEMMTZmFS8kTq6m8hXj+m1D8TgwgIbumHddJa9h4yl4GkKb8/bgAl2+g7eDgA==}
     engines: {node: '>=16'}
     hasBin: true
     dependencies:
-      playwright: 1.43.0
+      playwright: 1.43.1
     dev: true
 
   /@pnpm/config.env-replace@1.1.0:
@@ -6266,19 +6248,19 @@ packages:
       '@tanstack/query-core': 5.29.0
       react: 18.2.0
 
-  /@tanstack/react-table@8.15.3(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-aocQ4WpWiAh7R+yxNp+DGQYXeVACh5lv2kk96DjYgFiHDCB0cOFoYMT/pM6eDOzeMXR9AvPoLeumTgq8/0qX+w==}
+  /@tanstack/react-table@8.16.0(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-rKRjnt8ostqN2fercRVOIH/dq7MAmOENCMvVlKx6P9Iokhh6woBGnIZEkqsY/vEJf1jN3TqLOb34xQGLVRuhAg==}
     engines: {node: '>=12'}
     peerDependencies:
       react: '>=16.8'
       react-dom: '>=16.8'
     dependencies:
-      '@tanstack/table-core': 8.15.3
+      '@tanstack/table-core': 8.16.0
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
 
-  /@tanstack/table-core@8.15.3:
-    resolution: {integrity: sha512-wOgV0HfEvuMOv8RlqdR9MdNNqq0uyvQtP39QOvGlggHvIObOE4exS+D5LGO8LZ3LUXxId2IlUKcHDHaGujWhUg==}
+  /@tanstack/table-core@8.16.0:
+    resolution: {integrity: sha512-dCG8vQGk4js5v88/k83tTedWOwjGnIyONrKpHpfmSJB8jwFHl8GSu1sBBxbtACVAPtAQgwNxl0rw1d3RqRM1Tg==}
     engines: {node: '>=12'}
 
   /@toeverything/y-indexeddb@0.10.0-canary.9(yjs@13.6.14):
@@ -6802,7 +6784,7 @@ packages:
   /@urql/exchange-auth@2.1.6(graphql@16.8.1):
     resolution: {integrity: sha512-snOlt7p5kYq0KnPDuXkKe2qW3/BucQZOElvTeo3svLQuk9JiNJVnm6ffQ6QGiGO+G3AtMrctnno1+X44fLtDuQ==}
     dependencies:
-      '@urql/core': 4.3.0(graphql@16.8.1)
+      '@urql/core': 5.0.0(graphql@16.8.1)
       wonka: 6.3.4
     transitivePeerDependencies:
       - graphql
@@ -6812,7 +6794,7 @@ packages:
     resolution: {integrity: sha512-Ky77kuaTuo1H+VKZatXyNDqTMw+z03KV3Ep/6TQjktlc+0RDhEZq3rI4F/ViwqLaDUtGqPCYjmnHdoupXqdK0g==}
     dependencies:
       '@0no-co/graphql.web': 1.0.6(graphql@16.8.1)
-      '@urql/core': 4.3.0(graphql@16.8.1)
+      '@urql/core': 5.0.0(graphql@16.8.1)
       wonka: 6.3.4
     transitivePeerDependencies:
       - graphql
@@ -6821,7 +6803,7 @@ packages:
   /@urql/exchange-persisted@4.2.0(graphql@16.8.1):
     resolution: {integrity: sha512-Q23UOcO9YPibPcAZ+4+PMPstijoVIzjqAfPufOmgK3rmuEjnIQYlzRJGxn90r3uunXYiVj3gHXo9qhfrzGRreQ==}
     dependencies:
-      '@urql/core': 4.3.0(graphql@16.8.1)
+      '@urql/core': 5.0.0(graphql@16.8.1)
       wonka: 6.3.4
     transitivePeerDependencies:
       - graphql
@@ -7339,7 +7321,7 @@ packages:
     hasBin: true
     dependencies:
       caniuse-lite: 1.0.30001609
-      electron-to-chromium: 1.4.735
+      electron-to-chromium: 1.4.736
       node-releases: 2.0.14
       update-browserslist-db: 1.0.13(browserslist@4.23.0)
 
@@ -8164,8 +8146,8 @@ packages:
       semver: 7.6.0
     dev: false
 
-  /electron-to-chromium@1.4.735:
-    resolution: {integrity: sha512-pkYpvwg8VyOTQAeBqZ7jsmpCjko1Qc6We1ZtZCjRyYbT5v4AIUKDy5cQTRotQlSSZmMr8jqpEt6JtOj5k7lR7A==}
+  /electron-to-chromium@1.4.736:
+    resolution: {integrity: sha512-Rer6wc3ynLelKNM4lOCg7/zPQj8tPOCB2hzD32PX9wd3hgRRi9MxEbmkFCokzcEhRVMiOVLjnL9ig9cefJ+6+Q==}
 
   /emery@1.4.3:
     resolution: {integrity: sha512-DrP24dscOZx5BJpOo32X1CjaWgbFojS4sAXKtlmTQmCJ01Vv2brjeWKIS6cQ4Rblt/hZIN+6pdV2L7Y9Rsh8EA==}
@@ -11400,18 +11382,18 @@ packages:
     resolution: {integrity: sha512-saLsH7WeYYPiD25LDuLRRY/i+6HaPYr6G1OUlN39otzkSTxKnubR9RTxS3/Kk50s1g2JTgFwWQDQyplC5/SHZg==}
     engines: {node: '>= 6'}
 
-  /playwright-core@1.43.0:
-    resolution: {integrity: sha512-iWFjyBUH97+pUFiyTqSLd8cDMMOS0r2ZYz2qEsPjH8/bX++sbIJT35MSwKnp1r/OQBAqC5XO99xFbJ9XClhf4w==}
+  /playwright-core@1.43.1:
+    resolution: {integrity: sha512-EI36Mto2Vrx6VF7rm708qSnesVQKbxEWvPrfA1IPY6HgczBplDx7ENtx+K2n4kJ41sLLkuGfmb0ZLSSXlDhqPg==}
     engines: {node: '>=16'}
     hasBin: true
     dev: true
 
-  /playwright@1.43.0:
-    resolution: {integrity: sha512-SiOKHbVjTSf6wHuGCbqrEyzlm6qvXcv7mENP+OZon1I07brfZLGdfWV0l/efAzVx7TF3Z45ov1gPEkku9q25YQ==}
+  /playwright@1.43.1:
+    resolution: {integrity: sha512-V7SoH0ai2kNt1Md9E3Gwas5B9m8KR2GVvwZnAI6Pg0m3sh7UvgiYhRrhsziCmqMJNouPckiOhk8T+9bSAK0VIA==}
     engines: {node: '>=16'}
     hasBin: true
     dependencies:
-      playwright-core: 1.43.0
+      playwright-core: 1.43.1
     optionalDependencies:
       fsevents: 2.3.2
     dev: true
@@ -11437,18 +11419,6 @@ packages:
       postcss-value-parser: 4.2.0
       read-cache: 1.0.0
       resolve: 1.22.8
-    dev: false
-
-  /postcss-import@15.1.0(postcss@8.4.38):
-    resolution: {integrity: sha512-hpr+J05B2FVYUAXHeK1YyI267J/dDDhMU6B6civm8hSY1jYJnBXxzKDKDswzJmtLHryrjhnDjqqp/49t8FALew==}
-    engines: {node: '>=14.0.0'}
-    peerDependencies:
-      postcss: ^8.0.0
-    dependencies:
-      postcss: 8.4.38
-      postcss-value-parser: 4.2.0
-      read-cache: 1.0.0
-      resolve: 1.22.8
 
   /postcss-js@4.0.1(postcss@8.4.33):
     resolution: {integrity: sha512-dDLF8pEO191hJMtlHFPRa8xsizHaM82MLfNkUHdUtVEV3tgTp5oj+8qbEqYM57SLfc74KSbw//4SeJma2LRVIw==}
@@ -11458,16 +11428,6 @@ packages:
     dependencies:
       camelcase-css: 2.0.1
       postcss: 8.4.33
-    dev: false
-
-  /postcss-js@4.0.1(postcss@8.4.38):
-    resolution: {integrity: sha512-dDLF8pEO191hJMtlHFPRa8xsizHaM82MLfNkUHdUtVEV3tgTp5oj+8qbEqYM57SLfc74KSbw//4SeJma2LRVIw==}
-    engines: {node: ^12 || ^14 || >= 16}
-    peerDependencies:
-      postcss: ^8.4.21
-    dependencies:
-      camelcase-css: 2.0.1
-      postcss: 8.4.38
 
   /postcss-load-config@4.0.2(postcss@8.4.33):
     resolution: {integrity: sha512-bSVhyJGL00wMVoPUzAVAnbEoWyqRxkjv64tUl427SKnPrENtq6hJwUojroMz2VB+Q1edmi4IfrAPpami5VVgMQ==}
@@ -11484,23 +11444,6 @@ packages:
       lilconfig: 3.1.1
       postcss: 8.4.33
       yaml: 2.4.1
-    dev: false
-
-  /postcss-load-config@4.0.2(postcss@8.4.38):
-    resolution: {integrity: sha512-bSVhyJGL00wMVoPUzAVAnbEoWyqRxkjv64tUl427SKnPrENtq6hJwUojroMz2VB+Q1edmi4IfrAPpami5VVgMQ==}
-    engines: {node: '>= 14'}
-    peerDependencies:
-      postcss: '>=8.0.9'
-      ts-node: '>=9.0.0'
-    peerDependenciesMeta:
-      postcss:
-        optional: true
-      ts-node:
-        optional: true
-    dependencies:
-      lilconfig: 3.1.1
-      postcss: 8.4.38
-      yaml: 2.4.1
 
   /postcss-nested@6.0.1(postcss@8.4.33):
     resolution: {integrity: sha512-mEp4xPMi5bSWiMbsgoPfcP74lsWLHkQbZc3sY+jWYd65CUwXrUaTp0fmNpa01ZcETKlIgUdFN/MpS2xZtqL9dQ==}
@@ -11509,16 +11452,6 @@ packages:
       postcss: ^8.2.14
     dependencies:
       postcss: 8.4.33
-      postcss-selector-parser: 6.0.16
-    dev: false
-
-  /postcss-nested@6.0.1(postcss@8.4.38):
-    resolution: {integrity: sha512-mEp4xPMi5bSWiMbsgoPfcP74lsWLHkQbZc3sY+jWYd65CUwXrUaTp0fmNpa01ZcETKlIgUdFN/MpS2xZtqL9dQ==}
-    engines: {node: '>=12.0'}
-    peerDependencies:
-      postcss: ^8.2.14
-    dependencies:
-      postcss: 8.4.38
       postcss-selector-parser: 6.0.16
 
   /postcss-selector-parser@6.0.16:
@@ -11555,14 +11488,6 @@ packages:
       picocolors: 1.0.0
       source-map-js: 1.2.0
     dev: false
-
-  /postcss@8.4.38:
-    resolution: {integrity: sha512-Wglpdk03BSfXkHoQa3b/oulrotAkwrlLDRSOb9D0bN86FdRyE9lppSp33aHNPgBa0JKCoB+drFLZkQoRRYae5A==}
-    engines: {node: ^10 || ^12 || >=14}
-    dependencies:
-      nanoid: 3.3.7
-      picocolors: 1.0.0
-      source-map-js: 1.2.0
 
   /prelude-ls@1.2.1:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
@@ -11779,8 +11704,8 @@ packages:
     resolution: {integrity: sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==}
     engines: {node: '>=6'}
 
-  /qs@6.12.0:
-    resolution: {integrity: sha512-trVZiI6RMOkO476zLGaBIzszOdFPnCCXHPG9kn0yuS1uz6xdVxPfZdB3vUig9pxPFDM9BRAgz/YUIVQ1/vuiUg==}
+  /qs@6.12.1:
+    resolution: {integrity: sha512-zWmv4RSuB9r2mYQw3zxQuHWeU+42aKi1wWig/j4ele4ygELZ7PEO6MM7rim9oAQH2A5MWfsAVf/jPvTPgCbvUQ==}
     engines: {node: '>=0.6'}
     dependencies:
       side-channel: 1.0.6
@@ -12770,7 +12695,7 @@ packages:
     engines: {node: '>=12.*'}
     dependencies:
       '@types/node': 20.12.7
-      qs: 6.12.0
+      qs: 6.12.1
     dev: false
 
   /styled-jsx@5.1.1(react@18.2.0):
@@ -12924,11 +12849,11 @@ packages:
       normalize-path: 3.0.0
       object-hash: 3.0.0
       picocolors: 1.0.0
-      postcss: 8.4.38
-      postcss-import: 15.1.0(postcss@8.4.38)
-      postcss-js: 4.0.1(postcss@8.4.38)
-      postcss-load-config: 4.0.2(postcss@8.4.38)
-      postcss-nested: 6.0.1(postcss@8.4.38)
+      postcss: 8.4.33
+      postcss-import: 15.1.0(postcss@8.4.33)
+      postcss-js: 4.0.1(postcss@8.4.33)
+      postcss-load-config: 4.0.2(postcss@8.4.33)
+      postcss-nested: 6.0.1(postcss@8.4.33)
       postcss-selector-parser: 6.0.16
       resolve: 1.22.8
       sucrase: 3.35.0

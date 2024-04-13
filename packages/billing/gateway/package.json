@@ -11,7 +11,8 @@
   "prettier": "@kit/prettier-config",
   "exports": {
     ".": "./src/index.ts",
-    "./components": "./src/components/index.ts"
+    "./components": "./src/components/index.ts",
+    "./checkout": "./src/components/embedded-checkout.tsx"
   },
   "peerDependencies": {
     "@hookform/resolvers": "3.3.4",

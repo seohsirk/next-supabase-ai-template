@@ -1,6 +1,7 @@
 {
   "name": "next-supabase-saas-kit-turbo",
   "private": true,
+  "sideEffects": false,
   "engines": {
     "node": ">=v18.17.1"
   },

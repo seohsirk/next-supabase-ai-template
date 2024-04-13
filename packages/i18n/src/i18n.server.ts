@@ -1,35 +1,25 @@
-import { createInstance } from 'i18next';
+import { type InitOptions, createInstance } from 'i18next';
 import resourcesToBackend from 'i18next-resources-to-backend';
 import { initReactI18next } from 'react-i18next/initReactI18next';
 
-import { I18N_COOKIE_NAME, getI18nSettings, languages } from './i18n.settings';
-
-export function getLanguageCookie<
-  Cookies extends {
-    get: (name: string) => { value: string } | undefined;
-  },
->(cookies: Cookies) {
-  return cookies.get(I18N_COOKIE_NAME)?.value;
-}
-
+/**
+ * Initialize the i18n instance on the server.
+ * This is useful for RSC and SSR.
+ * @param settings - the i18n settings
+ * @param resolver - a function that resolves the i18n resources
+ */
 export async function initializeServerI18n(
-  lang: string | undefined,
-  i18nResolver: (language: string, namespace: string) => Promise<object>,
+  settings: InitOptions,
+  resolver: (language: string, namespace: string) => Promise<object>,
 ) {
   const i18nInstance = createInstance();
-
-  if (i18nInstance.isInitialized) {
-    return i18nInstance;
-  }
-
-  const settings = getI18nSettings(lang);
 
   await i18nInstance
     .use(initReactI18next)
     .use(
       resourcesToBackend(async (language, namespace, callback) => {
         try {
-          const data = await i18nResolver(language, namespace);
+          const data = await resolver(language, namespace);
 
           return callback(null, data);
         } catch (error) {
@@ -49,7 +39,7 @@ export async function initializeServerI18n(
 
 export function parseAcceptLanguageHeader(
   languageHeaderValue: string | null | undefined,
-  acceptedLanguages = languages,
+  acceptedLanguages: string[],
 ): string[] {
   // Return an empty array if the header value is not provided
   if (!languageHeaderValue) return [];

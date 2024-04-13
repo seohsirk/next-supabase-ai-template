@@ -27,7 +27,7 @@
   "devDependencies": {
     "@hookform/resolvers": "^3.3.4",
     "@kit/eslint-config": "workspace:*",
-    "@kit/next": "^0.1.0",
+    "@kit/next": "workspace:^",
     "@kit/prettier-config": "workspace:*",
     "@kit/supabase": "workspace:^",
     "@kit/tailwind-config": "workspace:*",
@@ -37,7 +37,7 @@
     "@makerkit/data-loader-supabase-nextjs": "^1.0.0",
     "@supabase/supabase-js": "^2.42.3",
     "@tanstack/react-query": "5.29.0",
-    "@tanstack/react-table": "^8.15.3",
+    "@tanstack/react-table": "^8.16.0",
     "@types/react": "^18.2.77",
     "lucide-react": "^0.367.0",
     "next": "14.2.0",

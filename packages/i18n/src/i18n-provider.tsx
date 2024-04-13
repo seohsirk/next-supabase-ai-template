@@ -1,6 +1,6 @@
 'use client';
 
-import type { i18n } from 'i18next';
+import type { InitOptions, i18n } from 'i18next';
 
 let client: i18n;
 
@@ -10,28 +10,28 @@ type Resolver = (
 ) => Promise<Record<string, string>>;
 
 export function I18nProvider({
-  lang,
+  settings,
   children,
   resolver,
 }: React.PropsWithChildren<{
-  lang: string;
+  settings: InitOptions;
   resolver: Resolver;
 }>) {
   if (!client) {
-    throw withI18nClient(lang, resolver);
+    throw withI18nClient(settings, resolver);
   }
 
   return children;
 }
 
-async function withI18nClient(lang: string, resolver: Resolver) {
+async function withI18nClient(settings: InitOptions, resolver: Resolver) {
   if (typeof window !== 'undefined') {
     const { initializeI18nClient } = await import('./i18n.client');
 
-    client = await initializeI18nClient(lang, resolver);
+    client = await initializeI18nClient(settings, resolver);
   } else {
     const { initializeServerI18n } = await import('./i18n.server');
 
-    client = await initializeServerI18n(lang, resolver);
+    client = await initializeServerI18n(settings, resolver);
   }
 }
