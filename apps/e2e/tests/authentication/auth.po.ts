@@ -27,7 +27,7 @@ export class AuthPageObject {
     email: string,
     password: string
   }) {
-    await this.page.waitForTimeout(100);
+    await this.page.waitForTimeout(1000);
 
     await this.page.fill('input[name="email"]', params.email);
     await this.page.fill('input[name="password"]', params.password);
@@ -39,7 +39,7 @@ export class AuthPageObject {
     password: string,
     repeatPassword: string
   }) {
-    await this.page.waitForTimeout(100);
+    await this.page.waitForTimeout(1000);
 
     await this.page.fill('input[name="email"]', params.email);
     await this.page.fill('input[name="password"]', params.password);
@@ -47,7 +47,9 @@ export class AuthPageObject {
     await this.page.click('button[type="submit"]');
   }
 
-  async visitConfirmEmailLink(email: string) {
+  async visitConfirmEmailLink(email: string, params?: {
+    deleteAfter: boolean
+  }) {
     return expect(async() => {
       const res = await this.mailbox.visitMailbox(email);
 

@@ -7,7 +7,9 @@ export class Mailbox {
   ) {
   }
 
-  async visitMailbox(email: string) {
+  async visitMailbox(email: string, params?: {
+    deleteAfter: boolean
+  }) {
     const mailbox = email.split('@')[0];
 
     console.log(`Visiting mailbox ${mailbox} ...`)
@@ -16,7 +18,7 @@ export class Mailbox {
       throw new Error('Invalid email');
     }
 
-    const json = await this.getInviteEmail(mailbox);
+    const json = await this.getInviteEmail(mailbox, params);
 
     if (!json.body) {
       throw new Error('Email body was not found');

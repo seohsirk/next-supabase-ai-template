@@ -17,7 +17,7 @@ export class AccountPerSeatBillingService {
 
     logger.info(
       ctx,
-      `Getting per-seat subscription item for account ${accountId}...`,
+      `Retrieving per-seat subscription item for account ${accountId}...`,
     );
 
     const { data, error } = await this.client
@@ -34,7 +34,7 @@ export class AccountPerSeatBillingService {
         `,
       )
       .eq('account_id', accountId)
-      .eq('subscription_items.type', 'per-seat')
+      .eq('subscription_items.type', 'per_seat')
       .maybeSingle();
 
     if (error) {
@@ -52,7 +52,7 @@ export class AccountPerSeatBillingService {
     if (!data?.subscription_items) {
       logger.info(
         ctx,
-        `No per-seat subscription item found for account ${accountId}. Exiting...`,
+        `Account is not subscribed to a per-seat subscription. Exiting...`,
       );
 
       return;

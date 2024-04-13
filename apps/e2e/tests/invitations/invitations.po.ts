@@ -1,4 +1,4 @@
-import { Page } from '@playwright/test';
+import { expect, Page } from '@playwright/test';
 import { AuthPageObject } from '../authentication/auth.po';
 import { TeamAccountsPageObject } from '../team-accounts/team-accounts.po';
 
@@ -44,7 +44,7 @@ export class InvitationsPageObject {
     await form.locator('button[type="submit"]').click();
   }
 
-  public navigateToMembers() {
+   navigateToMembers() {
     return this.page.locator('a', {
       hasText: 'Members',
     }).click();
@@ -54,7 +54,47 @@ export class InvitationsPageObject {
     await this.page.locator('[data-test="invite-members-form-trigger"]').click();
   }
 
+  async getInvitations() {
+    return this.page.locator('[data-test="invitation-email"]');
+  }
+
   private getInviteForm() {
     return this.page.locator('[data-test="invite-members-form"]');
+  }
+
+  async deleteInvitation(email: string) {
+    const actions = this.getInvitationRow(email).getByRole('button');
+
+    await actions.click();
+
+    await this.page.locator('[data-test="remove-invitation-trigger"]').click();
+
+    await this.page.click('[data-test="delete-invitation-form"] button[type="submit"]');
+  }
+
+  getInvitationRow(email: string) {
+    return this.page.getByRole('row', { name: email });
+  }
+
+  async updateInvitation(email: string, role: string) {
+    const row = this.getInvitationRow(email);
+    const actions = row.getByRole('button');
+
+    await actions.click();
+
+    await this.page.locator('[data-test="update-invitation-trigger"]').click();
+
+    await this.page.click(`[data-test="role-selector-trigger"]`);
+    await this.page.click(`[data-test="role-option-${role}"]`);
+
+    await this.page.click('[data-test="update-invitation-form"] button[type="submit"]');
+  }
+
+  async acceptInvitation() {
+    await this.page.locator('[data-test="join-team-form"] button[type="submit"]').click();
+
+    await this.page.waitForResponse(response => {
+      return response.url().includes('/join') && response.request().method() === 'POST';
+    })
   }
 }

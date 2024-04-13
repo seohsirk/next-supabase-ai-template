@@ -25,7 +25,7 @@ import {
 import { If } from '@kit/ui/if';
 import { Trans } from '@kit/ui/trans';
 
-import { UpdateMemberRoleSchema } from '../../schema/update-member-role.schema';
+import { RoleSchema } from '../../schema/update-member-role.schema';
 import { updateInvitationAction } from '../../server/actions/team-invitations-server-actions';
 import { MembershipRoleSelector } from '../members/membership-role-selector';
 import { RolesDataProvider } from '../members/roles-data-provider';
@@ -47,37 +47,30 @@ export const UpdateInvitationDialog: React.FC<{
   userRoleHierarchy,
   account,
 }) => {
-  return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>
-            <Trans i18nKey={'teams:updateMemberRoleModalHeading'} />
-          </DialogTitle>
+    return (
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              <Trans i18nKey={'teams:updateMemberRoleModalHeading'} />
+            </DialogTitle>
 
-          <DialogDescription>
-            <Trans i18nKey={'teams:updateMemberRoleModalDescription'} />
-          </DialogDescription>
-        </DialogHeader>
+            <DialogDescription>
+              <Trans i18nKey={'teams:updateMemberRoleModalDescription'} />
+            </DialogDescription>
+          </DialogHeader>
 
-        <RolesDataProvider
-          accountId={account}
-          maxRoleHierarchy={userRoleHierarchy}
-        >
-          {(roles) => (
-            <UpdateInvitationForm
-              account={account}
-              invitationId={invitationId}
-              userRole={userRole}
-              userRoleHierarchy={roles.length}
-              setIsOpen={setIsOpen}
-            />
-          )}
-        </RolesDataProvider>
-      </DialogContent>
-    </Dialog>
-  );
-};
+          <UpdateInvitationForm
+            account={account}
+            invitationId={invitationId}
+            userRole={userRole}
+            userRoleHierarchy={userRoleHierarchy}
+            setIsOpen={setIsOpen}
+          />
+        </DialogContent>
+      </Dialog>
+    );
+  };
 
 function UpdateInvitationForm({
   account,
@@ -113,7 +106,7 @@ function UpdateInvitationForm({
 
   const form = useForm({
     resolver: zodResolver(
-      UpdateMemberRoleSchema.refine(
+      RoleSchema.refine(
         (data) => {
           return data.role !== userRole;
         },
@@ -133,6 +126,7 @@ function UpdateInvitationForm({
   return (
     <Form {...form}>
       <form
+        data-test={'update-invitation-form'}
         onSubmit={form.handleSubmit(onSubmit)}
         className={'flex flex-col space-y-6'}
       >
@@ -177,7 +171,7 @@ function UpdateInvitationForm({
           }}
         />
 
-        <Button data-test={'confirm-update-member-role'} disabled={pending}>
+        <Button type={'submit'} disabled={pending}>
           <Trans i18nKey={'teams:updateRoleSubmitLabel'} />
         </Button>
       </form>

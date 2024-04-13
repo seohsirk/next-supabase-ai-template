@@ -66,7 +66,7 @@ function DeleteInvitationForm({
   };
 
   return (
-    <form action={onInvitationRemoved}>
+    <form data-test={'delete-invitation-form'} action={onInvitationRemoved}>
       <div className={'flex flex-col space-y-6'}>
         <p className={'text-muted-foreground text-sm'}>
           <Trans i18nKey={'common:modalConfirmationQuestion'} />
@@ -82,7 +82,7 @@ function DeleteInvitationForm({
           </AlertDialogCancel>
 
           <Button
-            data-test={'confirm-delete-invitation'}
+            type={'submit'}
             variant={'destructive'}
             disabled={isSubmitting}
           >

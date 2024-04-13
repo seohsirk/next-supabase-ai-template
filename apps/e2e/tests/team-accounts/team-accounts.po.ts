@@ -18,7 +18,17 @@ export class TeamAccountsPageObject {
   async getTeamFromSelector(teamSlug: string) {
     await this.openAccountsSelector();
 
-    return this.page.locator(`[data-test="account-selector-team-${teamSlug}"]`);
+    return this.page.locator(`[data-test="account-selector-team"][data-value="${teamSlug}"]`);
+  }
+
+  async selectAccount(teamName: string) {
+    await this.page.click(`[data-test="account-selector-team"][data-name="${teamName}"]`);
+  }
+
+  async getTeams() {
+    await this.openAccountsSelector();
+
+    return this.page.locator('[data-test="account-selector-team"]');
   }
 
   async goToSettings() {

@@ -17,7 +17,7 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 3 : 1,
   /* Limit parallel tests on CI. */
-  workers: process.env.CI ? 2 : undefined,
+  workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
@@ -30,6 +30,13 @@ export default defineConfig({
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
+  },
+
+  // test timeout set to 2 minutes
+  timeout: 2 * 60 * 1000,
+  expect: {
+    // expect timeout set to 10 seconds
+    timeout: 10 * 1000
   },
 
   /* Configure projects for major browsers */

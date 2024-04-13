@@ -188,7 +188,9 @@ export function AccountSelector({
                   >
                     {(accounts ?? []).map((account) => (
                       <CommandItem
-                        data-test={'account-selector-team-' + account.value}
+                        data-test={'account-selector-team'}
+                        data-name={account.label}
+                        data-slug={account.value}
                         className={'group'}
                         key={account.value}
                         value={account.value ?? ''}

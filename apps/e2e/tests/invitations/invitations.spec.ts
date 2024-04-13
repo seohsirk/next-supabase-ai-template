@@ -1,4 +1,4 @@
-import { Page, test } from '@playwright/test';
+import { expect, Page, test } from '@playwright/test';
 import { InvitationsPageObject } from './invitations.po';
 
 test.describe('Invitations', () => {
@@ -12,7 +12,7 @@ test.describe('Invitations', () => {
     await invitations.setup();
   });
 
-  test('user invite users', async ({page}) => {
+  test('Full invite flow', async ({page}) => {
     await page.waitForLoadState('networkidle');
 
     await invitations.navigateToMembers();
@@ -30,5 +30,80 @@ test.describe('Invitations', () => {
     ];
 
     await invitations.inviteMembers(invites);
+
+    const firstEmail = invites[0]!.email;
+
+    await expect(await invitations.getInvitations()).toHaveCount(2)
+
+    // sign out and sign in with the first email
+    await invitations.auth.signOut();
+
+    await invitations.auth.visitConfirmEmailLink(invites[0]!.email, {
+      deleteAfter: true
+    });
+
+    await invitations.auth.signUp({
+      email: firstEmail,
+      password: 'password',
+      repeatPassword: 'password'
+    });
+
+    await invitations.auth.visitConfirmEmailLink(firstEmail);
+
+    await invitations.acceptInvitation();
+
+    await invitations.teamAccounts.openAccountsSelector();
+
+    await expect(await invitations.teamAccounts.getTeams()).toHaveCount(1);
+  });
+
+  test('users can delete invites', async ({page}) => {
+    await page.waitForLoadState('networkidle');
+
+    await invitations.navigateToMembers();
+    await invitations.openInviteForm();
+
+    const email = invitations.auth.createRandomEmail();
+
+    const invites = [
+      {
+        email,
+        role: 'member'
+      },
+    ];
+
+    await invitations.inviteMembers(invites);
+
+    await expect(await invitations.getInvitations()).toHaveCount(1);
+
+    await invitations.deleteInvitation(email);
+
+    await expect(await invitations.getInvitations()).toHaveCount(0);
+  });
+
+  test('users can update invites', async ({page}) => {
+    await page.waitForLoadState('networkidle');
+
+    await invitations.navigateToMembers();
+    await invitations.openInviteForm();
+
+    const email = invitations.auth.createRandomEmail();
+
+    const invites = [
+      {
+        email,
+        role: 'member'
+      },
+    ];
+
+    await invitations.inviteMembers(invites);
+
+    await expect(await invitations.getInvitations()).toHaveCount(1);
+
+    await invitations.updateInvitation(email, 'owner');
+
+    const row = invitations.getInvitationRow(email);
+
+    await expect(row.locator('[data-test="member-role-badge"]')).toHaveText('owner');
   });
 });

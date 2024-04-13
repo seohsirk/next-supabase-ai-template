@@ -65,7 +65,11 @@ export function AccountInvitationsTable({
         placeholder={t(`searchInvitations`)}
       />
 
-      <DataTable columns={columns} data={filteredInvitations} />
+      <DataTable
+        data-cy={'invitations-table'}
+        columns={columns}
+        data={filteredInvitations}
+      />
     </div>
   );
 }
@@ -87,7 +91,10 @@ function useGetColumns(permissions: {
           const email = member.email;
 
           return (
-            <span className={'flex items-center space-x-4 text-left'}>
+            <span
+              data-test={'invitation-email'}
+              className={'flex items-center space-x-4 text-left'}
+            >
               <span>
                 <ProfileAvatar text={email} />
               </span>
@@ -166,19 +173,28 @@ function ActionsDropdown({
 
         <DropdownMenuContent>
           <If condition={permissions.canUpdateInvitation}>
-            <DropdownMenuItem onClick={() => setIsUpdatingRole(true)}>
+            <DropdownMenuItem
+              data-test={'update-invitation-trigger'}
+              onClick={() => setIsUpdatingRole(true)}
+            >
               <Trans i18nKey={'teams:updateInvitation'} />
             </DropdownMenuItem>
 
             <If condition={getIsInviteExpired(invitation.expires_at)}>
-              <DropdownMenuItem onClick={() => setIsRenewingInvite(true)}>
+              <DropdownMenuItem
+                data-test={'renew-invitation-trigger'}
+                onClick={() => setIsRenewingInvite(true)}
+              >
                 <Trans i18nKey={'teams:renewInvitation'} />
               </DropdownMenuItem>
             </If>
           </If>
 
           <If condition={permissions.canRemoveInvitation}>
-            <DropdownMenuItem onClick={() => setIsDeletingInvite(true)}>
+            <DropdownMenuItem
+              data-test={'remove-invitation-trigger'}
+              onClick={() => setIsDeletingInvite(true)}
+            >
               <Trans i18nKey={'teams:removeInvitation'} />
             </DropdownMenuItem>
           </If>
