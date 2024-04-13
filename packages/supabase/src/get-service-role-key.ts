@@ -10,7 +10,7 @@ export function getServiceRoleKey() {
 
   if (process.env.NODE_ENV !== 'production') {
     console.warn(
-      `[Dev Only] You are using the Supabase Service Role. Make sure it's the right call.`,
+      `[Dev Only] This is a simple warning to let you know you are using the Supabase Service Role. Make sure it's the right call.`,
     );
   }
 

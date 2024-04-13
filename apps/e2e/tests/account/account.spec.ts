@@ -56,6 +56,12 @@ test.describe('Account Deletion', () => {
     await account.setup();
     await account.deleteAccount();
 
-    await page.waitForURL('http://localhost:3000');
+    const response = await page.waitForResponse((resp) => {
+      return resp.url().includes('home/settings') &&
+        resp.request().method() === 'POST';
+    });
+
+    // The server should respond with a 303 redirect
+    expect(response.status()).toBe(303);
   });
 });
