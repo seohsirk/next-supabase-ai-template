@@ -26,7 +26,7 @@ export default defineConfig({
     baseURL: 'http://localhost:3000',
 
     // take a screenshot when a test fails
-    screenshot: 'on',
+    screenshot: 'only-on-failure',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry'
@@ -68,10 +68,11 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: 'cd ../../ && pnpm run dev',
+    cwd: '../../',
+    command: 'pnpm run dev',
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
     stdout: 'pipe',
-    stderr: 'pipe'
+    stderr: 'pipe',
   }
 });

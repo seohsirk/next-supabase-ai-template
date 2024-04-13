@@ -359,12 +359,7 @@ begin
         public.accounts_memberships
     set
         account_role =(
-            select
-                name
-            from
-                public.roles
-            where
-                hierarchy_level = 1)
+            kit.get_upper_system_role())
     where
         target_account_id = account_id
         and user_id = new_owner_id;
@@ -421,6 +416,21 @@ create trigger protect_account_fields
     before update on public.accounts for each row
     execute function kit.protect_account_fields();
 
+create or replace function kit.get_upper_system_role()
+    returns varchar
+    as $$
+declare
+    role varchar(50);
+begin
+    select name from public.roles
+      where account_id is null and
+      hierarchy_level = 1 into role;
+
+    return role;
+end;
+$$
+language plpgsql;
+
 create or replace function kit.add_current_user_to_new_account()
     returns trigger
     language plpgsql
@@ -436,7 +446,7 @@ begin
         values(
             new.id,
             auth.uid(),
-            'owner');
+            kit.get_upper_system_role());
 
     end if;
 
@@ -490,7 +500,7 @@ create trigger "on_auth_user_updated"
 -- Account Memberships table
 create table if not exists public.roles(
     name varchar(50) not null,
-    hierarchy_level int not null,
+    hierarchy_level int not null check (hierarchy_level > 0),
     account_id uuid references public.accounts(id) on delete cascade,
     unique(name, account_id),
     primary key (name)
@@ -509,9 +519,13 @@ end; $$ language plpgsql immutable;
 
 grant execute on function kit.get_system_role_uuid() to authenticated, service_role;
 
+-- we create a unique index on the roles table to ensure that the
+-- can there be a unique hierarchy_level per account (or system role)
 create unique index idx_unique_hierarchy_per_account
     on public.roles (hierarchy_level, coalesce(account_id, kit.get_system_role_uuid()));
 
+-- we create a unique index on the roles table to ensure that the
+-- can there be a unique name per account (or system role)
 create unique index idx_unique_name_per_account
     on public.roles (name, coalesce(account_id, kit.get_system_role_uuid()));
 
@@ -536,22 +550,6 @@ create constraint trigger tr_check_non_personal_account_roles
     after insert or update on public.roles
     for each row
     execute procedure kit.check_non_personal_account_roles();
-
--- Seed the roles table with default roles 'owner' and
---   'member'
-insert into public.roles(
-    name,
-    hierarchy_level)
-values (
-    'owner',
-    1);
-
-insert into public.roles(
-    name,
-    hierarchy_level)
-values (
-    'member',
-    2);
 
 -- RLS
 alter table public.roles enable row level security;
@@ -672,7 +670,7 @@ create policy roles_read on public.roles
             or public.has_role_on_account(account_id)
         );
 
---    Function to check if a user can remove a member from an account
+-- Function to check if a user can remove a member from an account
 create or replace function
     kit.can_remove_account_member(target_team_account_id uuid,
     user_id uuid)
@@ -882,6 +880,7 @@ begin
             where
                 id = target_account_id
                 and primary_owner_user_id = target_user_id) into is_primary_owner;
+
     -- If the user is the primary owner, they have the highest role and can
     --   perform any action
     if is_primary_owner then
@@ -908,9 +907,11 @@ begin
     from
         public.roles
     where
-        name = role_name;
+        name = role_name
+        and account_id = target_account_id or account_id is null;
     -- If the user's role is higher than the target role, they can perform
     --   the action
+
     return user_role_hierarchy_level < target_role_hierarchy_level;
 
 end;
