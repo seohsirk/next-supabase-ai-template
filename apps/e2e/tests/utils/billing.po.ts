@@ -32,7 +32,7 @@ export class BillingPageObject {
     // wait a bit for the webhook to be processed
     await this.page.waitForTimeout(1000);
 
-    await this.successStatus().locator('button').click();
+    return this.page.locator('[data-test="checkout-success-back-link"]').click();
   }
 
   proceedToCheckout() {

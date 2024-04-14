@@ -22,7 +22,9 @@ test.describe('User Billing', () => {
     await expect(po.billing.successStatus()).toBeVisible();
     await po.billing.returnToHome();
 
-    const link = page.locator('a', {
+    await page.waitForURL('http://localhost:3000/home');
+
+    const link = page.locator('button', {
       hasText: 'Billing'
     });
 

@@ -13,7 +13,7 @@ test.describe('Team Billing', () => {
     await po.teamAccounts.goToBilling();
   });
 
-  test('a team can subscribe to a plan', async () => {
+  test('a team can subscribe to a plan', async ({page}) => {
     await po.billing.selectPlan(0);
     await po.billing.proceedToCheckout();
 

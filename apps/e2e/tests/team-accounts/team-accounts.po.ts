@@ -31,14 +31,14 @@ export class TeamAccountsPageObject {
     return this.page.locator('[data-test="account-selector-team"]');
   }
 
-  async goToSettings() {
-    await this.page.locator('a', {
+  goToSettings() {
+    return this.page.locator('a', {
       hasText: 'Settings',
     }).click();
   }
 
-  async goToBilling() {
-    await this.page.locator('a', {
+  goToBilling() {
+    return this.page.locator('a', {
       hasText: 'Billing',
     }).click();
   }
