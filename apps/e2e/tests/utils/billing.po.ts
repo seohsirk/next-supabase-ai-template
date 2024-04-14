@@ -21,7 +21,7 @@ export class BillingPageObject {
   }
 
   manageBillingButton() {
-    return this.page.locator('manage-billing-redirect-button');
+    return this.page.locator('[data-test="manage-billing-redirect-button"]');
   }
 
   successStatus() {
