@@ -288,7 +288,7 @@ export function PlanPicker(
                             >
                               <If
                                 condition={
-                                  plan.trialPeriod && props.canStartTrial
+                                  plan.trialDays && props.canStartTrial
                                 }
                               >
                                 <div>
@@ -296,7 +296,7 @@ export function PlanPicker(
                                     <Trans
                                       i18nKey={`billing:trialPeriod`}
                                       values={{
-                                        period: plan.trialPeriod,
+                                        period: plan.trialDays,
                                       }}
                                     />
                                   </Badge>
@@ -356,7 +356,7 @@ export function PlanPicker(
               ) : (
                 <>
                   <If
-                    condition={selectedPlan?.trialPeriod && props.canStartTrial}
+                    condition={selectedPlan?.trialDays && props.canStartTrial}
                     fallback={t(`proceedToPayment`)}
                   >
                     <span>{t(`startTrial`)}</span>

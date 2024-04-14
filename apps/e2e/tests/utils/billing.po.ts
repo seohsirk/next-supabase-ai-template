@@ -1,4 +1,4 @@
-import { expect, Page } from '@playwright/test';
+import { Page } from '@playwright/test';
 import { StripePageObject } from './stripe.po';
 
 export class BillingPageObject {
@@ -32,7 +32,7 @@ export class BillingPageObject {
     // wait a bit for the webhook to be processed
     await this.page.waitForTimeout(1000);
 
-    return this.page.locator('[data-test="checkout-success-back-link"]').click();
+    return this.page.locator('[data-test="checkout-success-back-link"] button').click();
   }
 
   proceedToCheckout() {

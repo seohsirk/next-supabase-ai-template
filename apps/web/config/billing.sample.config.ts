@@ -26,7 +26,7 @@ export default createBillingSchema({
         {
           name: 'Starter Monthly',
           id: 'starter-monthly',
-          trialPeriod: 7,
+          trialDays: 7,
           paymentType: 'recurring',
           interval: 'month',
           lineItems: [

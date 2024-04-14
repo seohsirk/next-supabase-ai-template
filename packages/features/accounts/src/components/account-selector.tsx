@@ -191,7 +191,12 @@ export function AccountSelector({
                         data-test={'account-selector-team'}
                         data-name={account.label}
                         data-slug={account.value}
-                        className={'group flex space-x-2'}
+                        className={cn(
+                          'group flex justify-between transition-colors',
+                          {
+                            ['bg-muted']: value === account.value,
+                          },
+                        )}
                         key={account.value}
                         value={account.value ?? ''}
                         onSelect={(currentValue) => {
@@ -203,23 +208,28 @@ export function AccountSelector({
                           }
                         }}
                       >
-                        <Avatar
-                          className={cn('h-6 w-6 border border-transparent', {
-                            ['border-border']: value === account.value,
-                            ['group-hover:border-border ']:
-                              value !== account.value,
-                          })}
-                        >
-                          <AvatarImage src={account.image ?? undefined} />
+                        <div className={'flex items-center'}>
+                          <Avatar
+                            className={cn(
+                              'mr-2 h-6 w-6 border border-transparent',
+                              {
+                                ['border-border']: value === account.value,
+                                ['group-hover:border-border ']:
+                                  value !== account.value,
+                              },
+                            )}
+                          >
+                            <AvatarImage src={account.image ?? undefined} />
 
-                          <AvatarFallback>
-                            {account.label ? account.label[0] : ''}
-                          </AvatarFallback>
-                        </Avatar>
+                            <AvatarFallback>
+                              {account.label ? account.label[0] : ''}
+                            </AvatarFallback>
+                          </Avatar>
 
-                        <span className={'mr-2 max-w-[165px] truncate'}>
-                          {account.label}
-                        </span>
+                          <span className={'mr-2 max-w-[165px] truncate'}>
+                            {account.label}
+                          </span>
+                        </div>
 
                         <Icon item={account.value ?? ''} />
                       </CommandItem>

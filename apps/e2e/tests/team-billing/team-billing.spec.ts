@@ -13,7 +13,7 @@ test.describe('Team Billing', () => {
     await po.teamAccounts.goToBilling();
   });
 
-  test('a team can subscribe to a plan', async ({page}) => {
+  test('a team can subscribe to a plan', async () => {
     await po.billing.selectPlan(0);
     await po.billing.proceedToCheckout();
 
@@ -25,7 +25,7 @@ test.describe('Team Billing', () => {
 
     await po.teamAccounts.goToBilling();
 
-    await expect(await po.billing.getStatus()).toContainText('Active');
+    await expect(await po.billing.getStatus()).toContainText('Trial');
     await expect(po.billing.manageBillingButton()).toBeVisible();
   });
 });

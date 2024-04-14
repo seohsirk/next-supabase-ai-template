@@ -33,7 +33,7 @@ export async function createStripeCheckout(
     | Stripe.Checkout.SessionCreateParams.SubscriptionData
     | undefined = isSubscription
     ? {
-        trial_period_days: params.trialDays,
+        trial_period_days: params.plan.trialDays,
         metadata: {
           accountId: params.accountId,
         },

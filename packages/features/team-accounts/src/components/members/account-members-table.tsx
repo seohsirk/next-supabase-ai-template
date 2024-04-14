@@ -7,6 +7,7 @@ import { Ellipsis } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 import { Database } from '@kit/supabase/database';
+import { Badge } from '@kit/ui/badge';
 import { Button } from '@kit/ui/button';
 import { DataTable } from '@kit/ui/data-table';
 import {
@@ -121,13 +122,7 @@ function useGetColumns(
               <span>{displayName}</span>
 
               <If condition={isSelf}>
-                <span
-                  className={
-                    'bg-muted rounded-md px-2.5 py-1 text-xs font-medium'
-                  }
-                >
-                  {t('youLabel')}
-                </span>
+                <Badge variant={'outline'}>{t('youLabel')}</Badge>
               </If>
             </span>
           );

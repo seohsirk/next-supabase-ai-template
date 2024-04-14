@@ -1,7 +1,3 @@
-'use client';
-
-import Link from 'next/link';
-
 import { Check, ChevronRight } from 'lucide-react';
 
 import { Button } from '@kit/ui/button';
@@ -12,33 +8,13 @@ import { Trans } from '@kit/ui/trans';
  * Retrieves the session status for a Stripe checkout session.
  * Since we should only arrive here for a successful checkout, we only check
  * for the `paid` status.
- *
- * @param {Stripe.Checkout.Session['status']} status - The status of the Stripe checkout session.
- * @param {string} customerEmail - The email address of the customer associated with the session.
- *
- * @returns {ReactElement} - The component to render based on the session status.
- */
+ **/
 export function BillingSessionStatus({
   customerEmail,
-  redirectPath,
+  onRedirect,
 }: React.PropsWithChildren<{
   customerEmail: string;
-  redirectPath: string;
-}>) {
-  return (
-    <SuccessSessionStatus
-      redirectPath={redirectPath}
-      customerEmail={customerEmail}
-    />
-  );
-}
-
-function SuccessSessionStatus({
-  customerEmail,
-  redirectPath,
-}: React.PropsWithChildren<{
-  customerEmail: string;
-  redirectPath: string;
+  onRedirect: () => void;
 }>) {
   return (
     <section
@@ -78,15 +54,15 @@ function SuccessSessionStatus({
           </p>
         </div>
 
-        <Link data-test={'checkout-success-back-link'} href={redirectPath}>
-          <Button>
+        <form data-test={'checkout-success-back-link'}>
+          <Button formAction={onRedirect}>
             <span>
               <Trans i18nKey={'billing:checkoutSuccessBackButton'} />
             </span>
 
             <ChevronRight className={'h-4'} />
           </Button>
-        </Link>
+        </form>
       </div>
     </section>
   );

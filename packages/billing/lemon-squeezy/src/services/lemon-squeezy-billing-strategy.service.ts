@@ -119,7 +119,7 @@ export class LemonSqueezyBillingStrategyService
           'Failed to cancel subscription',
         );
 
-        throw error;
+        throw new Error('Failed to cancel subscription');
       }
 
       logger.info(ctx, 'Subscription cancelled successfully');

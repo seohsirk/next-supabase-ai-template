@@ -22,15 +22,13 @@ test.describe('User Billing', () => {
     await expect(po.billing.successStatus()).toBeVisible();
     await po.billing.returnToHome();
 
-    await page.waitForURL('http://localhost:3000/home');
-
     const link = page.locator('button', {
       hasText: 'Billing'
     });
 
     await link.click();
 
-    await expect(await po.billing.getStatus()).toContainText('Active');
+    await expect(await po.billing.getStatus()).toContainText('Trial');
     await expect(po.billing.manageBillingButton()).toBeVisible();
   });
 });

@@ -8,6 +8,7 @@ import { Alert, AlertDescription, AlertTitle } from '@kit/ui/alert';
 import { If } from '@kit/ui/if';
 import { PageBody, PageHeader } from '@kit/ui/page';
 import { Trans } from '@kit/ui/trans';
+import { cn } from '@kit/ui/utils';
 
 import { createBillingPortalSession } from '~/(dashboard)/home/[account]/billing/server-actions';
 import billingConfig from '~/config/billing.config';
@@ -75,13 +76,17 @@ async function TeamAccountBillingPage({ params }: Params) {
       />
 
       <PageBody>
-        <div className={'mx-auto flex w-full max-w-2xl flex-col space-y-6'}>
+        <div
+          className={cn(`flex w-full flex-col space-y-6`, {
+            'mx-auto max-w-2xl ': subscription,
+          })}
+        >
           <If
             condition={subscription}
             fallback={
-              <>
+              <div>
                 <Checkout />
-              </>
+              </div>
             }
           >
             {(subscription) => (

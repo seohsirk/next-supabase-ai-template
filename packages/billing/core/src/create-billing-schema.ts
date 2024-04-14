@@ -81,7 +81,7 @@ export const PlanSchema = z
       .min(1),
     interval: BillingIntervalSchema.optional(),
     lineItems: z.array(LineItemSchema),
-    trialPeriod: z
+    trialDays: z
       .number({
         description:
           'Number of days for the trial period. Leave empty for no trial.',
