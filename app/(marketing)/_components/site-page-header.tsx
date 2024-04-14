@@ -10,12 +10,8 @@ export function SitePageHeader(props: {
       <div className={'container flex flex-col space-y-4'}>
         <h1 className={'font-base text-3xl xl:text-5xl'}>{props.title}</h1>
 
-        <h2
-          className={
-            'text-base text-secondary-foreground xl:text-lg 2xl:text-xl'
-          }
-        >
-          <span className={'font-normal'}>{props.subtitle}</span>
+        <h2 className={'text-muted-foreground xl:text-lg 2xl:text-xl'}>
+          {props.subtitle}
         </h2>
       </div>
     </div>

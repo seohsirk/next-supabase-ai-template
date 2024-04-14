@@ -39,11 +39,13 @@ export async function POST(request: Request) {
     );
 
     return new Response('OK', { status: 200 });
-  } catch (e) {
+  } catch (error) {
+    console.error(error);
+
     logger.error(
       {
         name: 'billing',
-        error: e,
+        error: JSON.stringify(error),
       },
       `Failed to process billing webhook`,
     );
