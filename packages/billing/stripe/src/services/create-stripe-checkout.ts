@@ -26,18 +26,19 @@ export async function createStripeCheckout(
   const mode: Stripe.Checkout.SessionCreateParams.Mode =
     params.plan.paymentType === 'recurring' ? 'subscription' : 'payment';
 
+  const isSubscription = mode === 'subscription';
+
   // this should only be set if the mode is 'subscription'
   const subscriptionData:
     | Stripe.Checkout.SessionCreateParams.SubscriptionData
-    | undefined =
-    mode === 'subscription'
-      ? {
-          trial_period_days: params.trialDays,
-          metadata: {
-            accountId: params.accountId,
-          },
-        }
-      : undefined;
+    | undefined = isSubscription
+    ? {
+        trial_period_days: params.trialDays,
+        metadata: {
+          accountId: params.accountId,
+        },
+      }
+    : {};
 
   const urls = getUrls({
     returnUrl: params.returnUrl,
@@ -53,6 +54,10 @@ export async function createStripeCheckout(
     : {
         customer_email: params.customerEmail,
       };
+
+  const customerCreation = isSubscription
+    ? ({} as Record<string, string>)
+    : { customer_creation: 'always' };
 
   const lineItems = params.plan.lineItems.map((item) => {
     if (item.type === 'metered') {
@@ -81,7 +86,7 @@ export async function createStripeCheckout(
     line_items: lineItems,
     client_reference_id: clientReferenceId,
     subscription_data: subscriptionData,
-    customer_creation: 'always',
+    ...customerCreation,
     ...customerData,
     ...urls,
   });

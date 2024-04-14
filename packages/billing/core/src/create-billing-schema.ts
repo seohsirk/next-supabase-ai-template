@@ -356,7 +356,7 @@ export function getLineItemTypeById(
   for (const product of config.products) {
     for (const plan of product.plans) {
       for (const lineItem of plan.lineItems) {
-        if (lineItem.type === id) {
+        if (lineItem.id === id) {
           return lineItem.type;
         }
       }

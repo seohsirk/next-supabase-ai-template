@@ -236,6 +236,7 @@ export function PlanPicker(
                           key={primaryLineItem.id}
                         >
                           <RadioGroupItem
+                            data-test-plan={plan.id}
                             key={plan.id + selected}
                             id={plan.id}
                             value={plan.id}
@@ -346,7 +347,10 @@ export function PlanPicker(
           />
 
           <div>
-            <Button disabled={props.pending ?? !form.formState.isValid}>
+            <Button
+              data-test="checkout-submit-button"
+              disabled={props.pending ?? !form.formState.isValid}
+            >
               {props.pending ? (
                 t('processing')
               ) : (

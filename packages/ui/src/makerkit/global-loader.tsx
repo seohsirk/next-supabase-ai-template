@@ -26,7 +26,9 @@ export function GlobalLoader({
       </If>
 
       <If condition={displaySpinner}>
-        <div className={'flex flex-1 flex-col items-center justify-center py-48'}>
+        <div
+          className={'flex flex-1 flex-col items-center justify-center py-48'}
+        >
           <LoadingOverlay displayLogo={displayLogo} fullPage={fullPage}>
             {Text}
           </LoadingOverlay>

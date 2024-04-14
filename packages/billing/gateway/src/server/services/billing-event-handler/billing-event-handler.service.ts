@@ -26,15 +26,14 @@ export class BillingEventHandlerService {
         const client = this.clientProvider();
         const logger = await getLogger();
 
+        const ctx = {
+          namespace: this.namespace,
+          subscriptionId,
+        };
+
         // Handle the subscription deleted event
         // here we delete the subscription from the database
-        logger.info(
-          {
-            namespace: this.namespace,
-            subscriptionId,
-          },
-          'Processing subscription deleted event',
-        );
+        logger.info(ctx, 'Processing subscription deleted event');
 
         const { error } = await client
           .from('subscriptions')
@@ -42,16 +41,18 @@ export class BillingEventHandlerService {
           .match({ id: subscriptionId });
 
         if (error) {
+          logger.error(
+            {
+              error,
+              ...ctx,
+            },
+            `Failed to delete subscription`,
+          );
+
           throw new Error('Failed to delete subscription');
         }
 
-        logger.info(
-          {
-            namespace: this.namespace,
-            subscriptionId,
-          },
-          'Successfully deleted subscription',
-        );
+        logger.info(ctx, 'Successfully deleted subscription');
       },
       onSubscriptionUpdated: async (subscription) => {
         const client = this.clientProvider();
@@ -65,7 +66,7 @@ export class BillingEventHandlerService {
           customerId: subscription.target_customer_id,
         };
 
-        logger.info(ctx, 'Processing subscription updated event');
+        logger.info(ctx, 'Processing subscription updated event ...');
 
         // Handle the subscription updated event
         // here we update the subscription in the database
@@ -139,15 +140,14 @@ export class BillingEventHandlerService {
         const client = this.clientProvider();
         const logger = await getLogger();
 
+        const ctx = {
+          namespace: this.namespace,
+          sessionId,
+        };
+
         // Handle the payment succeeded event
         // here we update the payment status in the database
-        logger.info(
-          {
-            namespace: this.namespace,
-            sessionId,
-          },
-          'Processing payment succeeded event',
-        );
+        logger.info(ctx, 'Processing payment succeeded event...');
 
         const { error } = await client
           .from('orders')
@@ -155,30 +155,31 @@ export class BillingEventHandlerService {
           .match({ session_id: sessionId });
 
         if (error) {
+          logger.error(
+            {
+              error,
+              ...ctx,
+            },
+            'Failed to update payment status',
+          );
+
           throw new Error('Failed to update payment status');
         }
 
-        logger.info(
-          {
-            namespace: this.namespace,
-            sessionId,
-          },
-          'Successfully updated payment status',
-        );
+        logger.info(ctx, 'Successfully updated payment status');
       },
       onPaymentFailed: async (sessionId: string) => {
         const client = this.clientProvider();
         const logger = await getLogger();
 
+        const ctx = {
+          namespace: this.namespace,
+          sessionId,
+        };
+
         // Handle the payment failed event
         // here we update the payment status in the database
-        logger.info(
-          {
-            namespace: this.namespace,
-            sessionId,
-          },
-          'Processing payment failed event',
-        );
+        logger.info(ctx, 'Processing payment failed event');
 
         const { error } = await client
           .from('orders')
@@ -186,16 +187,18 @@ export class BillingEventHandlerService {
           .match({ session_id: sessionId });
 
         if (error) {
+          logger.error(
+            {
+              error,
+              ...ctx,
+            },
+            'Failed to update payment status',
+          );
+
           throw new Error('Failed to update payment status');
         }
 
-        logger.info(
-          {
-            namespace: this.namespace,
-            sessionId,
-          },
-          'Successfully updated payment status',
-        );
+        logger.info(ctx, 'Successfully updated payment status');
       },
     });
   }

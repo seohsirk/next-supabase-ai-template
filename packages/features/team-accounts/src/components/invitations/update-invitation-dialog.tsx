@@ -47,30 +47,30 @@ export const UpdateInvitationDialog: React.FC<{
   userRoleHierarchy,
   account,
 }) => {
-    return (
-      <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>
-              <Trans i18nKey={'teams:updateMemberRoleModalHeading'} />
-            </DialogTitle>
+  return (
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>
+            <Trans i18nKey={'teams:updateMemberRoleModalHeading'} />
+          </DialogTitle>
 
-            <DialogDescription>
-              <Trans i18nKey={'teams:updateMemberRoleModalDescription'} />
-            </DialogDescription>
-          </DialogHeader>
+          <DialogDescription>
+            <Trans i18nKey={'teams:updateMemberRoleModalDescription'} />
+          </DialogDescription>
+        </DialogHeader>
 
-          <UpdateInvitationForm
-            account={account}
-            invitationId={invitationId}
-            userRole={userRole}
-            userRoleHierarchy={userRoleHierarchy}
-            setIsOpen={setIsOpen}
-          />
-        </DialogContent>
-      </Dialog>
-    );
-  };
+        <UpdateInvitationForm
+          account={account}
+          invitationId={invitationId}
+          userRole={userRole}
+          userRoleHierarchy={userRoleHierarchy}
+          setIsOpen={setIsOpen}
+        />
+      </DialogContent>
+    </Dialog>
+  );
+};
 
 function UpdateInvitationForm({
   account,

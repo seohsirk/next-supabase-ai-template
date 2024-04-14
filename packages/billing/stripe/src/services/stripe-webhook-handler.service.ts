@@ -282,17 +282,18 @@ export class StripeWebhookHandlerService
 
     const lineItems = params.lineItems.map((item) => {
       const quantity = item.quantity ?? 1;
+      const variantId = item.price?.id as string;
 
       return {
         id: item.id,
         quantity,
         subscription_id: params.id,
         product_id: item.price?.product as string,
-        variant_id: item.price?.id,
+        variant_id: variantId,
         price_amount: item.price?.unit_amount,
         interval: item.price?.recurring?.interval as string,
         interval_count: item.price?.recurring?.interval_count as number,
-        type: getLineItemTypeById(this.config, item.id),
+        type: getLineItemTypeById(this.config, variantId),
       };
     });
 

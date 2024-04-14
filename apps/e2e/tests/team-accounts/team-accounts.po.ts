@@ -37,6 +37,12 @@ export class TeamAccountsPageObject {
     }).click();
   }
 
+  async goToBilling() {
+    await this.page.locator('a', {
+      hasText: 'Billing',
+    }).click();
+  }
+
   async openAccountsSelector() {
     await this.page.click('[data-test="account-selector-trigger"]');
   }
