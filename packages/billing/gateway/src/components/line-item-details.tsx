@@ -17,7 +17,7 @@ export function LineItemDetails(
   }>,
 ) {
   return (
-    <div className={'flex flex-col space-y-1 px-1'}>
+    <div className={'flex flex-col space-y-1'}>
       {props.lineItems.map((item) => {
         // If the item has a description, we render it as a simple text
         // and pass the item as values to the translation so we can use

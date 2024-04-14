@@ -1,4 +1,4 @@
-import { Page } from '@playwright/test';
+import { expect, Page } from '@playwright/test';
 import { StripePageObject } from './stripe.po';
 
 export class BillingPageObject {
@@ -29,6 +29,7 @@ export class BillingPageObject {
   }
 
   async returnToHome() {
+    // wait a bit for the webhook to be processed
     await this.page.waitForTimeout(1000);
 
     await this.successStatus().locator('button').click();

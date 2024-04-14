@@ -12,7 +12,7 @@ test.describe('User Billing', () => {
     await po.setup();
   });
 
-  test('user can subscribe to a plan', async ({page}) => {
+  test('user can subscribe to a plan', async ({ page }) => {
     await po.billing.selectPlan(0);
     await po.billing.proceedToCheckout();
 
@@ -22,9 +22,11 @@ test.describe('User Billing', () => {
     await expect(po.billing.successStatus()).toBeVisible();
     await po.billing.returnToHome();
 
-    await page.locator('a', {
-      hasText: 'Billing',
-    }).click();
+    const link = page.locator('a', {
+      hasText: 'Billing'
+    });
+
+    await link.click();
 
     await expect(await po.billing.getStatus()).toContainText('Active');
     await expect(po.billing.manageBillingButton()).toBeVisible();
