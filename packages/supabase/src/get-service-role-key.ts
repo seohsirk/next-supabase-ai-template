@@ -2,6 +2,9 @@ import 'server-only';
 
 import { z } from 'zod';
 
+const message =
+  'Invalid Supabase Service Role Key. Please check the environment variable SUPABASE_SERVICE_ROLE_KEY.';
+
 /**
  * @name getServiceRoleKey
  * @description Get the Supabase Service Role Key.
@@ -9,7 +12,15 @@ import { z } from 'zod';
  */
 export function getServiceRoleKey() {
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  return z.string().min(1).parse(serviceRoleKey);
+
+  return z
+    .string({
+      required_error: message,
+    })
+    .min(1, {
+      message: message,
+    })
+    .parse(serviceRoleKey);
 }
 
 /**
