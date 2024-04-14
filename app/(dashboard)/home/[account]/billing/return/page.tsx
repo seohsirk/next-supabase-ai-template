@@ -1,3 +1,4 @@
+import { revalidatePath } from 'next/cache';
 import dynamic from 'next/dynamic';
 import { notFound, redirect } from 'next/navigation';
 
@@ -7,16 +8,11 @@ import { requireUser } from '@kit/supabase/require-user';
 import { getSupabaseServerComponentClient } from '@kit/supabase/server-component-client';
 
 import billingConfig from '~/config/billing.config';
-import pathsConfig from '~/config/paths.config';
 import { withI18n } from '~/lib/i18n/with-i18n';
 
 interface SessionPageProps {
   searchParams: {
     session_id: string;
-  };
-
-  params: {
-    account: string;
   };
 }
 
@@ -31,10 +27,7 @@ const LazyEmbeddedCheckout = dynamic(
   },
 );
 
-async function ReturnCheckoutSessionPage({
-  searchParams,
-  params,
-}: SessionPageProps) {
+async function ReturnCheckoutSessionPage({ searchParams }: SessionPageProps) {
   const sessionId = searchParams.session_id;
 
   if (!sessionId) {
@@ -52,17 +45,12 @@ async function ReturnCheckoutSessionPage({
     );
   }
 
-  const redirectPath = pathsConfig.app.accountHome.replace(
-    '[account]',
-    params.account,
-  );
-
   return (
     <>
       <div className={'fixed left-0 top-48 z-50 mx-auto w-full'}>
         <BillingSessionStatus
+          onRedirect={onRedirect}
           customerEmail={customerEmail ?? ''}
-          redirectPath={redirectPath}
         />
       </div>
 
@@ -105,4 +93,16 @@ async function loadCheckoutSession(sessionId: string) {
     customerEmail: session.customer.email,
     checkoutToken,
   };
+}
+
+// eslint-disable-next-line @typescript-eslint/require-await
+async function onRedirect() {
+  'use server';
+
+  // revalidate the home page to update cached pages
+  // which may have changed due to the billing session
+  revalidatePath('/home', 'layout');
+
+  // redirect back
+  redirect('../');
 }
