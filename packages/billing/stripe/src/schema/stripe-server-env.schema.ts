@@ -2,8 +2,16 @@ import { z } from 'zod';
 
 export const StripeServerEnvSchema = z
   .object({
-    secretKey: z.string().min(1),
-    webhooksSecret: z.string().min(1),
+    secretKey: z
+      .string({
+        required_error: `Please provide the variable STRIPE_SECRET_KEY`,
+      })
+      .min(1),
+    webhooksSecret: z
+      .string({
+        required_error: `Please provide the variable STRIPE_WEBHOOK_SECRET`,
+      })
+      .min(1),
   })
   .refine(
     (schema) => {

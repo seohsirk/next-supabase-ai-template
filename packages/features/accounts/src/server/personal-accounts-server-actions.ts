@@ -76,8 +76,16 @@ export async function deletePersonalAccountAction(formData: FormData) {
 function getEmailSettingsFromEnvironment() {
   return z
     .object({
-      fromEmail: z.string().email(),
-      productName: z.string().min(1),
+      fromEmail: z
+        .string({
+          required_error: 'Provide the variable EMAIL_SENDER',
+        })
+        .email(),
+      productName: z
+        .string({
+          required_error: 'Provide the variable NEXT_PUBLIC_PRODUCT_NAME',
+        })
+        .min(1),
     })
     .parse({
       fromEmail: process.env.EMAIL_SENDER,

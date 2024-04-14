@@ -1,17 +1,43 @@
 import { z } from 'zod';
 
 const FeatureFlagsSchema = z.object({
-  enableThemeToggle: z.boolean(),
-  enableAccountDeletion: z.boolean(),
-  enableTeamDeletion: z.boolean(),
-  enableTeamAccounts: z.boolean(),
-  enableTeamCreation: z.boolean(),
-  enablePersonalAccountBilling: z.boolean(),
-  enableTeamAccountBilling: z.boolean(),
+  enableThemeToggle: z.boolean({
+    description: 'Enable theme toggle in the user interface.',
+    required_error: 'Provide the variable NEXT_PUBLIC_ENABLE_THEME_TOGGLE',
+  }),
+  enableAccountDeletion: z.boolean({
+    description: 'Enable account deletion.',
+    required_error: 'Provide the variable NEXT_PUBLIC_ENABLE_ACCOUNT_DELETION',
+  }),
+  enableTeamDeletion: z.boolean({
+    description: 'Enable team deletion.',
+    required_error: 'Provide the variable NEXT_PUBLIC_ENABLE_TEAM_DELETION',
+  }),
+  enableTeamAccounts: z.boolean({
+    description: 'Enable team accounts.',
+    required_error: 'Provide the variable NEXT_PUBLIC_ENABLE_TEAM_ACCOUNTS',
+  }),
+  enableTeamCreation: z.boolean({
+    description: 'Enable team creation.',
+    required_error: 'Provide the variable NEXT_PUBLIC_ENABLE_TEAMS_CREATION',
+  }),
+  enablePersonalAccountBilling: z.boolean({
+    description: 'Enable personal account billing.',
+    required_error:
+      'Provide the variable NEXT_PUBLIC_ENABLE_PERSONAL_ACCOUNT_BILLING',
+  }),
+  enableTeamAccountBilling: z.boolean({
+    description: 'Enable team account billing.',
+    required_error:
+      'Provide the variable NEXT_PUBLIC_ENABLE_ORGANIZATION_BILLING',
+  }),
 });
 
 const featuresFlagConfig = FeatureFlagsSchema.parse({
-  enableThemeToggle: true,
+  enableThemeToggle: getBoolean(
+    process.env.NEXT_PUBLIC_ENABLE_THEME_TOGGLE,
+    true,
+  ),
   enableAccountDeletion: getBoolean(
     process.env.NEXT_PUBLIC_ENABLE_ACCOUNT_DELETION,
     false,
