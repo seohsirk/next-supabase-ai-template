@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { notFound, redirect } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 
 import { ArrowLeft } from 'lucide-react';
 
@@ -18,7 +18,7 @@ import { JoinTeamService } from './_lib/server/join-team.service';
 
 interface Context {
   searchParams: {
-    invite_token: string;
+    invite_token?: string;
   };
 }
 
@@ -45,7 +45,9 @@ async function JoinTeamAccountPage({ searchParams }: Context) {
   // redirect to the sign up page with the invite token
   // so that they will get back to this page after signing up
   if (auth.error ?? !auth.data) {
-    redirect(pathsConfig.auth.signUp + '?invite_token=' + token);
+    const path = `${pathsConfig.auth.signUp}?invite_token=${token}`;
+
+    permanentRedirect(path);
   }
 
   const service = new JoinTeamService();
@@ -53,16 +55,16 @@ async function JoinTeamAccountPage({ searchParams }: Context) {
   // the user is logged in, we can now check if the token is valid
   const invitation = await service.getInviteDataFromInviteToken(token);
 
+  // the invitation is not found or expired
   if (!invitation) {
     return <InviteNotFoundOrExpired />;
   }
 
   // we need to verify the user isn't already in the account
-  const isInAccount = await service.isCurrentUserAlreadyInAccount(
-    invitation.account.id,
-  );
+  const isSignedInUserPartOfAccount =
+    await service.isCurrentUserAlreadyInAccount(invitation.account.id);
 
-  if (isInAccount) {
+  if (isSignedInUserPartOfAccount) {
     const { getLogger } = await import('@kit/shared/logger');
     const logger = await getLogger();
 
@@ -76,12 +78,12 @@ async function JoinTeamAccountPage({ searchParams }: Context) {
     );
 
     // if the user is already in the account redirect to the home page
-    redirect(pathsConfig.app.home);
+    permanentRedirect(pathsConfig.app.home);
   }
 
   // if the user decides to sign in with a different account
   // we redirect them to the sign in page with the invite token
-  const signOutNext = pathsConfig.auth.signIn + '?invite_token=' + token;
+  const signOutNext = `${pathsConfig.auth.signIn}?invite_token=${token}`;
 
   // once the user accepts the invitation, we redirect them to the account home page
   const accountHome = pathsConfig.app.accountHome.replace(

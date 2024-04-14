@@ -24,6 +24,11 @@ interface Props {
   };
 }
 
+const paths = {
+  callback: pathsConfig.auth.callback,
+  appHome: pathsConfig.app.home,
+};
+
 function SignUpPage({ searchParams }: Props) {
   const inviteToken = searchParams.invite_token;
 
@@ -36,10 +41,7 @@ function SignUpPage({ searchParams }: Props) {
       <SignUpMethodsContainer
         providers={authConfig.providers}
         inviteToken={inviteToken}
-        paths={{
-          callback: pathsConfig.auth.callback,
-          appHome: pathsConfig.app.home,
-        }}
+        paths={paths}
       />
 
       <div className={'justify-centers flex'}>
