@@ -48,8 +48,10 @@ export class AuthPageObject {
     await this.page.click('button[type="submit"]');
   }
 
-  async visitConfirmEmailLink(email: string, params?: {
+  async visitConfirmEmailLink(email: string, params: {
     deleteAfter: boolean
+  } = {
+    deleteAfter: true
   }) {
     return expect(async() => {
       const res = await this.mailbox.visitMailbox(email, params);

@@ -39,7 +39,7 @@
     "@manypkg/cli": "^0.21.3",
     "@turbo/gen": "^1.13.2",
     "cross-env": "^7.0.3",
-    "pnpm": "^8.15.6",
+    "pnpm": "^8.15.7",
     "prettier": "^3.2.5",
     "turbo": "^1.13.2",
     "typescript": "^5.4.5",

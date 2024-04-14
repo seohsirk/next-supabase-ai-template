@@ -14,6 +14,10 @@ export async function initializeServerI18n(
 ) {
   const i18nInstance = createInstance();
 
+  if (i18nInstance.isInitialized) {
+    return i18nInstance;
+  }
+
   await i18nInstance
     .use(initReactI18next)
     .use(

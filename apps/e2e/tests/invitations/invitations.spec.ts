@@ -36,9 +36,9 @@ test.describe('Invitations', () => {
     // sign out and sign in with the first email
     await invitations.auth.signOut();
 
-    await invitations.auth.visitConfirmEmailLink(invites[0]!.email, {
-      deleteAfter: true
-    });
+    await invitations.auth.visitConfirmEmailLink(invites[0]!.email);
+
+    console.log(`Signing up with ${firstEmail}`);
 
     await invitations.auth.signUp({
       email: firstEmail,
@@ -47,6 +47,8 @@ test.describe('Invitations', () => {
     });
 
     await invitations.auth.visitConfirmEmailLink(firstEmail);
+
+    console.log(`Accepting invitation as ${firstEmail}`);
 
     await invitations.acceptInvitation();
 
