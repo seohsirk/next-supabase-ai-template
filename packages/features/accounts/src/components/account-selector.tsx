@@ -129,7 +129,7 @@ export function AccountSelector({
                 <span className={'flex items-center space-x-2'}>
                   <Avatar
                     className={
-                      'group-hover:border-border mr-2 h-6 w-6 border border-transparent'
+                      'group-hover:border-border h-6 w-6 border border-transparent'
                     }
                   >
                     <AvatarImage src={account.image ?? undefined} />
@@ -191,7 +191,7 @@ export function AccountSelector({
                         data-test={'account-selector-team'}
                         data-name={account.label}
                         data-slug={account.value}
-                        className={'group'}
+                        className={'group flex space-x-2'}
                         key={account.value}
                         value={account.value ?? ''}
                         onSelect={(currentValue) => {
@@ -204,14 +204,11 @@ export function AccountSelector({
                         }}
                       >
                         <Avatar
-                          className={cn(
-                            'mr-2 h-6 w-6 border border-transparent',
-                            {
-                              ['border-border']: value === account.value,
-                              ['group-hover:border-border ']:
-                                value !== account.value,
-                            },
-                          )}
+                          className={cn('h-6 w-6 border border-transparent', {
+                            ['border-border']: value === account.value,
+                            ['group-hover:border-border ']:
+                              value !== account.value,
+                          })}
                         >
                           <AvatarImage src={account.image ?? undefined} />
 
