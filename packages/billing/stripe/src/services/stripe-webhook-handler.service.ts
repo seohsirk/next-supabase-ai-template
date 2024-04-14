@@ -90,7 +90,7 @@ export class StripeWebhookHandlerService
       case 'customer.subscription.updated': {
         return this.handleSubscriptionUpdatedEvent(
           event,
-          params.onCheckoutSessionCompleted,
+          params.onSubscriptionUpdated,
         );
       }
 

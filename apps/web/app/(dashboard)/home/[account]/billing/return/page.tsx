@@ -14,6 +14,10 @@ interface SessionPageProps {
   searchParams: {
     session_id: string;
   };
+
+  params: {
+    account: string;
+  };
 }
 
 const LazyEmbeddedCheckout = dynamic(
@@ -27,7 +31,10 @@ const LazyEmbeddedCheckout = dynamic(
   },
 );
 
-async function ReturnCheckoutSessionPage({ searchParams }: SessionPageProps) {
+async function ReturnCheckoutSessionPage({
+  searchParams,
+  params,
+}: SessionPageProps) {
   const sessionId = searchParams.session_id;
 
   if (!sessionId) {
@@ -45,12 +52,17 @@ async function ReturnCheckoutSessionPage({ searchParams }: SessionPageProps) {
     );
   }
 
+  const redirectPath = pathsConfig.app.accountHome.replace(
+    '[account]',
+    params.account,
+  );
+
   return (
     <>
       <div className={'fixed left-0 top-48 z-50 mx-auto w-full'}>
         <BillingSessionStatus
           customerEmail={customerEmail ?? ''}
-          redirectPath={pathsConfig.app.home}
+          redirectPath={redirectPath}
         />
       </div>
 

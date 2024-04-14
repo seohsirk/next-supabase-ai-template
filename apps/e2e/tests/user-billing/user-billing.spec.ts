@@ -20,8 +20,11 @@ test.describe('User Billing', () => {
     await po.billing.stripe.submitForm();
 
     await expect(po.billing.successStatus()).toBeVisible();
+    await po.billing.returnToHome();
 
-    await page.goto('/home/billing');
+    await page.locator('a', {
+      hasText: 'Billing',
+    }).click();
 
     await expect(await po.billing.getStatus()).toContainText('active');
     await expect(po.billing.manageBillingButton()).toBeVisible();
