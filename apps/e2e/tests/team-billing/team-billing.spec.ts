@@ -26,7 +26,7 @@ test.describe('Team Billing', () => {
 
     await po.teamAccounts.goToBilling();
 
-    await expect(await po.billing.getStatus()).toContainText('active');
+    await expect(await po.billing.getStatus()).toContainText('Active');
     await expect(po.billing.manageBillingButton()).toBeVisible();
   });
 });

@@ -26,7 +26,7 @@ test.describe('User Billing', () => {
       hasText: 'Billing',
     }).click();
 
-    await expect(await po.billing.getStatus()).toContainText('active');
+    await expect(await po.billing.getStatus()).toContainText('Active');
     await expect(po.billing.manageBillingButton()).toBeVisible();
   });
 });
