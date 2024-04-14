@@ -3,6 +3,7 @@ import { BadgeCheck } from 'lucide-react';
 
 import { BillingConfig, getProductPlanPairByVariantId } from '@kit/billing';
 import { Database } from '@kit/supabase/database';
+import { Alert, AlertDescription, AlertTitle } from '@kit/ui/alert';
 import {
   Card,
   CardContent,
@@ -108,15 +109,18 @@ export function CurrentSubscriptionCard({
         </If>
 
         <If condition={subscription.cancel_at_period_end}>
-          <div className="flex flex-col space-y-0.5">
-            <span className="font-semibold">
-              <Trans i18nKey="billing:cancelSubscriptionDate" />
-            </span>
+          <Alert variant={'warning'}>
+            <AlertTitle>
+              <Trans i18nKey="billing:subscriptionCancelled" />
+            </AlertTitle>
 
-            <div className={'text-muted-foreground'}>
-              <span>{formatDate(subscription.period_ends_at ?? '', 'P')}</span>
-            </div>
-          </div>
+            <AlertDescription>
+              <Trans i18nKey="billing:cancelSubscriptionDate" />:
+              <span className={'ml-1'}>
+                {formatDate(subscription.period_ends_at ?? '', 'P')}
+              </span>
+            </AlertDescription>
+          </Alert>
         </If>
 
         <div className="flex flex-col space-y-0.5">

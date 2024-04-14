@@ -231,7 +231,7 @@ export class StripeWebhookHandlerService
   ) {
     const subscription = event.data.object;
     const subscriptionId = subscription.id;
-    const accountId = subscription.metadata.account_id as string;
+    const accountId = subscription.metadata.accountId as string;
 
     const payload = this.buildSubscriptionPayload({
       customerId: subscription.customer as string,

@@ -68,15 +68,6 @@ export class BillingEventHandlerService {
 
         logger.info(ctx, 'Processing subscription updated event ...');
 
-        if (!subscription.target_account_id) {
-          logger.info(
-            `No account id found in subscription. This event may have arrived before we created a subscription. Exiting...`,
-            subscription,
-          );
-
-          return;
-        }
-
         // Handle the subscription updated event
         // here we update the subscription in the database
         const { error } = await client.rpc('upsert_subscription', subscription);
