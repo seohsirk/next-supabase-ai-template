@@ -1,14 +1,13 @@
 import { Page, expect } from '@playwright/test';
+import { BillingPageObject } from './billing.po';
 
 export class StripePageObject {
-  private page: Page;
+  private readonly page: Page;
+  public readonly billing: BillingPageObject;
 
   constructor(page: Page) {
     this.page = page;
-  }
-
-  plans() {
-    return this.page.locator('[data-test-plan]');
+    this.billing = new BillingPageObject(page);
   }
 
   getStripeCheckoutIframe() {
@@ -65,23 +64,5 @@ export class StripePageObject {
 
   billingCountry() {
     return this.getStripeCheckoutIframe().locator('#billingCountry');
-  }
-
-  selectPlan(index: number = 0) {
-    const plans = this.plans();
-
-    return plans.nth(index).click();
-  }
-
-  manageBillingButton() {
-    return this.page.locator('manage-billing-redirect-button');
-  }
-
-  successStatus() {
-    return this.page.locator('[data-test="payment-return-success"]');
-  }
-
-  proceedToCheckout() {
-    return this.page.click('[data-test="checkout-submit-button"]');
   }
 }

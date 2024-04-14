@@ -3,22 +3,27 @@ import { UserBillingPageObject } from './user-billing.po';
 
 test.describe('User Billing', () => {
   let page: Page;
-  let billing: UserBillingPageObject;
+  let po: UserBillingPageObject;
 
   test.beforeAll(async ({ browser }) => {
     page = await browser.newPage();
-    billing = new UserBillingPageObject(page);
+    po = new UserBillingPageObject(page);
 
-    await billing.setup();
+    await po.setup();
   });
 
-  test('user can subscribe to a plan', async () => {
-    await billing.stripe.selectPlan(0);
-    await billing.stripe.proceedToCheckout();
+  test('user can subscribe to a plan', async ({page}) => {
+    await po.billing.selectPlan(0);
+    await po.billing.proceedToCheckout();
 
-    await billing.stripe.fillForm();
-    await billing.stripe.submitForm();
+    await po.billing.stripe.fillForm();
+    await po.billing.stripe.submitForm();
 
-    await expect(billing.stripe.successStatus()).toBeVisible();
+    await expect(po.billing.successStatus()).toBeVisible();
+
+    await page.goto('/home/billing');
+
+    await expect(await po.billing.getStatus()).toContainText('active');
+    await expect(po.billing.manageBillingButton()).toBeVisible();
   });
 });

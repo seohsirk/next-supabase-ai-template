@@ -73,7 +73,9 @@ export function CurrentSubscriptionCard({
               }
             />
 
-            <span>{product.name}</span>
+            <span data-test={'current-plan-card-product-name'}>
+              {product.name}
+            </span>
 
             <CurrentPlanBadge status={subscription.status} />
           </div>
@@ -84,7 +86,7 @@ export function CurrentSubscriptionCard({
           (e.g. trial ending soon, subscription canceled, etc.)
         */}
         <If condition={!subscription.active}>
-          <div>
+          <div data-test={'current-plan-card-status-alert'}>
             <CurrentPlanAlert status={subscription.status} />
           </div>
         </If>

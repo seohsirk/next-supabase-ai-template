@@ -45,7 +45,7 @@ export function CurrentPlanBadge(
   }
 
   return (
-    <Badge variant={variant}>
+    <Badge data-test={'current-plan-card-status-badge'} variant={variant}>
       <Trans i18nKey={text} />
     </Badge>
   );

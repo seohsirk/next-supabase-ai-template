@@ -1,18 +1,17 @@
 import { Page } from '@playwright/test';
-import { StripePageObject } from '../utils/stripe.po';
 import { TeamAccountsPageObject } from '../team-accounts/team-accounts.po';
+import { BillingPageObject } from '../utils/billing.po';
 
 export class TeamBillingPageObject {
-  private readonly teamAccounts: TeamAccountsPageObject;
-  public readonly stripe: StripePageObject;
+  public readonly teamAccounts: TeamAccountsPageObject;
+  public readonly billing: BillingPageObject;
 
   constructor(page: Page) {
     this.teamAccounts = new TeamAccountsPageObject(page);
-    this.stripe = new StripePageObject(page);
+    this.billing = new BillingPageObject(page);
   }
 
   async setup() {
     await this.teamAccounts.setup();
-    await this.teamAccounts.goToBilling();
   }
 }

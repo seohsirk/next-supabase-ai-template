@@ -1,14 +1,14 @@
 import { Page } from '@playwright/test';
 import { AuthPageObject } from '../authentication/auth.po';
-import { StripePageObject } from '../utils/stripe.po';
+import { BillingPageObject } from '../utils/billing.po';
 
 export class UserBillingPageObject {
   private readonly auth: AuthPageObject;
-  public readonly stripe: StripePageObject;
+  public readonly billing: BillingPageObject;
 
   constructor(page: Page) {
     this.auth = new AuthPageObject(page);
-    this.stripe = new StripePageObject(page);
+    this.billing = new BillingPageObject(page);
   }
 
   async setup() {
