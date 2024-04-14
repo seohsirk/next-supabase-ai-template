@@ -75,28 +75,24 @@ async function TeamAccountBillingPage({ params }: Params) {
       />
 
       <PageBody>
-        <div className={'mx-auto w-full'}>
-          <div>
-            <div className={'flex flex-col space-y-6'}>
-              <If
-                condition={subscription}
-                fallback={
-                  <>
-                    <Checkout />
-                  </>
-                }
-              >
-                {(subscription) => (
-                  <CurrentSubscriptionCard
-                    subscription={subscription}
-                    config={billingConfig}
-                  />
-                )}
-              </If>
+        <div className={'mx-auto flex w-full max-w-2xl flex-col space-y-6'}>
+          <If
+            condition={subscription}
+            fallback={
+              <>
+                <Checkout />
+              </>
+            }
+          >
+            {(subscription) => (
+              <CurrentSubscriptionCard
+                subscription={subscription}
+                config={billingConfig}
+              />
+            )}
+          </If>
 
-              <BillingPortal />
-            </div>
-          </div>
+          <BillingPortal />
         </div>
       </PageBody>
     </>

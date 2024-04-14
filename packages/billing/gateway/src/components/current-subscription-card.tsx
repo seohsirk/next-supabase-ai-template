@@ -65,7 +65,7 @@ export function CurrentSubscriptionCard({
         </CardDescription>
       </CardHeader>
 
-      <CardContent className={'space-y-3 text-sm'}>
+      <CardContent className={'space-y-4 border-t pt-4 text-sm'}>
         <div className={'flex flex-col space-y-1'}>
           <div className={'flex items-center space-x-2 text-lg font-semibold'}>
             <BadgeCheck
@@ -75,10 +75,19 @@ export function CurrentSubscriptionCard({
             />
 
             <span data-test={'current-plan-card-product-name'}>
-              {product.name}
+              <Trans i18nKey={product.name} defaults={product.name} />
             </span>
 
             <CurrentPlanBadge status={subscription.status} />
+          </div>
+
+          <div>
+            <p className={'text-muted-foreground'}>
+              <Trans
+                i18nKey={product.description}
+                defaults={product.description}
+              />
+            </p>
           </div>
         </div>
 

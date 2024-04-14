@@ -78,17 +78,15 @@ function SuccessSessionStatus({
           </p>
         </div>
 
-        <Button data-test={'checkout-success-back-button'} variant={'outline'}>
-          <Link href={redirectPath}>
-            <span className={'flex items-center space-x-2.5'}>
-              <span>
-                <Trans i18nKey={'billing:checkoutSuccessBackButton'} />
-              </span>
-
-              <ChevronRight className={'h-4'} />
+        <Link data-test={'checkout-success-back-link'} href={redirectPath}>
+          <Button>
+            <span>
+              <Trans i18nKey={'billing:checkoutSuccessBackButton'} />
             </span>
-          </Link>
-        </Button>
+
+            <ChevronRight className={'h-4'} />
+          </Button>
+        </Link>
       </div>
     </section>
   );
