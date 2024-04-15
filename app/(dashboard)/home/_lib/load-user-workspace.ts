@@ -2,12 +2,14 @@ import { cache } from 'react';
 
 import { getSupabaseServerComponentClient } from '@kit/supabase/server-component-client';
 
+import featureFlagsConfig from '~/config/feature-flags.config';
 import { Database } from '~/lib/database.types';
 
 export const loadUserWorkspace = cache(async () => {
   const client = getSupabaseServerComponentClient();
+  const loadAccounts = featureFlagsConfig.enableTeamAccounts;
 
-  const accounts = await loadUserAccounts(client);
+  const accounts = loadAccounts ? await loadUserAccounts(client) : [];
   const { data } = await client.auth.getSession();
 
   return {
