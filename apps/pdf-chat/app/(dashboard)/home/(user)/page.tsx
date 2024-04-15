@@ -1,35 +1,67 @@
-import { PageBody } from '@kit/ui/page';
+import { use } from 'react';
+
+import Link from 'next/link';
+
+import { ServerDataLoader } from '@makerkit/data-loader-supabase-nextjs';
+import { PlusCircle } from 'lucide-react';
+
+import { getSupabaseServerComponentClient } from '@kit/supabase/server-component-client';
+import { Button } from '@kit/ui/button';
+import { PageBody, PageHeader } from '@kit/ui/page';
 import { Trans } from '@kit/ui/trans';
 
-import { UserAccountHeader } from '~/(dashboard)/home/(user)/_components/user-account-header';
-import { createI18nServerInstance } from '~/lib/i18n/i18n.server';
+import { DocumentsTable } from '~/(dashboard)/home/(user)/documents/_components/documents-table';
+import { loadUserWorkspace } from '~/(dashboard)/home/_lib/load-user-workspace';
 import { withI18n } from '~/lib/i18n/with-i18n';
 
-export const generateMetadata = async () => {
-  const i18n = await createI18nServerInstance();
-  const title = i18n.t('account:homePage');
+function DocumentsPage() {
+  const client = getSupabaseServerComponentClient();
+  const workspace = use(loadUserWorkspace());
+  const accountId = workspace.user?.id as string;
 
-  return {
-    title,
-  };
-};
-
-function UserHomePage() {
   return (
     <>
-      <UserAccountHeader
-        title={<Trans i18nKey={'common:homeTabLabel'} defaults={'Home'} />}
-        description={
-          <Trans
-            i18nKey={'common:homeTabDescription'}
-            defaults={'Welcome to your Home Page'}
-          />
-        }
-      />
+      <PageHeader
+        title={<Trans i18nKey={'documents:documentsTabLabel'} />}
+        description={<Trans i18nKey={'documents:documentsTabDescription'} />}
+      >
+        <Link href={'home/documents/new'}>
+          <Button>
+            <PlusCircle className="mr-2 h-5 w-5" />
 
-      <PageBody></PageBody>
+            <span>
+              <Trans i18nKey={'documents:addDocument'} />
+            </span>
+          </Button>
+        </Link>
+      </PageHeader>
+
+      <PageBody>
+        <ServerDataLoader
+          client={client}
+          table={'documents'}
+          select={['id', 'created_at', 'title']}
+          camelCase
+          where={{
+            account_id: {
+              eq: accountId,
+            },
+          }}
+        >
+          {({ data, page, pageCount, pageSize }) => {
+            return (
+              <DocumentsTable
+                data={data}
+                page={page}
+                pageCount={pageCount}
+                pageSize={pageSize}
+              />
+            );
+          }}
+        </ServerDataLoader>
+      </PageBody>
     </>
   );
 }
 
-export default withI18n(UserHomePage);
+export default withI18n(DocumentsPage);

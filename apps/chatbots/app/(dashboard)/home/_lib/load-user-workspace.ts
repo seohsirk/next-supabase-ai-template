@@ -2,26 +2,28 @@ import { cache } from 'react';
 
 import { getSupabaseServerComponentClient } from '@kit/supabase/server-component-client';
 
+import featureFlagsConfig from '~/config/feature-flags.config';
 import { Database } from '~/lib/database.types';
 
 export const loadUserWorkspace = cache(async () => {
   const client = getSupabaseServerComponentClient();
+  const loadAccounts = featureFlagsConfig.enableTeamAccounts;
 
-  const accounts = await loadUserAccounts(client);
-  const { data } = await client.auth.getSession();
+  const accounts = loadAccounts ? await loadUserAccounts(client) : [];
+  const { data } = await client.auth.getUser();
 
   return {
     accounts,
-    session: data.session,
+    user: data.user,
   };
 });
 
 async function loadUserAccounts(
-  client: ReturnType<typeof getSupabaseServerComponentClient<Database>>,
+    client: ReturnType<typeof getSupabaseServerComponentClient<Database>>,
 ) {
   const { data: accounts, error } = await client
-    .from('user_accounts')
-    .select(`name, slug, picture_url`);
+      .from('user_accounts')
+      .select(`name, slug, picture_url`);
 
   if (error) {
     throw error;

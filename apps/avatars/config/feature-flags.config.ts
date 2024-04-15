@@ -6,8 +6,9 @@ const FeatureFlagsSchema = z.object({
     required_error: 'Provide the variable NEXT_PUBLIC_ENABLE_THEME_TOGGLE',
   }),
   enableAccountDeletion: z.boolean({
-    description: 'Enable account deletion.',
-    required_error: 'Provide the variable NEXT_PUBLIC_ENABLE_ACCOUNT_DELETION',
+    description: 'Enable personal account deletion.',
+    required_error:
+      'Provide the variable NEXT_PUBLIC_ENABLE_PERSONAL_ACCOUNT_DELETION',
   }),
   enableTeamDeletion: z.boolean({
     description: 'Enable team deletion.',
@@ -15,11 +16,13 @@ const FeatureFlagsSchema = z.object({
   }),
   enableTeamAccounts: z.boolean({
     description: 'Enable team accounts.',
-    required_error: 'Provide the variable NEXT_PUBLIC_ENABLE_TEAM_ACCOUNTS',
+    required_error:
+      'Provide the variable NEXT_PUBLIC_ENABLE_TEAM_ACCOUNTS_DELETION',
   }),
   enableTeamCreation: z.boolean({
     description: 'Enable team creation.',
-    required_error: 'Provide the variable NEXT_PUBLIC_ENABLE_TEAMS_CREATION',
+    required_error:
+      'Provide the variable NEXT_PUBLIC_ENABLE_TEAM_ACCOUNTS_CREATION',
   }),
   enablePersonalAccountBilling: z.boolean({
     description: 'Enable personal account billing.',
@@ -29,7 +32,7 @@ const FeatureFlagsSchema = z.object({
   enableTeamAccountBilling: z.boolean({
     description: 'Enable team account billing.',
     required_error:
-      'Provide the variable NEXT_PUBLIC_ENABLE_ORGANIZATION_BILLING',
+      'Provide the variable NEXT_PUBLIC_ENABLE_TEAM_ACCOUNTS_BILLING',
   }),
 });
 
@@ -39,11 +42,11 @@ const featuresFlagConfig = FeatureFlagsSchema.parse({
     true,
   ),
   enableAccountDeletion: getBoolean(
-    process.env.NEXT_PUBLIC_ENABLE_ACCOUNT_DELETION,
+    process.env.NEXT_PUBLIC_ENABLE_PERSONAL_ACCOUNT_DELETION,
     false,
   ),
   enableTeamDeletion: getBoolean(
-    process.env.NEXT_PUBLIC_ENABLE_TEAM_DELETION,
+    process.env.NEXT_PUBLIC_ENABLE_TEAM_ACCOUNTS_DELETION,
     false,
   ),
   enableTeamAccounts: getBoolean(
@@ -51,7 +54,7 @@ const featuresFlagConfig = FeatureFlagsSchema.parse({
     true,
   ),
   enableTeamCreation: getBoolean(
-    process.env.NEXT_PUBLIC_ENABLE_TEAMS_CREATION,
+    process.env.NEXT_PUBLIC_ENABLE_TEAM_ACCOUNTS_CREATION,
     true,
   ),
   enablePersonalAccountBilling: getBoolean(
@@ -59,7 +62,7 @@ const featuresFlagConfig = FeatureFlagsSchema.parse({
     false,
   ),
   enableTeamAccountBilling: getBoolean(
-    process.env.NEXT_PUBLIC_ENABLE_ORGANIZATION_BILLING,
+    process.env.NEXT_PUBLIC_ENABLE_TEAM_ACCOUNTS_BILLING,
     false,
   ),
 } satisfies z.infer<typeof FeatureFlagsSchema>);

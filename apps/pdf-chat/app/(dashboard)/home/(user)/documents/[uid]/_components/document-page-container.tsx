@@ -1,26 +1,35 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import ChatContainer from './chat-container';
-import ConversationsSidebar from './conversation-sidebar';
-import { PageBody, PageHeader } from '~/core/ui/Page';
-import If from '~/core/ui/If';
-import DocumentActionsDropdown from './document-actions-dropdown';
+
+
+
+import { If } from '@kit/ui/if';
+import {PageBody, PageHeader} from '@kit/ui/page';
+
+
+
+import { ChatContainer } from './chat-container';
+import { ConversationsSidebar } from './conversation-sidebar';
+import { DocumentActionsDropdown } from './document-actions-dropdown';
+
 
 interface Conversation {
   id: string;
   name: string;
 }
 
-function DocumentPageContainer(props: React.PropsWithChildren<{
-  doc: {
-    id: string;
-    name: string;
-  };
+export function DocumentPageContainer(
+  props: React.PropsWithChildren<{
+    doc: {
+      id: string;
+      name: string;
+    };
 
-  conversation: Maybe<Conversation>;
-  conversations: Conversation[];
-}>) {
+    conversation: Conversation | undefined;
+    conversations: Conversation[];
+  }>,
+) {
   const [conversation, setConversation] = useState(props.conversation);
   const [conversations, setConversations] = useState(props.conversations);
 
@@ -34,9 +43,11 @@ function DocumentPageContainer(props: React.PropsWithChildren<{
   useEffect(() => {
     setConversations(props.conversations);
 
-    const isSelectedConversationExisting = props.conversations.some((conversation) => {
-      return conversation.id === props.conversation?.id;
-    });
+    const isSelectedConversationExisting = props.conversations.some(
+      (conversation) => {
+        return conversation.id === props.conversation?.id;
+      },
+    );
 
     if (!isSelectedConversationExisting) {
       setConversation(undefined);
@@ -45,8 +56,8 @@ function DocumentPageContainer(props: React.PropsWithChildren<{
 
   return (
     <>
-      <div className={'w-2/12 min-w-72 h-full py-container'}>
-        <PageBody className='h-full'>
+      <div className={'py-4 h-full w-2/12 min-w-72'}>
+        <PageBody className="h-full">
           <ConversationsSidebar
             conversations={conversations}
             conversation={conversation}
@@ -55,8 +66,8 @@ function DocumentPageContainer(props: React.PropsWithChildren<{
         </PageBody>
       </div>
 
-      <div className={'w-9/12 flex flex-col flex-1 divide-y'}>
-        <div className='flex justify-between items-center'>
+      <div className={'flex w-9/12 flex-1 flex-col divide-y'}>
+        <div className="flex items-center justify-between">
           <PageHeader title={props.doc.name} />
 
           <If condition={conversation}>
@@ -73,5 +84,3 @@ function DocumentPageContainer(props: React.PropsWithChildren<{
     </>
   );
 }
-
-export default DocumentPageContainer;

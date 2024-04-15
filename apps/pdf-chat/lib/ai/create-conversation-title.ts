@@ -6,7 +6,7 @@ const LLM_API_KEY = process.env.LLM_API_KEY;
 
 const FALLBACK_TITLE = `Conversation with AI assistant`;
 
-export default async function createConversationTitle(question: string) {
+export async function createConversationTitle(question: string) {
   const client = new OpenAI({
     baseURL: LLM_BASE_URL,
     apiKey: LLM_API_KEY,

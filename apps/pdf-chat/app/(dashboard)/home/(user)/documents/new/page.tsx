@@ -1,8 +1,10 @@
-import { PageBody, PageHeader } from '~/core/ui/Page';
+import { PageBody, PageHeader } from '@kit/ui/page';
+import { Trans } from '@kit/ui/trans';
 
-import Trans from '~/core/ui/Trans';
-import UploadDocumentForm from '../components/UploadDocumentForm';
-import { withI18n } from '~/i18n/with-i18n';
+
+import { UploadDocumentForm } from '../_components/upload-document-form';
+import { withI18n } from '~/lib/i18n/with-i18n';
+
 
 function NewDocumentPage() {
   return (

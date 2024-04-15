@@ -1,14 +1,14 @@
 import { notFound } from 'next/navigation';
 
-import { withI18n } from '~/i18n/with-i18n';
-import getSupabaseServerComponentClient from '~/core/supabase/server-component-client';
+import { getSupabaseServerComponentClient } from '@kit/supabase/server-component-client';
 
-import loadAppData from '~/lib/server/loaders/load-app-data';
-import DocumentPageContainer from './components/DocumentPageContainer';
+import { DocumentPageContainer } from './_components/document-page-container';
+import {withI18n} from "~/lib/i18n/with-i18n";
+import {SupabaseClient} from "@supabase/supabase-js";
+import {Database} from "~/lib/database.types";
 
 interface DocumentPageParams {
   params: {
-    organization: string;
     uid: string;
   };
 
@@ -19,17 +19,9 @@ interface DocumentPageParams {
 
 async function DocumentPage({ params, searchParams }: DocumentPageParams) {
   const client = getSupabaseServerComponentClient();
-  const appData = await loadAppData(params.organization);
 
   // fetch the document and conversations
-  const { doc, conversations } = await getData(client, params.uid)
-  const isSameOrganization = doc.organization_id === appData.organization?.id;
-
-  // if the document is not found or the user is not in the same organization
-  // as the document, then return a 404
-  if (!appData.organization?.id || !isSameOrganization) {
-    return notFound();
-  }
+  const { doc, conversations } = await getData(client, params.uid);
 
   // retrieve the conversation from the list of conversations
   const conversation = conversations.find((conversation) => {
@@ -37,10 +29,10 @@ async function DocumentPage({ params, searchParams }: DocumentPageParams) {
   });
 
   return (
-    <div className={'h-screen flex flex-col flex-1'}>
+    <div className={'flex h-screen flex-1 flex-col'}>
       <div
         className={
-          'divide divide-x divide-gray-100 dark:divide-dark-900 flex flex-1 h-full'
+          'divide dark:divide-dark-900 flex h-full flex-1 divide-x divide-gray-100'
         }
       >
         <DocumentPageContainer
@@ -58,28 +50,38 @@ async function DocumentPage({ params, searchParams }: DocumentPageParams) {
 
 export default withI18n(DocumentPage);
 
-async function getData(client: ReturnType<typeof getSupabaseServerComponentClient>, documentId: string) {
+async function getData(
+  client: SupabaseClient<Database>,
+  documentId: string,
+) {
   const doc = client
     .from('documents')
-    .select(`
+    .select(
+      `
       id,
-      organization_id,
+      account_id,
       title
-    `)
+    `,
+    )
     .filter('id', 'eq', documentId)
     .single();
 
   const conversations = client
     .from('conversations')
-    .select(`
+    .select(
+      `
       id: reference_id,
       name,
       created_at
-    `)
+    `,
+    )
     .filter('document_id', 'eq', documentId)
     .order('created_at', { ascending: false });
 
-  const [docResponse, conversationsResponse] = await Promise.all([doc, conversations]);
+  const [docResponse, conversationsResponse] = await Promise.all([
+    doc,
+    conversations,
+  ]);
 
   if (!docResponse.data) {
     return notFound();

@@ -1,14 +1,11 @@
 'use client';
 
-import {
-  ChatBubbleLeftIcon,
-  PlusCircleIcon,
-} from '@heroicons/react/24/outline';
-
-import classNames from 'clsx';
 import { useEffect } from 'react';
 
-import Button from '~/core/ui/Button';
+import { ChatBubbleIcon } from '@radix-ui/react-icons';
+
+import { Button } from '@kit/ui/button';
+import { cn } from '@kit/ui/utils';
 
 type Conversation = {
   id: string;
@@ -16,14 +13,14 @@ type Conversation = {
   new?: true;
 };
 
-function ConversationsSidebar(props: {
-  conversation: Maybe<Conversation>;
-  setConversation: (id: Maybe<Conversation>) => void;
+export function ConversationsSidebar(props: {
+  conversation: Conversation | undefined;
+  setConversation: (conversation: Conversation | undefined) => void;
   conversations: Conversation[];
 }) {
   // we want to update the URL query params when the conversationId changes
   // without triggering a page reload
-  const setSearchParams = (conversationId: Maybe<string>) => {
+  const setSearchParams = (conversationId: string | undefined) => {
     if (conversationId) {
       history.replaceState(null, '', `?conversation=${conversationId}`);
     } else {
@@ -40,7 +37,6 @@ function ConversationsSidebar(props: {
       <Button
         size={'sm'}
         variant={'outline'}
-        block
         onClick={() => {
           props.setConversation(undefined);
           setSearchParams(undefined);
@@ -51,30 +47,24 @@ function ConversationsSidebar(props: {
 
       <ul className={'relative flex flex-col space-y-1'}>
         {props.conversations.map((conversation) => {
-          const selected = conversation.id === props.conversation?.id
+          const selected = conversation.id === props.conversation?.id;
 
           return (
-            <li key={conversation.id}>
-              <button
+            <li className={'w-full'} key={conversation.id}>
+              <Button
+                className={'w-full text-left justify-start'}
+                size={'sm'}
                 role="link"
-                className={classNames(
-                  'py-2 px-2.5 flex font-medium space-x-1 rounded-md text-xs active:bg-gray-100 dark:active:bg-dark-800' +
-                    'items-center transition-colors duration-200 truncate max-w-full w-full',
-                  {
-                    'bg-primary text-primary-foreground': selected,
-                    'hover:bg-gray-50 dark:hover:bg-dark-900': !selected,
-                    'animate-in fade-in zoom-in-95 duration-500': conversation.new
-                  },
-                )}
+                variant={selected ? 'default' : 'ghost'}
                 onClick={() => {
                   props.setConversation(conversation);
                   setSearchParams(conversation.id);
                 }}
               >
-                <ChatBubbleLeftIcon className={'h-4 w-4 min-w-4 mr-1'} />
+                <ChatBubbleIcon className={'mr-2.5 h-4 w-4 min-w-4'} />
 
                 <span className="truncate">{conversation.name}</span>
-              </button>
+              </Button>
             </li>
           );
         })}
@@ -82,5 +72,3 @@ function ConversationsSidebar(props: {
     </div>
   );
 }
-
-export default ConversationsSidebar;

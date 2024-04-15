@@ -1,4 +1,4 @@
-import { CreditCard, Home, User } from 'lucide-react';
+import { CreditCard, Book, User } from 'lucide-react';
 
 import { SidebarConfigSchema } from '@kit/ui/sidebar-schema';
 
@@ -9,9 +9,9 @@ const iconClasses = 'w-4';
 
 const routes = [
   {
-    label: 'common:homeTabLabel',
+    label: 'documents:documentsTabLabel',
     path: pathsConfig.app.home,
-    Icon: <Home className={iconClasses} />,
+    Icon: <Book className={iconClasses} />,
     end: true,
   },
   {

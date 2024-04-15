@@ -1,27 +1,26 @@
-import { ChatOpenAI } from '@langchain/openai';
-import { formatDocumentsAsString } from 'langchain/util/document';
-import { RunnableSequence } from '@langchain/core/runnables';
-import { LLMResult } from '@langchain/core/outputs';
-import { ConsoleCallbackHandler } from '@langchain/core/tracers/console';
+import { SupabaseClient } from '@supabase/supabase-js';
 
-import { PromptTemplate } from '@langchain/core/prompts';
 import { BaseCallbackHandler } from '@langchain/core/callbacks/base';
 import { StringOutputParser } from '@langchain/core/output_parsers';
-
-import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
-import { DocumentCompressorPipeline } from 'langchain/retrievers/document_compressors';
-import { ContextualCompressionRetriever } from 'langchain/retrievers/contextual_compression';
-import { EmbeddingsFilter } from "langchain/retrievers/document_compressors/embeddings_filter";
-
-import { SupabaseClient } from '@supabase/supabase-js';
+import { LLMResult } from '@langchain/core/outputs';
+import { PromptTemplate } from '@langchain/core/prompts';
+import { RunnableSequence } from '@langchain/core/runnables';
+import { ConsoleCallbackHandler } from '@langchain/core/tracers/console';
+import { ChatOpenAI } from '@langchain/openai';
 import { encode } from 'gpt-tokenizer';
+import { ContextualCompressionRetriever } from 'langchain/retrievers/contextual_compression';
+import { DocumentCompressorPipeline } from 'langchain/retrievers/document_compressors';
+import { EmbeddingsFilter } from 'langchain/retrievers/document_compressors/embeddings_filter';
+import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
+import { formatDocumentsAsString } from 'langchain/util/document';
 
-import getVectorStore from '~/lib/ai/vector-store';
-import { Database } from '~/database.types';
-import getLogger from '~/core/logger';
+import { getLogger } from '@kit/shared/logger';
+
 import getEmbeddingsModel from '~/lib/ai/embeddings-model';
+import getVectorStore from '~/lib/ai/vector-store';
+import { Database } from '~/lib/database.types';
 
-const LLM_MODEL_NAME = process.env.LLM_MODEL_NAME || 'gpt-turbo-3.5';
+const LLM_MODEL_NAME = process.env.LLM_MODEL_NAME ?? 'gpt-turbo-3.5';
 const LLM_BASE_URL = process.env.LLM_BASE_URL;
 const LLM_API_KEY = process.env.LLM_API_KEY;
 
@@ -32,22 +31,24 @@ type ChatHistory = Array<{
   role: 'user' | 'assistant';
 }>;
 
-export default async function runConversationChain(params: {
+export async function runConversationChain(params: {
+  client: SupabaseClient<Database>;
   adminClient: SupabaseClient<Database>;
   conversationId: number;
-  organizationId: number;
+  accountId: string;
   documentId: string;
   chatHistory: ChatHistory;
 }) {
-  const { adminClient, chatHistory, documentId } = params;
-  const question = chatHistory[chatHistory.length - 1].content;
+  const { adminClient, chatHistory, documentId, client } = params;
+  const question = chatHistory[chatHistory.length - 1]?.content ?? '';
 
   chatHistory.pop();
 
   const callbacks: Array<BaseCallbackHandler> = [
     new StreamEndCallbackHandler(
+      client,
       adminClient,
-      params.organizationId,
+      params.accountId,
       params.conversationId,
       question,
     ),
@@ -100,15 +101,17 @@ export default async function runConversationChain(params: {
 
 async function insertConversationMessages(params: {
   conversationId: number;
-  organizationId: number;
+  accountId: string;
   client: SupabaseClient<Database>;
+  adminClient: SupabaseClient<Database>;
   text: string;
   previousMessage: string;
 }) {
   const table = params.client.from('messages');
+  const logger = await getLogger();
 
   if (!params.conversationId) {
-    getLogger().warn(
+    logger.warn(
       {
         conversationReferenceId: params.conversationId,
       },
@@ -123,13 +126,13 @@ async function insertConversationMessages(params: {
   return table.insert([
     {
       conversation_id: params.conversationId,
-      organization_id: params.organizationId,
+      account_id: params.accountId,
       text: params.previousMessage,
       sender: 'user' as const,
     },
     {
       conversation_id: params.conversationId,
-      organization_id: params.organizationId,
+      account_id: params.accountId,
       text: params.text,
       sender: 'assistant' as const,
     },
@@ -141,7 +144,8 @@ class StreamEndCallbackHandler extends BaseCallbackHandler {
 
   constructor(
     private readonly client: SupabaseClient<Database>,
-    private readonly organizationId: number,
+    private readonly adminClient: SupabaseClient<Database>,
+    private readonly accountId: string,
     private readonly conversationId: number,
     private readonly previousMessage: string,
   ) {
@@ -149,7 +153,7 @@ class StreamEndCallbackHandler extends BaseCallbackHandler {
   }
 
   async handleLLMEnd(output: LLMResult) {
-    const logger = getLogger();
+    const logger = await getLogger();
 
     logger.info(
       {
@@ -182,15 +186,19 @@ class StreamEndCallbackHandler extends BaseCallbackHandler {
   }
 
   private async handleInsertMessages(text: string) {
-    const logger = getLogger();
+    const logger = await getLogger();
 
-    logger.info({
-      conversationId: this.conversationId,
-    }, `Inserting messages...`);
+    logger.info(
+      {
+        conversationId: this.conversationId,
+      },
+      `Inserting messages...`,
+    );
 
     const response = await insertConversationMessages({
       client: this.client,
-      organizationId: this.organizationId,
+      adminClient: this.adminClient,
+      accountId: this.accountId,
       conversationId: this.conversationId,
       previousMessage: this.previousMessage,
       text,
@@ -215,26 +223,39 @@ class StreamEndCallbackHandler extends BaseCallbackHandler {
   }
 
   private async handleTokensUsage(totalTokens: number) {
-    const logger = getLogger();
+    const logger = await getLogger();
 
-    logger.info({
-      conversationId: this.conversationId,
-    }, `Reporting tokens usage...`);
+    logger.info(
+      {
+        conversationId: this.conversationId,
+      },
+      `Reporting tokens usage...`,
+    );
 
     // we need to calculate the tokens usage and report it
-    const { data: remainingTokens } = await this.client.rpc('get_remaining_tokens', {
-      conversation_id: this.conversationId,
-    });
+    const { data: remainingTokens } = await this.client.rpc(
+      'get_remaining_tokens',
+    );
 
     const tokens = (remainingTokens ?? 0) - totalTokens;
 
-    const response = await this.client
-      .from('organization_usage')
+    logger.info(
+      {
+        remainingTokens,
+        totalTokens,
+        tokens,
+        conversationId: this.conversationId,
+      },
+      `Setting tokens quota to ${tokens} tokens.`,
+    );
+
+    const response = await this.adminClient
+      .from('credits_usage')
       .update({
         tokens_quota: tokens,
       })
       .match({
-        organization_id: this.organizationId,
+        account_id: this.accountId,
       });
 
     if (response.error) {
@@ -252,6 +273,7 @@ class StreamEndCallbackHandler extends BaseCallbackHandler {
       logger.info(
         {
           conversationId: this.conversationId,
+          previousTokens: remainingTokens,
           tokens,
         },
         `Successfully reported tokens usage.`,

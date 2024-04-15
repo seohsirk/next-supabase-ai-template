@@ -2,8 +2,11 @@ import { use } from 'react';
 
 import { cookies } from 'next/headers';
 
+import { If } from '@kit/ui/if';
 import { Sidebar, SidebarContent, SidebarNavigation } from '@kit/ui/sidebar';
 
+import { AppLogo } from '~/components/app-logo';
+import featuresFlagConfig from '~/config/feature-flags.config';
 import { personalAccountSidebarConfig } from '~/config/personal-account-sidebar.config';
 
 // home imports
@@ -13,12 +16,20 @@ import { loadUserWorkspace } from '../_lib/load-user-workspace';
 
 export function HomeSidebar() {
   const collapsed = getSidebarCollapsed();
-  const { accounts, session } = use(loadUserWorkspace());
+  const { accounts, user } = use(loadUserWorkspace());
 
   return (
     <Sidebar collapsed={collapsed}>
       <SidebarContent className={'my-4'}>
-        <HomeSidebarAccountSelector collapsed={collapsed} accounts={accounts} />
+        <If
+          condition={featuresFlagConfig.enableTeamAccounts}
+          fallback={<AppLogo className={'py-2'} />}
+        >
+          <HomeSidebarAccountSelector
+            collapsed={collapsed}
+            accounts={accounts}
+          />
+        </If>
       </SidebarContent>
 
       <SidebarContent className={`h-[calc(100%-160px)] overflow-y-auto`}>
@@ -29,7 +40,7 @@ export function HomeSidebar() {
         <SidebarContent>
           <ProfileAccountDropdownContainer
             collapsed={collapsed}
-            user={session?.user ?? null}
+            user={user}
           />
         </SidebarContent>
       </div>

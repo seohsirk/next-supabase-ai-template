@@ -1,24 +1,34 @@
 'use client';
 
 import { FormEventHandler } from 'react';
-import { toast } from 'sonner';
 
 import Link from 'next/link';
-import { ColumnDef } from '@tanstack/react-table';
 
-import { deleteDocument } from '../server-actions';
-import {DataTable} from "@kit/ui/enhanced-data-table";
-import {Trans} from "@kit/ui/trans";
-import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger} from "@kit/ui/dropdown-menu";
-import {EllipsisVertical} from "lucide-react";
-import {Button} from "@kit/ui/button";
+import { ColumnDef } from '@tanstack/react-table';
+import { EllipsisVertical } from 'lucide-react';
+import { toast } from 'sonner';
+
 import {
   AlertDialog,
-  AlertDialogContent, AlertDialogDescription, AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger
-} from "@kit/ui/alert-dialog";
+  AlertDialogTrigger,
+} from '@kit/ui/alert-dialog';
+import { Button } from '@kit/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@kit/ui/dropdown-menu';
+import { DataTable } from '@kit/ui/enhanced-data-table';
+import { Trans } from '@kit/ui/trans';
+
+import { deleteDocument } from '../server-actions';
 
 interface DocumentsTableProps {
   data: Array<{
@@ -31,7 +41,7 @@ interface DocumentsTableProps {
   pageSize: number;
 }
 
-function DocumentsTable({
+export function DocumentsTable({
   data,
   page,
   pageSize,
@@ -47,8 +57,6 @@ function DocumentsTable({
     />
   );
 }
-
-export default DocumentsTable;
 
 function getColumns<
   T extends {
@@ -68,7 +76,7 @@ function getColumns<
         return (
           <Link
             className={'hover:underline'}
-            href={`documents/${row.original.id}`}
+            href={`/home/documents/${row.original.id}`}
           >
             <span>{title}</span>
           </Link>
@@ -110,7 +118,10 @@ function getColumns<
                 </DropdownMenuItem>
 
                 <DeleteDocumentModal documentId={doc.id}>
-                  <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                  <DropdownMenuItem
+                    className={'w-full'}
+                    onSelect={(e) => e.preventDefault()}
+                  >
                     Delete Document
                   </DropdownMenuItem>
                 </DeleteDocumentModal>
@@ -142,15 +153,11 @@ function DeleteDocumentModal(
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger>
-        {props.children}
-      </AlertDialogTrigger>
+      <AlertDialogTrigger asChild>{props.children}</AlertDialogTrigger>
 
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>
-            Delete Document
-          </AlertDialogTitle>
+          <AlertDialogTitle>Delete Document</AlertDialogTitle>
 
           <AlertDialogDescription>
             Are you sure you want to delete this document? This action cannot be
@@ -160,6 +167,8 @@ function DeleteDocumentModal(
 
         <form onSubmit={onConfirm}>
           <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+
             <Button variant={'destructive'}>Yes, Delete Document</Button>
           </AlertDialogFooter>
         </form>

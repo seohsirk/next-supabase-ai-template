@@ -1,213 +1,229 @@
 'use server';
 
-import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 
-import { z } from 'zod';
 import { isWithinTokenLimit } from 'gpt-tokenizer';
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
+import { z } from 'zod';
 
-import getSupabaseServerActionClient from '~/core/supabase/action-client';
-import getSdk from '~/lib/sdk';
-import configuration from '~/configuration';
-import getLogger from '~/core/logger';
-import getVectorStore from '~/lib/ai/vector-store';
+import { getLogger } from '@kit/shared/logger';
+import { requireUser } from '@kit/supabase/require-user';
+import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
+
 import parsePdf from '~/lib/ai/parse-pdf';
-import { withSession } from '~/core/generic/actions-utils';
+import getVectorStore from '~/lib/ai/vector-store';
+import { Database } from '~/lib/database.types';
 
 const schema = z.object({
   path: z.string().min(1).max(200),
   title: z.string().min(1).max(200),
 });
 
-const DOCUMENT_CHUNK_SIZE = process.env.DOCUMENT_CHUNK_SIZE ? Number(process.env.DOCUMENT_CHUNK_SIZE) : 1500;
+const DOCUMENT_CHUNK_SIZE = process.env.DOCUMENT_CHUNK_SIZE
+  ? Number(process.env.DOCUMENT_CHUNK_SIZE)
+  : 1500;
 
-export const addDocument = withSession(
-  async (params: { path: string; title: string }) => {
-    const logger = getLogger();
-    const client = getSupabaseServerActionClient();
-    const sdk = getSdk(client);
-    const organization = await sdk.organization.getCurrent();
+export const addDocument = async (params: { path: string; title: string }) => {
+  const logger = await getLogger();
+  const client = getSupabaseServerActionClient();
+  const auth = await requireUser(client);
 
-    logger.info(params, `Uploading document...`);
+  if (!auth?.data) {
+    throw new Error(`Unauthorized`);
+  }
 
-    if (!organization) {
-      throw new Error(`No organization found`);
-    }
+  logger.info(params, `Uploading document...`);
 
-    const { path, title } = schema.parse(params);
+  const { path, title } = schema.parse(params);
 
-    const storageDocument = await client.storage
-      .from('documents')
-      .download(path);
+  const storageDocument = await client.storage.from('documents').download(path);
 
-    if (storageDocument.error) {
-      throw storageDocument.error;
-    }
+  if (storageDocument.error) {
+    throw storageDocument.error;
+  }
 
-    const documentData = await storageDocument.data.arrayBuffer();
-    const text = await parsePdf(documentData) as string;
+  const documentData = await storageDocument.data.arrayBuffer();
+  const text = (await parsePdf(documentData)) as string;
+  const accountId = auth.data.id;
 
-    const { data } = await client
-      .from('organization_usage')
-      .select('tokens_quota')
-      .eq('organization_id', organization.id)
-      .single();
+  const { data } = await client
+    .from('credits_usage')
+    .select('tokens_quota')
+    .eq('account_id', accountId)
+    .single();
 
-    const remainingTokens = data?.tokens_quota ?? 0;
+  const remainingTokens = data?.tokens_quota ?? 0;
 
-    if (!remainingTokens) {
-      logger.info({
-        remainingTokens,
-        organizationId: organization.id,
-      }, `No tokens left to index this document`);
-
-      throw new Error(`You can't index more documents`);
-    }
-
-    const tokensCount = isWithinTokenLimit(text as string, remainingTokens);
-
-    if (tokensCount === false) {
-      logger.info({
-        remainingTokens,
-        tokensCount,
-        organizationId: organization.id,
-      }, `Not enough tokens to index this document`);
-
-      throw new Error(`You don't have enough tokens to index this document`);
-    }
-
-    if (tokensCount === 0) {
-      logger.info({
-        remainingTokens,
-        tokensCount,
-        organizationId: organization.id,
-      }, `Document is empty. Likely parsing error.`);
-
-      throw new Error(`Document is empty`);
-    }
-
-    const adminClient = getSupabaseServerActionClient({
-      admin: true,
-    });
-
-    // we create a vector store using the admin client
-    // because RLS is enabled on the documents table without policies
-    // so we can always check if the user can index documents or not
-    const vectorStore = await getVectorStore(adminClient);
-
-    const splitter = new RecursiveCharacterTextSplitter({
-      chunkSize: DOCUMENT_CHUNK_SIZE,
-      chunkOverlap: 0,
-    });
-
-    const splittedDocs = await splitter.splitText(text);
-
-    logger.info({
-      title,
-      organizationId: organization.id,
-    }, `Inserting document into database...`);
-
-    const documentResponse = await adminClient
-      .from('documents')
-      .insert({
-        title,
-        organization_id: organization.id,
-      })
-      .select('id')
-      .single();
-
-    if (documentResponse.error) {
-      throw documentResponse.error;
-    }
-
-    logger.info({
-      title,
-      organizationId: organization.id,
-      documentId: documentResponse.data.id,
-    }, `Document inserted into database`);
-
-    logger.info({
-      title,
-      organizationId: organization.id,
-      documentId: documentResponse.data.id,
-    }, `Inserting document embeddings...`);
-
-    const documentEmbeddings = splittedDocs.map(item => {
-      return {
-        pageContent: item,
-        metadata: {
-          name: title,
-          organization_id: organization.id,
-          document_id: documentResponse.data.id,
-        },
-      };
-    });
-
-    const docs = await vectorStore.addDocuments(documentEmbeddings);
-
+  if (!remainingTokens) {
     logger.info(
       {
-        id: docs[0],
+        remainingTokens,
+        accountId,
       },
-      `Document uploaded successfully`,
+      `No tokens left to index this document`,
     );
 
-    logger.info(`Updating organization usage...`);
+    throw new Error(`You can't index more documents`);
+  }
 
-    const { error } = await adminClient
-      .from('organization_usage')
-      .update({ tokens_quota: remainingTokens - tokensCount })
-      .eq('organization_id', organization.id);
+  const tokensCount = isWithinTokenLimit(text, remainingTokens);
 
-    if (error) {
-      logger.error({
+  if (tokensCount === false) {
+    logger.info(
+      {
+        remainingTokens,
+        tokensCount,
+        accountId,
+      },
+      `Not enough tokens to index this document`,
+    );
+
+    throw new Error(`You don't have enough tokens to index this document`);
+  }
+
+  if (tokensCount === 0) {
+    logger.info(
+      {
+        remainingTokens,
+        tokensCount,
+        accountId,
+      },
+      `Document is empty. Likely parsing error.`,
+    );
+
+    throw new Error(`Document is empty`);
+  }
+
+  const adminClient = getSupabaseServerActionClient({
+    admin: true,
+  });
+
+  // we create a vector store using the admin client
+  // because RLS is enabled on the documents table without policies
+  // so we can always check if the user can index documents or not
+  const vectorStore = await getVectorStore(adminClient);
+
+  const splitter = new RecursiveCharacterTextSplitter({
+    chunkSize: DOCUMENT_CHUNK_SIZE,
+    chunkOverlap: 0,
+  });
+
+  const splittedDocs = await splitter.splitText(text);
+
+  logger.info(
+    {
+      title,
+      accountId,
+    },
+    `Inserting document into database...`,
+  );
+
+  const documentResponse = await adminClient
+    .from('documents')
+    .insert({
+      title,
+      content: text,
+      account_id: accountId,
+    })
+    .select('id')
+    .single();
+
+  if (documentResponse.error) {
+    throw documentResponse.error;
+  }
+
+  logger.info(
+    {
+      title,
+      accountId,
+      documentId: documentResponse.data.id,
+    },
+    `Document inserted into database`,
+  );
+
+  logger.info(
+    {
+      title,
+      accountId,
+      documentId: documentResponse.data.id,
+    },
+    `Inserting document embeddings...`,
+  );
+
+  const documentEmbeddings = splittedDocs.map((item) => {
+    return {
+      pageContent: item,
+      metadata: {
+        name: title,
+        account_id: accountId,
+        document_id: documentResponse.data.id,
+      },
+    };
+  });
+
+  const docs = await vectorStore.addDocuments(documentEmbeddings);
+
+  logger.info(
+    {
+      id: docs[0],
+    },
+    `Document uploaded successfully`,
+  );
+
+  logger.info(`Updating organization usage...`);
+
+  const { error } = await adminClient
+    .from('credits_usage')
+    .update({ tokens_quota: remainingTokens - tokensCount })
+    .eq('account_id', accountId);
+
+  if (error) {
+    logger.error(
+      {
         error,
-        organizationId: organization.id,
-      }, `Failed to update organization usage`);
-    } else {
-      logger.info({
-        organizationId: organization.id,
-      }, `Organization usage updated successfully`);
-    }
+        accountId,
+      },
+      `Failed to update account usage`,
+    );
+  } else {
+    logger.info(
+      {
+        accountId,
+      },
+      `Account usage updated successfully`,
+    );
+  }
 
-    try {
-      logger.info(
-        {
-          organizationId: organization.id,
-          id: docs[0],
-          storagePath: path,
-        },
-        `Removing document from storage after successful indexing`,
-      );
+  try {
+    logger.info(
+      {
+        accountId,
+        id: docs[0],
+        storagePath: path,
+      },
+      `Removing document from storage after successful indexing`,
+    );
 
-      await client.storage.from('documents').remove([path]);
-    } catch (e) {
-      logger.error(
-        {
-          error: e,
-          documentId: docs[0],
-          storagePath: path,
-          organizationId: organization.id,
-        },
-        `Failed to remove document from storage`,
-      );
-    }
+    await client.storage.from('documents').remove([path]);
+  } catch (e) {
+    logger.error(
+      {
+        error: e,
+        documentId: docs[0],
+        storagePath: path,
+        accountId,
+      },
+      `Failed to remove document from storage`,
+    );
+  }
 
-    logger.info({}, `Redirecting to document page...`);
+  logger.info({}, `Redirecting to document page...`);
 
-    const redirectPath = [
-      configuration.paths.appHome,
-      organization.uuid,
-      'documents',
-      documentResponse.data.id,
-    ].join('/');
+  return redirect('/home/documents');
+};
 
-    return redirect(redirectPath);
-  },
-);
-
-export const deleteDocument = withSession(async (documentId: string) => {
+export const deleteDocument = async (documentId: string) => {
   const client = getSupabaseServerActionClient();
 
   const { error } = await client
@@ -219,14 +235,14 @@ export const deleteDocument = withSession(async (documentId: string) => {
     throw error;
   }
 
-  revalidatePath(`/dashboard/[organization]/documents`, 'page');
+  revalidatePath(`/home/documents`, 'page');
 
   return {
     success: true,
   };
-});
+};
 
-export const deleteConversation = withSession(async (referenceId: string) => {
+export const deleteConversation = async (referenceId: string) => {
   const client = getSupabaseServerActionClient();
 
   const { error } = await client.from('conversations').delete().match({
@@ -237,16 +253,15 @@ export const deleteConversation = withSession(async (referenceId: string) => {
     throw error;
   }
 
-  revalidatePath(`/dashboard/[organization]/documents/[uid]`, 'page');
+  revalidatePath(`/home/documents/[uid]`, 'page');
 
   return {
     success: true,
   };
-});
+};
 
-export const clearConversation = withSession(async (referenceId: string) => {
+export const clearConversation = async (referenceId: string) => {
   const client = getSupabaseServerActionClient();
-
   const conversation = await getConversationByReferenceId(referenceId);
 
   const { error } = await client.from('messages').delete().match({
@@ -257,17 +272,17 @@ export const clearConversation = withSession(async (referenceId: string) => {
     throw error;
   }
 
-  revalidatePath(`/dashboard/[organization]/documents/[uid]`, 'page');
+  revalidatePath(`/home/documents/[uid]`, 'page');
 
   return {
     success: true,
   };
-});
+};
 
 export async function getConversationByReferenceId(
   conversationReferenceId: string,
 ) {
-  const client = getSupabaseServerActionClient();
+  const client = getSupabaseServerActionClient<Database>();
 
   const { data, error } = await client
     .from('conversations')

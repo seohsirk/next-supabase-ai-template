@@ -8,7 +8,6 @@ import featureFlagsConfig from '~/config/feature-flags.config';
 import pathsConfig from '~/config/paths.config';
 
 const features = {
-  enableTeamAccounts: featureFlagsConfig.enableTeamAccounts,
   enableTeamCreation: featureFlagsConfig.enableTeamCreation,
 };
 

@@ -32,6 +32,7 @@ const config = {
   },
   experimental: {
     mdxRs: true,
+    taint: true,
     instrumentationHook: true,
     optimizePackageImports: [
       'recharts',

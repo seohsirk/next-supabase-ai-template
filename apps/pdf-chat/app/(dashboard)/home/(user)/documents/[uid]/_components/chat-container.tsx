@@ -1,57 +1,58 @@
 'use client';
 
 import { useCallback, useEffect, useRef } from 'react';
-import classNames from 'clsx';
-import { useChat } from 'ai/react';
-import { Message } from 'ai';
-import useQuery, { useSWRConfig } from 'swr';
-import { toast } from 'sonner';
-import { nanoid } from 'nanoid';
+
+
 
 import { fetchDataFromSupabase } from '@makerkit/data-loader-supabase-core';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { Message } from 'ai';
+import { useChat } from 'ai/react';
+import { nanoid } from 'nanoid';
+import { toast } from 'sonner';
 
-import MessageContainer from './message-container';
-import ChatTextField from './chat-text-field';
-import useCsrfToken from '~/core/hooks/use-csrf-token';
-import useSupabase from '~/core/hooks/use-supabase';
-import If from '~/core/ui/If';
-import LoadingBubble from './loading-bubble';
+
+
+import { useSupabase } from '@kit/supabase/hooks/use-supabase';
+import { Heading } from '@kit/ui/heading';
+import { If } from '@kit/ui/if';
+import { cn } from '@kit/ui/utils';
+
+
+
 import { getConversationByReferenceId } from '../../server-actions';
-import Heading from '~/core/ui/Heading';
+import { ChatTextField } from './chat-text-field';
+import { LoadingBubble } from './loading-bubble';
+import { MessageContainer } from './message-container';
 
-function ChatContainer({
+
+export function ChatContainer({
   conversation,
   onCreateConversation,
   documentId,
 }: {
-  conversation: Maybe<{
-    id: string;
-    name: string;
-  }>;
+  conversation:
+    | {
+        id: string;
+        name: string;
+      }
+    | undefined;
 
   onCreateConversation: (conversation: { name: string; id: string }) => void;
   documentId: string;
 }) {
   // fetch the list of messages for this conversation
-  const {
-    data: messages,
-    isLoading,
-    isValidating,
-  } = useConversationMessages(conversation);
-
-  // display the loader if the messages are loading or
-  // if the messages are being validated
-  const displayLoader = isLoading || isValidating;
+  const { data: messages, isPending } = useConversationMessages(conversation);
 
   return (
     <>
       <ChatBodyContainer
-        className={classNames('transition-opacity', {
-          ['opacity-40 pointer-events-none']: displayLoader
+        className={cn('transition-opacity', {
+          ['pointer-events-none opacity-40']: isPending,
         })}
         conversationId={conversation?.id}
         documentId={documentId}
-        messages={messages}
+        messages={messages ?? []}
         onCreateConversation={onCreateConversation}
       />
     </>
@@ -60,18 +61,18 @@ function ChatContainer({
 
 function ChatBodyContainer(props: {
   className?: string;
-  conversationId: Maybe<string>;
+  conversationId: string | undefined;
   documentId: string;
-  messages: Maybe<Message[]> | null;
+  messages: Message[] | null;
   onCreateConversation: (conversation: { name: string; id: string }) => void;
 }) {
   // set a ref for the conversation id - or generate a new one if there is none
   const conversationIdRef = useRef(props.conversationId);
-  const { mutate } = useSWRConfig();
 
-  const scrollingDiv = useRef<HTMLDivElement>();
-  const csrfToken = useCsrfToken();
+  const scrollingDiv = useRef<HTMLDivElement | null>();
   const scrollToBottom = useScrollToBottom(scrollingDiv);
+
+  const queryClient = useQueryClient();
 
   const {
     messages,
@@ -83,13 +84,12 @@ function ChatBodyContainer(props: {
   } = useChat({
     api: getApiEndpoint(props.documentId),
     headers: {
-      'x-csrf-token': csrfToken,
       'x-conversation-id': conversationIdRef.current ?? '',
     },
     body: {
       create: !props.conversationId,
     },
-    initialMessages: props.messages || undefined,
+    initialMessages: props.messages ?? undefined,
     onError: (error) => {
       console.error(error);
       toast.error('Something went wrong. Please try again.');
@@ -100,7 +100,7 @@ function ChatBodyContainer(props: {
 
       // we need to update the cache with the new message
       // so that we don't have to fetch it from the API the next time
-      const updateCache = async () => {
+      const updateCache = () => {
         const cacheKey = getConversationIdStorageKey(conversationIdRef.current);
 
         const userMessage = {
@@ -112,7 +112,7 @@ function ChatBodyContainer(props: {
 
         const nextCache = [...(messages ?? []), userMessage, message];
 
-        return mutate(cacheKey, nextCache);
+        return queryClient.setQueryData([cacheKey], nextCache);
       };
 
       // if the conversation id is already set, we just update the cache
@@ -175,14 +175,16 @@ function ChatBodyContainer(props: {
 
   return (
     <div
-      className={classNames(
-        'm-auto flex h-full w-full flex-col flex-1 space-y-4 pt-container',
+      className={cn(
+        'pt-4 m-auto flex h-full w-full flex-1 flex-col space-y-4',
         props.className,
       )}
     >
       <div
-        className={'order-1 flex-[1_1_0] overflow-y-auto px-container'}
-        ref={(div) => (scrollingDiv.current = div ?? undefined)}
+        className={'px-4 order-1 flex-[1_1_0] overflow-y-auto'}
+        ref={ref => {
+          scrollingDiv.current = ref;
+        }}
       >
         <div className={'mx-auto h-full w-full'}>
           <ChatMessagesContainer messages={messages} loading={isLoading} />
@@ -233,7 +235,7 @@ function ChatMessageItem({
   message,
 }: React.PropsWithChildren<{ message: Message }>) {
   return (
-    <div className={classNames(`flex h-fit w-full animate-in fade-in-90`)}>
+    <div className={cn(`flex h-fit w-full animate-in fade-in-90`)}>
       <div
         className={'m-auto flex w-full whitespace-pre-wrap break-words'}
         style={{
@@ -250,11 +252,11 @@ function NoMessageEmptySpace() {
   return (
     <div
       className={
-        'm-auto flex h-full flex-1 space-y-2.5 flex-col items-center justify-center'
+        'm-auto flex h-full flex-1 flex-col items-center justify-center space-y-2.5'
       }
     >
       <div>
-        <Heading type={3}>Hello, how can I help you?</Heading>
+        <Heading level={3}>Hello, how can I help you?</Heading>
       </div>
 
       <span className={'text-gray-500 dark:text-gray-400'}>
@@ -264,25 +266,23 @@ function NoMessageEmptySpace() {
   );
 }
 
-export default ChatContainer;
-
 function useConversationMessages(
-  conversation: Maybe<{
+  conversation: undefined | {
     id: string;
     name: string;
-  }>,
+  }
 ) {
   const client = useSupabase();
 
   const queryFn = async () => {
     if (!conversation) {
-     return null;
+      return null;
     }
 
     const { data, error } = await fetchDataFromSupabase({
       client,
       table: 'messages',
-      camelCase: true,
+      camelCase: false,
       limit: 50,
       select: `
         id,
@@ -312,25 +312,19 @@ function useConversationMessages(
     });
   };
 
-  type Data = Awaited<ReturnType<typeof queryFn>>;
+  const queryKey = conversation?.id
+    ? [getConversationIdStorageKey(conversation?.id)]
+    : [];
 
-  const key = conversation?.id ? getConversationIdStorageKey(conversation?.id) : null;
-
-  return useQuery<Data>(key, queryFn, {
-    revalidateOnFocus: false,
-    revalidateOnReconnect: false,
-    refreshWhenHidden: false,
-    refreshWhenOffline: false,
-    revalidateIfStale: false,
-  });
+  return useQuery({ queryFn, queryKey, refetchOnMount: false });
 }
 
-function getConversationIdStorageKey(conversationId: Maybe<string>) {
+function getConversationIdStorageKey(conversationId: string | undefined) {
   return `conversation-${conversationId}`;
 }
 
 function useScrollToBottom(
-  scrollingDiv: React.MutableRefObject<HTMLDivElement | undefined>,
+  scrollingDiv: React.MutableRefObject<HTMLDivElement | null>,
 ) {
   return useCallback(
     ({ smooth } = { smooth: false }) => {

@@ -1,4 +1,4 @@
-export default function GptLogo() {
+export function GptLogo() {
   return (
     <svg
       width="32"

@@ -1,10 +1,12 @@
 'use client';
 
-import classNames from 'clsx';
 import { Message } from 'ai';
-import LoadingBubble from './loading-bubble';
 
-function MessageContainer({
+import { cn } from '@kit/ui/utils';
+
+import { LoadingBubble } from './loading-bubble';
+
+export function MessageContainer({
   message,
 }: React.PropsWithChildren<{
   message: Message;
@@ -14,19 +16,20 @@ function MessageContainer({
 
   return (
     <div
-      className={classNames('w-full rounded-md p-4 border animate-in slide-in-from-bottom-1', {
-        'bg-primary-50 dark:bg-primary-800 border-border': isUser,
-        'border-transparent': !isUser,
-      })}
+      className={cn(
+        'w-full rounded-md border p-4 animate-in slide-in-from-bottom-1',
+        {
+          'bg-primary-50 dark:bg-primary-800 border-border': isUser,
+          'border-transparent': !isUser,
+        },
+      )}
     >
       <div className={'flex items-start space-x-4'}>
         <LoadingIndicator show={!content} />
 
         <MessageContentContainer show={!!content}>
           <div>
-            <b>
-              {isUser ? `You` : `Assistant`}:{' '}
-            </b>
+            <b>{isUser ? `You` : `Assistant`}: </b>
             {content}
           </div>
         </MessageContentContainer>
@@ -34,8 +37,6 @@ function MessageContainer({
     </div>
   );
 }
-
-export default MessageContainer;
 
 function LoadingIndicator({
   show,
@@ -51,4 +52,3 @@ function MessageContentContainer({
 }>) {
   return show ? <div className={'text-sm text-current'}>{children}</div> : null;
 }
-

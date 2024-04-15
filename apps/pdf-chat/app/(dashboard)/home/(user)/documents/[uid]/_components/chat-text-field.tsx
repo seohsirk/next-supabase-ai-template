@@ -1,5 +1,4 @@
-
-function ChatTextField({
+export function ChatTextField({
   handleSubmit,
   handleInputChange,
   input,
@@ -11,22 +10,19 @@ function ChatTextField({
   loading: boolean;
 }>) {
   return (
-    <form onSubmit={handleSubmit} className={'p-container border-t border-gray-100 dark:border-border'}>
+    <form onSubmit={handleSubmit} className={'p-4 border-t border-gray-100 dark:border-border'}>
       <input
         disabled={loading}
         onInput={handleInputChange}
         value={input}
         placeholder='Ask your PDF anything and it will answer you.'
         className={
-          '!min-h-[80px] w-full border px-container bg-gray-50 shadow-sm' +
+          '!min-h-[80px] w-full border px-4 bg-gray-50 shadow-sm' +
           ' focus:ring-none outline-none transition-all' +
           ' ring-primary focus:ring-2 focus:ring-offset-0' +
-          ' dark:hover:border-dark-700' +
-          ' aria-disabled:opacity-50 dark:border-dark-800 dark:bg-background'
+          ' aria-disabled:opacity-50 dark:bg-background'
         }
       />
     </form>
   );
 }
-
-export default ChatTextField;

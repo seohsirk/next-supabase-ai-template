@@ -2,19 +2,23 @@
 
 import { useCallback, useState } from 'react';
 
-
-
 import { useMutation } from '@tanstack/react-query';
 import { Cloud } from 'lucide-react';
 import { nanoid } from 'nanoid';
 import { useDropzone } from 'react-dropzone';
+import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-
-
 
 import { usePersonalAccountData } from '@kit/accounts/hooks/use-personal-account-data';
 import { useSupabase } from '@kit/supabase/hooks/use-supabase';
 import { Button } from '@kit/ui/button';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from '@kit/ui/form';
 import { Heading } from '@kit/ui/heading';
 import { If } from '@kit/ui/if';
 import { Input } from '@kit/ui/input';
@@ -26,8 +30,7 @@ import { cn } from '@kit/ui/utils';
 
 import { addDocument } from '../server-actions';
 
-
-function UploadDocumentForm() {
+export function UploadDocumentForm() {
   const [files, setFiles] = useState<File[]>([]);
 
   const { getRootProps, getInputProps, isDragAccept, isDragReject } =
@@ -45,7 +48,7 @@ function UploadDocumentForm() {
     return (
       <div
         className={
-          's-full my-24 flex flex-1 flex-col items-center justify-between space-y-8'
+          's-full my-24 flex flex-col items-center justify-between space-y-8'
         }
       >
         <AcceptedFilesConfirmation
@@ -59,7 +62,7 @@ function UploadDocumentForm() {
   return (
     <div
       className={
-        's-full my-24 flex flex-1 flex-col items-center justify-between space-y-8'
+        'my-24 flex w-full flex-col items-center justify-between space-y-8'
       }
     >
       <div className={'flex flex-col items-center'}>
@@ -104,8 +107,6 @@ function UploadDocumentForm() {
   );
 }
 
-export default UploadDocumentForm;
-
 function AcceptedFilesConfirmation(props: {
   acceptedFiles: File[];
   onClear: () => void;
@@ -125,7 +126,7 @@ function AcceptedFilesConfirmation(props: {
       setCurrentStep(2);
 
       try {
-        const path = await useUploadDocumentToStorageMutation.trigger(file);
+        const path = await useUploadDocumentToStorageMutation.mutateAsync(file);
 
         await addDocument({
           title,
@@ -148,7 +149,7 @@ function AcceptedFilesConfirmation(props: {
 
         <If condition={currentStep === 0}>
           <DocumentDetailsStep
-            file={file}
+            file={file as File}
             onNext={() => setCurrentStep(1)}
             onCancel={props.onClear}
           />
@@ -216,48 +217,58 @@ function DocumentTitleStep(props: {
   onNext: (title: string) => void;
   onCancel: () => void;
 }) {
-  const [title, setTitle] = useState('');
+  const form = useForm({
+    defaultValues: {
+      title: '',
+    },
+  });
 
   return (
-    <>
-      <div className={'flex flex-col'}>
-        <Heading level={4}>Document Title</Heading>
+    <Form {...form}>
+      <form
+        className={'flex flex-col space-y-4'}
+        onSubmit={form.handleSubmit((values) => {
+          props.onNext(values.title);
+        })}
+      >
+        <div className={'flex flex-col'}>
+          <Heading level={4}>Document Title</Heading>
 
-        <Heading level={6} className={'!text-base'}>
-          Please enter a title for your document.
-        </Heading>
-      </div>
+          <Heading level={6} className={'!text-base'}>
+            Please enter a title for your document.
+          </Heading>
+        </div>
 
-      <div>
-        <Label>
-          <span>Document Title</span>
+        <div>
+          <FormField
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Document Title</FormLabel>
 
-          <Input
-            required
-            type={'text'}
-            className={'w-full'}
-            placeholder={'Document Title'}
-            onInput={(e) =>
-              setTitle((e.target as HTMLInputElement).value ?? '')
-            }
+                <FormControl>
+                  <Input
+                    required
+                    type={'text'}
+                    className={'w-full'}
+                    placeholder={'Document Title'}
+                    {...field}
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+            name={'title'}
           />
-        </Label>
-      </div>
+        </div>
 
-      <div className={'flex justify-end space-x-4'}>
-        <Button variant={'ghost'} onClick={props.onCancel}>
-          Go Back
-        </Button>
+        <div className={'flex justify-end space-x-4'}>
+          <Button type={'button'} variant={'ghost'} onClick={props.onCancel}>
+            Go Back
+          </Button>
 
-        <Button
-          onClick={() => {
-            props.onNext(title);
-          }}
-        >
-          Next
-        </Button>
-      </div>
-    </>
+          <Button>Next</Button>
+        </div>
+      </form>
+    </Form>
   );
 }
 
@@ -270,7 +281,11 @@ function useUploadDocumentToStorage() {
 
   return useMutation({
     mutationKey: ['upload-document'],
-    mutationFn: async (file: File) => {
+    mutationFn: async (file: File | undefined) => {
+      if (!file) {
+        throw new Error('File is not defined');
+      }
+
       if (!account) {
         throw new Error('Account is not defined');
       }
