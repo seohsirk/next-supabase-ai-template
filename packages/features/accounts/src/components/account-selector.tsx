@@ -33,7 +33,6 @@ interface AccountSelectorProps {
   }>;
 
   features: {
-    enableTeamAccounts: boolean;
     enableTeamCreation: boolean;
   };
 
@@ -50,7 +49,6 @@ export function AccountSelector({
   selectedAccount,
   onAccountChange,
   features = {
-    enableTeamAccounts: true,
     enableTeamCreation: true,
   },
   collapsed = false,
@@ -79,10 +77,6 @@ export function AccountSelector({
       />
     );
   };
-
-  if (!features.enableTeamAccounts) {
-    return null;
-  }
 
   const selected = accounts.find((account) => account.value === value);
   const pictureUrl = personalData.data?.picture_url;
@@ -176,66 +170,64 @@ export function AccountSelector({
 
               <CommandSeparator />
 
-              <If condition={features.enableTeamAccounts}>
-                <If condition={accounts.length > 0}>
-                  <CommandGroup
-                    heading={
-                      <Trans
-                        i18nKey={'teams:yourTeams'}
-                        values={{ teamsCount: accounts.length }}
-                      />
-                    }
-                  >
-                    {(accounts ?? []).map((account) => (
-                      <CommandItem
-                        data-test={'account-selector-team'}
-                        data-name={account.label}
-                        data-slug={account.value}
-                        className={cn(
-                          'group flex justify-between transition-colors',
-                          {
-                            ['bg-muted']: value === account.value,
-                          },
-                        )}
-                        key={account.value}
-                        value={account.value ?? ''}
-                        onSelect={(currentValue) => {
-                          setValue(currentValue === value ? '' : currentValue);
-                          setOpen(false);
+              <If condition={accounts.length > 0}>
+                <CommandGroup
+                  heading={
+                    <Trans
+                      i18nKey={'teams:yourTeams'}
+                      values={{ teamsCount: accounts.length }}
+                    />
+                  }
+                >
+                  {(accounts ?? []).map((account) => (
+                    <CommandItem
+                      data-test={'account-selector-team'}
+                      data-name={account.label}
+                      data-slug={account.value}
+                      className={cn(
+                        'group flex justify-between transition-colors',
+                        {
+                          ['bg-muted']: value === account.value,
+                        },
+                      )}
+                      key={account.value}
+                      value={account.value ?? ''}
+                      onSelect={(currentValue) => {
+                        setValue(currentValue === value ? '' : currentValue);
+                        setOpen(false);
 
-                          if (onAccountChange) {
-                            onAccountChange(currentValue);
-                          }
-                        }}
-                      >
-                        <div className={'flex items-center'}>
-                          <Avatar
-                            className={cn(
-                              'mr-2 h-6 w-6 border border-transparent',
-                              {
-                                ['border-border']: value === account.value,
-                                ['group-hover:border-border ']:
-                                  value !== account.value,
-                              },
-                            )}
-                          >
-                            <AvatarImage src={account.image ?? undefined} />
+                        if (onAccountChange) {
+                          onAccountChange(currentValue);
+                        }
+                      }}
+                    >
+                      <div className={'flex items-center'}>
+                        <Avatar
+                          className={cn(
+                            'mr-2 h-6 w-6 border border-transparent',
+                            {
+                              ['border-border']: value === account.value,
+                              ['group-hover:border-border ']:
+                                value !== account.value,
+                            },
+                          )}
+                        >
+                          <AvatarImage src={account.image ?? undefined} />
 
-                            <AvatarFallback>
-                              {account.label ? account.label[0] : ''}
-                            </AvatarFallback>
-                          </Avatar>
+                          <AvatarFallback>
+                            {account.label ? account.label[0] : ''}
+                          </AvatarFallback>
+                        </Avatar>
 
-                          <span className={'mr-2 max-w-[165px] truncate'}>
-                            {account.label}
-                          </span>
-                        </div>
+                        <span className={'mr-2 max-w-[165px] truncate'}>
+                          {account.label}
+                        </span>
+                      </div>
 
-                        <Icon item={account.value ?? ''} />
-                      </CommandItem>
-                    ))}
-                  </CommandGroup>
-                </If>
+                      <Icon item={account.value ?? ''} />
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
               </If>
             </CommandList>
           </Command>

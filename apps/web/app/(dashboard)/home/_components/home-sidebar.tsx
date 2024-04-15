@@ -2,8 +2,11 @@ import { use } from 'react';
 
 import { cookies } from 'next/headers';
 
+import { If } from '@kit/ui/if';
 import { Sidebar, SidebarContent, SidebarNavigation } from '@kit/ui/sidebar';
 
+import { AppLogo } from '~/components/app-logo';
+import featuresFlagConfig from '~/config/feature-flags.config';
 import { personalAccountSidebarConfig } from '~/config/personal-account-sidebar.config';
 
 // home imports
@@ -18,7 +21,15 @@ export function HomeSidebar() {
   return (
     <Sidebar collapsed={collapsed}>
       <SidebarContent className={'my-4'}>
-        <HomeSidebarAccountSelector collapsed={collapsed} accounts={accounts} />
+        <If
+          condition={featuresFlagConfig.enableTeamAccounts}
+          fallback={<AppLogo className={'py-2'} />}
+        >
+          <HomeSidebarAccountSelector
+            collapsed={collapsed}
+            accounts={accounts}
+          />
+        </If>
       </SidebarContent>
 
       <SidebarContent className={`h-[calc(100%-160px)] overflow-y-auto`}>
