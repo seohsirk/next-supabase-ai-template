@@ -110,7 +110,7 @@ jobs:
         run: pnpm --filter web build:test
 
       - name: Run App
-        run: pnpm --filter web start:test
+        run: pnpm --filter web start:test &
 
       - name: Run Playwright tests
         run: pnpm run test
