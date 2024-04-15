@@ -5,7 +5,7 @@ import { z } from 'zod';
 const providers: z.ZodType<Provider> = getProviders();
 
 const AuthConfigSchema = z.object({
-  captchaTokenSiteKey: z.string().min(1).optional(),
+  captchaTokenSiteKey: z.string().optional(),
   providers: z.object({
     password: z.boolean({
       description: 'Enable password authentication.',
