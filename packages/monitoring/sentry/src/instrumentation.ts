@@ -28,7 +28,7 @@ export async function registerInstrumentation() {
     resource: new Resource({
       [SEMRESATTRS_SERVICE_NAME]: serviceName,
     }),
-    spanProcessor: new SentrySpanProcessor(),
+    spanProcessors: [new SentrySpanProcessor()],
     textMapPropagator: new SentryPropagator(),
   });
 
