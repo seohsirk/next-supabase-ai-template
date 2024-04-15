@@ -18,13 +18,13 @@ export function LineItemDetails(
 ) {
   return (
     <div className={'flex flex-col space-y-1'}>
-      {props.lineItems.map((item) => {
+      {props.lineItems.map((item, index) => {
         // If the item has a description, we render it as a simple text
         // and pass the item as values to the translation so we can use
         // the item properties in the translation.
         if (item.description) {
           return (
-            <div key={item.id} className={className}>
+            <div key={index} className={className}>
               <span className={'flex items-center space-x-1.5'}>
                 <PlusSquare className={'w-4'} />
 
@@ -219,7 +219,7 @@ function Tiers({
     return (
       <span
         className={'text-secondary-foreground flex space-x-1 text-xs'}
-        key={tier.upTo}
+        key={index}
       >
         <span>-</span>
 
