@@ -15,8 +15,7 @@ export async function register() {
       '@kit/monitoring/instrumentation'
     );
 
-    // Register monitoring instrumentation based on the
-    // MONITORING_INSTRUMENTATION_PROVIDER environment variable.
+    // Register monitoring instrumentation based on the MONITORING_PROVIDER environment variable.
     return registerMonitoringInstrumentation();
   }
 }

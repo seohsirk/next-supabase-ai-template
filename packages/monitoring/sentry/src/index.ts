@@ -1,1 +1,1 @@
-export { captureException } from './capture-exception';
+export * from './capture-exception';

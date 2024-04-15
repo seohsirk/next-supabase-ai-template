@@ -23,19 +23,19 @@ export async function registerMonitoringInstrumentation() {
 
   switch (MONITORING_PROVIDER) {
     case InstrumentationProvider.Baselime: {
-      const { registerBaselimeInstrumentation } = await import(
+      const { registerInstrumentation } = await import(
         '@kit/baselime/instrumentation'
       );
 
-      return registerBaselimeInstrumentation();
+      return registerInstrumentation();
     }
 
     case InstrumentationProvider.Sentry: {
-      const { registerSentryInstrumentation } = await import(
+      const { registerInstrumentation } = await import(
         '@kit/sentry/instrumentation'
       );
 
-      return registerSentryInstrumentation();
+      return registerInstrumentation();
     }
 
     default:

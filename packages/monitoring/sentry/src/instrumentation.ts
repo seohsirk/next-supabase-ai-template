@@ -1,18 +1,18 @@
-const INSTRUMENTATION_SERVICE_NAME = process.env.INSTRUMENTATION_SERVICE_NAME;
-
-if (!INSTRUMENTATION_SERVICE_NAME) {
-  throw new Error(`
-    You have set the Sentry instrumentation provider, but have not set the INSTRUMENTATION_SERVICE_NAME environment variable. Please set the INSTRUMENTATION_SERVICE_NAME environment variable.
-  `);
-}
-
 /**
- * @name registerSentryInstrumentation
+ * @name registerInstrumentation
  * @description This file is used to register Sentry instrumentation for your Next.js application.
  *
- * Please set the MONITORING_INSTRUMENTATION_PROVIDER environment variable to 'sentry' to register Sentry instrumentation.
+ * Please set the MONITORING_PROVIDER environment variable to 'sentry' to register Sentry instrumentation.
  */
-export async function registerSentryInstrumentation() {
+export async function registerInstrumentation() {
+  const serviceName = process.env.INSTRUMENTATION_SERVICE_NAME;
+
+  if (!serviceName) {
+    throw new Error(
+      `You have set the Sentry instrumentation provider, but have not set the INSTRUMENTATION_SERVICE_NAME environment variable. Please set the INSTRUMENTATION_SERVICE_NAME environment variable.`,
+    );
+  }
+
   const { Resource } = await import('@opentelemetry/resources');
   const { NodeSDK } = await import('@opentelemetry/sdk-node');
 
@@ -26,7 +26,7 @@ export async function registerSentryInstrumentation() {
 
   const sdk = new NodeSDK({
     resource: new Resource({
-      [SEMRESATTRS_SERVICE_NAME]: INSTRUMENTATION_SERVICE_NAME,
+      [SEMRESATTRS_SERVICE_NAME]: serviceName,
     }),
     spanProcessor: new SentrySpanProcessor(),
     textMapPropagator: new SentryPropagator(),
