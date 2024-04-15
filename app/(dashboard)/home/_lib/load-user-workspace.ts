@@ -10,11 +10,11 @@ export const loadUserWorkspace = cache(async () => {
   const loadAccounts = featureFlagsConfig.enableTeamAccounts;
 
   const accounts = loadAccounts ? await loadUserAccounts(client) : [];
-  const { data } = await client.auth.getSession();
+  const { data } = await client.auth.getUser();
 
   return {
     accounts,
-    session: data.session,
+    user: data.user,
   };
 });
 
