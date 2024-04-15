@@ -33,9 +33,11 @@ const CaptchaTokenSetter = dynamic(async () => {
 
 export function RootProviders({
   lang,
+  theme = appConfig.theme,
   children,
 }: React.PropsWithChildren<{
   lang: string;
+  theme?: string;
 }>) {
   const i18nSettings = getI18nSettings(lang);
 
@@ -51,7 +53,7 @@ export function RootProviders({
                 attribute="class"
                 enableSystem
                 disableTransitionOnChange
-                defaultTheme={appConfig.theme}
+                defaultTheme={theme}
               >
                 {children}
               </ThemeProvider>

@@ -24,22 +24,23 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const { language } = await createI18nServerInstance();
+  const theme = getTheme();
 
   return (
-    <html lang={language} className={getClassName()}>
+    <html lang={language} className={getClassName(theme)}>
       <CsrfTokenMeta />
 
       <body>
-        <RootProviders lang={language}>{children}</RootProviders>
+        <RootProviders theme={theme} lang={language}>
+          {children}
+        </RootProviders>
         <Toaster richColors={false} />
       </body>
     </html>
   );
 }
 
-function getClassName() {
-  const themeCookie = cookies().get('theme')?.value;
-  const theme = themeCookie ?? appConfig.theme;
+function getClassName(theme?: string) {
   const dark = theme === 'dark';
 
   return cn(
@@ -49,6 +50,10 @@ function getClassName() {
     },
     sans.className,
   );
+}
+
+function getTheme() {
+  return cookies().get('theme')?.value;
 }
 
 export const metadata = {
