@@ -22,6 +22,7 @@
     "@kit/email-templates": "workspace:^",
     "@kit/eslint-config": "workspace:*",
     "@kit/mailers": "workspace:^",
+    "@kit/monitoring": "workspace:*",
     "@kit/prettier-config": "workspace:*",
     "@kit/shared": "workspace:^",
     "@kit/supabase": "workspace:^",

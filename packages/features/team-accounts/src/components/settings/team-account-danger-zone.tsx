@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
+import { ErrorBoundary } from '@kit/monitoring/components';
 import { useUser } from '@kit/supabase/hooks/use-user';
 import { Alert, AlertDescription, AlertTitle } from '@kit/ui/alert';
 import {
@@ -19,7 +20,6 @@ import {
   AlertDialogTrigger,
 } from '@kit/ui/alert-dialog';
 import { Button } from '@kit/ui/button';
-import { ErrorBoundary } from '@kit/ui/error-boundary';
 import {
   Form,
   FormControl,

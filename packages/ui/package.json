@@ -119,7 +119,6 @@
     "./page": "./src/makerkit/page.tsx",
     "./image-uploader": "./src/makerkit/image-uploader.tsx",
     "./global-loader": "./src/makerkit/global-loader.tsx",
-    "./error-boundary": "./src/makerkit/error-boundary.tsx",
     "./auth-change-listener": "./src/makerkit/auth-change-listener.tsx",
     "./loading-overlay": "./src/makerkit/loading-overlay.tsx",
     "./profile-avatar": "./src/makerkit/profile-avatar.tsx",

@@ -21,6 +21,7 @@
   "clear": "Clear",
   "notFound": "Not Found",
   "backToHomePage": "Back to Home Page",
+  "goBack": "Go Back",
   "genericServerError": "Sorry, something went wrong.",
   "genericServerErrorHeading": "Sorry, something went wrong while processing your request. Please contact us if the issue persists.",
   "pageNotFound": "Sorry, this page does not exist.",

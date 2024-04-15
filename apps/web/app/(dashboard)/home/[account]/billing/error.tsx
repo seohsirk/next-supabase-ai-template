@@ -1,16 +1,21 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
 
+import { useCaptureException } from '@kit/monitoring/hooks';
 import { Alert, AlertDescription, AlertTitle } from '@kit/ui/alert';
 import { Button } from '@kit/ui/button';
 import { PageBody, PageHeader } from '@kit/ui/page';
 import { Trans } from '@kit/ui/trans';
 
-export default function BillingErrorPage() {
-  const router = useRouter();
+export default function BillingErrorPage({
+  error,
+  reset,
+}: {
+  error: Error & { digest?: string };
+  reset: () => void;
+}) {
+  useCaptureException(error);
 
   return (
     <>
@@ -34,7 +39,7 @@ export default function BillingErrorPage() {
           </Alert>
 
           <div>
-            <Button variant={'outline'} onClick={() => router.refresh()}>
+            <Button variant={'outline'} onClick={reset}>
               <Trans i18nKey={'common:retry'} />
             </Button>
           </div>

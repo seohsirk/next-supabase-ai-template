@@ -554,6 +554,9 @@ importers:
       '@kit/mailers':
         specifier: workspace:^
         version: link:../../mailers
+      '@kit/monitoring':
+        specifier: workspace:^
+        version: link:../../monitoring
       '@kit/prettier-config':
         specifier: workspace:*
         version: link:../../../tooling/prettier
@@ -759,6 +762,9 @@ importers:
       '@kit/mailers':
         specifier: workspace:^
         version: link:../../mailers
+      '@kit/monitoring':
+        specifier: workspace:*
+        version: link:../../monitoring
       '@kit/prettier-config':
         specifier: workspace:*
         version: link:../../../tooling/prettier
@@ -901,12 +907,21 @@ importers:
       '@kit/tsconfig':
         specifier: workspace:*
         version: link:../../tooling/typescript
+      '@types/react':
+        specifier: ^18.2.77
+        version: 18.2.78
+      react:
+        specifier: 18.2.0
+        version: 18.2.0
 
   packages/monitoring/baselime:
     dependencies:
       '@baselime/node-opentelemetry':
         specifier: ^0.5.8
         version: 0.5.8(@trpc/server@10.45.2)
+      '@baselime/react-rum':
+        specifier: ^0.2.9
+        version: 0.2.9(react@18.2.0)
     devDependencies:
       '@kit/eslint-config':
         specifier: workspace:*
@@ -1582,6 +1597,17 @@ packages:
     transitivePeerDependencies:
       - debug
       - supports-color
+    dev: false
+
+  /@baselime/react-rum@0.2.9(react@18.2.0):
+    resolution: {integrity: sha512-x5+eYsNCsasHD6jbfH02HmwA7i8A+3Ac3PS2tKwgFgoqi1EmIgktjAvdYFosTZe73VIQMal19peRXAu2/lGxAA==}
+    peerDependencies:
+      react: ^18.2.0
+    dependencies:
+      js-cookie: 3.0.5
+      react: 18.2.0
+      react-error-boundary: 4.0.13(react@18.2.0)
+      web-vitals: 3.5.2
     dev: false
 
   /@braintree/sanitize-url@6.0.4:
@@ -11690,6 +11716,15 @@ packages:
       - webpack-cli
     dev: false
 
+  /react-error-boundary@4.0.13(react@18.2.0):
+    resolution: {integrity: sha512-b6PwbdSv8XeOSYvjt8LpgpKrZ0yGdtZokYwkwV2wlcZbxgopHX/hgPl5VgpnoVOWd868n1hktM8Qm4b+02MiLQ==}
+    peerDependencies:
+      react: '>=16.13.1'
+    dependencies:
+      '@babel/runtime': 7.24.4
+      react: 18.2.0
+    dev: false
+
   /react-hook-form@7.51.3(react@18.2.0):
     resolution: {integrity: sha512-cvJ/wbHdhYx8aviSWh28w9ImjmVsb5Y05n1+FW786vEZQJV5STNM0pW6ujS+oiBecb0ARBxJFyAnXj9+GHXACQ==}
     engines: {node: '>=12.22.0'}
@@ -13295,6 +13330,10 @@ packages:
     resolution: {integrity: sha512-d2JWLCivmZYTSIoge9MsgFCZrt571BikcWGYkjC1khllbTeDlGqZ2D8vD8E/lJa8WGWbb7Plm8/XJYV7IJHZZw==}
     engines: {node: '>= 8'}
     dev: true
+
+  /web-vitals@3.5.2:
+    resolution: {integrity: sha512-c0rhqNcHXRkY/ogGDJQxZ9Im9D19hDihbzSQJrsioex+KnFgmMzBiy57Z1EjkhX/+OjyBpclDCzz2ITtjokFmg==}
+    dev: false
 
   /webidl-conversions@3.0.1:
     resolution: {integrity: sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==}
