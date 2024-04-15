@@ -31,6 +31,8 @@ async function BlogPage({ searchParams }: { searchParams: { page: string } }) {
     limit,
     offset,
     language,
+    sortBy: 'publishedAt',
+    sortDirection: 'desc',
   });
 
   return (
