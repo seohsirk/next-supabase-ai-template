@@ -4,13 +4,22 @@ import Link from 'next/link';
 
 import { ArrowLeft } from 'lucide-react';
 
+import { useCaptureException } from '@kit/monitoring/hooks';
 import { Button } from '@kit/ui/button';
 import { Heading } from '@kit/ui/heading';
 import { Trans } from '@kit/ui/trans';
 
 import { SiteHeader } from '~/(marketing)/_components/site-header';
 
-const ErrorPage = () => {
+const ErrorPage = ({
+  error,
+  reset,
+}: {
+  error: Error & { digest?: string };
+  reset: () => void;
+}) => {
+  useCaptureException(error);
+
   return (
     <div className={'flex h-screen flex-1 flex-col'}>
       <SiteHeader />
@@ -39,13 +48,11 @@ const ErrorPage = () => {
             </div>
 
             <div>
-              <Link href={'/'}>
-                <Button variant={'outline'}>
-                  <ArrowLeft className={'mr-2 h-4'} />
+              <Button variant={'outline'} onClick={reset}>
+                <ArrowLeft className={'mr-2 h-4'} />
 
-                  <Trans i18nKey={'common:backToHomePage'} />
-                </Button>
-              </Link>
+                <Trans i18nKey={'common:goBack'} />
+              </Button>
             </div>
           </div>
         </div>
