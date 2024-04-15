@@ -1,5 +1,7 @@
 import 'server-only';
 
+import { experimental_taintUniqueValue as taintUniqueValue } from 'react';
+
 import { z } from 'zod';
 
 const message =
@@ -11,16 +13,22 @@ const message =
  * ONLY USE IN SERVER-SIDE CODE. DO NOT EXPOSE THIS TO CLIENT-SIDE CODE.
  */
 export function getServiceRoleKey() {
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-  return z
+  const serviceRoleKey = z
     .string({
       required_error: message,
     })
     .min(1, {
       message: message,
     })
-    .parse(serviceRoleKey);
+    .parse(process.env.SUPABASE_SERVICE_ROLE_KEY);
+
+  taintUniqueValue(
+    'Do not pass the service role key to the client',
+    process,
+    serviceRoleKey,
+  );
+
+  return serviceRoleKey;
 }
 
 /**

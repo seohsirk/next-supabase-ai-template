@@ -282,7 +282,7 @@ function HeroTitle({ children }: React.PropsWithChildren) {
 
 function Pill(props: React.PropsWithChildren) {
   return (
-    <h2 className={'rounded-full border px-4 py-2 text-sm'}>
+    <h2 className={'rounded-full border px-4 py-2 text-center text-sm'}>
       <Sparkle className={'inline-block h-4'} />
       {props.children}
     </h2>
@@ -321,20 +321,23 @@ function RightFeatureContainer(props: React.PropsWithChildren) {
 function MainCallToActionButton() {
   return (
     <div className={'flex space-x-2'}>
-      <Button size={'lg'}>
-        <Link href={'/auth/sign-up'}>
+      <Link href={'/auth/sign-up'}>
+        <Button
+          size={'lg'}
+          className={'rounded-full py-6 text-base font-medium'}
+        >
           <span className={'flex items-center space-x-0.5'}>
             <span>Get Started</span>
 
             <ChevronRight
               className={
                 'h-5 animate-in fade-in slide-in-from-left-8' +
-                ' delay-1000 duration-1000 zoom-in fill-mode-both'
+                ' delay-800 duration-1000 zoom-in fill-mode-both'
               }
             />
           </span>
-        </Link>
-      </Button>
+        </Button>
+      </Link>
     </div>
   );
 }

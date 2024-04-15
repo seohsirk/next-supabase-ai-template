@@ -68,7 +68,12 @@ function AuthButtons() {
       </div>
 
       <Link href={pathsConfig.auth.signUp}>
-        <Button variant={'ghost'} className={'border border-primary'}>
+        <Button
+          variant={'ghost'}
+          className={
+            'rounded-full border border-primary hover:bg-primary hover:text-primary-foreground'
+          }
+        >
           <Trans i18nKey={'auth:getStarted'} />
           <ChevronRight className={'h-4'} />
         </Button>
