@@ -1,11 +1,18 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { ChevronRight, Sparkle } from 'lucide-react';
+import {
+  ChevronRight,
+  CreditCard,
+  LayoutDashboard,
+  Lock,
+  Sparkle,
+} from 'lucide-react';
 
 import { PricingTable } from '@kit/billing-gateway/components';
 import { Button } from '@kit/ui/button';
 import { Heading } from '@kit/ui/heading';
+import { cn } from '@kit/ui/utils';
 
 import billingConfig from '~/config/billing.config';
 import pathsConfig from '~/config/paths.config';
@@ -115,10 +122,17 @@ function Home() {
         <div className={'flex flex-col space-y-4'}>
           <FeatureShowcaseContainer>
             <LeftFeatureContainer>
-              <div className={'flex flex-col space-y-1'}>
+              <div className={'flex flex-col space-y-2'}>
+                <IconContainer className={'bg-green-50 dark:bg-green-500/10'}>
+                  <Lock className={'h-5 text-green-500'} />
+                </IconContainer>
+
                 <Heading level={2}>Authentication</Heading>
 
-                <Heading level={3} className={'text-muted-foreground'}>
+                <Heading
+                  level={3}
+                  className={'font-medium text-muted-foreground'}
+                >
                   Secure and Easy-to-Use Authentication for Your SaaS Website
                   and API
                 </Heading>
@@ -136,8 +150,8 @@ function Home() {
               <Image
                 className="rounded-2xl"
                 src={'/images/sign-in.webp'}
-                width={'626'}
-                height={'683'}
+                width={'1100'}
+                height={'1282'}
                 alt={'Sign In'}
               />
             </RightFeatureContainer>
@@ -148,17 +162,24 @@ function Home() {
               <Image
                 className="rounded-2xl"
                 src={'/images/dashboard.webp'}
-                width={'887'}
-                height={'743'}
+                width={'2094'}
+                height={'2416'}
                 alt={'Dashboard'}
               />
             </LeftFeatureContainer>
 
             <RightFeatureContainer>
-              <div className={'flex flex-col space-y-1'}>
+              <div className={'flex flex-col space-y-2'}>
+                <IconContainer className={'bg-indigo-50 dark:bg-indigo-500/10'}>
+                  <LayoutDashboard className={'h-5 text-indigo-500'} />
+                </IconContainer>
+
                 <Heading level={2}>Dashboard</Heading>
 
-                <Heading level={3} className={'text-muted-foreground'}>
+                <Heading
+                  level={3}
+                  className={'font-medium text-muted-foreground'}
+                >
                   A fantastic dashboard to manage your SaaS business
                 </Heading>
               </div>
@@ -168,6 +189,41 @@ function Home() {
                 at a glance all you need to know about your business. It is
                 fully customizable and extendable.
               </div>
+            </RightFeatureContainer>
+          </FeatureShowcaseContainer>
+
+          <FeatureShowcaseContainer>
+            <LeftFeatureContainer>
+              <div className={'flex flex-col space-y-2'}>
+                <IconContainer className={'bg-blue-50 dark:bg-blue-500/10'}>
+                  <CreditCard className={'h-5 text-blue-500'} />
+                </IconContainer>
+
+                <Heading level={2}>Billing</Heading>
+
+                <Heading
+                  level={3}
+                  className={'font-medium text-muted-foreground'}
+                >
+                  A powerful billing system for your SaaS business
+                </Heading>
+              </div>
+
+              <div>
+                Powerful billing system that supports multiple payment gateways
+                such as Stripe, Lemon Squeezy and Paddle. Fully customizable and
+                easy to use.
+              </div>
+            </LeftFeatureContainer>
+
+            <RightFeatureContainer>
+              <Image
+                className="rounded-2xl"
+                src={'/images/billing.webp'}
+                width={'2456'}
+                height={'1454'}
+                alt={'Sign In'}
+              />
             </RightFeatureContainer>
           </FeatureShowcaseContainer>
         </div>
@@ -180,16 +236,17 @@ function Home() {
           }
         >
           <div className={'flex flex-col items-center space-y-8 text-center'}>
-            <Pill>
-              Get started for free. No credit card required. Cancel anytime.
-            </Pill>
+            <Pill>Get started for free. No credit card required.</Pill>
 
             <div className={'flex flex-col space-y-1'}>
               <Heading level={2}>
-                Ready to take your SaaS business to the next level?
+                Fair pricing for all types of SaaS businesses
               </Heading>
 
-              <Heading level={3} className={'text-muted-foreground'}>
+              <Heading
+                level={3}
+                className={'font-medium text-muted-foreground'}
+              >
                 Get started on our free plan and upgrade when you are ready.
               </Heading>
             </div>
@@ -278,6 +335,25 @@ function MainCallToActionButton() {
           </span>
         </Link>
       </Button>
+    </div>
+  );
+}
+
+function IconContainer(
+  props: React.PropsWithChildren<{
+    className?: string;
+  }>,
+) {
+  return (
+    <div className={'flex'}>
+      <span
+        className={cn(
+          'flex items-center justify-center rounded-lg p-3',
+          props.className,
+        )}
+      >
+        {props.children}
+      </span>
     </div>
   );
 }
