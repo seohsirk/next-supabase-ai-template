@@ -22,33 +22,55 @@ export class KeystaticClient implements CmsClient {
     const startOffset = options?.offset ?? 0;
     const endOffset = startOffset + (options?.limit ?? 10);
 
-    const filtered = docs.filter((item) => {
-      const categoryMatch = options?.categories?.length
-        ? options.categories.find((category) =>
-            item.entry.categories.includes(category),
-          )
-        : true;
+    const filtered = docs
+      .filter((item) => {
+        const categoryMatch = options?.categories?.length
+          ? options.categories.find((category) =>
+              item.entry.categories.includes(category),
+            )
+          : true;
 
-      if (!categoryMatch) {
-        return false;
-      }
-
-      if (options.language) {
-        if (item.entry.language && item.entry.language !== options.language) {
+        if (!categoryMatch) {
           return false;
         }
-      }
 
-      const tagMatch = options?.tags?.length
-        ? options.tags.find((tag) => item.entry.tags.includes(tag))
-        : true;
+        if (options.language) {
+          if (item.entry.language && item.entry.language !== options.language) {
+            return false;
+          }
+        }
 
-      if (!tagMatch) {
-        return false;
-      }
+        const tagMatch = options?.tags?.length
+          ? options.tags.find((tag) => item.entry.tags.includes(tag))
+          : true;
 
-      return true;
-    });
+        if (!tagMatch) {
+          return false;
+        }
+
+        return true;
+      })
+      .sort((a, b) => {
+        const direction = options.sortDirection ?? 'asc';
+        const sortBy = options.sortBy ?? 'publishedAt';
+
+        const transform = (value: string | number | undefined | null) => {
+          if (typeof value === 'string') {
+            return new Date(value).getTime();
+          }
+
+          return value ?? 0;
+        };
+
+        const left = transform(a.entry[sortBy]);
+        const right = transform(b.entry[sortBy]);
+
+        if (direction === 'asc') {
+          return left - right;
+        }
+
+        return right - left;
+      });
 
     const items = await Promise.all(
       filtered.slice(startOffset, endOffset).map(async (item) => {

@@ -36,6 +36,8 @@ export namespace Cms {
     tags?: string[];
     parentIds?: string[];
     language?: string | undefined;
+    sortDirection?: 'asc' | 'desc';
+    sortBy?: 'publishedAt' | 'order';
   }
 
   export interface GetCategoriesOptions {

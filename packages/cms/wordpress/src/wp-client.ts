@@ -38,6 +38,14 @@ export class WordpressClient implements CmsClient {
       queryParams.append('offset', options.offset.toString());
     }
 
+    if (options.sortBy) {
+      queryParams.append('orderby', options.sortBy);
+    }
+
+    if (options.sortDirection) {
+      queryParams.append('order', options.sortDirection);
+    }
+
     if (options?.categories) {
       const ids = await this.getCategories({
         slugs: options.categories,
