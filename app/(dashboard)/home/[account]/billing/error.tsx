@@ -2,6 +2,8 @@
 
 import { useRouter } from 'next/navigation';
 
+import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
+
 import { Alert, AlertDescription, AlertTitle } from '@kit/ui/alert';
 import { Button } from '@kit/ui/button';
 import { PageBody, PageHeader } from '@kit/ui/page';
@@ -20,6 +22,8 @@ export default function BillingErrorPage() {
       <PageBody>
         <div className={'flex flex-col space-y-4'}>
           <Alert variant={'destructive'}>
+            <ExclamationTriangleIcon className={'h-4'} />
+
             <AlertTitle>
               <Trans i18nKey={'billing:planPickerAlertErrorTitle'} />
             </AlertTitle>
