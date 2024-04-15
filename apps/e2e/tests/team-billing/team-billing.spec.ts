@@ -20,10 +20,11 @@ test.describe('Team Billing', () => {
     await po.billing.stripe.fillForm();
     await po.billing.stripe.submitForm();
 
-    await expect(po.billing.successStatus()).toBeVisible();
-    await po.billing.returnToHome();
+    await expect(po.billing.successStatus()).toBeVisible({
+      timeout: 30000,
+    });
 
-    await po.teamAccounts.goToBilling();
+    await po.billing.returnToBilling();
 
     await expect(await po.billing.getStatus()).toContainText('Trial');
     await expect(po.billing.manageBillingButton()).toBeVisible();

@@ -38,9 +38,7 @@ export class TeamAccountsPageObject {
   }
 
   goToBilling() {
-    return this.page.locator('a', {
-      hasText: 'Billing',
-    }).click();
+    return this.page.getByRole('button', { name: 'Billing' }).click();
   }
 
   async openAccountsSelector() {

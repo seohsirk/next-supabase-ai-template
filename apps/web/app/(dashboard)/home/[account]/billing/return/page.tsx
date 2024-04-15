@@ -95,6 +95,10 @@ async function loadCheckoutSession(sessionId: string) {
   };
 }
 
+/**
+ * Revalidates the layout to update cached pages
+ * and redirects back to the home page.
+ */
 // eslint-disable-next-line @typescript-eslint/require-await
 async function onRedirect() {
   'use server';
@@ -103,6 +107,6 @@ async function onRedirect() {
   // which may have changed due to the billing session
   revalidatePath('/home', 'layout');
 
-  // redirect back
-  redirect('../');
+  // redirect back to billing page
+  redirect('../billing');
 }

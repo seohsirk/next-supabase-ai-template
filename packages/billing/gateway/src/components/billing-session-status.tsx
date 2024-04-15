@@ -20,15 +20,14 @@ export function BillingSessionStatus({
     <section
       data-test={'payment-return-success'}
       className={
-        'fade-in mx-auto max-w-xl rounded-xl border p-16 xl:drop-shadow-sm' +
-        ' dark:border-dark-800 border-gray-100' +
+        'fade-in dark:border-border mx-auto max-w-xl rounded-xl border border-transparent p-16 xl:drop-shadow-2xl' +
         ' bg-background animate-in slide-in-from-bottom-8 ease-out' +
-        ' zoom-in-50 dark:shadow-primary/40 duration-1000 dark:shadow-2xl'
+        ' zoom-in-50 dark:shadow-primary/20 duration-1000 dark:shadow-2xl'
       }
     >
       <div
         className={
-          'flex flex-col items-center justify-center space-y-4 text-center'
+          'flex flex-col items-center justify-center space-y-6 text-center'
         }
       >
         <Check
@@ -54,8 +53,11 @@ export function BillingSessionStatus({
           </p>
         </div>
 
-        <form data-test={'checkout-success-back-link'}>
-          <Button formAction={onRedirect}>
+        <form>
+          <Button
+            data-test={'checkout-success-back-link'}
+            formAction={onRedirect}
+          >
             <span>
               <Trans i18nKey={'billing:checkoutSuccessBackButton'} />
             </span>

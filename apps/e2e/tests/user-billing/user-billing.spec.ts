@@ -19,14 +19,11 @@ test.describe('User Billing', () => {
     await po.billing.stripe.fillForm();
     await po.billing.stripe.submitForm();
 
-    await expect(po.billing.successStatus()).toBeVisible();
-    await po.billing.returnToHome();
-
-    const link = page.locator('button', {
-      hasText: 'Billing'
+    await expect(po.billing.successStatus()).toBeVisible({
+      timeout: 30000,
     });
 
-    await link.click();
+    await po.billing.returnToBilling();
 
     await expect(await po.billing.getStatus()).toContainText('Trial');
     await expect(po.billing.manageBillingButton()).toBeVisible();
