@@ -4,7 +4,7 @@ import { Fragment, useCallback } from 'react';
 
 import { cva } from 'class-variance-authority';
 
-import { cn } from '../utils/cn';
+import { cn } from '../utils';
 import { If } from './if';
 import { Trans } from './trans';
 
@@ -20,7 +20,7 @@ const classNameBuilder = getClassNameBuilder();
  *   - currentStep {number} - The index of the currently active step.
  *   - variant {string} (optional) - The variant of the stepper component (default: 'default').
  **/
-function Stepper(props: {
+export function Stepper(props: {
   steps: string[];
   currentStep: number;
   variant?: Variant;
@@ -77,8 +77,6 @@ function Stepper(props: {
     </div>
   );
 }
-
-export default Stepper;
 
 function getClassNameBuilder() {
   return cva(``, {
