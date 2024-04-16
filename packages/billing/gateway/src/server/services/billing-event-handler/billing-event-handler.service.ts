@@ -6,6 +6,30 @@ import { BillingWebhookHandlerService } from '@kit/billing';
 import { getLogger } from '@kit/shared/logger';
 import { Database } from '@kit/supabase/database';
 
+/**
+ * @name CustomHandlersParams
+ * @description Allow consumers to provide custom handlers for the billing events
+ * that are triggered by the webhook events.
+ */
+interface CustomHandlersParams {
+  onSubscriptionDeleted: (subscriptionId: string) => Promise<unknown>;
+  onSubscriptionUpdated: (
+    subscription: Database['public']['Functions']['upsert_subscription']['Args'],
+  ) => Promise<unknown>;
+  onCheckoutSessionCompleted: (
+    subscription:
+      | Database['public']['Functions']['upsert_subscription']['Args']
+      | Database['public']['Functions']['upsert_order']['Args'],
+    customerId: string,
+  ) => Promise<unknown>;
+  onPaymentSucceeded: (sessionId: string) => Promise<unknown>;
+  onPaymentFailed: (sessionId: string) => Promise<unknown>;
+  onInvoicePaid: (
+    data: Database['public']['Functions']['upsert_subscription']['Args'],
+  ) => Promise<unknown>;
+  onEvent?: (event: string, data: unknown) => Promise<unknown>;
+}
+
 export class BillingEventHandlerService {
   private readonly namespace = 'billing';
 
@@ -14,7 +38,10 @@ export class BillingEventHandlerService {
     private readonly strategy: BillingWebhookHandlerService,
   ) {}
 
-  async handleWebhookEvent(request: Request) {
+  async handleWebhookEvent(
+    request: Request,
+    params: Partial<CustomHandlersParams> = {},
+  ) {
     const event = await this.strategy.verifyWebhookSignature(request);
 
     if (!event) {
@@ -52,6 +79,10 @@ export class BillingEventHandlerService {
           throw new Error('Failed to delete subscription');
         }
 
+        if (params.onSubscriptionDeleted) {
+          await params.onSubscriptionDeleted(subscriptionId);
+        }
+
         logger.info(ctx, 'Successfully deleted subscription');
       },
       onSubscriptionUpdated: async (subscription) => {
@@ -84,6 +115,10 @@ export class BillingEventHandlerService {
           throw new Error('Failed to update subscription');
         }
 
+        if (params.onSubscriptionUpdated) {
+          await params.onSubscriptionUpdated(subscription);
+        }
+
         logger.info(ctx, 'Successfully updated subscription');
       },
       onCheckoutSessionCompleted: async (payload) => {
@@ -113,6 +148,13 @@ export class BillingEventHandlerService {
             throw new Error('Failed to add order');
           }
 
+          if (params.onCheckoutSessionCompleted) {
+            await params.onCheckoutSessionCompleted(
+              payload,
+              payload.target_customer_id,
+            );
+          }
+
           logger.info(ctx, 'Successfully added order');
         } else {
           const ctx = {
@@ -127,12 +169,22 @@ export class BillingEventHandlerService {
 
           const { error } = await client.rpc('upsert_subscription', payload);
 
+          // handle the error
           if (error) {
             logger.error({ ...ctx, error }, 'Failed to add subscription');
 
             throw new Error('Failed to add subscription');
           }
 
+          // allow consumers to provide custom handlers for the event
+          if (params.onCheckoutSessionCompleted) {
+            await params.onCheckoutSessionCompleted(
+              payload,
+              payload.target_customer_id,
+            );
+          }
+
+          // all good
           logger.info(ctx, 'Successfully added subscription');
         }
       },
@@ -154,16 +206,16 @@ export class BillingEventHandlerService {
           .update({ status: 'succeeded' })
           .match({ session_id: sessionId });
 
+        // handle the error
         if (error) {
-          logger.error(
-            {
-              error,
-              ...ctx,
-            },
-            'Failed to update payment status',
-          );
+          logger.error({ error, ...ctx }, 'Failed to update payment status');
 
           throw new Error('Failed to update payment status');
+        }
+
+        // allow consumers to provide custom handlers for the event
+        if (params.onPaymentSucceeded) {
+          await params.onPaymentSucceeded(sessionId);
         }
 
         logger.info(ctx, 'Successfully updated payment status');
@@ -187,19 +239,37 @@ export class BillingEventHandlerService {
           .match({ session_id: sessionId });
 
         if (error) {
-          logger.error(
-            {
-              error,
-              ...ctx,
-            },
-            'Failed to update payment status',
-          );
+          logger.error({ error, ...ctx }, 'Failed to update payment status');
 
           throw new Error('Failed to update payment status');
         }
 
+        // allow consumers to provide custom handlers for the event
+        if (params.onPaymentFailed) {
+          await params.onPaymentFailed(sessionId);
+        }
+
         logger.info(ctx, 'Successfully updated payment status');
       },
+      onInvoicePaid: async (data) => {
+        const logger = await getLogger();
+
+        const ctx = {
+          namespace: this.namespace,
+          subscriptionId: data.target_subscription_id,
+        };
+
+        logger.info(ctx, 'Processing invoice paid event...');
+
+        // by default we don't need to do anything here
+        // but we allow consumers to provide custom handlers for the event
+        if (params.onInvoicePaid) {
+          await params.onInvoicePaid(data);
+        }
+
+        logger.info(ctx, 'Invoice paid event processed successfully');
+      },
+      onEvent: params.onEvent,
     });
   }
 }
