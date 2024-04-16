@@ -54,7 +54,9 @@ export function PageHeader({
 
         <h1>
           <span className={'flex items-center space-x-0.5 lg:space-x-2'}>
-            <span className={'text-xl font-semibold dark:text-white'}>
+            <span
+              className={'font-heading text-xl font-semibold dark:text-white'}
+            >
               {title}
             </span>
           </span>

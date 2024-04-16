@@ -65,6 +65,7 @@ export default {
       fontFamily: {
         cal: ['var(--font-cal)', ...fontFamily.sans],
         sans: ['system-ui', 'var(--font-sans)', ...fontFamily.sans],
+        heading: ['var(--font-heading)'],
       },
       keyframes: {
         'fade-up': {

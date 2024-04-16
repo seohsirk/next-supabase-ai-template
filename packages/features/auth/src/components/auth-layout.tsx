@@ -15,7 +15,7 @@ export function AuthLayoutShell({
       {Logo && <Logo />}
 
       <div
-        className={`bg-background dark:border-border flex w-full max-w-sm flex-col items-center space-y-5 rounded-lg border-transparent px-6 md:w-8/12 md:border md:px-8 md:py-6 md:shadow lg:w-5/12 lg:px-6 xl:w-4/12 xl:py-8 2xl:w-3/12`}
+        className={`bg-background dark:border-border flex w-full max-w-sm flex-col items-center space-y-5 rounded-lg border-transparent px-6 md:w-8/12 md:border md:px-8 md:py-6 md:shadow lg:w-5/12 lg:px-6 xl:w-4/12 xl:py-8 2xl:w-3/12 dark:shadow`}
       >
         {children}
       </div>

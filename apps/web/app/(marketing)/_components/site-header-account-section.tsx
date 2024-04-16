@@ -71,7 +71,7 @@ function AuthButtons() {
         <Button
           variant={'ghost'}
           className={
-            'rounded-full border border-primary hover:bg-primary hover:text-primary-foreground'
+            'border border-primary hover:bg-primary hover:text-primary-foreground'
           }
         >
           <Trans i18nKey={'auth:getStarted'} />
