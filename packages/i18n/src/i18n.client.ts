@@ -43,6 +43,7 @@ export function initializeI18nClient(
         },
         (err) => {
           if (err) {
+            console.error('Error initializing i18n client', err);
             return reject(err);
           }
 
