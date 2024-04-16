@@ -14,20 +14,24 @@ export async function initializeI18nClient(
   settings: InitOptions,
   resolver: (lang: string, namespace: string) => Promise<object>,
 ): Promise<i18n> {
-  if (clientInstance?.isInitialized) {
+  if (clientInstance) {
     return Promise.resolve(clientInstance);
   }
 
+  const loadedLanguages: string[] = [];
+
   await i18next
-    .use(initReactI18next)
     .use(
       resourcesToBackend(async (language, namespace, callback) => {
         const data = await resolver(language, namespace);
+
+        loadedLanguages.push(language);
 
         return callback(null, data);
       }),
     )
     .use(LanguageDetector)
+    .use(initReactI18next)
     .init(
       {
         ...settings,
@@ -47,19 +51,10 @@ export async function initializeI18nClient(
       },
     );
 
-  console.log('i18n client initialized');
-
-  console.log(
-    `initialized with ${i18next.languages.join(', ')} languages`,
-    clientInstance,
-  );
-
-  console.log(
-    'resource',
-    i18next.getResource('en', 'billing', 'billingInterval.month'),
-  );
-
-  console.log(i18next.t('billing:billingInterval.month'));
+  // keep component suspended until all languages are loaded
+  if (loadedLanguages.length !== settings.ns?.length) {
+    throw new Error();
+  }
 
   clientInstance = i18next;
 
