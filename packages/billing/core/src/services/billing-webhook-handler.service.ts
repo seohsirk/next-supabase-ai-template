@@ -1,10 +1,4 @@
-import { Database } from '@kit/supabase/database';
-
-type UpsertSubscriptionParams =
-  Database['public']['Functions']['upsert_subscription']['Args'];
-
-type UpsertOrderParams =
-  Database['public']['Functions']['upsert_order']['Args'];
+import { UpsertOrderParams, UpsertSubscriptionParams } from '../types';
 
 /**
  * @name BillingWebhookHandlerService
@@ -44,7 +38,7 @@ export abstract class BillingWebhookHandlerService {
       onPaymentFailed: (sessionId: string) => Promise<unknown>;
 
       // generic handler for any event
-      onEvent?: (event: string, data: unknown) => Promise<unknown>;
+      onEvent?: <Data>(event: string, data: Data) => Promise<unknown>;
     },
   ): Promise<unknown>;
 }

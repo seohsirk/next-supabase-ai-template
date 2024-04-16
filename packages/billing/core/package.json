@@ -12,7 +12,8 @@
   "exports": {
     ".": "./src/index.ts",
     "./components/*": "./src/components/*",
-    "./schema": "./src/schema/index.ts"
+    "./schema": "./src/schema/index.ts",
+    "./types": "./src/types/index.ts"
   },
   "peerDependencies": {
     "@kit/supabase": "0.1.0",

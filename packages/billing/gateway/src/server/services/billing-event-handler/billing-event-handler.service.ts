@@ -3,31 +3,12 @@ import 'server-only';
 import { SupabaseClient } from '@supabase/supabase-js';
 
 import { BillingWebhookHandlerService } from '@kit/billing';
+import {
+  UpsertOrderParams,
+  UpsertSubscriptionParams,
+} from '@kit/billing/types';
 import { getLogger } from '@kit/shared/logger';
 import { Database } from '@kit/supabase/database';
-
-type LineItems = Array<{
-  id: string;
-  quantity: number;
-  product_id: string;
-  variant_id: string;
-  price_amount: number;
-}>;
-
-type UpsertSubscriptionParams =
-  Database['public']['Functions']['upsert_subscription']['Args'] & {
-    line_items: LineItems & {
-      interval: string;
-      subscription_id: string;
-      interval_count: number;
-      type: 'per_seat' | 'flat' | 'metered';
-    };
-  };
-
-type UpsertOrderParams =
-  Database['public']['Functions']['upsert_order']['Args'] & {
-    line_items: LineItems;
-  };
 
 /**
  * @name CustomHandlersParams
