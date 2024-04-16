@@ -1,5 +1,6 @@
 import Link from 'next/link';
 
+import { Heading } from '@kit/ui/heading';
 import { Trans } from '@kit/ui/trans';
 
 import { AppLogo } from '~/components/app-logo';
@@ -10,7 +11,7 @@ const YEAR = new Date().getFullYear();
 export function SiteFooter() {
   return (
     <footer className={'border-t py-8 xl:py-12 2xl:py-14'}>
-      <div className={'container mx-auto'}>
+      <div className={'px-8'}>
         <div className={'flex flex-col space-y-8 lg:flex-row lg:space-y-0'}>
           <div
             className={
@@ -20,10 +21,10 @@ export function SiteFooter() {
           >
             <div className={'flex flex-col space-y-4'}>
               <div>
-                <AppLogo className={'w-[85px] md:w-[115px]'} />
+                <AppLogo className={'w-[85px] md:w-[95px]'} />
               </div>
 
-              <div className={'flex flex-col space-y-2'}>
+              <div className={'flex flex-col space-y-4'}>
                 <div>
                   <p className={'text-sm text-muted-foreground'}>
                     Add a short tagline about your product
@@ -42,8 +43,7 @@ export function SiteFooter() {
           <div
             className={
               'flex flex-col space-y-8 lg:space-x-6 lg:space-y-0' +
-              ' xl:space-x-16 2xl:space-x-20' +
-              ' w-full lg:flex-row lg:justify-end'
+              ' w-full lg:flex-row lg:justify-end xl:space-x-16'
             }
           >
             <div>
@@ -116,11 +116,7 @@ export function SiteFooter() {
 }
 
 function FooterSectionHeading(props: React.PropsWithChildren) {
-  return (
-    <p>
-      <span className={'font-semibold'}>{props.children}</span>
-    </p>
-  );
+  return <Heading level={6}>{props.children}</Heading>;
 }
 
 function FooterSectionList(props: React.PropsWithChildren) {

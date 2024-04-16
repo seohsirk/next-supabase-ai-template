@@ -10,7 +10,7 @@ let clientInstance: i18n | null = null;
  * @param settings - the i18n settings
  * @param resolver - a function that resolves the i18n resources
  */
-export function initializeI18nClient(
+export async function initializeI18nClient(
   settings: InitOptions,
   resolver: (lang: string, namespace: string) => Promise<object>,
 ): Promise<i18n> {
@@ -18,52 +18,50 @@ export function initializeI18nClient(
     return Promise.resolve(clientInstance);
   }
 
-  return new Promise<i18n>((resolve, reject) => {
-    void i18next
-      .use(initReactI18next)
-      .use(
-        resourcesToBackend(async (language, namespace, callback) => {
-          const data = await resolver(language, namespace);
+  await i18next
+    .use(initReactI18next)
+    .use(
+      resourcesToBackend(async (language, namespace, callback) => {
+        const data = await resolver(language, namespace);
 
-          return callback(null, data);
-        }),
-      )
-      .use(LanguageDetector)
-      .init(
-        {
-          ...settings,
-          detection: {
-            order: ['htmlTag', 'cookie', 'navigator'],
-            caches: ['cookie'],
-            lookupCookie: 'lang',
-          },
-          interpolation: {
-            escapeValue: false,
-          },
+        return callback(null, data);
+      }),
+    )
+    .use(LanguageDetector)
+    .init(
+      {
+        ...settings,
+        detection: {
+          order: ['htmlTag', 'cookie', 'navigator'],
+          caches: ['cookie'],
+          lookupCookie: 'lang',
         },
-        (err) => {
-          if (err) {
-            console.error('Error initializing i18n client', err);
-            return reject(err);
-          }
-
-          console.log('i18n client initialized');
-          console.log(
-            `initialized with ${i18next.languages.join(', ')} languages`,
-            clientInstance,
-          );
-
-          console.log(
-            'resource',
-            i18next.getResource('en', 'billing', 'billingInterval.month'),
-          );
-
-          console.log(i18next.t('billing:billingInterval.month'));
-
-          clientInstance = i18next;
-
-          resolve(clientInstance);
+        interpolation: {
+          escapeValue: false,
         },
-      );
-  });
+      },
+      (err) => {
+        if (err) {
+          console.error('Error initializing i18n client', err);
+        }
+      },
+    );
+
+  console.log('i18n client initialized');
+
+  console.log(
+    `initialized with ${i18next.languages.join(', ')} languages`,
+    clientInstance,
+  );
+
+  console.log(
+    'resource',
+    i18next.getResource('en', 'billing', 'billingInterval.month'),
+  );
+
+  console.log(i18next.t('billing:billingInterval.month'));
+
+  clientInstance = i18next;
+
+  return clientInstance;
 }
