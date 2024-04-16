@@ -6,6 +6,29 @@ import { BillingWebhookHandlerService } from '@kit/billing';
 import { getLogger } from '@kit/shared/logger';
 import { Database } from '@kit/supabase/database';
 
+type LineItems = Array<{
+  id: string;
+  quantity: number;
+  product_id: string;
+  variant_id: string;
+  price_amount: number;
+}>;
+
+type UpsertSubscriptionParams =
+  Database['public']['Functions']['upsert_subscription']['Args'] & {
+    line_items: LineItems & {
+      interval: string;
+      subscription_id: string;
+      interval_count: number;
+      type: 'per_seat' | 'flat' | 'metered';
+    };
+  };
+
+type UpsertOrderParams =
+  Database['public']['Functions']['upsert_order']['Args'] & {
+    line_items: LineItems;
+  };
+
 /**
  * @name CustomHandlersParams
  * @description Allow consumers to provide custom handlers for the billing events
@@ -14,19 +37,15 @@ import { Database } from '@kit/supabase/database';
 interface CustomHandlersParams {
   onSubscriptionDeleted: (subscriptionId: string) => Promise<unknown>;
   onSubscriptionUpdated: (
-    subscription: Database['public']['Functions']['upsert_subscription']['Args'],
+    subscription: UpsertSubscriptionParams,
   ) => Promise<unknown>;
   onCheckoutSessionCompleted: (
-    subscription:
-      | Database['public']['Functions']['upsert_subscription']['Args']
-      | Database['public']['Functions']['upsert_order']['Args'],
+    subscription: UpsertSubscriptionParams | UpsertOrderParams,
     customerId: string,
   ) => Promise<unknown>;
   onPaymentSucceeded: (sessionId: string) => Promise<unknown>;
   onPaymentFailed: (sessionId: string) => Promise<unknown>;
-  onInvoicePaid: (
-    data: Database['public']['Functions']['upsert_subscription']['Args'],
-  ) => Promise<unknown>;
+  onInvoicePaid: (data: UpsertSubscriptionParams) => Promise<unknown>;
   onEvent?: (event: string, data: unknown) => Promise<unknown>;
 }
 
