@@ -153,10 +153,10 @@ function PricingItem(
       className={cn(
         props.className,
         `s-full flex flex-1 grow flex-col items-stretch justify-between space-y-8 self-stretch
-            rounded-lg p-8 ring-2 lg:w-4/12 xl:max-w-[20rem]`,
+            rounded-lg border p-8 lg:w-4/12 xl:max-w-[20rem]`,
         {
-          ['ring-primary']: highlighted,
-          ['dark:shadow-primary/30 shadow-none ring-transparent dark:shadow-sm']:
+          ['border-primary']: highlighted,
+          ['dark:shadow-primary/40 border-transparent shadow dark:shadow-sm']:
             !highlighted,
         },
       )}
@@ -167,7 +167,7 @@ function PricingItem(
             <Heading level={5}>
               <b
                 className={
-                  'text-current-foreground font-heading font-medium uppercase'
+                  'text-current-foreground font-heading font-semibold uppercase'
                 }
               >
                 <Trans
@@ -324,7 +324,11 @@ function Price({ children }: React.PropsWithChildren) {
     <div
       className={`animate-in slide-in-from-left-4 fade-in items-center duration-500`}
     >
-      <span className={'flex items-center text-2xl font-bold lg:text-3xl'}>
+      <span
+        className={
+          'font-heading flex items-center text-3xl font-bold lg:text-4xl'
+        }
+      >
         {children}
       </span>
     </div>
