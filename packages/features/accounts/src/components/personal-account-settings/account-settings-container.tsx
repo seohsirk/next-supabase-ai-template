@@ -11,8 +11,10 @@ import {
 } from '@kit/ui/card';
 import { If } from '@kit/ui/if';
 import { LanguageSelector } from '@kit/ui/language-selector';
+import { LoadingOverlay } from '@kit/ui/loading-overlay';
 import { Trans } from '@kit/ui/trans';
 
+import { usePersonalAccountData } from '../../hooks/use-personal-account-data';
 import { AccountDangerZone } from './account-danger-zone';
 import { UpdateEmailFormContainer } from './email/update-email-form-container';
 import { MultiFactorAuthFactorsList } from './mfa/multi-factor-auth-list';
@@ -32,6 +34,11 @@ export function PersonalAccountSettingsContainer(
   }>,
 ) {
   const supportsLanguageSelection = useSupportMultiLanguage();
+  const user = usePersonalAccountData();
+
+  if (!user.data || user.isPending) {
+    return <LoadingOverlay fullPage />;
+  }
 
   return (
     <div className={'flex w-full flex-col space-y-6 pb-32'}>
@@ -47,7 +54,12 @@ export function PersonalAccountSettingsContainer(
         </CardHeader>
 
         <CardContent>
-          <UpdateAccountImageContainer />
+          <UpdateAccountImageContainer
+            user={{
+              pictureUrl: user.data.picture_url,
+              id: user.data.id,
+            }}
+          />
         </CardContent>
       </Card>
 
@@ -63,7 +75,7 @@ export function PersonalAccountSettingsContainer(
         </CardHeader>
 
         <CardContent>
-          <UpdateAccountDetailsFormContainer />
+          <UpdateAccountDetailsFormContainer user={user.data} />
         </CardContent>
       </Card>
 

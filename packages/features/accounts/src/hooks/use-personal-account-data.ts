@@ -51,7 +51,13 @@ export function usePersonalAccountData(
     enabled: !!userId,
     refetchOnWindowFocus: false,
     refetchOnMount: false,
-    initialData: partialAccount,
+    initialData: partialAccount?.id
+      ? {
+          id: partialAccount.id,
+          name: partialAccount.name,
+          picture_url: partialAccount.picture_url,
+        }
+      : undefined,
   });
 }
 
