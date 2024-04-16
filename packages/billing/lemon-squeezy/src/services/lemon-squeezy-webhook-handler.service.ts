@@ -145,7 +145,7 @@ export class LemonSqueezyWebhookHandlerService
             eventType: eventName,
             name: this.namespace,
           },
-          `Unhandle Lemon Squeezy event type`,
+          `Unhandled Lemon Squeezy event type`,
         );
 
         return;
@@ -190,9 +190,9 @@ export class LemonSqueezyWebhookHandlerService
       total_amount: attrs.first_order_item.price,
       line_items: [
         {
-          id: attrs.first_order_item.id,
-          product_id: attrs.first_order_item.product_id,
-          variant_id: attrs.first_order_item.variant_id,
+          id: attrs.first_order_item.id.toString(),
+          product_id: attrs.first_order_item.product_id.toString(),
+          variant_id: attrs.first_order_item.variant_id.toString(),
           price_amount: attrs.first_order_item.price,
           quantity: 1,
         },
@@ -248,7 +248,7 @@ export class LemonSqueezyWebhookHandlerService
         product: productId.toString(),
         variant: variantId.toString(),
         quantity: order.data.attributes.first_order_item.quantity,
-        unitAmount: order.data.attributes.first_order_item.price,
+        priceAmount: order.data.attributes.first_order_item.price,
       },
     ];
 
@@ -312,7 +312,7 @@ export class LemonSqueezyWebhookHandlerService
       quantity: number;
       product: string;
       variant: string;
-      unitAmount: number;
+      priceAmount: number;
     },
   >(params: {
     id: string;
@@ -342,7 +342,7 @@ export class LemonSqueezyWebhookHandlerService
         subscription_id: params.id,
         product_id: item.product,
         variant_id: item.variant,
-        price_amount: item.unitAmount,
+        price_amount: item.priceAmount,
         type: getLineItemTypeById(this.config, item.id),
       };
     });
