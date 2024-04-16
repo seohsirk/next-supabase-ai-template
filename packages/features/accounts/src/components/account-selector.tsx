@@ -98,7 +98,7 @@ export function AccountSelector({
             variant="ghost"
             role="combobox"
             aria-expanded={open}
-            className={cn('group w-full shadow', {
+            className={cn('dark:shadow-primary/10 group w-full border px-4', {
               'justify-between': !collapsed,
               'justify-center': collapsed,
             })}

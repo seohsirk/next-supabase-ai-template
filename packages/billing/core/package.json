@@ -28,7 +28,7 @@
     "@kit/tailwind-config": "workspace:*",
     "@kit/tsconfig": "workspace:*",
     "@kit/ui": "workspace:*",
-    "lucide-react": "^0.367.0",
+    "lucide-react": "^0.368.0",
     "zod": "^3.22.4"
   },
   "eslintConfig": {

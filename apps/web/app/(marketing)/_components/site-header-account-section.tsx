@@ -1,5 +1,6 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 
 import type { User } from '@supabase/supabase-js';
@@ -10,11 +11,17 @@ import { PersonalAccountDropdown } from '@kit/accounts/personal-account-dropdown
 import { useSignOut } from '@kit/supabase/hooks/use-sign-out';
 import { useUser } from '@kit/supabase/hooks/use-user';
 import { Button } from '@kit/ui/button';
-import { ModeToggle } from '@kit/ui/mode-toggle';
 import { Trans } from '@kit/ui/trans';
 
 import featuresFlagConfig from '~/config/feature-flags.config';
 import pathsConfig from '~/config/paths.config';
+
+const ModeToggle = dynamic(
+  () => import('@kit/ui/mode-toggle').then((mod) => mod.ModeToggle),
+  {
+    ssr: false,
+  },
+);
 
 const paths = {
   home: pathsConfig.app.home,

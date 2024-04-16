@@ -47,6 +47,19 @@ export function initializeI18nClient(
             return reject(err);
           }
 
+          console.log('i18n client initialized');
+          console.log(
+            `initialized with ${i18next.languages.join(', ')} languages`,
+            clientInstance,
+          );
+
+          console.log(
+            'resource',
+            i18next.getResource('en', 'billing', 'billingInterval.month'),
+          );
+
+          console.log(i18next.t('billing:billingInterval.month'));
+
           clientInstance = i18next;
 
           resolve(clientInstance);
