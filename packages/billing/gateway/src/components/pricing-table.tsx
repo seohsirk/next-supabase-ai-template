@@ -165,7 +165,11 @@ function PricingItem(
         <div className={'flex flex-col space-y-4'}>
           <div className={'flex items-center space-x-4'}>
             <Heading level={5}>
-              <b className={'text-current-foreground font-normal uppercase'}>
+              <b
+                className={
+                  'text-current-foreground font-heading font-normal uppercase'
+                }
+              >
                 <Trans
                   i18nKey={props.product.name}
                   defaults={props.product.name}
@@ -189,7 +193,7 @@ function PricingItem(
             </If>
           </div>
 
-          <span className={cn(`text-muted-foreground h-10 text-lg`)}>
+          <span className={cn(`text-muted-foreground h-10 text-base`)}>
             <Trans
               i18nKey={props.product.description}
               defaults={props.product.description}

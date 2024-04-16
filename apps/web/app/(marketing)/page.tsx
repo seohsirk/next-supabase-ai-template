@@ -50,14 +50,18 @@ function Home() {
               <div>
                 <Heading
                   level={3}
-                  className={'text-center font-medium text-muted-foreground'}
+                  className={
+                    'text-center font-sans font-medium text-muted-foreground'
+                  }
                 >
                   <span>Build and launch a SaaS in days, not months</span>
                 </Heading>
 
                 <Heading
                   level={3}
-                  className={'text-center font-medium text-muted-foreground'}
+                  className={
+                    'text-center font-sans font-medium text-muted-foreground'
+                  }
                 >
                   <span>
                     <span>Focus on your business, not on the tech</span>
@@ -104,11 +108,11 @@ function Home() {
               <span>A modern, scalable, and secure SaaS Starter Kit</span>
             </Pill>
 
-            <div className={'flex flex-col space-y-1'}>
-              <Heading level={2}>The best tool in the space</Heading>
+            <div className={'flex flex-col space-y-2'}>
+              <Heading level={1}>The best tool in the space</Heading>
 
               <Heading
-                level={3}
+                level={2}
                 className={'font-medium text-muted-foreground'}
               >
                 Unbeatable Features and Benefits for Your SaaS Business
@@ -122,7 +126,7 @@ function Home() {
         <div className={'flex flex-col space-y-4'}>
           <FeatureShowcaseContainer>
             <LeftFeatureContainer>
-              <div className={'flex flex-col space-y-2'}>
+              <div className={'flex flex-col space-y-2.5'}>
                 <IconContainer className={'bg-green-50 dark:bg-green-500/10'}>
                   <Lock className={'h-5 text-green-500'} />
                 </IconContainer>
@@ -169,7 +173,7 @@ function Home() {
             </LeftFeatureContainer>
 
             <RightFeatureContainer>
-              <div className={'flex flex-col space-y-2'}>
+              <div className={'flex flex-col space-y-2.5'}>
                 <IconContainer className={'bg-indigo-50 dark:bg-indigo-500/10'}>
                   <LayoutDashboard className={'h-5 text-indigo-500'} />
                 </IconContainer>
@@ -194,7 +198,7 @@ function Home() {
 
           <FeatureShowcaseContainer>
             <LeftFeatureContainer>
-              <div className={'flex flex-col space-y-2'}>
+              <div className={'flex flex-col space-y-2.5'}>
                 <IconContainer className={'bg-blue-50 dark:bg-blue-500/10'}>
                   <CreditCard className={'h-5 text-blue-500'} />
                 </IconContainer>
@@ -238,13 +242,13 @@ function Home() {
           <div className={'flex flex-col items-center space-y-8 text-center'}>
             <Pill>Get started for free. No credit card required.</Pill>
 
-            <div className={'flex flex-col space-y-1'}>
-              <Heading level={2}>
+            <div className={'flex flex-col space-y-2'}>
+              <Heading level={1}>
                 Fair pricing for all types of SaaS businesses
               </Heading>
 
               <Heading
-                level={3}
+                level={2}
                 className={'font-medium text-muted-foreground'}
               >
                 Get started on our free plan and upgrade when you are ready.
@@ -272,7 +276,7 @@ function HeroTitle({ children }: React.PropsWithChildren) {
   return (
     <h1
       className={
-        'flex flex-col text-center text-4xl font-bold tracking-tight sm:text-6xl'
+        'font-heading flex flex-col text-center text-5xl font-semibold tracking-tight sm:text-6xl lg:text-7xl'
       }
     >
       {children}
@@ -282,7 +286,11 @@ function HeroTitle({ children }: React.PropsWithChildren) {
 
 function Pill(props: React.PropsWithChildren) {
   return (
-    <h2 className={'rounded-full border px-4 py-2 text-center text-sm'}>
+    <h2
+      className={
+        'rounded-full px-4 py-2 text-center text-sm text-muted-foreground shadow dark:shadow-primary/20'
+      }
+    >
       <Sparkle className={'inline-block h-4'} />
       {props.children}
     </h2>
@@ -321,17 +329,18 @@ function RightFeatureContainer(props: React.PropsWithChildren) {
 function MainCallToActionButton() {
   return (
     <div className={'flex space-x-2'}>
+      <Link href={'/docs'}>
+        <Button variant={'link'}>Documentation</Button>
+      </Link>
+
       <Link href={'/auth/sign-up'}>
-        <Button
-          size={'lg'}
-          className={'rounded-full py-6 text-base font-medium'}
-        >
+        <Button>
           <span className={'flex items-center space-x-0.5'}>
             <span>Get Started</span>
 
             <ChevronRight
               className={
-                'h-5 animate-in fade-in slide-in-from-left-8' +
+                'h-4 animate-in fade-in slide-in-from-left-8' +
                 ' delay-800 duration-1000 zoom-in fill-mode-both'
               }
             />
