@@ -32,7 +32,7 @@ function TeamWorkspaceLayout({
           collapsed={false}
           account={params.account}
           accounts={accounts}
-          user={data.session?.user ?? null}
+          user={data?.user ?? null}
         />
       }
     >
