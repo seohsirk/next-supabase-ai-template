@@ -36,9 +36,15 @@ export abstract class BillingWebhookHandlerService {
       // one-time payments
       onPaymentSucceeded: (sessionId: string) => Promise<unknown>;
 
+      // this method is called when an invoice is paid. This is used for
+      onInvoicePaid: (data: UpsertSubscriptionParams) => Promise<unknown>;
+
       // this method is called when a payment is failed. This is used for
       // one-time payments
       onPaymentFailed: (sessionId: string) => Promise<unknown>;
+
+      // generic handler for any event
+      onEvent?: (event: string, data: unknown) => Promise<unknown>;
     },
   ): Promise<unknown>;
 }

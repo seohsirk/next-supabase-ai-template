@@ -12,10 +12,6 @@ import { initializeLemonSqueezyClient } from './lemon-squeezy-sdk';
 
 /**
  * Creates a checkout for a Lemon Squeezy product.
- *
- * @param {object} params - The parameters for creating the checkout.
- * @return {Promise<object>} - A promise that resolves to the created Lemon Squeezy checkout.
- * @throws {Error} - If no line items are found in the subscription.
  */
 export async function createLemonSqueezyCheckout(
   params: z.infer<typeof CreateBillingCheckoutSchema>,
