@@ -161,13 +161,13 @@ function PricingItem(
         },
       )}
     >
-      <div className={'flex flex-col space-y-8'}>
+      <div className={'flex flex-col space-y-6'}>
         <div className={'flex flex-col space-y-4'}>
           <div className={'flex items-center space-x-4'}>
             <Heading level={5}>
               <b
                 className={
-                  'text-current-foreground font-heading font-normal uppercase'
+                  'text-current-foreground font-heading font-medium uppercase'
                 }
               >
                 <Trans
@@ -178,7 +178,7 @@ function PricingItem(
             </Heading>
 
             <If condition={props.product.badge}>
-              <Badge variant={'outline'}>
+              <Badge variant={highlighted ? 'default' : 'outline'}>
                 <If condition={highlighted}>
                   <Sparkles className={'h-3'} />
                 </If>
@@ -193,7 +193,7 @@ function PricingItem(
             </If>
           </div>
 
-          <span className={cn(`text-muted-foreground h-10 text-base`)}>
+          <span className={cn(`text-muted-foreground h-8 text-base`)}>
             <Trans
               i18nKey={props.product.description}
               defaults={props.product.description}

@@ -26,11 +26,10 @@ const DocsNavLink: React.FC<{
 
   return (
     <Button
-      className={cn('w-full', {
-        ['font-semibold']: isFirstLevel,
+      className={cn('w-full shadow-none', {
+        ['font-normal']: !isFirstLevel,
       })}
       variant={isCurrent ? 'secondary' : 'ghost'}
-      size={isFirstLevel ? 'default' : 'sm'}
     >
       <Link
         className="flex h-full max-w-full grow items-center space-x-2"
