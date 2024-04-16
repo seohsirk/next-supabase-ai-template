@@ -39,13 +39,14 @@ export function SiteHeaderAccountSection({
 function SuspendedPersonalAccountDropdown(props: { user: User | null }) {
   const signOut = useSignOut();
   const user = useUser(props.user);
+  const userData = user.data ?? props.user ?? null;
 
-  if (user.data) {
+  if (userData) {
     return (
       <PersonalAccountDropdown
         paths={paths}
         features={features}
-        user={user.data}
+        user={userData}
         signOutRequested={() => signOut.mutateAsync()}
       />
     );

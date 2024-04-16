@@ -51,14 +51,16 @@ export default async function RootLayout({
 
 function getClassName(theme?: string) {
   const dark = theme === 'dark';
+  const light = theme === 'light';
 
   return cn(
     'min-h-screen bg-background antialiased',
-    {
-      dark,
-    },
     sans.variable,
     heading.variable,
+    {
+      dark,
+      light,
+    },
   );
 }
 
