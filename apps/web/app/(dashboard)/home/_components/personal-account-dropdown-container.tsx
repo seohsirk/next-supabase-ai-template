@@ -16,8 +16,10 @@ export function ProfileAccountDropdownContainer(props: {
   const signOut = useSignOut();
   const user = useUser(props.user);
 
+  const userData = user.data ?? props.user ?? null;
+
   return (
-    <div className={props.collapsed ? '' : 'w-full'}>
+    <div className={props.collapsed ? '' : 'w-full animate-in fade-in-90'}>
       <PersonalAccountDropdown
         paths={{
           home: pathsConfig.app.home,
@@ -27,7 +29,7 @@ export function ProfileAccountDropdownContainer(props: {
         }}
         className={'w-full'}
         showProfileName={!props.collapsed}
-        user={user.data ?? null}
+        user={userData}
         signOutRequested={() => signOut.mutateAsync()}
       />
     </div>
