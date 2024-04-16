@@ -36,19 +36,29 @@ export function PersonalAccountDropdown({
   showProfileName,
   paths,
   features,
+  account,
 }: {
   className?: string;
   user: User | null;
+
+  account?: {
+    id: string | null;
+    name: string | null;
+    picture_url: string | null;
+  };
+
   signOutRequested: () => unknown;
   showProfileName?: boolean;
+
   paths: {
     home: string;
   };
+
   features: {
     enableThemeToggle: boolean;
   };
 }) {
-  const { data: personalAccountData } = usePersonalAccountData();
+  const { data: personalAccountData } = usePersonalAccountData(account);
 
   const signedInAsLabel = useMemo(() => {
     const email = user?.email ?? undefined;
@@ -57,7 +67,8 @@ export function PersonalAccountDropdown({
     return email ?? phone;
   }, [user?.email, user?.phone]);
 
-  const displayName = personalAccountData?.name ?? user?.email ?? '';
+  const displayName =
+    account?.name ?? personalAccountData?.name ?? user?.email ?? '';
 
   const isSuperAdmin = useMemo(() => {
     return user?.app_metadata.role === 'super-admin';
