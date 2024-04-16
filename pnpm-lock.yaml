@@ -650,8 +650,8 @@ importers:
         specifier: ^0.0.7
         version: 0.0.7(@supabase/postgrest-js@1.15.2)(@supabase/supabase-js@2.42.4)
       '@makerkit/data-loader-supabase-nextjs':
-        specifier: ^1.0.0
-        version: 1.0.0(@supabase/postgrest-js@1.15.2)(@supabase/supabase-js@2.42.4)(@tanstack/react-query@5.29.2)(next@14.2.1)(react@18.2.0)
+        specifier: ^1.1.0
+        version: 1.1.0(@supabase/postgrest-js@1.15.2)(@supabase/supabase-js@2.42.4)(@tanstack/react-query@5.29.2)(next@14.2.1)(react@18.2.0)
       '@supabase/supabase-js':
         specifier: ^2.42.4
         version: 2.42.4
@@ -2374,23 +2374,6 @@ packages:
       '@supabase/supabase-js': 2.42.4
       ts-case-convert: 2.0.7
 
-  /@makerkit/data-loader-supabase-nextjs@1.0.0(@supabase/postgrest-js@1.15.2)(@supabase/supabase-js@2.42.4)(@tanstack/react-query@5.29.2)(next@14.2.1)(react@18.2.0):
-    resolution: {integrity: sha512-+gma4JSLi7ChJ0fU5Q5CKqzTpzehEJuoAo8OSwuHIfYYtOggg3gYH6DcOYj4tiz8uCSgKNr9ORi0rnk1XfqMsQ==}
-    peerDependencies:
-      '@supabase/supabase-js': '>=2.0.0'
-      '@tanstack/react-query': '>=5.0.0'
-      next: 14.2.1
-      react: 18.2.0
-    dependencies:
-      '@makerkit/data-loader-supabase-core': 0.0.7(@supabase/postgrest-js@1.15.2)(@supabase/supabase-js@2.42.4)
-      '@supabase/supabase-js': 2.42.4
-      '@tanstack/react-query': 5.29.2(react@18.2.0)
-      next: 14.2.1(@opentelemetry/api@1.8.0)(react-dom@18.2.0)(react@18.2.0)
-      react: 18.2.0
-    transitivePeerDependencies:
-      - '@supabase/postgrest-js'
-    dev: true
-
   /@makerkit/data-loader-supabase-nextjs@1.1.0(@supabase/postgrest-js@1.15.2)(@supabase/supabase-js@2.42.4)(@tanstack/react-query@5.29.2)(next@14.2.1)(react@18.2.0):
     resolution: {integrity: sha512-4+QtHMXeOCPFKnP14a/K0mVUGr/809WE1J7RF5Eue45xdXMbvhyWIHqRNvvpUo9N6MnDO7u9IaYKO0aneMPFrw==}
     peerDependencies:
@@ -2406,7 +2389,6 @@ packages:
       react: 18.2.0
     transitivePeerDependencies:
       - '@supabase/postgrest-js'
-    dev: false
 
   /@manypkg/cli@0.21.4:
     resolution: {integrity: sha512-EACxxb+c/t6G0l1FrlyewZeBnyR5V1cLkXjnBfsay5TN1UgbilFpG6POglzn+lVJet9NqnEKe3RLHABzkIDZ0Q==}
