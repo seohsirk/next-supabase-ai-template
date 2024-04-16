@@ -1,4 +1,4 @@
-import { Inter as SansFont } from 'next/font/google';
+import { Urbanist as HeadingFont, Inter as SansFont } from 'next/font/google';
 import { cookies, headers } from 'next/headers';
 
 import { Toaster } from '@kit/ui/sonner';
@@ -12,10 +12,18 @@ import '../styles/globals.css';
 
 const sans = SansFont({
   subsets: ['latin'],
-  variable: '--font-family-sans',
+  variable: '--font-sans',
   fallback: ['system-ui', 'Helvetica Neue', 'Helvetica', 'Arial'],
   preload: true,
-  weight: ['300', '400', '500', '600', '700', '800'],
+  weight: ['300', '400', '500', '600', '700'],
+});
+
+const heading = HeadingFont({
+  subsets: ['latin'],
+  variable: '--font-heading',
+  fallback: ['system-ui', 'Helvetica Neue', 'Helvetica', 'Arial'],
+  preload: true,
+  weight: ['500', '700'],
 });
 
 export default async function RootLayout({
@@ -34,6 +42,7 @@ export default async function RootLayout({
         <RootProviders theme={theme} lang={language}>
           {children}
         </RootProviders>
+
         <Toaster richColors={false} />
       </body>
     </html>
@@ -48,7 +57,8 @@ function getClassName(theme?: string) {
     {
       dark,
     },
-    sans.className,
+    sans.variable,
+    heading.variable,
   );
 }
 

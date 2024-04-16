@@ -6,9 +6,9 @@ import { AppLogo } from '~/components/app-logo';
 
 export function SiteHeader(props: { user?: User | null }) {
   return (
-    <div>
-      <div className={'container mx-auto'}>
-        <div className="flex h-16 items-center justify-between">
+    <div className={'border-b border-gray-100 dark:border-border'}>
+      <div className={'px-4 lg:px-8'}>
+        <div className="flex h-14 items-center justify-between">
           <div className={'flex w-6/12 items-center space-x-8'}>
             <AppLogo />
 
