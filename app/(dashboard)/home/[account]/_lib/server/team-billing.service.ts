@@ -314,7 +314,7 @@ async function getBillingPermissionsForAccountId(
  * customer ID for the provided account ID
  */
 async function getCustomerIdFromAccountId(
-  client: ReturnType<typeof getSupabaseServerActionClient<Database>>,
+  client: SupabaseClient<Database>,
   accountId: string,
 ) {
   const { data, error } = await client
