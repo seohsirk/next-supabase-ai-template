@@ -70,7 +70,7 @@ function ChatBodyContainer(props: {
   const conversationIdRef = useRef(props.conversationId);
 
   const scrollingDiv = useRef<HTMLDivElement | null>();
-  const scrollToBottom = useScrollToBottom(scrollingDiv);
+  const scrollToBottom = useScrollToBottom(scrollingDiv.current);
 
   const queryClient = useQueryClient();
 
@@ -94,62 +94,64 @@ function ChatBodyContainer(props: {
       console.error(error);
       toast.error('Something went wrong. Please try again.');
     },
-    onFinish: async (message) => {
-      // scroll to the bottom when the message is sent
-      scrollToBottom({ smooth: true });
+    onFinish: (message) => {
+      void (async () => {
+        // scroll to the bottom when the message is sent
+        scrollToBottom({ smooth: true });
 
-      // we need to update the cache with the new message
-      // so that we don't have to fetch it from the API the next time
-      const updateCache = () => {
-        const cacheKey = getConversationIdStorageKey(conversationIdRef.current);
+        // we need to update the cache with the new message
+        // so that we don't have to fetch it from the API the next time
+        const updateCache = () => {
+          const cacheKey = getConversationIdStorageKey(conversationIdRef.current);
 
-        const userMessage = {
-          id: nanoid(),
-          content: input,
-          createdAt: new Date(),
-          role: 'user',
+          const userMessage = {
+            id: nanoid(),
+            content: input,
+            createdAt: new Date(),
+            role: 'user',
+          };
+
+          const nextCache = [...(messages ?? []), userMessage, message];
+
+          return queryClient.setQueryData([cacheKey], nextCache);
         };
 
-        const nextCache = [...(messages ?? []), userMessage, message];
-
-        return queryClient.setQueryData([cacheKey], nextCache);
-      };
-
-      // if the conversation id is already set, we just update the cache
-      if (props.conversationId) {
-        return updateCache();
-      }
-
-      // if there is no conversation id, it means the user created a new conversation
-      // in this case, we fetch the conversation from the API and update the UI
-      try {
-        if (!conversationIdRef.current) {
-          conversationIdRef.current = createConversationReferenceId();
+        // if the conversation id is already set, we just update the cache
+        if (props.conversationId) {
+          return updateCache();
         }
 
-        const data = await getConversationByReferenceId(
-          conversationIdRef.current,
-        );
+        // if there is no conversation id, it means the user created a new conversation
+        // in this case, we fetch the conversation from the API and update the UI
+        try {
+          if (!conversationIdRef.current) {
+            conversationIdRef.current = createConversationReferenceId();
+          }
 
-        // once the conversation is created, we update the UI
-        if (data) {
-          conversationIdRef.current = data.reference_id;
+          const data = await getConversationByReferenceId(
+              conversationIdRef.current,
+          );
 
-          // dispatch an event to the parent component
-          // so that it can display the new conversation in the sidebar
-          props.onCreateConversation({
-            id: data.reference_id,
-            name: data.name,
-          });
+          // once the conversation is created, we update the UI
+          if (data) {
+            conversationIdRef.current = data.reference_id;
 
-          // update the cache
-          await updateCache();
+            // dispatch an event to the parent component
+            // so that it can display the new conversation in the sidebar
+            props.onCreateConversation({
+              id: data.reference_id,
+              name: data.name,
+            });
+
+            // update the cache
+            await updateCache();
+          }
+        } catch {
+          toast.error(
+              'Something went wrong creating your conversation. Please try again.',
+          );
         }
-      } catch {
-        toast.error(
-          'Something went wrong creating your conversation. Please try again.',
-        );
-      }
+      })();
     },
   });
 
@@ -324,15 +326,15 @@ function getConversationIdStorageKey(conversationId: string | undefined) {
 }
 
 function useScrollToBottom(
-  scrollingDiv: React.MutableRefObject<HTMLDivElement | null>,
+  scrollingDiv: HTMLDivElement | null | undefined
 ) {
   return useCallback(
     ({ smooth } = { smooth: false }) => {
       setTimeout(() => {
-        if (scrollingDiv.current) {
-          scrollingDiv.current?.scrollTo({
+        if (scrollingDiv) {
+          scrollingDiv?.scrollTo({
             behavior: smooth ? 'smooth' : 'auto',
-            top: scrollingDiv.current.scrollHeight,
+            top: scrollingDiv.scrollHeight,
           });
         }
       }, 50);

@@ -3,12 +3,7 @@ import { NextRequest } from 'next/server';
 
 import { SupabaseClient } from '@supabase/supabase-js';
 
-import {
-  createStreamDataTransformer,
-  experimental_streamText as streamText,
-  readDataStream,
-  StreamingTextResponse
-} from 'ai';
+import { StreamingTextResponse } from 'ai';
 import { z } from 'zod';
 
 import { getLogger } from '@kit/shared/logger';
@@ -135,9 +130,7 @@ export async function POST(
     `Stream generated. Sending response...`,
   );
 
-  return new StreamingTextResponse(
-      stream
-  );
+  return new StreamingTextResponse(stream);
 }
 
 function getBodySchema() {

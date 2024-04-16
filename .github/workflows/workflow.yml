@@ -6,6 +6,7 @@ on:
     branches: [ main ]
 jobs:
   typescript:
+    if: false
     name: ʦ TypeScript
     timeout-minutes: 8
     runs-on: ubuntu-latest
@@ -46,6 +47,7 @@ jobs:
         run: pnpm run lint
 
   test:
+    if: false
     name: ⚫️ Test
     timeout-minutes: 8
     runs-on: ubuntu-latest

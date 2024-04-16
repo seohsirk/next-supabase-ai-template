@@ -1,6 +1,6 @@
 import { OpenAI } from 'openai';
 
-const LLM_MODEL_NAME = process.env.LLM_MODEL_NAME || 'gpt-turbo-3.5';
+const LLM_MODEL_NAME = process.env.LLM_MODEL_NAME ?? 'gpt-turbo-3.5';
 const LLM_BASE_URL = process.env.LLM_BASE_URL;
 const LLM_API_KEY = process.env.LLM_API_KEY;
 
@@ -26,7 +26,9 @@ export async function createConversationTitle(question: string) {
       ],
     });
 
-    let title = response.choices[0].message.content?.trim();
+    const choice = response.choices[0];
+
+    const title = choice?.message.content?.trim() ?? '';
 
     if (!title) {
       return FALLBACK_TITLE;
@@ -34,7 +36,7 @@ export async function createConversationTitle(question: string) {
 
     return cleanTitle(title);
   } catch (error) {
-    console.error(`Failed to generate title using AI: ${error}`);
+    console.error(`Failed to generate title using AI: ${JSON.stringify(error)}`);
 
     return FALLBACK_TITLE;
   }
