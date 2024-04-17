@@ -289,11 +289,25 @@ Now, you need to deploy the Supabase DB webhooks to your Supabase instance.
 
 Please copy the webhooks (written with Postgres SQL) from apps/web/supabase/seed.sql and make sure to replicate them to the Supabase instance.
 
-Make sure to add the following header `X-Supabase-Webhook-Secret` with the value of the `SUPABASE_DB_WEBHOOK_SECRET` to the request.
+Make sure to add the following header `X-Supabase-Event-Signature` with the value of the `SUPABASE_DB_WEBHOOK_SECRET` to the request.
 
 In this way - you server will be able to authenticate the request and be sure it's coming from your Supabase instance.
 
 As endpoint, remember to use the `/api/db/webhook` endpoint. If your APP url is `https://myapp.vercel.app`, the endpoint will be `https://myapp.vercel.app/api/db/webhook`.
+
+#### Adding Database Webhooks from Supabase Studio
+
+While you can create a migration to add the database webhooks, you can also add them from the Supabase Studio.
+
+1. Go to the Supabase Studio
+2. Go to Database->Webhooks
+3. Click on "Enable Webhooks"
+4. Click on "Create a new hook"
+
+Now, replicate thr webhooks at `apps/web/supabase/seed.sql` using the UI:
+1. Please remember to set the `X-Supabase-Event-Signature` header with the value of the `SUPABASE_DB_WEBHOOK_SECRET` to the request.
+2. Please remember to set the endpoint to `/api/db/webhook` using your real APP URL. If your APP URL is `https://myapp.vercel.app`, the endpoint will be `https://myapp.vercel.app/api/db/webhook`.
+3. Use 5000 as the timeout.
 
 ## Deploying to Vercel
 
@@ -311,6 +325,7 @@ To deploy the application to Cloudflare, you need to do the following:
 2. Using the Cloudflare Mailer
 3. Install the Cloudflare CLI
 4. Switching CMS
+5. Setting Node.js Compatibility Flags
 
 ### 1. Opting in to the Edge runtime
 
@@ -351,3 +366,25 @@ CMS_CLIENT=wordpress
 ```
 
 More alternative CMS implementations will be added in the future.
+
+If you leave Keystatic (or any unsupported CMSs) - it'll deploy, but it won't be able to fetch the content so you'll see a 500 error.
+
+### 5. Setting Node.js Compatibility Flags
+
+Cloudflare requires you to set the Node.js compatibility flags. Please follow the instructions on the [Cloudflare documentation](https://developers.cloudflare.com/workers/runtime-apis/nodejs).
+
+Please don't miss this step, as it's crucial for the application to work in the Edge runtime.
+
+## Super Admin
+
+The Super Admin panel allows you to manage users and accounts.
+
+To access the super admin panel at `/admin`, you will need to assign a user as a super admin.
+
+To do so, pick the user ID of the user you want to assign as a super admin and run the following SQL query:
+
+```sql
+UPDATE auth.users SET raw_app_meta_data = raw_app_meta_data || '{"role": "super-admin"}' WHERE id='<user_id>';
+```
+
+Please replace `<user_id>` with the user ID you want to assign as a super admin.
