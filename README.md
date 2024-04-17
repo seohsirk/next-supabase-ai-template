@@ -183,3 +183,138 @@ npx shadcn-ui@latest add button --path=packages/src/ui/shadcn
 ```
 
 We pass the `--path` flag to specify the path where the component should be installed. You may need to adjust the path based on your project structure.
+
+## Environment Variables
+
+The majority of the environment variables are defined in the `apps/web/.env` file. These are the env variables 
+shared between environments (eg. they will be the same for development, staging, and production).
+
+**NB: You will not add any secret keys or sensitive information here.** Only configuration, paths, feature flags, etc.
+
+```
+# SHARED ENVIROMENT VARIABLES
+# HERE YOU CAN ADD ALL THE **PUBLIC** ENVIRONMENT VARIABLES THAT ARE SHARED ACROSS ALL THE ENVIROMENTS
+# PLEASE DO NOT ADD ANY CONFIDENTIAL KEYS OR SENSITIVE INFORMATION HERE
+# ONLY CONFIGURATION, PATH, FEATURE FLAGS, ETC.
+# TO OVERRIDE THESE VARIABLES IN A SPECIFIC ENVIRONMENT, PLEASE ADD THEM TO THE SPECIFIC ENVIRONMENT FILE (e.g. .env.development, .env.production)
+
+# SITE
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+NEXT_PUBLIC_PRODUCT_NAME=Makerkit
+NEXT_PUBLIC_SITE_TITLE="Makerkit - The easiest way to build and manage your SaaS"
+NEXT_PUBLIC_SITE_DESCRIPTION="Makerkit is the easiest way to build and manage your SaaS. It provides you with the tools you need to build your SaaS, without the hassle of building it from scratch."
+NEXT_PUBLIC_DEFAULT_THEME_MODE=light
+NEXT_PUBLIC_THEME_COLOR="#ffffff"
+NEXT_PUBLIC_THEME_COLOR_DARK="#0a0a0a"
+
+# AUTH
+NEXT_PUBLIC_AUTH_PASSWORD=true
+NEXT_PUBLIC_AUTH_MAGIC_LINK=false
+NEXT_PUBLIC_CAPTCHA_SITE_KEY=
+
+# BILLING
+NEXT_PUBLIC_BILLING_PROVIDER=stripe
+
+# CMS
+CMS_CLIENT=keystatic
+
+# KEYSTATIC
+NEXT_PUBLIC_KEYSTATIC_CONTENT_PATH=./content
+
+# LOCALES PATH
+NEXT_PUBLIC_LOCALES_PATH=apps/web/public/locales
+
+# PATHS (to be used in "packages")
+SIGN_IN_PATH=/auth/sign-in
+SIGN_UP_PATH=/auth/sign-up
+TEAM_ACCOUNTS_HOME_PATH=/home
+INVITATION_PAGE_PATH=/join
+
+# FEATURE FLAGS
+NEXT_PUBLIC_ENABLE_THEME_TOGGLE=true
+NEXT_PUBLIC_ENABLE_PERSONAL_ACCOUNT_DELETION=true
+NEXT_PUBLIC_ENABLE_PERSONAL_ACCOUNT_BILLING=true
+NEXT_PUBLIC_ENABLE_TEAM_ACCOUNTS_DELETION=true
+NEXT_PUBLIC_ENABLE_TEAM_ACCOUNTS_BILLING=true
+NEXT_PUBLIC_ENABLE_TEAM_ACCOUNTS=true
+NEXT_PUBLIC_ENABLE_TEAM_ACCOUNTS_CREATION=true
+```
+
+Please update the `apps/web/.env` file with the appropriate values.
+
+This is complemented by the environment variables defined in the `apps/web/.env.development` and `apps/web/.env.production` files.
+
+### Production Environment Variables
+
+When going to production, you will need to define the environment variables in the `apps/web/.env.production` file.
+
+```
+# SITE
+NEXT_PUBLIC_SITE_URL=
+```
+
+If you use Stripe, also add:
+
+```
+# STRIPE
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
+```
+
+From your CI, please add the following environment variables:
+
+```
+# SUPABASE
+SUPABASE_SERVICE_ROLE_KEY=
+```
+
+If you use Stripe, also add:
+
+```
+# STRIPE
+STRIPE_WEBHOOK_SECRET=
+STRIPE_SECRET_KEY=
+```
+
+## Deploying to Vercel
+
+Deploying to Vercel is straightforward. You can deploy the application using the Vercel CLI or the Vercel dashboard.
+
+No additional configuration is needed to deploy the application to Vercel. If you want to opt-in to the Edge Runtime, please follow the instructions below (except for the Cloudflare CLI installation).
+
+Since Vercel Edge runtime uses Cloudflare, the steps are similar to deploying to Cloudflare.
+
+## Deploying to Cloudflare
+
+To deploy the application to Cloudflare, you need to do the following:
+
+1. Opt-in to the Edge runtime
+2. Using the Cloudflare Mailer
+3. Install the Cloudflare CLI
+
+### 1. Opting in to the Edge runtime
+
+To opt-in to the Edge runtime, you need to do the following: open the root layout file of your app `apps/web/app/layout.tsx` and export the const runtime as `edge`:
+
+```tsx
+export const runtime = 'edge';
+```
+
+This will enable the Edge runtime for your application.
+
+### 2. Using the Cloudflare Mailer
+
+Since the default library `nodemailer` relies on Node.js, we cannot use it in the Edge runtime. Instead, we will use the Cloudflare Mailer.
+
+To use the Cloudflare Mailer, you need to do the following. Set the `MAILER_PROVIDER` environment variable to `cloudflare` in the `apps/web/.env` file:
+
+```
+MAILER_PROVIDER=cloudflare
+```
+
+Setup SPF and DKIM records in your DNS settings.
+
+Please follow [the Vercel Email documentation](https://github.com/Sh4yy/vercel-email?tab=readme-ov-file#setup-spf) to set up the SPF and DKIM records.
+
+### 3. Installing the Cloudflare CLI
+
+Please follow the instructions on the [Cloudflare documentation](https://github.com/cloudflare/next-on-pages/tree/main/packages/next-on-pages#3-deploy-your-application-to-cloudflare-pages) to install the Cloudflare CLI.
