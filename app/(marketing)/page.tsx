@@ -276,7 +276,7 @@ function HeroTitle({ children }: React.PropsWithChildren) {
   return (
     <h1
       className={
-        'font-heading flex flex-col text-center text-5xl font-semibold tracking-tight sm:text-6xl lg:text-7xl'
+        'flex flex-col text-center font-heading text-5xl font-semibold tracking-tight sm:text-6xl lg:text-7xl'
       }
     >
       {children}

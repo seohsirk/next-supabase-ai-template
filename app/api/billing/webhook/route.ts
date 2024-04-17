@@ -16,10 +16,7 @@ export async function POST(request: Request) {
     provider,
   };
 
-  logger.info(
-    ctx,
-    `Received billing webhook. Processing...`,
-  );
+  logger.info(ctx, `Received billing webhook. Processing...`);
 
   const supabaseClientProvider = () =>
     getSupabaseRouteHandlerClient({ admin: true });
@@ -33,10 +30,7 @@ export async function POST(request: Request) {
   try {
     await service.handleWebhookEvent(request);
 
-    logger.info(
-      ctx,
-      `Successfully processed billing webhook`,
-    );
+    logger.info(ctx, `Successfully processed billing webhook`);
 
     return new Response('OK', { status: 200 });
   } catch (error) {
