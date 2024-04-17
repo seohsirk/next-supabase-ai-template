@@ -309,6 +309,17 @@ Now, replicate thr webhooks at `apps/web/supabase/seed.sql` using the UI:
 2. Please remember to set the endpoint to `/api/db/webhook` using your real APP URL. If your APP URL is `https://myapp.vercel.app`, the endpoint will be `https://myapp.vercel.app/api/db/webhook`.
 3. Use 5000 as the timeout.
 
+## Authentication
+
+From your Supabase dashboard, please visit Authentication->URL Configuration and set the following:
+
+- **Site URL**: The URL of your application (e.g., `http://mypp.com`)
+- **Redirect URLs**: The URL to redirect the user after signing in (e.g., `http://myapp.com/auth/callback`)
+
+Remember to update the mailing sender in Supabase too, as the default sender is most likely going to spam and has very limited quota.
+
+You can do so from Settings->Authentication->SMTP Settings.
+
 ## Deploying to Vercel
 
 Deploying to Vercel is straightforward. You can deploy the application using the Vercel CLI or the Vercel dashboard.

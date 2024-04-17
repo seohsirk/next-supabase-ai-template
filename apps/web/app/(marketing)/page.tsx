@@ -47,25 +47,32 @@ function Home() {
                 </span>
               </HeroTitle>
 
-              <div>
+              <div className={'flex flex-col'}>
                 <Heading
-                  level={3}
+                  level={2}
                   className={
-                    'text-center font-sans font-medium text-muted-foreground'
+                    'text-center font-sans text-2xl font-normal text-muted-foreground p-0'
                   }
                 >
                   <span>Build and launch a SaaS in days, not months</span>
                 </Heading>
 
                 <Heading
-                  level={3}
+                  level={2}
                   className={
-                    'text-center font-sans font-medium text-muted-foreground'
+                    'text-center font-sans text-2xl font-normal text-muted-foreground p-0'
                   }
                 >
-                  <span>
-                    <span>Focus on your business, not on the tech</span>
-                  </span>
+                  <span>Focus on your business, not on the tech</span>
+                </Heading>
+
+                <Heading
+                    level={2}
+                    className={
+                      'text-center font-sans text-2xl font-normal text-muted-foreground p-0'
+                    }
+                >
+                  Ship something great, today.
                 </Heading>
               </div>
 
@@ -89,6 +96,7 @@ function Home() {
             height={1916}
             src={`/images/dashboard-demo.webp`}
             alt={`App Image`}
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
         </div>
       </div>
@@ -157,6 +165,7 @@ function Home() {
                 width={'1100'}
                 height={'1282'}
                 alt={'Sign In'}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               />
             </RightFeatureContainer>
           </FeatureShowcaseContainer>
@@ -169,6 +178,7 @@ function Home() {
                 width={'2094'}
                 height={'2416'}
                 alt={'Dashboard'}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               />
             </LeftFeatureContainer>
 
@@ -226,7 +236,8 @@ function Home() {
                 src={'/images/billing.webp'}
                 width={'2456'}
                 height={'1454'}
-                alt={'Sign In'}
+                alt={'Billing'}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               />
             </RightFeatureContainer>
           </FeatureShowcaseContainer>

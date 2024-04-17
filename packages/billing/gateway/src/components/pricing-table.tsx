@@ -16,7 +16,6 @@ import {
 import { formatCurrency } from '@kit/shared/utils';
 import { Badge } from '@kit/ui/badge';
 import { Button } from '@kit/ui/button';
-import { Heading } from '@kit/ui/heading';
 import { If } from '@kit/ui/if';
 import { Separator } from '@kit/ui/separator';
 import { Trans } from '@kit/ui/trans';
@@ -164,18 +163,16 @@ function PricingItem(
       <div className={'flex flex-col space-y-6'}>
         <div className={'flex flex-col space-y-4'}>
           <div className={'flex items-center space-x-4'}>
-            <Heading level={5}>
-              <b
-                className={
-                  'text-current-foreground font-heading font-semibold uppercase'
-                }
-              >
-                <Trans
-                  i18nKey={props.product.name}
-                  defaults={props.product.name}
-                />
-              </b>
-            </Heading>
+            <b
+              className={
+                'text-current-foreground font-heading font-semibold uppercase'
+              }
+            >
+              <Trans
+                i18nKey={props.product.name}
+                defaults={props.product.name}
+              />
+            </b>
 
             <If condition={props.product.badge}>
               <Badge variant={highlighted ? 'default' : 'outline'}>
