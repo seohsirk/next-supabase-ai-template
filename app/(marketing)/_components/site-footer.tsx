@@ -1,6 +1,5 @@
 import Link from 'next/link';
 
-import { Heading } from '@kit/ui/heading';
 import { Trans } from '@kit/ui/trans';
 
 import { AppLogo } from '~/components/app-logo';
@@ -116,7 +115,7 @@ export function SiteFooter() {
 }
 
 function FooterSectionHeading(props: React.PropsWithChildren) {
-  return <Heading level={6}>{props.children}</Heading>;
+  return <span className={'font-heading'}>{props.children}</span>;
 }
 
 function FooterSectionList(props: React.PropsWithChildren) {
