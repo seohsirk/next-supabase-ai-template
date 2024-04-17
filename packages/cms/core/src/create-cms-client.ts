@@ -40,15 +40,20 @@ async function getKeystaticClient() {
     return new KeystaticClient();
   }
 
-  console.error(`[CMS] Keystatic client is only available in Node.js runtime. Please choose a different CMS client. Returning a mock client instead of throwing an error.`);
+  console.error(
+    `[CMS] Keystatic client is only available in Node.js runtime. Please choose a different CMS client. Returning a mock client instead of throwing an error.`,
+  );
 
-  return mockCMSClient();
+  return mockCMSClient() as unknown as CmsClient;
 }
 
 function mockCMSClient() {
   return {
-    async getContentItems() {
-      return [];
+    getContentItems() {
+      return Promise.resolve([]);
+    },
+    getContentItemBySlug() {
+      return Promise.resolve(undefined);
     },
   };
 }

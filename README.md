@@ -275,6 +275,26 @@ STRIPE_WEBHOOK_SECRET=
 STRIPE_SECRET_KEY=
 ```
 
+### Database Webhooks
+
+Finally, you need to set a secret `SUPABASE_DB_WEBHOOK_SECRET` that your server and your Supabase instance will share in order to authenticate the requests.
+
+```
+SUPABASE_DB_WEBHOOK_SECRET=**************************************************
+```
+
+Make it a strong secret key - and make sure to keep it secret!
+
+Now, you need to deploy the Supabase DB webhooks to your Supabase instance. 
+
+Please copy the webhooks (written with Postgres SQL) from apps/web/supabase/seed.sql and make sure to replicate them to the Supabase instance.
+
+Make sure to add the following header `X-Supabase-Webhook-Secret` with the value of the `SUPABASE_DB_WEBHOOK_SECRET` to the request.
+
+In this way - you server will be able to authenticate the request and be sure it's coming from your Supabase instance.
+
+As endpoint, remember to use the `/api/db/webhook` endpoint. If your APP url is `https://myapp.vercel.app`, the endpoint will be `https://myapp.vercel.app/api/db/webhook`.
+
 ## Deploying to Vercel
 
 Deploying to Vercel is straightforward. You can deploy the application using the Vercel CLI or the Vercel dashboard.

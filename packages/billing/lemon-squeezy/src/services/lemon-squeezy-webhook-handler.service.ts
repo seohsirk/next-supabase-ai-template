@@ -1,19 +1,18 @@
 import { getOrder, getVariant } from '@lemonsqueezy/lemonsqueezy.js';
 
-
-
-import { BillingConfig, BillingWebhookHandlerService, getLineItemTypeById } from '@kit/billing';
+import {
+  BillingConfig,
+  BillingWebhookHandlerService,
+  getLineItemTypeById,
+} from '@kit/billing';
 import { getLogger } from '@kit/shared/logger';
 import { Database } from '@kit/supabase/database';
-
-
 
 import { getLemonSqueezyEnv } from '../schema/lemon-squeezy-server-env.schema';
 import { OrderWebhook } from '../types/order-webhook';
 import { SubscriptionWebhook } from '../types/subscription-webhook';
 import { initializeLemonSqueezyClient } from './lemon-squeezy-sdk';
-import { createHmac } from "./verify-hmac";
-
+import { createHmac } from './verify-hmac';
 
 type UpsertSubscriptionParams =
   Database['public']['Functions']['upsert_subscription']['Args'];
@@ -419,7 +418,7 @@ async function isSigningSecretValid(rawBody: string, signatureHeader: string) {
 
   const { hex: digest } = await createHmac({
     key: webhooksSecret,
-    data: rawBody
+    data: rawBody,
   });
 
   const signature = Buffer.from(signatureHeader, 'utf8');
