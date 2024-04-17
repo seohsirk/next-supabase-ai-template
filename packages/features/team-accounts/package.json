@@ -54,7 +54,7 @@
     "@kit/supabase": "0.1.0",
     "@kit/ui": "workspace:^",
     "@supabase/supabase-js": "^2.42.0",
-    "@tanstack/react-query": "5.29.0",
+    "@tanstack/react-query": "5.29.2",
     "lucide-react": "^0.368.0",
     "next": "^14.1.4",
     "react": "^18.2.0",
