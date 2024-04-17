@@ -15,7 +15,7 @@ execute function "supabase_functions"."http_request"(
 
 -- this webhook will be triggered after a delete on the subscriptions table
 -- which should happen when a user deletes their account (and all their subscriptions)
-create trigger "account_delete" after delete
+create trigger "subscriptions_delete" after delete
 on "public"."subscriptions" for each row
 execute function "supabase_functions"."http_request"(
   'http://host.docker.internal:3000/api/db/webhook',
