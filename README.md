@@ -290,6 +290,7 @@ To deploy the application to Cloudflare, you need to do the following:
 1. Opt-in to the Edge runtime
 2. Using the Cloudflare Mailer
 3. Install the Cloudflare CLI
+4. Switching CMS
 
 ### 1. Opting in to the Edge runtime
 
@@ -318,3 +319,15 @@ Please follow [the Vercel Email documentation](https://github.com/Sh4yy/vercel-e
 ### 3. Installing the Cloudflare CLI
 
 Please follow the instructions on the [Cloudflare documentation](https://github.com/cloudflare/next-on-pages/tree/main/packages/next-on-pages#3-deploy-your-application-to-cloudflare-pages) to install the Cloudflare CLI.
+
+### 4. Switching CMS
+
+By default, Makerkit uses Keystatic as a CMS. Keystatic's local mode (which relies on the file system) is not supported in the Edge runtime. Therefore, you will need to switch to another CMS.
+
+At this time, the other CMS supported is WordPress. Set `CMS_CLIENT` to `wordpress` in the `apps/web/.env` file:
+
+```
+CMS_CLIENT=wordpress
+```
+
+More alternative CMS implementations will be added in the future.
