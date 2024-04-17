@@ -339,7 +339,7 @@ This will enable the Edge runtime for your application.
 
 ### 2. Using the Cloudflare Mailer
 
-Since the default library `nodemailer` relies on Node.js, we cannot use it in the Edge runtime. Instead, we will use the Cloudflare Mailer.
+Since the default library `nodemailer` relies on Node.js, we cannot use it in the Edge runtime. Instead, we will use the Cloudflare Mailer or the Resend Mailer.
 
 To use the Cloudflare Mailer, you need to do the following. Set the `MAILER_PROVIDER` environment variable to `cloudflare` in the `apps/web/.env` file:
 
@@ -350,6 +350,18 @@ MAILER_PROVIDER=cloudflare
 Setup SPF and DKIM records in your DNS settings.
 
 Please follow [the Vercel Email documentation](https://github.com/Sh4yy/vercel-email?tab=readme-ov-file#setup-spf) to set up the SPF and DKIM records.
+
+Alternatively, you can use the Resend Mailer. Set the `MAILER_PROVIDER` environment variable to `resend` in the `apps/web/.env` file:
+
+```
+MAILER_PROVIDER=resend
+```
+
+And provide the Resend API key:
+
+```
+RESEND_API_KEY=your-api-key
+```
 
 ### 3. Installing the Cloudflare CLI
 

@@ -25,6 +25,12 @@ To use Cloudflare, please set the environment variable `MAILER_PROVIDER` to `clo
 MAILER_PROVIDER=cloudflare
 ```
 
+To use [Resend](https:///resend.com)'s HTTP API, please set the environment variable `MAILER_PROVIDER` to `resend`.
+
+```
+MAILER_PROVIDER=resend
+```
+
 ### Send an email
 
 ```tsx
@@ -42,4 +48,14 @@ async function sendEmail() {
 }
 ```
 
+## Cloudflare
+
 If you're using the `cloudflare` provider, please also read the instructions of the package [Vercel Email](https://github.com/Sh4yy/vercel-email) to setup your Workers.
+
+## Resend
+
+If you're using the `resend` provider, please add the following environment variables:
+
+```
+RESEND_API_KEY=your-api-key
+```

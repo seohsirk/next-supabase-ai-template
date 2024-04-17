@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 const MAILER_PROVIDER = z
-  .enum(['nodemailer', 'cloudflare'])
+  .enum(['nodemailer', 'cloudflare', 'resend'])
   .default('nodemailer')
   .parse(process.env.MAILER_PROVIDER);
 
@@ -24,6 +24,12 @@ export async function getMailer() {
       const { CloudflareMailer } = await import('./impl/cloudflare');
 
       return new CloudflareMailer();
+    }
+
+    case 'resend': {
+      const { ResendMailer } = await import('./impl/resend');
+
+      return new ResendMailer();
     }
 
     default:
