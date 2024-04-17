@@ -9,7 +9,7 @@ import {
   Sparkle,
 } from 'lucide-react';
 
-import { PricingTable } from '@kit/billing-gateway/components';
+import { PricingTable } from '@kit/billing-gateway/marketing';
 import { Button } from '@kit/ui/button';
 import { Heading } from '@kit/ui/heading';
 import { cn } from '@kit/ui/utils';
@@ -51,7 +51,7 @@ function Home() {
                 <Heading
                   level={2}
                   className={
-                    'text-center font-sans text-2xl font-normal text-muted-foreground p-0'
+                    'p-0 text-center font-sans text-2xl font-normal text-muted-foreground'
                   }
                 >
                   <span>Build and launch a SaaS in days, not months</span>
@@ -60,17 +60,17 @@ function Home() {
                 <Heading
                   level={2}
                   className={
-                    'text-center font-sans text-2xl font-normal text-muted-foreground p-0'
+                    'p-0 text-center font-sans text-2xl font-normal text-muted-foreground'
                   }
                 >
                   <span>Focus on your business, not on the tech</span>
                 </Heading>
 
                 <Heading
-                    level={2}
-                    className={
-                      'text-center font-sans text-2xl font-normal text-muted-foreground p-0'
-                    }
+                  level={2}
+                  className={
+                    'p-0 text-center font-sans text-2xl font-normal text-muted-foreground'
+                  }
                 >
                   Ship something great, today.
                 </Heading>
