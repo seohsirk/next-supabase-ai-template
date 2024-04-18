@@ -56,7 +56,7 @@ function TeamAccountHomePage({
         account={params.account}
       >
         <Button size={'sm'}>
-          <PlusCircle className={'h-4 mr-1'} />
+          <PlusCircle className={'mr-1 h-4'} />
           <span>Add Widget</span>
         </Button>
       </AccountLayoutHeader>
