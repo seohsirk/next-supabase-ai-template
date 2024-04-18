@@ -25,17 +25,21 @@ import { LineItemDetails } from './line-item-details';
 
 interface Paths {
   signUp: string;
+  subscription: string;
 }
 
 export function PricingTable({
   config,
   paths,
   CheckoutButtonRenderer,
+  redirectToCheckout = true,
   displayPlanDetails = true,
 }: {
   config: BillingConfig;
   paths: Paths;
   displayPlanDetails?: boolean;
+
+  redirectToCheckout?: boolean;
 
   CheckoutButtonRenderer?: React.ComponentType<{
     planId: string;
@@ -88,6 +92,7 @@ export function PricingTable({
               selectable
               key={plan.id}
               plan={plan}
+              redirectToCheckout={redirectToCheckout}
               primaryLineItem={primaryLineItem}
               product={product}
               paths={paths}
@@ -106,13 +111,13 @@ function PricingItem(
     className?: string;
     displayPlanDetails: boolean;
 
-    paths: {
-      signUp: string;
-    };
+    paths: Paths;
 
     selectable: boolean;
 
     primaryLineItem: z.infer<typeof LineItemSchema>;
+
+    redirectToCheckout?: boolean;
 
     plan: {
       id: string;
@@ -251,10 +256,11 @@ function PricingItem(
             condition={props.plan.id && props.CheckoutButton}
             fallback={
               <DefaultCheckoutButton
-                signUpPath={props.paths.signUp}
+                paths={props.paths}
                 product={props.product}
                 highlighted={highlighted}
                 plan={props.plan}
+                redirectToCheckout={props.redirectToCheckout}
               />
             }
           >
@@ -410,12 +416,24 @@ function DefaultCheckoutButton(
       name: string;
     };
 
-    signUpPath: string;
+    paths: Paths;
+    redirectToCheckout?: boolean;
+
     highlighted?: boolean;
   }>,
 ) {
+  const redirectToCheckoutParam = props.redirectToCheckout
+    ? '?redirectToCheckout=true'
+    : '';
+
+  const planId = props.plan.id;
+  const signUpPath = props.paths.signUp;
+  const subscriptionPath = props.paths.subscription;
+
   const linkHref =
-    props.plan.href ?? `${props.signUpPath}?utm_source=${props.plan.id}` ?? '';
+    props.plan.href ??
+    `${signUpPath}?plan=${planId}&next=${subscriptionPath}?plan=${planId}${redirectToCheckoutParam}` ??
+    '';
 
   const label = props.plan.label ?? 'common:getStartedWithPlan';
 

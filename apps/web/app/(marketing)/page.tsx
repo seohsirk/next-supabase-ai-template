@@ -272,6 +272,7 @@ function Home() {
               config={billingConfig}
               paths={{
                 signUp: pathsConfig.auth.signUp,
+                subscription: pathsConfig.app.personalAccountBilling,
               }}
             />
           </div>
