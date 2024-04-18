@@ -43,12 +43,8 @@ export class ResendMailer implements Mailer {
       }),
     });
 
-    if (res.ok) {
-      const data = await res.json();
-
-      return data;
+    if (!res.ok) {
+      throw new Error('Failed to send email');
     }
-
-    throw new Error('Failed to send email');
   }
 }
