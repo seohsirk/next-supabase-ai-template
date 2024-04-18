@@ -5,11 +5,12 @@ import { getSupabaseRouteHandlerClient } from '@kit/supabase/route-handler-clien
 
 import { RecordChange, Tables } from '../record-change.type';
 import { DatabaseWebhookRouterService } from './database-webhook-router.service';
+import { getDatabaseWebhookVerifier } from './verifier';
 
 export class DatabaseWebhookHandlerService {
   private readonly namespace = 'database-webhook-handler';
 
-  async handleWebhook(request: Request, webhooksSecret: string) {
+  async handleWebhook(request: Request) {
     const logger = await getLogger();
 
     const json = await request.clone().json();
@@ -25,7 +26,9 @@ export class DatabaseWebhookHandlerService {
     );
 
     // check if the signature is valid
-    this.assertSignatureIsAuthentic(request, webhooksSecret);
+    const verifier = await getDatabaseWebhookVerifier();
+
+    await verifier.verifySignatureOrThrow(request);
 
     // all good, handle the webhook
 
@@ -62,14 +65,6 @@ export class DatabaseWebhookHandlerService {
       );
 
       throw error;
-    }
-  }
-
-  private assertSignatureIsAuthentic(request: Request, webhooksSecret: string) {
-    const header = request.headers.get('X-Supabase-Event-Signature');
-
-    if (header !== webhooksSecret) {
-      throw new Error('Invalid signature');
     }
   }
 }

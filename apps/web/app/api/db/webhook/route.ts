@@ -1,14 +1,4 @@
-import { z } from 'zod';
-
 import { DatabaseWebhookHandlerService } from '@kit/database-webhooks';
-
-const webhooksSecret = z
-  .string({
-    description: `The secret used to verify the webhook signature`,
-    required_error: `Provide the variable SUPABASE_DB_WEBHOOK_SECRET. This is used to authenticate the webhook event from Supabase.`,
-  })
-  .min(1)
-  .parse(process.env.SUPABASE_DB_WEBHOOK_SECRET);
 
 const service = new DatabaseWebhookHandlerService();
 
@@ -23,7 +13,7 @@ const response = (status: number) => new Response(null, { status });
 export async function POST(request: Request) {
   try {
     // handle the webhook event
-    await service.handleWebhook(request, webhooksSecret);
+    await service.handleWebhook(request);
 
     return response(200);
   } catch {
