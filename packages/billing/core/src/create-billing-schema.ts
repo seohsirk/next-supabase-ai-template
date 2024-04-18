@@ -80,7 +80,19 @@ export const PlanSchema = z
       })
       .min(1),
     interval: BillingIntervalSchema.optional(),
-    lineItems: z.array(LineItemSchema),
+    lineItems: z.array(LineItemSchema).refine(
+      (schema) => {
+        const types = schema.map((item) => item.type);
+        const perSeat = types.filter((type) => type === 'per-seat').length;
+        const flat = types.filter((type) => type === 'flat').length;
+
+        return perSeat <= 1 && flat <= 1;
+      },
+      {
+        message: 'Plans can only have one per-seat and one flat line item',
+        path: ['lineItems'],
+      },
+    ),
     trialDays: z
       .number({
         description:
