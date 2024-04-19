@@ -10,11 +10,11 @@ const getClassName = (path: string, currentPathName: string) => {
   const isActive = isRouteActive(path, currentPathName);
 
   return cn(
-    `text-sm font-medium px-2.5 py-2 border rounded-lg border-transparent transition-colors duration-200`,
+    `text-sm font-medium px-2.5 py-2 border rounded-lg border-transparent transition-colors duration-100`,
     {
-      'hover:border-border active:dark:bg-secondary active:bg-gray-50 dark:text-gray-400 text-gray-600 hover:text-current dark:hover:text-white':
+      'hover:border-border dark:text-gray-400 text-gray-600 hover:text-current dark:hover:text-white':
         !isActive,
-      'dark:bg-secondary bg-gray-50': isActive,
+      'dark:text-white text-current': isActive,
     },
   );
 };
@@ -26,10 +26,11 @@ export function SiteNavigationItem({
   path: string;
 }>) {
   const currentPathName = usePathname();
+  const className = getClassName(path, currentPathName);
 
   return (
     <NavigationMenuItem key={path}>
-      <Link className={getClassName(path, currentPathName)} href={path}>
+      <Link className={className} href={path}>
         {children}
       </Link>
     </NavigationMenuItem>
