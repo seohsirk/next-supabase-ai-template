@@ -17,17 +17,17 @@ KEYSTATIC_PATH=local # local, cloud, github
 
 You can also use Keystatic Cloud or GitHub as the storage kind as remote storage.
 
-If `KEYSTATIC_PATH_STORAGE_KIND` is set to `cloud`, the following environment variables are required:
+If `KEYSTATIC_STORAGE_KIND` is set to `cloud`, the following environment variables are required:
 
 ```
-KEYSTATIC_PATH_STORAGE_PROJECT=project-id
+KEYSTATIC_STORAGE_PROJECT=project-id
 ```
 
-If `KEYSTATIC_PATH_STORAGE_KIND` is set to `github`, the following environment variables are required:
+If `KEYSTATIC_STORAGE_KIND` is set to `github`, the following environment variables are required:
 
 ```
-KEYSTATIC_PATH_STORAGE_REPO=repo-name
-KEYSTATIC_PATH_STORAGE_BRANCH_PREFIX=branch-prefix
+KEYSTATIC_STORAGE_REPO=repo-name
+KEYSTATIC_STORAGE_BRANCH_PREFIX=branch-prefix
 ```
 
 GitHub mode requires the installation of a GitHub app.
