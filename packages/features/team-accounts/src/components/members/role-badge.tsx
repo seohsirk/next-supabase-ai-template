@@ -24,7 +24,7 @@ export const RoleBadge: React.FC<{
   return (
     <Badge className={className}>
       <span data-test={'member-role-badge'}>
-        <Trans i18nKey={`common.roles.${role}`} defaults={role} />
+        <Trans i18nKey={`common.roles.${role}.label`} defaults={role} />
       </span>
     </Badge>
   );
