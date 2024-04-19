@@ -1,2 +1,2 @@
 export * from './components/password-reset-request-container';
-export * from './components/password-reset-form';
+export * from './components/update-password-form';

@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 
-import { PasswordResetForm } from '@kit/auth/password-reset';
+import { UpdatePasswordForm } from '@kit/auth/password-reset';
 import { AuthLayoutShell } from '@kit/auth/shared';
 import { requireUser } from '@kit/supabase/require-user';
 import { getSupabaseServerComponentClient } from '@kit/supabase/server-component-client';
@@ -18,7 +18,7 @@ export const generateMetadata = async () => {
   };
 };
 
-async function PasswordResetPage() {
+async function UpdatePasswordPage() {
   const client = getSupabaseServerComponentClient();
   const auth = await requireUser(client);
 
@@ -29,9 +29,9 @@ async function PasswordResetPage() {
 
   return (
     <AuthLayoutShell Logo={AppLogo}>
-      <PasswordResetForm redirectTo={pathsConfig.app.home} />
+      <UpdatePasswordForm redirectTo={pathsConfig.app.home} />
     </AuthLayoutShell>
   );
 }
 
-export default withI18n(PasswordResetPage);
+export default withI18n(UpdatePasswordPage);
