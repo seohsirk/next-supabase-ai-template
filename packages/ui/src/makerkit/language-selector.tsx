@@ -2,6 +2,8 @@
 
 import { useCallback, useMemo, useState } from 'react';
 
+import { useRouter } from 'next/navigation';
+
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -18,7 +20,7 @@ export function LanguageSelector({
   onChange?: (locale: string) => unknown;
 }) {
   const { i18n } = useTranslation();
-
+  const router = useRouter();
   const { language: currentLanguage, options } = i18n;
 
   const locales = (options.supportedLngs as string[]).filter(
@@ -42,8 +44,11 @@ export function LanguageSelector({
       }
 
       await i18n.changeLanguage(locale);
+
+      // refresh cached translations
+      router.refresh();
     },
-    [i18n, onChange],
+    [i18n, router, onChange],
   );
 
   return (
