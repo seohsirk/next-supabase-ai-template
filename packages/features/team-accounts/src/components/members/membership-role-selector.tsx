@@ -31,7 +31,7 @@ export const MembershipRoleSelector: React.FC<{
               value={role}
             >
               <span className={'text-sm capitalize'}>
-                <Trans i18nKey={`common.roles.${role}`} defaults={role} />
+                <Trans i18nKey={`common:roles.${role}.label`} defaults={role} />
               </span>
             </SelectItem>
           );
