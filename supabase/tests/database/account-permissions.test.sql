@@ -75,7 +75,7 @@ select throws_ok(
 update public.accounts_memberships
     set account_role = 'custom-role'
     where account_id = makerkit.get_account_id_by_slug('test')
-        and user_id = makerkit.get_user_id('test1@test.com');
+        and user_id = tests.get_supabase_uid('test1');
 
 set local role postgres;
 
