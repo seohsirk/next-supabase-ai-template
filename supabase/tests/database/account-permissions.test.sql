@@ -77,6 +77,11 @@ update public.accounts_memberships
     where account_id = makerkit.get_account_id_by_slug('test')
         and user_id = makerkit.get_user_id('test1@test.com');
 
+set local role postgres;
+
+-- insert permissions for the custom role
+insert into public.role_permissions (role, permission) values ('custom-role', 'members.manage');
+
 select tests.authenticate_as('test1');
 
 -- the custom role does not have permissions to manage billing

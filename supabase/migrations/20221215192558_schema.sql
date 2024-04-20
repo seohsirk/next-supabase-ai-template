@@ -631,8 +631,8 @@ create or replace function public.has_role_on_account(account_id
             where
                 membership.user_id = auth.uid()
                 and membership.account_id = has_role_on_account.account_id
-                and(membership.account_role = has_role_on_account.account_role
-                    or has_role_on_account.account_role is null));
+                and((membership.account_role = has_role_on_account.account_role
+                    or has_role_on_account.account_role is null)));
 $$;
 
 grant execute on function public.has_role_on_account(uuid, varchar)
@@ -840,6 +840,7 @@ language plpgsql;
 grant execute on function public.has_permission(uuid, uuid,
     public.app_permissions) to authenticated, service_role;
 
+-- Function: Check if a user has a more elevated role than the target role
 create or replace function
     public.has_more_elevated_role(target_user_id uuid,
     target_account_id uuid, role_name varchar)
@@ -850,6 +851,7 @@ declare
     user_role_hierarchy_level int;
     target_role_hierarchy_level int;
 begin
+    -- Check if the user is the primary owner of the account
     select
         exists (
             select
@@ -864,9 +866,9 @@ begin
     --   perform any action
     if is_primary_owner then
         return true;
-
     end if;
 
+    -- Get the hierarchy level of the user's role within the account
     select
         hierarchy_level into user_role_hierarchy_level
     from
@@ -881,16 +883,26 @@ begin
                 account_id = target_account_id
                 and target_user_id = user_id);
 
+    if user_role_hierarchy_level is null then
+        return false;
+    end if;
+
+    -- Get the hierarchy level of the target role
     select
         hierarchy_level into target_role_hierarchy_level
     from
         public.roles
     where
         name = role_name
-        and account_id = target_account_id or account_id is null;
+        and (account_id = target_account_id or account_id is null);
+
+    -- If the target role does not exist, the user cannot perform the action
+    if target_role_hierarchy_level is null then
+        return false;
+    end if;
+
     -- If the user's role is higher than the target role, they can perform
     --   the action
-
     return user_role_hierarchy_level < target_role_hierarchy_level;
 
 end;
@@ -901,6 +913,77 @@ language plpgsql;
 grant execute on function public.has_more_elevated_role(uuid, uuid,
     varchar) to authenticated, service_role;
 
+-- Function: Check if a user has the same role hierarchy level as the target role
+create or replace function
+    public.has_same_role_hierarchy_level(target_user_id uuid,
+    target_account_id uuid, role_name varchar)
+    returns boolean
+    as $$
+declare
+    is_primary_owner boolean;
+    user_role_hierarchy_level int;
+    target_role_hierarchy_level int;
+begin
+    -- Check if the user is the primary owner of the account
+    select
+        exists (
+            select
+                1
+            from
+                public.accounts
+            where
+                id = target_account_id
+                and primary_owner_user_id = target_user_id) into is_primary_owner;
+
+    -- If the user is the primary owner, they have the highest role and can perform any action
+    if is_primary_owner then
+        return true;
+    end if;
+
+    -- Get the hierarchy level of the user's role within the account
+    select
+        hierarchy_level into user_role_hierarchy_level
+    from
+        public.roles
+    where
+        name =(
+            select
+                account_role
+            from
+                public.accounts_memberships
+            where
+                account_id = target_account_id
+                and target_user_id = user_id);
+
+    if user_role_hierarchy_level is null then
+        return false;
+    end if;
+
+    -- Get the hierarchy level of the target role
+    select
+        hierarchy_level into target_role_hierarchy_level
+    from
+        public.roles
+    where
+        name = role_name
+        and (account_id = target_account_id or account_id is null);
+
+    -- If the target role does not exist, the user cannot perform the action
+    if target_role_hierarchy_level is null then
+        return false;
+    end if;
+
+   -- check the user's role hierarchy level is the same as the target role
+    return user_role_hierarchy_level = target_role_hierarchy_level;
+
+end;
+
+$$
+language plpgsql;
+
+grant execute on function public.has_same_role_hierarchy_level(uuid, uuid,
+    varchar) to authenticated, service_role;
+
 -- Enable RLS on the role_permissions table
 alter table public.role_permissions enable row level security;
 
@@ -909,7 +992,6 @@ alter table public.role_permissions enable row level security;
 create policy role_permissions_read on public.role_permissions
     for select to authenticated
         using (true);
-
 
 /*
  * -------------------------------------------------------
@@ -948,7 +1030,7 @@ comment on column public.invitations.email is 'The email of the user being invit
 -- Open up access to invitations table for authenticated users and
 --   service_role
 grant select, insert, update, delete on table public.invitations to
-    service_role;
+    authenticated, service_role;
 
 -- Enable RLS on the invitations table
 alter table public.invitations enable row level security;
@@ -996,8 +1078,8 @@ create policy invitations_create_self on public.invitations
     for insert to authenticated
         with check (
         public.is_set('enable_team_accounts') and
-        public.has_permission(auth.uid(), account_id, 'invites.manage' ::app_permissions)
-        and public.has_more_elevated_role(
+        public.has_permission(auth.uid(), account_id, 'invites.manage'::app_permissions)
+        and public.has_same_role_hierarchy_level(
         auth.uid(), account_id, role));
 
 -- UPDATE: Users can update invitations to users of an account they are
