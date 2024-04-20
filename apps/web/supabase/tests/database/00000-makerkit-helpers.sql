@@ -10,6 +10,22 @@ alter default PRIVILEGES in schema makerkit revoke execute on FUNCTIONS from pub
 alter default PRIVILEGES in schema makerkit grant execute on FUNCTIONS to anon,
   authenticated, service_role;
 
+create or replace function makerkit.set_identifier(
+  identifier text,
+  user_email text
+)
+  returns text
+  as $$
+begin
+ update auth.users set raw_user_meta_data = jsonb_build_object('test_identifier', identifier)
+ where email = user_email;
+
+ return identifier;
+
+end;
+
+$$ language PLPGSQL;
+
 create or replace function makerkit.get_account_by_slug(
   account_slug text
 )
