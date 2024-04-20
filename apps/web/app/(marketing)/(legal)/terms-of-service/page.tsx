@@ -6,7 +6,7 @@ export async function generateMetadata() {
   const { t } = await createI18nServerInstance();
 
   return {
-    title: t('marketing.termsOfService'),
+    title: t('marketing:termsOfService'),
   };
 }
 

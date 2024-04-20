@@ -399,8 +399,8 @@ You can do so from Settings->Authentication->SMTP Settings.
 When you update the repository - I found it best to clear the workspaces and reinstall the dependencies.
 
 ```bash
-pnpm run clear:workspaces
-pnpm run clear
+pnpm run clean:workspaces
+pnpm run clean
 ```
 
 Then, reinstall the dependencies:

@@ -14,7 +14,7 @@ export const generateMetadata = async () => {
   const { t } = await createI18nServerInstance();
 
   return {
-    title: t('auth.updatePassword'),
+    title: t('auth:updatePassword'),
   };
 };
 
