@@ -18,7 +18,7 @@ select tests.authenticate_as('primary_owner');
 select throws_ok(
     $$ select public.transfer_team_account_ownership(
         makerkit.get_account_id_by_slug('makerkit'),
-        makerkit.get_user_id('custom@makerkit.dev')
+        tests.get_supabase_uid('custom')
     ) $$,
     'permission denied for function transfer_team_account_ownership'
 );
@@ -29,7 +29,7 @@ set local role service_role;
 select throws_ok(
     $$ select public.transfer_team_account_ownership(
         makerkit.get_account_id_by_slug('makerkit'),
-        makerkit.get_user_id('test@supabase.com')
+        tests.get_supabase_uid('test')
     ) $$,
     'The new owner must be a member of the account'
 );
@@ -38,14 +38,14 @@ select throws_ok(
 select lives_ok(
     $$ select public.transfer_team_account_ownership(
         makerkit.get_account_id_by_slug('makerkit'),
-        makerkit.get_user_id('owner@makerkit.dev')
+        tests.get_supabase_uid('owner')
     ) $$
 );
 
 -- check the account owner has been updated
 select row_eq(
     $$ select primary_owner_user_id from public.accounts where id = makerkit.get_account_id_by_slug('makerkit') $$,
-    row(makerkit.get_user_id('owner@makerkit.dev')),
+    row(tests.get_supabase_uid('owner')),
     'The account owner should be updated'
 );
 
@@ -54,7 +54,7 @@ select row_eq(
 select lives_ok(
     $$ select public.transfer_team_account_ownership(
         makerkit.get_account_id_by_slug('makerkit'),
-        makerkit.get_user_id('member@makerkit.dev')
+        tests.get_supabase_uid('member')
     ) $$
 );
 
@@ -62,18 +62,10 @@ select lives_ok(
 select row_eq(
     $$ select account_role from public.accounts_memberships
        where account_id = makerkit.get_account_id_by_slug('makerkit')
-       and user_id = makerkit.get_user_id('member@makerkit.dev');
+       and user_id = tests.get_supabase_uid('member');
     $$,
     row('owner'::varchar),
     'The account owner should be updated'
-);
-
--- rollback
-select lives_ok(
-    $$ select public.transfer_team_account_ownership(
-        makerkit.get_account_id_by_slug('makerkit'),
-        makerkit.get_user_id('test@makerkit.dev')
-    ) $$
 );
 
 select * from finish();

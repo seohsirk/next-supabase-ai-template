@@ -686,10 +686,11 @@ create policy roles_read on public.roles
             or public.has_role_on_account(account_id)
         );
 
+
 -- Function to check if a user can perform management actions on an account member
 create or replace function
     public.can_action_account_member(target_team_account_id uuid,
-    user_id uuid)
+    target_user_id uuid)
     returns boolean
     as $$
 declare
@@ -697,64 +698,83 @@ declare
     target_user_hierarchy_level int;
     current_user_hierarchy_level int;
     is_account_owner boolean;
+    target_user_role varchar(50);
 begin
-    select public.is_account_owner(target_team_account_id) into is_account_owner;
-
-    -- a primary owner of the account can never be actioned
-    if is_account_owner and user_id = auth.uid() then
-        raise exception 'You cannot action the primary owner of the account';
+    if target_user_id = auth.uid() then
+      raise exception 'You cannot update your own account membership with this function';
     end if;
 
     -- an account owner can action any member of the account
-    if is_account_owner then
-        return true;
+    if public.is_account_owner(target_team_account_id) then
+      return true;
     end if;
+
+     -- check the target user is the primary owner of the account
+    select
+        exists (
+            select
+                1
+            from
+                public.accounts
+            where
+                id = target_team_account_id
+                and primary_owner_user_id = target_user_id) into is_account_owner;
+
+
+    if is_account_owner then
+        raise exception 'The primary account owner cannot be actioned';
+        end if;
+
 
     -- validate the auth user has the required permission on the account
-    --  to manage members of the account
+    -- to manage members of the account
     select
-	public.has_permission(auth.uid(), target_team_account_id,
-	    'members.manage'::app_permissions) into
-	    permission_granted;
+ public.has_permission(auth.uid(), target_team_account_id,
+     'members.manage'::app_permissions) into
+     permission_granted;
 
+    -- if the user does not have the required permission, raise an exception
     if not permission_granted then
-        raise exception 'You do not have permission to action a member from this account';
-
-    end if;
-    -- users cannot remove themselves from the account with this function
-    if can_action_account_member.user_id = auth.uid() then
-        raise exception 'You cannot update your own account membership with this function';
+      raise exception 'You do not have permission to action a member from this account';
     end if;
 
+    -- get the role of the target user
     select
-        hierarchy_level into target_user_hierarchy_level
+        am.account_role,
+        r.hierarchy_level
     from
-        public.roles
+        public.accounts_memberships as am
+    join
+        public.roles as r on am.account_role = r.name
     where
-        name = target_user_role;
+        am.account_id = target_team_account_id
+        and am.user_id = target_user_id
+    into target_user_role, target_user_hierarchy_level;
 
+    -- get the hierarchy level of the current user
     select
-        hierarchy_level into current_user_hierarchy_level
+        r.hierarchy_level into current_user_hierarchy_level
     from
-        public.roles
+        public.roles as r
+    join
+        public.accounts_memberships as am on r.name = am.account_role
     where
-        name =(
-            select
-                account_role
-            from
-                public.accounts_memberships
-            where
-                account_id = target_team_account_id
-                and user_id = auth.uid());
+        am.account_id = target_team_account_id
+        and am.user_id = auth.uid();
 
-    -- check if the current user has a higher hierarchy level than the
-    --   target user. Lower hierarchy levels have higher permissions than higher hierarchy levels
-    if current_user_hierarchy_level <= target_user_hierarchy_level then
-        raise exception 'You do not have permission to action this user';
-
+    if target_user_role is null then
+      raise exception 'The target user does not have a role on the account';
     end if;
 
-    -- return true if the user has the required permission
+    if current_user_hierarchy_level is null then
+      raise exception 'The current user does not have a role on the account';
+    end if;
+
+    -- check the current user has a higher role than the target user
+    if current_user_hierarchy_level >= target_user_hierarchy_level then
+      raise exception 'You do not have permission to action a member from this account';
+    end if;
+
     return true;
 
 end;
@@ -782,14 +802,16 @@ create policy accounts_read_team on public.accounts
     for select to authenticated
         using (has_role_on_account(id));
 
--- DELETE: Users can remove themselves from an account
+-- DELETE: Users can remove themselves from an account unless they are the primary owner
 create policy accounts_memberships_delete_self on public.accounts_memberships
-    for delete to authenticated
+    for delete
+    to authenticated
         using (user_id = auth.uid());
 
 -- DELETE: Users with the required role can remove members from an account
 create policy accounts_memberships_delete on public.accounts_memberships
-    for delete to authenticated
+    for delete
+    to authenticated
         using (public.can_action_account_member(account_id, user_id));
 
 -- SELECT (public.accounts): Team members can read accounts of the team

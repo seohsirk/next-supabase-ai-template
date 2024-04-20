@@ -15,6 +15,8 @@ create or replace function makerkit.set_identifier(
   user_email text
 )
   returns text
+  security definer
+  set search_path = auth, pg_temp
   as $$
 begin
  update auth.users set raw_user_meta_data = jsonb_build_object('test_identifier', identifier)
@@ -60,25 +62,6 @@ begin
          accounts
        where
          slug = account_slug);
-
-end;
-
-$$ language PLPGSQL;
-
-create or replace function makerkit.get_user_id(
-  user_email text
-)
-  returns uuid
-  as $$
-begin
-
-    return
-      (select
-         primary_owner_user_id
-       from
-         accounts
-       where
-         email = user_email);
 
 end;
 
