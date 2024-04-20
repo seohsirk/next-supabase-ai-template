@@ -9,30 +9,41 @@ const MAILER_PROVIDER = z
  * @description Get the mailer based on the environment variable.
  */
 export async function getMailer() {
-  switch (process.env.MAILER_PROVIDER as typeof MAILER_PROVIDER) {
-    case 'nodemailer': {
-      if (process.env.NEXT_RUNTIME !== 'edge') {
-        const { Nodemailer } = await import('./impl/nodemailer');
+  switch (MAILER_PROVIDER) {
+    case 'nodemailer':
+      return getNodemailer();
 
-        return new Nodemailer();
-      } else {
-        throw new Error('Nodemailer is not available on the edge runtime side');
-      }
-    }
+    case 'cloudflare':
+      return getCloudflareMailer();
 
-    case 'cloudflare': {
-      const { CloudflareMailer } = await import('./impl/cloudflare');
-
-      return new CloudflareMailer();
-    }
-
-    case 'resend': {
-      const { ResendMailer } = await import('./impl/resend');
-
-      return new ResendMailer();
-    }
+    case 'resend':
+      return getResendMailer();
 
     default:
       throw new Error(`Invalid mailer: ${MAILER_PROVIDER as string}`);
   }
+}
+
+async function getNodemailer() {
+  if (process.env.NEXT_RUNTIME === 'nodejs') {
+    const { Nodemailer } = await import('./impl/nodemailer');
+
+    return new Nodemailer();
+  } else {
+    throw new Error(
+      'Nodemailer is not available on the edge runtime. Please use another mailer.',
+    );
+  }
+}
+
+async function getCloudflareMailer() {
+  const { CloudflareMailer } = await import('./impl/cloudflare');
+
+  return new CloudflareMailer();
+}
+
+async function getResendMailer() {
+  const { ResendMailer } = await import('./impl/resend');
+
+  return new ResendMailer();
 }

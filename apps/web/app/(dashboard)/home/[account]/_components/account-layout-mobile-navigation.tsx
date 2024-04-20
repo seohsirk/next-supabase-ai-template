@@ -76,7 +76,7 @@ export const AccountLayoutMobileNavigation = (
       </DropdownMenuTrigger>
 
       <DropdownMenuContent sideOffset={10} className={'w-screen rounded-none'}>
-        <OrganizationsModal />
+        <TeamAccountsModal />
 
         {Links}
 
@@ -130,7 +130,7 @@ function SignOutDropdownItem(
   );
 }
 
-function OrganizationsModal() {
+function TeamAccountsModal() {
   const router = useRouter();
 
   return (
@@ -143,7 +143,7 @@ function OrganizationsModal() {
           <Home className={'h-4'} />
 
           <span>
-            <Trans i18nKey={'common:yourOrganizations'} />
+            <Trans i18nKey={'common:yourAccounts'} />
           </span>
         </DropdownMenuItem>
       </DialogTrigger>
@@ -151,7 +151,7 @@ function OrganizationsModal() {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            <Trans i18nKey={'common:yourOrganizations'} />
+            <Trans i18nKey={'common:yourAccounts'} />
           </DialogTitle>
         </DialogHeader>
 

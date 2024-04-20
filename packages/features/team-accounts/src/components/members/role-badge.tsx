@@ -5,7 +5,7 @@ import { Trans } from '@kit/ui/trans';
 
 type Role = string;
 
-const roleClassNameBuilder = cva('font-medium capitalize', {
+const roleClassNameBuilder = cva('font-medium capitalize shadow-none', {
   variants: {
     role: {
       owner: '',

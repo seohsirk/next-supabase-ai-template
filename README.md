@@ -106,6 +106,11 @@ This command will run the web application.
 
 Please refer to `apps/web/README.md` for more information about the web application.
 
+To get started right away, use the credentials below:
+
+- **Email**: `test@makerkit.dev`
+- **Password**: `testingpassword`
+
 #### Turbopack
 
 Makerkit uses Turbopack by default. Turbopack is the new bundler for Next.js - and it is still experimental. It is faster, but it may have some issues.
