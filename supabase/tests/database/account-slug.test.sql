@@ -9,31 +9,31 @@ select tests.create_supabase_user('test1', 'test1@test.com');
 
 select tests.create_supabase_user('test2');
 
--- Create an organization account
+-- Create an team account
 
 select tests.authenticate_as('test1');
 
-select public.create_account('Test');
-select public.create_account('Test');
-select public.create_account('Test');
+select public.create_team_account('Test');
+select public.create_team_account('Test');
+select public.create_team_account('Test');
 
 -- should automatically create slugs for the accounts
 select row_eq(
   $$ select slug from public.accounts where name = 'Test' and slug = 'test' $$,
   row('test'::text),
-  'The first organization account should automatically create a slug named "test"'
+  'The first team account should automatically create a slug named "test"'
 );
 
 select row_eq(
   $$ select slug from public.accounts where name = 'Test' and slug = 'test-1' $$,
   row('test-1'::text),
-  'The second organization account should automatically create a slug named "test-1"'
+  'The second team account should automatically create a slug named "test-1"'
 );
 
 select row_eq(
   $$ select slug from public.accounts where name = 'Test' and slug = 'test-2' $$,
   row('test-2'::text),
-    'The third organization account should automatically create a slug named "test-2"'
+    'The third team account should automatically create a slug named "test-2"'
 );
 
 -- Should automatically update the slug if the name is updated
@@ -42,7 +42,7 @@ update public.accounts set name = 'Test 4' where slug = 'test-2';
 select row_eq(
   $$ select slug from public.accounts where name = 'Test 4' $$,
   row('test-4'::text),
-  'Updating the name of an organization account should update the slug'
+  'Updating the name of a team account should update the slug'
 );
 
 -- Should fail if the slug is updated to an existing slug

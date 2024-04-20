@@ -9,10 +9,10 @@ import { getSupabaseServerComponentClient } from '@kit/supabase/server-component
 import pathsConfig from '~/config/paths.config';
 
 /**
- * Load the organization workspace data.
+ * Load the account workspace data.
  * We place this function into a separate file so it can be reused in multiple places across the server components.
  *
- * This function is used in the layout component for the organization workspace.
+ * This function is used in the layout component for the account workspace.
  * It is cached so that the data is only fetched once per request.
  *
  * @param accountSlug
@@ -42,7 +42,7 @@ export const loadTeamWorkspace = cache(async (accountSlug: string) => {
     throw accountResult.error;
   }
 
-  // we cannot find any record for the selected organization
+  // we cannot find any record for the selected account
   // so we redirect the user to the home page
   if (!accountResult.data.length) {
     return redirect(pathsConfig.app.home);
@@ -50,7 +50,7 @@ export const loadTeamWorkspace = cache(async (accountSlug: string) => {
 
   const accountData = accountResult.data[0];
 
-  // we cannot find any record for the selected organization
+  // we cannot find any record for the selected account
   // so we redirect the user to the home page
   if (!accountData) {
     return redirect(pathsConfig.app.home);

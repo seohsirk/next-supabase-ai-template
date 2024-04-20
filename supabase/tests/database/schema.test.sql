@@ -16,7 +16,7 @@ SELECT schema_privs_are('public', 'anon', Array [NULL], 'Anon should not have ac
 -- set the role to anonymous for verifying access tests
 set role anon;
 select throws_ok('select public.get_config()');
-select throws_ok('select public.is_set(''enable_organization_accounts'')');
+select throws_ok('select public.is_set(''enable_team_accounts'')');
 
 -- set the role to the service_role for testing access
 set role service_role;
@@ -26,7 +26,7 @@ select ok(public.get_config() is not null),
 -- set the role to authenticated for tests
 set role authenticated;
 select ok(public.get_config() is not null), 'Makerkit get_config should be accessible to authenticated users';
-select ok(public.is_set('enable_organization_accounts')),
+select ok(public.is_set('enable_team_accounts')),
        'Makerkit is_set should be accessible to authenticated users';
 select isnt_empty('select * from public.config', 'authenticated users should have access to Makerkit config');
 

@@ -1,9 +1,9 @@
 create schema if not exists makerkit;
 
--- anon, authenticated, and service_role should have access to tests schema
+-- anon, authenticated, and service_role should have access to makerkit schema
 grant USAGE on schema makerkit to anon, authenticated, service_role;
 
--- Don't allow public to execute any functions in the tests schema
+-- Don't allow public to execute any functions in the makerkit schema
 alter default PRIVILEGES in schema makerkit revoke execute on FUNCTIONS from public;
 
 -- Grant execute to anon, authenticated, and service_role for testing purposes
@@ -28,6 +28,57 @@ begin
 end;
 
 $$ language PLPGSQL;
+
+create or replace function makerkit.get_account_id_by_slug(
+  account_slug text
+)
+  returns uuid
+  as $$
+
+begin
+
+    return
+      (select
+         id
+       from
+         accounts
+       where
+         slug = account_slug);
+
+end;
+
+$$ language PLPGSQL;
+
+create or replace function makerkit.get_user_id(
+  user_email text
+)
+  returns uuid
+  as $$
+begin
+
+    return
+      (select
+         primary_owner_user_id
+       from
+         accounts
+       where
+         email = user_email);
+
+end;
+
+$$ language PLPGSQL;
+
+begin;
+
+select plan(1);
+
+select is_empty($$
+  select
+    *
+  from
+    makerkit.get_account_by_slug('test') $$,
+  'get_account_by_slug should return an empty set when the account does not exist'
+);
 
 select
   *
