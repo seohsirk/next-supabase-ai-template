@@ -44,6 +44,34 @@ SELECT row_eq(
     'The subscription items should be updated'
 );
 
+select tests.authenticate_as('primary_owner');
+
+-- account can read their own subscription
+SELECT isnt_empty(
+  $$ select 1 from orders where id = 'order_test' $$,
+    'The account can read their own order'
+);
+
+SELECT isnt_empty(
+  $$ select * from order_items where order_id = 'order_test' $$,
+    'The account can read their own order'
+);
+
+-- foreigners
+select tests.create_supabase_user('foreigner');
+select tests.authenticate_as('foreigner');
+
+-- account cannot read other's subscription
+SELECT is_empty(
+  $$ select 1 from orders where id = 'order_test' $$,
+    'The account cannot read the other account orders'
+);
+
+SELECT is_empty(
+  $$ select 1 from order_items where order_id = 'order_test' $$,
+    'The account cannot read the other account order items'
+);
+
 -- Finish the tests and clean up
 SELECT * FROM finish();
 ROLLBACK;

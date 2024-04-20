@@ -103,7 +103,6 @@ SELECT is(
   'The subscription status should be past_due'
 );
 
-
 -- Call the upsert_subscription function again to update the subscription
 SELECT public.upsert_subscription(tests.get_supabase_uid('primary_owner'), 'cus_test', 'sub_test', true, 'active', 'stripe', false, 'usd', now(), now() + interval '1 month', '[]');
 
@@ -112,6 +111,40 @@ SELECT is(
   (SELECT active FROM public.subscriptions WHERE id = 'sub_test'),
   true,
   'The subscription should be active'
+);
+
+select tests.authenticate_as('primary_owner');
+
+-- account can read their own subscription
+SELECT isnt_empty(
+  $$ select 1 from subscriptions where id = 'sub_test' $$,
+    'The account can read their own subscription'
+);
+
+SELECT isnt_empty(
+  $$ select * from subscription_items where subscription_id = 'sub_test' $$,
+    'The account can read their own subscription items'
+);
+
+-- users cannot manually update subscriptions
+select throws_ok(
+  $$ select public.upsert_subscription(tests.get_supabase_uid('primary_owner'), 'cus_test', 'sub_test', true, 'active', 'stripe', false, 'usd', now(), now() + interval '1 month', '[]') $$,
+  'permission denied for function upsert_subscription'
+);
+
+-- foreigners
+select tests.create_supabase_user('foreigner');
+select tests.authenticate_as('foreigner');
+
+-- account cannot read other's subscription
+SELECT is_empty(
+  $$ select 1 from subscriptions where id = 'sub_test' $$,
+   'The account cannot read the other account subscriptions'
+);
+
+SELECT is_empty(
+  $$ select 1 from subscription_items where subscription_id = 'sub_test' $$,
+    'The account cannot read the other account subscription items'
 );
 
 -- Finish the tests and clean up
