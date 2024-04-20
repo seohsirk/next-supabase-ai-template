@@ -525,6 +525,23 @@ UPDATE auth.users SET raw_app_meta_data = raw_app_meta_data || '{"role": "super-
 
 Please replace `<user_id>` with the user ID you want to assign as a super admin.
 
+## How to approach Local Development
+
+Supabase's hosted Studio is pretty great - but I don't think it should be used to perform schema changes. Instead, I recommend using your local Supabase Studio to make the changes and then generate the migration file. Then, you can push the migration to the remote Supabase instance.
+
+At this point, you have two options:
+
+1. create a migration with `pnpm --filter web supabase migration new <name>` and update the code manually
+2. or, use the local Supabase Studio to make the changes and then run `pnpm --filter web supabase db diff -f <name>` which will generate the migration file for you. DOUBLY CHECK THE FILE!
+
+Once you've tested it all and are happy with your local changes, push the migration to the remote Supabase instance with `pnpm --filter web supabase db push`.
+
+Doing the opposite is also okay - but:
+1. You're making changes against the production database - which is risky
+2. You're not testing the changes locally - which is risky
+3. You need to pull the changes from the remote Supabase instance to your local instance so they are in sync
+
+My two cents - but you do you - anything that works for you is good.
 
 ## Going to Production
 

@@ -87,17 +87,20 @@ export async function transferOwnershipAction(
     );
   }
 
+  const service = new AccountMembersService(client);
+
   // at this point, the user is authenticated and is the owner of the account
   // so we proceed with the transfer of ownership with admin privileges
-  const service = new AccountMembersService(
-    getSupabaseServerActionClient({ admin: true }),
-  );
+  const adminClient = getSupabaseServerActionClient({ admin: true });
 
-  await service.transferOwnership({
-    accountId,
-    userId,
-    confirmation: params.confirmation,
-  });
+  await service.transferOwnership(
+    {
+      accountId,
+      userId,
+      confirmation: params.confirmation,
+    },
+    adminClient,
+  );
 
   // revalidate all pages that depend on the account
   revalidatePath('/home/[account]', 'layout');

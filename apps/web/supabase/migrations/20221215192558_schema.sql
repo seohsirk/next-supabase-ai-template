@@ -344,8 +344,20 @@ create or replace function
 begin
     if current_user not in('service_role') then
         raise exception 'You do not have permission to transfer account ownership';
-
     end if;
+
+    -- verify the user is already a member of the account
+    if not exists(
+        select
+            1
+        from
+            public.accounts_memberships
+        where
+            target_account_id = account_id
+            and user_id = new_owner_id) then
+        raise exception 'The new owner must be a member of the account';
+    end if;
+
     -- update the primary owner of the account
     update
         public.accounts
@@ -354,12 +366,13 @@ begin
     where
         id = target_account_id
         and is_personal_account = false;
+
     -- update membership assigning it the hierarchy role
     update
         public.accounts_memberships
     set
         account_role =(
-            kit.get_upper_system_role())
+            public.get_upper_system_role())
     where
         target_account_id = account_id
         and user_id = new_owner_id;
@@ -416,7 +429,7 @@ create trigger protect_account_fields
     before update on public.accounts for each row
     execute function kit.protect_account_fields();
 
-create or replace function kit.get_upper_system_role()
+create or replace function public.get_upper_system_role()
     returns varchar
     as $$
 declare
@@ -430,6 +443,9 @@ begin
 end;
 $$
 language plpgsql;
+
+grant execute on function public.get_upper_system_role() to
+    service_role;
 
 create or replace function kit.add_current_user_to_new_account()
     returns trigger
@@ -446,7 +462,7 @@ begin
         values(
             new.id,
             auth.uid(),
-            kit.get_upper_system_role());
+            public.get_upper_system_role());
 
     end if;
 
@@ -955,6 +971,7 @@ begin
                 account_id = target_account_id
                 and target_user_id = user_id);
 
+    -- If the user does not have a role in the account, they cannot perform the action
     if user_role_hierarchy_level is null then
         return false;
     end if;
@@ -1077,10 +1094,9 @@ create policy invitations_read_self on public.invitations
 create policy invitations_create_self on public.invitations
     for insert to authenticated
         with check (
-        public.is_set('enable_team_accounts') and
-        public.has_permission(auth.uid(), account_id, 'invites.manage'::app_permissions)
-        and public.has_same_role_hierarchy_level(
-        auth.uid(), account_id, role));
+        public.is_set('enable_team_accounts')
+        and public.has_permission(auth.uid(), account_id, 'invites.manage'::app_permissions)
+        and public.has_same_role_hierarchy_level(auth.uid(), account_id, role));
 
 -- UPDATE: Users can update invitations to users of an account they are
 --   a member of

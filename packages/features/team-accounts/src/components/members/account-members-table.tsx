@@ -75,15 +75,27 @@ export function AccountMembersTable({
     currentRoleHierarchy: userRoleHierarchy,
   });
 
-  const filteredMembers = members.filter((member) => {
-    const searchString = search.toLowerCase();
-    const displayName = member.name ?? member.email.split('@')[0];
+  const filteredMembers = members
+    .filter((member) => {
+      const searchString = search.toLowerCase();
+      const displayName = member.name ?? member.email.split('@')[0];
 
-    return (
-      displayName.includes(searchString) ||
-      member.role.toLowerCase().includes(searchString)
-    );
-  });
+      return (
+        displayName.includes(searchString) ||
+        member.role.toLowerCase().includes(searchString)
+      );
+    })
+    .sort((prev, next) => {
+      if (prev.primary_owner_user_id === prev.user_id) {
+        return -1;
+      }
+
+      if (prev.role_hierarchy_level < next.role_hierarchy_level) {
+        return -1;
+      }
+
+      return 1;
+    });
 
   return (
     <div className={'flex flex-col space-y-2'}>

@@ -125,6 +125,7 @@ export class AccountMembersService {
 
   async transferOwnership(
     params: z.infer<typeof TransferOwnershipConfirmationSchema>,
+    adminClient: SupabaseClient<Database>,
   ) {
     const logger = await getLogger();
 
@@ -135,7 +136,7 @@ export class AccountMembersService {
 
     logger.info(ctx, `Transferring ownership of account...`);
 
-    const { data, error } = await this.client.rpc(
+    const { data, error } = await adminClient.rpc(
       'transfer_team_account_ownership',
       {
         target_account_id: params.accountId,

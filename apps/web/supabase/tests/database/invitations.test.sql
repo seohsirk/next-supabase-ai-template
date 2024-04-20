@@ -58,6 +58,23 @@ select lives_ok(
     'custom role should be able to create invitations'
 );
 
+-- Foreigners should not be able to create invitations
+
+select tests.create_supabase_user('user');
+
+select tests.authenticate_as('user');
+
+-- it will fail because the user is not a member of the account
+select throws_ok(
+    $$ insert into public.invitations (email, invited_by, account_id, role, invite_token) values ('invite4@makerkit.dev', auth.uid(), makerkit.get_account_id_by_slug('makerkit'), 'member', gen_random_uuid()) $$,
+    'new row violates row-level security policy for table "invitations"'
+);
+
+select is_empty($$
+    select * from public.invitations where account_id = makerkit.get_account_id_by_slug('makerkit') $$,
+    'no invitations should be listed'
+);
+
 select * from finish();
 
 rollback;
