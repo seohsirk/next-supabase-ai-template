@@ -1,5 +1,3 @@
-'use client';
-
 import { SidebarDivider, SidebarGroup, SidebarItem } from '@kit/ui/sidebar';
 import { Trans } from '@kit/ui/trans';
 
@@ -10,9 +8,11 @@ export function AccountLayoutSidebarNavigation({
 }: React.PropsWithChildren<{
   account: string;
 }>) {
+  const routes = getTeamAccountSidebarConfig(account).routes;
+
   return (
     <>
-      {getTeamAccountSidebarConfig(account).routes.map((item, index) => {
+      {routes.map((item, index) => {
         if ('divider' in item) {
           return <SidebarDivider key={index} />;
         }
@@ -55,5 +55,3 @@ export function AccountLayoutSidebarNavigation({
     </>
   );
 }
-
-export default AccountLayoutSidebarNavigation;

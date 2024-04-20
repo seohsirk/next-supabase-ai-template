@@ -56,10 +56,13 @@ export function getI18nSettings(
 
   return {
     supportedLngs: languages,
-    fallbackLng: defaultLanguage,
+    fallbackLng: languages[0],
+    detection: undefined,
     lng,
+    load: 'languageOnly',
+    preload: false,
+    lowerCaseLng: true,
     fallbackNS: defaultI18nNamespaces,
-    defaultNS: defaultI18nNamespaces,
     ns,
     react: {
       useSuspense: true,
