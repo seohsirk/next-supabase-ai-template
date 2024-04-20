@@ -6,7 +6,7 @@ export async function generateMetadata() {
   const { t } = await createI18nServerInstance();
 
   return {
-    title: t('marketing.cookiePolicy'),
+    title: t('marketing:cookiePolicy'),
   };
 }
 
@@ -17,7 +17,7 @@ async function CookiePolicyPage() {
     <div>
       <div className={'container mx-auto'}>
         <SitePageHeader
-          title={t(`marketing.cookiePolicy`)}
+          title={t(`marketing:cookiePolicy`)}
           subtitle={`This is the cookie policy page. It's a great place to put information about the cookies your site uses.`}
         />
       </div>
