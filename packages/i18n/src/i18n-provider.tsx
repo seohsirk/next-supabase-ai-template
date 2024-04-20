@@ -17,7 +17,9 @@ export function I18nProvider({
   settings: InitOptions;
   resolver: Resolver;
 }>) {
-  if (!client) {
+  // If the client is not initialized or
+  // the language has changed, reinitialize the client
+  if (!client || client.language !== settings.lng) {
     throw withI18nClient(settings, resolver);
   }
 

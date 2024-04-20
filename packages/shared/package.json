@@ -14,7 +14,11 @@
     "./utils": "./src/utils.ts"
   },
   "dependencies": {
-    "pino": "^8.20.0"
+    "@tanstack/react-table": "^8.16.0",
+    "next": "14.3.0-canary.7",
+    "pino": "^8.20.0",
+    "tailwind-merge": "^2.2.2",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@kit/eslint-config": "workspace:*",

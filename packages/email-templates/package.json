@@ -13,7 +13,11 @@
     ".": "./src/index.ts"
   },
   "dependencies": {
-    "@react-email/components": "0.0.16"
+    "@react-email/components": "0.0.16",
+    "@tanstack/react-table": "^8.16.0",
+    "next": "14.3.0-canary.7",
+    "tailwind-merge": "^2.2.2",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@kit/eslint-config": "workspace:*",

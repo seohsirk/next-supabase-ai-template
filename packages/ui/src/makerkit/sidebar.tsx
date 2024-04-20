@@ -175,7 +175,7 @@ export function SidebarItem({
         <If condition={collapsed} fallback={Icon}>
           <TooltipProvider>
             <Tooltip>
-              <TooltipTrigger>{Icon}</TooltipTrigger>
+              <TooltipTrigger asChild>{Icon}</TooltipTrigger>
 
               <TooltipContent side={'right'} sideOffset={20}>
                 {children}
@@ -184,13 +184,7 @@ export function SidebarItem({
           </TooltipProvider>
         </If>
 
-        <span
-          className={cn({
-            hidden: collapsed,
-          })}
-        >
-          {children}
-        </span>
+        <span className={cn({ hidden: collapsed })}>{children}</span>
       </Button>
     </Link>
   );

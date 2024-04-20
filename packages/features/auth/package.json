@@ -68,5 +68,9 @@
         "src/*"
       ]
     }
+  },
+  "dependencies": {
+    "@tanstack/react-table": "^8.16.0",
+    "tailwind-merge": "^2.2.2"
   }
 }

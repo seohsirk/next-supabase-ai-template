@@ -19,7 +19,6 @@ export async function initializeServerI18n(
   }
 
   await i18nInstance
-    .use(initReactI18next)
     .use(
       resourcesToBackend(async (language, namespace, callback) => {
         try {
@@ -36,6 +35,7 @@ export async function initializeServerI18n(
         }
       }),
     )
+    .use(initReactI18next)
     .init(settings);
 
   return i18nInstance;

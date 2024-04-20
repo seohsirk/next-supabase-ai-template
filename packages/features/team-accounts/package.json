@@ -13,7 +13,8 @@
     "./webhooks": "./src/server/services/webhooks/index.ts"
   },
   "dependencies": {
-    "nanoid": "^5.0.7"
+    "nanoid": "^5.0.7",
+    "tailwind-merge": "^2.2.2"
   },
   "devDependencies": {
     "@hookform/resolvers": "^3.3.4",
