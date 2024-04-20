@@ -670,9 +670,9 @@ create policy roles_read on public.roles
             or public.has_role_on_account(account_id)
         );
 
--- Function to check if a user can remove a member from an account
+-- Function to check if a user can perform management actions on an account member
 create or replace function
-    kit.can_remove_account_member(target_team_account_id uuid,
+    public.can_action_account_member(target_team_account_id uuid,
     user_id uuid)
     returns boolean
     as $$
@@ -680,22 +680,34 @@ declare
     permission_granted boolean;
     target_user_hierarchy_level int;
     current_user_hierarchy_level int;
+    is_account_owner boolean;
 begin
+    select public.is_account_owner(target_team_account_id) into is_account_owner;
+
+    -- a primary owner of the account can never be actioned
+    if is_account_owner and user_id = auth.uid() then
+        raise exception 'You cannot action the primary owner of the account';
+    end if;
+
+    -- an account owner can action any member of the account
+    if is_account_owner then
+        return true;
+    end if;
+
     -- validate the auth user has the required permission on the account
-    --    to manage members of the account
+    --  to manage members of the account
     select
 	public.has_permission(auth.uid(), target_team_account_id,
 	    'members.manage'::app_permissions) into
 	    permission_granted;
 
     if not permission_granted then
-        raise exception 'You do not have permission to remove a member from this account';
+        raise exception 'You do not have permission to action a member from this account';
 
     end if;
     -- users cannot remove themselves from the account with this function
-    if can_remove_account_member.user_id = auth.uid() then
-        raise exception 'You cannot remove yourself from the account';
-
+    if can_action_account_member.user_id = auth.uid() then
+        raise exception 'You cannot update your own account membership with this function';
     end if;
 
     select
@@ -718,13 +730,15 @@ begin
             where
                 account_id = target_team_account_id
                 and user_id = auth.uid());
+
     -- check if the current user has a higher hierarchy level than the
-    --   target user
+    --   target user. Lower hierarchy levels have higher permissions than higher hierarchy levels
     if current_user_hierarchy_level <= target_user_hierarchy_level then
-        raise exception 'You do not have permission to remove this user from the account';
+        raise exception 'You do not have permission to action this user';
 
     end if;
 
+    -- return true if the user has the required permission
     return true;
 
 end;
@@ -732,11 +746,11 @@ end;
 $$
 language plpgsql;
 
-grant execute on function kit.can_remove_account_member(uuid, uuid)
+grant execute on function public.can_action_account_member(uuid, uuid)
     to authenticated, service_role;
 
 -- RLS
--- SELECT: Users can read their team members account memberships
+-- SELECT: Users can read their account memberships
 create policy accounts_memberships_read_self on public.accounts_memberships
     for select to authenticated
         using (user_id = auth.uid());
@@ -760,7 +774,7 @@ create policy accounts_memberships_delete_self on public.accounts_memberships
 -- DELETE: Users with the required role can remove members from an account
 create policy accounts_memberships_delete on public.accounts_memberships
     for delete to authenticated
-        using (kit.can_remove_account_member(account_id, user_id));
+        using (public.can_action_account_member(account_id, user_id));
 
 -- SELECT (public.accounts): Team members can read accounts of the team
 --   they are a member of
@@ -939,7 +953,7 @@ grant select, insert, update, delete on table public.invitations to
 -- Enable RLS on the invitations table
 alter table public.invitations enable row level security;
 
-create or replace function check_team_account()
+create or replace function kit.check_team_account()
     returns trigger
     as $$
 begin
@@ -963,7 +977,7 @@ language plpgsql;
 
 create trigger only_team_accounts_check
     before insert or update on public.invitations for each row
-    execute procedure check_team_account();
+    execute procedure kit.check_team_account();
 
 -- RLS
 --    SELECT: Users can read invitations to users of an account they
@@ -971,7 +985,7 @@ create trigger only_team_accounts_check
 --   a member of
 create policy invitations_read_self on public.invitations
     for select to authenticated
-        using (has_role_on_account(account_id));
+        using (public.has_role_on_account(account_id));
 
 -- INSERT: Users can create invitations to users of an account they are
 --   a member of
@@ -982,7 +996,7 @@ create policy invitations_create_self on public.invitations
     for insert to authenticated
         with check (
         public.is_set('enable_team_accounts') and
-public.has_permission(auth.uid(), account_id, 'invites.manage' ::app_permissions)
+        public.has_permission(auth.uid(), account_id, 'invites.manage' ::app_permissions)
         and public.has_more_elevated_role(
         auth.uid(), account_id, role));
 

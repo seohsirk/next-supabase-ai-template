@@ -36,14 +36,14 @@ export const UpdateMemberRoleDialog: React.FC<{
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
   userId: string;
-  accountId: string;
+  teamAccountId: string;
   userRole: Role;
   userRoleHierarchy: number;
 }> = ({
   isOpen,
   setIsOpen,
   userId,
-  accountId,
+  teamAccountId,
   userRole,
   userRoleHierarchy,
 }) => {
@@ -61,14 +61,14 @@ export const UpdateMemberRoleDialog: React.FC<{
         </DialogHeader>
 
         <RolesDataProvider
-          accountId={accountId}
+          accountId={teamAccountId}
           maxRoleHierarchy={userRoleHierarchy}
         >
           {(data) => (
             <UpdateMemberForm
               setIsOpen={setIsOpen}
               userId={userId}
-              accountId={accountId}
+              teamAccountId={teamAccountId}
               userRole={userRole}
               roles={data}
             />
@@ -82,13 +82,13 @@ export const UpdateMemberRoleDialog: React.FC<{
 function UpdateMemberForm({
   userId,
   userRole,
-  accountId,
+  teamAccountId,
   setIsOpen,
   roles,
 }: React.PropsWithChildren<{
   userId: string;
   userRole: Role;
-  accountId: string;
+  teamAccountId: string;
   setIsOpen: (isOpen: boolean) => void;
   roles: Role[];
 }>) {
@@ -99,7 +99,11 @@ function UpdateMemberForm({
   const onSubmit = ({ role }: { role: Role }) => {
     startTransition(async () => {
       try {
-        await updateMemberRoleAction({ accountId, userId, role });
+        await updateMemberRoleAction({
+          accountId: teamAccountId,
+          userId,
+          role,
+        });
 
         setIsOpen(false);
       } catch (e) {

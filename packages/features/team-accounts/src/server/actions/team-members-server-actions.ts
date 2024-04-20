@@ -33,6 +33,9 @@ export async function removeMemberFromAccountAction(
     userId,
   });
 
+  // revalidate all pages that depend on the account
+  revalidatePath('/home/[account]', 'layout');
+
   return { success: true };
 }
 
@@ -44,12 +47,20 @@ export async function updateMemberRoleAction(
   await assertSession(client);
 
   const service = new AccountMembersService(client);
+  const adminClient = getSupabaseServerActionClient({ admin: true });
 
-  await service.updateMemberRole({
-    accountId: params.accountId,
-    userId: params.userId,
-    role: params.role,
-  });
+  // update the role of the member
+  await service.updateMemberRole(
+    {
+      accountId: params.accountId,
+      userId: params.userId,
+      role: params.role,
+    },
+    adminClient,
+  );
+
+  // revalidate all pages that depend on the account
+  revalidatePath('/home/[account]', 'layout');
 
   return { success: true };
 }

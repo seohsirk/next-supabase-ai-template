@@ -59,7 +59,10 @@ export class AccountMembersService {
     return data;
   }
 
-  async updateMemberRole(params: z.infer<typeof UpdateMemberRoleSchema>) {
+  async updateMemberRole(
+    params: z.infer<typeof UpdateMemberRoleSchema>,
+    adminClient: SupabaseClient<Database>,
+  ) {
     const logger = await getLogger();
 
     const ctx = {
@@ -67,9 +70,33 @@ export class AccountMembersService {
       ...params,
     };
 
-    logger.info(ctx, `Updating member role...`);
+    logger.info(ctx, `Validating permissions to update member role...`);
 
-    const { data, error } = await this.client
+    const { data: canActionAccountMember, error: accountError } =
+      await this.client.rpc('can_action_account_member', {
+        user_id: params.userId,
+        target_team_account_id: params.accountId,
+      });
+
+    if (accountError ?? !canActionAccountMember) {
+      logger.error(
+        {
+          ...ctx,
+          accountError,
+        },
+        `Failed to validate permissions to update member role`,
+      );
+
+      throw new Error(`Failed to validate permissions to update member role`);
+    }
+
+    logger.info(ctx, `Permissions validated. Updating member role...`);
+
+    // we use the Admin client to update the role
+    // since we do not set any RLS policies on the accounts_memberships table
+    // for updating accounts_memberships. Instead, we use the can_action_account_member
+    // RPC to validate permissions to update the role
+    const { data, error } = await adminClient
       .from('accounts_memberships')
       .update({
         account_role: params.role,
