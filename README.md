@@ -6,6 +6,8 @@ This version uses Turborepo to manage multiple packages in a single repository.
 
 **This project is currently under development. Please wait for the stable release before using it in production. It will undergo big changes and improvements.**
 
+A demo version of this project can be found at [makerkit/next-supabase-saas-kit-turbo-demo](https://github.com/next-supabase-saas-kit-turbo-demo). This version contains a tasks functionality that is not present in the original version, multiple languages, and other various modifications.
+
 ## Roadmap
 
 The roadmap for the project is as follows:
@@ -219,6 +221,36 @@ The configuration is defined in the `apps/web/config` folder. Here you can find 
 - **`personal-account-sidebar.config.ts`**: Personal account sidebar configuration (e.g., links, icons, etc.)
 - **`team-account-sidebar.config.ts`**: Team account sidebar configuration (e.g., links, icons, etc.)
 
+## Conventions
+
+### 1. Packages vs Apps
+
+In this project, we use packages to define reusable code that can be shared across multiple applications.
+
+Apps are used to define the main application, including the routing, layout, and global styles.
+
+Apps pass down the configuration to the packages - and the packages provide the corresponding logic and components.
+
+- When you import something from a package, you will use `@kit/package-name` (e.g., `@kit/ui`, `@kit/shared`, etc.).
+- When you import something from an app, you will use `~/` (e.g., `~/lib/components`, `~/config`, etc.).
+
+Non-route folders within `app` will be prefixed with an underscore (e.g., `_components`, `_lib`, etc.). This makes it obvious that these folders are not routes and are used for shared components, utilities, etc.
+
+### 2. Environment Variables
+
+Environment variables are defined in the `.env` file in the root of the `apps/web` package.
+
+1. **Shared Environment Variables**: Shared environment variables are defined in the `.env` file. These are the env variables shared between environments (e.g., development, staging, production).
+2. **Environment Variables**: Environment variables for a specific environment are defined in the `.env.development` and `.env.production` files. These are the env variables specific to the development and production environments.
+3. **Secret Keys**: Secret keys and sensitive information are not stored in the `.env` file. Instead, they are stored in the environment variables of the CI/CD system.
+4. **Secret keys to be used locally**: If you need to use secret keys locally, you can store them in the `.env.local` file. This file is not committed to Git, therefore it is safe to store sensitive information in it.
+
+### 3. Your app
+
+Your application will be defined in the `apps/web` package. This is where you will define the main application, including the routing, layout, and global styles.
+
+If you want - create a package for it - but it's not necessary. The `apps/web` package is the main application and you can place all your logic and files there.
+
 ## Installing a Shadcn UI component
 
 To install a Shadcn UI component, you can use the following command:
@@ -237,7 +269,7 @@ We pass the `--path` flag to specify the path where the component should be inst
 
 ## Environment Variables
 
-The majority of the environment variables are defined in the `apps/web/.env` file. These are the env variables 
+The majority of the environment variables are defined in the `apps/web/.env` file. These are the env variables
 shared between environments (eg. they will be the same for development, staging, and production).
 
 **NB: You will not add any secret keys or sensitive information here.** Only configuration, paths, feature flags, etc.
@@ -358,7 +390,7 @@ SUPABASE_DB_WEBHOOK_SECRET=**************************************************
 
 Make it a strong secret key - and make sure to keep it secret!
 
-Now, you need to deploy the Supabase DB webhooks to your Supabase instance. 
+Now, you need to deploy the Supabase DB webhooks to your Supabase instance.
 
 Please copy the webhooks (written with Postgres SQL) from apps/web/supabase/seed.sql and make sure to replicate them to the Supabase instance.
 
