@@ -1,6 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { ArrowRight } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -129,7 +130,17 @@ export const PasswordSignUpForm: React.FC<{
         >
           <If
             condition={loading}
-            fallback={<Trans i18nKey={'auth:signUpWithEmail'} />}
+            fallback={
+              <>
+                <Trans i18nKey={'auth:signUpWithEmail'} />
+
+                <ArrowRight
+                  className={
+                    'zoom-in animate-in slide-in-from-left-2 fill-mode-both h-4 delay-500 duration-500'
+                  }
+                />
+              </>
+            }
           >
             <Trans i18nKey={'auth:signingUp'} />
           </If>
