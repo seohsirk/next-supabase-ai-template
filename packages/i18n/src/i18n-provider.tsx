@@ -1,7 +1,10 @@
 'use client';
 
-import { useSuspenseQuery } from '@tanstack/react-query';
-import type { InitOptions } from 'i18next';
+import type { InitOptions, i18n } from 'i18next';
+
+import { initializeI18nClient } from './i18n.client';
+
+let i18nInstance: i18n;
 
 type Resolver = (
   lang: string,
@@ -28,20 +31,17 @@ export function I18nProvider({
  * @param resolver
  */
 function useI18nClient(settings: InitOptions, resolver: Resolver) {
-  return useSuspenseQuery({
-    queryKey: ['i18n', settings.lng],
-    queryFn: async () => {
-      const isBrowser = typeof window !== 'undefined';
+  if (
+    !i18nInstance ||
+    i18nInstance.language !== settings.lng ||
+    i18nInstance.options.ns?.length !== settings.ns?.length
+  ) {
+    throw loadI18nInstance(settings, resolver);
+  }
 
-      if (isBrowser) {
-        const { initializeI18nClient } = await import('./i18n.client');
+  return i18nInstance;
+}
 
-        return await initializeI18nClient(settings, resolver);
-      } else {
-        const { initializeServerI18n } = await import('./i18n.server');
-
-        return await initializeServerI18n(settings, resolver);
-      }
-    },
-  });
+async function loadI18nInstance(settings: InitOptions, resolver: Resolver) {
+  i18nInstance = await initializeI18nClient(settings, resolver);
 }

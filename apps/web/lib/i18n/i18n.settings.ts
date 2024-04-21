@@ -1,4 +1,4 @@
-import { InitOptions } from 'i18next';
+import { createI18nSettings } from '@kit/i18n';
 
 /**
  * The default language of the application.
@@ -43,7 +43,7 @@ export const defaultI18nNamespaces = [
 export function getI18nSettings(
   language: string | undefined,
   ns: string | string[] = defaultI18nNamespaces,
-): InitOptions {
+) {
   let lng = language ?? defaultLanguage;
 
   if (!languages.includes(lng)) {
@@ -54,18 +54,9 @@ export function getI18nSettings(
     lng = defaultLanguage;
   }
 
-  return {
-    supportedLngs: languages,
-    fallbackLng: languages[0],
-    detection: undefined,
-    lng,
-    load: 'languageOnly',
-    preload: false,
-    lowerCaseLng: true,
-    fallbackNS: defaultI18nNamespaces,
-    ns,
-    react: {
-      useSuspense: true,
-    },
-  };
+  return createI18nSettings({
+    language: lng,
+    namespaces: ns,
+    languages,
+  });
 }

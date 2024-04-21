@@ -46,7 +46,7 @@ export function RootProviders({
   return (
     <QueryClientProvider client={queryClient}>
       <ReactQueryStreamedHydration>
-        <Suspense>
+        <Suspense fallback={null}>
           <I18nProvider settings={i18nSettings} resolver={i18nResolver}>
             <CaptchaProvider>
               <CaptchaTokenSetter siteKey={captchaSiteKey} />
