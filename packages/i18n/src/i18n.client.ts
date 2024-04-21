@@ -3,8 +3,6 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import resourcesToBackend from 'i18next-resources-to-backend';
 import { initReactI18next } from 'react-i18next';
 
-let clientInstance: i18n | null = null;
-
 /**
  * Initialize the i18n instance on the client.
  * @param settings - the i18n settings
@@ -14,10 +12,6 @@ export async function initializeI18nClient(
   settings: InitOptions,
   resolver: (lang: string, namespace: string) => Promise<object>,
 ): Promise<i18n> {
-  if (clientInstance) {
-    return Promise.resolve(clientInstance);
-  }
-
   await i18next
     .use(
       resourcesToBackend(async (language, namespace, callback) => {
@@ -47,7 +41,5 @@ export async function initializeI18nClient(
       },
     );
 
-  clientInstance = i18next;
-
-  return clientInstance;
+  return i18next;
 }

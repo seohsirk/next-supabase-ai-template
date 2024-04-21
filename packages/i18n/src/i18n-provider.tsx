@@ -1,8 +1,7 @@
 'use client';
 
-import type { InitOptions, i18n } from 'i18next';
-
-let client: i18n;
+import { useSuspenseQuery } from '@tanstack/react-query';
+import type { InitOptions } from 'i18next';
 
 type Resolver = (
   lang: string,
@@ -17,23 +16,32 @@ export function I18nProvider({
   settings: InitOptions;
   resolver: Resolver;
 }>) {
-  // If the client is not initialized or
-  // the language has changed, reinitialize the client
-  if (!client || client.language !== settings.lng) {
-    throw withI18nClient(settings, resolver);
-  }
+  useI18nClient(settings, resolver);
 
   return children;
 }
 
-async function withI18nClient(settings: InitOptions, resolver: Resolver) {
-  if (typeof window !== 'undefined') {
-    const { initializeI18nClient } = await import('./i18n.client');
+/**
+ * @name useI18nClient
+ * @description A hook that initializes the i18n client.
+ * @param settings
+ * @param resolver
+ */
+function useI18nClient(settings: InitOptions, resolver: Resolver) {
+  return useSuspenseQuery({
+    queryKey: ['i18n', settings.lng],
+    queryFn: async () => {
+      const isBrowser = typeof window !== 'undefined';
 
-    client = await initializeI18nClient(settings, resolver);
-  } else {
-    const { initializeServerI18n } = await import('./i18n.server');
+      if (isBrowser) {
+        const { initializeI18nClient } = await import('./i18n.client');
 
-    client = await initializeServerI18n(settings, resolver);
-  }
+        return await initializeI18nClient(settings, resolver);
+      } else {
+        const { initializeServerI18n } = await import('./i18n.server');
+
+        return await initializeServerI18n(settings, resolver);
+      }
+    },
+  });
 }
