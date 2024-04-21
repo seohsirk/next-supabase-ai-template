@@ -6,7 +6,7 @@ This version uses Turborepo to manage multiple packages in a single repository.
 
 **This project is currently under development. Please wait for the stable release before using it in production. It will undergo big changes and improvements.**
 
-A demo version of this project can be found at [makerkit/next-supabase-saas-kit-turbo-demo](https://github.com/next-supabase-saas-kit-turbo-demo). This version contains a tasks functionality that is not present in the original version, multiple languages, and other various modifications.
+A demo version of this project can be found at [makerkit/next-supabase-saas-kit-turbo-demo](https://github.com/makerkit/next-supabase-saas-kit-turbo-demo). This version contains a tasks functionality that is not present in the original version, multiple languages, and other various modifications.
 
 ## Roadmap
 
