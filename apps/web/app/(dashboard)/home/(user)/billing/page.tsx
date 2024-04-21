@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 
 import {
   BillingPortalCard,
+  CurrentLifetimeOrderCard,
   CurrentSubscriptionCard,
 } from '@kit/billing-gateway/components';
 import { requireUser } from '@kit/supabase/require-user';
@@ -37,7 +38,7 @@ async function PersonalAccountBillingPage() {
     redirect(auth.redirectTo);
   }
 
-  const [subscription, customerId] = await loadPersonalAccountBillingPageData(
+  const [data, customerId] = await loadPersonalAccountBillingPageData(
     auth.data.id,
   );
 
@@ -50,7 +51,7 @@ async function PersonalAccountBillingPage() {
 
       <PageBody>
         <div className={'flex flex-col space-y-8'}>
-          <If condition={!subscription}>
+          <If condition={!data}>
             <PersonalAccountCheckoutForm customerId={customerId} />
 
             <If condition={customerId}>
@@ -58,15 +59,26 @@ async function PersonalAccountBillingPage() {
             </If>
           </If>
 
-          <If condition={subscription}>
+          <If condition={data}>
             {(subscription) => (
               <div
                 className={'mx-auto flex w-full max-w-2xl flex-col space-y-6'}
               >
-                <CurrentSubscriptionCard
-                  subscription={subscription}
-                  config={billingConfig}
-                />
+                <If condition={data}>
+                  <CurrentSubscriptionCard
+                    subscription={data.}
+                    config={billingConfig}
+                  />
+                </If>
+
+                <If condition={!data}>
+                  <PersonalAccountCheckoutForm customerId={customerId} />
+
+                  <CurrentLifetimeOrderCard
+                    order={data}
+                    config={billingConfig}
+                  />
+                </If>
 
                 <If condition={customerId}>
                   <CustomerBillingPortalForm />
