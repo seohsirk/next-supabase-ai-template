@@ -21,9 +21,9 @@ export function createI18nSettings({
     fallbackLng: languages[0],
     detection: undefined,
     lng,
-    load: 'languageOnly',
-    preload: false,
-    lowerCaseLng: true,
+    load: 'languageOnly' as const,
+    preload: false as const,
+    lowerCaseLng: true as const,
     fallbackNS: ns,
     ns,
     react: {

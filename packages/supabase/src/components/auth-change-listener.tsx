@@ -12,11 +12,15 @@ import {
   useUserSession,
 } from '../hooks/use-user-session';
 
+const PRIVATE_PATH_PREFIXES = ['/home', '/admin', '/join', '/update-password'];
+
 function AuthRedirectListener({
   children,
+  privatePathPrefixes = PRIVATE_PATH_PREFIXES,
   appHomePath,
 }: React.PropsWithChildren<{
   appHomePath: string;
+  privatePathPrefixes?: string[];
 }>) {
   const client = useSupabase();
   const pathName = usePathname();
@@ -30,7 +34,8 @@ function AuthRedirectListener({
     const listener = client.auth.onAuthStateChange((_, user) => {
       // log user out if user is falsy
       // and if the current path is a private route
-      const shouldRedirectUser = !user && isPrivateRoute(pathName);
+      const shouldRedirectUser =
+        !user && isPrivateRoute(pathName, privatePathPrefixes);
 
       if (shouldRedirectUser) {
         // send user away when signed out
@@ -86,11 +91,7 @@ export function AuthChangeListener({
 
 /**
  * Determines if a given path is a private route.
- *
- * @param {string} path - The path to check.
  */
-function isPrivateRoute(path: string) {
-  const prefixes = ['/home', '/admin', '/join', '/update-password'];
-
-  return prefixes.some((prefix) => path.startsWith(prefix));
+function isPrivateRoute(path: string, privatePathPrefixes: string[]) {
+  return privatePathPrefixes.some((prefix) => path.startsWith(prefix));
 }

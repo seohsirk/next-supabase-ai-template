@@ -1,7 +1,5 @@
 'use client';
 
-import { Suspense } from 'react';
-
 import dynamic from 'next/dynamic';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -46,25 +44,23 @@ export function RootProviders({
   return (
     <QueryClientProvider client={queryClient}>
       <ReactQueryStreamedHydration>
-        <Suspense fallback={null}>
-          <I18nProvider settings={i18nSettings} resolver={i18nResolver}>
-            <CaptchaProvider>
-              <CaptchaTokenSetter siteKey={captchaSiteKey} />
+        <I18nProvider settings={i18nSettings} resolver={i18nResolver}>
+          <CaptchaProvider>
+            <CaptchaTokenSetter siteKey={captchaSiteKey} />
 
-              <AuthChangeListener appHomePath={pathsConfig.app.home}>
-                <ThemeProvider
-                  attribute="class"
-                  enableSystem
-                  disableTransitionOnChange
-                  defaultTheme={theme}
-                  enableColorScheme={false}
-                >
-                  {children}
-                </ThemeProvider>
-              </AuthChangeListener>
-            </CaptchaProvider>
-          </I18nProvider>
-        </Suspense>
+            <AuthChangeListener appHomePath={pathsConfig.app.home}>
+              <ThemeProvider
+                attribute="class"
+                enableSystem
+                disableTransitionOnChange
+                defaultTheme={theme}
+                enableColorScheme={false}
+              >
+                {children}
+              </ThemeProvider>
+            </AuthChangeListener>
+          </CaptchaProvider>
+        </I18nProvider>
       </ReactQueryStreamedHydration>
     </QueryClientProvider>
   );
