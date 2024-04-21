@@ -60,24 +60,24 @@ async function PersonalAccountBillingPage() {
           </If>
 
           <If condition={data}>
-            {(subscription) => (
+            {(data) => (
               <div
                 className={'mx-auto flex w-full max-w-2xl flex-col space-y-6'}
               >
-                <If condition={data}>
+                {'active' in data ? (
                   <CurrentSubscriptionCard
-                    subscription={data.}
+                    subscription={data}
                     config={billingConfig}
                   />
-                </If>
-
-                <If condition={!data}>
-                  <PersonalAccountCheckoutForm customerId={customerId} />
-
+                ) : (
                   <CurrentLifetimeOrderCard
                     order={data}
                     config={billingConfig}
                   />
+                )}
+
+                <If condition={!data}>
+                  <PersonalAccountCheckoutForm customerId={customerId} />
                 </If>
 
                 <If condition={customerId}>
