@@ -21,6 +21,10 @@ export const config = {
 export async function middleware(request: NextRequest) {
   const response = NextResponse.next();
 
+  // set a unique request ID for each request
+  // this helps us log and trace requests
+  setRequestId(request);
+
   // apply CSRF and session middleware
   const csrfResponse = await withCsrfMiddleware(request, response);
 
@@ -109,6 +113,9 @@ async function adminMiddleware(request: NextRequest, response: NextResponse) {
   return response;
 }
 
+/**
+ * Define URL patterns and their corresponding handlers.
+ */
 function getPatterns() {
   return [
     {
@@ -170,6 +177,10 @@ function getPatterns() {
   ];
 }
 
+/**
+ * Match URL patterns to specific handlers.
+ * @param url
+ */
 function matchUrlPattern(url: string) {
   const patterns = getPatterns();
   const input = url.split('?')[0];
@@ -181,4 +192,12 @@ function matchUrlPattern(url: string) {
       return pattern.handler;
     }
   }
+}
+
+/**
+ * Set a unique request ID for each request.
+ * @param request
+ */
+function setRequestId(request: Request) {
+  request.headers.set('x-correlation-id', crypto.randomUUID());
 }

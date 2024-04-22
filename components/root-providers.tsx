@@ -8,6 +8,7 @@ import { ThemeProvider } from 'next-themes';
 
 import { CaptchaProvider } from '@kit/auth/captcha/client';
 import { I18nProvider } from '@kit/i18n/provider';
+import { MonitoringProvider } from '@kit/monitoring/components';
 import { AuthChangeListener } from '@kit/supabase/components/auth-change-listener';
 
 import appConfig from '~/config/app.config';
@@ -42,26 +43,28 @@ export function RootProviders({
   const i18nSettings = getI18nSettings(lang);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <ReactQueryStreamedHydration>
-        <I18nProvider settings={i18nSettings} resolver={i18nResolver}>
-          <CaptchaProvider>
-            <CaptchaTokenSetter siteKey={captchaSiteKey} />
+    <MonitoringProvider>
+      <QueryClientProvider client={queryClient}>
+        <ReactQueryStreamedHydration>
+          <I18nProvider settings={i18nSettings} resolver={i18nResolver}>
+            <CaptchaProvider>
+              <CaptchaTokenSetter siteKey={captchaSiteKey} />
 
-            <AuthChangeListener appHomePath={pathsConfig.app.home}>
-              <ThemeProvider
-                attribute="class"
-                enableSystem
-                disableTransitionOnChange
-                defaultTheme={theme}
-                enableColorScheme={false}
-              >
-                {children}
-              </ThemeProvider>
-            </AuthChangeListener>
-          </CaptchaProvider>
-        </I18nProvider>
-      </ReactQueryStreamedHydration>
-    </QueryClientProvider>
+              <AuthChangeListener appHomePath={pathsConfig.app.home}>
+                <ThemeProvider
+                  attribute="class"
+                  enableSystem
+                  disableTransitionOnChange
+                  defaultTheme={theme}
+                  enableColorScheme={false}
+                >
+                  {children}
+                </ThemeProvider>
+              </AuthChangeListener>
+            </CaptchaProvider>
+          </I18nProvider>
+        </ReactQueryStreamedHydration>
+      </QueryClientProvider>
+    </MonitoringProvider>
   );
 }
