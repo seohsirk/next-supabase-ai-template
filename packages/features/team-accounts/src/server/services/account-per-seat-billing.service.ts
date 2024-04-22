@@ -28,7 +28,7 @@ export class AccountPerSeatBillingService {
           id,
           subscription_items !inner (
             quantity,
-            id: variant_id,
+            id,
             type
           )
         `,

@@ -242,7 +242,11 @@ export class TeamBillingService {
     }> = [];
 
     for (const lineItem of lineItems) {
-      if (lineItem.type === 'per-seat') {
+      // check if the line item is a per seat type
+      const isPerSeat = lineItem.type === 'per_seat';
+
+      if (isPerSeat) {
+        // get the current number of members in the account
         const quantity = await this.getCurrentMembersCount(accountId);
 
         const item = {
@@ -254,6 +258,7 @@ export class TeamBillingService {
       }
     }
 
+    // set initial quantity for the line items
     return variantQuantities;
   }
 

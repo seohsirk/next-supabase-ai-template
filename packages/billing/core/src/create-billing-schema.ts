@@ -1,7 +1,13 @@
 import { z } from 'zod';
 
+enum LineItemType {
+  Flat = 'flat',
+  PerSeat = 'per_seat',
+  Metered = 'metered',
+}
+
 const BillingIntervalSchema = z.enum(['month', 'year']);
-const LineItemTypeSchema = z.enum(['flat', 'per-seat', 'metered']);
+const LineItemTypeSchema = z.nativeEnum(LineItemType);
 
 export const BillingProviderSchema = z.enum([
   'stripe',
@@ -83,8 +89,10 @@ export const PlanSchema = z
     lineItems: z.array(LineItemSchema).refine(
       (schema) => {
         const types = schema.map((item) => item.type);
-        const perSeat = types.filter((type) => type === 'per-seat').length;
-        const flat = types.filter((type) => type === 'flat').length;
+        const perSeat = types.filter(
+          (type) => type === LineItemType.PerSeat,
+        ).length;
+        const flat = types.filter((type) => type === LineItemType.Flat).length;
 
         return perSeat <= 1 && flat <= 1;
       },
@@ -135,7 +143,7 @@ export const PlanSchema = z
     (data) => {
       if (data.paymentType === 'one-time') {
         const nonFlatLineItems = data.lineItems.filter(
-          (item) => item.type !== 'flat',
+          (item) => item.type !== LineItemType.Flat,
         );
 
         return nonFlatLineItems.length === 0;
@@ -314,7 +322,7 @@ export function getPrimaryLineItem(
         }
 
         const flatLineItem = plan.lineItems.find(
-          (item) => item.type === 'flat',
+          (item) => item.type === LineItemType.Flat,
         );
 
         if (flatLineItem) {
