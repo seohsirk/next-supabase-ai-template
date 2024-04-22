@@ -37,6 +37,7 @@ export const generateMetadata = async () => {
 async function TeamAccountBillingPage({ params }: Params) {
   const workspace = await loadTeamWorkspace(params.account);
   const accountId = workspace.account.id;
+
   const [subscription, customerId] =
     await loadTeamAccountBillingPage(accountId);
 

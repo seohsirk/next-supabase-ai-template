@@ -20,7 +20,7 @@ import pathsConfig from '~/config/paths.config';
 export const loadTeamWorkspace = cache(async (accountSlug: string) => {
   const client = getSupabaseServerComponentClient();
 
-  const accountPromise = client.rpc('organization_account_workspace', {
+  const accountPromise = client.rpc('team_account_workspace', {
     account_slug: accountSlug,
   });
 
@@ -30,12 +30,12 @@ export const loadTeamWorkspace = cache(async (accountSlug: string) => {
     accountResult,
     accountsResult,
     {
-      data: { session },
+      data: { user },
     },
   ] = await Promise.all([
     accountPromise,
     accountsPromise,
-    client.auth.getSession(),
+    client.auth.getUser(),
   ]);
 
   if (accountResult.error) {
@@ -63,6 +63,6 @@ export const loadTeamWorkspace = cache(async (accountSlug: string) => {
   return {
     account: accountData,
     accounts: accountsResult.data,
-    session,
+    user,
   };
 });

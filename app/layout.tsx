@@ -1,4 +1,5 @@
 import { Urbanist as HeadingFont, Inter as SansFont } from 'next/font/google';
+import Head from 'next/head';
 import { cookies, headers } from 'next/headers';
 
 import { Toaster } from '@kit/ui/sonner';
@@ -36,7 +37,9 @@ export default async function RootLayout({
 
   return (
     <html lang={language} className={getClassName(theme)}>
-      <CsrfTokenMeta />
+      <Head>
+        <CsrfTokenMeta />
+      </Head>
 
       <body>
         <RootProviders theme={theme} lang={language}>
@@ -51,14 +54,16 @@ export default async function RootLayout({
 
 function getClassName(theme?: string) {
   const dark = theme === 'dark';
+  const light = !dark;
 
   return cn(
     'min-h-screen bg-background antialiased',
-    {
-      dark,
-    },
     sans.variable,
     heading.variable,
+    {
+      dark,
+      light,
+    },
   );
 }
 

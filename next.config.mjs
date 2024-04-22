@@ -52,6 +52,9 @@ const config = {
       transform: 'lodash/{{member}}',
     },
   },
+  env: {
+    NEXT_PUBLIC_BUILD_ID: process.env.GIT_HASH ?? performance.now().toString(),
+  },
   /** We already do linting and typechecking as separate tasks in CI */
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
