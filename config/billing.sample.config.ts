@@ -33,13 +33,13 @@ export default createBillingSchema({
               id: 'price_1NNwYHI1i3VnbZTqI2UzaHIe',
               name: 'Addon 2',
               cost: 9.99,
-              type: 'flat',
+              type: 'flat' as const,
             },
             {
               id: 'price_1P8N0zI1i3VnbZTqtUPc1Zvr',
               name: 'Addon 3',
               cost: 0,
-              type: 'per_seat',
+              type: 'per_seat' as const,
               tiers: [
                 {
                   upTo: 1,
@@ -67,7 +67,7 @@ export default createBillingSchema({
               id: 'starter-yearly',
               name: 'Base',
               cost: 99.99,
-              type: 'flat',
+              type: 'flat' as const,
             },
           ],
         },
