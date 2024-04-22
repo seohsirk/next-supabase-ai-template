@@ -1314,7 +1314,7 @@ NEXT_PUBLIC_MONITORING_PROVIDER=sentry
 To use Baselime, you need to set the following environment variables:
 
 ```bash
-BASELIME_KEY=your_key
+NEXT_PUBLIC_BASELIME_KEY=your_key
 NEXT_PUBLIC_MONITORING_PROVIDER=baselime
 ```
 

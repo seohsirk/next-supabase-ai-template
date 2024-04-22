@@ -1,6 +1,6 @@
 import { BaselimeRum } from '@baselime/react-rum';
 
-export function BaselineProvider({
+export function BaselimeProvider({
   children,
   apiKey,
   enableWebVitals,

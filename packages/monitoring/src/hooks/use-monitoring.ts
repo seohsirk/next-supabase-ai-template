@@ -5,7 +5,7 @@ import { MonitoringService } from '../services/monitoring.service';
 
 const MONITORING = getMonitoringProvider();
 
-let service: MonitoringService;
+let serviceFactory: () => MonitoringService;
 
 /**
  * @name useMonitoring
@@ -13,22 +13,20 @@ let service: MonitoringService;
  * Use Suspense to suspend while loading the service.
  */
 export function useMonitoring() {
-  if (!service) {
+  if (!serviceFactory) {
     throw withMonitoringService();
   }
 
-  console.log(service);
-
-  return service;
+  return serviceFactory();
 }
 
 async function withMonitoringService() {
-  service = await loadMonitoringService();
+  serviceFactory = await loadMonitoringService();
 }
 
-async function loadMonitoringService() {
+async function loadMonitoringService(): Promise<() => MonitoringService> {
   if (!MONITORING) {
-    return new ConsoleMonitoringService();
+    return Promise.resolve(() => new ConsoleMonitoringService());
   }
 
   switch (MONITORING) {
@@ -45,7 +43,9 @@ async function loadMonitoringService() {
     }
 
     default: {
-      throw new Error(`Unknown instrumentation provider: ${MONITORING}`);
+      throw new Error(
+        `Unknown instrumentation provider: ${MONITORING as string}`,
+      );
     }
   }
 }
