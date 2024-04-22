@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 
 import { getSupabaseServerComponentClient } from '@kit/supabase/server-component-client';
 
-import { isSuperAdmin } from '../lib/server/is-super-admin';
+import { isSuperAdmin } from '../lib/server/utils/is-super-admin';
 
 type LayoutOrPageComponent<Params> = React.ComponentType<Params>;
 

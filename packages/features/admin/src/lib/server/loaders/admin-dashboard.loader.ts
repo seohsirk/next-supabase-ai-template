@@ -1,58 +1,19 @@
 import 'server-only';
 
+import { cache } from 'react';
+
 import { getSupabaseServerComponentClient } from '@kit/supabase/server-component-client';
+
+import { AdminDashboardService } from '../services/admin-dashboard.service';
 
 /**
  * @name loadAdminDashboard
  * @description Load the admin dashboard data.
  * @param params
  */
-export async function loadAdminDashboard(params?: {
-  count: 'exact' | 'estimated' | 'planned';
-}) {
-  const count = params?.count ?? 'estimated';
+export const loadAdminDashboard = cache(() => {
   const client = getSupabaseServerComponentClient({ admin: true });
+  const service = new AdminDashboardService(client);
 
-  const selectParams = {
-    count,
-    head: true,
-  };
-
-  const subscriptionsPromise = client
-    .from('subscriptions')
-    .select('*', selectParams)
-    .eq('status', 'active')
-    .then((response) => response.count);
-
-  const trialsPromise = client
-    .from('subscriptions')
-    .select('*', selectParams)
-    .eq('status', 'trialing')
-    .then((response) => response.count);
-
-  const accountsPromise = client
-    .from('accounts')
-    .select('*', selectParams)
-    .eq('is_personal_account', true)
-    .then((response) => response.count);
-
-  const teamAccountsPromise = client
-    .from('accounts')
-    .select('*', selectParams)
-    .eq('is_personal_account', false)
-    .then((response) => response.count);
-
-  const [subscriptions, trials, accounts, teamAccounts] = await Promise.all([
-    subscriptionsPromise,
-    trialsPromise,
-    accountsPromise,
-    teamAccountsPromise,
-  ]);
-
-  return {
-    subscriptions,
-    trials,
-    accounts,
-    teamAccounts,
-  };
-}
+  return service.getDashboardData();
+});

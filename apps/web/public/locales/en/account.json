@@ -1,6 +1,6 @@
 {
-  "generalTab": "My Details",
-  "generalTabSubheading": "Manage your profile details",
+  "accountTabLabel": "Account Settings",
+  "accountTabDescription": "Manage your account settings",
   "emailTab": "Email",
   "emailTabTabSubheading": "Update your email address",
   "passwordTab": "Password",

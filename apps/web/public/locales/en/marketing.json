@@ -18,6 +18,11 @@
   "product": "Product",
   "legal": "Legal",
   "termsOfService": "Terms of Service",
+  "termsOfServiceDescription": "Our terms and conditions",
   "cookiePolicy": "Cookie Policy",
-  "privacyPolicy": "Privacy Policy"
+  "cookiePolicyDescription": "Our cookie policy and how we use them",
+  "privacyPolicy": "Privacy Policy",
+  "privacyPolicyDescription": "Our privacy policy and how we use your data"
 }
+
+

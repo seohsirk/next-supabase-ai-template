@@ -62,7 +62,11 @@ async function BlogPost({ params }: { params: { slug: string } }) {
     notFound();
   }
 
-  return <Post post={post} content={post.content} />;
+  return (
+    <div className={'container'}>
+      <Post post={post} content={post.content} />;
+    </div>
+  );
 }
 
 export default withI18n(BlogPost);

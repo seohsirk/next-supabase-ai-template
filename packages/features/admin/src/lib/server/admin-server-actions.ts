@@ -6,7 +6,6 @@ import { redirect } from 'next/navigation';
 import { enhanceAction } from '@kit/next/actions';
 import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
 
-import { adminAction } from './admin-action';
 import {
   BanUserSchema,
   DeleteAccountSchema,
@@ -16,6 +15,7 @@ import {
 } from './schema/admin-actions.schema';
 import { AdminAccountsService } from './services/admin-accounts.service';
 import { AdminAuthUserService } from './services/admin-auth-user.service';
+import { adminAction } from './utils/admin-action';
 
 /**
  * @name banUserAction
