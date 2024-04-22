@@ -507,20 +507,63 @@ function Component() {
     email: string;
     password: string;
   }) => {
-    const response = await fetch('/api/my-api-route', {
+    const response = await fetch('/my-api-route', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'x-csrf-token': csrfToken,
+        'x-captcha-token': captchaToken,
       },
-      body: JSON.stringify({
-        ...params,
-        captchaToken,
-      }),
+      body: JSON.stringify(params),
     });
     
     // ... your code here
   };
+  
+  // ... your code here
+}
+```
+
+You can improve the above using React Query:
+
+```tsx
+import { useMutation } from '@tanstack/react-query';
+import { useCaptchaToken } from '@kit/auth/captcha/client';
+
+function Component() {
+  const captchaToken = useCaptchaToken();
+  const mutation = useMutateData();
+
+  const onSubmit = async (params: {
+    email: string;
+    password: string;
+  }) => {
+    await mutation.mutateAsync(params);
+  };
+  
+  // ... your code here
+}
+
+function useMutateData() {
+  return useMutation({
+    mutationKey: 'my-mutation',
+    mutationFn: async (params: { email: string; password: string }) => {
+      const response = await fetch('/my-api-route', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-captcha-token': captchaToken,
+        },
+        body: JSON.stringify(params),
+      });
+      
+      if (!response.ok) {
+        throw new Error('An error occurred');
+      }
+
+      return response.json();
+    },
+  });
 }
 ```
 
