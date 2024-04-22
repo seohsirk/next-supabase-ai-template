@@ -29,7 +29,7 @@
     "@radix-ui/react-tooltip": "1.0.7",
     "clsx": "^2.1.0",
     "cmdk": "1.0.0",
-    "input-otp": "1.2.3",
+    "input-otp": "1.2.4",
     "react-top-loading-bar": "2.3.1",
     "tailwind-merge": "^2.2.2"
   },
@@ -58,7 +58,7 @@
     "class-variance-authority": "^0.7.0",
     "date-fns": "^3.6.0",
     "eslint": "^8.57.0",
-    "lucide-react": "^0.367.0",
+    "lucide-react": "^0.368.0",
     "next": "14.2.1",
     "next-themes": "0.3.0",
     "prettier": "^3.2.5",
@@ -66,7 +66,7 @@
     "react-hook-form": "^7.51.3",
     "react-i18next": "^14.1.0",
     "sonner": "^1.4.41",
-    "tailwindcss": "3.4.1",
+    "tailwindcss": "3.4.3",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "^5.4.5",
     "zod": "^3.22.4"

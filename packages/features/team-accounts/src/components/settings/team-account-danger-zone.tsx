@@ -47,14 +47,14 @@ export function TeamAccountDangerZone({
 
   primaryOwnerUserId: string;
 }>) {
-  const { data: user, isLoading } = useUser();
+  const { data: user } = useUser();
 
-  if (isLoading) {
+  if (!user) {
     return <LoadingOverlay fullPage={false} />;
   }
 
   // Only the primary owner can delete the team account
-  const userIsPrimaryOwner = user?.id === primaryOwnerUserId;
+  const userIsPrimaryOwner = user.id === primaryOwnerUserId;
 
   if (userIsPrimaryOwner) {
     return <DeleteTeamContainer account={account} />;

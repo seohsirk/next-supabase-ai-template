@@ -44,7 +44,9 @@ export function PageHeader({
   mobileNavigation?: React.ReactNode;
 }>) {
   return (
-    <div className={'flex items-start justify-between p-4'}>
+    <div
+      className={'mb-4 flex items-start justify-between border-b px-4 py-2.5'}
+    >
       <div
         className={
           'flex items-center space-x-4 lg:flex-col lg:items-start lg:space-x-0'

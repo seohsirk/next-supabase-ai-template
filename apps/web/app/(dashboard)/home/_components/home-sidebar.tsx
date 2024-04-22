@@ -16,7 +16,7 @@ import { loadUserWorkspace } from '../_lib/load-user-workspace';
 
 export function HomeSidebar() {
   const collapsed = getSidebarCollapsed();
-  const { accounts, user } = use(loadUserWorkspace());
+  const { accounts, user, workspace } = use(loadUserWorkspace());
 
   return (
     <Sidebar collapsed={collapsed}>
@@ -38,7 +38,11 @@ export function HomeSidebar() {
 
       <div className={'absolute bottom-4 left-0 w-full'}>
         <SidebarContent>
-          <ProfileAccountDropdownContainer collapsed={collapsed} user={user} />
+          <ProfileAccountDropdownContainer
+            collapsed={collapsed}
+            user={user}
+            account={workspace}
+          />
         </SidebarContent>
       </div>
     </Sidebar>

@@ -10,31 +10,27 @@ import { toast } from 'sonner';
 import { Database } from '@kit/supabase/database';
 import { useSupabase } from '@kit/supabase/hooks/use-supabase';
 import { ImageUploader } from '@kit/ui/image-uploader';
-import { LoadingOverlay } from '@kit/ui/loading-overlay';
 import { Trans } from '@kit/ui/trans';
 
-import {
-  usePersonalAccountData,
-  useRevalidatePersonalAccountDataQuery,
-} from '../../hooks/use-personal-account-data';
+import { useRevalidatePersonalAccountDataQuery } from '../../hooks/use-personal-account-data';
 
 const AVATARS_BUCKET = 'account_image';
 
-export function UpdateAccountImageContainer() {
-  const accountData = usePersonalAccountData();
+export function UpdateAccountImageContainer({
+  user,
+}: {
+  user: {
+    pictureUrl: string | null;
+    id: string;
+  };
+}) {
   const revalidateUserDataQuery = useRevalidatePersonalAccountDataQuery();
-
-  if (!accountData.data) {
-    return <LoadingOverlay fullPage={false} />;
-  }
-
-  const userId = accountData.data.id;
 
   return (
     <UploadProfileAvatarForm
-      pictureUrl={accountData.data.picture_url ?? null}
-      userId={userId}
-      onAvatarUpdated={() => revalidateUserDataQuery(userId)}
+      pictureUrl={user.pictureUrl ?? null}
+      userId={user.id}
+      onAvatarUpdated={() => revalidateUserDataQuery(user.id)}
     />
   );
 }

@@ -10,47 +10,53 @@ let clientInstance: i18n | null = null;
  * @param settings - the i18n settings
  * @param resolver - a function that resolves the i18n resources
  */
-export function initializeI18nClient(
+export async function initializeI18nClient(
   settings: InitOptions,
   resolver: (lang: string, namespace: string) => Promise<object>,
 ): Promise<i18n> {
-  if (clientInstance?.isInitialized) {
+  if (clientInstance) {
     return Promise.resolve(clientInstance);
   }
 
-  return new Promise<i18n>((resolve, reject) => {
-    void i18next
-      .use(initReactI18next)
-      .use(
-        resourcesToBackend(async (language, namespace, callback) => {
-          const data = await resolver(language, namespace);
+  const loadedLanguages: string[] = [];
 
-          return callback(null, data);
-        }),
-      )
-      .use(LanguageDetector)
-      .init(
-        {
-          ...settings,
-          detection: {
-            order: ['htmlTag', 'cookie', 'navigator'],
-            caches: ['cookie'],
-            lookupCookie: 'lang',
-          },
-          interpolation: {
-            escapeValue: false,
-          },
+  await i18next
+    .use(
+      resourcesToBackend(async (language, namespace, callback) => {
+        const data = await resolver(language, namespace);
+
+        loadedLanguages.push(language);
+
+        return callback(null, data);
+      }),
+    )
+    .use(LanguageDetector)
+    .use(initReactI18next)
+    .init(
+      {
+        ...settings,
+        detection: {
+          order: ['htmlTag', 'cookie', 'navigator'],
+          caches: ['cookie'],
+          lookupCookie: 'lang',
         },
-        (err) => {
-          if (err) {
-            console.error('Error initializing i18n client', err);
-            return reject(err);
-          }
-
-          clientInstance = i18next;
-
-          resolve(clientInstance);
+        interpolation: {
+          escapeValue: false,
         },
-      );
-  });
+      },
+      (err) => {
+        if (err) {
+          console.error('Error initializing i18n client', err);
+        }
+      },
+    );
+
+  // keep component suspended until all languages are loaded
+  if (loadedLanguages.length !== settings.ns?.length) {
+    throw new Error();
+  }
+
+  clientInstance = i18next;
+
+  return clientInstance;
 }

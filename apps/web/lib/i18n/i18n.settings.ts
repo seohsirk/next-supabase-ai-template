@@ -61,5 +61,8 @@ export function getI18nSettings(
     fallbackNS: defaultI18nNamespaces,
     defaultNS: defaultI18nNamespaces,
     ns,
+    react: {
+      useSuspense: true,
+    },
   };
 }

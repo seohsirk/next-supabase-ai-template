@@ -160,13 +160,13 @@ export function SidebarItem({
 
   const currentPath = usePathname() ?? '';
   const active = isRouteActive(path, currentPath, end ? 0 : 3);
-  const variant = active ? 'default' : 'ghost';
+  const variant = active ? 'secondary' : 'ghost';
   const size = collapsed ? 'icon' : 'default';
 
   return (
     <Link key={path} href={path}>
       <Button
-        className={cn('flex w-full', {
+        className={cn('flex w-full shadow-none', {
           'justify-start space-x-2': !collapsed,
         })}
         size={size}

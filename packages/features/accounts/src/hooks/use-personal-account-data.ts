@@ -5,7 +5,15 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useSupabase } from '@kit/supabase/hooks/use-supabase';
 import { useUser } from '@kit/supabase/hooks/use-user';
 
-export function usePersonalAccountData() {
+export function usePersonalAccountData(
+  partialAccount?:
+    | {
+        id: string | null;
+        name: string | null;
+        picture_url: string | null;
+      }
+    | undefined,
+) {
   const client = useSupabase();
   const user = useUser();
   const userId = user.data?.id;
@@ -43,6 +51,13 @@ export function usePersonalAccountData() {
     enabled: !!userId,
     refetchOnWindowFocus: false,
     refetchOnMount: false,
+    initialData: partialAccount?.id
+      ? {
+          id: partialAccount.id,
+          name: partialAccount.name,
+          picture_url: partialAccount.picture_url,
+        }
+      : undefined,
   });
 }
 

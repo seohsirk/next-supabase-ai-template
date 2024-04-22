@@ -1781,19 +1781,21 @@ language plpgsql;
 --
 -- VIEW "user_account_workspace":
 -- we create a view to load the general app data for the authenticated
--- user which includes the user's accounts, memberships, and roles, and relative subscription status
+-- user which includes the user accounts and memberships
 create or replace view public.user_account_workspace as
 select
     accounts.id as id,
     accounts.name as name,
     accounts.picture_url as picture_url,
+    accounts.public_data as public_data,
     subscriptions.status as subscription_status
 from
     public.accounts
     left join public.subscriptions on accounts.id = subscriptions.account_id
 where
     primary_owner_user_id = auth.uid()
-    and accounts.is_personal_account = true;
+    and accounts.is_personal_account = true
+limit 1;
 
 grant select on public.user_account_workspace to authenticated, service_role;
 
@@ -1822,7 +1824,7 @@ grant select on public.user_accounts to authenticated, service_role;
 -- Function: get the account workspace for an organization account
 -- to load all the required data for the authenticated user within the account scope
 create or replace function
-    public.organization_account_workspace(account_slug text)
+    public.team_account_workspace(account_slug text)
     returns table(
         id uuid,
         name varchar(255),
@@ -1869,7 +1871,7 @@ end;
 $$
 language plpgsql;
 
-grant execute on function public.organization_account_workspace(text)
+grant execute on function public.team_account_workspace(text)
     to authenticated, service_role;
 
 -- Functions: get account members
