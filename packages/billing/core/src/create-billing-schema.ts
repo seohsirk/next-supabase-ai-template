@@ -1,13 +1,13 @@
 import { z } from 'zod';
 
-enum LineItemType {
+export enum LineItemType {
   Flat = 'flat',
   PerSeat = 'per_seat',
   Metered = 'metered',
 }
 
 const BillingIntervalSchema = z.enum(['month', 'year']);
-const LineItemTypeSchema = z.nativeEnum(LineItemType);
+const LineItemTypeSchema = z.enum(['flat', 'per_seat', 'metered']);
 
 export const BillingProviderSchema = z.enum([
   'stripe',
@@ -66,7 +66,8 @@ export const LineItemSchema = z
   })
   .refine(
     (data) =>
-      data.type !== 'metered' || (data.unit && data.tiers !== undefined),
+      data.type !== LineItemType.Metered ||
+      (data.unit && data.tiers !== undefined),
     {
       message: 'Metered line items must have a unit and tiers',
       path: ['type', 'unit', 'tiers'],

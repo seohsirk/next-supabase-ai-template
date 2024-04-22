@@ -1,6 +1,5 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 
-import { createBillingWebhooksService } from '@kit/billing-gateway';
 import { getLogger } from '@kit/shared/logger';
 import { Database } from '@kit/supabase/database';
 
