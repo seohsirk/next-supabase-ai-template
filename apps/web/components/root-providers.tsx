@@ -9,7 +9,7 @@ import { ThemeProvider } from 'next-themes';
 import { CaptchaProvider } from '@kit/auth/captcha/client';
 import { I18nProvider } from '@kit/i18n/provider';
 import { MonitoringProvider } from '@kit/monitoring/components';
-import { AuthChangeListener } from '@kit/supabase/components/auth-change-listener';
+import { useAuthChangeListener } from '@kit/supabase/hooks/use-auth-change-listener';
 
 import appConfig from '~/config/app.config';
 import authConfig from '~/config/auth.config';
@@ -50,7 +50,7 @@ export function RootProviders({
             <CaptchaProvider>
               <CaptchaTokenSetter siteKey={captchaSiteKey} />
 
-              <AuthChangeListener appHomePath={pathsConfig.app.home}>
+              <AuthProvider>
                 <ThemeProvider
                   attribute="class"
                   enableSystem
@@ -60,11 +60,20 @@ export function RootProviders({
                 >
                   {children}
                 </ThemeProvider>
-              </AuthChangeListener>
+              </AuthProvider>
             </CaptchaProvider>
           </I18nProvider>
         </ReactQueryStreamedHydration>
       </QueryClientProvider>
     </MonitoringProvider>
   );
+}
+
+// we place this below React Query since it uses the QueryClient
+function AuthProvider(props: React.PropsWithChildren) {
+  useAuthChangeListener({
+    appHomePath: pathsConfig.app.home,
+  });
+
+  return props.children;
 }

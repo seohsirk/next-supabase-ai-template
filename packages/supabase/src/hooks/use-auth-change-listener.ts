@@ -4,24 +4,28 @@ import { useEffect } from 'react';
 
 import { usePathname, useRouter } from 'next/navigation';
 
-import { isBrowser } from '@supabase/ssr';
+import { useSupabase } from './use-supabase';
+import { useRevalidateUserSession, useUserSession } from './use-user-session';
 
-import { useSupabase } from '../hooks/use-supabase';
-import {
-  useRevalidateUserSession,
-  useUserSession,
-} from '../hooks/use-user-session';
-
+/**
+ * @name PRIVATE_PATH_PREFIXES
+ * @description A list of private path prefixes
+ */
 const PRIVATE_PATH_PREFIXES = ['/home', '/admin', '/join', '/update-password'];
 
-function AuthRedirectListener({
-  children,
+/**
+ * @name AuthRedirectListener
+ * @description A component that listens to auth state changes and redirects users
+ * @param privatePathPrefixes
+ * @param appHomePath
+ */
+export function useAuthChangeListener({
   privatePathPrefixes = PRIVATE_PATH_PREFIXES,
   appHomePath,
-}: React.PropsWithChildren<{
+}: {
   appHomePath: string;
   privatePathPrefixes?: string[];
-}>) {
+}) {
   const client = useSupabase();
   const pathName = usePathname();
   const router = useRouter();
@@ -63,30 +67,6 @@ function AuthRedirectListener({
     pathName,
     appHomePath,
   ]);
-
-  return <>{children}</>;
-}
-
-export function AuthChangeListener({
-  children,
-  appHomePath,
-}: React.PropsWithChildren<{
-  appHomePath: string;
-  privateRoutes?: string[];
-}>) {
-  const shouldActivateListener = isBrowser();
-
-  // we only activate the listener if
-  // we are rendering in the browser
-  if (!shouldActivateListener) {
-    return <>{children}</>;
-  }
-
-  return (
-    <AuthRedirectListener appHomePath={appHomePath}>
-      {children}
-    </AuthRedirectListener>
-  );
 }
 
 /**
