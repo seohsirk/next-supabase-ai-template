@@ -265,16 +265,38 @@ export function PlanPicker(
                                 'flex flex-col justify-center space-y-2'
                               }
                             >
-                              <span className="font-semibold">
-                                <Trans
-                                  i18nKey={`billing:products.${product.id}.name`}
-                                  defaults={product.name}
-                                />
-                              </span>
+                              <div className={'flex items-center space-x-2.5'}>
+                                <span className="font-semibold">
+                                  <Trans
+                                    i18nKey={`billing:plans.${product.id}.name`}
+                                    defaults={product.name}
+                                  />
+                                </span>
+
+                                <If
+                                  condition={
+                                    plan.trialDays && props.canStartTrial
+                                  }
+                                >
+                                  <div>
+                                    <Badge
+                                      className={'px-1 py-0.5 text-xs'}
+                                      variant={'success'}
+                                    >
+                                      <Trans
+                                        i18nKey={`billing:trialPeriod`}
+                                        values={{
+                                          period: plan.trialDays,
+                                        }}
+                                      />
+                                    </Badge>
+                                  </div>
+                                </If>
+                              </div>
 
                               <span className={'text-muted-foreground'}>
                                 <Trans
-                                  i18nKey={`billing:products.${product.id}.description`}
+                                  i18nKey={`billing:plans.${product.id}.description`}
                                   defaults={product.description}
                                 />
                               </span>
@@ -285,23 +307,6 @@ export function PlanPicker(
                                 'flex flex-col space-y-2 lg:flex-row lg:items-center lg:space-x-4 lg:space-y-0 lg:text-right'
                               }
                             >
-                              <If
-                                condition={
-                                  plan.trialDays && props.canStartTrial
-                                }
-                              >
-                                <div>
-                                  <Badge variant={'success'}>
-                                    <Trans
-                                      i18nKey={`billing:trialPeriod`}
-                                      values={{
-                                        period: plan.trialDays,
-                                      }}
-                                    />
-                                  </Badge>
-                                </div>
-                              </If>
-
                               <div>
                                 <Price key={plan.id}>
                                   <span>
@@ -416,7 +421,7 @@ function PlanDetails({
         <Heading level={5}>
           <b>
             <Trans
-              i18nKey={`billing:products.${selectedProduct.id}.name`}
+              i18nKey={`billing:plans.${selectedProduct.id}.name`}
               defaults={selectedProduct.name}
             />
           </b>{' '}
@@ -428,7 +433,7 @@ function PlanDetails({
         <p>
           <span className={'text-muted-foreground'}>
             <Trans
-              i18nKey={`billing:products.${selectedProduct.id}.description`}
+              i18nKey={`billing:plans.${selectedProduct.id}.description`}
               defaults={selectedProduct.description}
             />
           </span>
@@ -464,7 +469,7 @@ function PlanDetails({
               <CheckCircle className={'h-4 text-green-500'} />
 
               <span className={'text-secondary-foreground'}>
-                <Trans i18nKey={`billing:features.${item}`} defaults={item} />
+                <Trans i18nKey={item} defaults={item} />
               </span>
             </div>
           );

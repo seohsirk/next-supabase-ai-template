@@ -4,7 +4,8 @@ import { useState } from 'react';
 
 import Link from 'next/link';
 
-import { ArrowRight, CheckCircle, Circle, Sparkles } from 'lucide-react';
+import { ArrowRight, CheckCircle, Circle } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import {
@@ -167,7 +168,7 @@ function PricingItem(
     >
       <div className={'flex flex-col space-y-6'}>
         <div className={'flex flex-col space-y-4'}>
-          <div className={'flex items-center space-x-4'}>
+          <div className={'flex items-center space-x-6'}>
             <b
               className={
                 'text-current-foreground font-heading font-semibold uppercase'
@@ -181,10 +182,6 @@ function PricingItem(
 
             <If condition={props.product.badge}>
               <Badge variant={highlighted ? 'default' : 'outline'}>
-                <If condition={highlighted}>
-                  <Sparkles className={'h-3'} />
-                </If>
-
                 <span>
                   <Trans
                     i18nKey={props.product.badge}
@@ -195,13 +192,15 @@ function PricingItem(
             </If>
           </div>
 
-          <span className={cn(`text-muted-foreground h-8 text-base`)}>
+          <span className={cn(`text-muted-foreground h-10 text-base`)}>
             <Trans
               i18nKey={props.product.description}
               defaults={props.product.description}
             />
           </span>
         </div>
+
+        <Separator />
 
         <div className={'flex flex-col space-y-1'}>
           <Price>
@@ -311,10 +310,7 @@ function FeaturesList(
       {props.features.map((feature) => {
         return (
           <ListItem key={feature}>
-            <Trans
-              i18nKey={`common:plans.features.${feature}`}
-              defaults={feature}
-            />
+            <Trans i18nKey={feature} defaults={feature} />
           </ListItem>
         );
       })}
@@ -426,6 +422,8 @@ function DefaultCheckoutButton(
     ? '?redirectToCheckout=true'
     : '';
 
+  const { t } = useTranslation('billing');
+
   const planId = props.plan.id;
   const signUpPath = props.paths.signUp;
   const subscriptionPath = props.paths.subscription;
@@ -449,7 +447,9 @@ function DefaultCheckoutButton(
             i18nKey={label}
             defaults={label}
             values={{
-              plan: props.product.name,
+              plan: t(props.product.name, {
+                defaultValue: props.product.name,
+              }),
             }}
           />
         </span>
