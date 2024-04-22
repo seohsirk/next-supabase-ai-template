@@ -1296,6 +1296,108 @@ Doing the opposite is also okay - but:
 
 My two cents - but you do you - anything that works for you is good.
 
+## Monitoring
+
+Monitoring is crucial for any application. Makerkit uses Sentry or Baselime for error tracking. Additionally, Makerkit makes use of Next.js experimental instrumentation for performance monitoring.
+
+### Sentry
+
+To use Sentry, you need to set the following environment variables:
+
+```bash
+NEXT_PUBLIC_SENTRY_DSN=
+NEXT_PUBLIC_MONITORING_PROVIDER=sentry
+```
+
+### Baselime
+
+To use Baselime, you need to set the following environment variables:
+
+```bash
+BASELIME_KEY=your_key
+NEXT_PUBLIC_MONITORING_PROVIDER=baselime
+```
+
+### Next.js Instrumentation
+
+To enable instrumentation, you need to set the following environment variables:
+
+```bash
+MONITORING_INSTRUMENTATION_ENABLED=true
+```
+
+That's it! Makerkit will take care of the rest.
+
+### Capturing Errors
+
+By default, Makerkit captures errors that are caught when rendering the upper `error.tsx` component. This is a good place to catch errors that are not caught by the error boundary.
+
+If you want to capture errors manually, you have two ways
+
+#### Capturing Errors using a hook
+
+```tsx
+import { useMonitoring } from '@kit/monitoring/client';
+
+function Component() {
+  const { captureException } = useMonitoring();
+
+  const onClick = () => {
+    try {
+      throw new Error('An error occurred');
+    } catch (error) {
+      captureException(error);
+    }
+  };
+
+  return (
+    <button onClick={onClick}>Throw an error</button>
+  );
+}
+```
+
+Alternatively, directly use `useCaptureException`:
+
+```tsx
+import { useCaptureException } from '@kit/monitoring/client';
+
+function Component() {
+  const captureException = useCaptureException();
+
+  const onClick = () => {
+    try {
+      throw new Error('An error occurred');
+    } catch (error) {
+      captureException(error);
+    }
+  };
+
+  return (
+    <button onClick={onClick}>Throw an error</button>
+  );
+}
+```
+
+### Server Errors
+
+To capture server errors, you can use the `captureException` function from the `monitoring` package:
+
+```tsx
+import { getMonitoringService } from '@kit/monitoring/server';
+
+async function serverSideFunction() {
+  try {
+    await someAsyncFunction();
+  } catch (error) {
+    const monitoring = await getMonitoringService();
+    
+    await monitoring.captureException(error);
+  }
+}
+```
+
+In the future - this will be automatically captured by the `enhanceAction` and `enhanceRouteHandler` functions - so you won't need to do this manually unless you're swallowing the errors in the inner function (in which case, you should rethrow the error or capture manually).
+
 ## Going to Production
 
 When you are ready to go to production, please follow the checklist below. This is an overview, a more detailed guide will be provided in the future.

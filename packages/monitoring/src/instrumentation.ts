@@ -1,4 +1,7 @@
+import { getMonitoringProvider } from './get-monitoring-provider';
 import { InstrumentationProvider } from './monitoring-providers.enum';
+
+const PROVIDER = getMonitoringProvider();
 
 /**
  * @name registerMonitoringInstrumentation
@@ -7,13 +10,13 @@ import { InstrumentationProvider } from './monitoring-providers.enum';
  * Please set the MONITORING_PROVIDER environment variable to register the monitoring instrumentation provider.
  */
 export async function registerMonitoringInstrumentation() {
-  if (!process.env.MONITORING_PROVIDER) {
+  if (!PROVIDER) {
     console.info(`No instrumentation provider specified. Skipping...`);
 
     return;
   }
 
-  switch (process.env.MONITORING_PROVIDER as InstrumentationProvider) {
+  switch (PROVIDER) {
     case InstrumentationProvider.Baselime: {
       const { registerInstrumentation } = await import(
         '@kit/baselime/instrumentation'
