@@ -2,7 +2,9 @@
 
 import type { InitOptions, i18n } from 'i18next';
 
-let client: i18n;
+import { initializeI18nClient } from './i18n.client';
+
+let i18nInstance: i18n;
 
 type Resolver = (
   lang: string,
@@ -17,21 +19,29 @@ export function I18nProvider({
   settings: InitOptions;
   resolver: Resolver;
 }>) {
-  if (!client) {
-    throw withI18nClient(settings, resolver);
-  }
+  useI18nClient(settings, resolver);
 
   return children;
 }
 
-async function withI18nClient(settings: InitOptions, resolver: Resolver) {
-  if (typeof window !== 'undefined') {
-    const { initializeI18nClient } = await import('./i18n.client');
-
-    client = await initializeI18nClient(settings, resolver);
-  } else {
-    const { initializeServerI18n } = await import('./i18n.server');
-
-    client = await initializeServerI18n(settings, resolver);
+/**
+ * @name useI18nClient
+ * @description A hook that initializes the i18n client.
+ * @param settings
+ * @param resolver
+ */
+function useI18nClient(settings: InitOptions, resolver: Resolver) {
+  if (
+    !i18nInstance ||
+    i18nInstance.language !== settings.lng ||
+    i18nInstance.options.ns?.length !== settings.ns?.length
+  ) {
+    throw loadI18nInstance(settings, resolver);
   }
+
+  return i18nInstance;
+}
+
+async function loadI18nInstance(settings: InitOptions, resolver: Resolver) {
+  i18nInstance = await initializeI18nClient(settings, resolver);
 }

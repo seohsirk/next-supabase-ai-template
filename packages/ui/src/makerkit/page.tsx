@@ -14,7 +14,7 @@ export function Page(
       <div
         className={
           props.contentContainerClassName ??
-          'mx-auto flex h-screen w-full flex-col overflow-y-auto'
+          'mx-auto flex h-screen w-full flex-col space-y-4 overflow-y-auto'
         }
       >
         {props.children}
@@ -44,28 +44,28 @@ export function PageHeader({
   mobileNavigation?: React.ReactNode;
 }>) {
   return (
-    <div
-      className={'mb-4 flex items-start justify-between border-b px-4 py-2.5'}
-    >
+    <div className={'flex min-h-16 items-center justify-between border-b px-4'}>
       <div
         className={
-          'flex items-center space-x-4 lg:flex-col lg:items-start lg:space-x-0'
+          'flex items-center space-x-4 lg:flex-col lg:items-start lg:space-x-0 lg:space-y-0.5'
         }
       >
         <div className={'flex items-center lg:hidden'}>{mobileNavigation}</div>
 
-        <h1>
-          <span className={'flex items-center space-x-0.5 lg:space-x-2'}>
-            <span
-              className={'font-heading text-xl font-semibold dark:text-white'}
-            >
-              {title}
-            </span>
-          </span>
+        <h1
+          className={
+            'font-heading text-xl font-semibold leading-none dark:text-white'
+          }
+        >
+          {title}
         </h1>
 
         <h2 className={'hidden lg:block'}>
-          <span className={'text-base font-normal text-muted-foreground'}>
+          <span
+            className={
+              'text-base font-normal leading-none text-muted-foreground'
+            }
+          >
             {description}
           </span>
         </h2>

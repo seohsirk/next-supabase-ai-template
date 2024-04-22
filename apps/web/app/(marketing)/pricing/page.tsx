@@ -1,4 +1,4 @@
-import { PricingTable } from '@kit/billing-gateway/components';
+import { PricingTable } from '@kit/billing-gateway/marketing';
 
 import { SitePageHeader } from '~/(marketing)/_components/site-page-header';
 import billingConfig from '~/config/billing.config';
@@ -14,6 +14,11 @@ export const generateMetadata = async () => {
   };
 };
 
+const paths = {
+  signUp: pathsConfig.auth.signUp,
+  subscription: pathsConfig.app.personalAccountBilling,
+};
+
 async function PricingPage() {
   const { t } = await createI18nServerInstance();
 
@@ -25,7 +30,7 @@ async function PricingPage() {
       />
 
       <div className={'container mx-auto pb-8 xl:pb-16'}>
-        <PricingTable paths={pathsConfig.auth} config={billingConfig} />
+        <PricingTable paths={paths} config={billingConfig} />
       </div>
     </div>
   );

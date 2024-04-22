@@ -1,8 +1,6 @@
 import type { ErrorInfo, ReactNode } from 'react';
 import { Component } from 'react';
 
-import { captureException } from '../capture-exception';
-
 interface Props {
   onError?: (error: Error, info: ErrorInfo) => void;
   fallback: ReactNode;
@@ -23,10 +21,8 @@ export class ErrorBoundary extends Component<Props> {
     };
   }
 
-  async componentDidCatch(error: Error, info: ErrorInfo) {
+  componentDidCatch(error: Error, info: ErrorInfo) {
     this.props.onError?.(error, info);
-
-    await captureException(error);
   }
 
   render() {

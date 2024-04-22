@@ -3,6 +3,7 @@
 import Link from 'next/link';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { ArrowRight } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import type { z } from 'zod';
@@ -103,13 +104,23 @@ export const PasswordSignInForm: React.FC<{
 
         <Button
           data-test="auth-submit-button"
-          className={'w-full'}
+          className={'group w-full'}
           type="submit"
           disabled={loading}
         >
           <If
             condition={loading}
-            fallback={<Trans i18nKey={'auth:signInWithEmail'} />}
+            fallback={
+              <>
+                <Trans i18nKey={'auth:signInWithEmail'} />
+
+                <ArrowRight
+                  className={
+                    'zoom-in animate-in slide-in-from-left-2 fill-mode-both h-4 delay-500 duration-500'
+                  }
+                />
+              </>
+            }
           >
             <Trans i18nKey={'auth:signingIn'} />
           </If>

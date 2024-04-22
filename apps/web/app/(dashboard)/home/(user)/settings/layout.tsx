@@ -7,8 +7,8 @@ function UserSettingsLayout(props: React.PropsWithChildren) {
   return (
     <>
       <UserAccountHeader
-        title={<Trans i18nKey={'common:yourAccountTabLabel'} />}
-        description={'Manage your account settings'}
+        title={<Trans i18nKey={'account:accountTabLabel'} />}
+        description={<Trans i18nKey={'account:accountTabDescription'} />}
       />
 
       {props.children}

@@ -161,12 +161,12 @@ export function SidebarItem({
   const currentPath = usePathname() ?? '';
   const active = isRouteActive(path, currentPath, end ? 0 : 3);
   const variant = active ? 'secondary' : 'ghost';
-  const size = collapsed ? 'icon' : 'default';
+  const size = collapsed ? 'icon' : 'sm';
 
   return (
     <Link key={path} href={path}>
       <Button
-        className={cn('flex w-full shadow-none', {
+        className={cn('flex w-full text-sm shadow-none', {
           'justify-start space-x-2': !collapsed,
         })}
         size={size}
@@ -175,7 +175,7 @@ export function SidebarItem({
         <If condition={collapsed} fallback={Icon}>
           <TooltipProvider>
             <Tooltip>
-              <TooltipTrigger>{Icon}</TooltipTrigger>
+              <TooltipTrigger asChild>{Icon}</TooltipTrigger>
 
               <TooltipContent side={'right'} sideOffset={20}>
                 {children}
@@ -184,13 +184,7 @@ export function SidebarItem({
           </TooltipProvider>
         </If>
 
-        <span
-          className={cn({
-            hidden: collapsed,
-          })}
-        >
-          {children}
-        </span>
+        <span className={cn({ hidden: collapsed })}>{children}</span>
       </Button>
     </Link>
   );

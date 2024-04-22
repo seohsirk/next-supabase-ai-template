@@ -34,7 +34,9 @@ type Membership = Db['accounts_memberships']['Row'];
 export function AdminAccountPage(props: {
   account: Account & { memberships: Membership[] };
 }) {
-  if (props.account.is_personal_account) {
+  const isPersonalAccount = props.account.is_personal_account;
+
+  if (isPersonalAccount) {
     return <PersonalAccountPage account={props.account} />;
   }
 

@@ -162,6 +162,10 @@ function ActionsDropdown({
   const [isUpdatingRole, setIsUpdatingRole] = useState(false);
   const [iRenewingInvite, setIsRenewingInvite] = useState(false);
 
+  if (!permissions.canUpdateInvitation && !permissions.canRemoveInvitation) {
+    return null;
+  }
+
   return (
     <>
       <DropdownMenu>

@@ -1,1 +1,1 @@
-export * from './lib/server/is-super-admin';
+export * from './lib/server/utils/is-super-admin';

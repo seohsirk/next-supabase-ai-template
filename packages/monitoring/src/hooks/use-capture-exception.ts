@@ -1,11 +1,7 @@
-import { useEffect } from 'react';
-
-import { captureException } from '../capture-exception';
+import { useMonitoring } from './use-monitoring';
 
 export function useCaptureException(error: Error) {
-  useEffect(() => {
-    void captureException(error);
-  }, [error]);
+  const service = useMonitoring();
 
-  return null;
+  return service.captureException(error);
 }

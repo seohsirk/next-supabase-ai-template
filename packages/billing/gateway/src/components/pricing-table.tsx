@@ -4,7 +4,8 @@ import { useState } from 'react';
 
 import Link from 'next/link';
 
-import { ArrowRight, CheckCircle, Circle, Sparkles } from 'lucide-react';
+import { ArrowRight, CheckCircle, Circle } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import {
@@ -16,7 +17,6 @@ import {
 import { formatCurrency } from '@kit/shared/utils';
 import { Badge } from '@kit/ui/badge';
 import { Button } from '@kit/ui/button';
-import { Heading } from '@kit/ui/heading';
 import { If } from '@kit/ui/if';
 import { Separator } from '@kit/ui/separator';
 import { Trans } from '@kit/ui/trans';
@@ -26,17 +26,21 @@ import { LineItemDetails } from './line-item-details';
 
 interface Paths {
   signUp: string;
+  subscription: string;
 }
 
 export function PricingTable({
   config,
   paths,
   CheckoutButtonRenderer,
+  redirectToCheckout = true,
   displayPlanDetails = true,
 }: {
   config: BillingConfig;
   paths: Paths;
   displayPlanDetails?: boolean;
+
+  redirectToCheckout?: boolean;
 
   CheckoutButtonRenderer?: React.ComponentType<{
     planId: string;
@@ -89,6 +93,7 @@ export function PricingTable({
               selectable
               key={plan.id}
               plan={plan}
+              redirectToCheckout={redirectToCheckout}
               primaryLineItem={primaryLineItem}
               product={product}
               paths={paths}
@@ -107,13 +112,13 @@ function PricingItem(
     className?: string;
     displayPlanDetails: boolean;
 
-    paths: {
-      signUp: string;
-    };
+    paths: Paths;
 
     selectable: boolean;
 
     primaryLineItem: z.infer<typeof LineItemSchema>;
+
+    redirectToCheckout?: boolean;
 
     plan: {
       id: string;
@@ -163,26 +168,20 @@ function PricingItem(
     >
       <div className={'flex flex-col space-y-6'}>
         <div className={'flex flex-col space-y-4'}>
-          <div className={'flex items-center space-x-4'}>
-            <Heading level={5}>
-              <b
-                className={
-                  'text-current-foreground font-heading font-semibold uppercase'
-                }
-              >
-                <Trans
-                  i18nKey={props.product.name}
-                  defaults={props.product.name}
-                />
-              </b>
-            </Heading>
+          <div className={'flex items-center space-x-6'}>
+            <b
+              className={
+                'text-current-foreground font-heading font-semibold uppercase'
+              }
+            >
+              <Trans
+                i18nKey={props.product.name}
+                defaults={props.product.name}
+              />
+            </b>
 
             <If condition={props.product.badge}>
               <Badge variant={highlighted ? 'default' : 'outline'}>
-                <If condition={highlighted}>
-                  <Sparkles className={'h-3'} />
-                </If>
-
                 <span>
                   <Trans
                     i18nKey={props.product.badge}
@@ -193,13 +192,15 @@ function PricingItem(
             </If>
           </div>
 
-          <span className={cn(`text-muted-foreground h-8 text-base`)}>
+          <span className={cn(`text-muted-foreground h-10 text-base`)}>
             <Trans
               i18nKey={props.product.description}
               defaults={props.product.description}
             />
           </span>
         </div>
+
+        <Separator />
 
         <div className={'flex flex-col space-y-1'}>
           <Price>
@@ -254,10 +255,11 @@ function PricingItem(
             condition={props.plan.id && props.CheckoutButton}
             fallback={
               <DefaultCheckoutButton
-                signUpPath={props.paths.signUp}
+                paths={props.paths}
                 product={props.product}
                 highlighted={highlighted}
                 plan={props.plan}
+                redirectToCheckout={props.redirectToCheckout}
               />
             }
           >
@@ -308,10 +310,7 @@ function FeaturesList(
       {props.features.map((feature) => {
         return (
           <ListItem key={feature}>
-            <Trans
-              i18nKey={`common:plans.features.${feature}`}
-              defaults={feature}
-            />
+            <Trans i18nKey={feature} defaults={feature} />
           </ListItem>
         );
       })}
@@ -387,10 +386,7 @@ function PlanIntervalSwitcher(
               </If>
 
               <span className={'capitalize'}>
-                <Trans
-                  i18nKey={`common:plans.interval.${plan}`}
-                  defaults={plan}
-                />
+                <Trans i18nKey={`common:billingInterval.${plan}`} />
               </span>
             </span>
           </Button>
@@ -413,12 +409,26 @@ function DefaultCheckoutButton(
       name: string;
     };
 
-    signUpPath: string;
+    paths: Paths;
+    redirectToCheckout?: boolean;
+
     highlighted?: boolean;
   }>,
 ) {
+  const redirectToCheckoutParam = props.redirectToCheckout
+    ? '?redirectToCheckout=true'
+    : '';
+
+  const { t } = useTranslation('billing');
+
+  const planId = props.plan.id;
+  const signUpPath = props.paths.signUp;
+  const subscriptionPath = props.paths.subscription;
+
   const linkHref =
-    props.plan.href ?? `${props.signUpPath}?utm_source=${props.plan.id}` ?? '';
+    props.plan.href ??
+    `${signUpPath}?plan=${planId}&next=${subscriptionPath}?plan=${planId}${redirectToCheckoutParam}` ??
+    '';
 
   const label = props.plan.label ?? 'common:getStartedWithPlan';
 
@@ -434,7 +444,9 @@ function DefaultCheckoutButton(
             i18nKey={label}
             defaults={label}
             values={{
-              plan: props.product.name,
+              plan: t(props.product.name, {
+                defaultValue: props.product.name,
+              }),
             }}
           />
         </span>

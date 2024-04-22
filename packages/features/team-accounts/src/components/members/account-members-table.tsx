@@ -56,27 +56,46 @@ export function AccountMembersTable({
   const { t } = useTranslation('teams');
 
   const permissions = {
-    canUpdateRole: (targetRole: number) =>
-      canManageRoles && targetRole < userRoleHierarchy,
-    canRemoveFromAccount: (targetRole: number) =>
-      canManageRoles && targetRole < userRoleHierarchy,
+    canUpdateRole: (targetRole: number) => {
+      return (
+        isPrimaryOwner || (canManageRoles && userRoleHierarchy < targetRole)
+      );
+    },
+    canRemoveFromAccount: (targetRole: number) => {
+      return (
+        isPrimaryOwner || (canManageRoles && userRoleHierarchy < targetRole)
+      );
+    },
     canTransferOwnership: isPrimaryOwner,
   };
 
   const columns = useGetColumns(permissions, {
     currentUserId,
     currentAccountId,
+    currentRoleHierarchy: userRoleHierarchy,
   });
 
-  const filteredMembers = members.filter((member) => {
-    const searchString = search.toLowerCase();
-    const displayName = member.name ?? member.email.split('@')[0];
+  const filteredMembers = members
+    .filter((member) => {
+      const searchString = search.toLowerCase();
+      const displayName = member.name ?? member.email.split('@')[0];
 
-    return (
-      displayName.includes(searchString) ||
-      member.role.toLowerCase().includes(searchString)
-    );
-  });
+      return (
+        displayName.includes(searchString) ||
+        member.role.toLowerCase().includes(searchString)
+      );
+    })
+    .sort((prev, next) => {
+      if (prev.primary_owner_user_id === prev.user_id) {
+        return -1;
+      }
+
+      if (prev.role_hierarchy_level < next.role_hierarchy_level) {
+        return -1;
+      }
+
+      return 1;
+    });
 
   return (
     <div className={'flex flex-col space-y-2'}>
@@ -96,6 +115,7 @@ function useGetColumns(
   params: {
     currentUserId: string;
     currentAccountId: string;
+    currentRoleHierarchy: number;
   },
 ): ColumnDef<Members[0]>[] {
   const { t } = useTranslation('teams');
@@ -173,6 +193,7 @@ function useGetColumns(
             member={row.original}
             currentUserId={params.currentUserId}
             accountId={params.currentAccountId}
+            currentRoleHierarchy={params.currentRoleHierarchy}
           />
         ),
       },
@@ -185,12 +206,13 @@ function ActionsDropdown({
   permissions,
   member,
   currentUserId,
-  accountId,
+  currentRoleHierarchy,
 }: {
   permissions: Permissions;
   member: Members[0];
   currentUserId: string;
   accountId: string;
+  currentRoleHierarchy: number;
 }) {
   const [isRemoving, setIsRemoving] = useState(false);
   const [isTransferring, setIsTransferring] = useState(false);
@@ -262,10 +284,10 @@ function ActionsDropdown({
         <UpdateMemberRoleDialog
           isOpen
           setIsOpen={setIsUpdatingRole}
-          accountId={member.id}
           userId={member.user_id}
           userRole={member.role}
-          userRoleHierarchy={memberRoleHierarchy}
+          teamAccountId={member.account_id}
+          userRoleHierarchy={currentRoleHierarchy}
         />
       </If>
 
@@ -274,7 +296,7 @@ function ActionsDropdown({
           isOpen
           setIsOpen={setIsTransferring}
           targetDisplayName={member.name ?? member.email}
-          accountId={accountId}
+          accountId={member.account_id}
           userId={member.user_id}
         />
       </If>

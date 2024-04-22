@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 
 import {
   BillingPortalCard,
+  CurrentLifetimeOrderCard,
   CurrentSubscriptionCard,
 } from '@kit/billing-gateway/components';
 import { requireUser } from '@kit/supabase/require-user';
@@ -10,12 +11,12 @@ import { If } from '@kit/ui/if';
 import { PageBody } from '@kit/ui/page';
 import { Trans } from '@kit/ui/trans';
 
-import { UserAccountHeader } from '~/(dashboard)/home/(user)/_components/user-account-header';
 import billingConfig from '~/config/billing.config';
 import { createI18nServerInstance } from '~/lib/i18n/i18n.server';
 import { withI18n } from '~/lib/i18n/with-i18n';
 
-import { createPersonalAccountBillingPortalSession } from '../billing/server-actions';
+import { UserAccountHeader } from '../_components/user-account-header';
+import { createPersonalAccountBillingPortalSession } from '../billing/_lib/server/server-actions';
 import { PersonalAccountCheckoutForm } from './_components/personal-account-checkout-form';
 // user billing imports
 import { loadPersonalAccountBillingPageData } from './_lib/server/personal-account-billing-page.loader';
@@ -37,7 +38,7 @@ async function PersonalAccountBillingPage() {
     redirect(auth.redirectTo);
   }
 
-  const [subscription, customerId] = await loadPersonalAccountBillingPageData(
+  const [data, customerId] = await loadPersonalAccountBillingPageData(
     auth.data.id,
   );
 
@@ -50,7 +51,7 @@ async function PersonalAccountBillingPage() {
 
       <PageBody>
         <div className={'flex flex-col space-y-8'}>
-          <If condition={!subscription}>
+          <If condition={!data}>
             <PersonalAccountCheckoutForm customerId={customerId} />
 
             <If condition={customerId}>
@@ -58,15 +59,26 @@ async function PersonalAccountBillingPage() {
             </If>
           </If>
 
-          <If condition={subscription}>
-            {(subscription) => (
+          <If condition={data}>
+            {(data) => (
               <div
                 className={'mx-auto flex w-full max-w-2xl flex-col space-y-6'}
               >
-                <CurrentSubscriptionCard
-                  subscription={subscription}
-                  config={billingConfig}
-                />
+                {'active' in data ? (
+                  <CurrentSubscriptionCard
+                    subscription={data}
+                    config={billingConfig}
+                  />
+                ) : (
+                  <CurrentLifetimeOrderCard
+                    order={data}
+                    config={billingConfig}
+                  />
+                )}
+
+                <If condition={!data}>
+                  <PersonalAccountCheckoutForm customerId={customerId} />
+                </If>
 
                 <If condition={customerId}>
                   <CustomerBillingPortalForm />

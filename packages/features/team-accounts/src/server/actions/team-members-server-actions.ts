@@ -33,6 +33,9 @@ export async function removeMemberFromAccountAction(
     userId,
   });
 
+  // revalidate all pages that depend on the account
+  revalidatePath('/home/[account]', 'layout');
+
   return { success: true };
 }
 
@@ -44,12 +47,20 @@ export async function updateMemberRoleAction(
   await assertSession(client);
 
   const service = new AccountMembersService(client);
+  const adminClient = getSupabaseServerActionClient({ admin: true });
 
-  await service.updateMemberRole({
-    accountId: params.accountId,
-    userId: params.userId,
-    role: params.role,
-  });
+  // update the role of the member
+  await service.updateMemberRole(
+    {
+      accountId: params.accountId,
+      userId: params.userId,
+      role: params.role,
+    },
+    adminClient,
+  );
+
+  // revalidate all pages that depend on the account
+  revalidatePath('/home/[account]', 'layout');
 
   return { success: true };
 }
@@ -76,17 +87,20 @@ export async function transferOwnershipAction(
     );
   }
 
+  const service = new AccountMembersService(client);
+
   // at this point, the user is authenticated and is the owner of the account
   // so we proceed with the transfer of ownership with admin privileges
-  const service = new AccountMembersService(
-    getSupabaseServerActionClient({ admin: true }),
-  );
+  const adminClient = getSupabaseServerActionClient({ admin: true });
 
-  await service.transferOwnership({
-    accountId,
-    userId,
-    confirmation: params.confirmation,
-  });
+  await service.transferOwnership(
+    {
+      accountId,
+      userId,
+      confirmation: params.confirmation,
+    },
+    adminClient,
+  );
 
   // revalidate all pages that depend on the account
   revalidatePath('/home/[account]', 'layout');

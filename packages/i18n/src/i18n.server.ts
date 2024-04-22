@@ -14,12 +14,7 @@ export async function initializeServerI18n(
 ) {
   const i18nInstance = createInstance();
 
-  if (i18nInstance.isInitialized) {
-    return i18nInstance;
-  }
-
   await i18nInstance
-    .use(initReactI18next)
     .use(
       resourcesToBackend(async (language, namespace, callback) => {
         try {
@@ -36,11 +31,21 @@ export async function initializeServerI18n(
         }
       }),
     )
-    .init(settings);
+    .use(initReactI18next)
+    .init(settings, (error) => {
+      if (error) {
+        console.error('Error initializing i18n server', error);
+      }
+    });
 
   return i18nInstance;
 }
 
+/**
+ * Parse the accept-language header value and return the languages that are included in the accepted languages.
+ * @param languageHeaderValue
+ * @param acceptedLanguages
+ */
 export function parseAcceptLanguageHeader(
   languageHeaderValue: string | null | undefined,
   acceptedLanguages: string[],

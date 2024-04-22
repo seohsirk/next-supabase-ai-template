@@ -116,13 +116,16 @@ export class AccountInvitationsWebhookService {
           logger.info(ctx, 'Invitation email successfully sent!');
         })
         .catch((error) => {
-          logger.warn({ error, ...ctx }, 'Failed to send invitation email');
+          console.error(error);
+
+          logger.error({ error, ...ctx }, 'Failed to send invitation email');
         });
 
       return {
         success: true,
       };
     } catch (error) {
+      console.error(error);
       logger.warn({ error, ...ctx }, 'Failed to invite user to team');
 
       return {

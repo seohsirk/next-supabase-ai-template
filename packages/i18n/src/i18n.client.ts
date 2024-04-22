@@ -3,7 +3,11 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import resourcesToBackend from 'i18next-resources-to-backend';
 import { initReactI18next } from 'react-i18next';
 
-let clientInstance: i18n | null = null;
+// Keep track of the number of iterations
+let iteration = 0;
+
+// Maximum number of iterations
+const MAX_ITERATIONS = 20;
 
 /**
  * Initialize the i18n instance on the client.
@@ -14,18 +18,21 @@ export async function initializeI18nClient(
   settings: InitOptions,
   resolver: (lang: string, namespace: string) => Promise<object>,
 ): Promise<i18n> {
-  if (clientInstance) {
-    return Promise.resolve(clientInstance);
-  }
-
   const loadedLanguages: string[] = [];
+  const loadedNamespaces: string[] = [];
 
   await i18next
     .use(
       resourcesToBackend(async (language, namespace, callback) => {
         const data = await resolver(language, namespace);
 
-        loadedLanguages.push(language);
+        if (!loadedLanguages.includes(language)) {
+          loadedLanguages.push(language);
+        }
+
+        if (!loadedNamespaces.includes(namespace)) {
+          loadedNamespaces.push(namespace);
+        }
 
         return callback(null, data);
       }),
@@ -51,12 +58,24 @@ export async function initializeI18nClient(
       },
     );
 
-  // keep component suspended until all languages are loaded
-  if (loadedLanguages.length !== settings.ns?.length) {
-    throw new Error();
+  // to avoid infinite loops, we return the i18next instance after a certain number of iterations
+  // even if the languages and namespaces are not loaded
+  if (iteration >= MAX_ITERATIONS) {
+    console.debug(`Max iterations reached: ${MAX_ITERATIONS}`);
+
+    return i18next;
   }
 
-  clientInstance = i18next;
+  // keep component from rendering if no languages or namespaces are loaded
+  if (loadedLanguages.length === 0 || loadedNamespaces.length === 0) {
+    iteration++;
 
-  return clientInstance;
+    console.debug(
+      `Keeping component from rendering if no languages or namespaces are loaded. Iteration: ${iteration}. Will stop after ${MAX_ITERATIONS} iterations.`,
+    );
+
+    throw new Error('No languages or namespaces loaded');
+  }
+
+  return i18next;
 }

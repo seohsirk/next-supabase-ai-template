@@ -1,3 +1,5 @@
+import { cache } from 'react';
+
 import { cookies, headers } from 'next/headers';
 
 import {
@@ -21,7 +23,7 @@ import { i18nResolver } from './i18n.resolver';
  *
  * Initialize the i18n instance for every RSC server request (eg. each page/layout)
  */
-export function createI18nServerInstance() {
+function createInstance() {
   const acceptLanguage = headers().get('accept-language');
   const cookie = cookies().get(I18N_COOKIE_NAME)?.value;
 
@@ -42,3 +44,5 @@ export function createI18nServerInstance() {
 
   return initializeServerI18n(settings, i18nResolver);
 }
+
+export const createI18nServerInstance = cache(createInstance);

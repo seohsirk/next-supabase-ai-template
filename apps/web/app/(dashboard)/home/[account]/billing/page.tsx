@@ -2,22 +2,24 @@ import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
 
 import {
   BillingPortalCard,
+  CurrentLifetimeOrderCard,
   CurrentSubscriptionCard,
 } from '@kit/billing-gateway/components';
 import { Alert, AlertDescription, AlertTitle } from '@kit/ui/alert';
 import { If } from '@kit/ui/if';
-import { PageBody, PageHeader } from '@kit/ui/page';
+import { PageBody } from '@kit/ui/page';
 import { Trans } from '@kit/ui/trans';
 import { cn } from '@kit/ui/utils';
 
-import { createBillingPortalSession } from '~/(dashboard)/home/[account]/billing/server-actions';
 import billingConfig from '~/config/billing.config';
 import { createI18nServerInstance } from '~/lib/i18n/i18n.server';
 import { withI18n } from '~/lib/i18n/with-i18n';
 
+import { AccountLayoutHeader } from '../_components/account-layout-header';
 import { loadTeamAccountBillingPage } from '../_lib/server/team-account-billing-page.loader';
 import { loadTeamWorkspace } from '../_lib/server/team-account-workspace.loader';
 import { TeamAccountCheckoutForm } from './_components/team-account-checkout-form';
+import { createBillingPortalSession } from './_lib/server/server-actions';
 
 interface Params {
   params: {
@@ -38,8 +40,7 @@ async function TeamAccountBillingPage({ params }: Params) {
   const workspace = await loadTeamWorkspace(params.account);
   const accountId = workspace.account.id;
 
-  const [subscription, customerId] =
-    await loadTeamAccountBillingPage(accountId);
+  const [data, customerId] = await loadTeamAccountBillingPage(accountId);
 
   const canManageBilling =
     workspace.account.permissions.includes('billing.manage');
@@ -71,31 +72,40 @@ async function TeamAccountBillingPage({ params }: Params) {
 
   return (
     <>
-      <PageHeader
+      <AccountLayoutHeader
         title={<Trans i18nKey={'common:billingTabLabel'} />}
         description={<Trans i18nKey={'common:billingTabDescription'} />}
+        account={params.account}
       />
 
       <PageBody>
         <div
           className={cn(`flex w-full flex-col space-y-6`, {
-            'mx-auto max-w-2xl ': subscription,
+            'mx-auto max-w-2xl': data,
           })}
         >
           <If
-            condition={subscription}
+            condition={data}
             fallback={
               <div>
                 <Checkout />
               </div>
             }
           >
-            {(subscription) => (
-              <CurrentSubscriptionCard
-                subscription={subscription}
-                config={billingConfig}
-              />
-            )}
+            {(data) => {
+              if ('active' in data) {
+                return (
+                  <CurrentSubscriptionCard
+                    subscription={data}
+                    config={billingConfig}
+                  />
+                );
+              }
+
+              return (
+                <CurrentLifetimeOrderCard order={data} config={billingConfig} />
+              );
+            }}
           </If>
 
           <BillingPortal />

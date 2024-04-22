@@ -30,7 +30,7 @@ export class AccountInvitationsService {
       ...params,
     };
 
-    logger.info(ctx, 'Removing invitation');
+    logger.info(ctx, 'Removing invitation...');
 
     const { data, error } = await this.client
       .from('invitations')

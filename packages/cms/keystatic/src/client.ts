@@ -1,17 +1,14 @@
-import { Entry, createReader } from '@keystatic/core/reader';
-
 import { Cms, CmsClient } from '@kit/cms';
 
-import config from './keystatic.config';
-
-const reader = createReader('.', config);
-
-type EntryProps = Entry<(typeof config)['collections']['posts']>;
+import { createKeystaticReader } from './create-reader';
+import { PostEntryProps } from './keystatic.config';
 
 export class KeystaticClient implements CmsClient {
   async getContentItems(options: Cms.GetContentItemsOptions) {
+    const reader = await createKeystaticReader();
+
     const collection =
-      options.collection as keyof (typeof config)['collections'];
+      options.collection as keyof (typeof reader)['collections'];
 
     if (!reader.collections[collection]) {
       throw new Error(`Collection ${collection} not found`);
@@ -87,8 +84,10 @@ export class KeystaticClient implements CmsClient {
   }
 
   async getContentItemBySlug(params: { slug: string; collection: string }) {
+    const reader = await createKeystaticReader();
+
     const collection =
-      params.collection as keyof (typeof config)['collections'];
+      params.collection as keyof (typeof reader)['collections'];
 
     if (!reader.collections[collection]) {
       throw new Error(`Collection ${collection} not found`);
@@ -127,7 +126,7 @@ export class KeystaticClient implements CmsClient {
 
   private async mapPost<
     Type extends {
-      entry: EntryProps;
+      entry: PostEntryProps;
       slug: string;
     },
   >(item: Type, children: Type[] = []): Promise<Cms.ContentItem> {
@@ -143,7 +142,7 @@ export class KeystaticClient implements CmsClient {
       url: item.slug,
       slug: item.slug,
       description: item.entry.description,
-      publishedAt,
+      publishedAt: publishedAt.toISOString(),
       content,
       image: item.entry.image ?? undefined,
       categories:
