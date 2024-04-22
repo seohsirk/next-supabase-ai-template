@@ -20,8 +20,6 @@ import pathsConfig from '~/config/paths.config';
 import { withI18n } from '~/lib/i18n/with-i18n';
 
 function Home() {
-  throw new Error(`This is a test error`);
-
   return (
     <div className={'mt-4 flex flex-col space-y-24 py-16'}>
       <div className={'container mx-auto flex flex-col space-y-20'}>
