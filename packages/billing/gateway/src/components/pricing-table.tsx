@@ -386,10 +386,7 @@ function PlanIntervalSwitcher(
               </If>
 
               <span className={'capitalize'}>
-                <Trans
-                  i18nKey={`common:plans.interval.${plan}`}
-                  defaults={plan}
-                />
+                <Trans i18nKey={`common:billingInterval.${plan}`} />
               </span>
             </span>
           </Button>
