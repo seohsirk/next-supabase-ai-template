@@ -18,7 +18,15 @@ import { Database } from '~/lib/database.types';
 
 import { TeamCheckoutSchema } from '../schema/team-billing.schema';
 
-export class TeamBillingService {
+export function createTeamBillingService(client: SupabaseClient<Database>) {
+  return new TeamBillingService(client);
+}
+
+/**
+ * @name TeamBillingService
+ * @description Service for managing billing for team accounts.
+ */
+class TeamBillingService {
   private readonly namespace = 'billing.team-account';
 
   constructor(private readonly client: SupabaseClient<Database>) {}
