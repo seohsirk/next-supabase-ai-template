@@ -74,7 +74,7 @@ export class AccountMembersService {
 
     const { data: canActionAccountMember, error: accountError } =
       await this.client.rpc('can_action_account_member', {
-        user_id: params.userId,
+        target_user_id: params.userId,
         target_team_account_id: params.accountId,
       });
 
