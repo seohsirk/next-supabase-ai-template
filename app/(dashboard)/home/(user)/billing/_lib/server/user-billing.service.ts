@@ -4,23 +4,30 @@ import { SupabaseClient } from '@supabase/supabase-js';
 
 import { z } from 'zod';
 
+import { createAccountsApi } from '@kit/accounts/api';
 import { getProductPlanPair } from '@kit/billing';
 import { getBillingGatewayProvider } from '@kit/billing-gateway';
 import { getLogger } from '@kit/shared/logger';
 import { requireUser } from '@kit/supabase/require-user';
-import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
 
-import { PersonalAccountCheckoutSchema } from '~/(dashboard)/home/(user)/billing/_lib/schema/personal-account-checkout.schema';
 import appConfig from '~/config/app.config';
 import billingConfig from '~/config/billing.config';
 import pathsConfig from '~/config/paths.config';
 import { Database } from '~/lib/database.types';
+
+import { PersonalAccountCheckoutSchema } from '../schema/personal-account-checkout.schema';
 
 export class UserBillingService {
   private readonly namespace = 'billing.personal-account';
 
   constructor(private readonly client: SupabaseClient<Database>) {}
 
+  /**
+   * @name createCheckoutSession
+   * @description Create a checkout session for the user
+   * @param planId
+   * @param productId
+   */
   async createCheckoutSession({
     planId,
     productId,
@@ -43,7 +50,8 @@ export class UserBillingService {
 
     // find the customer ID for the account if it exists
     // (eg. if the account has been billed before)
-    const customerId = await getCustomerIdFromAccountId(accountId);
+    const api = createAccountsApi(this.client);
+    const customerId = await api.getBillingCustomerId(accountId);
 
     const product = billingConfig.products.find(
       (item) => item.id === productId,
@@ -106,6 +114,11 @@ export class UserBillingService {
     }
   }
 
+  /**
+   * @name createBillingPortalSession
+   * @description Create a billing portal session for the user
+   * @returns The URL to redirect the user to the billing portal
+   */
   async createBillingPortalSession() {
     const { data, error } = await requireUser(this.client);
 
@@ -117,7 +130,8 @@ export class UserBillingService {
     const logger = await getLogger();
 
     const accountId = data.id;
-    const customerId = await getCustomerIdFromAccountId(accountId);
+    const api = createAccountsApi(this.client);
+    const customerId = await api.getBillingCustomerId(accountId);
     const returnUrl = getBillingPortalReturnUrl();
 
     if (!customerId) {
@@ -163,38 +177,6 @@ export class UserBillingService {
     // redirect user to billing portal
     return url;
   }
-}
-
-async function getCustomerIdFromAccountId(accountId: string) {
-  const client = getSupabaseServerActionClient();
-  const logger = await getLogger();
-
-  logger.info(
-    {
-      accountId,
-    },
-    `Getting customer ID for account ${accountId}...`,
-  );
-
-  const { data, error } = await client
-    .from('billing_customers')
-    .select('customer_id')
-    .eq('account_id', accountId)
-    .maybeSingle();
-
-  if (error) {
-    logger.error(
-      {
-        accountId,
-        error,
-      },
-      `Failed to get customer ID`,
-    );
-
-    throw error;
-  }
-
-  return data?.customer_id;
 }
 
 function getCheckoutSessionReturnUrl() {

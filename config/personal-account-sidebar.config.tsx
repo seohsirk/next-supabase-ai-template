@@ -15,7 +15,7 @@ const routes = [
     end: true,
   },
   {
-    label: 'common:yourAccountTabLabel',
+    label: 'account:accountTabLabel',
     path: pathsConfig.app.personalAccountSettings,
     Icon: <User className={iconClasses} />,
   },

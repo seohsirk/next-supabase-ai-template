@@ -1,7 +1,5 @@
 'use client';
 
-import { Suspense } from 'react';
-
 import dynamic from 'next/dynamic';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -10,7 +8,8 @@ import { ThemeProvider } from 'next-themes';
 
 import { CaptchaProvider } from '@kit/auth/captcha/client';
 import { I18nProvider } from '@kit/i18n/provider';
-import { AuthChangeListener } from '@kit/supabase/components/auth-change-listener';
+import { MonitoringProvider } from '@kit/monitoring/components';
+import { useAuthChangeListener } from '@kit/supabase/hooks/use-auth-change-listener';
 
 import appConfig from '~/config/app.config';
 import authConfig from '~/config/auth.config';
@@ -44,14 +43,14 @@ export function RootProviders({
   const i18nSettings = getI18nSettings(lang);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <ReactQueryStreamedHydration>
-        <Suspense>
+    <MonitoringProvider>
+      <QueryClientProvider client={queryClient}>
+        <ReactQueryStreamedHydration>
           <I18nProvider settings={i18nSettings} resolver={i18nResolver}>
             <CaptchaProvider>
               <CaptchaTokenSetter siteKey={captchaSiteKey} />
 
-              <AuthChangeListener appHomePath={pathsConfig.app.home}>
+              <AuthProvider>
                 <ThemeProvider
                   attribute="class"
                   enableSystem
@@ -61,11 +60,20 @@ export function RootProviders({
                 >
                   {children}
                 </ThemeProvider>
-              </AuthChangeListener>
+              </AuthProvider>
             </CaptchaProvider>
           </I18nProvider>
-        </Suspense>
-      </ReactQueryStreamedHydration>
-    </QueryClientProvider>
+        </ReactQueryStreamedHydration>
+      </QueryClientProvider>
+    </MonitoringProvider>
   );
+}
+
+// we place this below React Query since it uses the QueryClient
+function AuthProvider(props: React.PropsWithChildren) {
+  useAuthChangeListener({
+    appHomePath: pathsConfig.app.home,
+  });
+
+  return props.children;
 }

@@ -6,7 +6,7 @@ export async function generateMetadata() {
   const { t } = await createI18nServerInstance();
 
   return {
-    title: t('marketing.termsOfService'),
+    title: t('marketing:termsOfService'),
   };
 }
 
@@ -16,7 +16,10 @@ async function TermsOfServicePage() {
   return (
     <div className={'mt-8'}>
       <div className={'container mx-auto'}>
-        <SitePageHeader title={t(`marketing:termsOfService`)} subtitle={``} />
+        <SitePageHeader
+          title={t(`marketing:termsOfService`)}
+          subtitle={t(`marketing:termsOfServiceDescription`)}
+        />
       </div>
     </div>
   );

@@ -11,13 +11,12 @@ export async function POST(request: Request) {
   const provider = billingConfig.provider;
   const logger = await getLogger();
 
-  logger.info(
-    {
-      name: 'billing.webhook',
-      provider,
-    },
-    `Received billing webhook. Processing...`,
-  );
+  const ctx = {
+    name: 'billing.webhook',
+    provider,
+  };
+
+  logger.info(ctx, `Received billing webhook. Processing...`);
 
   const supabaseClientProvider = () =>
     getSupabaseRouteHandlerClient({ admin: true });
@@ -31,12 +30,7 @@ export async function POST(request: Request) {
   try {
     await service.handleWebhookEvent(request);
 
-    logger.info(
-      {
-        name: 'billing.webhook',
-      },
-      `Successfully processed billing webhook`,
-    );
+    logger.info(ctx, `Successfully processed billing webhook`);
 
     return new Response('OK', { status: 200 });
   } catch (error) {
@@ -44,7 +38,7 @@ export async function POST(request: Request) {
 
     logger.error(
       {
-        name: 'billing',
+        ...ctx,
         error: JSON.stringify(error),
       },
       `Failed to process billing webhook`,

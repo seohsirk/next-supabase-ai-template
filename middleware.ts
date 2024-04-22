@@ -1,7 +1,7 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse, URLPattern } from 'next/server';
 
-import csrf from 'edge-csrf';
+import { CsrfError, createCsrfProtect } from '@edge-csrf/nextjs';
 
 import { checkRequiresMultiFactorAuthentication } from '@kit/supabase/check-requires-mfa';
 import { createMiddlewareClient } from '@kit/supabase/middleware-client';
@@ -20,6 +20,10 @@ export const config = {
 
 export async function middleware(request: NextRequest) {
   const response = NextResponse.next();
+
+  // set a unique request ID for each request
+  // this helps us log and trace requests
+  setRequestId(request);
 
   // apply CSRF and session middleware
   const csrfResponse = await withCsrfMiddleware(request, response);
@@ -46,7 +50,7 @@ async function withCsrfMiddleware(
   response = new NextResponse(),
 ) {
   // set up CSRF protection
-  const csrfMiddleware = csrf({
+  const csrfProtect = createCsrfProtect({
     cookie: {
       secure: appConfig.production,
       name: CSRF_SECRET_COOKIE,
@@ -58,17 +62,20 @@ async function withCsrfMiddleware(
         ['GET', 'HEAD', 'OPTIONS'],
   });
 
-  const csrfError = await csrfMiddleware(request, response);
+  try {
+    await csrfProtect(request, response);
 
-  // if there is a CSRF error, return a 403 response
-  if (csrfError) {
-    return NextResponse.json('Invalid CSRF token', {
-      status: 401,
-    });
+    return response;
+  } catch (error) {
+    // if there is a CSRF error, return a 403 response
+    if (error instanceof CsrfError) {
+      return NextResponse.json('Invalid CSRF token', {
+        status: 401,
+      });
+    }
+
+    throw error;
   }
-
-  // otherwise, return the response
-  return response;
 }
 
 function isServerAction(request: NextRequest) {
@@ -106,6 +113,9 @@ async function adminMiddleware(request: NextRequest, response: NextResponse) {
   return response;
 }
 
+/**
+ * Define URL patterns and their corresponding handlers.
+ */
 function getPatterns() {
   return [
     {
@@ -167,6 +177,10 @@ function getPatterns() {
   ];
 }
 
+/**
+ * Match URL patterns to specific handlers.
+ * @param url
+ */
 function matchUrlPattern(url: string) {
   const patterns = getPatterns();
   const input = url.split('?')[0];
@@ -178,4 +192,12 @@ function matchUrlPattern(url: string) {
       return pattern.handler;
     }
   }
+}
+
+/**
+ * Set a unique request ID for each request.
+ * @param request
+ */
+function setRequestId(request: Request) {
+  request.headers.set('x-correlation-id', crypto.randomUUID());
 }

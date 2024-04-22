@@ -6,7 +6,7 @@ export async function generateMetadata() {
   const { t } = await createI18nServerInstance();
 
   return {
-    title: t('marketing.privacyPolicy'),
+    title: t('marketing:privacyPolicy'),
   };
 }
 
@@ -16,7 +16,10 @@ async function PrivacyPolicyPage() {
   return (
     <div className={'mt-8'}>
       <div className={'container mx-auto'}>
-        <SitePageHeader title={t('marketing.privacyPolicy')} subtitle={``} />
+        <SitePageHeader
+          title={t('marketing:privacyPolicy')}
+          subtitle={t('marketing:privacyPolicyDescription')}
+        />
       </div>
     </div>
   );

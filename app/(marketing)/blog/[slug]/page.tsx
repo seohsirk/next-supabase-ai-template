@@ -36,7 +36,7 @@ export async function generateMetadata({
       title,
       description,
       type: 'article',
-      publishedTime: publishedAt?.toDateString(),
+      publishedTime: publishedAt,
       url: post.url,
       images: image
         ? [
@@ -62,7 +62,11 @@ async function BlogPost({ params }: { params: { slug: string } }) {
     notFound();
   }
 
-  return <Post post={post} content={post.content} />;
+  return (
+    <div className={'container'}>
+      <Post post={post} content={post.content} />;
+    </div>
+  );
 }
 
 export default withI18n(BlogPost);

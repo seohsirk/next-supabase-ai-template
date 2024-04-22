@@ -18,7 +18,7 @@ import {
 import { Trans } from '@kit/ui/trans';
 import { cn } from '@kit/ui/utils';
 
-import { ProfileAccountDropdownContainer } from '~/(dashboard)/home/_components/personal-account-dropdown-container';
+import { ProfileAccountDropdownContainer } from '~/components//personal-account-dropdown-container';
 import featureFlagsConfig from '~/config/feature-flags.config';
 import pathsConfig from '~/config/paths.config';
 
@@ -69,7 +69,7 @@ function SidebarContainer(props: {
 
   return (
     <>
-      <SidebarContent className={'my-4'}>
+      <SidebarContent className={'h-16 justify-center'}>
         <AccountSelector
           selectedAccount={account}
           accounts={accounts}
@@ -85,7 +85,7 @@ function SidebarContainer(props: {
         />
       </SidebarContent>
 
-      <SidebarContent className={`h-[calc(100%-160px)] overflow-y-auto`}>
+      <SidebarContent className={`mt-5 h-[calc(100%-160px)] overflow-y-auto`}>
         <AccountLayoutSidebarNavigation account={account} />
       </SidebarContent>
 
