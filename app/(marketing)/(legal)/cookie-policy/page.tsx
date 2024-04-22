@@ -18,7 +18,7 @@ async function CookiePolicyPage() {
       <div className={'container mx-auto'}>
         <SitePageHeader
           title={t(`marketing:cookiePolicy`)}
-          subtitle={`This is the cookie policy page. It's a great place to put information about the cookies your site uses.`}
+          subtitle={t(`marketing:cookiePolicyDescription`)}
         />
       </div>
     </div>
