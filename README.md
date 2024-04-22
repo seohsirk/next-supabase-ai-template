@@ -289,7 +289,23 @@ We pass the `--path` flag to specify the path where the component should be inst
 
 ## Writing Server Actions
 
-In the large majority of cases - you will be writing React Server Actions to update data in your DB.
+In the large majority of cases - you will be writing React Server Actions to update data in your DB. Server Actions are used to perform mutations on the server-side - while being called like normal functions.
+
+To create a server action, it's enough to add `use server` at the top of the file and export the function.
+
+```tsx
+'use server';
+
+// I am now a server action!
+export const myServerAction = async function () {
+  // ... your code here
+  return {
+    success: true,
+  };
+};
+```
+
+The above is a plain POST request that basically does nothing. Let's see how we can make it more useful.
 
 Makerkit ships with a utility to help you write these actions. The utility is called `enhanceAction` and we import it from `@kit/next/actions`.
 
@@ -402,7 +418,9 @@ The only captcha provider supported is Cloudflare Turnstile.
 
 ## Writing API Route Handlers
 
-You won't be writing too many API route handlers - but when you do, you can use the `enhanceRouteHandler` utility to help you with the following:
+API Route handlers are added using the convention `route.ts` and exporting one or many HTTP methods (e.g., `GET`, `POST`, `PUT`, `DELETE`).
+
+While you won't be writing too many API route handlers (prefer Server Actions for mutations) - you can use the `enhanceRouteHandler` utility to help you with the following:
 
 1. checks the user state (if the user is authenticated)
 2. given a Zod schema, it validates the request body
@@ -411,8 +429,6 @@ You won't be writing too many API route handlers - but when you do, you can use 
 Fantastic, let's see how we can use it.
 
 ```tsx
-'use server';
-
 import { z } from 'zod';
 
 import { enhanceRouteHandler } from '@kit/next/routes';
@@ -445,8 +461,6 @@ export const POST = enhanceRouteHandler(
 If you want to protect your API route handlers with a captcha token, you can do so by passing the captcha site token to the `enhanceRouteHandler` function and setting the `captcha` flag to `true`.
 
 ```tsx
-'use server';
-
 import { enhanceRouteHandler } from '@kit/next/routes';
 
 export const POST = enhanceRouteHandler(
