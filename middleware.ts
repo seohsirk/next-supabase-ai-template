@@ -1,7 +1,7 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse, URLPattern } from 'next/server';
 
-import csrf from 'edge-csrf';
+import { CsrfError, createCsrfProtect } from '@edge-csrf/nextjs';
 
 import { checkRequiresMultiFactorAuthentication } from '@kit/supabase/check-requires-mfa';
 import { createMiddlewareClient } from '@kit/supabase/middleware-client';
@@ -46,7 +46,7 @@ async function withCsrfMiddleware(
   response = new NextResponse(),
 ) {
   // set up CSRF protection
-  const csrfMiddleware = csrf({
+  const csrfProtect = createCsrfProtect({
     cookie: {
       secure: appConfig.production,
       name: CSRF_SECRET_COOKIE,
@@ -58,17 +58,20 @@ async function withCsrfMiddleware(
         ['GET', 'HEAD', 'OPTIONS'],
   });
 
-  const csrfError = await csrfMiddleware(request, response);
+  try {
+    await csrfProtect(request, response);
 
-  // if there is a CSRF error, return a 403 response
-  if (csrfError) {
-    return NextResponse.json('Invalid CSRF token', {
-      status: 401,
-    });
+    return response;
+  } catch (error) {
+    // if there is a CSRF error, return a 403 response
+    if (error instanceof CsrfError) {
+      return NextResponse.json('Invalid CSRF token', {
+        status: 401,
+      });
+    }
+
+    throw error;
   }
-
-  // otherwise, return the response
-  return response;
 }
 
 function isServerAction(request: NextRequest) {

@@ -667,7 +667,7 @@ export type Database = {
       can_action_account_member: {
         Args: {
           target_team_account_id: string
-          user_id: string
+          target_user_id: string
         }
         Returns: boolean
       }
@@ -747,6 +747,10 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: Json
       }
+      get_upper_system_role: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
       has_more_elevated_role: {
         Args: {
           target_user_id: string
@@ -767,6 +771,14 @@ export type Database = {
         Args: {
           account_id: string
           account_role?: string
+        }
+        Returns: boolean
+      }
+      has_same_role_hierarchy_level: {
+        Args: {
+          target_user_id: string
+          target_account_id: string
+          role_name: string
         }
         Returns: boolean
       }

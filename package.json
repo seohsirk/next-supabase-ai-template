@@ -57,7 +57,7 @@
     "@tanstack/react-query-next-experimental": "^5.29.2",
     "@tanstack/react-table": "^8.16.0",
     "date-fns": "^3.6.0",
-    "edge-csrf": "1.0.12-sveltekit-1",
+    "@edge-csrf/nextjs": "2.0.0",
     "i18next": "^23.11.2",
     "i18next-resources-to-backend": "^1.2.1",
     "lucide-react": "^0.368.0",
