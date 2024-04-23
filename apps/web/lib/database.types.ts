@@ -492,6 +492,7 @@ export type Database = {
       subscription_items: {
         Row: {
           created_at: string;
+          id: string;
           interval: string;
           interval_count: number;
           price_amount: number | null;
@@ -504,6 +505,7 @@ export type Database = {
         };
         Insert: {
           created_at?: string;
+          id: string;
           interval: string;
           interval_count: number;
           price_amount?: number | null;
@@ -516,6 +518,7 @@ export type Database = {
         };
         Update: {
           created_at?: string;
+          id?: string;
           interval?: string;
           interval_count?: number;
           price_amount?: number | null;
