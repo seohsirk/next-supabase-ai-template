@@ -42,7 +42,7 @@ export function LineItemDetails(
           <If condition={item.setupFee}>
             <div className={className}>
               <span className={'flex items-center space-x-1'}>
-                <PlusSquare className={'w-4'} />
+                <PlusSquare className={'w-3'} />
 
                 <span>
                   <Trans
@@ -65,7 +65,7 @@ export function LineItemDetails(
             <div className={className}>
               <span className={'flex items-center space-x-1'}>
                 <span className={'flex items-center space-x-1.5'}>
-                  <PlusSquare className={'w-4'} />
+                  <PlusSquare className={'w-3'} />
 
                   <span>
                     <Trans i18nKey={'billing:basePlan'} />
@@ -95,7 +95,7 @@ export function LineItemDetails(
 
             <If condition={item.tiers?.length}>
               <span className={'flex items-center space-x-1.5'}>
-                <PlusSquare className={'w-4'} />
+                <PlusSquare className={'w-3'} />
 
                 <span className={'flex space-x-1 text-sm'}>
                   <span>
@@ -118,7 +118,7 @@ export function LineItemDetails(
           <div key={index} className={'flex flex-col'}>
             <div className={className}>
               <span className={'flex items-center space-x-1.5'}>
-                <PlusSquare className={'w-4'} />
+                <PlusSquare className={'w-3'} />
 
                 <span>
                   <Trans i18nKey={'billing:perTeamMember'} />
@@ -145,7 +145,7 @@ export function LineItemDetails(
             <div className={className}>
               <span className={'flex items-center space-x-1'}>
                 <span className={'flex items-center space-x-1.5'}>
-                  <PlusSquare className={'w-4'} />
+                  <PlusSquare className={'w-3'} />
 
                   <span className={'flex space-x-1'}>
                     <span>

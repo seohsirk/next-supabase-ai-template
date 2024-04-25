@@ -121,7 +121,7 @@ function Home() {
 
               <Heading
                 level={2}
-                className={'font-medium text-muted-foreground'}
+                className={'font-sans font-normal text-muted-foreground'}
               >
                 Unbeatable Features and Benefits for Your SaaS Business
               </Heading>
@@ -136,16 +136,16 @@ function Home() {
         >
           <FeatureShowcaseContainer>
             <FeatureContainer>
-              <div className={'flex flex-col space-y-4'}>
+              <div className={'flex flex-col space-y-6'}>
                 <IconContainer className={'bg-green-50 dark:bg-green-500/10'}>
                   <Lock className={'h-5 text-green-500'} />
                 </IconContainer>
 
-                <div className={'flex flex-col space-y-1'}>
-                  <Heading level={1}>Authentication</Heading>
+                <div className={'flex flex-col'}>
+                  <Heading level={2}>Authentication</Heading>
 
                   <Heading
-                    level={2}
+                    level={3}
                     className={'font-sans font-normal text-muted-foreground'}
                   >
                     Secure and Easy-to-Use Authentication for Your SaaS Website
@@ -185,16 +185,16 @@ function Home() {
             </FeatureContainer>
 
             <FeatureContainer>
-              <div className={'flex flex-col space-y-4'}>
+              <div className={'flex flex-col space-y-6'}>
                 <IconContainer className={'bg-indigo-50 dark:bg-indigo-500/10'}>
                   <LayoutDashboard className={'h-5 text-indigo-500'} />
                 </IconContainer>
 
-                <div className={'flex flex-col space-y-1'}>
-                  <Heading level={1}>Dashboard</Heading>
+                <div className={'flex flex-col'}>
+                  <Heading level={2}>Dashboard</Heading>
 
                   <Heading
-                    level={2}
+                    level={3}
                     className={'font-sans font-normal text-muted-foreground'}
                   >
                     A fantastic dashboard to manage your SaaS business
@@ -212,16 +212,16 @@ function Home() {
 
           <FeatureShowcaseContainer>
             <FeatureContainer>
-              <div className={'flex flex-col space-y-4'}>
+              <div className={'flex flex-col space-y-6'}>
                 <IconContainer className={'bg-blue-50 dark:bg-blue-500/10'}>
                   <CreditCard className={'h-5 text-blue-500'} />
                 </IconContainer>
 
-                <div className={'flex flex-col space-y-1'}>
-                  <Heading level={1}>Billing</Heading>
+                <div className={'flex flex-col'}>
+                  <Heading level={2}>Billing</Heading>
 
                   <Heading
-                    level={2}
+                    level={3}
                     className={'font-sans font-normal text-muted-foreground'}
                   >
                     A powerful billing system for your SaaS business
@@ -260,12 +260,12 @@ function Home() {
 
             <div className={'flex flex-col space-y-2'}>
               <Heading level={1}>
-                Fair pricing for all types of SaaS businesses
+                Fair pricing for all types of businesses
               </Heading>
 
               <Heading
                 level={2}
-                className={'font-medium text-muted-foreground'}
+                className={'font-sans font-normal text-muted-foreground'}
               >
                 Get started on our free plan and upgrade when you are ready.
               </Heading>

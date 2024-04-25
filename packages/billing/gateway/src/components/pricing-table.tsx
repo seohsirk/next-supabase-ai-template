@@ -51,7 +51,7 @@ export function PricingTable({
   const [interval, setInterval] = useState(intervals[0]!);
 
   return (
-    <div className={'flex flex-col space-y-8'}>
+    <div className={'flex flex-col space-y-8 xl:space-y-12'}>
       <div className={'flex justify-center'}>
         {intervals.length ? (
           <PlanIntervalSwitcher
@@ -89,7 +89,6 @@ export function PricingTable({
 
           return (
             <PricingItem
-              className={cn('border')}
               selectable
               key={plan.id}
               plan={plan}
@@ -157,8 +156,8 @@ function PricingItem(
       data-cy={'subscription-plan'}
       className={cn(
         props.className,
-        `s-full flex flex-1 grow flex-col items-stretch justify-between space-y-8 self-stretch
-            rounded-lg border p-8 lg:w-4/12 xl:max-w-[20rem]`,
+        `s-full relative flex flex-1 grow flex-col items-stretch justify-between 
+            self-stretch rounded-lg border p-8 lg:w-4/12 xl:max-w-[20rem]`,
         {
           ['border-primary']: highlighted,
           ['dark:shadow-primary/40 border-transparent shadow dark:shadow-sm']:
@@ -166,8 +165,21 @@ function PricingItem(
         },
       )}
     >
+      <If condition={props.product.badge}>
+        <div className={'absolute -top-2.5 left-0 flex w-full justify-center'}>
+          <Badge variant={highlighted ? 'default' : 'outline'}>
+            <span>
+              <Trans
+                i18nKey={props.product.badge}
+                defaults={props.product.badge}
+              />
+            </span>
+          </Badge>
+        </div>
+      </If>
+
       <div className={'flex flex-col space-y-6'}>
-        <div className={'flex flex-col space-y-4'}>
+        <div className={'flex flex-col space-y-2.5'}>
           <div className={'flex items-center space-x-6'}>
             <b
               className={
@@ -179,20 +191,9 @@ function PricingItem(
                 defaults={props.product.name}
               />
             </b>
-
-            <If condition={props.product.badge}>
-              <Badge variant={highlighted ? 'default' : 'outline'}>
-                <span>
-                  <Trans
-                    i18nKey={props.product.badge}
-                    defaults={props.product.badge}
-                  />
-                </span>
-              </Badge>
-            </If>
           </div>
 
-          <span className={cn(`text-muted-foreground h-10 text-base`)}>
+          <span className={cn(`text-muted-foreground h-6 text-sm`)}>
             <Trans
               i18nKey={props.product.description}
               defaults={props.product.description}
@@ -282,6 +283,8 @@ function PricingItem(
         </div>
 
         <If condition={props.displayPlanDetails && lineItemsToDisplay.length}>
+          <Separator />
+
           <div className={'flex flex-col space-y-2'}>
             <h6 className={'text-sm font-semibold'}>
               <Trans i18nKey={'billing:detailsLabel'} />
