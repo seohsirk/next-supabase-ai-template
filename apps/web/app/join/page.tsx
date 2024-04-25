@@ -94,8 +94,11 @@ async function JoinTeamAccountPage({ searchParams }: Context) {
     invitation.account.slug,
   );
 
+  const email = auth.data.email ?? '';
+
   return (
     <AcceptInvitationContainer
+      email={email}
       inviteToken={token}
       invitation={invitation}
       paths={{

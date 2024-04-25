@@ -11,6 +11,7 @@ import { SignOutInvitationButton } from './sign-out-invitation-button';
 
 export function AcceptInvitationContainer(props: {
   inviteToken: string;
+  email: string;
 
   invitation: {
     id: string;
@@ -29,7 +30,7 @@ export function AcceptInvitationContainer(props: {
 }) {
   return (
     <div className={'flex flex-col items-center space-y-4'}>
-      <Heading className={'text-center'} level={5}>
+      <Heading className={'text-center'} level={4}>
         <Trans
           i18nKey={'teams:acceptInvitationHeading'}
           values={{
@@ -59,7 +60,7 @@ export function AcceptInvitationContainer(props: {
         />
       </div>
 
-      <div className={'flex flex-col space-y-2.5'}>
+      <div className={'flex flex-col space-y-4'}>
         <form
           data-test={'join-team-form'}
           className={'w-full'}
@@ -73,7 +74,10 @@ export function AcceptInvitationContainer(props: {
             value={props.paths.accountHome}
           />
 
-          <InvitationSubmitButton accountName={props.invitation.account.name} />
+          <InvitationSubmitButton
+            email={props.email}
+            accountName={props.invitation.account.name}
+          />
         </form>
 
         <Separator />
