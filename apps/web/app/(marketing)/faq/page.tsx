@@ -86,8 +86,8 @@ async function FAQPage() {
           </div>
 
           <div>
-            <Button variant={'outline'}>
-              <Link asChild href={'/contact'}>
+            <Button asChild variant={'outline'}>
+              <Link href={'/contact'}>
                 <span>
                   <Trans i18nKey={'marketing:contactFaq'} />
                 </span>
