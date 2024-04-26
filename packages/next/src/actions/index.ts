@@ -19,46 +19,60 @@ import { captureException, zodParseFactory } from '../utils';
  */
 export function enhanceAction<
   Args,
-  Schema extends z.ZodType<Omit<Args, 'captchaToken'>, z.ZodTypeDef>,
   Response,
->(
-  fn: (params: z.infer<Schema>, user: User) => Response | Promise<Response>,
-  config: {
+  Config extends {
+    auth?: boolean;
     captcha?: boolean;
     captureException?: boolean;
-    schema: Schema;
+    schema: z.ZodType<
+      Config['captcha'] extends true ? Args & { captchaToken: string } : Args,
+      z.ZodTypeDef
+    >;
   },
+>(
+  fn: (
+    params: z.infer<Config['schema']>,
+    user: Config['auth'] extends false ? undefined : User,
+  ) => Response | Promise<Response>,
+  config: Config,
 ) {
-  return async (
-    params: z.infer<Schema> & {
-      captchaToken?: string;
-    },
-  ) => {
-    // verify the user is authenticated if required
-    const auth = await requireUser(getSupabaseServerActionClient());
+  return async (params: z.infer<Config['schema']>) => {
+    type UserParam = Config['auth'] extends false ? undefined : User;
 
-    // If the user is not authenticated, redirect to the specified URL.
-    if (!auth.data) {
-      redirect(auth.redirectTo);
-    }
+    const requireAuth = config.auth ?? true;
 
-    // verify the captcha token if required
-    if (config.captcha) {
-      const token = z.string().min(1).parse(params.captchaToken);
+    let user: UserParam = undefined as UserParam;
 
-      await verifyCaptchaToken(token);
+    if (requireAuth) {
+      // verify the user is authenticated if required
+      const auth = await requireUser(getSupabaseServerActionClient());
+
+      // If the user is not authenticated, redirect to the specified URL.
+      if (!auth.data) {
+        redirect(auth.redirectTo);
+      }
+
+      user = auth.data as UserParam;
     }
 
     // validate the schema
     const parsed = zodParseFactory(config.schema);
     const data = parsed(params);
 
+    // verify the captcha token if required
+    if (config.captcha) {
+      const token = (data as Args & { captchaToken: string }).captchaToken;
+
+      // Verify the CAPTCHA token. It will throw an error if the token is invalid.
+      await verifyCaptchaToken(token);
+    }
+
     // capture exceptions if required
     const shouldCaptureException = config.captureException ?? true;
 
     if (shouldCaptureException) {
       try {
-        return await fn(data, auth.data);
+        return await fn(data, user);
       } catch (error) {
         await captureException(error);
 
@@ -66,7 +80,7 @@ export function enhanceAction<
       }
     } else {
       // pass the data to the action
-      return fn(data, auth.data);
+      return fn(data, user);
     }
   };
 }
