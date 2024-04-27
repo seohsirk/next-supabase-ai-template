@@ -44,10 +44,7 @@ class BillingGatewayService {
   async createCheckoutSession(
     params: z.infer<typeof CreateBillingCheckoutSchema>,
   ) {
-    const strategy = await BillingGatewayFactoryService.GetProviderStrategy(
-      this.provider,
-    );
-
+    const strategy = await this.getStrategy();
     const payload = CreateBillingCheckoutSchema.parse(params);
 
     return strategy.createCheckoutSession(payload);
@@ -61,10 +58,7 @@ class BillingGatewayService {
   async retrieveCheckoutSession(
     params: z.infer<typeof RetrieveCheckoutSessionSchema>,
   ) {
-    const strategy = await BillingGatewayFactoryService.GetProviderStrategy(
-      this.provider,
-    );
-
+    const strategy = await this.getStrategy();
     const payload = RetrieveCheckoutSessionSchema.parse(params);
 
     return strategy.retrieveCheckoutSession(payload);
@@ -78,10 +72,7 @@ class BillingGatewayService {
   async createBillingPortalSession(
     params: z.infer<typeof CreateBillingPortalSessionSchema>,
   ) {
-    const strategy = await BillingGatewayFactoryService.GetProviderStrategy(
-      this.provider,
-    );
-
+    const strategy = await this.getStrategy();
     const payload = CreateBillingPortalSessionSchema.parse(params);
 
     return strategy.createBillingPortalSession(payload);
@@ -95,10 +86,7 @@ class BillingGatewayService {
   async cancelSubscription(
     params: z.infer<typeof CancelSubscriptionParamsSchema>,
   ) {
-    const strategy = await BillingGatewayFactoryService.GetProviderStrategy(
-      this.provider,
-    );
-
+    const strategy = await this.getStrategy();
     const payload = CancelSubscriptionParamsSchema.parse(params);
 
     return strategy.cancelSubscription(payload);
@@ -110,10 +98,7 @@ class BillingGatewayService {
    * @param params
    */
   async reportUsage(params: z.infer<typeof ReportBillingUsageSchema>) {
-    const strategy = await BillingGatewayFactoryService.GetProviderStrategy(
-      this.provider,
-    );
-
+    const strategy = await this.getStrategy();
     const payload = ReportBillingUsageSchema.parse(params);
 
     return strategy.reportUsage(payload);
@@ -125,10 +110,7 @@ class BillingGatewayService {
    * @param params
    */
   async queryUsage(params: z.infer<typeof QueryBillingUsageSchema>) {
-    const strategy = await BillingGatewayFactoryService.GetProviderStrategy(
-      this.provider,
-    );
-
+    const strategy = await this.getStrategy();
     const payload = QueryBillingUsageSchema.parse(params);
 
     return strategy.queryUsage(payload);
@@ -141,12 +123,13 @@ class BillingGatewayService {
   async updateSubscriptionItem(
     params: z.infer<typeof UpdateSubscriptionParamsSchema>,
   ) {
-    const strategy = await BillingGatewayFactoryService.GetProviderStrategy(
-      this.provider,
-    );
-
+    const strategy = await this.getStrategy();
     const payload = UpdateSubscriptionParamsSchema.parse(params);
 
-    return strategy.updateSubscription(payload);
+    return strategy.updateSubscriptionItem(payload);
+  }
+
+  getStrategy() {
+    return BillingGatewayFactoryService.GetProviderStrategy(this.provider);
   }
 }

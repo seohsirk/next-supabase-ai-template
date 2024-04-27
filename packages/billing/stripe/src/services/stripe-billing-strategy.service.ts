@@ -273,11 +273,11 @@ export class StripeBillingStrategyService
   }
 
   /**
-   * @name updateSubscription
+   * @name updateSubscriptionItem
    * @description Updates a subscription
    * @param params
    */
-  async updateSubscription(
+  async updateSubscriptionItem(
     params: z.infer<typeof UpdateSubscriptionParamsSchema>,
   ) {
     const stripe = await this.stripeProvider();
