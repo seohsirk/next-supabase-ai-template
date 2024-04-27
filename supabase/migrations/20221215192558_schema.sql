@@ -172,7 +172,8 @@ values (
 -- Open up access to config table for authenticated users and service_role
 grant select on public.config to authenticated, service_role;
 
--- RLS on the config table
+-- RLS
+-- SELECT(config):
 -- Authenticated users can read the config
 create policy "public config can be read by authenticated users" on
     public.config
@@ -246,7 +247,8 @@ language plpgsql;
 
 grant execute on function public.get_config() to authenticated, service_role;
 
--- check if a field is set in the config
+-- Function "public.is_set"
+-- Check if a field is set in the config
 create or replace function public.is_set(field_name text)
     returns boolean
     as $$
@@ -263,7 +265,6 @@ $$
 language plpgsql;
 
 grant execute on function public.is_set(text) to authenticated;
-
 
 /*
  * -------------------------------------------------------
@@ -309,33 +310,35 @@ grant select, insert, update, delete on table public.accounts to
     authenticated, service_role;
 
 -- constraint that conditionally allows nulls on the slug ONLY if
---   personal_account is true
+--  personal_account is true
 alter table public.accounts
     add constraint accounts_slug_null_if_personal_account_true check
 	((is_personal_account = true and slug is null) or
 	(is_personal_account = false and slug is not null));
 
--- constraint to ensure that the primary_owner_user_id is unique for
---   personal accounts
+-- constraint to ensure that the primary_owner_user_id is unique for personal accounts
 create unique index unique_personal_account on
     public.accounts(primary_owner_user_id)
 where
     is_personal_account = true;
 
 -- RLS on the accounts table
--- SELECT: Users can read their own accounts
+
+-- SELECT(accounts):
+-- Users can read their own accounts
 create policy accounts_read_self on public.accounts
     for select to authenticated
         using (auth.uid() = primary_owner_user_id);
 
--- UPDATE: Team owners can update their accounts
+-- UPDATE(accounts):
+-- Team owners can update their accounts
 create policy accounts_self_update on public.accounts
     for update to authenticated
         using (auth.uid() = primary_owner_user_id)
         with check (auth.uid() = primary_owner_user_id);
 
--- Functions
--- Function to transfer team account ownership to another user
+-- Function "public.transfer_team_account_ownership"
+-- Function to transfer the ownership of a team account to another user
 create or replace function
     public.transfer_team_account_ownership(target_account_id uuid,
     new_owner_id uuid)
@@ -386,6 +389,8 @@ grant execute on function
     public.transfer_team_account_ownership(uuid, uuid) to
     service_role;
 
+-- Function "public.is_account_owner"
+-- Function to check if a user is the primary owner of an account
 create function public.is_account_owner(account_id uuid)
     returns boolean
     as $$
@@ -404,6 +409,8 @@ language sql;
 grant execute on function public.is_account_owner(uuid) to
     authenticated, service_role;
 
+-- Function "kit.protect_account_fields"
+-- Function to protect account fields from being updated
 create or replace function kit.protect_account_fields()
     returns trigger
     as $$
@@ -429,6 +436,8 @@ create trigger protect_account_fields
     before update on public.accounts for each row
     execute function kit.protect_account_fields();
 
+-- Function "public.get_upper_system_role"
+-- Function to get the highest system role for an account
 create or replace function public.get_upper_system_role()
     returns varchar
     as $$
@@ -447,6 +456,8 @@ language plpgsql;
 grant execute on function public.get_upper_system_role() to
     service_role;
 
+-- Function "kit.add_current_user_to_new_account"
+-- Trigger to add the current user to a new account as the primary owner
 create or replace function kit.add_current_user_to_new_account()
     returns trigger
     language plpgsql
@@ -477,8 +488,7 @@ create trigger "add_current_user_to_new_account"
     after insert on public.accounts for each row
     execute function kit.add_current_user_to_new_account();
 
--- create a trigger to update the account email when the primary owner
---   email is updated
+-- create a trigger to update the account email when the primary owner email is updated
 create or replace function kit.handle_update_user_email()
     returns trigger
     language plpgsql
@@ -500,9 +510,8 @@ end;
 
 $$;
 
--- trigger the function every time a user email is updated
---     only if the user is the primary owner of the account and the
---   account is personal account
+-- trigger the function every time a user email is updated only if the user is the primary owner of the account and
+ -- the account is personal account
 create trigger "on_auth_user_updated"
     after update of email on auth.users for each row
     execute procedure kit.handle_update_user_email();
@@ -513,7 +522,7 @@ create trigger "on_auth_user_updated"
  * We create the schema for the roles. Roles are the roles for an account. For example, an account might have the roles 'owner', 'admin', and 'member'.
  * -------------------------------------------------------
  */
--- Account Memberships table
+-- Roles Table
 create table if not exists public.roles(
     name varchar(50) not null,
     hierarchy_level int not null check (hierarchy_level > 0),
@@ -545,6 +554,8 @@ create unique index idx_unique_hierarchy_per_account
 create unique index idx_unique_name_per_account
     on public.roles (name, coalesce(account_id, kit.get_system_role_uuid()));
 
+-- Function "kit.check_non_personal_account_roles"
+-- Trigger to prevent roles from being created for personal accounts
 create or replace function kit.check_non_personal_account_roles()
     returns trigger
     as $$
@@ -594,14 +605,14 @@ comment on column public.accounts_memberships.account_id is 'The account the mem
 
 comment on column public.accounts_memberships.account_role is 'The role for the membership';
 
--- Open up access to accounts_memberships table for authenticated users
---   and service_role
+-- Open up access to accounts_memberships table for authenticated users and service_role
 grant select, insert, update, delete on table
     public.accounts_memberships to service_role;
 
 -- Enable RLS on the accounts_memberships table
 alter table public.accounts_memberships enable row level security;
 
+-- Function "kit.prevent_account_owner_membership_delete"
 -- Trigger to prevent a primary owner from being removed from an account
 create or replace function kit.prevent_account_owner_membership_delete()
     returns trigger
@@ -630,7 +641,8 @@ create or replace trigger prevent_account_owner_membership_delete_check
     before delete on public.accounts_memberships for each row
     execute function kit.prevent_account_owner_membership_delete();
 
--- Functions
+-- Function "public.has_role_on_account"
+-- Function to check if a user has a role on an account
 create or replace function public.has_role_on_account(account_id
     uuid, account_role varchar(50) default null)
     returns boolean
@@ -654,7 +666,8 @@ $$;
 grant execute on function public.has_role_on_account(uuid, varchar)
     to authenticated;
 
--- Function to check if a user is a team member of an account or not
+-- Function "public.is_team_member"
+-- Check if a user is a team member of an account or not
 create or replace function public.is_team_member(account_id uuid,
     user_id uuid)
     returns boolean
@@ -676,9 +689,9 @@ $$;
 
 grant execute on function public.is_team_member(uuid, uuid) to authenticated;
 
-
--- SELECT(roles): authenticated users can query roles if the role is public
---  or the user has a role on the account the role is for
+-- RLS
+-- SELECT(roles)
+-- authenticated users can query roles if the role is public or the user has a role on the account the role is for
 create policy roles_read on public.roles
     for select to authenticated
         using (
@@ -686,8 +699,8 @@ create policy roles_read on public.roles
             or public.has_role_on_account(account_id)
         );
 
-
--- Function to check if a user can perform management actions on an account member
+-- Function "public.can_action_account_member"
+-- Check if a user can perform management actions on an account member
 create or replace function
     public.can_action_account_member(target_team_account_id uuid,
     target_user_id uuid)
@@ -786,36 +799,29 @@ grant execute on function public.can_action_account_member(uuid, uuid)
     to authenticated, service_role;
 
 -- RLS
--- SELECT: Users can read their account memberships
+
+-- SELECT(accounts_memberships):
+-- Users can read their account memberships
 create policy accounts_memberships_read_self on public.accounts_memberships
     for select to authenticated
         using (user_id = auth.uid());
 
--- SELECT: Users can read their team members account memberships
+-- SELECT(accounts_memberships):
+-- Users can read their team members account memberships
 create policy accounts_memberships_team_read on public.accounts_memberships
     for select to authenticated
         using (is_team_member(account_id, user_id));
 
 -- RLS on the accounts table
---    SELECT: Users can read the team accounts they are a member of
+
+-- SELECT(accounts):
+-- Users can read the team accounts they are a member of
 create policy accounts_read_team on public.accounts
     for select to authenticated
         using (has_role_on_account(id));
 
--- DELETE: Users can remove themselves from an account unless they are the primary owner
-create policy accounts_memberships_delete_self on public.accounts_memberships
-    for delete
-    to authenticated
-        using (user_id = auth.uid());
-
--- DELETE: Users with the required role can remove members from an account
-create policy accounts_memberships_delete on public.accounts_memberships
-    for delete
-    to authenticated
-        using (public.can_action_account_member(account_id, user_id));
-
--- SELECT (public.accounts): Team members can read accounts of the team
---   they are a member of
+-- SELECT(accounts):
+-- Team members can read accounts of the team they are a member of
 create policy accounts_team_read on public.accounts
     for select to authenticated
         using (exists (
@@ -825,6 +831,20 @@ create policy accounts_team_read on public.accounts
                 public.accounts_memberships as membership
             where
                 public.is_team_member(membership.account_id, id)));
+
+-- DELETE(accounts_memberships):
+-- Users can remove themselves from an account unless they are the primary owner
+create policy accounts_memberships_delete_self on public.accounts_memberships
+    for delete
+    to authenticated
+        using (user_id = auth.uid());
+
+-- DELETE(accounts_memberships):
+-- Users with the required role can remove members from an account
+create policy accounts_memberships_delete on public.accounts_memberships
+    for delete
+    to authenticated
+        using (public.can_action_account_member(account_id, user_id));
 
 /*
  * -------------------------------------------------------
@@ -847,10 +867,14 @@ comment on column public.role_permissions.role is 'The role the permission is fo
 
 comment on column public.role_permissions.permission is 'The permission for the role';
 
--- Open up access to accounts
+-- Open up access to role_permissions table for authenticated users and service_role
 grant select, insert, update, delete on table public.role_permissions
-    to authenticated, service_role;
+    to service_role;
 
+-- Authenticated users can read role permissions
+grant select on table public.role_permissions to authenticated;
+
+-- Function "public.has_permission"
 -- Create a function to check if a user has a permission
 create function public.has_permission(user_id uuid, account_id uuid,
     permission_name app_permissions)
@@ -878,7 +902,8 @@ language plpgsql;
 grant execute on function public.has_permission(uuid, uuid,
     public.app_permissions) to authenticated, service_role;
 
--- Function: Check if a user has a more elevated role than the target role
+-- Function "public.has_more_elevated_role"
+-- Check if a user has a more elevated role than the target role
 create or replace function
     public.has_more_elevated_role(target_user_id uuid,
     target_account_id uuid, role_name varchar)
@@ -951,7 +976,8 @@ language plpgsql;
 grant execute on function public.has_more_elevated_role(uuid, uuid,
     varchar) to authenticated, service_role;
 
--- Function: Check if a user has the same role hierarchy level as the target role
+-- Function "public.has_same_role_hierarchy_level"
+-- Check if a user has the same role hierarchy level as the target role
 create or replace function
     public.has_same_role_hierarchy_level(target_user_id uuid,
     target_account_id uuid, role_name varchar)
@@ -1026,8 +1052,10 @@ grant execute on function public.has_same_role_hierarchy_level(uuid, uuid,
 -- Enable RLS on the role_permissions table
 alter table public.role_permissions enable row level security;
 
--- RLS
--- Authenticated Users can read their permissions
+-- RLS on the role_permissions table
+
+-- SELECT(role_permissions):
+-- Authenticated Users can read global permissions
 create policy role_permissions_read on public.role_permissions
     for select to authenticated
         using (true);
@@ -1074,6 +1102,8 @@ grant select, insert, update, delete on table public.invitations to
 -- Enable RLS on the invitations table
 alter table public.invitations enable row level security;
 
+-- Function "kit.check_team_account"
+-- Function to check if the account is a team account or not when inserting or updating an invitation
 create or replace function kit.check_team_account()
     returns trigger
     as $$
@@ -1100,19 +1130,17 @@ create trigger only_team_accounts_check
     before insert or update on public.invitations for each row
     execute procedure kit.check_team_account();
 
--- RLS
---    SELECT: Users can read invitations to users of an account they
--- are
---   a member of
+-- RLS on the invitations table
+
+-- SELECT(invitations):
+-- Users can read invitations to users of an account they are a member of
 create policy invitations_read_self on public.invitations
     for select to authenticated
         using (public.has_role_on_account(account_id));
 
--- INSERT: Users can create invitations to users of an account they are
---   a member of
---     and have the 'invites.manage' permission AND the target role is
---  not
---   higher than the user's role
+-- INSERT(invitations):
+-- Users can create invitations to users of an account they are
+-- a member of  and have the 'invites.manage' permission AND the target role is not higher than the user's role
 create policy invitations_create_self on public.invitations
     for insert to authenticated
         with check (
@@ -1120,11 +1148,9 @@ create policy invitations_create_self on public.invitations
         and public.has_permission(auth.uid(), account_id, 'invites.manage'::app_permissions)
         and public.has_same_role_hierarchy_level(auth.uid(), account_id, role));
 
--- UPDATE: Users can update invitations to users of an account they are
---   a member of
---     and have the 'invites.manage' permission AND the target role is
---  not
---   higher than the user's role
+-- UPDATE(public.invitations):
+-- Users can update invitations to users of an account they are a member of and have the 'invites.manage' permission AND
+-- the target role is not higher than the user's role
 create policy invitations_update on public.invitations
     for update to authenticated
 	using (public.has_permission(auth.uid(), account_id,
@@ -1134,16 +1160,14 @@ create policy invitations_update on public.invitations
 		'invites.manage'::app_permissions)
             and public.has_more_elevated_role(auth.uid(), account_id, role));
 
--- DELETE: Users can delete invitations to users of an account they are
---   a member of
---    and have the 'invites.manage' permission
+-- DELETE(public.invitations):
+-- Users can delete invitations to users of an account they are a member of and have the 'invites.manage' permission
 create policy invitations_delete on public.invitations
     for delete to authenticated
         using (has_role_on_account(account_id)
-	    and public.has_permission(auth.uid(), account_id,
-		'invites.manage'::app_permissions));
+	    and public.has_permission(auth.uid(), account_id, 'invites.manage'::app_permissions));
 
--- Functions
+-- Functions "public.accept_invitation"
 -- Function to accept an invitation to an account
 create or replace function accept_invitation(token text, user_id uuid)
     returns uuid
@@ -1164,7 +1188,6 @@ begin
 
     if not found then
         raise exception 'Invalid or expired invitation token';
-
     end if;
 
     insert into public.accounts_memberships(
@@ -1186,7 +1209,6 @@ $$
 language plpgsql;
 
 grant execute on function accept_invitation(text, uuid) to service_role;
-
 
 /*
  * -------------------------------------------------------
@@ -1222,12 +1244,13 @@ grant select, insert, update, delete on table
 -- Enable RLS on billing_customers table
 alter table public.billing_customers enable row level security;
 
-grant select on table public.billing_customers to authenticated;
+-- Open up access to billing_customers table for authenticated users
+grant select on table public.billing_customers to authenticated, service_role;
 
--- RLS
---    SELECT: Users can read account subscriptions on an account they
---  are
---   a member of
+-- RLS on the billing_customers table
+
+-- SELECT(billing_customers):
+-- Users can read account subscriptions on an account they are a member of
 create policy billing_customers_read_self on public.billing_customers
     for select to authenticated
         using (account_id = auth.uid()
@@ -1282,9 +1305,7 @@ comment on column public.subscriptions.active is 'Whether the subscription is ac
 
 comment on column public.subscriptions.billing_customer_id is 'The billing customer ID for the subscription';
 
-
--- Open up access to subscriptions table for authenticated users and
---   service_role
+-- Open up access to subscriptions table for authenticated users and service_role
 grant select, insert, update, delete on table public.subscriptions to
     service_role;
 
@@ -1293,10 +1314,10 @@ grant select on table public.subscriptions to authenticated;
 -- Enable RLS on subscriptions table
 alter table public.subscriptions enable row level security;
 
--- RLS
---    SELECT: Users can read account subscriptions on an account they
---  are
---   a member of
+-- RLS on the subscriptions table
+
+-- SELECT(subscriptions):
+-- Users can read account subscriptions on an account they are a member of
 create policy subscriptions_read_self on public.subscriptions
     for select to authenticated
         using (
@@ -1304,7 +1325,8 @@ create policy subscriptions_read_self on public.subscriptions
             or (account_id = auth.uid() and public.is_set('enable_account_billing'))
          );
 
--- Functions
+-- Function "public.upsert_subscription"
+-- Insert or Update a subscription and its items in the database when receiving a webhook from the billing provider
 create or replace function
     public.upsert_subscription(target_account_id uuid,
     target_customer_id varchar(255), target_subscription_id text,
@@ -1483,8 +1505,8 @@ grant insert, update, delete on table public.subscription_items to
 -- RLS
 alter table public.subscription_items enable row level security;
 
--- SELECT: Users can read subscription items on a subscription they are
---   a member of
+-- SELECT(subscription_items)
+-- Users can read subscription items on a subscription they are a member of
 create policy subscription_items_read_self on public.subscription_items
     for select to authenticated
         using (exists (
@@ -1538,9 +1560,8 @@ grant select, insert, update, delete on table public.orders to service_role;
 -- RLS
 alter table public.orders enable row level security;
 
--- SELECT
---    Users can read orders on an account they are a member of or the
---   account is their own
+-- SELECT(orders)
+-- Users can read orders on an account they are a member of or the account is their own
 create policy orders_read_self on public.orders
     for select to authenticated
         using ((account_id = auth.uid() and public.is_set('enable_account_billing'))
@@ -1586,7 +1607,7 @@ grant select on table public.order_items to authenticated, service_role;
 -- RLS
 alter table public.order_items enable row level security;
 
--- SELECT
+-- SELECT(order_items):
 -- Users can read order items on an order they are a member of
 create policy order_items_read_self on public.order_items
     for select to authenticated
@@ -1599,7 +1620,8 @@ create policy order_items_read_self on public.order_items
 		id = order_id and (account_id = auth.uid() or
 		    has_role_on_account(account_id))));
 
--- Functions
+-- Function "public.upsert_order"
+-- Insert or update an order and its items when receiving a webhook from the billing provider
 create or replace function public.upsert_order(target_account_id
     uuid, target_customer_id varchar(255), target_order_id text,
     status public.payment_status, billing_provider
@@ -1685,13 +1707,8 @@ grant execute on function public.upsert_order(uuid, varchar, text,
     public.payment_status, public.billing_provider, numeric, varchar,
     jsonb) to service_role;
 
-
-/*
- * -------------------------------------------------------
- * Section: Functions
- * -------------------------------------------------------
- */
 -- Create a function to slugify a string
+-- useful for turning an account name into a unique slug
 create or replace function kit.slugify("value" text)
     returns text
     as $$
@@ -1740,6 +1757,8 @@ strict immutable;
 
 grant execute on function kit.slugify(text) to service_role, authenticated;
 
+-- Function "kit.set_slug_from_account_name"
+-- Set the slug from the account name and increment if the slug exists
 create or replace function kit.set_slug_from_account_name()
     returns trigger
     language plpgsql
@@ -1802,7 +1821,8 @@ create trigger "update_slug_from_account_name"
 	NEW.is_personal_account = false)
     execute procedure kit.set_slug_from_account_name();
 
--- Create a function to setup a new user with a personal account
+-- Function "kit.setup_new_user"
+-- Setup a new user account after user creation
 create function kit.setup_new_user()
     returns trigger
     language plpgsql
@@ -1851,13 +1871,18 @@ create trigger on_auth_user_created
     after insert on auth.users for each row
     execute procedure kit.setup_new_user();
 
--- Function: create a team account
+-- Function "public.create_team_account"
+-- Create a team account if team accounts are enabled
 create or replace function public.create_team_account(account_name text)
     returns public.accounts
     as $$
 declare
     new_account public.accounts;
 begin
+    if (not public.is_set('enable_team_accounts')) then
+        raise exception 'Team accounts are not enabled';
+    end if;
+
     insert into public.accounts(
         name,
         is_personal_account)
@@ -1877,7 +1902,7 @@ language plpgsql;
 grant execute on function public.create_team_account(text) to
     authenticated, service_role;
 
--- RLS
+-- RLS(public.accounts)
 -- Authenticated users can create team accounts
 create policy create_org_account on public.accounts
     for insert to authenticated
@@ -1886,7 +1911,8 @@ public.is_set(
         'enable_team_accounts')
         and public.accounts.is_personal_account = false);
 
--- Function: create an invitation to an account
+-- Function "public.create_invitation"
+-- create an invitation to an account
 create or replace function public.create_invitation(account_id uuid,
     email text, role varchar(50))
     returns public.invitations
@@ -1962,8 +1988,8 @@ where
 grant select on public.user_accounts to authenticated, service_role;
 
 --
--- Function: get the account workspace for a team account
--- to load all the required data for the authenticated user within the account scope
+-- Function "public.team_account_workspace"
+-- Load all the data for a team account workspace
 create or replace function
     public.team_account_workspace(account_slug text)
     returns table(
@@ -2015,7 +2041,7 @@ language plpgsql;
 grant execute on function public.team_account_workspace(text)
     to authenticated, service_role;
 
--- Functions: get account members
+-- Functions "public.get_account_members"
 -- Function to get the members of an account by the account slug
 create or replace function public.get_account_members(account_slug text)
     returns table(
@@ -2061,7 +2087,8 @@ $$;
 grant execute on function public.get_account_members(text) to
     authenticated, service_role;
 
--- Function to get the account invitations by the account slug
+-- Function "public.get_account_invitations"
+-- List the account invitations by the account slug
 create or replace function public.get_account_invitations(account_slug text)
     returns table(
         id integer,
@@ -2103,7 +2130,8 @@ language plpgsql;
 grant execute on function public.get_account_invitations(text) to
     authenticated, service_role;
 
--- Function to append invitations to an account
+-- Function "public.add_invitations_to_account"
+-- Add invitations to an account
 create or replace function
     public.add_invitations_to_account(account_slug text, invitations
     public.invitation[])
@@ -2152,6 +2180,9 @@ language plpgsql;
 grant execute on function public.add_invitations_to_account(text,
     public.invitation[]) to authenticated, service_role;
 
+-- Function "public.has_active_subscription"
+-- Check if a user has an active subscription on an account - ie. it's trialing or active
+-- Useful to gate access to features that require a subscription
 create or replace function public.has_active_subscription(target_account_id uuid)
     returns boolean
     as $$
@@ -2173,7 +2204,6 @@ language plpgsql;
 grant execute on function public.has_active_subscription(uuid) to
     authenticated, service_role;
 
-
 -- Storage
 -- Account Image
 insert into storage.buckets(
@@ -2185,6 +2215,8 @@ values (
     'account_image',
     true);
 
+-- Function: get the storage filename as a UUID.
+-- Useful if you want to name files with UUIDs related to an account
 create or replace function kit.get_storage_filename_as_uuid(name text)
     returns uuid
     as $$
