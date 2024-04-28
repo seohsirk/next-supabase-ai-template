@@ -1,8 +1,9 @@
 import Link from 'next/link';
-import { notFound, permanentRedirect } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 
 import { ArrowLeft } from 'lucide-react';
 
+import { AuthLayoutShell } from '@kit/auth/shared';
 import { requireUser } from '@kit/supabase/require-user';
 import { getSupabaseServerComponentClient } from '@kit/supabase/server-component-client';
 import { createTeamAccountsApi } from '@kit/team-accounts/api';
@@ -11,6 +12,7 @@ import { Button } from '@kit/ui/button';
 import { Heading } from '@kit/ui/heading';
 import { Trans } from '@kit/ui/trans';
 
+import { AppLogo } from '~/components/app-logo';
 import pathsConfig from '~/config/paths.config';
 import { createI18nServerInstance } from '~/lib/i18n/i18n.server';
 import { withI18n } from '~/lib/i18n/with-i18n';
@@ -46,7 +48,7 @@ async function JoinTeamAccountPage({ searchParams }: Context) {
   if (auth.error ?? !auth.data) {
     const path = `${pathsConfig.auth.signUp}?invite_token=${token}`;
 
-    permanentRedirect(path);
+    redirect(path);
   }
 
   // get api to interact with team accounts
@@ -58,7 +60,11 @@ async function JoinTeamAccountPage({ searchParams }: Context) {
 
   // the invitation is not found or expired
   if (!invitation) {
-    return <InviteNotFoundOrExpired />;
+    return (
+      <AuthLayoutShell Logo={AppLogo}>
+        <InviteNotFoundOrExpired />
+      </AuthLayoutShell>
+    );
   }
 
   // we need to verify the user isn't already in the account
@@ -81,7 +87,7 @@ async function JoinTeamAccountPage({ searchParams }: Context) {
     );
 
     // if the user is already in the account redirect to the home page
-    permanentRedirect(pathsConfig.app.home);
+    redirect(pathsConfig.app.home);
   }
 
   // if the user decides to sign in with a different account
@@ -97,15 +103,17 @@ async function JoinTeamAccountPage({ searchParams }: Context) {
   const email = auth.data.email ?? '';
 
   return (
-    <AcceptInvitationContainer
-      email={email}
-      inviteToken={token}
-      invitation={invitation}
-      paths={{
-        signOutNext,
-        accountHome,
-      }}
-    />
+    <AuthLayoutShell Logo={AppLogo}>
+      <AcceptInvitationContainer
+        email={email}
+        inviteToken={token}
+        invitation={invitation}
+        paths={{
+          signOutNext,
+          accountHome,
+        }}
+      />
+    </AuthLayoutShell>
   );
 }
 
