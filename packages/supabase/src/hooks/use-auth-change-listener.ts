@@ -11,7 +11,7 @@ import { useRevalidateUserSession, useUserSession } from './use-user-session';
  * @name PRIVATE_PATH_PREFIXES
  * @description A list of private path prefixes
  */
-const PRIVATE_PATH_PREFIXES = ['/home', '/admin', '/update-password'];
+const PRIVATE_PATH_PREFIXES = ['/home', '/admin', '/join', '/update-password'];
 
 /**
  * @name useAuthChangeListener
