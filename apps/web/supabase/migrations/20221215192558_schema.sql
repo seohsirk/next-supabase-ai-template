@@ -197,7 +197,7 @@ select
 create
 or replace function public.get_config () returns json
 set
-  search_path = public as $$
+  search_path = '' as $$
 declare
     result record;
 begin
@@ -217,7 +217,7 @@ $$ language plpgsql;
 create
 or replace function public.trigger_set_timestamps () returns trigger
 set
-  search_path = public as $$
+  search_path = '' as $$
 begin
     if TG_OP = 'INSERT' then
         new.created_at = now();
@@ -240,7 +240,7 @@ $$ language plpgsql;
 create
 or replace function public.trigger_set_user_tracking () returns trigger
 set
-  search_path = public as $$
+  search_path = '' as $$
 begin
     if TG_OP = 'INSERT' then
         new.created_by = auth.uid();
@@ -267,7 +267,7 @@ service_role;
 create
 or replace function public.is_set (field_name text) returns boolean
 set
-  search_path = public as $$
+  search_path = '' as $$
 declare
     result boolean;
 begin
@@ -373,7 +373,7 @@ with
 create
 or replace function public.transfer_team_account_ownership (target_account_id uuid, new_owner_id uuid) returns void
 set
-  search_path = public as $$
+  search_path = '' as $$
 begin
     if current_user not in('service_role') then
         raise exception 'You do not have permission to transfer account ownership';
@@ -422,7 +422,7 @@ execute on function public.transfer_team_account_ownership (uuid, uuid) to servi
 create
 or replace function public.is_account_owner (account_id uuid) returns boolean
 set
-  search_path = public as $$
+  search_path = '' as $$
     select
         exists(
             select
@@ -456,7 +456,7 @@ begin
     return NEW;
 
 end
-$$ language plpgsql;
+$$ language plpgsql set search_path = '';
 
 -- trigger to protect account fields
 create trigger protect_account_fields before
@@ -468,7 +468,7 @@ execute function kit.protect_account_fields ();
 create
 or replace function public.get_upper_system_role () returns varchar
 set
-  search_path = public as $$
+  search_path = '' as $$
 declare
     role varchar(50);
 begin
@@ -488,7 +488,7 @@ execute on function public.get_upper_system_role () to service_role;
 create
 or replace function kit.add_current_user_to_new_account () returns trigger language plpgsql security definer
 set
-  search_path = public as $$
+  search_path = '' as $$
 begin
     if new.primary_owner_user_id = auth.uid() then
         insert into public.accounts_memberships(
@@ -517,7 +517,7 @@ execute function kit.add_current_user_to_new_account ();
 create
 or replace function kit.handle_update_user_email () returns trigger language plpgsql security definer
 set
-  search_path = public as $$
+  search_path = '' as $$
 begin
     update
         public.accounts
@@ -566,7 +566,7 @@ select
 create
 or replace function kit.get_system_role_uuid () returns uuid
 set
-  search_path = public as $$
+  search_path = '' as $$
 begin
     return 'fd4f287c-762e-42b7-8207-b1252f799670';
 end; $$ language plpgsql immutable;
@@ -597,7 +597,7 @@ create index idx_roles_account_id on public.roles (account_id);
 create
 or replace function kit.check_non_personal_account_roles () returns trigger
 set
-  search_path = public as $$
+  search_path = '' as $$
 begin
     if new.account_id is not null and(
         select
@@ -656,8 +656,8 @@ delete on table public.accounts_memberships to service_role;
 
 -- Indexes on the accounts_memberships table
 create index ix_accounts_memberships_account_id on public.accounts_memberships (account_id);
-
 create index ix_accounts_memberships_user_id on public.accounts_memberships (user_id);
+create index ix_accounts_memberships_account_role on public.accounts_memberships (account_role);
 
 -- Enable RLS on the accounts_memberships table
 alter table public.accounts_memberships enable row level security;
@@ -667,7 +667,7 @@ alter table public.accounts_memberships enable row level security;
 create
 or replace function kit.prevent_account_owner_membership_delete () returns trigger
 set
-  search_path = public as $$
+  search_path = '' as $$
 begin
     if exists(
         select
@@ -699,7 +699,7 @@ or replace function public.has_role_on_account (
   account_role varchar(50) default null
 ) returns boolean language sql security definer
 set
-  search_path = public as $$
+  search_path = '' as $$
     select
         exists(
             select
@@ -721,7 +721,7 @@ execute on function public.has_role_on_account (uuid, varchar) to authenticated;
 create
 or replace function public.is_team_member (account_id uuid, user_id uuid) returns boolean language sql security definer
 set
-  search_path = public as $$
+  search_path = '' as $$
     select
         exists(
             select
@@ -753,7 +753,7 @@ select
 create
 or replace function public.can_action_account_member (target_team_account_id uuid, target_user_id uuid) returns boolean
 set
-  search_path = public as $$
+  search_path = '' as $$
 declare
     permission_granted boolean;
     target_user_hierarchy_level int;
@@ -781,17 +781,15 @@ begin
                 id = target_team_account_id
                 and primary_owner_user_id = target_user_id) into is_account_owner;
 
-
     if is_account_owner then
         raise exception 'The primary account owner cannot be actioned';
     end if;
-
 
     -- validate the auth user has the required permission on the account
     -- to manage members of the account
     select
  public.has_permission(auth.uid(), target_team_account_id,
-     'members.manage'::app_permissions) into
+     'members.manage'::public.app_permissions) into
      permission_granted;
 
     -- if the user does not have the required permission, raise an exception
@@ -864,7 +862,7 @@ select
 create
 or replace function public.is_account_team_member (target_account_id uuid) returns boolean
 set
-  search_path = public as $$
+  search_path = '' as $$
     select exists(
         select 1
         from public.accounts_memberships as membership
@@ -919,7 +917,7 @@ create table if not exists
   public.role_permissions (
     id bigint generated by default as identity primary key,
     role varchar(50) references public.roles (name) not null,
-    permission app_permissions not null,
+    permission public.app_permissions not null,
     unique (role, permission)
   );
 
@@ -951,10 +949,10 @@ create
 or replace function public.has_permission (
   user_id uuid,
   account_id uuid,
-  permission_name app_permissions
+  permission_name public.app_permissions
 ) returns boolean
 set
-  search_path = public as $$
+  search_path = '' as $$
 begin
     return exists(
         select
@@ -986,7 +984,7 @@ or replace function public.has_more_elevated_role (
   role_name varchar
 ) returns boolean
 set
-  search_path = public as $$
+  search_path = '' as $$
 declare
     declare is_primary_owner boolean;
     user_role_hierarchy_level int;
@@ -1063,7 +1061,7 @@ or replace function public.has_same_role_hierarchy_level (
   role_name varchar
 ) returns boolean
 set
-  search_path = public as $$
+  search_path = '' as $$
 declare
     is_primary_owner boolean;
     user_role_hierarchy_level int;
@@ -1176,6 +1174,7 @@ comment on column public.invitations.email is 'The email of the user being invit
 
 -- Indexes on the invitations table
 create index ix_invitations_account_id on public.invitations (account_id);
+create index ix_invitations_role on public.invitations (role);
 
 -- Open up access to invitations table for authenticated users and
 --   service_role
@@ -1195,7 +1194,7 @@ alter table public.invitations enable row level security;
 create
 or replace function kit.check_team_account () returns trigger
 set
-  search_path = public as $$
+  search_path = '' as $$
 begin
     if(
         select
@@ -1239,7 +1238,7 @@ with
           auth.uid ()
       ),
       account_id,
-      'invites.manage'::app_permissions
+      'invites.manage'::public.app_permissions
     )
     and public.has_same_role_hierarchy_level (
       (
@@ -1263,7 +1262,7 @@ for update
           auth.uid ()
       ),
       account_id,
-      'invites.manage'::app_permissions
+      'invites.manage'::public.app_permissions
     )
     and public.has_more_elevated_role (
       (
@@ -1282,7 +1281,7 @@ with
           auth.uid ()
       ),
       account_id,
-      'invites.manage'::app_permissions
+      'invites.manage'::public.app_permissions
     )
     and public.has_more_elevated_role (
       (
@@ -1304,7 +1303,7 @@ create policy invitations_delete on public.invitations for delete to authenticat
         auth.uid ()
     ),
     account_id,
-    'invites.manage'::app_permissions
+    'invites.manage'::public.app_permissions
   )
 );
 
@@ -1313,7 +1312,7 @@ create policy invitations_delete on public.invitations for delete to authenticat
 create
 or replace function accept_invitation (token text, user_id uuid) returns uuid
 set
-  search_path = public as $$
+  search_path = '' as $$
 declare
     target_account_id uuid;
     target_role varchar(50);
@@ -1518,7 +1517,7 @@ or replace function public.upsert_subscription (
   trial_ends_at timestamptz default null
 ) returns public.subscriptions
 set
-  search_path = public as $$
+  search_path = '' as $$
 declare
     new_subscription public.subscriptions;
     new_billing_customer_id int;
@@ -1884,7 +1883,7 @@ or replace function public.upsert_order (
   line_items jsonb
 ) returns public.orders
 set
-  search_path = public as $$
+  search_path = '' as $$
 declare
     new_order public.orders;
     new_billing_customer_id int;
@@ -2013,7 +2012,7 @@ or replace function kit.slugify ("value" text) returns text as $$
             "value"
         from
             "trimmed";
-$$ language SQL strict immutable;
+$$ language SQL strict immutable set search_path to '';
 
 grant
 execute on function kit.slugify (text) to service_role,
@@ -2024,7 +2023,7 @@ authenticated;
 create
 or replace function kit.set_slug_from_account_name () returns trigger language plpgsql security definer
 set
-  search_path = public as $$
+  search_path = '' as $$
 declare
     sql_string varchar;
     tmp_slug varchar;
@@ -2089,7 +2088,7 @@ execute procedure kit.set_slug_from_account_name ();
 create
 or replace function kit.setup_new_user () returns trigger language plpgsql security definer
 set
-  search_path = public as $$
+  search_path = '' as $$
 declare
     user_name text;
 begin
@@ -2137,7 +2136,7 @@ execute procedure kit.setup_new_user ();
 create
 or replace function public.create_team_account (account_name text) returns public.accounts
 set
-  search_path = public as $$
+  search_path = '' as $$
 declare
     new_account public.accounts;
 begin
@@ -2178,7 +2177,7 @@ with
 create
 or replace function public.create_invitation (account_id uuid, email text, role varchar(50)) returns public.invitations
 set
-  search_path = public as $$
+  search_path = '' as $$
 declare
     new_invitation public.invitations;
     invite_token text;
@@ -2276,7 +2275,7 @@ or replace function public.team_account_workspace (account_slug text) returns ta
   permissions public.app_permissions[]
 )
 set
-  search_path = public as $$
+  search_path = '' as $$
 begin
     return QUERY
     select
@@ -2331,7 +2330,7 @@ or replace function public.get_account_members (account_slug text) returns table
   updated_at timestamptz
 ) language plpgsql
 set
-  search_path = public as $$
+  search_path = '' as $$
 begin
     return QUERY
     select
@@ -2378,7 +2377,7 @@ or replace function public.get_account_invitations (account_slug text) returns t
   inviter_email varchar
 )
 set
-  search_path = public as $$
+  search_path = '' as $$
 begin
     return query
     select
@@ -2414,7 +2413,7 @@ or replace function public.add_invitations_to_account (
   invitations public.invitation[]
 ) returns public.invitations[]
 set
-  search_path = public as $$
+  search_path = '' as $$
 declare
     new_invitation public.invitations;
     all_invitations public.invitations[] := array[]::public.invitations[];
@@ -2464,7 +2463,7 @@ service_role;
 create
 or replace function public.has_active_subscription (target_account_id uuid) returns boolean
 set
-  search_path = public as $$
+  search_path = '' as $$
 begin
     return exists (
         select
@@ -2495,7 +2494,7 @@ values
 create
 or replace function kit.get_storage_filename_as_uuid (name text) returns uuid
 set
-  search_path = storage as $$
+  search_path = '' as $$
 begin
     return replace(storage.filename(name), concat('.',
 	storage.extension(name)), '')::uuid;
