@@ -95,15 +95,18 @@ function isServerAction(request: NextRequest) {
   return headers.has(NEXT_ACTION_HEADER);
 }
 
-async function adminMiddleware(request: NextRequest, response: NextResponse) {
+function adminMiddleware(
+  request: NextRequest,
+  response: NextResponse,
+  userResponse: UserResponse,
+) {
   const isAdminPath = request.nextUrl.pathname.startsWith('/admin');
 
   if (!isAdminPath) {
     return response;
   }
 
-  const supabase = createMiddlewareClient(request, response);
-  const { data, error } = await supabase.auth.getUser();
+  const { data, error } = userResponse;
 
   // If user is not logged in, redirect to sign in page.
   // This should never happen, but just in case.
@@ -135,17 +138,15 @@ function getPatterns() {
     },
     {
       pattern: new URLPattern({ pathname: '/auth*' }),
-      handler: async (
+      handler: (
         req: NextRequest,
-        res: NextResponse,
+        _: NextResponse,
         userResponse: UserResponse,
       ) => {
-        const supabase = createMiddlewareClient(req, res);
+        const user = userResponse.data.user;
 
         // the user is logged out, so we don't need to do anything
-        if (!userResponse.data) {
-          await supabase.auth.signOut();
-
+        if (!user) {
           return;
         }
 
@@ -168,13 +169,15 @@ function getPatterns() {
         res: NextResponse,
         userResponse: UserResponse,
       ) => {
-        const { data: user, error } = userResponse;
+        const {
+          data: { user },
+        } = userResponse;
 
         const origin = req.nextUrl.origin;
         const next = req.nextUrl.pathname;
 
         // If user is not logged in, redirect to sign in page.
-        if (!user || error) {
+        if (!user) {
           const signIn = pathsConfig.auth.signIn;
           const redirectPath = `${signIn}?next=${next}`;
 
