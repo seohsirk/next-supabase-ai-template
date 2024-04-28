@@ -37,6 +37,9 @@ export const deletePersonalAccountAction = enhanceAction(
     // create a new instance of the personal accounts service
     const service = createDeletePersonalAccountService();
 
+    // sign out the user before deleting their account
+    await client.auth.signOut();
+
     // delete the user's account and cancel all subscriptions
     await service.deletePersonalAccount({
       adminClient: getSupabaseServerActionClient({ admin: true }),
@@ -44,9 +47,6 @@ export const deletePersonalAccountAction = enhanceAction(
       userEmail: user.email ?? null,
       emailSettings,
     });
-
-    // sign out the user after deleting their account
-    await client.auth.signOut();
 
     // clear the cache for all pages
     revalidatePath('/', 'layout');
