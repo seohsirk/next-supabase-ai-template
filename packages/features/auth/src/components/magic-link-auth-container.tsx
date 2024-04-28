@@ -22,15 +22,16 @@ import { If } from '@kit/ui/if';
 import { Input } from '@kit/ui/input';
 import { Trans } from '@kit/ui/trans';
 
+import { useCaptchaToken } from '../captcha/client';
+
 export function MagicLinkAuthContainer({
   inviteToken,
   redirectUrl,
-  captchaToken,
 }: {
   inviteToken?: string;
-  captchaToken?: string;
   redirectUrl: string;
 }) {
+  const { captchaToken, resetCaptchaToken } = useCaptchaToken();
   const { t } = useTranslation();
   const signInWithOtpMutation = useSignInWithOtp();
 
@@ -63,6 +64,8 @@ export function MagicLinkAuthContainer({
       success: t(`auth:sendLinkSuccessToast`),
       error: t(`auth:errors.link`),
     });
+
+    resetCaptchaToken();
   };
 
   if (signInWithOtpMutation.data) {

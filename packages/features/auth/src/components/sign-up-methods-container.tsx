@@ -8,7 +8,6 @@ import { If } from '@kit/ui/if';
 import { Separator } from '@kit/ui/separator';
 import { Trans } from '@kit/ui/trans';
 
-import { useCaptchaToken } from '../captcha/client';
 import { MagicLinkAuthContainer } from './magic-link-auth-container';
 import { OauthProviders } from './oauth-providers';
 import { EmailPasswordSignUpContainer } from './password-sign-up-container';
@@ -28,7 +27,6 @@ export function SignUpMethodsContainer(props: {
   inviteToken?: string;
 }) {
   const redirectUrl = getCallbackUrl(props);
-  const { captchaToken } = useCaptchaToken();
 
   return (
     <>
@@ -37,17 +35,13 @@ export function SignUpMethodsContainer(props: {
       </If>
 
       <If condition={props.providers.password}>
-        <EmailPasswordSignUpContainer
-          captchaToken={captchaToken}
-          emailRedirectTo={redirectUrl}
-        />
+        <EmailPasswordSignUpContainer emailRedirectTo={redirectUrl} />
       </If>
 
       <If condition={props.providers.magicLink}>
         <MagicLinkAuthContainer
           inviteToken={props.inviteToken}
           redirectUrl={redirectUrl}
-          captchaToken={captchaToken}
         />
       </If>
 

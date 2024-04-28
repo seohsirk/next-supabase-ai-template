@@ -14,7 +14,7 @@ import { PasswordSignInForm } from './password-sign-in-form';
 export const PasswordSignInContainer: React.FC<{
   onSignIn?: (userId?: string) => unknown;
 }> = ({ onSignIn }) => {
-  const { captchaToken } = useCaptchaToken();
+  const { captchaToken, resetCaptchaToken } = useCaptchaToken();
   const signInMutation = useSignInWithEmailPassword();
   const isLoading = signInMutation.isPending;
 
@@ -33,9 +33,11 @@ export const PasswordSignInContainer: React.FC<{
         }
       } catch (e) {
         // wrong credentials, do nothing
+      } finally {
+        resetCaptchaToken();
       }
     },
-    [captchaToken, onSignIn, signInMutation],
+    [captchaToken, onSignIn, resetCaptchaToken, signInMutation],
   );
 
   return (
