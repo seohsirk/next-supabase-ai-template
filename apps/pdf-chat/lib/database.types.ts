@@ -248,6 +248,172 @@ export type Database = {
         }
         Relationships: []
       }
+      conversations: {
+        Row: {
+          account_id: string
+          created_at: string
+          document_id: string
+          id: number
+          name: string
+          reference_id: string
+        }
+        Insert: {
+          account_id: string
+          created_at?: string
+          document_id: string
+          id?: number
+          name: string
+          reference_id: string
+        }
+        Update: {
+          account_id?: string
+          created_at?: string
+          document_id?: string
+          id?: number
+          name?: string
+          reference_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversations_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "conversations_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "user_account_workspace"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "conversations_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "user_accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "conversations_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      credits_usage: {
+        Row: {
+          account_id: string
+          id: number
+          tokens_quota: number
+        }
+        Insert: {
+          account_id: string
+          id?: number
+          tokens_quota?: number
+        }
+        Update: {
+          account_id?: string
+          id?: number
+          tokens_quota?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "credits_usage_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "credits_usage_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "user_account_workspace"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "credits_usage_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "user_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      documents: {
+        Row: {
+          account_id: string
+          content: string
+          created_at: string
+          id: string
+          title: string
+        }
+        Insert: {
+          account_id: string
+          content: string
+          created_at?: string
+          id?: string
+          title: string
+        }
+        Update: {
+          account_id?: string
+          content?: string
+          created_at?: string
+          id?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "documents_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "documents_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "user_account_workspace"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "documents_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "user_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      documents_embeddings: {
+        Row: {
+          content: string
+          created_at: string
+          embedding: string | null
+          id: string
+          metadata: Json
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          embedding?: string | null
+          id?: string
+          metadata?: Json
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          embedding?: string | null
+          id?: string
+          metadata?: Json
+        }
+        Relationships: []
+      }
       invitations: {
         Row: {
           account_id: string
@@ -320,60 +486,58 @@ export type Database = {
           },
         ]
       }
-      notifications: {
+      messages: {
         Row: {
           account_id: string
-          body: string
-          channel: Database["public"]["Enums"]["notification_channel"]
+          conversation_id: number
           created_at: string
-          dismissed: boolean
-          expires_at: string | null
           id: number
-          link: string | null
-          type: Database["public"]["Enums"]["notification_type"]
+          sender: Database["public"]["Enums"]["sender"]
+          text: string
         }
         Insert: {
           account_id: string
-          body: string
-          channel?: Database["public"]["Enums"]["notification_channel"]
+          conversation_id: number
           created_at?: string
-          dismissed?: boolean
-          expires_at?: string | null
-          id?: never
-          link?: string | null
-          type?: Database["public"]["Enums"]["notification_type"]
+          id?: number
+          sender: Database["public"]["Enums"]["sender"]
+          text: string
         }
         Update: {
           account_id?: string
-          body?: string
-          channel?: Database["public"]["Enums"]["notification_channel"]
+          conversation_id?: number
           created_at?: string
-          dismissed?: boolean
-          expires_at?: string | null
-          id?: never
-          link?: string | null
-          type?: Database["public"]["Enums"]["notification_type"]
+          id?: number
+          sender?: Database["public"]["Enums"]["sender"]
+          text?: string
         }
         Relationships: [
           {
-            foreignKeyName: "notifications_account_id_fkey"
+            foreignKeyName: "messages_account_id_fkey"
             columns: ["account_id"]
             isOneToOne: false
             referencedRelation: "accounts"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "notifications_account_id_fkey"
+            foreignKeyName: "messages_account_id_fkey"
             columns: ["account_id"]
             isOneToOne: false
             referencedRelation: "user_account_workspace"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "notifications_account_id_fkey"
+            foreignKeyName: "messages_account_id_fkey"
             columns: ["account_id"]
             isOneToOne: false
             referencedRelation: "user_accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
             referencedColumns: ["id"]
           },
         ]
@@ -484,6 +648,27 @@ export type Database = {
           },
         ]
       }
+      plans: {
+        Row: {
+          max_documents: number
+          name: string
+          price_id: string
+          tokens: number
+        }
+        Insert: {
+          max_documents: number
+          name: string
+          price_id: string
+          tokens: number
+        }
+        Update: {
+          max_documents?: number
+          name?: string
+          price_id?: string
+          tokens?: number
+        }
+        Relationships: []
+      }
       role_permissions: {
         Row: {
           id: number
@@ -512,18 +697,43 @@ export type Database = {
       }
       roles: {
         Row: {
+          account_id: string | null
           hierarchy_level: number
           name: string
         }
         Insert: {
+          account_id?: string | null
           hierarchy_level: number
           name: string
         }
         Update: {
+          account_id?: string | null
           hierarchy_level?: number
           name?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "roles_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "roles_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "user_account_workspace"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "roles_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "user_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       subscription_items: {
         Row: {
@@ -786,6 +996,10 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: Json
       }
+      get_remaining_tokens: {
+        Args: Record<PropertyKey, never>
+        Returns: number
+      }
       get_upper_system_role: {
         Args: Record<PropertyKey, never>
         Returns: string
@@ -827,10 +1041,6 @@ export type Database = {
         }
         Returns: boolean
       }
-      install_extensions: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
-      }
       is_account_owner: {
         Args: {
           account_id: string
@@ -855,6 +1065,19 @@ export type Database = {
           user_id: string
         }
         Returns: boolean
+      }
+      match_documents: {
+        Args: {
+          query_embedding: string
+          match_count?: number
+          filter?: Json
+        }
+        Returns: {
+          id: string
+          content: string
+          metadata: Json
+          similarity: number
+        }[]
       }
       team_account_workspace: {
         Args: {
@@ -944,9 +1167,8 @@ export type Database = {
         | "members.manage"
         | "invites.manage"
       billing_provider: "stripe" | "lemon-squeezy" | "paddle"
-      notification_channel: "in_app" | "email"
-      notification_type: "info" | "warning" | "error"
       payment_status: "pending" | "succeeded" | "failed"
+      sender: "user" | "assistant"
       subscription_item_type: "flat" | "per_seat" | "metered"
       subscription_status:
         | "active"
