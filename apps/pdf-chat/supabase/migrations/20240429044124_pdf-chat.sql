@@ -151,10 +151,10 @@ create policy messages_delete
 */
 create table plans (
   name text not null,
-  price_id text not null,
+  variant_id text not null,
   max_documents bigint not null,
   tokens bigint not null,
-  primary key (price_id)
+  primary key (variant_id)
 );
 
 grant select on table plans to authenticated, service_role;

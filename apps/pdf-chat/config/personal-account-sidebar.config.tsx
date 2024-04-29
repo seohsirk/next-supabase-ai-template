@@ -1,4 +1,4 @@
-import {Book, CreditCard, User} from 'lucide-react';
+import { Book, CreditCard, User } from 'lucide-react';
 
 import { SidebarConfigSchema } from '@kit/ui/sidebar-schema';
 
