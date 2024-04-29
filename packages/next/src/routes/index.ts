@@ -1,5 +1,6 @@
 import 'server-only';
 
+import { isRedirectError } from 'next/dist/client/components/redirect';
 import { redirect } from 'next/navigation';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -11,7 +12,7 @@ import { verifyCaptchaToken } from '@kit/auth/captcha/server';
 import { requireUser } from '@kit/supabase/require-user';
 import { getSupabaseRouteHandlerClient } from '@kit/supabase/route-handler-client';
 
-import { zodParseFactory } from '../utils';
+import { captureException, zodParseFactory } from '../utils';
 
 interface HandlerParams<Body> {
   request: NextRequest;
@@ -53,6 +54,7 @@ export const enhanceRouteHandler = <
   // Parameters object
   params?: {
     captcha?: boolean;
+    captureException?: boolean;
     schema?: Schema;
   },
 ) => {
@@ -62,8 +64,11 @@ export const enhanceRouteHandler = <
    * This function takes a request object as an argument and returns a response object.
    */
   return async function routeHandler(request: NextRequest) {
-    // Verify the captcha token if required
-    if (params?.captcha) {
+    // Check if the captcha token should be verified
+    const shouldVerifyCaptcha = params?.captcha ?? false;
+
+    // Verify the captcha token if required and setup
+    if (shouldVerifyCaptcha) {
       const token = captchaTokenGetter(request);
 
       // If the captcha token is not provided, return a 400 response.
@@ -92,8 +97,25 @@ export const enhanceRouteHandler = <
       body = zodParseFactory(params.schema)(body);
     }
 
-    // all good, call the handler with the request, body and user
-    return handler({ request, body, user });
+    const shouldCaptureException = params?.captureException ?? true;
+
+    if (shouldCaptureException) {
+      try {
+        return await handler({ request, body, user });
+      } catch (error) {
+        if (isRedirectError(error)) {
+          throw error;
+        }
+
+        // capture the exception
+        await captureException(error);
+
+        throw error;
+      }
+    } else {
+      // all good, call the handler with the request, body and user
+      return handler({ request, body, user });
+    }
   };
 };
 

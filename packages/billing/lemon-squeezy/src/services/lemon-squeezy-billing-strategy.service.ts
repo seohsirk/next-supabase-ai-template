@@ -307,7 +307,7 @@ export class LemonSqueezyBillingStrategyService
    * @description Queries the usage of the metered billing
    * @param params
    */
-  async updateSubscription(
+  async updateSubscriptionItem(
     params: z.infer<typeof UpdateSubscriptionParamsSchema>,
   ) {
     const logger = await getLogger();

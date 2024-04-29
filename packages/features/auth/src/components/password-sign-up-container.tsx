@@ -9,20 +9,21 @@ import { Alert, AlertDescription, AlertTitle } from '@kit/ui/alert';
 import { If } from '@kit/ui/if';
 import { Trans } from '@kit/ui/trans';
 
+import { useCaptchaToken } from '../captcha/client';
 import { AuthErrorAlert } from './auth-error-alert';
 import { PasswordSignUpForm } from './password-sign-up-form';
 
 interface EmailPasswordSignUpContainerProps {
   onSignUp?: (userId?: string) => unknown;
   emailRedirectTo: string;
-  captchaToken?: string;
 }
 
 export function EmailPasswordSignUpContainer({
   onSignUp,
   emailRedirectTo,
-  captchaToken,
 }: EmailPasswordSignUpContainerProps) {
+  const { captchaToken, resetCaptchaToken } = useCaptchaToken();
+
   const signUpMutation = useSignUpWithEmailAndPassword();
   const redirecting = useRef(false);
   const loading = signUpMutation.isPending || redirecting.current;
@@ -48,9 +49,18 @@ export function EmailPasswordSignUpContainer({
         }
       } catch (error) {
         console.error(error);
+      } finally {
+        resetCaptchaToken();
       }
     },
-    [captchaToken, emailRedirectTo, loading, onSignUp, signUpMutation],
+    [
+      captchaToken,
+      emailRedirectTo,
+      loading,
+      onSignUp,
+      resetCaptchaToken,
+      signUpMutation,
+    ],
   );
 
   return (
