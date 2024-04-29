@@ -168,6 +168,7 @@ comment on column public.config.enable_team_account_billing is 'Enable billing f
 
 comment on column public.config.billing_provider is 'The billing provider to use';
 
+-- RLS(config)
 alter table public.config enable row level security;
 
 -- create config row
@@ -179,6 +180,12 @@ insert into
   )
 values
   (true, true, true);
+
+-- Revoke all on accounts table from authenticated and service_role
+revoke all on public.config
+from
+  authenticated,
+  service_role;
 
 -- Open up access to config table for authenticated users and service_role
 grant
@@ -321,6 +328,12 @@ comment on column public.accounts.email is 'The email of the account. For teams,
 -- Enable RLS on the accounts table
 alter table "public"."accounts" enable row level security;
 
+-- Revoke all on accounts table from authenticated and service_role
+revoke all on public.accounts
+from
+  authenticated,
+  service_role;
+
 -- Open up access to accounts
 grant
 select
@@ -456,7 +469,9 @@ begin
     return NEW;
 
 end
-$$ language plpgsql set search_path = '';
+$$ language plpgsql
+set
+  search_path = '';
 
 -- trigger to protect account fields
 create trigger protect_account_fields before
@@ -556,8 +571,15 @@ create table if not exists
     primary key (name)
   );
 
+-- Revoke all on roles table from authenticated and service_role
+revoke all on public.roles
+from
+  authenticated,
+  service_role;
+
+-- Open up access to roles table for authenticated users and service_role
 grant
-select
+select, insert, delete, update
   on table public.roles to authenticated,
   service_role;
 
@@ -646,17 +668,25 @@ comment on column public.accounts_memberships.account_id is 'The account the mem
 
 comment on column public.accounts_memberships.account_role is 'The role for the membership';
 
+-- Revoke all on accounts_memberships table from authenticated and service_role
+revoke all on public.accounts_memberships
+from
+  authenticated,
+  service_role;
+
 -- Open up access to accounts_memberships table for authenticated users and service_role
 grant
 select
 ,
   insert,
 update,
-delete on table public.accounts_memberships to service_role;
+delete on table public.accounts_memberships to authenticated, service_role;
 
 -- Indexes on the accounts_memberships table
 create index ix_accounts_memberships_account_id on public.accounts_memberships (account_id);
+
 create index ix_accounts_memberships_user_id on public.accounts_memberships (user_id);
+
 create index ix_accounts_memberships_account_role on public.accounts_memberships (account_role);
 
 -- Enable RLS on the accounts_memberships table
@@ -930,6 +960,12 @@ comment on column public.role_permissions.permission is 'The permission for the 
 -- Indexes on the role_permissions table
 create index ix_role_permissions_role on public.role_permissions (role);
 
+-- Revoke all on role_permissions table from authenticated and service_role
+revoke all on public.role_permissions
+from
+  authenticated,
+  service_role;
+
 -- Open up access to role_permissions table for authenticated users and service_role
 grant
 select
@@ -1174,10 +1210,14 @@ comment on column public.invitations.email is 'The email of the user being invit
 
 -- Indexes on the invitations table
 create index ix_invitations_account_id on public.invitations (account_id);
-create index ix_invitations_role on public.invitations (role);
 
--- Open up access to invitations table for authenticated users and
---   service_role
+-- Revoke all on invitations table from authenticated and service_role
+revoke all on public.invitations
+from
+  authenticated,
+  service_role;
+
+-- Open up access to invitations table for authenticated users and service_role
 grant
 select
 ,
@@ -1381,8 +1421,13 @@ comment on column public.billing_customers.email is 'The email of the billing cu
 -- Indexes on the billing_customers table
 create index ix_billing_customers_account_id on public.billing_customers (account_id);
 
--- Open up access to billing_customers table for authenticated users
---   and service_role
+-- Revoke all on billing_customers table from authenticated and service_role
+revoke all on public.billing_customers
+from
+  authenticated,
+  service_role;
+
+-- Open up relevant access to billing_customers table for authenticated users and service_role
 grant
 select
 ,
@@ -1390,14 +1435,14 @@ select
 update,
 delete on table public.billing_customers to service_role;
 
--- Enable RLS on billing_customers table
-alter table public.billing_customers enable row level security;
-
 -- Open up access to billing_customers table for authenticated users
 grant
 select
   on table public.billing_customers to authenticated,
   service_role;
+
+-- Enable RLS on billing_customers table
+alter table public.billing_customers enable row level security;
 
 -- RLS on the billing_customers table
 -- SELECT(billing_customers):
@@ -1461,7 +1506,13 @@ comment on column public.subscriptions.active is 'Whether the subscription is ac
 
 comment on column public.subscriptions.billing_customer_id is 'The billing customer ID for the subscription';
 
--- Open up access to subscriptions table for authenticated users and service_role
+-- Revoke all on subscriptions table from authenticated and service_role
+revoke all on public.subscriptions
+from
+  authenticated,
+  service_role;
+
+-- Open up relevant access to subscriptions table for authenticated users and service_role
 grant
 select
 ,
@@ -1685,8 +1736,13 @@ comment on column public.subscription_items.created_at is 'The creation date of 
 
 comment on column public.subscription_items.updated_at is 'The last update date of the item';
 
--- Open up access to subscription_items table for authenticated users
---   and service_role
+-- Revoke all access to subscription_items table for authenticated users and service_role
+revoke all on public.subscription_items
+from
+  authenticated,
+  service_role;
+
+-- Open up relevant access to subscription_items table for authenticated users and service_role
 grant
 select
   on table public.subscription_items to authenticated,
@@ -1758,6 +1814,12 @@ comment on column public.orders.currency is 'The currency for the order';
 comment on column public.orders.status is 'The status of the order';
 
 comment on column public.orders.billing_customer_id is 'The billing customer ID for the order';
+
+-- Revoke all access to orders table for authenticated users and service_role
+revoke all on public.orders
+from
+  authenticated,
+  service_role;
 
 -- Open up access to orders table for authenticated users and service_role
 grant
@@ -1833,7 +1895,13 @@ comment on column public.order_items.created_at is 'The creation date of the ite
 
 comment on column public.order_items.updated_at is 'The last update date of the item';
 
--- Open up access to order_items table for authenticated users and service_role
+-- Revoke all access to order_items table for authenticated users and service_role
+revoke all on public.order_items
+from
+  authenticated,
+  service_role;
+
+-- Open up relevant access to order_items table for authenticated users and service_role
 grant
 select
   on table public.order_items to authenticated,
@@ -1975,23 +2043,22 @@ execute on function public.upsert_order (
  * We create the schema for the notifications. Notifications are the notifications for an account.
  * -------------------------------------------------------
  */
-create type public.notification_channel as enum ('in_app', 'email');
-create type public.notification_type as enum ('info', 'warning', 'error');
+create type public.notification_channel as enum('in_app', 'email');
 
-create table if not exists public.notifications (
-  id bigint generated always as identity primary key,
-  account_id uuid not null references public.accounts(id) on delete cascade,
-  type public.notification_type not null default 'info',
-  body varchar(5000) not null,
-  link varchar(255),
-  entity_id text,
-  entity_type text,
-  channel public.notification_channel not null default 'in_app',
-  language_code varchar(10) not null default 'en',
-  dismissed boolean not null default false,
-  expires_at timestamptz default (now() + interval '1 month'),
-  created_at timestamptz not null default now()
-);
+create type public.notification_type as enum('info', 'warning', 'error');
+
+create table if not exists
+  public.notifications (
+    id bigint generated always as identity primary key,
+    account_id uuid not null references public.accounts (id) on delete cascade,
+    type public.notification_type not null default 'info',
+    body varchar(5000) not null,
+    link varchar(255),
+    channel public.notification_channel not null default 'in_app',
+    dismissed boolean not null default false,
+    expires_at timestamptz default (now() + interval '1 month'),
+    created_at timestamptz not null default now()
+  );
 
 comment on table notifications is 'The notifications for an account';
 
@@ -2003,13 +2070,7 @@ comment on column notifications.body is 'The body of the notification';
 
 comment on column notifications.link is 'The link for the notification';
 
-comment on column notifications.entity_id is 'The entity ID for the notification';
-
-comment on column notifications.entity_type is 'The entity type for the notification';
-
 comment on column notifications.channel is 'The channel for the notification';
-
-comment on column notifications.language_code is 'The language code for the notification';
 
 comment on column notifications.dismissed is 'Whether the notification has been dismissed';
 
@@ -2017,23 +2078,29 @@ comment on column notifications.expires_at is 'The expiry date for the notificat
 
 comment on column notifications.created_at is 'The creation date for the notification';
 
--- Open up access to order_items table for authenticated users and service_role
-grant
-select, update
-  on table public.notifications to authenticated,
+-- Revoke all access to notifications table for authenticated users and service_role
+revoke all on public.notifications
+from
+  authenticated,
   service_role;
+
+-- Open up relevant access to notifications table for authenticated users and service_role
+grant
+select
+,
+update on table public.notifications to authenticated,
+service_role;
 
 grant insert on table public.notifications to service_role;
 
 -- enable realtime
-alter
-  publication supabase_realtime add table public.notifications;
+alter publication supabase_realtime
+add table public.notifications;
 
 -- Indexes
 -- Indexes on the notifications table
-
 -- index for selecting notifications for an account that are not dismissed and not expired
-create index idx_notifications_account_dismissed on notifications(account_id, dismissed, expires_at);
+create index idx_notifications_account_dismissed on notifications (account_id, dismissed, expires_at);
 
 -- RLS
 alter table public.notifications enable row level security;
@@ -2052,8 +2119,8 @@ select
 
 -- UPDATE(notifications):
 -- Users can set notifications to read on an account they are a member of
-create policy notifications_update_self on public.notifications for
-update
+create policy notifications_update_self on public.notifications
+for update
   to authenticated using (
     account_id = (
       select
@@ -2064,10 +2131,10 @@ update
 
 -- Function "kit.update_notification_dismissed_status"
 -- Make sure the only updatable field is the dismissed status and nothing else
-create or replace function kit.update_notification_dismissed_status()
-returns trigger
-set search_path to ''
-as $$
+create
+or replace function kit.update_notification_dismissed_status () returns trigger
+set
+  search_path to '' as $$
 begin
     old.dismissed := new.dismissed;
 
@@ -2080,8 +2147,9 @@ end;
 $$ language plpgsql;
 
 -- add trigger when updating a notification to update the dismissed status
-create trigger update_notification_dismissed_status before update on public.notifications for each row
-execute procedure kit.update_notification_dismissed_status();
+create trigger update_notification_dismissed_status before
+update on public.notifications for each row
+execute procedure kit.update_notification_dismissed_status ();
 
 /**
  * -------------------------------------------------------
@@ -2090,7 +2158,6 @@ execute procedure kit.update_notification_dismissed_status();
  * We use this for ensure unique slugs for accounts.
  * -------------------------------------------------------
  */
-
 -- Create a function to slugify a string
 -- useful for turning an account name into a unique slug
 create
@@ -2134,7 +2201,9 @@ or replace function kit.slugify ("value" text) returns text as $$
             "value"
         from
             "trimmed";
-$$ language SQL strict immutable set search_path to '';
+$$ language SQL strict immutable
+set
+  search_path to '';
 
 grant
 execute on function kit.slugify (text) to service_role,
@@ -2259,7 +2328,6 @@ execute procedure kit.setup_new_user ();
  * We create the schema for the functions. Functions are the custom functions for the application.
  * -------------------------------------------------------
  */
-
 -- Function "public.create_team_account"
 -- Create a team account if team accounts are enabled
 create
