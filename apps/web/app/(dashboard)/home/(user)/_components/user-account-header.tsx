@@ -13,6 +13,8 @@ export function UserAccountHeader(
       title={props.title}
       description={props.description}
       mobileNavigation={<UserLayoutMobileNavigation />}
-    />
+    >
+      {props.children}
+    </PageHeader>
   );
 }
