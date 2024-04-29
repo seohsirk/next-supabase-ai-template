@@ -50,6 +50,11 @@ grant delete, insert, update on table documents to service_role;
 
 alter table documents enable row level security;
 
+-- indexes
+create index ix_documents_account_id on documents (account_id);
+
+-- rls
+
 create policy documents_read
   on documents
   for select
@@ -79,6 +84,12 @@ create table conversations (
 );
 
 grant select, delete, insert, update on table documents to authenticated, service_role;
+
+-- indexes
+create index ix_conversations_account_id on conversations (account_id);
+create index ix_conversations_document_id on conversations (document_id);
+
+-- rls
 
 alter table conversations enable row level security;
 
@@ -120,6 +131,11 @@ create table messages (
 
 grant select, delete, insert, update on table messages to authenticated, service_role;
 
+-- index
+create index ix_messages_conversation_id on messages (conversation_id);
+create index ix_messages_account_id on messages (account_id);
+
+-- rls
 alter table messages enable row level security;
 
 create policy messages_read
@@ -179,6 +195,10 @@ create table credits_usage (
 grant select on table credits_usage to authenticated;
 grant select, insert, update, delete on table credits_usage to service_role;
 
+-- indexes
+create index ix_credits_usage_account_id on credits_usage (account_id);
+
+-- rls
 alter table credits_usage enable row level security;
 
 create policy read_credits_usage
