@@ -327,11 +327,8 @@ export type Database = {
           channel: Database["public"]["Enums"]["notification_channel"]
           created_at: string
           dismissed: boolean
-          entity_id: string | null
-          entity_type: string | null
           expires_at: string | null
           id: number
-          language_code: string
           link: string | null
           type: Database["public"]["Enums"]["notification_type"]
         }
@@ -341,11 +338,8 @@ export type Database = {
           channel?: Database["public"]["Enums"]["notification_channel"]
           created_at?: string
           dismissed?: boolean
-          entity_id?: string | null
-          entity_type?: string | null
           expires_at?: string | null
           id?: never
-          language_code?: string
           link?: string | null
           type?: Database["public"]["Enums"]["notification_type"]
         }
@@ -355,11 +349,8 @@ export type Database = {
           channel?: Database["public"]["Enums"]["notification_channel"]
           created_at?: string
           dismissed?: boolean
-          entity_id?: string | null
-          entity_type?: string | null
           expires_at?: string | null
           id?: never
-          language_code?: string
           link?: string | null
           type?: Database["public"]["Enums"]["notification_type"]
         }
@@ -860,6 +851,10 @@ export type Database = {
           role_name: string
         }
         Returns: boolean
+      }
+      install_extensions: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
       }
       is_account_owner: {
         Args: {
