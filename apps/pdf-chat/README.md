@@ -1,4 +1,4 @@
-# Your Application
+# PDF Chat Application
 
 Write here everything about your application.
 
@@ -27,6 +27,17 @@ STRIPE_WEBHOOK_SECRET=
 STRIPE_SECRET_KEY=
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
 ```
+
+### LLM 
+
+Please add the following LLM (OpenAI Compatible) keys:
+
+```
+LLM_API_KEY=*****************************************
+LLM_MODEL_NAME=gpt-3.5-turbo
+```
+
+The above uses the `gpt-3.5-turbo` model. You can change it to any other model you have access to - as long as it is OpenAI compatible.
 
 ### Supabase
 
