@@ -1,6 +1,8 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse, URLPattern } from 'next/server';
 
+import type { UserResponse } from '@supabase/supabase-js';
+
 import { CsrfError, createCsrfProtect } from '@edge-csrf/nextjs';
 
 import { checkRequiresMultiFactorAuthentication } from '@kit/supabase/check-requires-mfa';
@@ -20,12 +22,16 @@ export const config = {
 
 export async function middleware(request: NextRequest) {
   const response = NextResponse.next();
+  const supabase = createMiddlewareClient(request, response);
+
+  // get the user from the session (no matter if it's logged in or not)
+  const userResponse = await supabase.auth.getUser();
 
   // set a unique request ID for each request
   // this helps us log and trace requests
   setRequestId(request);
 
-  // apply CSRF and session middleware
+  // apply CSRF protection for mutating requests
   const csrfResponse = await withCsrfMiddleware(request, response);
 
   // handle patterns for specific routes
@@ -33,7 +39,11 @@ export async function middleware(request: NextRequest) {
 
   // if a pattern handler exists, call it
   if (handlePattern) {
-    const patternHandlerResponse = await handlePattern(request, csrfResponse);
+    const patternHandlerResponse = await handlePattern(
+      request,
+      csrfResponse,
+      userResponse,
+    );
 
     // if a pattern handler returns a response, return it
     if (patternHandlerResponse) {
@@ -41,7 +51,8 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // if no pattern handler returned a response, return the session response
+  // if no pattern handler returned a response,
+  // return the session response
   return csrfResponse;
 }
 
@@ -84,15 +95,18 @@ function isServerAction(request: NextRequest) {
   return headers.has(NEXT_ACTION_HEADER);
 }
 
-async function adminMiddleware(request: NextRequest, response: NextResponse) {
+function adminMiddleware(
+  request: NextRequest,
+  response: NextResponse,
+  userResponse: UserResponse,
+) {
   const isAdminPath = request.nextUrl.pathname.startsWith('/admin');
 
   if (!isAdminPath) {
     return response;
   }
 
-  const supabase = createMiddlewareClient(request, response);
-  const { data, error } = await supabase.auth.getUser();
+  const { data, error } = userResponse;
 
   // If user is not logged in, redirect to sign in page.
   // This should never happen, but just in case.
@@ -124,14 +138,15 @@ function getPatterns() {
     },
     {
       pattern: new URLPattern({ pathname: '/auth*' }),
-      handler: async (req: NextRequest, res: NextResponse) => {
-        const supabase = createMiddlewareClient(req, res);
-        const { data: user, error } = await supabase.auth.getUser();
+      handler: (
+        req: NextRequest,
+        _: NextResponse,
+        userResponse: UserResponse,
+      ) => {
+        const user = userResponse.data.user;
 
         // the user is logged out, so we don't need to do anything
-        if (error) {
-          await supabase.auth.signOut();
-
+        if (!user) {
           return;
         }
 
@@ -140,7 +155,7 @@ function getPatterns() {
 
         // If user is logged in and does not need to verify MFA,
         // redirect to home page.
-        if (user && !isVerifyMfa) {
+        if (!isVerifyMfa) {
           return NextResponse.redirect(
             new URL(pathsConfig.app.home, req.nextUrl.origin).href,
           );
@@ -149,19 +164,27 @@ function getPatterns() {
     },
     {
       pattern: new URLPattern({ pathname: '/home*' }),
-      handler: async (req: NextRequest, res: NextResponse) => {
-        const supabase = createMiddlewareClient(req, res);
-        const { data: user, error } = await supabase.auth.getUser();
+      handler: async (
+        req: NextRequest,
+        res: NextResponse,
+        userResponse: UserResponse,
+      ) => {
+        const {
+          data: { user },
+        } = userResponse;
+
         const origin = req.nextUrl.origin;
         const next = req.nextUrl.pathname;
 
         // If user is not logged in, redirect to sign in page.
-        if (!user || error) {
+        if (!user) {
           const signIn = pathsConfig.auth.signIn;
           const redirectPath = `${signIn}?next=${next}`;
 
           return NextResponse.redirect(new URL(redirectPath, origin).href);
         }
+
+        const supabase = createMiddlewareClient(req, res);
 
         const requiresMultiFactorAuthentication =
           await checkRequiresMultiFactorAuthentication(supabase);
