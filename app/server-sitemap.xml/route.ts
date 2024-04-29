@@ -24,8 +24,11 @@ function getSiteUrls() {
   const urls = [
     '/',
     '/faq',
+    '/blog',
+    '/docs',
     '/pricing',
     '/contact',
+    '/cookie-policy',
     '/terms-of-service',
     '/privacy-policy',
   ];

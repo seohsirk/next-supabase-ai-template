@@ -152,7 +152,7 @@
   "signInWithDifferentAccountDescription": "If you wish to accept the invitation with a different account, please sign out and back in with the account you wish to use.",
   "acceptInvitationHeading": "Accept Invitation to join {{accountName}}",
   "acceptInvitationDescription": "You have been invited to join the team {{accountName}}. If you wish to accept the invitation, please click the button below.",
-  "joinTeam": "Join {{accountName}}",
+  "continueAs": "Continue as {{email}}",
   "joinTeamAccount": "Join Team",
   "joiningTeam": "Joining team...",
   "leaveTeamInputLabel": "Please type LEAVE to confirm leaving the team.",
