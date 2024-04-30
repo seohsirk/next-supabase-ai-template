@@ -128,8 +128,9 @@ export function NotificationsPopover(params: {
       </PopoverTrigger>
 
       <PopoverContent
-        className={'flex flex-col p-0'}
+        className={'flex w-full flex-col p-0 lg:min-w-64'}
         collisionPadding={{ right: 20 }}
+        sideOffset={10}
       >
         <div className={'flex items-center px-3 py-2 text-sm font-semibold'}>
           {t('common:notifications')}
