@@ -24,8 +24,8 @@
     "@kit/prettier-config": "workspace:*",
     "@kit/tsconfig": "workspace:*",
     "@kit/ui": "workspace:^",
-    "@types/node": "^20.12.7",
-    "zod": "^3.23.5"
+    "@types/node": "^20.12.8",
+    "zod": "^3.23.6"
   },
   "eslintConfig": {
     "root": true,

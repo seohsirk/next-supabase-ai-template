@@ -32,21 +32,19 @@ import { RolesDataProvider } from '../members/roles-data-provider';
 
 type Role = string;
 
-export const UpdateInvitationDialog: React.FC<{
-  isOpen: boolean;
-  setIsOpen: (isOpen: boolean) => void;
-  invitationId: number;
-  account: string;
-  userRole: Role;
-  userRoleHierarchy: number;
-}> = ({
+export function UpdateInvitationDialog({
   isOpen,
   setIsOpen,
   invitationId,
   userRole,
   userRoleHierarchy,
-  account,
-}) => {
+}: {
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
+  invitationId: number;
+  userRole: Role;
+  userRoleHierarchy: number;
+}) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent>
@@ -61,7 +59,6 @@ export const UpdateInvitationDialog: React.FC<{
         </DialogHeader>
 
         <UpdateInvitationForm
-          account={account}
           invitationId={invitationId}
           userRole={userRole}
           userRoleHierarchy={userRoleHierarchy}
@@ -70,16 +67,14 @@ export const UpdateInvitationDialog: React.FC<{
       </DialogContent>
     </Dialog>
   );
-};
+}
 
 function UpdateInvitationForm({
-  account,
   invitationId,
   userRole,
   userRoleHierarchy,
   setIsOpen,
 }: React.PropsWithChildren<{
-  account: string;
   invitationId: number;
   userRole: Role;
   userRoleHierarchy: number;

@@ -10,7 +10,11 @@ const webhooksSecret = z
   .min(1)
   .parse(process.env.SUPABASE_DB_WEBHOOK_SECRET);
 
-export class PostgresDatabaseWebhookVerifierService
+export function createDatabaseWebhookVerifierService() {
+  return new PostgresDatabaseWebhookVerifierService();
+}
+
+class PostgresDatabaseWebhookVerifierService
   implements DatabaseWebhookVerifierService
 {
   verifySignatureOrThrow(request: Request) {

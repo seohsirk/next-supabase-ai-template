@@ -45,7 +45,6 @@
     "stripe:listen": "pnpm --filter '@kit/stripe' start"
   },
   "prettier": "@kit/prettier-config",
-  "packageManager": "pnpm@9.0.4",
   "workspaces": [
     "apps/*",
     "packages/**",
@@ -60,5 +59,11 @@
     "turbo": "^1.13.3",
     "typescript": "^5.4.5",
     "yarn": "^1.22.22"
+  },
+  "pnpm": {
+    "overrides": {
+      "react": "18.3.1",
+      "react-dom": "18.3.1"
+    }
   }
 }

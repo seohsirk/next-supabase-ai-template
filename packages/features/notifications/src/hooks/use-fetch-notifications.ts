@@ -1,6 +1,10 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
+
+import { useQuery } from '@tanstack/react-query';
 
 import { useSupabase } from '@kit/supabase/hooks/use-supabase';
+
+import { useNotificationsStream } from './use-notifications-stream';
 
 type Notification = {
   id: number;
@@ -20,35 +24,31 @@ export function useFetchNotifications({
   accountIds: string[];
   realtime: boolean;
 }) {
-  const client = useSupabase();
-  const didFetchInitialData = useRef(false);
+  const { data: initialNotifications } = useFetchInitialNotifications({
+    accountIds,
+  });
+
+  useNotificationsStream({
+    onNotifications,
+    accountIds,
+    enabled: realtime,
+  });
 
   useEffect(() => {
-    let realtimeSubscription: { unsubscribe: () => void } | null = null;
-
-    if (realtime) {
-      const channel = client.channel('notifications-channel');
-
-      realtimeSubscription = channel
-        .on(
-          'postgres_changes',
-          {
-            event: 'INSERT',
-            schema: 'public',
-            filter: `account_id=in.(${accountIds.join(', ')})`,
-            table: 'notifications',
-          },
-          (payload) => {
-            onNotifications([payload.new as Notification]);
-          },
-        )
-        .subscribe();
+    if (initialNotifications) {
+      onNotifications(initialNotifications);
     }
+  }, [initialNotifications, onNotifications]);
+}
 
-    if (!didFetchInitialData.current) {
-      const now = new Date().toISOString();
+function useFetchInitialNotifications(props: { accountIds: string[] }) {
+  const client = useSupabase();
+  const now = new Date().toISOString();
 
-      const initialFetch = client
+  return useQuery({
+    queryKey: ['notifications', ...props.accountIds],
+    queryFn: async () => {
+      const { data } = await client
         .from('notifications')
         .select(
           `id, 
@@ -59,29 +59,15 @@ export function useFetchNotifications({
            link
            `,
         )
-        .in('account_id', accountIds)
+        .in('account_id', props.accountIds)
         .eq('dismissed', false)
         .gt('expires_at', now)
         .order('created_at', { ascending: false })
         .limit(10);
 
-      didFetchInitialData.current = true;
-
-      void initialFetch.then(({ data, error }) => {
-        if (error) {
-          throw error;
-        }
-
-        if (data) {
-          onNotifications(data);
-        }
-      });
-    }
-
-    return () => {
-      if (realtimeSubscription) {
-        realtimeSubscription.unsubscribe();
-      }
-    };
-  }, [client, onNotifications, accountIds, realtime]);
+      return data;
+    },
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+  });
 }

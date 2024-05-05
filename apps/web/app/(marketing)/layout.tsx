@@ -8,13 +8,13 @@ async function SiteLayout(props: React.PropsWithChildren) {
   const user = await getUser();
 
   return (
-    <>
+    <div className={'flex min-h-[100vh] flex-col'}>
       <SiteHeader user={user} />
 
       {props.children}
 
       <SiteFooter />
-    </>
+    </div>
   );
 }
 

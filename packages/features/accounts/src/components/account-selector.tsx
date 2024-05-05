@@ -38,6 +38,7 @@ interface AccountSelectorProps {
 
   selectedAccount?: string;
   collapsed?: boolean;
+  className?: string;
 
   onAccountChange: (value: string | undefined) => void;
 }
@@ -48,6 +49,7 @@ export function AccountSelector({
   accounts,
   selectedAccount,
   onAccountChange,
+  className,
   features = {
     enableTeamCreation: true,
   },
@@ -85,7 +87,7 @@ export function AccountSelector({
     pictureUrl ? (
       <UserAvatar pictureUrl={pictureUrl} />
     ) : (
-      <PersonIcon className="h-4 w-4" />
+      <PersonIcon className="h-4 min-h-4 w-4 min-w-4" />
     );
 
   return (
@@ -98,19 +100,23 @@ export function AccountSelector({
             variant="ghost"
             role="combobox"
             aria-expanded={open}
-            className={cn('dark:shadow-primary/10 group w-full border px-4', {
-              'justify-between': !collapsed,
-              'justify-center': collapsed,
-            })}
+            className={cn(
+              'dark:shadow-primary/10 group w-auto min-w-0 max-w-fit px-2',
+              {
+                'justify-start': !collapsed,
+                'justify-center': collapsed,
+              },
+              className,
+            )}
           >
             <If
               condition={selected}
               fallback={
-                <span className={'flex items-center space-x-2'}>
+                <span className={'flex max-w-full items-center space-x-2'}>
                   <PersonalAccountAvatar />
 
                   <span
-                    className={cn({
+                    className={cn('truncate', {
                       hidden: collapsed,
                     })}
                   >
@@ -120,21 +126,17 @@ export function AccountSelector({
               }
             >
               {(account) => (
-                <span className={'flex items-center space-x-2'}>
-                  <Avatar
-                    className={
-                      'group-hover:border-border h-6 w-6 border border-transparent'
-                    }
-                  >
+                <span className={'flex max-w-full items-center space-x-2'}>
+                  <Avatar className={'h-5 w-5'}>
                     <AvatarImage src={account.image ?? undefined} />
 
-                    <AvatarFallback>
+                    <AvatarFallback className={'group-hover:bg-background'}>
                       {account.label ? account.label[0] : ''}
                     </AvatarFallback>
                   </Avatar>
 
                   <span
-                    className={cn({
+                    className={cn('truncate', {
                       hidden: collapsed,
                     })}
                   >
@@ -144,11 +146,11 @@ export function AccountSelector({
               )}
             </If>
 
-            <CaretSortIcon className="h-4 w-4 shrink-0 opacity-50" />
+            <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
 
-        <PopoverContent className="w-full p-0">
+        <PopoverContent className="w-full p-0" collisionPadding={20}>
           <Command>
             <CommandInput placeholder={t('searchAccount')} className="h-9" />
 
@@ -185,7 +187,7 @@ export function AccountSelector({
                       data-name={account.label}
                       data-slug={account.value}
                       className={cn(
-                        'group flex justify-between transition-colors',
+                        'group my-1 flex justify-between transition-colors',
                         {
                           ['bg-muted']: value === account.value,
                         },
@@ -202,19 +204,16 @@ export function AccountSelector({
                       }}
                     >
                       <div className={'flex items-center'}>
-                        <Avatar
-                          className={cn(
-                            'mr-2 h-6 w-6 border border-transparent',
-                            {
-                              ['border-border']: value === account.value,
-                              ['group-hover:border-border ']:
-                                value !== account.value,
-                            },
-                          )}
-                        >
+                        <Avatar className={'mr-2 h-5 w-5'}>
                           <AvatarImage src={account.image ?? undefined} />
 
-                          <AvatarFallback>
+                          <AvatarFallback
+                            className={cn({
+                              ['bg-background']: value === account.value,
+                              ['group-hover:bg-background']:
+                                value !== account.value,
+                            })}
+                          >
                             {account.label ? account.label[0] : ''}
                           </AvatarFallback>
                         </Avatar>
@@ -238,7 +237,7 @@ export function AccountSelector({
             <Button
               data-test={'create-team-account-trigger'}
               variant="ghost"
-              className="w-full justify-start"
+              className="w-full justify-start rounded-none"
               onClick={() => {
                 setIsCreatingAccount(true);
                 setOpen(false);

@@ -160,7 +160,7 @@ function ActionsDropdown({
 }) {
   const [isDeletingInvite, setIsDeletingInvite] = useState(false);
   const [isUpdatingRole, setIsUpdatingRole] = useState(false);
-  const [iRenewingInvite, setIsRenewingInvite] = useState(false);
+  const [isRenewingInvite, setIsRenewingInvite] = useState(false);
 
   if (!permissions.canUpdateInvitation && !permissions.canRemoveInvitation) {
     return null;
@@ -217,14 +217,13 @@ function ActionsDropdown({
         <UpdateInvitationDialog
           isOpen
           setIsOpen={setIsUpdatingRole}
-          account={invitation.account_id}
           invitationId={invitation.id}
           userRole={invitation.role}
           userRoleHierarchy={permissions.currentUserRoleHierarchy}
         />
       </If>
 
-      <If condition={iRenewingInvite}>
+      <If condition={isRenewingInvite}>
         <RenewInvitationDialog
           isOpen
           setIsOpen={setIsRenewingInvite}
