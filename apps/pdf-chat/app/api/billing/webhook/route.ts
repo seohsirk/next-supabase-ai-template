@@ -1,4 +1,5 @@
 import { getBillingEventHandlerService } from '@kit/billing-gateway';
+import { enhanceRouteHandler } from '@kit/next/routes';
 import { getLogger } from '@kit/shared/logger';
 import { getSupabaseRouteHandlerClient } from '@kit/supabase/route-handler-client';
 
@@ -7,83 +8,76 @@ import billingConfig from '~/config/billing.config';
 /**
  * @description Handle the webhooks from Stripe related to checkouts
  */
-export async function POST(request: Request) {
-  const provider = billingConfig.provider;
-  const logger = await getLogger();
+export const POST = enhanceRouteHandler(
+  async ({ request }) => {
+    const provider = billingConfig.provider;
+    const logger = await getLogger();
 
-  logger.info(
-    {
+    const ctx = {
       name: 'billing.webhook',
       provider,
-    },
-    `Received billing webhook. Processing...`,
-  );
+    };
 
-  const supabaseClientProvider = () =>
-    getSupabaseRouteHandlerClient({ admin: true });
+    logger.info(ctx, `Received billing webhook. Processing...`);
 
-  const service = await getBillingEventHandlerService(
-    supabaseClientProvider,
-    provider,
-    billingConfig,
-  );
+    const supabaseClientProvider = () =>
+      getSupabaseRouteHandlerClient({ admin: true });
 
-  try {
-    await service.handleWebhookEvent(request, {
-      async onInvoicePaid(data) {
-        const logger = await getLogger();
-
-        const subscriptionId = data.target_subscription_id;
-        const accountId = data.target_account_id;
-        const lineItems = data.line_items;
-
-        // we only expect one line item in the invoice
-        // if you add more than one, you need to handle that here
-        // by finding the correct line item to get the variant ID
-        const variantId = lineItems[0]?.variant_id;
-
-        if (!variantId) {
-          logger.error(
-            {
-              subscriptionId,
-              accountId,
-            },
-            'Variant ID not found in invoice',
-          );
-
-          throw new Error('Variant ID not found in invoice');
-        }
-
-        await updateCreditsQuota({
-          subscriptionId,
-          accountId,
-          variantId,
-        });
-      },
-    });
-
-    logger.info(
-      {
-        name: 'billing.webhook',
-      },
-      `Successfully processed billing webhook`,
+    const service = await getBillingEventHandlerService(
+      supabaseClientProvider,
+      provider,
+      billingConfig,
     );
 
-    return new Response('OK', { status: 200 });
-  } catch (error) {
-    console.error(error);
+    try {
+      await service.handleWebhookEvent(request, {
+        async onInvoicePaid(data) {
+          const logger = await getLogger();
 
-    logger.error(
-      {
-        name: 'billing',
-        error: JSON.stringify(error),
-      },
-      `Failed to process billing webhook`,
-    );
+          const subscriptionId = data.target_subscription_id;
+          const accountId = data.target_account_id;
+          const lineItems = data.line_items;
 
-    return new Response('Error', { status: 500 });
-  }
-}
+          // we only expect one line item in the invoice
+          // if you add more than one, you need to handle that here
+          // by finding the correct line item to get the variant ID
+          const variantId = lineItems[0]?.variant_id;
+
+          if (!variantId) {
+            logger.error(
+              {
+                subscriptionId,
+                accountId,
+              },
+              'Variant ID not found in invoice',
+            );
+
+            throw new Error('Variant ID not found in invoice');
+          }
+
+          await updateCreditsQuota({
+            subscriptionId,
+            accountId,
+            variantId,
+          });
+        },
+      });
+
+      logger.info(ctx, `Successfully processed billing webhook`);
+
+      return new Response('OK', { status: 200 });
+    } catch (error) {
+      logger.error(ctx, `Failed to process billing webhook`, error);
+
+      return new Response('Failed to process billing webhook', {
+        status: 500,
+      });
+    }
+  },
+  {
+    auth: false,
+  },
+);
 
 async function updateCreditsQuota(params: {
   subscriptionId: string;
