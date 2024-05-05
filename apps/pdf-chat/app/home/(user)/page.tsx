@@ -10,9 +10,9 @@ import { Button } from '@kit/ui/button';
 import { PageBody } from '@kit/ui/page';
 import { Trans } from '@kit/ui/trans';
 
-import { UserAccountHeader } from '~/(dashboard)/home/(user)/_components/user-account-header';
-import { loadUserWorkspace } from '~/(dashboard)/home/(user)/_lib/server/load-user-workspace';
-import { DocumentsTable } from '~/(dashboard)/home/(user)/documents/_components/documents-table';
+import { loadUserWorkspace } from '~/home/(user)/_lib/server/load-user-workspace';
+import { DocumentsTable } from '~/home/(user)/documents/_components/documents-table';
+import { HomeLayoutPageHeader } from '~/home/(user)/_components/home-page-header';
 import { createI18nServerInstance } from '~/lib/i18n/i18n.server';
 import { withI18n } from '~/lib/i18n/with-i18n';
 
@@ -32,7 +32,7 @@ function UserHomePage() {
 
   return (
     <>
-      <UserAccountHeader
+      <HomeLayoutPageHeader
         title={<Trans i18nKey={'documents:documentsTabLabel'} />}
         description={<Trans i18nKey={'documents:documentsTabDescription'} />}
       >
@@ -45,7 +45,7 @@ function UserHomePage() {
             </span>
           </Link>
         </Button>
-      </UserAccountHeader>
+      </HomeLayoutPageHeader>
 
       <PageBody>
         <ServerDataLoader
