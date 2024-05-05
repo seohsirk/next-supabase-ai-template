@@ -5,11 +5,9 @@ import { Trans } from '@kit/ui/trans';
 import { AppLogo } from '~/components/app-logo';
 import appConfig from '~/config/app.config';
 
-const YEAR = new Date().getFullYear();
-
 export function SiteFooter() {
   return (
-    <footer className={'border-t py-8 xl:py-12 2xl:py-14'}>
+    <footer className={'mt-auto border-t py-8 2xl:py-14'}>
       <div className={'px-8'}>
         <div className={'flex flex-col space-y-8 lg:flex-row lg:space-y-0'}>
           <div
@@ -26,13 +24,19 @@ export function SiteFooter() {
               <div className={'flex flex-col space-y-4'}>
                 <div>
                   <p className={'text-sm text-muted-foreground'}>
-                    Add a short tagline about your product
+                    <Trans i18nKey={'marketing:footerDescription'} />
                   </p>
                 </div>
 
                 <div className={'flex text-xs text-muted-foreground'}>
                   <p>
-                    © Copyright {YEAR} {appConfig.name}. All Rights Reserved.
+                    <Trans
+                      i18nKey={'marketing:copyright'}
+                      values={{
+                        product: appConfig.name,
+                        year: new Date().getFullYear(),
+                      }}
+                    />
                   </p>
                 </div>
               </div>

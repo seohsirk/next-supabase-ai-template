@@ -19,7 +19,7 @@ const INTERNAL_PACKAGES = [
   '@kit/cms',
   '@kit/monitoring',
   '@kit/next',
-  '@kit/notifications'
+  '@kit/notifications',
 ];
 
 /** @type {import('next').NextConfig} */
@@ -36,6 +36,10 @@ const config = {
     instrumentationHook: true,
     turbo: {
       resolveExtensions: ['.ts', '.tsx', '.js', '.jsx'],
+    },
+    // needed for supporting dynamic imports for local content
+    outputFileTracingIncludes: {
+      '/*': ['./content/**/*'],
     },
     optimizePackageImports: [
       'recharts',

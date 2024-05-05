@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+type LanguagePriority = 'user' | 'application';
+
 const FeatureFlagsSchema = z.object({
   enableThemeToggle: z.boolean({
     description: 'Enable theme toggle in the user interface.',
@@ -40,18 +42,14 @@ const FeatureFlagsSchema = z.object({
       description: `If set to user, use the user's preferred language. If set to application, use the application's default language.`,
     })
     .default('application'),
-  enableNotifications: z
-    .boolean({
-      description: 'Enable notifications functionality',
-      required_error: 'Provide the variable NEXT_PUBLIC_ENABLE_NOTIFICATIONS',
-    })
-    .default(true),
-  realtimeNotifications: z
-    .boolean({
-      description: 'Enable realtime for the notifications functionality',
-      required_error: 'Provide the variable NEXT_PUBLIC_REALTIME_NOTIFICATIONS',
-    })
-    .default(true),
+  enableNotifications: z.boolean({
+    description: 'Enable notifications functionality',
+    required_error: 'Provide the variable NEXT_PUBLIC_ENABLE_NOTIFICATIONS',
+  }),
+  realtimeNotifications: z.boolean({
+    description: 'Enable realtime for the notifications functionality',
+    required_error: 'Provide the variable NEXT_PUBLIC_REALTIME_NOTIFICATIONS',
+  }),
 });
 
 const featuresFlagConfig = FeatureFlagsSchema.parse({
@@ -83,9 +81,8 @@ const featuresFlagConfig = FeatureFlagsSchema.parse({
     process.env.NEXT_PUBLIC_ENABLE_TEAM_ACCOUNTS_BILLING,
     false,
   ),
-  languagePriority: process.env.NEXT_PUBLIC_LANGUAGE_PRIORITY as
-    | 'user'
-    | 'application',
+  languagePriority: process.env
+    .NEXT_PUBLIC_LANGUAGE_PRIORITY as LanguagePriority,
   enableNotifications: getBoolean(
     process.env.NEXT_PUBLIC_ENABLE_NOTIFICATIONS,
     true,
