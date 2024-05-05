@@ -1,4 +1,4 @@
-import { Page, PageBody, PageHeader } from '@kit/ui/page';
+import { Page, PageMobileNavigation, PageNavigation } from '@kit/ui/page';
 
 import { AdminSidebar } from '~/admin/_components/admin-sidebar';
 import { AdminMobileNavigation } from '~/admin/_components/mobile-navigation';
@@ -9,14 +9,16 @@ export const metadata = {
 
 export default function AdminLayout(props: React.PropsWithChildren) {
   return (
-    <Page sidebar={<AdminSidebar />}>
-      <PageHeader
-        mobileNavigation={<AdminMobileNavigation />}
-        title={'Super Admin'}
-        description={`Your SaaS stats at a glance`}
-      />
+    <Page style={'sidebar'}>
+      <PageNavigation>
+        <AdminSidebar />
+      </PageNavigation>
 
-      <PageBody>{props.children}</PageBody>
+      <PageMobileNavigation>
+        <AdminMobileNavigation />
+      </PageMobileNavigation>
+
+      {props.children}
     </Page>
   );
 }
