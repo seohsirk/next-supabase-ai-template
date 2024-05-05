@@ -542,6 +542,64 @@ export type Database = {
           },
         ]
       }
+      notifications: {
+        Row: {
+          account_id: string
+          body: string
+          channel: Database["public"]["Enums"]["notification_channel"]
+          created_at: string
+          dismissed: boolean
+          expires_at: string | null
+          id: number
+          link: string | null
+          type: Database["public"]["Enums"]["notification_type"]
+        }
+        Insert: {
+          account_id: string
+          body: string
+          channel?: Database["public"]["Enums"]["notification_channel"]
+          created_at?: string
+          dismissed?: boolean
+          expires_at?: string | null
+          id?: never
+          link?: string | null
+          type?: Database["public"]["Enums"]["notification_type"]
+        }
+        Update: {
+          account_id?: string
+          body?: string
+          channel?: Database["public"]["Enums"]["notification_channel"]
+          created_at?: string
+          dismissed?: boolean
+          expires_at?: string | null
+          id?: never
+          link?: string | null
+          type?: Database["public"]["Enums"]["notification_type"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notifications_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "user_account_workspace"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notifications_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "user_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       order_items: {
         Row: {
           created_at: string
@@ -652,20 +710,20 @@ export type Database = {
         Row: {
           max_documents: number
           name: string
-          price_id: string
           tokens: number
+          variant_id: string
         }
         Insert: {
           max_documents: number
           name: string
-          price_id: string
           tokens: number
+          variant_id: string
         }
         Update: {
           max_documents?: number
           name?: string
-          price_id?: string
           tokens?: number
+          variant_id?: string
         }
         Relationships: []
       }
@@ -697,43 +755,18 @@ export type Database = {
       }
       roles: {
         Row: {
-          account_id: string | null
           hierarchy_level: number
           name: string
         }
         Insert: {
-          account_id?: string | null
           hierarchy_level: number
           name: string
         }
         Update: {
-          account_id?: string | null
           hierarchy_level?: number
           name?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "roles_account_id_fkey"
-            columns: ["account_id"]
-            isOneToOne: false
-            referencedRelation: "accounts"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "roles_account_id_fkey"
-            columns: ["account_id"]
-            isOneToOne: false
-            referencedRelation: "user_account_workspace"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "roles_account_id_fkey"
-            columns: ["account_id"]
-            isOneToOne: false
-            referencedRelation: "user_accounts"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       subscription_items: {
         Row: {
@@ -1167,6 +1200,8 @@ export type Database = {
         | "members.manage"
         | "invites.manage"
       billing_provider: "stripe" | "lemon-squeezy" | "paddle"
+      notification_channel: "in_app" | "email"
+      notification_type: "info" | "warning" | "error"
       payment_status: "pending" | "succeeded" | "failed"
       sender: "user" | "assistant"
       subscription_item_type: "flat" | "per_seat" | "metered"
