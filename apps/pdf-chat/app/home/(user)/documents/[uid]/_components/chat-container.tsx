@@ -2,8 +2,6 @@
 
 import { useCallback, useEffect, useRef } from 'react';
 
-
-
 import { fetchDataFromSupabase } from '@makerkit/data-loader-supabase-core';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Message } from 'ai';
@@ -11,20 +9,16 @@ import { useChat } from 'ai/react';
 import { nanoid } from 'nanoid';
 import { toast } from 'sonner';
 
-
-
 import { useSupabase } from '@kit/supabase/hooks/use-supabase';
 import { Heading } from '@kit/ui/heading';
 import { If } from '@kit/ui/if';
 import { cn } from '@kit/ui/utils';
 
-
-
-import { getConversationByReferenceId } from '../../server-actions';
+import { useRevalidateAvailableTokens } from '../../_lib/hooks/use-fetch-remaining-tokens';
+import { getConversationByReferenceId } from '../../_lib/server/server-actions';
 import { ChatTextField } from './chat-text-field';
 import { LoadingBubble } from './loading-bubble';
 import { MessageContainer } from './message-container';
-
 
 export function ChatContainer({
   conversation,
@@ -38,7 +32,7 @@ export function ChatContainer({
       }
     | undefined;
 
-  onCreateConversation: (conversation: { name: string; id: string }) => void;
+  onCreateConversation?: (conversation: { name: string; id: string }) => void;
   documentId: string;
 }) {
   // fetch the list of messages for this conversation
@@ -64,7 +58,7 @@ function ChatBodyContainer(props: {
   conversationId: string | undefined;
   documentId: string;
   messages: Message[] | null;
-  onCreateConversation: (conversation: { name: string; id: string }) => void;
+  onCreateConversation?: (conversation: { name: string; id: string }) => void;
 }) {
   // set a ref for the conversation id - or generate a new one if there is none
   const conversationIdRef = useRef(props.conversationId);
@@ -73,6 +67,7 @@ function ChatBodyContainer(props: {
   const scrollToBottom = useScrollToBottom(scrollingDiv.current);
 
   const queryClient = useQueryClient();
+  const revalidateAvailableTokens = useRevalidateAvailableTokens();
 
   const {
     messages,
@@ -83,6 +78,7 @@ function ChatBodyContainer(props: {
     setMessages,
   } = useChat({
     api: getApiEndpoint(props.documentId),
+    streamMode: 'text',
     headers: {
       'x-conversation-id': conversationIdRef.current ?? '',
     },
@@ -101,8 +97,10 @@ function ChatBodyContainer(props: {
 
         // we need to update the cache with the new message
         // so that we don't have to fetch it from the API the next time
-        const updateCache = () => {
-          const cacheKey = getConversationIdStorageKey(conversationIdRef.current);
+        const updateCache = async () => {
+          const cacheKey = getConversationIdStorageKey(
+            conversationIdRef.current,
+          );
 
           const userMessage = {
             id: nanoid(),
@@ -113,7 +111,10 @@ function ChatBodyContainer(props: {
 
           const nextCache = [...(messages ?? []), userMessage, message];
 
-          return queryClient.setQueryData([cacheKey], nextCache);
+          await queryClient.setQueryData([cacheKey], nextCache);
+
+          // revalidate the number of available tokens
+          await revalidateAvailableTokens();
         };
 
         // if the conversation id is already set, we just update the cache
@@ -129,41 +130,48 @@ function ChatBodyContainer(props: {
           }
 
           const data = await getConversationByReferenceId(
-              conversationIdRef.current,
+            conversationIdRef.current,
           );
 
           // once the conversation is created, we update the UI
           if (data) {
             conversationIdRef.current = data.reference_id;
 
-            // dispatch an event to the parent component
-            // so that it can display the new conversation in the sidebar
-            props.onCreateConversation({
-              id: data.reference_id,
-              name: data.name,
-            });
-
             // update the cache
             await updateCache();
+
+            // dispatch an event to the parent component
+            // so that it can display the new conversation in the sidebar
+            setTimeout(() => {
+              if (props.onCreateConversation) {
+                props.onCreateConversation({
+                  id: data.reference_id,
+                  name: data.name,
+                });
+              }
+            }, 1000);
           }
         } catch {
           toast.error(
-              'Something went wrong creating your conversation. Please try again.',
+            'Something went wrong creating your conversation. Please try again.',
           );
         }
       })();
     },
   });
 
-  // when the messages change, we need to update the state
   useEffect(() => {
+    // when the messages change, we need to update the state
     if (props.messages) {
       setMessages(props.messages);
+      scrollToBottom({ smooth: true });
     }
+  }, [props.messages]);
 
-    // scroll to the bottom when the messages change
+  useEffect(() => {
+    // when the messages change, we need to update the state
     scrollToBottom({ smooth: true });
-  }, [props.messages, setMessages, scrollToBottom]);
+  }, [isLoading]);
 
   // when the conversation id changes, we need to update the ref
   useEffect(() => {
@@ -178,13 +186,13 @@ function ChatBodyContainer(props: {
   return (
     <div
       className={cn(
-        'pt-4 m-auto flex h-full w-full flex-1 flex-col space-y-4',
+        'm-auto flex h-full w-full flex-1 flex-col space-y-4 pt-4',
         props.className,
       )}
     >
       <div
-        className={'px-4 order-1 flex-[1_1_0] overflow-y-auto'}
-        ref={ref => {
+        className={'order-1 flex-[1_1_0] overflow-y-auto px-4'}
+        ref={(ref) => {
           scrollingDiv.current = ref;
         }}
       >
@@ -237,7 +245,7 @@ function ChatMessageItem({
   message,
 }: React.PropsWithChildren<{ message: Message }>) {
   return (
-    <div className={cn(`flex h-fit w-full animate-in fade-in-90`)}>
+    <div className={cn(`flex h-fit w-full`)}>
       <div
         className={'m-auto flex w-full whitespace-pre-wrap break-words'}
         style={{
@@ -269,10 +277,12 @@ function NoMessageEmptySpace() {
 }
 
 function useConversationMessages(
-  conversation: undefined | {
-    id: string;
-    name: string;
-  }
+  conversation:
+    | undefined
+    | {
+        id: string;
+        name: string;
+      },
 ) {
   const client = useSupabase();
 
@@ -325,9 +335,7 @@ function getConversationIdStorageKey(conversationId: string | undefined) {
   return `conversation-${conversationId}`;
 }
 
-function useScrollToBottom(
-  scrollingDiv: HTMLDivElement | null | undefined
-) {
+function useScrollToBottom(scrollingDiv: HTMLDivElement | null | undefined) {
   return useCallback(
     ({ smooth } = { smooth: false }) => {
       setTimeout(() => {

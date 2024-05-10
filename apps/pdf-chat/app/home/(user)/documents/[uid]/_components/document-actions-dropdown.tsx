@@ -14,9 +14,9 @@ import {
 } from '@kit/ui/dropdown-menu';
 
 import {
-  clearConversation,
-  deleteConversation,
-} from '~/(dashboard)/home/(user)/documents/server-actions';
+  clearConversationAction,
+  deleteConversationAction,
+} from '~/home/(user)/documents/_lib/server/server-actions';
 
 export function DocumentActionsDropdown(props: { conversationId: string }) {
   const clearMessagesCache = useClearMessagesCache();
@@ -24,8 +24,8 @@ export function DocumentActionsDropdown(props: { conversationId: string }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button size={'icon'} variant={'ghost'} className="mx-8">
-          <EllipsisVertical className={'h-6'} />
+        <Button size={'icon'} variant={'ghost'}>
+          <EllipsisVertical className={'h-4'} />
         </Button>
       </DropdownMenuTrigger>
 
@@ -33,7 +33,7 @@ export function DocumentActionsDropdown(props: { conversationId: string }) {
         <DropdownMenuItem asChild>
           <button
             onClick={async () => {
-              await clearConversation(props.conversationId);
+              await clearConversationAction(props.conversationId);
               await clearMessagesCache(props.conversationId);
             }}
           >
@@ -42,7 +42,12 @@ export function DocumentActionsDropdown(props: { conversationId: string }) {
         </DropdownMenuItem>
 
         <DropdownMenuItem asChild>
-          <button onClick={() => deleteConversation(props.conversationId)}>
+          <button
+            onClick={async () => {
+              await deleteConversationAction(props.conversationId);
+              await clearMessagesCache(props.conversationId);
+            }}
+          >
             Delete conversation
           </button>
         </DropdownMenuItem>

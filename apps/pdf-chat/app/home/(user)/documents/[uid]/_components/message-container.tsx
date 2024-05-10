@@ -17,7 +17,7 @@ export function MessageContainer({
   return (
     <div
       className={cn(
-        'w-full rounded-md border p-4 animate-in slide-in-from-bottom-1',
+        'w-full rounded-md border p-4',
         {
           'bg-primary-50 dark:bg-primary-800 border-border': isUser,
           'border-transparent': !isUser,

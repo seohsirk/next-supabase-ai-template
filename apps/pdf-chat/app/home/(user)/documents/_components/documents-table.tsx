@@ -28,7 +28,7 @@ import {
 import { DataTable } from '@kit/ui/enhanced-data-table';
 import { Trans } from '@kit/ui/trans';
 
-import { deleteDocument } from '../server-actions';
+import { deleteDocumentAction } from '../_lib/server/server-actions';
 
 interface DocumentsTableProps {
   data: Array<{
@@ -134,14 +134,15 @@ function getColumns<
   ];
 }
 
-function DeleteDocumentModal(
-  props: React.PropsWithChildren<{ documentId: string }>,
-) {
+function DeleteDocumentModal({
+  documentId,
+    children
+}: React.PropsWithChildren<{ documentId: string }>) {
   const onConfirm: FormEventHandler = (e) => {
     e.preventDefault();
 
     const promise = async () => {
-      return deleteDocument(props.documentId);
+      return deleteDocumentAction({ documentId });
     };
 
     return toast.promise(promise, {
@@ -153,7 +154,7 @@ function DeleteDocumentModal(
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger asChild>{props.children}</AlertDialogTrigger>
+      <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
 
       <AlertDialogContent>
         <AlertDialogHeader>

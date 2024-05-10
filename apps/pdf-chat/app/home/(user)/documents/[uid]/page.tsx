@@ -1,11 +1,13 @@
 import { notFound } from 'next/navigation';
 
+import { SupabaseClient } from '@supabase/supabase-js';
+
 import { getSupabaseServerComponentClient } from '@kit/supabase/server-component-client';
 
+import { Database } from '~/lib/database.types';
+import { withI18n } from '~/lib/i18n/with-i18n';
+
 import { DocumentPageContainer } from './_components/document-page-container';
-import {withI18n} from "~/lib/i18n/with-i18n";
-import {SupabaseClient} from "@supabase/supabase-js";
-import {Database} from "~/lib/database.types";
 
 interface DocumentPageParams {
   params: {
@@ -32,7 +34,7 @@ async function DocumentPage({ params, searchParams }: DocumentPageParams) {
     <div className={'flex h-screen flex-1 flex-col'}>
       <div
         className={
-          'divide dark:divide-dark-900 flex h-full flex-1 divide-x divide-gray-100'
+          'divide flex h-full flex-1 divide-x'
         }
       >
         <DocumentPageContainer
@@ -50,10 +52,7 @@ async function DocumentPage({ params, searchParams }: DocumentPageParams) {
 
 export default withI18n(DocumentPage);
 
-async function getData(
-  client: SupabaseClient<Database>,
-  documentId: string,
-) {
+async function getData(client: SupabaseClient<Database>, documentId: string) {
   const doc = client
     .from('documents')
     .select(

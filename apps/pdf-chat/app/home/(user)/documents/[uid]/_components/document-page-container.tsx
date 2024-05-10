@@ -2,17 +2,15 @@
 
 import { useCallback, useEffect, useState } from 'react';
 
-
-
+import { Badge } from '@kit/ui/badge';
+import { Heading } from '@kit/ui/heading';
 import { If } from '@kit/ui/if';
-import {PageBody, PageHeader} from '@kit/ui/page';
 
-
+import { useFetchAvailableTokens } from '../../_lib/hooks/use-fetch-remaining-tokens';
 
 import { ChatContainer } from './chat-container';
 import { ConversationsSidebar } from './conversation-sidebar';
 import { DocumentActionsDropdown } from './document-actions-dropdown';
-
 
 interface Conversation {
   id: string;
@@ -39,6 +37,8 @@ export function DocumentPageContainer(
     setConversation(conversation);
   }, []);
 
+  const credits = useFetchAvailableTokens();
+
   // we need to update the conversation and conversations when the props change
   useEffect(() => {
     setConversations(props.conversations);
@@ -56,19 +56,25 @@ export function DocumentPageContainer(
 
   return (
     <>
-      <div className={'py-4 h-full w-2/12 min-w-72'}>
-        <PageBody className="h-full">
-          <ConversationsSidebar
-            conversations={conversations}
-            conversation={conversation}
-            setConversation={setConversation}
-          />
-        </PageBody>
+      <div className={'flex h-full w-2/12 max-w-72 flex-1 flex-col p-4'}>
+        <ConversationsSidebar
+          conversations={conversations}
+          conversation={conversation}
+          setConversation={setConversation}
+        />
       </div>
 
       <div className={'flex w-9/12 flex-1 flex-col divide-y'}>
-        <div className="flex items-center justify-between">
-          <PageHeader title={props.doc.name} />
+        <div className="flex items-center justify-between p-4">
+          <div className={'items-enter flex space-x-4'}>
+            <Heading level={3}>{props.doc.name}</Heading>
+
+            <If condition={credits.isSuccess}>
+              <Badge variant={'outline'}>
+                {credits.data} credits remaining
+              </Badge>
+            </If>
+          </div>
 
           <If condition={conversation}>
             {({ id }) => <DocumentActionsDropdown conversationId={id} />}

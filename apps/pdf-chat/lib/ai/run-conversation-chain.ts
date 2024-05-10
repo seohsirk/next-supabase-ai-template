@@ -11,13 +11,12 @@ import { encode } from 'gpt-tokenizer';
 import { ContextualCompressionRetriever } from 'langchain/retrievers/contextual_compression';
 import { DocumentCompressorPipeline } from 'langchain/retrievers/document_compressors';
 import { EmbeddingsFilter } from 'langchain/retrievers/document_compressors/embeddings_filter';
-import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
 import { formatDocumentsAsString } from 'langchain/util/document';
 
 import { getLogger } from '@kit/shared/logger';
 
-import getEmbeddingsModel from '~/lib/ai/embeddings-model';
-import getVectorStore from '~/lib/ai/vector-store';
+import { getEmbeddingsModel } from '~/lib/ai/embeddings-model';
+import { getVectorStore } from '~/lib/ai/vector-store';
 import { Database } from '~/lib/database.types';
 
 const LLM_MODEL_NAME = process.env.LLM_MODEL_NAME ?? 'gpt-turbo-3.5';
@@ -286,15 +285,8 @@ async function getVectorStoreRetriever(
   client: SupabaseClient<Database>,
   documentId: string,
 ) {
-  const chunkSize = 200;
-  const chunkOverlap = 0;
   const similarityThreshold = 0.5;
   const maxDocuments = 5;
-
-  const textSplitter = new RecursiveCharacterTextSplitter({
-    chunkSize,
-    chunkOverlap,
-  });
 
   const embeddingsFilter = new EmbeddingsFilter({
     embeddings: getEmbeddingsModel(),
@@ -303,7 +295,7 @@ async function getVectorStoreRetriever(
   });
 
   const compressorPipeline = new DocumentCompressorPipeline({
-    transformers: [textSplitter, embeddingsFilter],
+    transformers: [embeddingsFilter],
   });
 
   const vectorStore = await getVectorStore(client);

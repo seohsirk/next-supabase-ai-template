@@ -36,15 +36,15 @@ function Home() {
             }
           >
             <Pill>
-              <span>The leading SaaS Starter Kit for ambitious developers</span>
+              <span>Chat with your PDFs with AI</span>
             </Pill>
 
             <div className={'flex flex-col items-center space-y-8'}>
               <HeroTitle>
-                <span>The SaaS Starter Kit</span>
+                <span>Stop wasting time reading PDFs.</span>
 
                 <span>
-                  <span>for ambitious developers</span>
+                  <span>Ask AI instead.</span>
                 </span>
               </HeroTitle>
 
@@ -55,7 +55,9 @@ function Home() {
                     'p-0 text-center font-sans text-2xl font-normal text-muted-foreground'
                   }
                 >
-                  <span>Build and launch a SaaS in days, not months</span>
+                  <span>
+                    Upload your PDFs and let us help you understand them.
+                  </span>
                 </Heading>
 
                 <Heading
@@ -64,7 +66,10 @@ function Home() {
                     'p-0 text-center font-sans text-2xl font-normal text-muted-foreground'
                   }
                 >
-                  <span>Focus on your business, not on the tech</span>
+                  <span>
+                    Our AI is capable of answering your questions about your
+                    PDFs.
+                  </span>
                 </Heading>
 
                 <Heading
@@ -73,7 +78,7 @@ function Home() {
                     'p-0 text-center font-sans text-2xl font-normal text-muted-foreground'
                   }
                 >
-                  Ship something great, today.
+                  Get started for free.
                 </Heading>
               </div>
 

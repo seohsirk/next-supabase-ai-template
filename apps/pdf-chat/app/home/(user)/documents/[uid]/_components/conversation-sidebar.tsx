@@ -33,7 +33,7 @@ export function ConversationsSidebar(props: {
   }, [props.conversation?.id]);
 
   return (
-    <div className="flex flex-col space-y-4">
+    <div className="flex flex-col flex-1 space-y-4">
       <Button
         size={'sm'}
         variant={'outline'}
@@ -52,7 +52,7 @@ export function ConversationsSidebar(props: {
           return (
             <li className={'w-full'} key={conversation.id}>
               <Button
-                className={'w-full text-left justify-start'}
+                className={'w-full text-left justify-start animate-in slide-in-from-top-4'}
                 size={'sm'}
                 role="link"
                 variant={selected ? 'default' : 'ghost'}

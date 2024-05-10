@@ -28,7 +28,7 @@ import { Stepper } from '@kit/ui/stepper';
 import { Trans } from '@kit/ui/trans';
 import { cn } from '@kit/ui/utils';
 
-import { addDocument } from '../server-actions';
+import { addDocumentAction } from '../_lib/server/server-actions';
 
 export function UploadDocumentForm() {
   const [files, setFiles] = useState<File[]>([]);
@@ -128,7 +128,7 @@ function AcceptedFilesConfirmation(props: {
       try {
         const path = await useUploadDocumentToStorageMutation.mutateAsync(file);
 
-        await addDocument({
+        await addDocumentAction({
           title,
           path,
         });

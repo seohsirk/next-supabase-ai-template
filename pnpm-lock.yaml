@@ -299,11 +299,11 @@ importers:
         specifier: workspace:^
         version: link:../../packages/ui
       '@langchain/community':
-        specifier: ^0.0.48
-        version: 0.0.48(@supabase/postgrest-js@1.15.2)(@supabase/supabase-js@2.43.1)(html-to-text@9.0.5)(lodash@4.17.21)(openai@4.44.0)(ws@8.17.0)
+        specifier: ^0.0.55
+        version: 0.0.55(@supabase/postgrest-js@1.15.2)(@supabase/supabase-js@2.43.1)(html-to-text@9.0.5)(lodash@4.17.21)(openai@4.44.0)(ws@8.17.0)
       '@langchain/core':
-        specifier: 0.1.57
-        version: 0.1.57(openai@4.44.0)
+        specifier: 0.1.62
+        version: 0.1.62(openai@4.44.0)
       '@langchain/openai':
         specifier: 0.0.28
         version: 0.0.28
@@ -332,8 +332,8 @@ importers:
         specifier: ^8.16.0
         version: 8.16.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       ai:
-        specifier: 3.0.19
-        version: 3.0.19(react@18.3.1)(solid-js@1.8.17)(svelte@4.2.16)(vue@3.4.27(typescript@5.4.5))(zod@3.23.8)
+        specifier: 3.1.3
+        version: 3.1.3(react@18.3.1)(solid-js@1.8.17)(svelte@4.2.16)(vue@3.4.27(typescript@5.4.5))(zod@3.23.8)
       date-fns:
         specifier: ^3.6.0
         version: 3.6.0
@@ -341,7 +341,7 @@ importers:
         specifier: 2.1.2
         version: 2.1.2
       langchain:
-        specifier: ^0.1.33
+        specifier: ^0.1.36
         version: 0.1.36(@supabase/postgrest-js@1.15.2)(@supabase/supabase-js@2.43.1)(axios@1.6.8)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(lodash@4.17.21)(openai@4.44.0)(playwright@1.44.0)(ws@8.17.0)
       lucide-react:
         specifier: ^0.378.0
@@ -359,7 +359,7 @@ importers:
         specifier: 0.3.0
         version: 0.3.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       openai:
-        specifier: ^4.33.1
+        specifier: ^4.44.0
         version: 4.44.0
       react:
         specifier: 18.3.1
@@ -1828,6 +1828,19 @@ packages:
       graphql:
         optional: true
 
+  '@ai-sdk/provider-utils@0.0.6':
+    resolution: {integrity: sha512-SxOZgSxnaVlW04/SjfMoAD45kWOWTWx0QcZrHaQnePooLhyk5AqQpgauPijL803uoJPCKfzd0UBv1gSKvWiU0A==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      zod: ^3.0.0
+    peerDependenciesMeta:
+      zod:
+        optional: true
+
+  '@ai-sdk/provider@0.0.3':
+    resolution: {integrity: sha512-0B8P6VZpJ6F9yS9BpmJBYSqIaIfeRtL5tD5SP+qgR8y0pPwalIbRMUFiLz9YUT6g70MJsCLpm/2/fX3cfAYCJw==}
+    engines: {node: '>=18'}
+
   '@alloc/quick-lru@5.2.0':
     resolution: {integrity: sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==}
     engines: {node: '>=10'}
@@ -2169,8 +2182,8 @@ packages:
       react: 18.3.1
       react-dom: 18.3.1
 
-  '@langchain/community@0.0.48':
-    resolution: {integrity: sha512-jG7dpJkgKtwbrSLsxW4mXmECopTj5tRt4+B+QcKCqZm7yEghFR44Xj5OkDWtzzsjpL47RJck5AJ8MsQnmi7WDQ==}
+  '@langchain/community@0.0.55':
+    resolution: {integrity: sha512-JMlmzsOtdexQavFWPRZHAnlTnEKnYqlqFXo7YSVOGclW0pAaePT6oH+BNLhX9uCb2wZYBFUgdKm5eN2CpHb3eg==}
     engines: {node: '>=18'}
     peerDependencies:
       '@aws-crypto/sha256-js': ^5.0.0
@@ -2195,11 +2208,12 @@ packages:
       '@gradientai/nodejs-sdk': ^1.2.0
       '@huggingface/inference': ^2.6.4
       '@mozilla/readability': '*'
+      '@neondatabase/serverless': '*'
       '@opensearch-project/opensearch': '*'
       '@pinecone-database/pinecone': '*'
       '@planetscale/database': ^1.8.0
       '@premai/prem-sdk': ^0.3.25
-      '@qdrant/js-client-rest': ^1.2.0
+      '@qdrant/js-client-rest': ^1.8.2
       '@raycast/api': ^1.55.2
       '@rockset/client': ^0.9.1
       '@smithy/eventstream-codec': ^2.0.5
@@ -2212,7 +2226,7 @@ packages:
       '@tensorflow/tfjs-converter': '*'
       '@tensorflow/tfjs-core': '*'
       '@upstash/redis': ^1.20.6
-      '@upstash/vector': ^1.0.2
+      '@upstash/vector': ^1.0.7
       '@vercel/kv': ^0.2.3
       '@vercel/postgres': ^0.5.0
       '@writerai/writer-sdk': ^0.40.2
@@ -2236,7 +2250,7 @@ packages:
       firebase-admin: ^11.9.0 || ^12.0.0
       google-auth-library: ^8.9.0
       googleapis: ^126.0.1
-      hnswlib-node: ^1.4.2
+      hnswlib-node: ^3.0.0
       html-to-text: ^9.0.5
       interface-datastore: ^8.2.11
       ioredis: ^5.3.2
@@ -2308,6 +2322,8 @@ packages:
       '@huggingface/inference':
         optional: true
       '@mozilla/readability':
+        optional: true
+      '@neondatabase/serverless':
         optional: true
       '@opensearch-project/opensearch':
         optional: true
@@ -2447,10 +2463,6 @@ packages:
         optional: true
       ws:
         optional: true
-
-  '@langchain/core@0.1.57':
-    resolution: {integrity: sha512-6wOwidPkkRcANrOKl88+YYpm3jHfpg6W8EqZHQCImSAlxdEhyDSq2eeQKHOPCFCrfNWkClaNn+Wlzzz4Qwf9Tg==}
-    engines: {node: '>=18'}
 
   '@langchain/core@0.1.62':
     resolution: {integrity: sha512-PsBM/x0wxVvVPawKak2MFjxEneogipf212yO+rLf+2M3RDepCpYCdn1NBWgfmC+AWpmBYx/8zM7Y4QW7Kg2Wjw==}
@@ -4639,9 +4651,9 @@ packages:
     resolution: {integrity: sha512-4I7Td01quW/RpocfNayFdFVk1qSuoh0E7JrbRJ16nH01HhKFQ88INq9Sd+nd72zqRySlr9BmDA8xlEJ6vJMrYA==}
     engines: {node: '>=8'}
 
-  ai@3.0.19:
-    resolution: {integrity: sha512-HV0MixfqMrxq2N/gVsEXoNfO9e0mWkgv7zdUH6UvdtI53Qd0UjoxjH0bwe/TsxoCqnK4gnWaGYiGKZrpy/Ldtw==}
-    engines: {node: '>=14.6'}
+  ai@3.1.3:
+    resolution: {integrity: sha512-65ngr71PaLFzCa+rj/B9u2y3qlJsrUpc0i4WAcsd05/rxeY7RV8soLScCHeqB9v1yVdLBak8K6ftkGHXubtmag==}
+    engines: {node: '>=18'}
     peerDependencies:
       react: 18.3.1
       solid-js: ^1.7.7
@@ -8567,6 +8579,19 @@ snapshots:
     optionalDependencies:
       graphql: 16.8.1
 
+  '@ai-sdk/provider-utils@0.0.6(zod@3.23.8)':
+    dependencies:
+      '@ai-sdk/provider': 0.0.3
+      eventsource-parser: 1.1.2
+      nanoid: 3.3.6
+      secure-json-parse: 2.7.0
+    optionalDependencies:
+      zod: 3.23.8
+
+  '@ai-sdk/provider@0.0.3':
+    dependencies:
+      json-schema: 0.4.0
+
   '@alloc/quick-lru@5.2.0': {}
 
   '@ampproject/remapping@2.3.0':
@@ -9199,9 +9224,9 @@ snapshots:
       react-dom: 18.3.1(react@18.3.1)
       server-only: 0.0.1
 
-  '@langchain/community@0.0.48(@supabase/postgrest-js@1.15.2)(@supabase/supabase-js@2.43.1)(html-to-text@9.0.5)(lodash@4.17.21)(openai@4.44.0)(ws@8.17.0)':
+  '@langchain/community@0.0.55(@supabase/postgrest-js@1.15.2)(@supabase/supabase-js@2.43.1)(html-to-text@9.0.5)(lodash@4.17.21)(openai@4.44.0)(ws@8.17.0)':
     dependencies:
-      '@langchain/core': 0.1.57(openai@4.44.0)
+      '@langchain/core': 0.1.62(openai@4.44.0)
       '@langchain/openai': 0.0.28
       expr-eval: 2.0.2
       flat: 5.0.2
@@ -9217,22 +9242,6 @@ snapshots:
       ws: 8.17.0
     transitivePeerDependencies:
       - encoding
-      - openai
-
-  '@langchain/core@0.1.57(openai@4.44.0)':
-    dependencies:
-      ansi-styles: 5.2.0
-      camelcase: 6.3.0
-      decamelize: 1.2.0
-      js-tiktoken: 1.0.11
-      langsmith: 0.1.23(openai@4.44.0)
-      ml-distance: 4.0.1
-      p-queue: 6.6.2
-      p-retry: 4.6.2
-      uuid: 9.0.1
-      zod: 3.23.8
-      zod-to-json-schema: 3.23.0(zod@3.23.8)
-    transitivePeerDependencies:
       - openai
 
   '@langchain/core@0.1.62(openai@4.44.0)':
@@ -9254,7 +9263,7 @@ snapshots:
 
   '@langchain/openai@0.0.28':
     dependencies:
-      '@langchain/core': 0.1.57(openai@4.44.0)
+      '@langchain/core': 0.1.62(openai@4.44.0)
       js-tiktoken: 1.0.11
       openai: 4.44.0
       zod: 3.23.8
@@ -9264,7 +9273,7 @@ snapshots:
 
   '@langchain/textsplitters@0.0.0(openai@4.44.0)':
     dependencies:
-      '@langchain/core': 0.1.57(openai@4.44.0)
+      '@langchain/core': 0.1.62(openai@4.44.0)
       js-tiktoken: 1.0.11
     transitivePeerDependencies:
       - openai
@@ -12139,9 +12148,10 @@ snapshots:
       clean-stack: 2.2.0
       indent-string: 4.0.0
 
-  ai@3.0.19(react@18.3.1)(solid-js@1.8.17)(svelte@4.2.16)(vue@3.4.27(typescript@5.4.5))(zod@3.23.8):
+  ai@3.1.3(react@18.3.1)(solid-js@1.8.17)(svelte@4.2.16)(vue@3.4.27(typescript@5.4.5))(zod@3.23.8):
     dependencies:
-      '@types/json-schema': 7.0.15
+      '@ai-sdk/provider': 0.0.3
+      '@ai-sdk/provider-utils': 0.0.6(zod@3.23.8)
       eventsource-parser: 1.1.2
       json-schema: 0.4.0
       jsondiffpatch: 0.6.0
@@ -14005,7 +14015,7 @@ snapshots:
   langchain@0.1.36(@supabase/postgrest-js@1.15.2)(@supabase/supabase-js@2.43.1)(axios@1.6.8)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(lodash@4.17.21)(openai@4.44.0)(playwright@1.44.0)(ws@8.17.0):
     dependencies:
       '@anthropic-ai/sdk': 0.9.1
-      '@langchain/community': 0.0.48(@supabase/postgrest-js@1.15.2)(@supabase/supabase-js@2.43.1)(html-to-text@9.0.5)(lodash@4.17.21)(openai@4.44.0)(ws@8.17.0)
+      '@langchain/community': 0.0.55(@supabase/postgrest-js@1.15.2)(@supabase/supabase-js@2.43.1)(html-to-text@9.0.5)(lodash@4.17.21)(openai@4.44.0)(ws@8.17.0)
       '@langchain/core': 0.1.62(openai@4.44.0)
       '@langchain/openai': 0.0.28
       '@langchain/textsplitters': 0.0.0(openai@4.44.0)
@@ -14047,6 +14057,7 @@ snapshots:
       - '@gradientai/nodejs-sdk'
       - '@huggingface/inference'
       - '@mozilla/readability'
+      - '@neondatabase/serverless'
       - '@opensearch-project/opensearch'
       - '@planetscale/database'
       - '@premai/prem-sdk'

@@ -1,7 +1,7 @@
 import { OpenAIEmbeddings } from '@langchain/openai';
 import { z } from 'zod';
 
-export default function getEmbeddingsModel() {
+export function getEmbeddingsModel() {
   return getOpenAIEmbeddingsModel();
 }
 
