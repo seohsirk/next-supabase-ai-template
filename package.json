@@ -1,5 +1,5 @@
 {
-  "name": "next-supabase-saas-kit-turbo",
+  "name": "next-supabase-ai-templates",
   "private": true,
   "sideEffects": false,
   "engines": {
@@ -21,7 +21,7 @@
     "typecheck": "turbo typecheck --cache-dir=.turbo",
     "test": "turbo test --cache-dir=.turbo",
     "update": "pnpm update -r",
-    "dev:avatars": "pnpm --filter avatars dev",
+    "dev:avatars": "pnpm --filter ai-avatars dev",
     "dev:chatbots": "pnpm --filter chatbots dev",
     "dev:pdf": "pnpm --filter pdf-chat dev",
     "dev:blog": "pnpm --filter blog-writer dev",

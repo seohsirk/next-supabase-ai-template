@@ -125,7 +125,7 @@ create policy read_storage_models_bucket
     to authenticated
     using (bucket_id = 'avatars_models' and (
         (select auth.uid() = ((storage.foldername(name))[1]::uuid)
-    ));
+    )));
 
 create policy insert_storage_models_bucket
     on storage.objects
@@ -133,7 +133,7 @@ create policy insert_storage_models_bucket
     to authenticated
     with check (bucket_id = 'avatars_models' and (
         (select auth.uid() = ((storage.foldername(name))[1]::uuid)
-    ));
+    )));
 
 create policy read_storage_generations_bucket
     on storage.objects
@@ -141,7 +141,7 @@ create policy read_storage_generations_bucket
     to authenticated
     using (bucket_id = 'avatars_generations' and (
         (select auth.uid() = ((storage.foldername(name))[1]::uuid)
-    ));
+    )));
 
 create or replace function public.reduce_credits(target_account_id uuid, credits_cost integer)
 returns void

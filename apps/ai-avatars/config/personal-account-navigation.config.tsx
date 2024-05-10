@@ -1,4 +1,4 @@
-import { CreditCard, Home, User } from 'lucide-react';
+import { CreditCard, Home, ImageIcon, User } from 'lucide-react';
 
 import { NavigationConfigSchema } from '@kit/ui/navigation-schema';
 
@@ -9,10 +9,14 @@ const iconClasses = 'w-4';
 
 const routes = [
   {
-    label: 'common:homeTabLabel',
+    label: 'Models',
     path: pathsConfig.app.home,
     Icon: <Home className={iconClasses} />,
-    end: true,
+  },
+  {
+    label: 'Avatars',
+    path: '/home/avatars',
+    Icon: <ImageIcon className={iconClasses} />,
   },
   {
     label: 'account:accountTabLabel',

@@ -163,7 +163,7 @@ export function getSdxlPromptByPresetId(presetId: keyof typeof sdxlPrompts) {
 
 You can add more styles and prompts to the `sdxlPrompts` object.
 
-To populate the dropdown with the new prompts, add new options at `src/app/dashboard/[organization]/avatars/generate/GenerateAvatarsForm.tsx`:
+To populate the dropdown with the new prompts, add new options at `src/app/dashboard/[organization]/avatars/generate/generate-avatars-form.tsx`:
 
 ```tsx
 <SelectContent>
