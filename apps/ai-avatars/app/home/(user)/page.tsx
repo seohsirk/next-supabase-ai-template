@@ -28,8 +28,8 @@ async function ModelsPage({ searchParams }: { searchParams: SearchParams }) {
         title={'Models'}
         description={`Models are trained with your pictures. Manage them from here`}
       >
-        <Button size={'sm'} asChild>
-          <Link href={`home/models/new`}>
+        <Button asChild>
+          <Link href={`/home/models/new`}>
             <PlusCircleIcon className={'mr-2 w-4'} />
 
             <span>Train a Model from your pictures</span>
