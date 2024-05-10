@@ -33,7 +33,7 @@ export function ModelsTable(props: {
             return (
               <Link
                 className={'hover:underline'}
-                href={`models/${row.original.uuid}`}
+                href={`/models/${row.original.uuid}`}
               >
                 {row.original.name}
               </Link>

@@ -14,14 +14,14 @@ function NewAvatarsGenerationPage() {
   return (
     <>
       <HomeLayoutPageHeader
-        title={<Trans i18nKey={'common:newAvatarGenerationTabLabel'} />}
-        description={
-          <Trans i18nKey={'common:newAvatarGenerationTabDescription'} />
-        }
+        title={'Generate your Avatars'}
+        description={'Generate your avatars with the AI Avatars generator'}
       />
 
       <PageBody>
-        <GenerateAvatarsForm accountId={user.id} />
+        <div className={'w-full max-w-5xl'}>
+          <GenerateAvatarsForm accountId={user.id} />
+        </div>
       </PageBody>
     </>
   );

@@ -11,7 +11,7 @@ import { useForm } from 'react-hook-form';
 import { useSupabase } from '@kit/supabase/hooks/use-supabase';
 import { Alert, AlertDescription, AlertTitle } from '@kit/ui/alert';
 import { Button } from '@kit/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@kit/ui/card';
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@kit/ui/card';
 import {
   Form,
   FormControl,
@@ -36,7 +36,7 @@ import { Spinner } from '@kit/ui/spinner';
 import { Stepper } from '@kit/ui/stepper';
 import { Textarea } from '@kit/ui/textarea';
 
-import { generatePicturesAction } from '~/home/(user)/avatars/generate/_lib/server/actions.server';
+import { generatePicturesAction } from '~/home/(user)/avatars/generate/_lib/server/server-actions';
 import { SdxlPromptPreset } from '~/lib/replicate/sdxl-prompts';
 
 const CUSTOM = 'custom' as SdxlPromptPreset;
@@ -62,44 +62,42 @@ export function GenerateAvatarsForm(props: { accountId: string }) {
     <Card>
       <CardHeader>
         <CardTitle>Generate Avatars</CardTitle>
+
+        <CardDescription>
+          Pick a model and generate your avatars
+        </CardDescription>
       </CardHeader>
 
-      <CardContent>
-        <div className={'mt-8 flex w-full max-w-5xl flex-col space-y-16'}>
-          <Stepper
-            variant={'numbers'}
-            currentStep={step}
-            steps={['Details', 'Finish']}
+      <CardContent className={'space-y-12'}>
+        <Stepper currentStep={step} steps={['Details', 'Finish']} />
+
+        <If condition={step === 0}>
+          <GenerationSettingsStep
+            accountId={props.accountId}
+            onSubmit={(data) => {
+              setState(() => {
+                return {
+                  step: 1,
+                  ...data,
+                };
+              });
+            }}
           />
+        </If>
 
-          <If condition={step === 0}>
-            <GenerationSettingsStep
-              accountId={props.accountId}
-              onSubmit={(data) => {
-                setState(() => {
-                  return {
-                    step: 1,
-                    ...data,
-                  };
-                });
-              }}
-            />
-          </If>
-
-          <If condition={step === 1}>
-            <SubmitAvatarsGeneration
-              data={state}
-              onBack={() =>
-                setState((state) => {
-                  return {
-                    ...state,
-                    step: 0,
-                  };
-                })
-              }
-            />
-          </If>
-        </div>
+        <If condition={step === 1}>
+          <SubmitAvatarsGeneration
+            data={state}
+            onBack={() =>
+              setState((state) => {
+                return {
+                  ...state,
+                  step: 0,
+                };
+              })
+            }
+          />
+        </If>
       </CardContent>
     </Card>
   );
@@ -369,7 +367,9 @@ function GenerationSettingsStep({
           render={({ field }) => {
             return (
               <FormItem>
-                <FormLabel>Preset</FormLabel>
+                <FormLabel>
+                  Number of avatars
+                </FormLabel>
 
                 <FormControl>
                   <Input type={'number'} {...field} />

@@ -191,7 +191,7 @@ async function storeOutputImages({
 
     const uploadImageResponse = await client.storage
       .from('avatars_generations')
-      .upload(`output/${generationId}/${imageName}.png`, outputImage);
+      .upload(`output/${generationId}/${imageName}`, outputImage);
 
     if (uploadImageResponse.error) {
       console.error(uploadImageResponse.error);
@@ -252,8 +252,6 @@ async function notifyUserOfGenerationComplete(params: {
   try {
     const { error } = await client.from('notifications').insert({
       account_id: params.userId,
-      entity_id: params.generationId,
-      entity_type: 'generation',
       body: `Your generation "${params.name}" is ready! View it now.`,
       link: `/home/avatars/${params.generationId}`,
     });

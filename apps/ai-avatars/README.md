@@ -86,6 +86,24 @@ Let's break down each of these variables:
 
 The Supabase Proxy needs to point to your Supabase storage. You can find the URL in your Supabase dashboard.
 
+For reference my Replicate settings are:
+
+```
+REPLICATE_USERNAME=gbuomprisco
+REPLICATE_PARENT_MODEL_VERSION=39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c*******
+REPLICATE_DESTINATION_MODEL_NAME=sdxl
+```
+
+#### What is the STORAGE_PROXY_URL?
+
+You need to let Replicate access your local Supabase storage to upload the images. You can use LocalCan, ngrok, or any other service to proxy the requests from Replicate to your local server.
+
+When you deploy to production, you will need to change the `WEBHOOK_DOMAIN` to your production domain. Instead, the `production` build will never use `STORAGE_PROXY_URL` so you can remove it from your production environment variables.
+
+#### What is the WEBHOOK_DOMAIN?
+
+This is the domain where your webhook is hosted. This is used to receive webhooks from Replicate. Useful for testing since you'll need to receive webhooks from Replicate. I use LocalCan, but you can use ngrok or any other service.
+
 #### Proxies
 
 When you develop locally - you want to proxy the requests from the Replicate webhook to your local server. You can use LocalCan, ngrok, or any other service to do this.

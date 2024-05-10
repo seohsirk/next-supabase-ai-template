@@ -22,7 +22,6 @@ import {
 import { Heading } from '@kit/ui/heading';
 import { If } from '@kit/ui/if';
 import { Input } from '@kit/ui/input';
-import { Label } from '@kit/ui/label';
 import { LoadingOverlay } from '@kit/ui/loading-overlay';
 import { Stepper } from '@kit/ui/stepper';
 import { Trans } from '@kit/ui/trans';
@@ -145,7 +144,7 @@ function AcceptedFilesConfirmation(props: {
   return (
     <div className={'w-full max-w-3xl'}>
       <div className={'flex flex-col space-y-8 rounded-md border p-12'}>
-        <Stepper variant={'numbers'} steps={steps} currentStep={currentStep} />
+        <Stepper steps={steps} currentStep={currentStep} />
 
         <If condition={currentStep === 0}>
           <DocumentDetailsStep

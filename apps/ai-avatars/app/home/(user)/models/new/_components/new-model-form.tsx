@@ -30,7 +30,12 @@ import { If } from '@kit/ui/if';
 import { Input } from '@kit/ui/input';
 import { LoadingOverlay } from '@kit/ui/loading-overlay';
 import { Stepper } from '@kit/ui/stepper';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@kit/ui/tooltip';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@kit/ui/tooltip';
 import { cn } from '@kit/ui/utils';
 
 import { createNewModel } from '../_lib/server/server-actions';
@@ -48,12 +53,8 @@ export function NewModelForm(props: { accountId: string }) {
   const [files, setFiles] = useState<File[]>([]);
 
   return (
-    <div className={'mt-8 flex w-full max-w-2xl flex-col space-y-16'}>
-      <Stepper
-        variant={'numbers'}
-        currentStep={step}
-        steps={['Details', 'Images', 'Finish']}
-      />
+    <div className={'mt-8 flex w-full max-w-5xl flex-col space-y-16'}>
+      <Stepper currentStep={step} steps={['Details', 'Images', 'Finish']} />
 
       <If condition={step === 0}>
         <ModelDetailsStep
@@ -201,11 +202,10 @@ function UploadImageForm({ onUpload }: { onUpload: (files: File[]) => void }) {
     <div
       {...getRootProps({ className: 'dropzone' })}
       className={cn(
-        'hover:border-primary-500 hover:bg-primary-50 dark:hover:bg-primary-500/10 flex h-60 w-60 flex-1 cursor-pointer flex-col items-center justify-center rounded-md border border-dashed p-8 transition-colors',
+        'hover:bg-secondary-50 flex h-60 w-60 flex-1 cursor-pointer flex-col items-center justify-center rounded-md border border-dashed p-8 transition-colors hover:border-primary',
         {
-          'border-primary-500 bg-primary-50 dark:bg-primary-500/10':
-            isDragAccept,
-          'border-red-500 bg-red-50 dark:bg-red-500/10': isDragReject,
+          'bg-green/10 border-green-500': isDragAccept,
+          'border-destructive bg-destructive/10': isDragReject,
         },
       )}
     >
@@ -372,7 +372,7 @@ function UploadImagesStep({
 }) {
   return (
     <div className={'flex flex-col space-y-8 pb-16'}>
-      <div className={'flex flex-col space-y-2'}>
+      <div className={'flex flex-col space-y-2 text-sm'}>
         <p>
           Upload your images to generate avatar pictures. Please add at least{' '}
           <span>{MIN_IMAGES}</span> images (up to <span>{MAX_IMAGES}</span>).
@@ -397,25 +397,28 @@ function UploadImagesStep({
               key={file.name}
               className={'relative h-60 w-60 animate-in fade-in'}
             >
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    size={'icon'}
-                    className={'absolute right-2 top-2 z-10 bg-white'}
-                    onClick={() => {
-                      setFiles((files) => {
-                        const newFiles = [...files];
-                        newFiles.splice(index, 1);
-                        return newFiles;
-                      });
-                    }}
-                  >
-                    <X className={'w-6'} />
-                  </Button>
-                </TooltipTrigger>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      size={'icon'}
+                      variant={'ghost'}
+                      className={'absolute right-2 top-2 z-10 bg-white'}
+                      onClick={() => {
+                        setFiles((files) => {
+                          const newFiles = [...files];
+                          newFiles.splice(index, 1);
+                          return newFiles;
+                        });
+                      }}
+                    >
+                      <X className={'w-5'} />
+                    </Button>
+                  </TooltipTrigger>
 
-                <TooltipContent>Remove Image</TooltipContent>
-              </Tooltip>
+                  <TooltipContent>Remove Image</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
 
               <Image
                 alt={`Image ${index}`}

@@ -179,8 +179,6 @@ async function notifyUserOfModelCreation(params: {
   try {
     const { error } = await client.from('notifications').insert({
       account_id: params.accountId,
-      entity_id: params.modelUid,
-      entity_type: 'model',
       body: `Your model "${params.name}" is ready! Generate images now!`,
       link: `/home/models/${params.modelUid}`,
     });

@@ -90,10 +90,10 @@ export default withI18n(AvatarsPage);
 
 async function getImagesFromStorage(
   client: SupabaseClient<Database>,
-  uuid: string,
+  generationId: string,
 ) {
   const bucket = client.storage.from('avatars_generations');
-  const path = `output/${uuid}`;
+  const path = `output/${generationId}`;
   const { data } = await bucket.list(path);
 
   return (data ?? []).map((file) => {

@@ -15,6 +15,7 @@ import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-clie
 
 import { Database } from '~/lib/database.types';
 import { getSdxlPromptByPresetId } from '~/lib/replicate/sdxl-prompts';
+import appConfig from "~/config/app.config";
 
 const CreateGenerationSchema = z.object({
   name: z.string().min(1),
@@ -28,7 +29,7 @@ const predictionEndpoint =
   process.env.REPLICATE_PREDICTION_WEBHOOK_PATH ??
   '/api/replicate/prediction/webhook';
 
-const webhookDomain = process.env.WEBHOOK_DOMAIN ?? configuration.site.siteUrl;
+const webhookDomain = process.env.WEBHOOK_DOMAIN ?? appConfig.url;
 
 // SDXL settings
 const replicateImageWidth = process.env.REPLICATE_IMAGE_WIDTH ?? '1024';
@@ -59,7 +60,7 @@ export const generatePicturesAction = enhanceAction(
       `Creating generation...`,
     );
 
-    const organizationId = organization.id;
+    const accountId = user.id;
     const creditsCost = creditsPerAvatar * params.numberOfAvatars;
 
     // quick check to see if the user has enough credits
@@ -73,7 +74,7 @@ export const generatePicturesAction = enhanceAction(
 
     logger.info(
       {
-        organizationId,
+        accountId,
         name: logName,
       },
       `Creating generation record...`,
@@ -96,10 +97,9 @@ export const generatePicturesAction = enhanceAction(
     const insertAvatarResponse = await client
       .from('avatars_generations')
       .insert({
-        name: params.name,
-        account_id: user.id,
         prompt,
-        user_id: userId,
+        name: params.name,
+        account_id: accountId,
         model_id: model.id,
       })
       .select('id, uuid')
@@ -109,7 +109,7 @@ export const generatePicturesAction = enhanceAction(
       logger.error(
         {
           name: logName,
-          organizationId,
+          accountId,
         },
         `Error creating generation: ${insertAvatarResponse.error.message}`,
       );
@@ -137,7 +137,7 @@ export const generatePicturesAction = enhanceAction(
       // this function will both check if the organization
       // has enough credits and reduce them
       const { error } = await adminClient.rpc('reduce_credits', {
-        account_id: user.id,
+        target_account_id: accountId,
         credits_cost: creditsCost,
       });
 
@@ -145,10 +145,11 @@ export const generatePicturesAction = enhanceAction(
       if (error) {
         logger.error(
           {
+            accountId,
             creditsCost,
             error,
           },
-          `Error reducing credits for the organization`,
+          `Error reducing credits for the account`,
         );
 
         return Promise.reject(`Error reducing credits for the organization`);
@@ -175,6 +176,10 @@ export const generatePicturesAction = enhanceAction(
       );
 
       const [modelName, version] = modelVersion.split(':');
+
+      if (!modelName) {
+        throw new Error('Model name is missing');
+      }
 
       await replicate.predictions.create({
         model: modelName,
@@ -238,7 +243,7 @@ export const generatePicturesAction = enhanceAction(
     revalidatePath('/home/avatars', 'page');
 
     // redirect back to the dashboard
-    return redirect('../avatars');
+    return redirect('/home/avatars');
   },
   {
     schema: CreateGenerationSchema,

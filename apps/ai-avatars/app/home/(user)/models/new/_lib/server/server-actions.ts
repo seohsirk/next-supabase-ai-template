@@ -203,10 +203,10 @@ export const createNewModel = enhanceAction(
     }
 
     // revalidate the models list page
-    revalidatePath('/home/models', 'page');
+    revalidatePath('/home', 'page');
 
     // redirect back to the dashboard
-    return redirect('../models');
+    return redirect('/home');
   },
   {
     schema: CreateModelSchema,

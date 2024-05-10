@@ -2,7 +2,7 @@ import { getSupabaseServerComponentClient } from '@kit/supabase/server-component
 import { Alert, AlertDescription, AlertTitle } from '@kit/ui/alert';
 import { PageBody, PageHeader } from '@kit/ui/page';
 
-import AvatarsGenerationsTable from '~/home/(user)/avatars/_components/avatars-table';
+import { AvatarsGenerationsTable } from '~/home/(user)/avatars/_components/avatars-table';
 
 interface Params {
   uuid: string;
@@ -50,7 +50,7 @@ async function ModelPage({
 
   if (error) {
     return (
-      <Alert type={'destructive'}>
+      <Alert variant={'destructive'}>
         <AlertTitle>Error fetching model data</AlertTitle>
         <AlertDescription>
           Sorry, we could&apos;t fetch the model data. Please try again later.

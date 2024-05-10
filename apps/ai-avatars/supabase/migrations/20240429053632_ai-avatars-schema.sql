@@ -119,28 +119,27 @@ insert into storage.buckets (id, name, PUBLIC)
 insert into storage.buckets (id, name, PUBLIC)
   values ('avatars_generations', 'avatars_generations', true);
 
-create policy read_storage_models_bucket
-    on storage.objects
-    for select
-    to authenticated
-    using (bucket_id = 'avatars_models' and (
-        (select auth.uid() = ((storage.foldername(name))[1]::uuid)
-    )));
+create or replace function public.is_user_avatar(generation_id uuid) returns boolean
+language plpgsql
+set search_path = ''
+as $$
+begin
+    return exists (
+        select 1
+        from public.avatars_generations ag
+        where ag.uuid = generation_id and ag.account_id = (select auth.uid())
+    );
+end;
+$$;
 
-create policy insert_storage_models_bucket
-    on storage.objects
-    for insert
-    to authenticated
-    with check (bucket_id = 'avatars_models' and (
-        (select auth.uid() = ((storage.foldername(name))[1]::uuid)
-    )));
+grant execute on function public.is_user_avatar to authenticated;
 
 create policy read_storage_generations_bucket
     on storage.objects
     for select
     to authenticated
     using (bucket_id = 'avatars_generations' and (
-        (select auth.uid() = ((storage.foldername(name))[1]::uuid)
+        public.is_user_avatar((storage.foldername(name))[2]::uuid)
     )));
 
 create or replace function public.reduce_credits(target_account_id uuid, credits_cost integer)
