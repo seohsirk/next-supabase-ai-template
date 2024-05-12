@@ -4,7 +4,8 @@ import Markdown from 'markdown-to-jsx';
 
 import { cn } from '@kit/ui/utils';
 
-import MarkdownStyles from './MarkdownRenderer.module.css';
+// @ts-ignore
+import MarkdownStyles from './markdown-renderer.module.css';
 
 const MemoizedReactMarkdown = memo(
   Markdown,
