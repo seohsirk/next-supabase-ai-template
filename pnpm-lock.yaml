@@ -533,9 +533,9 @@ importers:
         version: 0.0.7(@supabase/postgrest-js@1.15.2)(@supabase/supabase-js@2.43.1)
       '@makerkit/data-loader-supabase-nextjs':
         specifier: ^1.2.2
-        version: 1.2.2(@supabase/postgrest-js@1.15.2)(@supabase/supabase-js@2.43.1)(@tanstack/react-query@5.35.1(react@18.3.1))(next@14.2.3(@opentelemetry/api@1.8.0)(@playwright/test@1.44.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+        version: 1.2.2(@supabase/postgrest-js@1.15.2)(@supabase/supabase-js@2.43.1)(@tanstack/react-query@5.35.5(react@18.3.1))(next@14.2.3(@opentelemetry/api@1.8.0)(@playwright/test@1.44.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       '@marsidev/react-turnstile':
-        specifier: ^0.6.0
+        specifier: ^0.6.1
         version: 0.6.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-icons':
         specifier: ^1.3.0
@@ -544,11 +544,11 @@ importers:
         specifier: ^2.43.1
         version: 2.43.1
       '@tanstack/react-query':
-        specifier: 5.35.1
-        version: 5.35.1(react@18.3.1)
+        specifier: 5.35.5
+        version: 5.35.5(react@18.3.1)
       '@tanstack/react-query-next-experimental':
-        specifier: ^5.35.1
-        version: 5.35.5(@tanstack/react-query@5.35.1(react@18.3.1))(next@14.2.3(@opentelemetry/api@1.8.0)(@playwright/test@1.44.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+        specifier: ^5.35.5
+        version: 5.35.5(@tanstack/react-query@5.35.5(react@18.3.1))(next@14.2.3(@opentelemetry/api@1.8.0)(@playwright/test@1.44.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       '@tanstack/react-table':
         specifier: ^8.16.0
         version: 8.16.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
