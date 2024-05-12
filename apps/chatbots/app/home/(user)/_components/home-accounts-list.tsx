@@ -2,6 +2,7 @@ import { use } from 'react';
 
 import Link from 'next/link';
 
+import { CardButton, CardButtonHeader } from '@kit/ui/card-button';
 import { Heading } from '@kit/ui/heading';
 
 import { loadUserWorkspace } from '../_lib/server/load-user-workspace';
@@ -18,13 +19,11 @@ export function HomeAccountsList() {
     <div className="flex flex-col">
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {accounts.map((account) => (
-          <Link
-            className="flex h-36 rounded-lg bg-secondary/80 p-4 transition-all hover:bg-secondary/90 active:bg-secondary"
-            key={account.id}
-            href={`/home/${account.value}`}
-          >
-            <span className="text-sm font-medium">{account.label}</span>
-          </Link>
+          <CardButton key={account.value} asChild>
+            <Link href={`/home/${account.value}`}>
+              <CardButtonHeader>{account.label}</CardButtonHeader>
+            </Link>
+          </CardButton>
         ))}
       </div>
     </div>
