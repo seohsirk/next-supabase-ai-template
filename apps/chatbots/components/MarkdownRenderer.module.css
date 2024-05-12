@@ -1,0 +1,19 @@
+.MarkdownRenderer p {
+    @apply my-2.5;
+}
+
+.MarkdownRenderer ol {
+    @apply list-decimal list-inside pl-2 my-2.5;
+}
+
+.MarkdownRenderer ul {
+    @apply list-disc list-inside pl-2 my-2.5;
+}
+
+.MarkdownRenderer pre {
+    @apply p-4 bg-secondary break-words rounded-md my-4 whitespace-break-spaces text-sm border;
+}
+
+.MarkdownRenderer .document-link {
+    @apply p-4 border rounded block my-2 font-medium text-xs bg-gray-50 hover:bg-gray-100/50 transition-colors;
+}

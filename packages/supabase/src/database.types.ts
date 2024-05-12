@@ -34,49 +34,6 @@ export type Database = {
   }
   public: {
     Tables: {
-      account_credits: {
-        Row: {
-          account_id: string
-          created_at: string
-          credits: number
-          id: number
-        }
-        Insert: {
-          account_id: string
-          created_at?: string
-          credits?: number
-          id?: number
-        }
-        Update: {
-          account_id?: string
-          created_at?: string
-          credits?: number
-          id?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "account_credits_account_id_fkey"
-            columns: ["account_id"]
-            isOneToOne: false
-            referencedRelation: "accounts"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "account_credits_account_id_fkey"
-            columns: ["account_id"]
-            isOneToOne: false
-            referencedRelation: "user_account_workspace"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "account_credits_account_id_fkey"
-            columns: ["account_id"]
-            isOneToOne: false
-            referencedRelation: "user_accounts"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       accounts: {
         Row: {
           created_at: string | null
@@ -224,123 +181,6 @@ export type Database = {
           },
         ]
       }
-      avatars_generations: {
-        Row: {
-          account_id: string
-          created_at: string
-          id: number
-          model_id: number
-          name: string
-          prompt: string
-          status: Database["public"]["Enums"]["generation_status"]
-          uuid: string
-        }
-        Insert: {
-          account_id: string
-          created_at?: string
-          id?: number
-          model_id: number
-          name: string
-          prompt: string
-          status?: Database["public"]["Enums"]["generation_status"]
-          uuid?: string
-        }
-        Update: {
-          account_id?: string
-          created_at?: string
-          id?: number
-          model_id?: number
-          name?: string
-          prompt?: string
-          status?: Database["public"]["Enums"]["generation_status"]
-          uuid?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "avatars_generations_account_id_fkey"
-            columns: ["account_id"]
-            isOneToOne: false
-            referencedRelation: "accounts"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "avatars_generations_account_id_fkey"
-            columns: ["account_id"]
-            isOneToOne: false
-            referencedRelation: "user_account_workspace"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "avatars_generations_account_id_fkey"
-            columns: ["account_id"]
-            isOneToOne: false
-            referencedRelation: "user_accounts"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "avatars_generations_model_id_fkey"
-            columns: ["model_id"]
-            isOneToOne: false
-            referencedRelation: "avatars_models"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      avatars_models: {
-        Row: {
-          account_id: string
-          created_at: string
-          id: number
-          model: string
-          name: string
-          reference_id: string
-          status: Database["public"]["Enums"]["generation_status"]
-          uuid: string
-        }
-        Insert: {
-          account_id: string
-          created_at?: string
-          id?: number
-          model: string
-          name: string
-          reference_id: string
-          status?: Database["public"]["Enums"]["generation_status"]
-          uuid?: string
-        }
-        Update: {
-          account_id?: string
-          created_at?: string
-          id?: number
-          model?: string
-          name?: string
-          reference_id?: string
-          status?: Database["public"]["Enums"]["generation_status"]
-          uuid?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "avatars_models_account_id_fkey"
-            columns: ["account_id"]
-            isOneToOne: false
-            referencedRelation: "accounts"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "avatars_models_account_id_fkey"
-            columns: ["account_id"]
-            isOneToOne: false
-            referencedRelation: "user_account_workspace"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "avatars_models_account_id_fkey"
-            columns: ["account_id"]
-            isOneToOne: false
-            referencedRelation: "user_accounts"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       billing_customers: {
         Row: {
           account_id: string
@@ -387,6 +227,61 @@ export type Database = {
           },
         ]
       }
+      chatbots: {
+        Row: {
+          account_id: string
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+          settings: Json
+          site_name: string
+          url: string
+        }
+        Insert: {
+          account_id: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+          settings?: Json
+          site_name: string
+          url: string
+        }
+        Update: {
+          account_id?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          settings?: Json
+          site_name?: string
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chatbots_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "chatbots_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "user_account_workspace"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "chatbots_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "user_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       config: {
         Row: {
           billing_provider: Database["public"]["Enums"]["billing_provider"]
@@ -405,6 +300,94 @@ export type Database = {
           enable_account_billing?: boolean
           enable_team_account_billing?: boolean
           enable_team_accounts?: boolean
+        }
+        Relationships: []
+      }
+      conversations: {
+        Row: {
+          chatbot_id: string
+          created_at: string
+          id: string
+          reference_id: string
+          user_email: string | null
+        }
+        Insert: {
+          chatbot_id: string
+          created_at?: string
+          id?: string
+          reference_id: string
+          user_email?: string | null
+        }
+        Update: {
+          chatbot_id?: string
+          created_at?: string
+          id?: string
+          reference_id?: string
+          user_email?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversations_chatbot_id_fkey"
+            columns: ["chatbot_id"]
+            isOneToOne: false
+            referencedRelation: "chatbots"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      documents: {
+        Row: {
+          chatbot_id: string
+          context: string
+          created_at: string
+          id: string
+          title: string
+        }
+        Insert: {
+          chatbot_id: string
+          context: string
+          created_at?: string
+          id?: string
+          title: string
+        }
+        Update: {
+          chatbot_id?: string
+          context?: string
+          created_at?: string
+          id?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "documents_chatbot_id_fkey"
+            columns: ["chatbot_id"]
+            isOneToOne: false
+            referencedRelation: "chatbots"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      documents_embeddings: {
+        Row: {
+          content: string
+          created_at: string
+          embedding: string | null
+          id: string
+          metadata: Json
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          embedding?: string | null
+          id?: string
+          metadata?: Json
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          embedding?: string | null
+          id?: string
+          metadata?: Json
         }
         Relationships: []
       }
@@ -477,6 +460,119 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "roles"
             referencedColumns: ["name"]
+          },
+        ]
+      }
+      jobs: {
+        Row: {
+          account_id: string
+          chatbot_id: string
+          completed_at: string | null
+          created_at: string
+          id: number
+          status: Database["public"]["Enums"]["jobs_status"]
+          tasks_completed_count: number
+          tasks_count: number
+          tasks_succeeded_count: number
+          updated_at: string
+        }
+        Insert: {
+          account_id: string
+          chatbot_id: string
+          completed_at?: string | null
+          created_at?: string
+          id?: never
+          status?: Database["public"]["Enums"]["jobs_status"]
+          tasks_completed_count?: number
+          tasks_count?: number
+          tasks_succeeded_count?: number
+          updated_at?: string
+        }
+        Update: {
+          account_id?: string
+          chatbot_id?: string
+          completed_at?: string | null
+          created_at?: string
+          id?: never
+          status?: Database["public"]["Enums"]["jobs_status"]
+          tasks_completed_count?: number
+          tasks_count?: number
+          tasks_succeeded_count?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "jobs_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "jobs_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "user_account_workspace"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "jobs_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "user_accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "jobs_chatbot_id_fkey"
+            columns: ["chatbot_id"]
+            isOneToOne: false
+            referencedRelation: "chatbots"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      messages: {
+        Row: {
+          chatbot_id: string
+          conversation_id: string
+          created_at: string
+          id: number
+          sender: Database["public"]["Enums"]["sender"]
+          text: string
+          type: Database["public"]["Enums"]["message_type"]
+        }
+        Insert: {
+          chatbot_id: string
+          conversation_id: string
+          created_at?: string
+          id?: number
+          sender: Database["public"]["Enums"]["sender"]
+          text: string
+          type: Database["public"]["Enums"]["message_type"]
+        }
+        Update: {
+          chatbot_id?: string
+          conversation_id?: string
+          created_at?: string
+          id?: number
+          sender?: Database["public"]["Enums"]["sender"]
+          text?: string
+          type?: Database["public"]["Enums"]["message_type"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_chatbot_id_fkey"
+            columns: ["chatbot_id"]
+            isOneToOne: false
+            referencedRelation: "chatbots"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -643,6 +739,30 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      plans: {
+        Row: {
+          max_chatbots: number
+          max_documents: number
+          max_messages: number
+          name: string
+          variant_id: string
+        }
+        Insert: {
+          max_chatbots: number
+          max_documents: number
+          max_messages: number
+          name: string
+          variant_id: string
+        }
+        Update: {
+          max_chatbots?: number
+          max_documents?: number
+          max_messages?: number
+          name?: string
+          variant_id?: string
+        }
+        Relationships: []
       }
       role_permissions: {
         Row: {
@@ -822,7 +942,6 @@ export type Database = {
           id: string | null
           name: string | null
           picture_url: string | null
-          public_data: Json | null
           subscription_status:
             | Database["public"]["Enums"]["subscription_status"]
             | null
@@ -870,9 +989,22 @@ export type Database = {
         }
         Returns: boolean
       }
-      can_generate: {
+      can_create_chatbot: {
         Args: {
-          credits_cost: number
+          target_account_id: string
+        }
+        Returns: boolean
+      }
+      can_index_documents: {
+        Args: {
+          target_account_id: string
+          requested_documents: number
+        }
+        Returns: boolean
+      }
+      can_respond_to_message: {
+        Args: {
+          target_chatbot_id: string
         }
         Returns: boolean
       }
@@ -952,6 +1084,20 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: Json
       }
+      get_current_subscription_details: {
+        Args: {
+          target_account_id: string
+        }
+        Returns: {
+          period_starts_at: string
+          period_ends_at: string
+          variant_id: string
+          interval_count: number
+          max_documents: number
+          max_messages: number
+          max_chatbots: number
+        }[]
+      }
       get_upper_system_role: {
         Args: Record<PropertyKey, never>
         Returns: string
@@ -982,6 +1128,12 @@ export type Database = {
         Args: {
           account_id: string
           account_role?: string
+        }
+        Returns: boolean
+      }
+      has_role_on_chatbot: {
+        Args: {
+          chatbot_id: string
         }
         Returns: boolean
       }
@@ -1018,12 +1170,18 @@ export type Database = {
         }
         Returns: boolean
       }
-      reduce_credits: {
+      match_documents: {
         Args: {
-          target_account_id: string
-          credits_cost: number
+          query_embedding: string
+          match_count?: number
+          filter?: Json
         }
-        Returns: undefined
+        Returns: {
+          id: string
+          content: string
+          metadata: Json
+          similarity: number
+        }[]
       }
       team_account_workspace: {
         Args: {
@@ -1113,10 +1271,12 @@ export type Database = {
         | "members.manage"
         | "invites.manage"
       billing_provider: "stripe" | "lemon-squeezy" | "paddle"
-      generation_status: "pending" | "success" | "failed"
+      jobs_status: "pending" | "running" | "completed" | "failed"
+      message_type: "ai" | "db" | "user"
       notification_channel: "in_app" | "email"
       notification_type: "info" | "warning" | "error"
       payment_status: "pending" | "succeeded" | "failed"
+      sender: "user" | "assistant"
       subscription_item_type: "flat" | "per_seat" | "metered"
       subscription_status:
         | "active"

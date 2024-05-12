@@ -1,0 +1,54 @@
+{
+  "name": "@kit/chatbot-widget",
+  "private": true,
+  "version": "0.1.0",
+  "exports": {
+    ".": "./index.ts"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "src/*"
+      ]
+    }
+  },
+  "license": "MIT",
+  "scripts": {
+    "clean": "rm -rf .turbo node_modules",
+    "lint": "eslint .",
+    "format": "prettier --check \"**/*.{mjs,ts,md,json}\"",
+    "typecheck": "tsc --noEmit",
+    "build:widget": "rollup -c ./rollup.config.mjs",
+    "build:widget:production": "rollup -c ./rollup.config.mjs --environment=production",
+    "serve:widget": "npx http-server dist --cors -p 9099"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@kit/eslint-config": "workspace:*",
+    "@kit/prettier-config": "workspace:*",
+    "@kit/tsconfig": "workspace:*",
+    "eslint": "^8.57.0",
+    "prettier": "^3.2.5",
+    "typescript": "^5.4.5",
+    "@babel/preset-react": "7.23.3",
+    "rollup": "^4.9.6",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "rollup-plugin-tsconfig-paths": "^1.5.2",
+    "@rollup/plugin-babel": "^6.0.4",
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-replace": "^5.0.5",
+    "@rollup/plugin-terser": "latest",
+    "dotenv": "^16.3.1",
+    "rollup-plugin-inject-process-env": "latest",
+    "rollup-plugin-polyfill-node": "^0.13.0",
+    "rollup-plugin-postcss": "latest",
+    "rollup-plugin-visualizer": "latest"
+  },
+  "eslintConfig": {
+    "extends": [
+      "@kit/eslint-config/base"
+    ]
+  },
+  "prettier": "@kit/prettier-config"
+}

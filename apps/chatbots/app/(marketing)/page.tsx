@@ -41,11 +41,9 @@ function Home() {
 
             <div className={'flex flex-col items-center space-y-8'}>
               <HeroTitle>
-                <span>The SaaS Starter Kit</span>
+                <span>AI Support Chatbots</span>
 
-                <span>
-                  <span>for ambitious developers</span>
-                </span>
+                <span>for your business</span>
               </HeroTitle>
 
               <div className={'flex flex-col'}>

@@ -1,4 +1,9 @@
-import { CreditCard, LayoutDashboard, Settings, Users } from 'lucide-react';
+import {
+  CreditCard,
+  LucideMessagesSquare,
+  Settings,
+  Users,
+} from 'lucide-react';
 
 import { NavigationConfigSchema } from '@kit/ui/navigation-schema';
 
@@ -9,10 +14,18 @@ const iconClasses = 'w-4';
 
 const getRoutes = (account: string) => [
   {
-    label: 'common:dashboardTabLabel',
-    path: pathsConfig.app.accountHome.replace('[account]', account),
-    Icon: <LayoutDashboard className={iconClasses} />,
-    end: true,
+    label: 'Chatbots',
+    collapsible: false,
+    children: [
+      {
+        label: 'Chatbots',
+        path:
+          pathsConfig.app.accountHome.replace('[account]', account) +
+          '/chatbots',
+        Icon: <LucideMessagesSquare className={iconClasses} />,
+        end: true,
+      },
+    ],
   },
   {
     label: 'common:settingsTabLabel',
