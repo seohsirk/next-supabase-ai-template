@@ -32,7 +32,7 @@ async function ChatbotLayout(
   };
 
   return (
-    <div className={'flex h-full flex-col space-y-8'}>
+    <div className={'flex h-full flex-col space-y-4'}>
       <div>
         <PageHeader
           title={
@@ -61,7 +61,7 @@ async function ChatbotLayout(
           </div>
         </PageHeader>
 
-        <div className={'px-4'}>
+        <div className={'px-4 border-b pb-2.5'}>
           <BorderedNavigationMenu>
             <BorderedNavigationMenuItem
               {...{

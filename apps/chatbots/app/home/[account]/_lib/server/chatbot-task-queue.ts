@@ -142,6 +142,7 @@ class ChatbotTaskQueue {
     );
 
     const { QStashTaskQueue } = await import('@makerkit/qstash');
+    const url = process.env.QSTASH_URL;
 
     const queue = new QStashTaskQueue<{
       chatbotId: string;
@@ -149,7 +150,7 @@ class ChatbotTaskQueue {
       delay: number;
       links: string[];
     }>({
-      url: process.env.QSTASH_URL,
+      url,
     });
 
     // for each job, we delay it by {ChatbotTaskQueue.DELAY_BETWEEN_JOBS_MS} ms
@@ -188,6 +189,7 @@ class ChatbotTaskQueue {
         jobId: job.data.id,
         numberOfJobs: results.length,
         numberOfJobsStarted: jobsStarted.length,
+        url,
       },
       `Finalized job creation`,
     );

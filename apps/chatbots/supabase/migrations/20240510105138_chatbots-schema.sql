@@ -418,23 +418,11 @@ begin
     from public.chatbots
     where public.chatbots.id = target_chatbot_id;
 
-    -- select the subscription period
-    select period_starts_at, period_ends_at, interval_count, max_messages
-    into period_start, period_end, subscription_interval, max_messages_quota
-    from public.get_current_subscription_details(target_account_id);
-
     -- select the number of messages sent in the current period
-    select messages_count from public.account_usage
-    where public.account_usage.account_id = target_account_id into messages_sent
-    for update;
+    select messages_quota from public.account_usage
+    where public.account_usage.account_id = target_account_id into messages_sent;
 
-    -- If no subscription is found, then the user is on the free plan
-    -- and the quota is 200 messages per month
-    if max_messages_quota is null then
-      return messages_count < 100;
-    end if;
-
-    return max_messages_quota > messages_sent;
+    return messages_sent > 0;
 end; $$
 language plpgsql;
 
