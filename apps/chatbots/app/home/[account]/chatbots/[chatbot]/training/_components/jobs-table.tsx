@@ -97,7 +97,7 @@ function useColumns() {
     {
       header: t('tasksCompleted'),
       id: 'completedTasks',
-      accessorKey: 'tasksCompleted',
+      accessorKey: 'tasksCompletedCount',
     },
     {
       header: t('tasksTotal'),

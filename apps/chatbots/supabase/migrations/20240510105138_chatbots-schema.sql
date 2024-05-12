@@ -378,13 +378,13 @@ begin
     -- select the subscription period
     select period_starts_at, period_ends_at, interval_count, max_messages
     into period_start, period_end, subscription_interval, max_messages_quota
-    from get_current_subscription_details(target_account_id);
+    from public.get_current_subscription_details(target_account_id);
 
     -- If no subscription is found, then the user is on the free plan
     -- and the quota is 200 messages per month
-    if stripe_price_id is null then
-        select count (*) from messages
-        where chatbot = messages.chatbot_id
+    if max_messages_quota is null then
+        select count (*) from public.messages
+        where target_chatbot_id = messages.chatbot_id
         and messages.type = 'ai'
         and created_at >= date_trunc('month', current_date - interval '1 month')
         and created_at < date_trunc('month', current_date)

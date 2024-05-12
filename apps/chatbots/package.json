@@ -50,6 +50,8 @@
     "@kit/supabase": "workspace:^",
     "@kit/team-accounts": "workspace:^",
     "@kit/ui": "workspace:^",
+    "@langchain/community": "^0.0.55",
+    "@langchain/openai": "0.0.28",
     "@makerkit/data-loader-supabase-core": "^0.0.7",
     "@makerkit/data-loader-supabase-nextjs": "^1.2.2",
     "@makerkit/qstash": "^0.0.1",

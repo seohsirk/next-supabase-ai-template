@@ -19,4 +19,8 @@ class JobsService {
   ) {
     return this.client.from('jobs').update(params).match({ id: jobId });
   }
+
+  insertJob(params: Database['public']['Tables']['jobs']['Insert']) {
+    return this.client.from('jobs').insert(params);
+  }
 }

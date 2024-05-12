@@ -5,23 +5,20 @@ import { useEffect, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import { useQuery } from '@tanstack/react-query';
-import { EllipsisVerticalIcon } from 'lucide-react';
 
 import { useSupabase } from '@kit/supabase/hooks/use-supabase';
 import { Alert, AlertDescription, AlertTitle } from '@kit/ui/alert';
-import { Dialog, DialogTitle } from '@kit/ui/dialog';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@kit/ui/dropdown-menu';
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@kit/ui/dialog';
 import { If } from '@kit/ui/if';
 import { Spinner } from '@kit/ui/spinner';
 import { Trans } from '@kit/ui/trans';
 
 import { MarkdownRenderer } from '~/components/markdown-renderer';
-import { DeleteDocumentModal } from '~/home/[account]/chatbots/[chatbot]/_components/delete-document-modal';
 
 export function DocumentDialog() {
   const params = useSearchParams();
@@ -50,10 +47,12 @@ export function DocumentDialog() {
         }
       }}
     >
-      <DocumentContent
-        documentId={docId}
-        onBeforeDelete={() => setDocId(null)}
-      />
+      <DialogContent>
+        <DocumentContent
+          documentId={docId}
+          onBeforeDelete={() => setDocId(null)}
+        />
+      </DialogContent>
     </Dialog>
   );
 }
@@ -78,6 +77,8 @@ function DocumentContent(props: {
     );
   }
 
+  console.log(data);
+
   return (
     <>
       <If condition={isLoading}>
@@ -92,33 +93,14 @@ function DocumentContent(props: {
 
       <If condition={data}>
         {(doc) => (
-          <div className={'flex w-full flex-col space-y-6 divide-y'}>
+          <div className={'flex w-full flex-col space-y-4 divide-y'}>
             <div className={'flex w-full items-center justify-between'}>
-              <DialogTitle>{doc.title}</DialogTitle>
-
-              <DropdownMenu>
-                <DropdownMenuTrigger>
-                  <EllipsisVerticalIcon className={'w-5'} />
-                </DropdownMenuTrigger>
-
-                <DropdownMenuContent collisionPadding={{ right: 20 }}>
-                  <DeleteDocumentModal
-                    onBeforeDelete={props.onBeforeDelete}
-                    documentId={doc.id}
-                  >
-                    <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                      <Trans i18nKey={'chatbot:deleteDocument'} />
-                    </DropdownMenuItem>
-                  </DeleteDocumentModal>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <DialogHeader>
+                <DialogTitle>{doc.title}</DialogTitle>
+              </DialogHeader>
             </div>
 
-            <div
-              className={
-                'absolute top-10 -m-6 h-full w-full overflow-y-auto p-6 pb-36'
-              }
-            >
+            <div className={'max-h-[50vh] overflow-auto'}>
               <MarkdownRenderer>{doc.content}</MarkdownRenderer>
             </div>
           </div>

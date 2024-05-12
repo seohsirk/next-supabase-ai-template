@@ -1,19 +1,15 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 
-import {
-  BaseCallbackHandler,
-  ConsoleCallbackHandler,
-} from 'langchain/callbacks';
-import { ChatOpenAI } from 'langchain/chat_models/openai';
-import { Document as LangchanDocument } from 'langchain/document';
-import { OpenAIEmbeddings } from 'langchain/embeddings/openai';
-import { PromptTemplate } from 'langchain/prompts';
+import { BaseCallbackHandler } from '@langchain/core/callbacks/base';
+import { StringOutputParser } from '@langchain/core/output_parsers';
+import { LLMResult } from '@langchain/core/outputs';
+import { PromptTemplate } from '@langchain/core/prompts';
+import { RunnableSequence } from '@langchain/core/runnables';
+import { ConsoleCallbackHandler } from '@langchain/core/tracers/console';
+import { ChatOpenAI, OpenAIEmbeddings } from '@langchain/openai';
 import { ContextualCompressionRetriever } from 'langchain/retrievers/contextual_compression';
 import { DocumentCompressorPipeline } from 'langchain/retrievers/document_compressors';
 import { EmbeddingsFilter } from 'langchain/retrievers/document_compressors/embeddings_filter';
-import { LLMResult } from 'langchain/schema';
-import { StringOutputParser } from 'langchain/schema/output_parser';
-import { RunnableSequence } from 'langchain/schema/runnable';
 
 import { getLogger } from '@kit/shared/logger';
 
@@ -148,8 +144,11 @@ async function crateChain(params: {
   const { model, questionPrompt, client, chatbotId } = params;
   const retriever = await getVectorStoreRetriever(client, chatbotId);
 
-  const serializeDocs = (docs: LangchanDocument[]) =>
-    docs.map((doc) => doc.pageContent).join('\n\n');
+  const serializeDocs = (
+    docs: Array<{
+      pageContent: string;
+    }>,
+  ) => docs.map((doc) => doc.pageContent).join('\n\n');
 
   return RunnableSequence.from([
     {

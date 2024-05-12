@@ -59,6 +59,7 @@ export function ChatbotContainer(props: ChatBotProps) {
     isLoading,
   } = useChat({
     api: NEXT_PUBLIC_CHATBOT_API_URL,
+    streamMode: 'text',
     initialMessages: chatBotMessagesStore.loadMessages(
       props.storageKey,
       props.siteName,

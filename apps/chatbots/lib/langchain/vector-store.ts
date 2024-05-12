@@ -1,7 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 
-import { OpenAIEmbeddings } from 'langchain/embeddings/openai';
-import { SupabaseVectorStore } from 'langchain/vectorstores/supabase';
+import { SupabaseVectorStore } from '@langchain/community/vectorstores/supabase';
+import { OpenAIEmbeddings } from '@langchain/openai';
 
 import { Database } from '~/lib/database.types';
 

@@ -54,12 +54,13 @@ export const POST = async (req: NextRequest) => {
 
 async function handler(req: NextRequest) {
   const logger = await getLogger();
-  const body = getBodySchema().parse(await req.json());
-
+  const json = await req.json();
   logger.info(`Request authenticated. Validating body...`);
 
   const retriesHeader = req.headers.get('Upstash-Retries');
   const retries = retriesHeader ? parseInt(retriesHeader) : 0;
+
+  const body = getBodySchema().parse(json);
 
   logger.info(
     {
@@ -96,6 +97,8 @@ async function handler(req: NextRequest) {
     `Crawling links...`,
   );
 
+  const service = createDocumentsService(supabase);
+
   const requests = body.links.map((url) => {
     return async () => {
       async function fetchPage() {
@@ -122,8 +125,6 @@ async function handler(req: NextRequest) {
         const { content, title } = await fetchPage();
         const hash = sha256(content);
 
-        const service = createDocumentsService(supabase);
-
         // we try avoid indexing the embedding twice
         // by looking the same hash in the DB
         const existingDocument = await service.getDocumentByHash({
@@ -131,7 +132,13 @@ async function handler(req: NextRequest) {
           chatbotId: body.chatbotId,
         });
 
-        if (existingDocument) {
+        if (existingDocument.data) {
+          logger.info({
+            title,
+            hash,
+            chatbotId: body.chatbotId,
+          }, `Document already indexed. Skipping...`);
+
           return {
             success: false,
           };
@@ -235,7 +242,7 @@ async function handler(req: NextRequest) {
       successfulTasks,
       erroredTasks,
     },
-    `Crawling links done.`,
+    `Finished crawling`
   );
 
   logger.info(`Updating job ${body.jobId}...`);

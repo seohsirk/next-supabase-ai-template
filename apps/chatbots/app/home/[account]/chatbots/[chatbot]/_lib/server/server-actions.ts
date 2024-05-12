@@ -11,6 +11,7 @@ import { getLogger } from '@kit/shared/logger';
 import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
 
 import { ChatbotSettings } from '~/components/chatbot/lib/types';
+import { createChatbotTasksQueue } from '~/home/[account]/_lib/server/chatbot-task-queue';
 import { CreateChatbotFormSchema } from '~/home/[account]/chatbots/[chatbot]/_lib/schema/create-chatbot.schema';
 import { DesignChatbotSchema } from '~/home/[account]/chatbots/[chatbot]/_lib/schema/design-chatbot.schema';
 import { UpdateChatbotSchema } from '~/home/[account]/chatbots/[chatbot]/_lib/schema/update-chatbot.schema';
@@ -79,20 +80,17 @@ export const getSitemapLinksAction = enhanceAction(
 
 export const createChatbotCrawlingJobAction = enhanceAction(
   async (body: { chatbotId: string; filters: SitemapFilters }) => {
-    const { QStashTaskQueue } = await import('@makerkit/qstash');
-    const path = headers().get('x-action-path');
+    const queue = createChatbotTasksQueue();
+    const client = getSupabaseServerActionClient<Database>();
 
-    const queue = new QStashTaskQueue<typeof body>({
-      url: process.env.CHATBOTS_TASK_QUEUE_URL,
-    });
-
-    await queue.create({
-      body,
+    await queue.createJob(client, {
+      chatbotId: body.chatbotId,
+      filters: body.filters,
     });
 
     revalidatePath(`/home/[account]/chatbots/[chatbot]/training`, `page`);
 
-    redirect(`${path}/chatbots/${body.chatbotId}/training`);
+    redirect(`training`);
   },
   {},
 );

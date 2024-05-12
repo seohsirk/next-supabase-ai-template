@@ -294,7 +294,13 @@ function AnalyzeWebsiteSitemapStep(
         />
       </div>
 
-      <div className={'flex flex-col space-y-2'}>
+      <div className={'flex justify-end space-x-2'}>
+        <div>
+          <Button variant={'outline'} type={'button'} onClick={props.onBack}>
+            <Trans i18nKey={'common:goBack'} />
+          </Button>
+        </div>
+
         <div>
           <If condition={numberOfFilteredPages > 0}>
             <If
@@ -306,12 +312,6 @@ function AnalyzeWebsiteSitemapStep(
               </Button>
             </If>
           </If>
-        </div>
-
-        <div>
-          <Button variant={'outline'} type={'button'} onClick={props.onBack}>
-            <Trans i18nKey={'common:goBack'} />
-          </Button>
         </div>
       </div>
     </div>

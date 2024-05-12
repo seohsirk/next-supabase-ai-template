@@ -1,21 +1,27 @@
 import { NextRequest } from 'next/server';
 
+
+
 import { SupabaseClient } from '@supabase/supabase-js';
 
+
+
 import { StreamingTextResponse } from 'ai';
-import isBot from 'isbot';
+import { isbot } from 'isbot';
 import { z } from 'zod';
+
+
 
 import { getLogger } from '@kit/shared/logger';
 import { getSupabaseRouteHandlerClient } from '@kit/supabase/route-handler-client';
 
+
+
 import appConfig from '~/config/app.config';
 import { Database } from '~/lib/database.types';
-import {
-  generateReplyFromChain,
-  insertConversationMessages,
-} from '~/lib/langchain/langchain';
+import { generateReplyFromChain, insertConversationMessages } from '~/lib/langchain/langchain';
 import { getVectorStore } from '~/lib/langchain/vector-store';
+
 
 const CONVERSATION_ID_STORAGE_KEY = getConversationIdHeaderName();
 const isProduction = appConfig.production;
@@ -50,7 +56,7 @@ export function handleChatBotRequest({
     const logger = await getLogger();
     const userAgent = req.headers.get('user-agent');
 
-    if (isBot.isbot(userAgent)) {
+    if (isbot(userAgent)) {
       return new Response(`No chatbot for you!`, {
         status: 403,
       });
@@ -103,9 +109,22 @@ export function handleChatBotRequest({
       admin: true,
     });
 
-    const canGenerateAIResponse = await client.rpc('can_respond_to_message', {
-      target_chatbot_id: chatbotId,
-    });
+    const canGenerateAIResponse = await client.rpc(
+      'can_respond_to_message',
+      {
+        target_chatbot_id: chatbotId,
+      },
+    );
+
+    if (canGenerateAIResponse.error) {
+      logger.error(
+        {
+          error: canGenerateAIResponse.error,
+          chatbotId,
+        },
+        `Error checking if AI can respond to message.`,
+      );
+    }
 
     // if it's the first message we insert a new conversation
     if (conversationReferenceId) {

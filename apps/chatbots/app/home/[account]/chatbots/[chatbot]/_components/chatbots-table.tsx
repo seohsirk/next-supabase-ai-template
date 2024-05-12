@@ -3,6 +3,7 @@
 import { useMemo } from 'react';
 
 import Link from 'next/link';
+import { useParams } from 'next/navigation';
 
 import { ColumnDef } from '@tanstack/react-table';
 import { useTranslation } from 'react-i18next';
@@ -27,11 +28,15 @@ export function ChatbotsTable(
 
 function useGetColumns() {
   const { t } = useTranslation('chatbot');
+  const account = useParams().account;
 
-  return useMemo(() => getColumns(t), [t]);
+  return useMemo(() => getColumns(account, t), [t]);
 }
 
-function getColumns(t: (key: string) => string): ColumnDef<{
+function getColumns(
+  account: string,
+  t: (key: string) => string,
+): ColumnDef<{
   id: string;
   name: string;
   created_at: string;
@@ -42,7 +47,9 @@ function getColumns(t: (key: string) => string): ColumnDef<{
       header: t('name'),
       cell: ({ row }) => {
         return (
-          <Link href={`chatbots/${row.original.id}`}>{row.original.name}</Link>
+          <Link href={`${account}/chatbots/${row.original.id}`}>
+            {row.original.name}
+          </Link>
         );
       },
     },
@@ -55,9 +62,11 @@ function getColumns(t: (key: string) => string): ColumnDef<{
       id: 'actions',
       header: '',
       cell: ({ row }) => {
-        return <div className={'flex justify-end px-4'}>
-          <ChatbotItemDropdown chatbotId={row.original.id} />
-        </div>
+        return (
+          <div className={'flex justify-end px-4'}>
+            <ChatbotItemDropdown chatbotId={row.original.id} />
+          </div>
+        );
       },
     },
   ];

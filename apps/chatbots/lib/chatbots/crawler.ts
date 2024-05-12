@@ -3,6 +3,7 @@ export default class Crawler {
     const { default: getSitemapLinks } = await import('get-sitemap-links');
 
     const sitemapUrl = this.getSitemapUrl(url);
+
     return getSitemapLinks(sitemapUrl);
   }
 
