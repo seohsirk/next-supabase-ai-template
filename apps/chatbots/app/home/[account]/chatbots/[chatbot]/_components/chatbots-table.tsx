@@ -28,7 +28,7 @@ export function ChatbotsTable(
 
 function useGetColumns() {
   const { t } = useTranslation('chatbot');
-  const account = useParams().account;
+  const account = useParams().account as string;
 
   return useMemo(() => getColumns(account, t), [t]);
 }

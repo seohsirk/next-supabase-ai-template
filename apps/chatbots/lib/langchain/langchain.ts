@@ -214,7 +214,7 @@ class StreamEndCallbackHandler extends BaseCallbackHandler {
       return;
     }
 
-    const response = await insertConversationMessages({
+    await insertConversationMessages({
       client: this.client,
       chatbotId: this.chatbotId,
       conversationReferenceId: this.conversationReferenceId,
@@ -222,24 +222,13 @@ class StreamEndCallbackHandler extends BaseCallbackHandler {
       text,
     });
 
-    if (response.error) {
-      logger.error(
-        {
-          chatbotId: this.chatbotId,
-          conversationReferenceId: this.conversationReferenceId,
-          error: response.error,
-        },
-        `Error inserting messages.`,
-      );
-    } else {
-      logger.info(
-        {
-          chatbotId: this.chatbotId,
-          conversationReferenceId: this.conversationReferenceId,
-        },
-        `Successfully inserted messages.`,
-      );
-    }
+    logger.info(
+      {
+        chatbotId: this.chatbotId,
+        conversationReferenceId: this.conversationReferenceId,
+      },
+      `Successfully inserted messages.`,
+    );
   }
 }
 
@@ -267,9 +256,7 @@ export async function insertConversationMessages(params: {
       `Conversation not found. Can't insert messages.`,
     );
 
-    return {
-      error: new Error(`Conversation not found. Can't insert messages.`),
-    };
+    throw new Error(`Conversation not found. Can't insert messages.`);
   }
 
   const { error } = await table.insert([
