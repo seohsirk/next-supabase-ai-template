@@ -49,7 +49,7 @@ async function ChatbotsPage({ params, searchParams }: ChatbotsPageProps) {
           accountId={accountId}
           canCreateChatbot={canCreateChatbot}
         >
-          <Button size={'sm'} variant={'outline'}>
+          <Button>
             <PlusCircleIcon className={'mr-2 w-4'} />
 
             <span>Add Chatbot</span>
@@ -96,7 +96,7 @@ function EmptyState({ accountId }: { accountId: string }) {
             <Trans i18nKey={'chatbot:chatbotsEmptyStateHeading'} />
           </Heading>
 
-          <Heading level={3} className={'text-muted-foreground font-medium'}>
+          <Heading level={3} className={'font-medium text-muted-foreground'}>
             <Trans i18nKey={'chatbot:chatbotsEmptyStateSubheading'} />
           </Heading>
         </div>

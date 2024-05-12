@@ -37,21 +37,21 @@ function JobStatusBadge({ status }: { status: Jobs['status'] }) {
   switch (status) {
     case 'failed':
       return (
-        <Badge className={'inline-flex'} color={'error'}>
+        <Badge className={'inline-flex'} variant={'destructive'}>
           <Trans i18nKey={'chatbot:jobFailed'} />
         </Badge>
       );
 
     case 'completed':
       return (
-        <Badge className={'inline-flex'} color={'success'}>
+        <Badge className={'inline-flex'} variant={'success'}>
           <Trans i18nKey={'chatbot:jobCompleted'} />
         </Badge>
       );
 
     case 'pending':
       return (
-        <Badge className={'inline-flex'}>
+        <Badge className={'inline-flex'} variant="outline">
           <Trans i18nKey={'chatbot:jobInProgress'} />
         </Badge>
       );

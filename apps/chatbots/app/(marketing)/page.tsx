@@ -35,9 +35,7 @@ function Home() {
               'flex w-full flex-1 flex-col items-center space-y-8 xl:space-y-12 2xl:space-y-14'
             }
           >
-            <Pill>
-              <span>The leading SaaS Starter Kit for ambitious developers</span>
-            </Pill>
+            <Pill>AI Chatbots that don&apos;t suck</Pill>
 
             <div className={'flex flex-col items-center space-y-8'}>
               <HeroTitle>
@@ -53,7 +51,7 @@ function Home() {
                     'p-0 text-center font-sans text-2xl font-normal text-muted-foreground'
                   }
                 >
-                  <span>Build and launch a SaaS in days, not months</span>
+                  <span>Innovative AI Chatbots for your business</span>
                 </Heading>
 
                 <Heading
@@ -62,7 +60,7 @@ function Home() {
                     'p-0 text-center font-sans text-2xl font-normal text-muted-foreground'
                   }
                 >
-                  <span>Focus on your business, not on the tech</span>
+                  <span>that will help you grow and scale</span>
                 </Heading>
 
                 <Heading
@@ -71,7 +69,7 @@ function Home() {
                     'p-0 text-center font-sans text-2xl font-normal text-muted-foreground'
                   }
                 >
-                  Ship something great, today.
+                  <span>your business to new heights</span>
                 </Heading>
               </div>
 
@@ -96,154 +94,6 @@ function Home() {
             src={`/images/dashboard-demo.webp`}
             alt={`App Image`}
           />
-        </div>
-      </div>
-
-      <div className={'container mx-auto'}>
-        <div
-          className={
-            'flex flex-col items-center justify-center space-y-8 py-8 xl:space-y-16 xl:py-16'
-          }
-        >
-          <div
-            className={
-              'flex max-w-3xl flex-col items-center space-y-8 text-center'
-            }
-          >
-            <Pill>
-              <span>A modern, scalable, and secure SaaS Starter Kit</span>
-            </Pill>
-
-            <div className={'flex flex-col space-y-2'}>
-              <Heading level={1}>The best tool in the space</Heading>
-
-              <Heading
-                level={2}
-                className={'font-sans font-normal text-muted-foreground'}
-              >
-                Unbeatable Features and Benefits for Your SaaS Business
-              </Heading>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className={'container mx-auto'}>
-        <div
-          className={'flex flex-col space-y-16 xl:space-y-32 2xl:space-y-36'}
-        >
-          <FeatureShowcaseContainer>
-            <FeatureContainer>
-              <div className={'flex flex-col space-y-6'}>
-                <IconContainer className={'bg-green-50 dark:bg-green-500/10'}>
-                  <Lock className={'h-5 text-green-500'} />
-                </IconContainer>
-
-                <div className={'flex flex-col'}>
-                  <Heading level={2}>Authentication</Heading>
-
-                  <Heading
-                    level={3}
-                    className={'font-sans font-normal text-muted-foreground'}
-                  >
-                    Secure and Easy-to-Use Authentication for Your SaaS Website
-                    and API
-                  </Heading>
-                </div>
-              </div>
-
-              <div>
-                Our authentication system is built on top of the
-                industry-leading PaaS such as Supabase and Firebase. It is
-                secure, easy-to-use, and fully customizable. It supports
-                email/password, social logins, and more.
-              </div>
-            </FeatureContainer>
-
-            <FeatureContainer>
-              <Image
-                className="rounded-2xl"
-                src={'/images/sign-in.webp'}
-                width={'1760'}
-                height={'1680'}
-                alt={'Sign In'}
-              />
-            </FeatureContainer>
-          </FeatureShowcaseContainer>
-
-          <FeatureShowcaseContainer>
-            <FeatureContainer reverse>
-              <Image
-                className="rounded-2xl"
-                src={'/images/dashboard.webp'}
-                width={'2004'}
-                height={'1410'}
-                alt={'Dashboard'}
-              />
-            </FeatureContainer>
-
-            <FeatureContainer>
-              <div className={'flex flex-col space-y-6'}>
-                <IconContainer className={'bg-indigo-50 dark:bg-indigo-500/10'}>
-                  <LayoutDashboard className={'h-5 text-indigo-500'} />
-                </IconContainer>
-
-                <div className={'flex flex-col'}>
-                  <Heading level={2}>Dashboard</Heading>
-
-                  <Heading
-                    level={3}
-                    className={'font-sans font-normal text-muted-foreground'}
-                  >
-                    A fantastic dashboard to manage your SaaS business
-                  </Heading>
-                </div>
-              </div>
-
-              <div>
-                Our dashboard offers an overview of your SaaS business. It shows
-                at a glance all you need to know about your business. It is
-                fully customizable and extendable.
-              </div>
-            </FeatureContainer>
-          </FeatureShowcaseContainer>
-
-          <FeatureShowcaseContainer>
-            <FeatureContainer>
-              <div className={'flex flex-col space-y-6'}>
-                <IconContainer className={'bg-blue-50 dark:bg-blue-500/10'}>
-                  <CreditCard className={'h-5 text-blue-500'} />
-                </IconContainer>
-
-                <div className={'flex flex-col'}>
-                  <Heading level={2}>Billing</Heading>
-
-                  <Heading
-                    level={3}
-                    className={'font-sans font-normal text-muted-foreground'}
-                  >
-                    A powerful billing system for your SaaS business
-                  </Heading>
-                </div>
-              </div>
-
-              <div>
-                Powerful billing system that supports multiple payment gateways
-                such as Stripe, Lemon Squeezy and Paddle. Fully customizable and
-                easy to use.
-              </div>
-            </FeatureContainer>
-
-            <FeatureContainer>
-              <Image
-                className="rounded-2xl"
-                src={'/images/billing.webp'}
-                width={'1916'}
-                height={'1392'}
-                alt={'Billing'}
-              />
-            </FeatureContainer>
-          </FeatureShowcaseContainer>
         </div>
       </div>
 

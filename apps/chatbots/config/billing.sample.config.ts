@@ -24,55 +24,17 @@ export default createBillingSchema({
       badge: `Value`,
       plans: [
         {
-          name: 'Starter Monthly',
-          id: 'starter-monthly',
+          name: 'Free',
+          id: 'free',
+          custom: true,
+          label: 'Free',
+          buttonLabel: 'Get started with the free plan',
           paymentType: 'recurring',
           interval: 'month',
-          lineItems: [
-            {
-              id: 'price_1NNwYHI1i3VnbZTqI2UzaHIe',
-              name: 'Addon 2',
-              cost: 9.99,
-              type: 'flat' as const,
-            },
-            {
-              id: 'price_1P8N0zI1i3VnbZTqtUPc1Zvr',
-              name: 'Addon 3',
-              cost: 0,
-              type: 'per_seat' as const,
-              tiers: [
-                {
-                  upTo: 1,
-                  cost: 0,
-                },
-                {
-                  upTo: 5,
-                  cost: 4,
-                },
-                {
-                  upTo: 'unlimited',
-                  cost: 3,
-                },
-              ],
-            },
-          ],
-        },
-        {
-          name: 'Starter Yearly',
-          id: 'starter-yearly',
-          paymentType: 'recurring',
-          interval: 'year',
-          lineItems: [
-            {
-              id: 'starter-yearly',
-              name: 'Base',
-              cost: 99.99,
-              type: 'flat' as const,
-            },
-          ],
+          lineItems: [],
         },
       ],
-      features: ['Feature 1', 'Feature 2', 'Feature 3'],
+      features: [`Up to 100 messages`, `Up to 5 documents`],
     },
     {
       id: 'pro',
@@ -96,28 +58,8 @@ export default createBillingSchema({
             },
           ],
         },
-        {
-          name: 'Pro Yearly',
-          id: 'pro-yearly',
-          paymentType: 'recurring',
-          interval: 'year',
-          lineItems: [
-            {
-              id: 'price_pro_yearly',
-              name: 'Base',
-              cost: 199.99,
-              type: 'flat',
-            },
-          ],
-        },
       ],
-      features: [
-        'Feature 1',
-        'Feature 2',
-        'Feature 3',
-        'Feature 4',
-        'Feature 5',
-      ],
+      features: ['Up to 1000 messages', 'Up to 50 documents'],
     },
     {
       id: 'enterprise',
@@ -139,30 +81,8 @@ export default createBillingSchema({
             },
           ],
         },
-        {
-          name: 'Enterprise Yearly',
-          id: 'enterprise-yearly',
-          paymentType: 'recurring',
-          interval: 'year',
-          lineItems: [
-            {
-              id: 'price_enterprise_yearly',
-              name: 'Base',
-              cost: 299.99,
-              type: 'flat',
-            },
-          ],
-        },
       ],
-      features: [
-        'Feature 1',
-        'Feature 2',
-        'Feature 3',
-        'Feature 4',
-        'Feature 5',
-        'Feature 6',
-        'Feature 7',
-      ],
+      features: ['Unlimited messages', 'Unlimited documents'],
     },
   ],
 });

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { ArrowLeftIcon, EditIcon } from 'lucide-react';
+import { EditIcon } from 'lucide-react';
 
 import {
   BorderedNavigationMenu,
@@ -38,12 +38,16 @@ async function ChatbotLayout(
           title={
             <span className={'flex space-x-2'}>
               <span>
-                <Link className={'hover:underline'} href={'../../'}>Chatbots</Link>
+                <Link className={'hover:underline'} href={'../../'}>
+                  Chatbots
+                </Link>
               </span>
 
               <span>/</span>
 
-              <span className={'text-muted-foreground font-medium'}>{chatbot.name}</span>
+              <span className={'font-medium text-muted-foreground'}>
+                {chatbot.name}
+              </span>
             </span>
           }
           description={'Manage your chatbot'}
@@ -61,7 +65,7 @@ async function ChatbotLayout(
           </div>
         </PageHeader>
 
-        <div className={'px-4 border-b pb-2.5'}>
+        <div className={'border-b px-4 pb-2.5'}>
           <BorderedNavigationMenu>
             <BorderedNavigationMenuItem
               {...{

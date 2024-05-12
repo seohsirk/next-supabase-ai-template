@@ -19,10 +19,9 @@ const getRoutes = (account: string) => [
     children: [
       {
         label: 'Chatbots',
-        path:
-          pathsConfig.app.accountHome.replace('[account]', account),
+        path: pathsConfig.app.accountHome.replace('[account]', account),
         Icon: <LucideMessagesSquare className={iconClasses} />,
-        end: true,
+        end: (path: string) => !path.includes('/chatbots'),
       },
     ],
   },

@@ -47,7 +47,7 @@ function getColumns(
       header: t('name'),
       cell: ({ row }) => {
         return (
-          <Link href={`${account}/chatbots/${row.original.id}`}>
+          <Link href={`${account}/chatbots/${row.original.id}/documents`}>
             {row.original.name}
           </Link>
         );
