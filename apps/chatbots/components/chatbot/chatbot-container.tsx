@@ -15,7 +15,7 @@ import {
 } from '@kit/ui/tooltip';
 import { cn } from '@kit/ui/utils';
 
-import { MarkdownRenderer } from '~/components/markdown-renderer';
+import { MarkdownRenderer } from '../markdown-renderer';
 
 import { ChatbotBubble } from './chatbot-bubble';
 import { ChatbotContext } from './chatbot-context';
@@ -44,7 +44,7 @@ type ChatBotProps = React.PropsWithChildren<{
 
 export function ChatbotContainer(props: ChatBotProps) {
   const { state, onOpenChange, onLoadingChange } = useContext(ChatbotContext);
-  const scrollingDiv = useRef<HTMLDivElement | undefined>();
+  const scrollingDiv = useRef<HTMLDivElement | undefined | null>();
   const scrollToBottom = useScrollToBottom(scrollingDiv);
   const [error, setError] = useState<string | undefined>(undefined);
 
@@ -111,7 +111,7 @@ export function ChatbotContainer(props: ChatBotProps) {
             />
 
             <div
-              ref={scrollingDiv}
+              ref={div => scrollingDiv.current = div}
               className={'flex flex-1 flex-col overflow-y-auto'}
             >
               <ChatBotMessages
@@ -465,7 +465,7 @@ function useShouldDisplayHelpButtons(messages: Message[]) {
 }
 
 function useScrollToBottom(
-  scrollingDiv: React.MutableRefObject<HTMLDivElement | undefined>,
+  scrollingDiv: React.MutableRefObject<HTMLDivElement | undefined | null>,
 ) {
   return useCallback(
     ({ smooth } = { smooth: false }) => {

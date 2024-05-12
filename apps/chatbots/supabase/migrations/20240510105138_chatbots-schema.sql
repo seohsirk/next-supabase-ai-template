@@ -146,7 +146,8 @@ alter table public.documents_embeddings enable row level security;
 create table if not exists public.documents (
   id uuid primary key default gen_random_uuid(),
   title text not null,
-  context text not null,
+  content text not null,
+  hash text not null,
   chatbot_id uuid not null references public.chatbots on delete cascade,
   created_at timestamptz default now() not null
 );

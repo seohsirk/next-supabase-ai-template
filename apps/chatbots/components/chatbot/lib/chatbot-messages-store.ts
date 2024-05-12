@@ -2,8 +2,8 @@ import { Message } from 'ai';
 
 import { isBrowser } from '@kit/shared/utils';
 
-import { ChatBotMessageRole } from '~/components/chatbot/lib/message-role.enum';
-import appConfig from '~/config/app.config';
+import { ChatBotMessageRole } from '../lib/message-role.enum';
+import appConfig from '../../../config/app.config';
 
 const LOCAL_STORAGE_KEY = createLocalStorageKey();
 

@@ -61,6 +61,20 @@ class ChatbotsService {
     }
   }
 
+  async getChatbotSettings(chatbotId: string) {
+    const { data, error } = await this.client
+      .from('chatbots')
+      .select('settings, siteName: site_name')
+      .eq('id', chatbotId)
+      .single();
+
+    if (error) {
+      throw error;
+    }
+
+    return data;
+  }
+
   async updateChatbotSettings(
     chatbotId: string,
     settings: ChatbotTable['Update']['settings'],

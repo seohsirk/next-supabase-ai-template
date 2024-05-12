@@ -1,5 +1,6 @@
 import { useReducer } from 'react';
-import { ChatbotSettings } from '~/components/chatbot/lib/types';
+
+import { ChatbotSettings } from '../lib/types';
 
 export enum ChatBotActionTypes {
   SET_IS_OPEN = 'SET_IS_OPEN',
@@ -28,7 +29,11 @@ type SetSettingsAction = {
   payload: Partial<ChatbotSettings>;
 };
 
-type Actions = SetIsOpenAction | SetIsLoadingAction | SetIsDisabledAction | SetSettingsAction;
+type Actions =
+  | SetIsOpenAction
+  | SetIsLoadingAction
+  | SetIsDisabledAction
+  | SetSettingsAction;
 
 const settings: ChatbotSettings = {
   title: 'Chat with us',
@@ -36,9 +41,9 @@ const settings: ChatbotSettings = {
   branding: {
     primaryColor: '#0a0a0a',
     accentColor: '#0a0a0a',
-    textColor: '#fff'
+    textColor: '#fff',
   },
-}
+};
 
 const initialState = {
   isOpen: false,

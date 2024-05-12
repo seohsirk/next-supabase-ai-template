@@ -338,22 +338,25 @@ export type Database = {
       documents: {
         Row: {
           chatbot_id: string
-          context: string
+          content: string
           created_at: string
+          hash: string
           id: string
           title: string
         }
         Insert: {
           chatbot_id: string
-          context: string
+          content: string
           created_at?: string
+          hash: string
           id?: string
           title: string
         }
         Update: {
           chatbot_id?: string
-          context?: string
+          content?: string
           created_at?: string
+          hash?: string
           id?: string
           title?: string
         }

@@ -1,7 +1,6 @@
 import {
   Suspense,
   createContext,
-  lazy,
   useCallback,
   useContext,
   useEffect,
@@ -9,14 +8,11 @@ import {
 } from 'react';
 
 import { nanoid } from 'ai';
+import Chatbot from 'chatbots/components/chatbot/chatbot';
+import { ChatbotSettings } from 'chatbots/components/chatbot/lib/types';
 import { hydrateRoot } from 'react-dom/client';
 
-import { ChatbotSettings } from '~/components/chatbot/lib/types';
-import { getConversationIdHeaderName } from '~/lib/chatbots/conversion-cookie-name';
-
 import './chatbot.css';
-
-const Chatbot = lazy(() => import('~/components/chatbot/ChatBot'));
 
 const SDK_NAME = process.env.CHATBOT_SDK_NAME;
 const SETTINGS_ENDPOINT = process.env.WIDGET_SETTINGS_ENDPOINT;
@@ -27,6 +23,7 @@ const ChatbotWidgetContext = createContext<{
   setConversationId: (conversationId: string) => void;
 }>({
   conversationId: '',
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   setConversationId: () => {},
 });
 
@@ -37,7 +34,9 @@ function initializeWidget() {
   if (document.readyState !== 'loading') {
     void onReady();
   } else {
-    document.addEventListener('DOMContentLoaded', onReady);
+    document.addEventListener('DOMContentLoaded', () => {
+      void onReady();
+    });
   }
 }
 
@@ -125,7 +124,7 @@ async function fetchChatbotSettings() {
 
   const response = await fetch(url, {
     headers: {
-      [getConversationIdHeaderName()]: conversationId || '',
+      ['x-conversation-id']: conversationId ?? '',
     },
   });
 
@@ -166,7 +165,7 @@ function getCurrentScript() {
     throw new Error('Missing CHATBOT_SDK_NAME environment variable');
   }
 
-  if (currentScript && currentScript.getAttribute('src')?.includes(SDK_NAME)) {
+  if (currentScript?.getAttribute('src')?.includes(SDK_NAME)) {
     return currentScript as HTMLScriptElement;
   }
 

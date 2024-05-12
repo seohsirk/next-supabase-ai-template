@@ -5,7 +5,7 @@ import {
   useChatBotState
 } from './lib/chatbot-state.reducer';
 
-import { ChatbotSettings } from '~/components/chatbot/lib/types';
+import { ChatbotSettings } from './lib/types';
 
 interface ChatBotContextState {
   state: ReturnType<typeof useChatBotState>[0];

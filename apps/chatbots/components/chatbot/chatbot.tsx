@@ -1,7 +1,7 @@
 'use client';
 
-import { ChatBotContextProvider } from '~/components/chatbot/chatbot-context';
-import { ChatbotSettings } from '~/components/chatbot/lib/types';
+import { ChatBotContextProvider } from './chatbot-context';
+import { ChatbotSettings } from './lib/types';
 
 import { ChatbotContainer } from './chatbot-container';
 

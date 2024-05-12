@@ -4,7 +4,7 @@ import { BotMessageSquareIcon, X } from 'lucide-react';
 
 import { cn } from '@kit/ui/utils';
 
-import { ChatbotContext } from '~/components/chatbot/chatbot-context';
+import { ChatbotContext } from './chatbot-context';
 
 export function ChatbotBubble() {
   const { state, onOpenChange } = useContext(ChatbotContext);
