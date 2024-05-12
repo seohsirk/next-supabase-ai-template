@@ -20,8 +20,7 @@ const getRoutes = (account: string) => [
       {
         label: 'Chatbots',
         path:
-          pathsConfig.app.accountHome.replace('[account]', account) +
-          '/chatbots',
+          pathsConfig.app.accountHome.replace('[account]', account),
         Icon: <LucideMessagesSquare className={iconClasses} />,
         end: true,
       },

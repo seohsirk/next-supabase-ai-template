@@ -1,70 +1,136 @@
-import loadDynamic from 'next/dynamic';
+import { SupabaseClient } from '@supabase/supabase-js';
 
-import { PlusCircle } from 'lucide-react';
+import { ServerDataLoader } from '@makerkit/data-loader-supabase-nextjs';
+import { PlusCircleIcon } from 'lucide-react';
 
+import { getSupabaseServerComponentClient } from '@kit/supabase/server-component-client';
 import { Button } from '@kit/ui/button';
-import { PageBody } from '@kit/ui/page';
-import { Spinner } from '@kit/ui/spinner';
+import { Heading } from '@kit/ui/heading';
+import { PageBody, PageHeader } from '@kit/ui/page';
 import { Trans } from '@kit/ui/trans';
 
-import { createI18nServerInstance } from '~/lib/i18n/i18n.server';
+import { loadTeamWorkspace } from '~/home/[account]/_lib/server/team-account-workspace.loader';
+import { ChatbotsTable } from '~/home/[account]/chatbots/[chatbot]/_components/chatbots-table';
+import { CreateChatbotModal } from '~/home/[account]/chatbots/[chatbot]/_components/create-chatbot-modal';
+import { Database } from '~/lib/database.types';
 import { withI18n } from '~/lib/i18n/with-i18n';
 
-import { TeamAccountLayoutPageHeader } from './_components/team-account-layout-page-header';
-
-interface Params {
-  account: string;
-}
-
-const DashboardDemo = loadDynamic(
-  () => import('./_components/dashboard-demo'),
-  {
-    ssr: false,
-    loading: () => (
-      <div
-        className={
-          'flex h-full flex-1 flex-col items-center justify-center space-y-4' +
-          ' py-24'
-        }
-      >
-        <Spinner />
-
-        <div>
-          <Trans i18nKey={'common:loading'} />
-        </div>
-      </div>
-    ),
-  },
-);
-
-export const generateMetadata = async () => {
-  const i18n = await createI18nServerInstance();
-  const title = i18n.t('teams:home.pageTitle');
-
-  return {
-    title,
-  };
+export const metadata = {
+  title: 'Chatbots',
 };
 
-function TeamAccountHomePage({ params }: { params: Params }) {
+interface ChatbotsPageProps {
+  params: {
+    account: string;
+  };
+
+  searchParams: {
+    page?: string;
+  };
+}
+
+async function ChatbotsPage({ params, searchParams }: ChatbotsPageProps) {
+  const client = getSupabaseServerComponentClient();
+
+  const page = searchParams.page ? +searchParams.page : 1;
+
+  const { canCreateChatbot, accountId } = await loadData(
+    client,
+    params.account,
+  );
+
   return (
     <>
-      <TeamAccountLayoutPageHeader
-        account={params.account}
-        title={<Trans i18nKey={'common:dashboardTabLabel'} />}
-        description={<Trans i18nKey={'common:dashboardTabDescription'} />}
+      <PageHeader
+        title={<Trans i18nKey={'chatbot:chatbotsTabLabel'} />}
+        description={<Trans i18nKey={'chatbot:chatbotsTabDescription'} />}
       >
-        <Button>
-          <PlusCircle className={'mr-1 h-4'} />
-          <span>Add Widget</span>
-        </Button>
-      </TeamAccountLayoutPageHeader>
+        <CreateChatbotModal
+          accountId={accountId}
+          canCreateChatbot={canCreateChatbot}
+        >
+          <Button size={'sm'} variant={'outline'}>
+            <PlusCircleIcon className={'mr-2 w-4'} />
+
+            <span>Add Chatbot</span>
+          </Button>
+        </CreateChatbotModal>
+      </PageHeader>
 
       <PageBody>
-        <DashboardDemo />
+        <ServerDataLoader
+          client={client}
+          table={'chatbots'}
+          page={page}
+          where={{
+            account_id: {
+              eq: accountId,
+            },
+          }}
+        >
+          {(props) => {
+            if (!props.data.length && canCreateChatbot) {
+              return <EmptyState accountId={accountId} />;
+            }
+
+            return <ChatbotsTable {...props} />;
+          }}
+        </ServerDataLoader>
       </PageBody>
     </>
   );
 }
 
-export default withI18n(TeamAccountHomePage);
+export default withI18n(ChatbotsPage);
+
+function EmptyState({ accountId }: { accountId: string }) {
+  return (
+    <div className={'flex h-full w-full flex-col items-center justify-center'}>
+      <div
+        className={
+          'flex flex-col items-center justify-center space-y-8 lg:p-24'
+        }
+      >
+        <div className={'flex flex-col space-y-2'}>
+          <Heading>
+            <Trans i18nKey={'chatbot:chatbotsEmptyStateHeading'} />
+          </Heading>
+
+          <Heading level={3} className={'text-muted-foreground font-medium'}>
+            <Trans i18nKey={'chatbot:chatbotsEmptyStateSubheading'} />
+          </Heading>
+        </div>
+
+        <CreateChatbotModal accountId={accountId} canCreateChatbot={true}>
+          <Button size={'lg'}>
+            <PlusCircleIcon className={'mr-4 h-6'} />
+
+            <span>
+              <Trans i18nKey={'chatbot:chatbotsEmptyStateButton'} />
+            </span>
+          </Button>
+        </CreateChatbotModal>
+      </div>
+    </div>
+  );
+}
+
+async function loadData(client: SupabaseClient<Database>, slug: string) {
+  const { account } = await loadTeamWorkspace(slug);
+
+  const canCreateChatbot = await client
+    .rpc('can_create_chatbot', {
+      target_account_id: account.id,
+    })
+    .then((response) => {
+      if (response.error) {
+        console.error(response.error);
+
+        return false;
+      }
+
+      return response.data;
+    });
+
+  return { canCreateChatbot, accountId: account.id };
+}

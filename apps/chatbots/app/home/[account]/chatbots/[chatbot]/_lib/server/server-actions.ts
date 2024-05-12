@@ -1,6 +1,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
+import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 import { z } from 'zod';
@@ -12,6 +13,7 @@ import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-clie
 import { ChatbotSettings } from '~/components/chatbot/lib/types';
 import { CreateChatbotFormSchema } from '~/home/[account]/chatbots/[chatbot]/_lib/schema/create-chatbot.schema';
 import { DesignChatbotSchema } from '~/home/[account]/chatbots/[chatbot]/_lib/schema/design-chatbot.schema';
+import { UpdateChatbotSchema } from '~/home/[account]/chatbots/[chatbot]/_lib/schema/update-chatbot.schema';
 import { createChatbotsService } from '~/home/[account]/chatbots/_lib/server/chatbots-service';
 import { Database } from '~/lib/database.types';
 
@@ -24,14 +26,16 @@ export const createChatbotAction = enhanceAction(
   async (data) => {
     const client = getSupabaseServerActionClient<Database>();
     const service = createChatbotsService(client);
+    const path = headers().get('x-action-path');
 
     const chatbot = await service.insertChatbot({
-      ...data,
       site_name: data.siteName,
       account_id: data.accountId,
+      url: data.url,
+      name: data.name,
     });
 
-    redirect(`chatbots/${chatbot.id}/documents`);
+    redirect(`${path}/chatbots/${chatbot.id}/documents`);
   },
   {
     schema: CreateChatbotFormSchema,
@@ -76,6 +80,7 @@ export const getSitemapLinksAction = enhanceAction(
 export const createChatbotCrawlingJobAction = enhanceAction(
   async (body: { chatbotId: string; filters: SitemapFilters }) => {
     const { QStashTaskQueue } = await import('@makerkit/qstash');
+    const path = headers().get('x-action-path');
 
     const queue = new QStashTaskQueue<typeof body>({
       url: process.env.CHATBOTS_TASK_QUEUE_URL,
@@ -87,7 +92,7 @@ export const createChatbotCrawlingJobAction = enhanceAction(
 
     revalidatePath(`/home/[account]/chatbots/[chatbot]/training`, `page`);
 
-    return redirect(`training`);
+    redirect(`${path}/chatbots/${body.chatbotId}/training`);
   },
   {},
 );
@@ -129,6 +134,10 @@ export const deleteDocumentAction = enhanceAction(async (data: FormData) => {
   );
 
   revalidatePath(`/home/[account]/chatbots/[chatbot]/documents`, `page`);
+
+  return {
+    success: true,
+  };
 }, {});
 
 export const saveChatbotSettingsAction = async (
@@ -192,3 +201,21 @@ export const saveChatbotSettingsAction = async (
     success: true,
   };
 };
+
+export const updateChatbotAction = enhanceAction(
+  async (data: z.infer<typeof UpdateChatbotSchema>) => {
+    const client = getSupabaseServerActionClient();
+    const service = createChatbotsService(client);
+
+    const { error } = await service.updateChatbot(data);
+
+    revalidatePath(`/home/[account]/chatbots/[chatbot]`, 'layout');
+
+    return {
+      success: !error,
+    };
+  },
+  {
+    schema: UpdateChatbotSchema,
+  },
+);
