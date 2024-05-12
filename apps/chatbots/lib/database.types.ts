@@ -34,6 +34,49 @@ export type Database = {
   }
   public: {
     Tables: {
+      account_usage: {
+        Row: {
+          account_id: string
+          documents_quota: number
+          id: string
+          messages_quota: number
+        }
+        Insert: {
+          account_id: string
+          documents_quota?: number
+          id?: string
+          messages_quota?: number
+        }
+        Update: {
+          account_id?: string
+          documents_quota?: number
+          id?: string
+          messages_quota?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "account_usage_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "account_usage_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "user_account_workspace"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "account_usage_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "user_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       accounts: {
         Row: {
           created_at: string | null
@@ -1185,6 +1228,19 @@ export type Database = {
           metadata: Json
           similarity: number
         }[]
+      }
+      reduce_documents_quota: {
+        Args: {
+          target_account_id: string
+          docs_count: number
+        }
+        Returns: undefined
+      }
+      reduce_messages_quota: {
+        Args: {
+          target_chatbot_id: string
+        }
+        Returns: undefined
       }
       team_account_workspace: {
         Args: {

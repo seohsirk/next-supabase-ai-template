@@ -34,18 +34,21 @@ async function ChatbotLayout(
   return (
     <div className={'flex h-full flex-col space-y-8'}>
       <div>
-        <PageHeader title={chatbot.name} description={chatbot.description}>
+        <PageHeader
+          title={
+            <span className={'flex space-x-2'}>
+              <span>
+                <Link className={'hover:underline'} href={'../../'}>Chatbots</Link>
+              </span>
+
+              <span>/</span>
+
+              <span className={'text-muted-foreground font-medium'}>{chatbot.name}</span>
+            </span>
+          }
+          description={'Manage your chatbot'}
+        >
           <div className={'flex space-x-2'}>
-            <Button variant={'ghost'} asChild>
-              <Link href={'../'}>
-                <ArrowLeftIcon className={'mr-2 h-4'} />
-
-                <span>
-                  <Trans i18nKey={'chatbot:backToChatbotsButton'} />
-                </span>
-              </Link>
-            </Button>
-
             <EditChatDialog chatbot={chatbot}>
               <Button variant={'outline'}>
                 <EditIcon className={'mr-2 h-4'} />
@@ -61,38 +64,38 @@ async function ChatbotLayout(
         <div className={'px-4'}>
           <BorderedNavigationMenu>
             <BorderedNavigationMenuItem
-                {...{
-                  path: path('documents'),
-                  label: 'chatbot:documentsTab',
-                }}
+              {...{
+                path: path('documents'),
+                label: 'chatbot:documentsTab',
+              }}
             />
 
             <BorderedNavigationMenuItem
-                {...{
-                  path: path('training'),
-                  label: 'chatbot:trainingTab',
-                }}
+              {...{
+                path: path('training'),
+                label: 'chatbot:trainingTab',
+              }}
             />
 
             <BorderedNavigationMenuItem
-                {...{
-                  path: path('design'),
-                  label: 'chatbot:designTab',
-                }}
+              {...{
+                path: path('design'),
+                label: 'chatbot:designTab',
+              }}
             />
 
             <BorderedNavigationMenuItem
-                {...{
-                  path: path('playground'),
-                  label: 'chatbot:playgroundTab',
-                }}
+              {...{
+                path: path('playground'),
+                label: 'chatbot:playgroundTab',
+              }}
             />
 
             <BorderedNavigationMenuItem
-                {...{
-                  path: path('publish'),
-                  label: 'chatbot:publishTab',
-                }}
+              {...{
+                path: path('publish'),
+                label: 'chatbot:publishTab',
+              }}
             />
           </BorderedNavigationMenu>
         </div>

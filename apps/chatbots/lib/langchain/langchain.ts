@@ -272,7 +272,7 @@ export async function insertConversationMessages(params: {
     };
   }
 
-  return table.insert([
+  const { error } = await table.insert([
     {
       chatbot_id: params.chatbotId,
       conversation_id: conversationId,
@@ -288,6 +288,40 @@ export async function insertConversationMessages(params: {
       type: 'ai' as const,
     },
   ]);
+
+  if (error) {
+    logger.error(
+      {
+        chatbotId: params.chatbotId,
+        conversationReferenceId: params.conversationReferenceId,
+        error,
+      },
+      `Error inserting messages.`,
+    );
+  } else {
+    const response = await params.client.rpc('reduce_messages_quota', {
+      target_chatbot_id: params.chatbotId,
+    });
+
+    if (response.error) {
+      logger.error(
+        {
+          chatbotId: params.chatbotId,
+          conversationReferenceId: params.conversationReferenceId,
+          error: response.error,
+        },
+        `Error reducing messages quota.`,
+      );
+    } else {
+      logger.info(
+        {
+          chatbotId: params.chatbotId,
+          conversationReferenceId: params.conversationReferenceId,
+        },
+        `Successfully reduced messages quota.`,
+      );
+    }
+  }
 }
 
 async function getConversationIdFromReferenceId(

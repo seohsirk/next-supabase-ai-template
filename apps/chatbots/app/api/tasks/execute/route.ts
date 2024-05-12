@@ -98,6 +98,7 @@ async function handler(req: NextRequest) {
   );
 
   const service = createDocumentsService(supabase);
+  const accountId = jobResponse.data.account_id;
 
   const requests = body.links.map((url) => {
     return async () => {
@@ -144,7 +145,6 @@ async function handler(req: NextRequest) {
           };
         }
 
-        const accountId = jobResponse.data.account_id;
 
         const documentResponse = await service.insertDocument({
           title,
@@ -259,6 +259,7 @@ async function handler(req: NextRequest) {
   }
 
   const completedTasksCount = job.tasks_completed_count + processedTasks;
+
   const successfulTasksCount =
     job.tasks_succeeded_count + successfulTasks.length;
 
@@ -270,6 +271,22 @@ async function handler(req: NextRequest) {
     tasks_succeeded_count: successfulTasksCount,
     status,
   });
+
+  const docsQuotaResponse = await supabase.rpc('reduce_documents_quota', {
+    target_account_id: accountId,
+    docs_count: successfulTasks.length,
+  });
+
+  if (docsQuotaResponse.error) {
+    logger.error(
+      {
+        error: docsQuotaResponse.error,
+        accountId,
+        chatbotId: body.chatbotId,
+      },
+      `Error reducing documents quota.`,
+    );
+  }
 
   if (updateResponse.error) {
     return handleError({

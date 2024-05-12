@@ -46,6 +46,8 @@ grant select, insert, update, delete on public.chatbots to authenticated;
 -- RLS
 alter table public.chatbots enable row level security;
 
+-- Indexes
+create index ix_chatbots_account_id on public.chatbots (account_id);
 
 -- Functions
 -- public.has_role_on_chatbot
@@ -69,19 +71,19 @@ returns bool
 set search_path = ''
 as $$
 declare
-    chatbot_count bigint;
+    chatbot_count int;
     plan_variant_id text;
     quota bigint;
 begin
-    select count(*) into chatbot_count
-    from public.chatbots
-    where public.chatbots.account_id = target_account_id;
+    select count(*) from public.chatbots
+    where public.chatbots.account_id = target_account_id into chatbot_count;
 
     select variant_id, max_chatbots
     from public.get_current_subscription_details(target_account_id)
     into plan_variant_id, quota;
 
     -- If no subscription is found, then the user is on the free plan
+    -- and the quota is 1 chatbot
     if plan_variant_id is null then
         return chatbot_count < 1;
     end if;
@@ -155,6 +157,9 @@ create table if not exists public.documents (
 grant select, update, delete on public.documents to authenticated;
 grant insert, select, update, delete on public.documents to service_role;
 
+-- Indexes
+create index ix_documents_chatbot_id on public.documents (chatbot_id);
+
 -- RLS
 alter table public.documents enable row level security;
 
@@ -213,8 +218,54 @@ create table if not exists public.messages (
 
 grant select, insert, update, delete on public.messages to authenticated, service_role;
 
+-- Indexes
+create index ix_messages_chatbot_id on public.messages (chatbot_id);
+create index ix_messages_conversation_id on public.messages (conversation_id);
+
 -- RLS
 alter table public.messages enable row level security;
+
+create table if not exists public.account_usage (
+  id uuid primary key default gen_random_uuid(),
+  account_id uuid not null references public.accounts on delete cascade,
+  documents_quota int not null default 5,
+  messages_quota int not null default 100
+);
+
+grant select, update public.account_usage to authenticated;
+grant insert, update, delete on public.account_usage to service_role;
+
+-- insert usage row for accounts on creation
+create function public.handle_new_account_usage()
+returns trigger
+language plpgsql
+security definer set search_path = public
+as $$
+begin
+  insert into public.account_usage (account_id)
+  values (new.id);
+  return new;
+end;
+$$;
+
+-- trigger the function every time a user is created
+create trigger on_account_created_set_usage
+  after insert on public.accounts
+  for each row
+  when (new.is_personal_account = false)
+  execute procedure public.handle_new_account_usage();
+
+-- RLS
+alter table public.account_usage enable row level security;
+
+-- SELECT(public.account_usage)
+create policy select_account_usage
+  on public.account_usage
+  for select
+  to authenticated
+  using (
+    public.has_role_on_account(account_id)
+  );
 
 -- Table public.jobs
 create table if not exists public.jobs (
@@ -333,34 +384,26 @@ $$ language plpgsql;
 grant execute on function public.get_current_subscription_details(uuid) to authenticated, service_role;
 
 create or replace function public.can_index_documents(target_account_id uuid, requested_documents bigint)
-returns bool as $$
+returns bool
+set search_path = ''
+as $$
 declare
-    documents_quota bigint;
-    total_documents bigint;
-    plan_variant_id text;
+    remaining_documents bigint;
 begin
-    select count(*) from public.documents
-    join public.chatbots on public.chatbots.account_id = target_account_id
-    where public.chatbots.account_id = target_account_id into total_documents;
-
-    select variant_id, max_documents
-    from public.get_current_subscription_details(target_account_id)
-    into plan_variant_id, documents_quota;
-
-    -- If no subscription is found, then the user is on the free plan
-    -- and the quota is 50 documents
-    if plan_variant_id is null then
-        return requested_documents + total_documents <= 50;
-    end if;
-
-    return documents_quota >= requested_documents + total_documents;
+    return exists (
+        select 1 from public.account_usage
+        where public.account_usage.account_id = target_account_id
+        and public.account_usage.documents_quota >= requested_documents
+    );
 end; $$
 language plpgsql;
 
 grant execute on function public.can_index_documents(uuid, bigint) to authenticated, service_role;
 
 create or replace function public.can_respond_to_message(target_chatbot_id uuid)
-returns bool as $$
+returns bool
+set search_path = ''
+as $$
 declare
     period_start timestamptz;
     period_end timestamptz;
@@ -380,31 +423,46 @@ begin
     into period_start, period_end, subscription_interval, max_messages_quota
     from public.get_current_subscription_details(target_account_id);
 
+    -- select the number of messages sent in the current period
+    select messages_count from public.account_usage
+    where public.account_usage.account_id = target_account_id into messages_sent
+    for update;
+
     -- If no subscription is found, then the user is on the free plan
     -- and the quota is 200 messages per month
     if max_messages_quota is null then
-        select count (*) from public.messages
-        where target_chatbot_id = messages.chatbot_id
-        and messages.type = 'ai'
-        and created_at >= date_trunc('month', current_date - interval '1 month')
-        and created_at < date_trunc('month', current_date)
-        into messages_sent;
-
-        return messages_sent < 200;
+      return messages_count < 100;
     end if;
-
-    -- select the number of messages sent in the current period
-    select count (*) from public.messages
-    where target_chatbot_id = public.messages.chatbot_id
-    and public.messages.type = 'ai'
-    and now() between period_start
-    and period_end
-    into messages_sent;
-
-    max_messages_quota := max_messages_quota / subscription_interval;
 
     return max_messages_quota > messages_sent;
 end; $$
 language plpgsql;
 
 grant execute on function public.can_respond_to_message(uuid) to authenticated, service_role;
+
+create or replace function public.reduce_messages_quota(target_chatbot_id uuid)
+returns void
+set search_path = ''
+as $$
+begin
+    update public.account_usage
+    set messages_quota = messages_quota - 1
+    from public.chatbots
+    where public.account_usage.account_id = public.chatbots.account_id;
+end; $$
+language plpgsql;
+
+grant execute on function public.reduce_messages_quota(uuid) to service_role;
+
+create or replace function public.reduce_documents_quota(target_account_id uuid, docs_count int)
+returns void
+set search_path = ''
+as $$
+begin
+    update public.account_usage
+    set documents_quota = documents_quota - docs_count
+    where public.account_usage.account_id = target_account_id;
+end; $$
+language plpgsql;
+
+grant execute on function public.reduce_documents_quota(uuid, int) to service_role;

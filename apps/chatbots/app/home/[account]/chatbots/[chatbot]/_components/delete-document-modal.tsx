@@ -10,10 +10,12 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
+    AlertDialogCancel
 } from '@kit/ui/alert-dialog';
 import { Button } from '@kit/ui/button';
 
 import { deleteDocumentAction } from '~/home/[account]/chatbots/[chatbot]/_lib/server/server-actions';
+import {Trans} from "@kit/ui/trans";
 
 export function DeleteDocumentModal({
   documentId,
@@ -59,7 +61,11 @@ export function DeleteDocumentModal({
           <form>
             <input type="hidden" name={'documentId'} value={documentId} />
 
-            <div className={'flex justify-end'}>
+            <div className={'flex justify-end space-x-2'}>
+              <AlertDialogCancel>
+                <Trans i18nKey={'common:cancel'} />
+              </AlertDialogCancel>
+
               <Button
                 disabled={pending}
                 formAction={deleteAction}

@@ -295,24 +295,33 @@ function AnalyzeWebsiteSitemapStep(
       </div>
 
       <div className={'flex justify-end space-x-2'}>
-        <div>
-          <Button variant={'outline'} type={'button'} onClick={props.onBack}>
-            <Trans i18nKey={'common:goBack'} />
-          </Button>
-        </div>
-
-        <div>
-          <If condition={numberOfFilteredPages > 0}>
-            <If
-              condition={canCreateCrawlingJobQuery.data}
-              fallback={<WarnCannotCreateJobAlert />}
-            >
-              <Button type={'button'} onClick={props.onNext}>
-                <Trans i18nKey={'chatbot:startCrawlingButton'} />
+        <If
+          condition={numberOfFilteredPages > 0}
+          fallback={
+            <>
+              <Button
+                variant={'outline'}
+                type={'button'}
+                onClick={props.onBack}
+              >
+                <Trans i18nKey={'common:goBack'} />
               </Button>
-            </If>
+            </>
+          }
+        >
+          <If
+            condition={canCreateCrawlingJobQuery.data}
+            fallback={<WarnCannotCreateJobAlert />}
+          >
+            <Button variant={'outline'} type={'button'} onClick={props.onBack}>
+              <Trans i18nKey={'common:goBack'} />
+            </Button>
+
+            <Button type={'button'} onClick={props.onNext}>
+              <Trans i18nKey={'chatbot:startCrawlingButton'} />
+            </Button>
           </If>
-        </div>
+        </If>
       </div>
     </div>
   );
