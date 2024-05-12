@@ -3,7 +3,6 @@ import 'server-only';
 import { SupabaseClient } from '@supabase/supabase-js';
 
 import { Database } from '@kit/supabase/database';
-import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
 
 import { createBillingGatewayService } from './billing-gateway.service';
 
@@ -20,9 +19,7 @@ export async function getBillingGatewayProvider(
   return createBillingGatewayService(provider);
 }
 
-async function getBillingProvider(
-  client: ReturnType<typeof getSupabaseServerActionClient<Database>>,
-) {
+async function getBillingProvider(client: SupabaseClient<Database>) {
   const { data, error } = await client
     .from('config')
     .select('billing_provider')

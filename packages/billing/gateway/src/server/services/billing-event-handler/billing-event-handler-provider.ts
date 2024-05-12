@@ -5,8 +5,8 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import { BillingConfig } from '@kit/billing';
 import { Database } from '@kit/supabase/database';
 
+import { BillingEventHandlerFactoryService } from './billing-event-handler-factory.service';
 import { BillingEventHandlerService } from './billing-event-handler.service';
-import { BillingEventHandlerFactoryService } from './billing-gateway-factory.service';
 
 /**
  * @description This function retrieves the billing provider from the database and returns a
