@@ -11,7 +11,13 @@ import { useForm } from 'react-hook-form';
 import { useSupabase } from '@kit/supabase/hooks/use-supabase';
 import { Alert, AlertDescription, AlertTitle } from '@kit/ui/alert';
 import { Button } from '@kit/ui/button';
-import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@kit/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@kit/ui/card';
 import {
   Form,
   FormControl,
@@ -37,6 +43,7 @@ import { Stepper } from '@kit/ui/stepper';
 import { Textarea } from '@kit/ui/textarea';
 
 import { generatePicturesAction } from '~/home/(user)/avatars/generate/_lib/server/server-actions';
+import { Database } from '~/lib/database.types';
 import { SdxlPromptPreset } from '~/lib/replicate/sdxl-prompts';
 
 const CUSTOM = 'custom' as SdxlPromptPreset;
@@ -367,9 +374,7 @@ function GenerationSettingsStep({
           render={({ field }) => {
             return (
               <FormItem>
-                <FormLabel>
-                  Number of avatars
-                </FormLabel>
+                <FormLabel>Number of avatars</FormLabel>
 
                 <FormControl>
                   <Input type={'number'} {...field} />
@@ -451,7 +456,7 @@ function ModelsSelect({
 }
 
 function useFetchModels(props: { accountId: string }) {
-  const client = useSupabase();
+  const client = useSupabase<Database>();
 
   return useSupabaseQuery({
     client,

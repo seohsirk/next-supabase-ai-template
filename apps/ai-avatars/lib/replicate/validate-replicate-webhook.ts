@@ -23,7 +23,7 @@ export async function validateReplicateWebhook(req: NextRequest) {
   const secret = await fetchReplicateWebhookSecret();
 
   const signedContent = `${webhookId}.${webhookTimestamp}.${body}`;
-  const secretBytes = new Buffer(secret.split('_')[1], "base64");
+  const secretBytes = new Buffer(secret.split('_')[1]!, "base64");
 
   const computedSignature =
     createHmac('sha256', secretBytes)

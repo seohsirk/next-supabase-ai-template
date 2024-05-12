@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
     `Fetching generation...`,
   );
 
-  const client = getSupabaseRouteHandlerClient({
+  const client = getSupabaseRouteHandlerClient<Database>({
     admin: true,
   });
 
@@ -162,7 +162,7 @@ async function notifyUserOfModelCreation(params: {
 }) {
   const logger = await getLogger();
 
-  const client = getSupabaseRouteHandlerClient({
+  const client = getSupabaseRouteHandlerClient<Database>({
     admin: true,
   });
 

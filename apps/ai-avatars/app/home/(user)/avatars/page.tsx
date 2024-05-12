@@ -6,11 +6,11 @@ import { PlusCircleIcon } from 'lucide-react';
 import { getSupabaseServerComponentClient } from '@kit/supabase/server-component-client';
 import { Button } from '@kit/ui/button';
 import { PageBody } from '@kit/ui/page';
-import { Trans } from '@kit/ui/trans';
 
 import { HomeLayoutPageHeader } from '~/home/(user)/_components/home-page-header';
 import { loadUserWorkspace } from '~/home/(user)/_lib/server/load-user-workspace';
 import { AvatarsGenerationsTable } from '~/home/(user)/avatars/_components/avatars-table';
+import { Database } from '~/lib/database.types';
 import { withI18n } from '~/lib/i18n/with-i18n';
 
 export const metadata = {
@@ -26,7 +26,7 @@ async function AvatarsGenerationsPage({
 }: {
   searchParams: SearchParams;
 }) {
-  const client = getSupabaseServerComponentClient();
+  const client = getSupabaseServerComponentClient<Database>();
   const data = await loadUserWorkspace();
 
   const accountId = data.user.id;

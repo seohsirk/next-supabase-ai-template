@@ -11,6 +11,7 @@ import { getLogger } from '@kit/shared/logger';
 import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
 
 import appConfig from '~/config/app.config';
+import {Database} from "~/lib/database.types";
 
 const CreateModelSchema = z.object({
   name: z.string().min(1),
@@ -47,8 +48,9 @@ const creditsCost = process.env.CREDITS_PER_MODEL
 
 export const createNewModel = enhanceAction(
   async ({ referenceId, name: modelName, captionPrefix }, user) => {
-    const client = getSupabaseServerActionClient();
+    const client = getSupabaseServerActionClient<Database>();
     const logger = await getLogger();
+
     const name = `createNewModel`;
     const accountId = user.id;
 
@@ -120,7 +122,7 @@ export const createNewModel = enhanceAction(
         `Reducing credits for the account...`,
       );
 
-      const adminClient = getSupabaseServerActionClient({
+      const adminClient = getSupabaseServerActionClient<Database>({
         admin: true,
       });
 
@@ -306,7 +308,7 @@ function runReplicateTraining(params: {
       input: {
         input_images: params.zipUrl,
         use_face_detection_instead: true,
-        caption_prefix: params.captionPrefix || defaultCaptionPrefix,
+        caption_prefix: params.captionPrefix ?? defaultCaptionPrefix,
       },
       webhook,
       webhook_events_filter: ['completed'],

@@ -13,9 +13,9 @@ import { enhanceAction } from '@kit/next/actions';
 import { getLogger } from '@kit/shared/logger';
 import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
 
+import appConfig from '~/config/app.config';
 import { Database } from '~/lib/database.types';
 import { getSdxlPromptByPresetId } from '~/lib/replicate/sdxl-prompts';
-import appConfig from "~/config/app.config";
 
 const CreateGenerationSchema = z.object({
   name: z.string().min(1),
@@ -49,7 +49,7 @@ export const generatePicturesAction = enhanceAction(
   async (params, user) => {
     const logger = await getLogger();
     const logName = `generatePictures`;
-    const client = getSupabaseServerActionClient();
+    const client = getSupabaseServerActionClient<Database>();
 
     const replicate = new Replicate();
 
@@ -130,7 +130,7 @@ export const generatePicturesAction = enhanceAction(
     );
 
     try {
-      const adminClient = getSupabaseServerActionClient({
+      const adminClient = getSupabaseServerActionClient<Database>({
         admin: true,
       });
 

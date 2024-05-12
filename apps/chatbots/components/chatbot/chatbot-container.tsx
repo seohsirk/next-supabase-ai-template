@@ -16,7 +16,6 @@ import {
 import { cn } from '@kit/ui/utils';
 
 import { MarkdownRenderer } from '../markdown-renderer';
-
 import { ChatbotBubble } from './chatbot-bubble';
 import { ChatbotContext } from './chatbot-context';
 import { chatBotMessagesStore } from './lib/chatbot-messages-store';
@@ -44,8 +43,10 @@ type ChatBotProps = React.PropsWithChildren<{
 
 export function ChatbotContainer(props: ChatBotProps) {
   const { state, onOpenChange, onLoadingChange } = useContext(ChatbotContext);
-  const scrollingDiv = useRef<HTMLDivElement | undefined | null>();
+  const scrollingDiv = useRef<HTMLDivElement | null>(null);
+
   const scrollToBottom = useScrollToBottom(scrollingDiv);
+
   const [error, setError] = useState<string | undefined>(undefined);
 
   const {
@@ -111,7 +112,9 @@ export function ChatbotContainer(props: ChatBotProps) {
             />
 
             <div
-              ref={div => scrollingDiv.current = div}
+              ref={div => {
+                scrollingDiv.current = div;
+              }}
               className={'flex flex-1 flex-col overflow-y-auto'}
             >
               <ChatBotMessages
@@ -339,7 +342,7 @@ function ChatBotInput({
           className={
             'h-14 p-4 dark:hover:text-white dark:focus:text-white' +
             ' w-full rounded-bl-xl rounded-br-xl outline-none' +
-            ' bg-secondary resize-none border-t text-sm transition-colors' +
+            ' resize-none border-t bg-secondary text-sm transition-colors' +
             ' pr-8'
           }
           placeholder="Ask our chatbot a question..."
@@ -464,9 +467,11 @@ function useShouldDisplayHelpButtons(messages: Message[]) {
   );
 }
 
-function useScrollToBottom(
-  scrollingDiv: React.MutableRefObject<HTMLDivElement | undefined | null>,
-) {
+function useScrollToBottom<
+  ScrollingDiv extends {
+    current: HTMLDivElement | null;
+  },
+>(scrollingDiv: ScrollingDiv) {
   return useCallback(
     ({ smooth } = { smooth: false }) => {
       setTimeout(() => {

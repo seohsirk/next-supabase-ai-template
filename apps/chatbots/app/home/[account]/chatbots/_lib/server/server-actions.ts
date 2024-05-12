@@ -15,7 +15,7 @@ import { Database } from '~/lib/database.types';
 import { createChatbotsService } from '../../_lib/server/chatbots-service';
 
 export const deleteChatbotAction = enhanceAction(async (data: FormData) => {
-  const client = getSupabaseServerActionClient();
+  const client = getSupabaseServerActionClient<Database>();
   const logger = await getLogger();
 
   const chatbotId = z.string().uuid().parse(data.get('chatbotId'));

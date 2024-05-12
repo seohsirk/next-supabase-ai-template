@@ -70,6 +70,7 @@ export const getSitemapLinksAction = enhanceAction(
       numberOfFilteredPages: links.length,
     };
   },
+  {},
 );
 
 export const createChatbotCrawlingJobAction = enhanceAction(
@@ -88,6 +89,7 @@ export const createChatbotCrawlingJobAction = enhanceAction(
 
     return redirect(`training`);
   },
+  {},
 );
 
 export const deleteDocumentAction = enhanceAction(async (data: FormData) => {
@@ -127,7 +129,7 @@ export const deleteDocumentAction = enhanceAction(async (data: FormData) => {
   );
 
   revalidatePath(`/home/[account]/chatbots/[chatbot]/documents`, `page`);
-});
+}, {});
 
 export const saveChatbotSettingsAction = async (
   prevState:

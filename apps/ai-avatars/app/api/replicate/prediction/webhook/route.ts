@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
     `Replicate prediction webhook received`,
   );
 
-  const client = getSupabaseRouteHandlerClient({
+  const client = getSupabaseRouteHandlerClient<Database>({
     admin: true,
   });
 
@@ -235,7 +235,7 @@ async function notifyUserOfGenerationComplete(params: {
 }) {
   const logger = await getLogger();
 
-  const client = getSupabaseRouteHandlerClient({
+  const client = getSupabaseRouteHandlerClient<Database>({
     admin: true,
   });
 

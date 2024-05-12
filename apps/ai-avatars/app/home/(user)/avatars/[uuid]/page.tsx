@@ -17,7 +17,7 @@ interface Params {
 }
 
 async function AvatarsPage({ params }: { params: Params }) {
-  const client = getSupabaseServerComponentClient();
+  const client = getSupabaseServerComponentClient<Database>();
 
   const [{ data, error }, images] = await Promise.all([
     fetchDataFromSupabase({

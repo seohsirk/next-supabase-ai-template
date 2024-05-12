@@ -3,6 +3,7 @@ import { Alert, AlertDescription, AlertTitle } from '@kit/ui/alert';
 import { PageBody, PageHeader } from '@kit/ui/page';
 
 import { AvatarsGenerationsTable } from '~/home/(user)/avatars/_components/avatars-table';
+import { Database } from '~/lib/database.types';
 
 interface Params {
   uuid: string;
@@ -19,7 +20,7 @@ async function ModelPage({
   params: Params;
   searchParams: SearchParams;
 }) {
-  const client = getSupabaseServerComponentClient();
+  const client = getSupabaseServerComponentClient<Database>();
   const page = searchParams.page ? Number(searchParams.page) : 1;
   const pageSize = 8;
   const startOffset = (page - 1) * pageSize;

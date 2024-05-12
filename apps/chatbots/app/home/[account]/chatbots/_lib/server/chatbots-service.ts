@@ -1,6 +1,7 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 
-import { Database } from '~/lib/database.types';
+import {Database, Json} from '~/lib/database.types';
+import {ChatbotSettings} from "~/components/chatbot/lib/types";
 
 type ChatbotTable = Database['public']['Tables']['chatbots'];
 
@@ -40,25 +41,17 @@ class ChatbotsService {
   }
 
   async updateChatbot(chatbot: ChatbotTable['Update']) {
-    const { error } = await this.client
+    return this.client
       .from('chatbots')
       .update(chatbot)
       .match({ id: chatbot.id });
-
-    if (error) {
-      throw error;
-    }
   }
 
   async deleteChatbot(chatbotId: string) {
-    const { error } = await this.client
+    return this.client
       .from('chatbots')
       .delete()
       .match({ id: chatbotId });
-
-    if (error) {
-      throw error;
-    }
   }
 
   async getChatbotSettings(chatbotId: string) {
@@ -77,11 +70,11 @@ class ChatbotsService {
 
   async updateChatbotSettings(
     chatbotId: string,
-    settings: ChatbotTable['Update']['settings'],
+    settings: ChatbotSettings
   ) {
     return this.client
       .from('chatbots')
-      .update({ settings })
+      .update({ settings: settings as unknown as Json })
       .match({ id: chatbotId });
   }
 

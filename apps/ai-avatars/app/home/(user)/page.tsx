@@ -10,6 +10,7 @@ import { PageBody } from '@kit/ui/page';
 import { HomeLayoutPageHeader } from '~/home/(user)/_components/home-page-header';
 import { loadUserWorkspace } from '~/home/(user)/_lib/server/load-user-workspace';
 import { ModelsTable } from '~/home/(user)/models/_components/models-table';
+import { Database } from '~/lib/database.types';
 import { withI18n } from '~/lib/i18n/with-i18n';
 
 interface SearchParams {
@@ -17,8 +18,9 @@ interface SearchParams {
 }
 
 async function ModelsPage({ searchParams }: { searchParams: SearchParams }) {
-  const client = getSupabaseServerComponentClient();
+  const client = getSupabaseServerComponentClient<Database>();
   const data = await loadUserWorkspace();
+
   const page = searchParams.page ? Number(searchParams.page) : 1;
   const userId = data.user.id;
 
