@@ -10,9 +10,10 @@ import { Button } from '@kit/ui/button';
 import { PageBody } from '@kit/ui/page';
 import { Trans } from '@kit/ui/trans';
 
+import { HomeLayoutPageHeader } from '~/home/(user)/_components/home-page-header';
 import { loadUserWorkspace } from '~/home/(user)/_lib/server/load-user-workspace';
 import { DocumentsTable } from '~/home/(user)/documents/_components/documents-table';
-import { HomeLayoutPageHeader } from '~/home/(user)/_components/home-page-header';
+import { Database } from '~/lib/database.types';
 import { createI18nServerInstance } from '~/lib/i18n/i18n.server';
 import { withI18n } from '~/lib/i18n/with-i18n';
 
@@ -27,7 +28,7 @@ export const generateMetadata = async () => {
 
 function UserHomePage() {
   const workspace = use(loadUserWorkspace());
-  const client = getSupabaseServerComponentClient();
+  const client = getSupabaseServerComponentClient<Database>();
   const accountId = workspace.user.id;
 
   return (

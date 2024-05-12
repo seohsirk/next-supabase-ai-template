@@ -1,12 +1,15 @@
+import { useCallback } from 'react';
+
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { useSupabase } from '@kit/supabase/hooks/use-supabase';
-import {useCallback} from "react";
+
+import { Database } from '~/lib/database.types';
 
 const QUERY_KEY = ['get_remaining_tokens'];
 
 export function useFetchAvailableTokens() {
-  const client = useSupabase();
+  const client = useSupabase<Database>();
 
   return useQuery({
     queryKey: QUERY_KEY,

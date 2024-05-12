@@ -1,5 +1,7 @@
 import 'server-only';
 
+import { SupabaseClient } from '@supabase/supabase-js';
+
 import { Database } from '@kit/supabase/database';
 import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
 
@@ -11,7 +13,7 @@ import { createBillingGatewayService } from './billing-gateway.service';
  * defined in the host application.
  */
 export async function getBillingGatewayProvider(
-  client: ReturnType<typeof getSupabaseServerActionClient>,
+  client: SupabaseClient<Database>,
 ) {
   const provider = await getBillingProvider(client);
 

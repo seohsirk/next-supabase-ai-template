@@ -39,7 +39,7 @@ export async function POST(
     });
   }
 
-  const client = getSupabaseRouteHandlerClient();
+  const client = getSupabaseRouteHandlerClient<Database>();
   const auth = await requireUser(client);
 
   if (!auth.data) {
@@ -100,7 +100,7 @@ export async function POST(
     conversation = data;
   }
 
-  const adminClient = getSupabaseRouteHandlerClient({
+  const adminClient = getSupabaseRouteHandlerClient<Database>({
     admin: true,
   });
 

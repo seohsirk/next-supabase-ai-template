@@ -4,6 +4,7 @@ import { getLogger } from '@kit/shared/logger';
 import { getSupabaseRouteHandlerClient } from '@kit/supabase/route-handler-client';
 
 import billingConfig from '~/config/billing.config';
+import {Database} from "~/lib/database.types";
 
 /**
  * @description Handle the webhooks from Stripe related to checkouts
@@ -84,7 +85,7 @@ async function updateCreditsQuota(params: {
   accountId: string;
   variantId: string;
 }) {
-  const client = getSupabaseRouteHandlerClient({ admin: true });
+  const client = getSupabaseRouteHandlerClient<Database>({ admin: true });
   const { subscriptionId, accountId, variantId } = params;
   const logger = await getLogger();
 

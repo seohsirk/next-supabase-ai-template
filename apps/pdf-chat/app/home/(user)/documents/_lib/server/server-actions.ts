@@ -27,7 +27,7 @@ const DOCUMENT_CHUNK_SIZE = process.env.DOCUMENT_CHUNK_SIZE
 export const addDocumentAction = enhanceAction(
   async (params, user) => {
     const logger = await getLogger();
-    const client = getSupabaseServerActionClient();
+    const client = getSupabaseServerActionClient<Database>();
     const { path, title } = params;
 
     logger.info(params, `Uploading document...`);
@@ -92,7 +92,7 @@ export const addDocumentAction = enhanceAction(
       throw new Error(`Document is empty`);
     }
 
-    const adminClient = getSupabaseServerActionClient({
+    const adminClient = getSupabaseServerActionClient<Database>({
       admin: true,
     });
 
@@ -226,7 +226,7 @@ export const addDocumentAction = enhanceAction(
 
 export const deleteDocumentAction = enhanceAction(
   async ({ documentId }) => {
-    const client = getSupabaseServerActionClient();
+    const client = getSupabaseServerActionClient<Database>();
 
     const { error } = await client
       .from('documents')
@@ -252,7 +252,7 @@ export const deleteDocumentAction = enhanceAction(
 
 export const deleteConversationAction = enhanceAction(
   async (referenceId: string) => {
-    const client = getSupabaseServerActionClient();
+    const client = getSupabaseServerActionClient<Database>();
 
     const { error } = await client.from('conversations').delete().match({
       reference_id: referenceId,
@@ -275,7 +275,7 @@ export const deleteConversationAction = enhanceAction(
 
 export const clearConversationAction = enhanceAction(
   async (referenceId: string) => {
-    const client = getSupabaseServerActionClient();
+    const client = getSupabaseServerActionClient<Database>();
     const conversation = await getConversationByReferenceId(referenceId);
 
     const { error } = await client.from('messages').delete().match({
