@@ -51,6 +51,7 @@
     "@kit/supabase": "workspace:^",
     "@kit/team-accounts": "workspace:^",
     "@kit/ui": "workspace:^",
+    "@langchain/core": "^0.1.62",
     "@langchain/community": "^0.0.55",
     "@langchain/openai": "0.0.28",
     "@makerkit/data-loader-supabase-core": "^0.0.7",

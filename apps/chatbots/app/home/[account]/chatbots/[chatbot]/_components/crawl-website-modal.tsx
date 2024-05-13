@@ -169,7 +169,9 @@ function ConfirmWebsiteStep(
           </span>
         </Label>
 
-        <pre className={'mt-2 border bg-muted text-muted-foreground p-4 text-xs'}>
+        <pre
+          className={'mt-2 border bg-muted p-4 text-xs text-muted-foreground'}
+        >
           <code>{props.url}</code>
         </pre>
       </div>
@@ -311,7 +313,19 @@ function AnalyzeWebsiteSitemapStep(
         >
           <If
             condition={canCreateCrawlingJobQuery.data}
-            fallback={<WarnCannotCreateJobAlert />}
+            fallback={
+              <div className={'flex flex-col space-y-4'}>
+                <WarnCannotCreateJobAlert />
+
+                <Button
+                  variant={'outline'}
+                  type={'button'}
+                  onClick={props.onBack}
+                >
+                  <Trans i18nKey={'common:goBack'} />
+                </Button>
+              </div>
+            }
           >
             <Button variant={'outline'} type={'button'} onClick={props.onBack}>
               <Trans i18nKey={'common:goBack'} />

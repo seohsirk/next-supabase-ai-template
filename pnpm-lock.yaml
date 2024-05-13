@@ -293,6 +293,9 @@ importers:
       '@langchain/community':
         specifier: ^0.0.55
         version: 0.0.55(@mozilla/readability@0.5.0)(@supabase/postgrest-js@1.15.2)(@supabase/supabase-js@2.43.1)(html-to-text@9.0.5)(lodash@4.17.21)(openai@4.45.0)(ws@8.17.0)
+      '@langchain/core':
+        specifier: ^0.1.62
+        version: 0.1.62(openai@4.45.0)
       '@langchain/openai':
         specifier: 0.0.28
         version: 0.0.28
