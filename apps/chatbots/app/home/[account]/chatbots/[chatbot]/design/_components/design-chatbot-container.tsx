@@ -6,11 +6,16 @@ import { useFormState } from 'react-dom';
 
 import dynamic from 'next/dynamic';
 
+import { zodResolver } from '@hookform/resolvers/zod';
 import { HexColorPicker } from 'react-colorful';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
+import {
+  ChatbotSettings,
+  chatBotMessagesStore,
+} from '@kit/chatbot-widget/chatbot';
 import { Button } from '@kit/ui/button';
 import {
   Form,
@@ -29,16 +34,21 @@ import {
   SelectValue,
 } from '@kit/ui/select';
 
-import { chatBotMessagesStore } from '~/components/chatbot/lib/chatbot-messages-store';
-import { ChatbotSettings } from '~/components/chatbot/lib/types';
+import { DesignChatbotSchema } from '~/home/[account]/chatbots/[chatbot]/_lib/schema/design-chatbot.schema';
 
 import { saveChatbotSettingsAction } from '../../_lib/server/server-actions';
-import {zodResolver} from "@hookform/resolvers/zod";
-import {DesignChatbotSchema} from "~/home/[account]/chatbots/[chatbot]/_lib/schema/design-chatbot.schema";
 
-const ChatBot = dynamic(() => import('~/components/chatbot/chatbot'), {
-  ssr: false,
-});
+const ChatBot = dynamic(
+  () =>
+    import('@kit/chatbot-widget/chatbot').then((m) => {
+      return {
+        default: m.ChatBot,
+      };
+    }),
+  {
+    ssr: false,
+  },
+);
 
 const LOCAL_STORAGE_KEY = 'design-chatbot-messages';
 

@@ -1,9 +1,6 @@
 import { Message } from 'ai';
 
-import { isBrowser } from '@kit/shared/utils';
-
-import { ChatBotMessageRole } from '../lib/message-role.enum';
-import appConfig from '../../../config/app.config';
+import { ChatBotMessageRole } from './message-role.enum';
 
 const LOCAL_STORAGE_KEY = createLocalStorageKey();
 
@@ -17,7 +14,7 @@ export const chatBotMessagesStore = {
       },
     ];
 
-    if (!isBrowser()) {
+    if (typeof document === 'undefined') {
       return emptyMessages;
     }
 
@@ -48,8 +45,11 @@ export const chatBotMessagesStore = {
 };
 
 function createLocalStorageKey() {
-  const url = new URL(appConfig.url ?? 'http://localhost');
-  const domain = url.hostname;
+  if (typeof window === 'undefined') {
+    return 'chatbot-messages';
+  }
+
+  const domain = window.location.hostname.split('.').join('-');
 
   return `${domain}-chatbot-messages`;
 }

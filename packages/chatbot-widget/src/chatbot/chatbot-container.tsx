@@ -7,6 +7,7 @@ import { useChat } from 'ai/react';
 import { RefreshCcw, Send, X } from 'lucide-react';
 
 import { If } from '@kit/ui/if';
+import { MarkdownRenderer } from '@kit/ui/markdown-renderer';
 import {
   Tooltip,
   TooltipContent,
@@ -15,7 +16,6 @@ import {
 } from '@kit/ui/tooltip';
 import { cn } from '@kit/ui/utils';
 
-import { MarkdownRenderer } from '../markdown-renderer';
 import { ChatbotBubble } from './chatbot-bubble';
 import { ChatbotContext } from './chatbot-context';
 import { chatBotMessagesStore } from './lib/chatbot-messages-store';
@@ -113,7 +113,7 @@ export function ChatbotContainer(props: ChatBotProps) {
             />
 
             <div
-              ref={div => {
+              ref={(div) => {
                 scrollingDiv.current = div;
               }}
               className={'flex flex-1 flex-col overflow-y-auto'}
@@ -155,8 +155,6 @@ export function ChatbotContainer(props: ChatBotProps) {
   );
 }
 
-export default ChatbotContainer;
-
 function ChatBotHeader(
   props: React.PropsWithChildren<{
     onClose: () => void;
@@ -168,11 +166,10 @@ function ChatBotHeader(
   return (
     <div
       className={
-        'flex justify-between border-b px-4 py-3 md:rounded-t-xl' +
-        ' dark:border-dark-600 items-center'
+        'flex items-center justify-between border-b px-4 py-3 md:rounded-t-xl'
       }
     >
-      <div className={'flex flex-col text-foreground'}>
+      <div className={'text-foreground flex flex-col'}>
         <span className={'font-semibold'}>{state.settings.title}</span>
       </div>
 
@@ -182,7 +179,7 @@ function ChatBotHeader(
             <TooltipTrigger asChild>
               <button onClick={props.onRefresh}>
                 <RefreshCcw
-                  className={'h-4 text-foreground dark:hover:text-white'}
+                  className={'text-foreground h-4 dark:hover:text-white'}
                 />
               </button>
             </TooltipTrigger>
@@ -195,7 +192,7 @@ function ChatBotHeader(
           <Tooltip>
             <TooltipTrigger asChild>
               <button onClick={props.onClose}>
-                <X className={'h-4 text-foreground dark:hover:text-white'} />
+                <X className={'text-foreground h-4 dark:hover:text-white'} />
               </button>
             </TooltipTrigger>
 
@@ -253,10 +250,10 @@ function ChatBotMessage({ message }: { message: Message }) {
   const isUser = message.role === ChatBotMessageRole.User;
 
   const className = cn(
-    `px-2.5 py-1.5 flex space-x-2 inline-flex text-sm rounded items-center`,
+    `px-2.5 py-1.5 flex space-x-2 inline-flex text-sm rounded items-center border`,
     {
-      'bg-gray-100 dark:bg-dark-700 text-gray-900 dark:text-gray-100': isBot,
-      [`text-primary-foreground`]: isUser,
+      'bg-secondary text-secondary-foreground': isBot,
+      [`bg-background`]: isUser,
     },
   );
 
@@ -313,7 +310,6 @@ function ChatBotInput({
   handleInputChange: React.ChangeEventHandler<HTMLInputElement>;
 }>) {
   const { onLoadingChange } = useContext(ChatbotContext);
-  const { state } = useContext(ChatbotContext);
 
   const onSubmit: React.FormEventHandler<HTMLFormElement> = useCallback(
     (e) => {
@@ -341,10 +337,10 @@ function ChatBotInput({
           onChange={handleInputChange}
           name={'message'}
           className={
-            'h-14 p-4 dark:hover:text-white dark:focus:text-white' +
+            'h-14 p-4 text-muted-foreground' +
             ' w-full rounded-bl-xl rounded-br-xl outline-none' +
-            ' resize-none border-t bg-secondary text-sm transition-colors' +
-            ' pr-8'
+            ' resize-none border-t text-sm transition-colors' +
+            ' bg-background focus:text-secondary-foreground pr-8'
           }
           placeholder="Ask our chatbot a question..."
         />
@@ -354,10 +350,7 @@ function ChatBotInput({
           type={'submit'}
           className={'absolute right-4 top-4 bg-transparent'}
         >
-          <Send
-            style={{ color: state.settings.branding.primaryColor }}
-            className={'h-6'}
-          />
+          <Send className={'text-muted-foreground h-6'} />
         </button>
       </div>
     </form>
@@ -419,9 +412,8 @@ function ClickablePrompt(
       }
   >,
 ) {
-  const className = `p-1.5 rounded-md text-xs inline-flex border dark:bg-dark-800
-      text-left transition-all dark:hover:border-dark-600 dark:border-dark-700 
-      hover:bg-gray-50 dark:hover:bg-dark-700`;
+  const className = `p-1.5 rounded-md text-xs inline-flex border 
+      text-left transition-all hover:bg-muted`;
 
   if ('href' in props) {
     return (
@@ -439,12 +431,12 @@ function ClickablePrompt(
 }
 
 function BubbleAnimation() {
-  const dotClassName = `rounded-full dark:bg-dark-600 bg-gray-100 h-2.5 w-2.5`;
+  const dotClassName = `rounded-full bg-muted h-2.5 w-2.5`;
 
   return (
     <div
       className={
-        'py-4 duration-1000 ease-out animate-in slide-in-from-bottom-12'
+        'animate-in slide-in-from-bottom-12 py-4 duration-1000 ease-out'
       }
     >
       <div className={'duration-750 flex animate-bounce space-x-1'}>
@@ -505,10 +497,10 @@ function ChatbotContentContainer(
   return (
     <div
       className={cn(
-        'fixed z-50 duration-200 animate-in fade-in slide-in-from-bottom-24' +
-          ' dark:bg-dark-800 bg-white font-sans md:rounded-lg' +
+        'animate-in fade-in slide-in-from-bottom-24 fixed z-50 duration-200' +
+          ' bg-background font-sans md:rounded-lg' +
           ' h-[60vh] w-full md:w-[40vw] xl:w-[26vw]' +
-          ' dark:border-dark-700 border shadow-2xl zoom-in-90',
+          ' zoom-in-90 border shadow-2xl',
         className,
       )}
     >

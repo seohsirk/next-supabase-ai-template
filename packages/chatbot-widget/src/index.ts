@@ -1,2 +1,3 @@
 export const name = 'chatbot-widget';
-export * from './Chatbot';
+
+export * from './chatbot-widget';

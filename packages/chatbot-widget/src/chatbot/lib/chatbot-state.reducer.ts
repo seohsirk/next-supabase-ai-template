@@ -1,6 +1,6 @@
 import { useReducer } from 'react';
 
-import { ChatbotSettings } from '../lib/types';
+import { ChatbotSettings } from './types';
 
 export enum ChatBotActionTypes {
   SET_IS_OPEN = 'SET_IS_OPEN',

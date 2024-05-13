@@ -232,7 +232,7 @@ create table if not exists public.account_usage (
   messages_quota int not null default 100
 );
 
-grant select, update public.account_usage to authenticated;
+grant select, update on public.account_usage to authenticated;
 grant insert, update, delete on public.account_usage to service_role;
 
 -- insert usage row for accounts on creation

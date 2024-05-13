@@ -47,6 +47,7 @@
     "class-variance-authority": "^0.7.0",
     "date-fns": "^3.6.0",
     "eslint": "^8.57.0",
+    "markdown-to-jsx": "^7.4.7",
     "next": "14.2.3",
     "next-themes": "0.3.0",
     "prettier": "^3.2.5",
@@ -118,7 +119,8 @@
     "./language-selector": "./src/makerkit/language-selector.tsx",
     "./stepper": "./src/makerkit/stepper.tsx",
     "./cookie-banner": "./src/makerkit/cookie-banner.tsx",
-    "./card-button": "./src/makerkit/card-button.tsx"
+    "./card-button": "./src/makerkit/card-button.tsx",
+    "./markdown-renderer": "./src/makerkit/markdown-renderer/index.ts"
   },
   "typesVersions": {
     "*": {

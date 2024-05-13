@@ -169,7 +169,7 @@ function ConfirmWebsiteStep(
           </span>
         </Label>
 
-        <pre className={'dark:bg-dark-950 mt-2 border bg-gray-50 p-4 text-xs'}>
+        <pre className={'mt-2 border bg-muted text-muted-foreground p-4 text-xs'}>
           <code>{props.url}</code>
         </pre>
       </div>

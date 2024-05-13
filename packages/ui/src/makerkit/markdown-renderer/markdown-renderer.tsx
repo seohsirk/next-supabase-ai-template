@@ -2,7 +2,7 @@ import { memo } from 'react';
 
 import Markdown from 'markdown-to-jsx';
 
-import { cn } from '@kit/ui/utils';
+import { cn } from '../../utils';
 
 // @ts-ignore
 import MarkdownStyles from './markdown-renderer.module.css';

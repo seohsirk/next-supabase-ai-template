@@ -15,10 +15,9 @@ import {
   DialogTitle,
 } from '@kit/ui/dialog';
 import { If } from '@kit/ui/if';
+import { MarkdownRenderer } from '@kit/ui/markdown-renderer';
 import { Spinner } from '@kit/ui/spinner';
 import { Trans } from '@kit/ui/trans';
-
-import { MarkdownRenderer } from '~/components/markdown-renderer';
 
 export function DocumentDialog() {
   const params = useSearchParams();

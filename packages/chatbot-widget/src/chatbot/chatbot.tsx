@@ -20,7 +20,7 @@ interface ChatBotProps {
   onMessage?: (message: string) => void;
 }
 
-function ChatBot(props: ChatBotProps) {
+export function ChatBot(props: ChatBotProps) {
   const {
     defaultPrompts = [],
     isOpen = false,
@@ -48,5 +48,3 @@ function ChatBot(props: ChatBotProps) {
     </ChatBotContextProvider>
   );
 }
-
-export default ChatBot;

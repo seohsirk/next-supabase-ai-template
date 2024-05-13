@@ -1,16 +1,24 @@
 import dynamic from 'next/dynamic';
 
+import { ChatbotSettings } from '@kit/chatbot-widget/chatbot';
 import { Heading } from '@kit/ui/heading';
 import { PageBody } from '@kit/ui/page';
 import { Trans } from '@kit/ui/trans';
 
-import { ChatbotSettings } from '~/components/chatbot/lib/types';
 import { loadChatbot } from '~/home/[account]/chatbots/_lib/server/load-chatbot';
 import { withI18n } from '~/lib/i18n/with-i18n';
 
-const ChatBot = dynamic(() => import('~/components/chatbot/chatbot'), {
-  ssr: false,
-});
+const ChatBot = dynamic(
+  () =>
+    import('@kit/chatbot-widget/chatbot').then((m) => {
+      return {
+        default: m.ChatBot,
+      };
+    }),
+  {
+    ssr: false,
+  },
+);
 
 interface ChatbotPlaygroundPageParams {
   params: {

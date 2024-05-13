@@ -7,12 +7,12 @@ import {
   useState,
 } from 'react';
 
-import { nanoid } from 'ai';
-import Chatbot from 'chatbots/components/chatbot/chatbot';
-import { ChatbotSettings } from 'chatbots/components/chatbot/lib/types';
+import { nanoid } from 'nanoid';
 import { hydrateRoot } from 'react-dom/client';
 
-import './chatbot.css';
+import { ChatBot } from './chatbot';
+import { ChatbotSettings } from './chatbot';
+import './chatbot-widget.css';
 
 const SDK_NAME = process.env.CHATBOT_SDK_NAME;
 const SETTINGS_ENDPOINT = process.env.WIDGET_SETTINGS_ENDPOINT;
@@ -96,7 +96,7 @@ function ChatbotRenderer(props: {
 
   return (
     <Suspense fallback={null}>
-      <Chatbot
+      <ChatBot
         {...props}
         conversationId={conversationId}
         storageKey={storageKey}
@@ -171,7 +171,7 @@ function getCurrentScript() {
 
   return Array.from(document.scripts).find((item) => {
     return item.src.includes(SDK_NAME);
-  }) as HTMLScriptElement | undefined;
+  });
 }
 
 function injectStyle(shadowRoot: HTMLElement) {

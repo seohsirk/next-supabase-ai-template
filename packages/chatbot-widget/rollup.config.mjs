@@ -63,16 +63,18 @@ export default {
         typescript({
             tsconfig: './tsconfig.json',
         }),
-        nodeResolve({extensions: ['.tsx', '.ts', '.jsx', '.js', '.json']}),
+        nodeResolve({extensions: ['.tsx', '.ts', '.json']}),
         babel({
             babelHelpers: 'bundled',
             presets: [
-                ['@babel/preset-react', {
+                '@babel/preset-typescript',
+                [
+                    '@babel/preset-react', {
                     runtime: 'automatic',
                     'targets': '>0.1%, not dead, not op_mini all'
                 }]
             ],
-            extensions: ['.js', '.jsx', '.ts', '.tsx']
+            extensions: ['.js', '.jsx', '.ts', '.tsx'],
         }),
         postcss({
             config: {

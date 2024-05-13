@@ -1,8 +1,8 @@
+import { ChatbotSettings } from '@kit/chatbot-widget/chatbot';
 import { Heading } from '@kit/ui/heading';
 import { PageBody } from '@kit/ui/page';
 import { Trans } from '@kit/ui/trans';
 
-import { ChatbotSettings } from '~/components/chatbot/lib/types';
 import { loadChatbot } from '~/home/[account]/chatbots/_lib/server/load-chatbot';
 import { withI18n } from '~/lib/i18n/with-i18n';
 
