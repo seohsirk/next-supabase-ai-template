@@ -49,7 +49,7 @@ export function ChatBotContextProvider(
     isLoading: false,
     isOpen: props.state.isOpen,
     isDisabled: props.state.isDisabled,
-    settings: props.state.settings || initialState.settings,
+    settings: props.state.settings ?? initialState.settings,
   });
 
   const onOpenChange = (isOpen: boolean) =>

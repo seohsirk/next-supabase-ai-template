@@ -4,7 +4,7 @@ import Markdown from 'markdown-to-jsx';
 
 import { cn } from '../../utils';
 
-// @ts-ignore
+// @ts-expect-error: fails for some weird reason
 import MarkdownStyles from './markdown-renderer.module.css';
 
 const MemoizedReactMarkdown = memo(

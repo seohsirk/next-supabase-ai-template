@@ -22,7 +22,7 @@ export const chatBotMessagesStore = {
 
     try {
       if (messages) {
-        const parsed = JSON.parse(messages);
+        const parsed = (JSON.parse(messages) ?? []) as Message[];
 
         if (!parsed.length) {
           return emptyMessages;
