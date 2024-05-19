@@ -4,7 +4,8 @@ import Markdown from 'markdown-to-jsx';
 
 import { cn } from '../../utils';
 
-// @ts-expect-error: fails for some weird reason
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import MarkdownStyles from './markdown-renderer.module.css';
 
 const MemoizedReactMarkdown = memo(

@@ -15,7 +15,7 @@ const keys = getSupabaseClientKeys();
 const serviceRoleKey = getServiceRoleKey();
 
 function createServerSupabaseClient<
-  GenericSchema extends Database = Database,
+  GenericSchema = Database,
 >() {
   return createServerClient<GenericSchema>(keys.url, keys.anonKey, {
     cookies: getCookiesStrategy(),
@@ -23,7 +23,7 @@ function createServerSupabaseClient<
 }
 
 export function getSupabaseServerActionClient<
-  GenericSchema extends Database = Database,
+  GenericSchema = Database,
 >(params?: { admin: boolean }) {
   const keys = getSupabaseClientKeys();
   const admin = params?.admin ?? false;
@@ -39,7 +39,7 @@ export function getSupabaseServerActionClient<
     });
   }
 
-  return createServerSupabaseClient();
+  return createServerSupabaseClient<GenericSchema>();
 }
 
 function getCookiesStrategy() {

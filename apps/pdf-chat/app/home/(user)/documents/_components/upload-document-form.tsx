@@ -29,7 +29,9 @@ import { cn } from '@kit/ui/utils';
 
 import { addDocumentAction } from '../_lib/server/server-actions';
 
-export function UploadDocumentForm() {
+export function UploadDocumentForm(props: {
+  accountId: string;
+}) {
   const [files, setFiles] = useState<File[]>([]);
 
   const { getRootProps, getInputProps, isDragAccept, isDragReject } =
@@ -52,6 +54,7 @@ export function UploadDocumentForm() {
       >
         <AcceptedFilesConfirmation
           acceptedFiles={files}
+          accountId={props.accountId}
           onClear={() => setFiles([])}
         />
       </div>
@@ -108,13 +111,16 @@ export function UploadDocumentForm() {
 
 function AcceptedFilesConfirmation(props: {
   acceptedFiles: File[];
+  accountId: string;
   onClear: () => void;
 }) {
   const file = props.acceptedFiles[0];
   const steps = ['documents:details', 'documents:title', 'documents:confirm'];
   const [currentStep, setCurrentStep] = useState(0);
 
-  const useUploadDocumentToStorageMutation = useUploadDocumentToStorage();
+  const useUploadDocumentToStorageMutation = useUploadDocumentToStorage({
+    accountId: props.accountId,
+  });
 
   const onUpload = useCallback(
     async (title: string) => {
@@ -271,10 +277,12 @@ function DocumentTitleStep(props: {
   );
 }
 
-function useUploadDocumentToStorage() {
+function useUploadDocumentToStorage(props: {
+  accountId: string;
+}) {
   const supabase = useSupabase();
   const documentName = nanoid(24);
-  const account = usePersonalAccountData();
+  const account = usePersonalAccountData(props.accountId);
 
   const accountId = account.data?.id;
 

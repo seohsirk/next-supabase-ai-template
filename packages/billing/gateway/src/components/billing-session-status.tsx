@@ -56,6 +56,8 @@ export function BillingSessionStatus({
         <form>
           <Button
             data-test={'checkout-success-back-link'}
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             formAction={onRedirect}
           >
             <span>

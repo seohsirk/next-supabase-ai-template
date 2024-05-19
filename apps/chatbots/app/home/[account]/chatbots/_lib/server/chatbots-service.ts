@@ -1,7 +1,8 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 
-import {Database, Json} from '~/lib/database.types';
-import {ChatbotSettings} from "~/components/chatbot/lib/types";
+import { ChatbotSettings } from '@kit/chatbot-widget/chatbot';
+
+import { Database, Json } from '~/lib/database.types';
 
 type ChatbotTable = Database['public']['Tables']['chatbots'];
 
@@ -48,10 +49,7 @@ class ChatbotsService {
   }
 
   async deleteChatbot(chatbotId: string) {
-    return this.client
-      .from('chatbots')
-      .delete()
-      .match({ id: chatbotId });
+    return this.client.from('chatbots').delete().match({ id: chatbotId });
   }
 
   async getChatbotSettings(chatbotId: string) {
@@ -68,10 +66,7 @@ class ChatbotsService {
     return data;
   }
 
-  async updateChatbotSettings(
-    chatbotId: string,
-    settings: ChatbotSettings
-  ) {
+  async updateChatbotSettings(chatbotId: string, settings: ChatbotSettings) {
     return this.client
       .from('chatbots')
       .update({ settings: settings as unknown as Json })

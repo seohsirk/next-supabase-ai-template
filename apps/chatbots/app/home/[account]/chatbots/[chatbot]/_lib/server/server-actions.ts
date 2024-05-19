@@ -6,11 +6,11 @@ import { redirect } from 'next/navigation';
 
 import { z } from 'zod';
 
+import { ChatbotSettings } from '@kit/chatbot-widget/chatbot';
 import { enhanceAction } from '@kit/next/actions';
 import { getLogger } from '@kit/shared/logger';
 import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
 
-import { ChatbotSettings } from '~/components/chatbot/lib/types';
 import { createChatbotTasksQueue } from '~/home/[account]/_lib/server/chatbot-task-queue';
 import { CreateChatbotFormSchema } from '~/home/[account]/chatbots/[chatbot]/_lib/schema/create-chatbot.schema';
 import { DesignChatbotSchema } from '~/home/[account]/chatbots/[chatbot]/_lib/schema/design-chatbot.schema';
