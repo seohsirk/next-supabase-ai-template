@@ -3,7 +3,6 @@ import { memo } from 'react';
 import Markdown from 'markdown-to-jsx';
 
 import { cn } from '../../utils';
-
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import MarkdownStyles from './markdown-renderer.module.css';
@@ -20,11 +19,7 @@ export function MarkdownRenderer(
 ) {
   return (
     <MemoizedReactMarkdown
-      className={cn(
-        props.className,
-        MarkdownStyles.MarkdownRenderer,
-        `MarkdownRenderer`,
-      )}
+      className={cn(props.className, MarkdownStyles.MarkdownRenderer)}
     >
       {props.children}
     </MemoizedReactMarkdown>

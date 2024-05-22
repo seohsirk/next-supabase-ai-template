@@ -8,6 +8,7 @@ import { PageBody } from '@kit/ui/page';
 import { Trans } from '@kit/ui/trans';
 
 import { loadChatbot } from '~/home/[account]/chatbots/_lib/server/load-chatbot';
+import { Database } from '~/lib/database.types';
 import { withI18n } from '~/lib/i18n/with-i18n';
 
 import { CrawlWebsiteModal } from '../_components/crawl-website-modal';
@@ -32,7 +33,7 @@ async function ChatbotTrainingPage({
   params,
   searchParams,
 }: ChatbotTrainingPageParams) {
-  const client = getSupabaseServerComponentClient();
+  const client = getSupabaseServerComponentClient<Database>();
   const page = searchParams.page ? +searchParams.page : 1;
   const chatbot = await loadChatbot(params.chatbot);
 
@@ -124,7 +125,9 @@ function EmptyState(props: {
   return (
     <>
       <div
-        className={'flex flex-1 flex-col items-center justify-center space-y-8 py-16'}
+        className={
+          'flex flex-1 flex-col items-center justify-center space-y-8 py-16'
+        }
       >
         <div className={'flex flex-col items-center justify-center space-y-2'}>
           <Heading level={3}>

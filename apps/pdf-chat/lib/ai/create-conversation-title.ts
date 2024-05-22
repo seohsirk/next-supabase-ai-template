@@ -36,7 +36,9 @@ export async function createConversationTitle(question: string) {
 
     return cleanTitle(title);
   } catch (error) {
-    console.error(`Failed to generate title using AI: ${JSON.stringify(error)}`);
+    console.error(
+      `Failed to generate title using AI: ${JSON.stringify(error)}`,
+    );
 
     return FALLBACK_TITLE;
   }

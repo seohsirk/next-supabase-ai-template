@@ -10,18 +10,20 @@ export function getEmbeddingsModel() {
  * Good for production.
  */
 function getOpenAIEmbeddingsModel() {
-  const data = z.object({
-    openAIApiKey: z.string().min(1),
-    baseURL: z.string().min(1).optional(),
-  }).parse({
-    openAIApiKey: process.env.LLM_API_KEY,
-    baseURL: process.env.LLM_BASE_URL,
-  });
+  const data = z
+    .object({
+      openAIApiKey: z.string().min(1),
+      baseURL: z.string().min(1).optional(),
+    })
+    .parse({
+      openAIApiKey: process.env.LLM_API_KEY,
+      baseURL: process.env.LLM_BASE_URL,
+    });
 
   return new OpenAIEmbeddings({
     openAIApiKey: data.openAIApiKey,
     configuration: {
-      baseURL: data.baseURL
-    }
+      baseURL: data.baseURL,
+    },
   });
 }

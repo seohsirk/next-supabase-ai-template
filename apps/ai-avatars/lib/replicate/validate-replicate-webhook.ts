@@ -1,7 +1,9 @@
 import { NextRequest } from 'next/server';
+
 import { createHmac } from 'crypto';
 
-const REPLICATE_WEBHOOK_SECRET_URL = 'https://api.replicate.com/v1/webhooks/default/secret';
+const REPLICATE_WEBHOOK_SECRET_URL =
+  'https://api.replicate.com/v1/webhooks/default/secret';
 const REPLICATE_API_TOKEN = process.env.REPLICATE_API_TOKEN;
 
 if (!REPLICATE_API_TOKEN) {
@@ -23,15 +25,18 @@ export async function validateReplicateWebhook(req: NextRequest) {
   const secret = await fetchReplicateWebhookSecret();
 
   const signedContent = `${webhookId}.${webhookTimestamp}.${body}`;
-  const secretBytes = new Buffer(secret.split('_')[1]!, "base64");
+  const secretBytes = new Buffer(secret.split('_')[1]!, 'base64');
 
-  const computedSignature =
-    createHmac('sha256', secretBytes)
-      .update(signedContent)
-      .digest('base64');
+  const computedSignature = createHmac('sha256', secretBytes)
+    .update(signedContent)
+    .digest('base64');
 
-  const expectedSignatures = signature.split(' ').map(sig => sig.split(',')[1]);
-  const isValid = expectedSignatures.some(expectedSignature => expectedSignature === computedSignature);
+  const expectedSignatures = signature
+    .split(' ')
+    .map((sig) => sig.split(',')[1]);
+  const isValid = expectedSignatures.some(
+    (expectedSignature) => expectedSignature === computedSignature,
+  );
 
   if (!isValid) {
     throw new Error('Invalid signature');

@@ -25,6 +25,8 @@ import { Spinner } from '@kit/ui/spinner';
 import { Stepper } from '@kit/ui/stepper';
 import { Trans } from '@kit/ui/trans';
 
+import { Database } from '~/lib/database.types';
+
 import {
   createChatbotCrawlingJobAction,
   getSitemapLinksAction,
@@ -483,7 +485,7 @@ function useCanCreateCrawlingJob(
   accountId: string,
   requestedDocuments: number,
 ) {
-  const supabase = useSupabase();
+  const supabase = useSupabase<Database>();
   const queryKey = ['can-create-crawling-job', requestedDocuments, accountId];
 
   return useQuery({

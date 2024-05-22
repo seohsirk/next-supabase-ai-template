@@ -30,7 +30,7 @@ interface ChatbotsPageProps {
 }
 
 async function ChatbotsPage({ params, searchParams }: ChatbotsPageProps) {
-  const client = getSupabaseServerComponentClient();
+  const client = getSupabaseServerComponentClient<Database>();
 
   const page = searchParams.page ? +searchParams.page : 1;
 

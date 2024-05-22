@@ -17,9 +17,7 @@ export function ChatbotItemDropdown(
 ) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger
-        onClick={(event) => event.stopPropagation()}
-      >
+      <DropdownMenuTrigger onClick={(event) => event.stopPropagation()}>
         <EllipsisVerticalIcon className={'w-4'} />
       </DropdownMenuTrigger>
 

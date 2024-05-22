@@ -14,6 +14,8 @@ import { Heading } from '@kit/ui/heading';
 import { If } from '@kit/ui/if';
 import { cn } from '@kit/ui/utils';
 
+import { Database } from '~/lib/database.types';
+
 import { useRevalidateAvailableTokens } from '../../_lib/hooks/use-fetch-remaining-tokens';
 import { getConversationByReferenceId } from '../../_lib/server/server-actions';
 import { ChatTextField } from './chat-text-field';
@@ -284,7 +286,7 @@ function useConversationMessages(
         name: string;
       },
 ) {
-  const client = useSupabase();
+  const client = useSupabase<Database>();
 
   const queryFn = async () => {
     if (!conversation) {

@@ -13,6 +13,7 @@ import { CrawlWebsiteModal } from '~/home/[account]/chatbots/[chatbot]/_componen
 import { DocumentsTable } from '~/home/[account]/chatbots/[chatbot]/_components/documents-table';
 import { DocumentDialog } from '~/home/[account]/chatbots/[chatbot]/documents/_components/document-dialog';
 import { loadChatbot } from '~/home/[account]/chatbots/_lib/server/load-chatbot';
+import { Database } from '~/lib/database.types';
 import { withI18n } from '~/lib/i18n/with-i18n';
 
 interface ChatbotPageParams {
@@ -32,7 +33,7 @@ export const metadata = {
 };
 
 async function ChatbotPage({ params, searchParams }: ChatbotPageParams) {
-  const client = getSupabaseServerComponentClient();
+  const client = getSupabaseServerComponentClient<Database>();
   const chatbotId = params.chatbot;
   const page = searchParams.page ? +searchParams.page : 1;
 

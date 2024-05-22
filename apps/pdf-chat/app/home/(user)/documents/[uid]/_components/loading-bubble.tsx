@@ -4,10 +4,10 @@ export function LoadingBubble() {
   return (
     <div
       className={
-        'animate-in slide-in-from-bottom-12 duration-1000 ease-out py-4 mt-4'
+        'mt-4 py-4 duration-1000 ease-out animate-in slide-in-from-bottom-12'
       }
     >
-      <div className={'flex space-x-1 animate-bounce duration-750'}>
+      <div className={'duration-750 flex animate-bounce space-x-1'}>
         <div className={dotClassName} />
         <div className={dotClassName} />
         <div className={dotClassName} />

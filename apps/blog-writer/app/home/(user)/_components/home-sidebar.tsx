@@ -1,3 +1,5 @@
+'use client';
+
 import { If } from '@kit/ui/if';
 import { Sidebar, SidebarContent, SidebarNavigation } from '@kit/ui/sidebar';
 

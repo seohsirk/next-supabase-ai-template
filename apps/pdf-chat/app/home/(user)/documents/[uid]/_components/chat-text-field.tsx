@@ -10,14 +10,17 @@ export function ChatTextField({
   loading: boolean;
 }>) {
   return (
-    <form onSubmit={handleSubmit} className={'p-4 border-t border-gray-100 dark:border-border'}>
+    <form
+      onSubmit={handleSubmit}
+      className={'border-t border-gray-100 p-4 dark:border-border'}
+    >
       <input
         disabled={loading}
         onInput={handleInputChange}
         value={input}
-        placeholder='Ask your PDF anything and it will answer you.'
+        placeholder="Ask your PDF anything and it will answer you."
         className={
-          '!min-h-[80px] w-full border px-4 bg-gray-50 shadow-sm' +
+          '!min-h-[80px] w-full border bg-gray-50 px-4 shadow-sm' +
           ' focus:ring-none outline-none transition-all' +
           ' ring-primary focus:ring-2 focus:ring-offset-0' +
           ' aria-disabled:opacity-50 dark:bg-background'

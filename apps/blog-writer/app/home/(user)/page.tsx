@@ -1,32 +1,70 @@
-import { PageBody } from '@kit/ui/page';
+import Link from 'next/link';
+
+import { ServerDataLoader } from '@makerkit/data-loader-supabase-nextjs';
+import { PlusCircleIcon } from 'lucide-react';
+
+import { getSupabaseServerComponentClient } from '@kit/supabase/server-component-client';
+import { Button } from '@kit/ui/button';
+import { PageBody, PageHeader } from '@kit/ui/page';
 import { Trans } from '@kit/ui/trans';
 
-import { createI18nServerInstance } from '~/lib/i18n/i18n.server';
+import { loadUserWorkspace } from '~/home/(user)/_lib/server/load-user-workspace';
+import { PostsTable } from '~/home/(user)/posts/_components/posts-table';
 import { withI18n } from '~/lib/i18n/with-i18n';
 
-// local imports
-import { HomeLayoutPageHeader } from './_components/home-page-header';
-
-export const generateMetadata = async () => {
-  const i18n = await createI18nServerInstance();
-  const title = i18n.t('account:homePage');
-
-  return {
-    title,
+interface PostPageProps {
+  searchParams: {
+    page?: string;
   };
-};
+}
 
-function UserHomePage() {
+async function PostsPage({ searchParams }: PostPageProps) {
+  const client = getSupabaseServerComponentClient();
+  const page = Number(searchParams.page ?? '1');
+  const { user } = await loadUserWorkspace();
+
   return (
     <>
-      <HomeLayoutPageHeader
-        title={<Trans i18nKey={'common:homeTabLabel'} />}
-        description={<Trans i18nKey={'common:homeTabDescription'} />}
-      />
+      <PageHeader
+        title={<Trans i18nKey="posts:postsTabLabel" />}
+        description={<Trans i18nKey="posts:postsTabDescription" />}
+      >
+        <Button asChild>
+          <Link href={'/home/posts/new'}>
+            <PlusCircleIcon className="mr-2 h-5 w-5" />
+            <span>
+              <Trans i18nKey="posts:createPostButtonLabel" />
+            </span>
+          </Link>
+        </Button>
+      </PageHeader>
 
-      <PageBody></PageBody>
+      <PageBody>
+        <ServerDataLoader
+          client={client}
+          table={'posts'}
+          select={['id', 'title']}
+          page={page}
+          where={{
+            account_id: {
+              eq: user.id,
+            },
+          }}
+        >
+          {({ data, pageSize, pageCount }) => {
+            return (
+              <PostsTable
+                data={data}
+                page={page}
+                pageSize={pageSize}
+                pageCount={pageCount}
+              />
+            );
+          }}
+        </ServerDataLoader>
+      </PageBody>
     </>
   );
 }
 
-export default withI18n(UserHomePage);
+export default withI18n(PostsPage);

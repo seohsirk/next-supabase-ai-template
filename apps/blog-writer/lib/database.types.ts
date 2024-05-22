@@ -248,6 +248,46 @@ export type Database = {
         };
         Relationships: [];
       };
+      credits_usage: {
+        Row: {
+          account_id: string;
+          id: number;
+          tokens_quota: number;
+        };
+        Insert: {
+          account_id: string;
+          id?: number;
+          tokens_quota?: number;
+        };
+        Update: {
+          account_id?: string;
+          id?: number;
+          tokens_quota?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'credits_usage_account_id_fkey';
+            columns: ['account_id'];
+            isOneToOne: false;
+            referencedRelation: 'accounts';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'credits_usage_account_id_fkey';
+            columns: ['account_id'];
+            isOneToOne: false;
+            referencedRelation: 'user_account_workspace';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'credits_usage_account_id_fkey';
+            columns: ['account_id'];
+            isOneToOne: false;
+            referencedRelation: 'user_accounts';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       invitations: {
         Row: {
           account_id: string;
@@ -484,6 +524,70 @@ export type Database = {
           },
         ];
       };
+      plans: {
+        Row: {
+          name: string;
+          tokens_quota: number;
+          variant_id: string;
+        };
+        Insert: {
+          name: string;
+          tokens_quota: number;
+          variant_id: string;
+        };
+        Update: {
+          name?: string;
+          tokens_quota?: number;
+          variant_id?: string;
+        };
+        Relationships: [];
+      };
+      posts: {
+        Row: {
+          account_id: string;
+          content: string;
+          created_at: string;
+          id: string;
+          title: string;
+        };
+        Insert: {
+          account_id: string;
+          content: string;
+          created_at?: string;
+          id?: string;
+          title: string;
+        };
+        Update: {
+          account_id?: string;
+          content?: string;
+          created_at?: string;
+          id?: string;
+          title?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'posts_account_id_fkey';
+            columns: ['account_id'];
+            isOneToOne: false;
+            referencedRelation: 'accounts';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'posts_account_id_fkey';
+            columns: ['account_id'];
+            isOneToOne: false;
+            referencedRelation: 'user_account_workspace';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'posts_account_id_fkey';
+            columns: ['account_id'];
+            isOneToOne: false;
+            referencedRelation: 'user_accounts';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       role_permissions: {
         Row: {
           id: number;
@@ -662,7 +766,6 @@ export type Database = {
           id: string | null;
           name: string | null;
           picture_url: string | null;
-          public_data: Json | null;
           subscription_status:
             | Database['public']['Enums']['subscription_status']
             | null;
@@ -709,6 +812,13 @@ export type Database = {
           target_user_id: string;
         };
         Returns: boolean;
+      };
+      consume_tokens: {
+        Args: {
+          target_account_id: string;
+          tokens: number;
+        };
+        Returns: number;
       };
       create_invitation: {
         Args: {
@@ -827,9 +937,12 @@ export type Database = {
         };
         Returns: boolean;
       };
-      install_extensions: {
-        Args: Record<PropertyKey, never>;
-        Returns: undefined;
+      has_tokens: {
+        Args: {
+          target_account_id: string;
+          tokens: number;
+        };
+        Returns: number;
       };
       is_account_owner: {
         Args: {

@@ -16,13 +16,10 @@ export function MessageContainer({
 
   return (
     <div
-      className={cn(
-        'w-full rounded-md border p-4',
-        {
-          'bg-primary-50 dark:bg-primary-800 border-border': isUser,
-          'border-transparent': !isUser,
-        },
-      )}
+      className={cn('w-full rounded-md border p-4', {
+        'bg-primary-50 dark:bg-primary-800 border-border': isUser,
+        'border-transparent': !isUser,
+      })}
     >
       <div className={'flex items-start space-x-4'}>
         <LoadingIndicator show={!content} />

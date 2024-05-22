@@ -14,9 +14,7 @@ import { getSupabaseClientKeys } from '../get-supabase-client-keys';
 const keys = getSupabaseClientKeys();
 const serviceRoleKey = getServiceRoleKey();
 
-function createServerSupabaseClient<
-  GenericSchema = Database,
->() {
+function createServerSupabaseClient<GenericSchema = Database>() {
   return createServerClient<GenericSchema>(keys.url, keys.anonKey, {
     cookies: getCookiesStrategy(),
   });

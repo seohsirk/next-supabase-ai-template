@@ -1,9 +1,10 @@
 import parse from 'node-html-parser';
-import HtmlCleaner from "~/lib/chatbots/html-cleaner";
+
+import HtmlCleaner from '~/lib/chatbots/html-cleaner';
 
 export default class Parser {
   async parse(html: string, host: string) {
-    const { Readability } = require("@mozilla/readability");
+    const { Readability } = require('@mozilla/readability');
 
     const document = await this.createDocument(html);
     const reader = new Readability(document);
@@ -15,7 +16,7 @@ export default class Parser {
     return {
       title,
       content,
-    }
+    };
   }
 
   private async convertToMarkdown(html: string) {

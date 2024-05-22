@@ -1,27 +1,21 @@
 import { NextRequest } from 'next/server';
 
-
-
 import { SupabaseClient } from '@supabase/supabase-js';
-
-
 
 import { StreamingTextResponse } from 'ai';
 import { isbot } from 'isbot';
 import { z } from 'zod';
 
-
-
 import { getLogger } from '@kit/shared/logger';
 import { getSupabaseRouteHandlerClient } from '@kit/supabase/route-handler-client';
 
-
-
 import appConfig from '~/config/app.config';
 import { Database } from '~/lib/database.types';
-import { generateReplyFromChain, insertConversationMessages } from '~/lib/langchain/langchain';
+import {
+  generateReplyFromChain,
+  insertConversationMessages,
+} from '~/lib/langchain/langchain';
 import { getVectorStore } from '~/lib/langchain/vector-store';
-
 
 const CONVERSATION_ID_STORAGE_KEY = getConversationIdHeaderName();
 const isProduction = appConfig.production;
@@ -105,16 +99,13 @@ export function handleChatBotRequest({
       return fakeDataStreamer();
     }
 
-    const client = getSupabaseRouteHandlerClient({
+    const client = getSupabaseRouteHandlerClient<Database>({
       admin: true,
     });
 
-    const canGenerateAIResponse = await client.rpc(
-      'can_respond_to_message',
-      {
-        target_chatbot_id: chatbotId,
-      },
-    );
+    const canGenerateAIResponse = await client.rpc('can_respond_to_message', {
+      target_chatbot_id: chatbotId,
+    });
 
     if (canGenerateAIResponse.error) {
       logger.error(

@@ -1,4 +1,4 @@
-import { CreditCard, Home, User } from 'lucide-react';
+import { CreditCard, PenSquareIcon, User } from 'lucide-react';
 
 import { NavigationConfigSchema } from '@kit/ui/navigation-schema';
 
@@ -9,10 +9,10 @@ const iconClasses = 'w-4';
 
 const routes = [
   {
-    label: 'common:homeTabLabel',
+    label: 'posts:postsTabLabel',
     path: pathsConfig.app.home,
-    Icon: <Home className={iconClasses} />,
-    end: true,
+    Icon: <PenSquareIcon className={iconClasses} />,
+    end: (path: string) => !path.includes('/posts/'),
   },
   {
     label: 'account:accountTabLabel',

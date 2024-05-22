@@ -28,7 +28,7 @@ STRIPE_SECRET_KEY=
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
 ```
 
-### LLM 
+### LLM
 
 Please add the following LLM (OpenAI Compatible) keys:
 
@@ -44,7 +44,6 @@ LLM_BASE_URL=
 ```
 
 The above uses the `gpt-3.5-turbo` model. You can change it to any other model you have access to - as long as it is OpenAI compatible.
-
 
 #### Vector Dimension
 
@@ -70,7 +69,6 @@ DOCUMENT_CHUNK_SIZE=4000
 ### Supabase
 
 Please follow the instructions in the [Supabase README](../supabase/README.md) to setup your Supabase project.
-
 
 ### Plans
 
@@ -131,4 +129,3 @@ We use `unpdf` to extract the text from the PDFs. The text is then indexed using
 The chats are fetched from the `conversations` table.
 
 The conversation is fetched from the DB the first time it's requested, and then cached in the browser using `swr`. The messages streamed from the LLM are then added to the conversation cache.
-

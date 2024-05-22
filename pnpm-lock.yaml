@@ -227,6 +227,187 @@ importers:
         specifier: ^5.4.5
         version: 5.4.5
 
+  apps/blog-writer:
+    dependencies:
+      '@ai-sdk/openai':
+        specifier: ^0.0.13
+        version: 0.0.13(zod@3.23.8)
+      '@edge-csrf/nextjs':
+        specifier: 2.0.0
+        version: 2.0.0(next@14.2.3(@opentelemetry/api@1.8.0)(@playwright/test@1.44.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
+      '@hookform/resolvers':
+        specifier: ^3.4.0
+        version: 3.4.2(react-hook-form@7.51.5(react@18.3.1))
+      '@kit/accounts':
+        specifier: workspace:^
+        version: link:../../packages/features/accounts
+      '@kit/admin':
+        specifier: workspace:^
+        version: link:../../packages/features/admin
+      '@kit/auth':
+        specifier: workspace:^
+        version: link:../../packages/features/auth
+      '@kit/billing':
+        specifier: workspace:^
+        version: link:../../packages/billing/core
+      '@kit/billing-gateway':
+        specifier: workspace:^
+        version: link:../../packages/billing/gateway
+      '@kit/cms':
+        specifier: workspace:^
+        version: link:../../packages/cms/core
+      '@kit/database-webhooks':
+        specifier: workspace:^
+        version: link:../../packages/database-webhooks
+      '@kit/email-templates':
+        specifier: workspace:^
+        version: link:../../packages/email-templates
+      '@kit/i18n':
+        specifier: workspace:^
+        version: link:../../packages/i18n
+      '@kit/mailers':
+        specifier: workspace:^
+        version: link:../../packages/mailers
+      '@kit/monitoring':
+        specifier: workspace:^
+        version: link:../../packages/monitoring/api
+      '@kit/next':
+        specifier: workspace:^
+        version: link:../../packages/next
+      '@kit/notifications':
+        specifier: workspace:^
+        version: link:../../packages/features/notifications
+      '@kit/shared':
+        specifier: workspace:^
+        version: link:../../packages/shared
+      '@kit/supabase':
+        specifier: workspace:^
+        version: link:../../packages/supabase
+      '@kit/team-accounts':
+        specifier: workspace:^
+        version: link:../../packages/features/team-accounts
+      '@kit/ui':
+        specifier: workspace:^
+        version: link:../../packages/ui
+      '@makerkit/data-loader-supabase-core':
+        specifier: ^0.0.8
+        version: 0.0.8(@supabase/postgrest-js@1.15.2)(@supabase/supabase-js@2.43.2)
+      '@makerkit/data-loader-supabase-nextjs':
+        specifier: ^1.2.3
+        version: 1.2.3(@supabase/postgrest-js@1.15.2)(@supabase/supabase-js@2.43.2)(@tanstack/react-query@5.37.1(react@18.3.1))(next@14.2.3(@opentelemetry/api@1.8.0)(@playwright/test@1.44.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+      '@marsidev/react-turnstile':
+        specifier: ^0.6.1
+        version: 0.6.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-icons':
+        specifier: ^1.3.0
+        version: 1.3.0(react@18.3.1)
+      '@supabase/supabase-js':
+        specifier: ^2.43.2
+        version: 2.43.2
+      '@tanstack/react-query':
+        specifier: 5.37.1
+        version: 5.37.1(react@18.3.1)
+      '@tanstack/react-query-next-experimental':
+        specifier: ^5.37.1
+        version: 5.37.1(@tanstack/react-query@5.37.1(react@18.3.1))(next@14.2.3(@opentelemetry/api@1.8.0)(@playwright/test@1.44.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+      '@tanstack/react-table':
+        specifier: ^8.17.3
+        version: 8.17.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      ai:
+        specifier: 3.1.12
+        version: 3.1.12(openai@4.47.1)(react@18.3.1)(solid-js@1.8.17)(svelte@4.2.17)(vue@3.4.27(typescript@5.4.5))(zod@3.23.8)
+      date-fns:
+        specifier: ^3.6.0
+        version: 3.6.0
+      lucide-react:
+        specifier: ^0.378.0
+        version: 0.378.0(react@18.3.1)
+      next:
+        specifier: 14.2.3
+        version: 14.2.3(@babel/core@7.24.5)(@opentelemetry/api@1.8.0)(@playwright/test@1.44.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      next-sitemap:
+        specifier: ^4.2.3
+        version: 4.2.3(next@14.2.3(@opentelemetry/api@1.8.0)(@playwright/test@1.44.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
+      next-themes:
+        specifier: 0.3.0
+        version: 0.3.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react:
+        specifier: 18.3.1
+        version: 18.3.1
+      react-dom:
+        specifier: 18.3.1
+        version: 18.3.1(react@18.3.1)
+      react-hook-form:
+        specifier: ^7.51.4
+        version: 7.51.5(react@18.3.1)
+      react-i18next:
+        specifier: ^14.1.1
+        version: 14.1.1(i18next@23.11.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      recharts:
+        specifier: ^2.12.7
+        version: 2.12.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      rxjs:
+        specifier: ^7.8.1
+        version: 7.8.1
+      sonner:
+        specifier: ^1.4.41
+        version: 1.4.41(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      tailwind-merge:
+        specifier: ^2.3.0
+        version: 2.3.0
+      zod:
+        specifier: ^3.23.8
+        version: 3.23.8
+    devDependencies:
+      '@kit/eslint-config':
+        specifier: workspace:^
+        version: link:../../tooling/eslint
+      '@kit/prettier-config':
+        specifier: workspace:^
+        version: link:../../tooling/prettier
+      '@kit/tailwind-config':
+        specifier: workspace:^
+        version: link:../../tooling/tailwind
+      '@kit/tsconfig':
+        specifier: workspace:^
+        version: link:../../tooling/typescript
+      '@next/bundle-analyzer':
+        specifier: 14.2.3
+        version: 14.2.3
+      '@types/mdx':
+        specifier: ^2.0.13
+        version: 2.0.13
+      '@types/node':
+        specifier: ^20.12.12
+        version: 20.12.12
+      '@types/react':
+        specifier: 18.3.2
+        version: 18.3.2
+      '@types/react-dom':
+        specifier: ^18.3.0
+        version: 18.3.0
+      autoprefixer:
+        specifier: ^10.4.19
+        version: 10.4.19(postcss@8.4.38)
+      dotenv-cli:
+        specifier: ^7.4.2
+        version: 7.4.2
+      eslint:
+        specifier: ^8.57.0
+        version: 8.57.0
+      prettier:
+        specifier: ^3.2.5
+        version: 3.2.5
+      supabase:
+        specifier: ^1.167.4
+        version: 1.167.4
+      tailwindcss:
+        specifier: 3.4.3
+        version: 3.4.3(ts-node@10.9.2(@types/node@20.12.12)(typescript@5.4.5))
+      typescript:
+        specifier: ^5.4.5
+        version: 5.4.5
+
   apps/chatbots:
     dependencies:
       '@edge-csrf/nextjs':
@@ -2043,7 +2224,7 @@ importers:
         version: 14.2.3
       '@trivago/prettier-plugin-sort-imports':
         specifier: ^4.3.0
-        version: 4.3.0(prettier@3.2.5)
+        version: 4.3.0(@vue/compiler-sfc@3.4.27)(prettier@3.2.5)
       '@types/eslint':
         specifier: ^8.56.10
         version: 8.56.10
@@ -2086,7 +2267,7 @@ importers:
     dependencies:
       '@ianvs/prettier-plugin-sort-imports':
         specifier: ^4.2.1
-        version: 4.2.1(prettier@3.2.5)
+        version: 4.2.1(@vue/compiler-sfc@3.4.27)(prettier@3.2.5)
       '@tanstack/react-table':
         specifier: ^8.17.3
         version: 8.17.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -2098,7 +2279,7 @@ importers:
         version: 3.2.5
       prettier-plugin-tailwindcss:
         specifier: ^0.5.14
-        version: 0.5.14(@ianvs/prettier-plugin-sort-imports@4.2.1(prettier@3.2.5))(@trivago/prettier-plugin-sort-imports@4.3.0(prettier@3.2.5))(prettier@3.2.5)
+        version: 0.5.14(@ianvs/prettier-plugin-sort-imports@4.2.1(@vue/compiler-sfc@3.4.27)(prettier@3.2.5))(@trivago/prettier-plugin-sort-imports@4.3.0(@vue/compiler-sfc@3.4.27)(prettier@3.2.5))(prettier@3.2.5)
     devDependencies:
       '@kit/tsconfig':
         specifier: workspace:^
@@ -2154,6 +2335,15 @@ packages:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
     peerDependenciesMeta:
       graphql:
+        optional: true
+
+  '@ai-sdk/openai@0.0.13':
+    resolution: {integrity: sha512-V5Jjem+83sVxFNzhNUV25c7uXC33VKIhoo1qN098EMqTriEp9oNCRAaNXf95eVFbFs2bDLVZtkoACv++Go0BUA==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      zod: ^3.0.0
+    peerDependenciesMeta:
+      zod:
         optional: true
 
   '@ai-sdk/provider-utils@0.0.8':
@@ -10205,6 +10395,13 @@ snapshots:
     optionalDependencies:
       graphql: 16.8.1
 
+  '@ai-sdk/openai@0.0.13(zod@3.23.8)':
+    dependencies:
+      '@ai-sdk/provider': 0.0.5
+      '@ai-sdk/provider-utils': 0.0.8(zod@3.23.8)
+    optionalDependencies:
+      zod: 3.23.8
+
   '@ai-sdk/provider-utils@0.0.8(zod@3.23.8)':
     dependencies:
       '@ai-sdk/provider': 0.0.5
@@ -10687,7 +10884,7 @@ snapshots:
 
   '@humanwhocodes/object-schema@2.0.3': {}
 
-  '@ianvs/prettier-plugin-sort-imports@4.2.1(prettier@3.2.5)':
+  '@ianvs/prettier-plugin-sort-imports@4.2.1(@vue/compiler-sfc@3.4.27)(prettier@3.2.5)':
     dependencies:
       '@babel/core': 7.24.5
       '@babel/generator': 7.24.5
@@ -10696,6 +10893,8 @@ snapshots:
       '@babel/types': 7.24.5
       prettier: 3.2.5
       semver: 7.6.2
+    optionalDependencies:
+      '@vue/compiler-sfc': 3.4.27
     transitivePeerDependencies:
       - supports-color
 
@@ -13770,7 +13969,7 @@ snapshots:
 
   '@tootallnate/quickjs-emscripten@0.23.0': {}
 
-  '@trivago/prettier-plugin-sort-imports@4.3.0(prettier@3.2.5)':
+  '@trivago/prettier-plugin-sort-imports@4.3.0(@vue/compiler-sfc@3.4.27)(prettier@3.2.5)':
     dependencies:
       '@babel/generator': 7.17.7
       '@babel/parser': 7.24.5
@@ -13779,6 +13978,8 @@ snapshots:
       javascript-natural-sort: 0.7.1
       lodash: 4.17.21
       prettier: 3.2.5
+    optionalDependencies:
+      '@vue/compiler-sfc': 3.4.27
     transitivePeerDependencies:
       - supports-color
 
@@ -17936,12 +18137,12 @@ snapshots:
 
   prelude-ls@1.2.1: {}
 
-  prettier-plugin-tailwindcss@0.5.14(@ianvs/prettier-plugin-sort-imports@4.2.1(prettier@3.2.5))(@trivago/prettier-plugin-sort-imports@4.3.0(prettier@3.2.5))(prettier@3.2.5):
+  prettier-plugin-tailwindcss@0.5.14(@ianvs/prettier-plugin-sort-imports@4.2.1(@vue/compiler-sfc@3.4.27)(prettier@3.2.5))(@trivago/prettier-plugin-sort-imports@4.3.0(@vue/compiler-sfc@3.4.27)(prettier@3.2.5))(prettier@3.2.5):
     dependencies:
       prettier: 3.2.5
     optionalDependencies:
-      '@ianvs/prettier-plugin-sort-imports': 4.2.1(prettier@3.2.5)
-      '@trivago/prettier-plugin-sort-imports': 4.3.0(prettier@3.2.5)
+      '@ianvs/prettier-plugin-sort-imports': 4.2.1(@vue/compiler-sfc@3.4.27)(prettier@3.2.5)
+      '@trivago/prettier-plugin-sort-imports': 4.3.0(@vue/compiler-sfc@3.4.27)(prettier@3.2.5)
 
   prettier@3.2.5: {}
 

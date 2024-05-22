@@ -29,9 +29,7 @@ import { cn } from '@kit/ui/utils';
 
 import { addDocumentAction } from '../_lib/server/server-actions';
 
-export function UploadDocumentForm(props: {
-  accountId: string;
-}) {
+export function UploadDocumentForm(props: { accountId: string }) {
   const [files, setFiles] = useState<File[]>([]);
 
   const { getRootProps, getInputProps, isDragAccept, isDragReject } =
@@ -277,9 +275,7 @@ function DocumentTitleStep(props: {
   );
 }
 
-function useUploadDocumentToStorage(props: {
-  accountId: string;
-}) {
+function useUploadDocumentToStorage(props: { accountId: string }) {
   const supabase = useSupabase();
   const documentName = nanoid(24);
   const account = usePersonalAccountData(props.accountId);

@@ -5,17 +5,17 @@ import { toast } from 'sonner';
 
 import {
   AlertDialog,
+  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-    AlertDialogCancel
 } from '@kit/ui/alert-dialog';
 import { Button } from '@kit/ui/button';
+import { Trans } from '@kit/ui/trans';
 
 import { deleteDocumentAction } from '~/home/[account]/chatbots/[chatbot]/_lib/server/server-actions';
-import {Trans} from "@kit/ui/trans";
 
 export function DeleteDocumentModal({
   documentId,

@@ -4,7 +4,7 @@ import { getLogger } from '@kit/shared/logger';
 import { getSupabaseRouteHandlerClient } from '@kit/supabase/route-handler-client';
 
 import billingConfig from '~/config/billing.config';
-import {Database} from "~/lib/database.types";
+import { Database } from '~/lib/database.types';
 
 /**
  * @description Handle the webhooks from Stripe related to checkouts

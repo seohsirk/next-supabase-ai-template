@@ -7,7 +7,6 @@ import { Heading } from '@kit/ui/heading';
 import { If } from '@kit/ui/if';
 
 import { useFetchAvailableTokens } from '../../_lib/hooks/use-fetch-remaining-tokens';
-
 import { ChatContainer } from './chat-container';
 import { ConversationsSidebar } from './conversation-sidebar';
 import { DocumentActionsDropdown } from './document-actions-dropdown';

@@ -37,7 +37,7 @@ export default class HtmlCleaner {
       if (src?.startsWith('/')) {
         image.setAttribute('src', `${host}${src}`);
       }
-    })
+    });
 
     return html.innerHTML;
   }

@@ -19,6 +19,8 @@ import { MarkdownRenderer } from '@kit/ui/markdown-renderer';
 import { Spinner } from '@kit/ui/spinner';
 import { Trans } from '@kit/ui/trans';
 
+import { Database } from '~/lib/database.types';
+
 export function DocumentDialog() {
   const params = useSearchParams();
   const value = params.get('document');
@@ -110,7 +112,7 @@ function DocumentContent(props: {
 }
 
 function useFetchDocument(documentId: string) {
-  const client = useSupabase();
+  const client = useSupabase<Database>();
   const queryKey = ['documents', documentId];
 
   const queryFn = async () => {

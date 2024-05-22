@@ -40,7 +40,7 @@ function ChatbotPublishPage({ params }: ChatbotPublishPageParams) {
 
       <pre
         className={
-          'p-4 rounded-lg border text-sm text-muted-foreground bg-muted'
+          'rounded-lg border bg-muted p-4 text-sm text-muted-foreground'
         }
       >
         <code>{script}</code>

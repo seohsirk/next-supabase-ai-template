@@ -136,7 +136,7 @@ function getColumns<
 
 function DeleteDocumentModal({
   documentId,
-    children
+  children,
 }: React.PropsWithChildren<{ documentId: string }>) {
   const onConfirm: FormEventHandler = (e) => {
     e.preventDefault();

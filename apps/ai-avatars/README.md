@@ -21,6 +21,7 @@ We have two pages/entities:
 2. Avatars - where you can pick a previously trained model and generate an avatar based on a set of user inputs (for example, you want to generate your avatars based on a cartoon style)
 
 In Storage, we also have the following folders:
+
 1. `avatars_models` - where we store a zip file containing the images used to train the model. This needs to be publicly accessible so that Replicate can access the images.
 2. `avatars_generations` - where we store the generated avatars.
 
@@ -77,6 +78,7 @@ STORAGE_PROXY_URL=
 ```
 
 Let's break down each of these variables:
+
 1. `REPLICATE_API_TOKEN` - your Replicate API token - keep it safe!
 2. `WEBHOOK_DOMAIN` - the domain where your webhook is hosted. This is used to receive webhooks from Replicate. Useful for testing since you'll need to receive webhooks from Replicate. I use LocalCan, but you can use ngrok or any other service.
 3. `REPLICATE_USERNAME` - your Replicate username
@@ -154,22 +156,22 @@ To update or add new prompts, open the file at `src/lib/replicate/sdxl-prompts.t
 
 ```tsx
 const sdxlPrompts = (captionPrefix: string) => ({
-   instagram: {
-      prompt: `${captionPrefix}, An Instagram influencer's profile avatar, vibrant colors, detailed skin, clear and bright background, medium shot, chest up, trendy clothing, highly detailed facial features, sharp focus, glossy eyes, radiant skin texture, high resolution, 8k quality, detailed hair, chic and stylish, ultra-detailed, vibrant and lively, Zeiss 150mm f/2.8, best quality`,
-      negative: `worst quality, low quality, normal quality, low-res, skin spots, acne, skin blemishes, age spots, ugly, duplicate, morbid, mutilated, blur, motion-blur, blurry, bokeh`
-   },
-   disney: {
-      prompt: `${captionPrefix}, Disney character in modern cartoon style, 8k resolution, vibrant colors, minimalistic background, digitally illustrated, crisp lines, excellent shading, detailed, high-quality rendering, Pixar-style 3D animation, smooth textures, expressive eyes, high definition, detailed, sharp focus, unreal engine, CGI, pixar`,
-      negative: `worst quality, low quality, normal quality, low-res, skin spots, acne, skin blemishes, age spots, ugly, duplicate, morbid, mutilated, blur, motion-blur, blurry, boke`,
-   },
-   anime: {
-      prompt: `${captionPrefix}, anime character for a profile picture, studio ghibli, Japanese, head and shoulders view, vibrant color scheme, clean line art, digital painting, crisp detail, subtle shading, bright eyes, high quality, high resolution, sharp focus, artstation, digital art, ultra-detailed, 4K.`,
-      negative: `worst quality, low quality, normal quality, low-res, skin spots, acne, skin blemishes, age spots, ugly, duplicate, morbid, mutilated, blur, motion-blur, blurry, bokeh`
-   },
-   custom : {
-      prompt: '',
-      negative: ''
-   }
+  instagram: {
+    prompt: `${captionPrefix}, An Instagram influencer's profile avatar, vibrant colors, detailed skin, clear and bright background, medium shot, chest up, trendy clothing, highly detailed facial features, sharp focus, glossy eyes, radiant skin texture, high resolution, 8k quality, detailed hair, chic and stylish, ultra-detailed, vibrant and lively, Zeiss 150mm f/2.8, best quality`,
+    negative: `worst quality, low quality, normal quality, low-res, skin spots, acne, skin blemishes, age spots, ugly, duplicate, morbid, mutilated, blur, motion-blur, blurry, bokeh`,
+  },
+  disney: {
+    prompt: `${captionPrefix}, Disney character in modern cartoon style, 8k resolution, vibrant colors, minimalistic background, digitally illustrated, crisp lines, excellent shading, detailed, high-quality rendering, Pixar-style 3D animation, smooth textures, expressive eyes, high definition, detailed, sharp focus, unreal engine, CGI, pixar`,
+    negative: `worst quality, low quality, normal quality, low-res, skin spots, acne, skin blemishes, age spots, ugly, duplicate, morbid, mutilated, blur, motion-blur, blurry, boke`,
+  },
+  anime: {
+    prompt: `${captionPrefix}, anime character for a profile picture, studio ghibli, Japanese, head and shoulders view, vibrant color scheme, clean line art, digital painting, crisp detail, subtle shading, bright eyes, high quality, high resolution, sharp focus, artstation, digital art, ultra-detailed, 4K.`,
+    negative: `worst quality, low quality, normal quality, low-res, skin spots, acne, skin blemishes, age spots, ugly, duplicate, morbid, mutilated, blur, motion-blur, blurry, bokeh`,
+  },
+  custom: {
+    prompt: '',
+    negative: '',
+  },
 });
 
 export type SdxlPromptPreset = keyof typeof sdxlPrompts;
@@ -185,20 +187,20 @@ To populate the dropdown with the new prompts, add new options at `src/app/dashb
 
 ```tsx
 <SelectContent>
-   <SelectGroup>
-      <SelectLabel>Presets</SelectLabel>
+  <SelectGroup>
+    <SelectLabel>Presets</SelectLabel>
 
-      <SelectItem value={'instagram'}>Instagram</SelectItem>
-      <SelectItem value={'disney'}>Disney</SelectItem>
-      <SelectItem value={'pixar'}>Pixar</SelectItem>
-      
-        {/* Add new prompts here */}
-   </SelectGroup>
+    <SelectItem value={'instagram'}>Instagram</SelectItem>
+    <SelectItem value={'disney'}>Disney</SelectItem>
+    <SelectItem value={'pixar'}>Pixar</SelectItem>
 
-   <SelectGroup>
-      <SelectLabel>Use your own prompt</SelectLabel>
-      <SelectItem value={CUSTOM}>Custom</SelectItem>
-   </SelectGroup>
+    {/* Add new prompts here */}
+  </SelectGroup>
+
+  <SelectGroup>
+    <SelectLabel>Use your own prompt</SelectLabel>
+    <SelectItem value={CUSTOM}>Custom</SelectItem>
+  </SelectGroup>
 </SelectContent>
 ```
 

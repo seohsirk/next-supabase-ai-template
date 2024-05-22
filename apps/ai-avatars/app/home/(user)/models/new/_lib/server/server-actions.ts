@@ -11,7 +11,7 @@ import { getLogger } from '@kit/shared/logger';
 import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
 
 import appConfig from '~/config/app.config';
-import {Database} from "~/lib/database.types";
+import { Database } from '~/lib/database.types';
 
 const CreateModelSchema = z.object({
   name: z.string().min(1),

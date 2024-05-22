@@ -1,5 +1,5 @@
 {
-  "name": "web",
+  "name": "blog-writer",
   "version": "0.1.0",
   "private": true,
   "sideEffects": false,
@@ -31,6 +31,7 @@
     "supabase:db:dump:local": "supabase db dump --local --data-only"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^0.0.13",
     "@edge-csrf/nextjs": "2.0.0",
     "@hookform/resolvers": "^3.4.0",
     "@kit/accounts": "workspace:^",
@@ -58,6 +59,7 @@
     "@tanstack/react-query": "5.37.1",
     "@tanstack/react-query-next-experimental": "^5.37.1",
     "@tanstack/react-table": "^8.17.3",
+    "ai": "3.1.12",
     "date-fns": "^3.6.0",
     "lucide-react": "^0.378.0",
     "next": "14.2.3",
@@ -68,6 +70,7 @@
     "react-hook-form": "^7.51.4",
     "react-i18next": "^14.1.1",
     "recharts": "^2.12.7",
+    "rxjs": "^7.8.1",
     "sonner": "^1.4.41",
     "tailwind-merge": "^2.3.0",
     "zod": "^3.23.8"

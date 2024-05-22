@@ -10,6 +10,7 @@ import { getSupabaseRouteHandlerClient } from '@kit/supabase/route-handler-clien
 
 import Crawler from '~/lib/chatbots/crawler';
 import Parser from '~/lib/chatbots/parser';
+import { Database } from '~/lib/database.types';
 import { createDocumentsService } from '~/lib/documents/documents.service';
 import { createJobsService } from '~/lib/jobs/jobs.service';
 import { getVectorStore } from '~/lib/langchain/vector-store';
@@ -69,7 +70,7 @@ async function handler(req: NextRequest) {
     `Body successfully validated`,
   );
 
-  const supabase = getSupabaseRouteHandlerClient({
+  const supabase = getSupabaseRouteHandlerClient<Database>({
     admin: true,
   });
 
@@ -134,17 +135,19 @@ async function handler(req: NextRequest) {
         });
 
         if (existingDocument.data) {
-          logger.info({
-            title,
-            hash,
-            chatbotId: body.chatbotId,
-          }, `Document already indexed. Skipping...`);
+          logger.info(
+            {
+              title,
+              hash,
+              chatbotId: body.chatbotId,
+            },
+            `Document already indexed. Skipping...`,
+          );
 
           return {
             success: false,
           };
         }
-
 
         const documentResponse = await service.insertDocument({
           title,
@@ -242,7 +245,7 @@ async function handler(req: NextRequest) {
       successfulTasks,
       erroredTasks,
     },
-    `Finished crawling`
+    `Finished crawling`,
   );
 
   logger.info(`Updating job ${body.jobId}...`);

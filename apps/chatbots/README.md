@@ -140,7 +140,7 @@ Then, update the `NEXT_PUBLIC_WIDGET_HOSTING_URL` environment variable to point 
 Create an `index.html` in the `packages/chatbot-widget/dist` folder and paste the Chatbot Widget code (you can find it in the `Publish` tab of the Chatbot). For example:
 
 ```html
-<script data-chatbot='2' src='makerkit-chatbot.js'></script>
+<script data-chatbot="2" src="makerkit-chatbot.js"></script>
 ```
 
 Make sure to change the `data-chatbot` attribute to the ID of the chatbot you want to test.
@@ -157,7 +157,7 @@ pnpm filter --chatbot-widget serve
 
 You are free to specify your own limitations in the DB.
 
-To add a plan, you will insert a new row in the `public.plans` table. 
+To add a plan, you will insert a new row in the `public.plans` table.
 
 The `public.plans` table has the following information:
 

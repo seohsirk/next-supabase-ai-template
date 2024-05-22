@@ -32,11 +32,7 @@ async function DocumentPage({ params, searchParams }: DocumentPageParams) {
 
   return (
     <div className={'flex h-screen flex-1 flex-col'}>
-      <div
-        className={
-          'divide flex h-full flex-1 divide-x'
-        }
-      >
+      <div className={'divide flex h-full flex-1 divide-x'}>
         <DocumentPageContainer
           doc={{
             id: doc.id,

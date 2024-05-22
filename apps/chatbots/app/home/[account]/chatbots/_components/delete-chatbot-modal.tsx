@@ -1,14 +1,15 @@
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@kit/ui/alert-dialog';
 import { Trans } from '@kit/ui/trans';
 
 import { DeleteChatSubmitButton } from '~/home/[account]/chatbots/_components/delete-chat-submit-button';
 import { deleteChatbotAction } from '~/home/[account]/chatbots/_lib/server/server-actions';
-import {
-  AlertDialog, AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger
-} from "@kit/ui/alert-dialog";
 
 export function DeleteChatbotModal(
   props: React.PropsWithChildren<{
@@ -40,7 +41,7 @@ export function DeleteChatbotModal(
               </div>
             </div>
 
-            <div className={'flex space-x-2 justify-end'}>
+            <div className={'flex justify-end space-x-2'}>
               <AlertDialogCancel>
                 <Trans i18nKey={'common:cancel'} />
               </AlertDialogCancel>
