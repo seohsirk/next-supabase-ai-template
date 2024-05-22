@@ -2,6 +2,22 @@
 
 Write here everything about your application.
 
+## OpenAI API 
+
+Please provide the OpenAI API key in the `.env.local` file:
+
+```
+OPENAI_API_KEY=********
+```
+
+You can also provide a custom model for the API:
+
+```
+LLM_MODEL_NAME=
+```
+
+Please **make sure the model supports JSON mode**. You can check this in the OpenAI API documentation.
+
 ## Setup
 
 For working locally, please add a file named `.env.local` where we can place our environment variables. This file is not committed to Git, therefore it is safe to store sensitive information in it.
