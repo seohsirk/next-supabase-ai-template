@@ -29,6 +29,7 @@
     "update:pdf": "git subtree pull --prefix=apps/pdf-chat origin web-branch --squash",
     "update:chatbots": "git subtree pull --prefix=apps/chatbots origin web-branch --squash",
     "update:ai-avatars": "git subtree pull --prefix=apps/ai-avatars origin web-branch --squash",
+    "update:blog": "git subtree pull --prefix=apps/blog-writer origin web-branch --squash",
     "supabase:avatars:start": "pnpm --filter ai-avatars supabase:start",
     "supabase:avatars:stop": "pnpm --filter ai-avatars supabase:stop",
     "supabase:avatars:typegen": "pnpm --filter ai-avatars supabase:typegen",
