@@ -308,7 +308,7 @@ importers:
         specifier: 5.40.0
         version: 5.40.0(react@18.3.1)
       '@tanstack/react-query-next-experimental':
-        specifier: ^5.37.1
+        specifier: ^5.40.0
         version: 5.40.0(@tanstack/react-query@5.40.0(react@18.3.1))(next@14.2.3(@opentelemetry/api@1.8.0)(@playwright/test@1.44.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       '@tanstack/react-table':
         specifier: ^8.17.3
@@ -320,8 +320,8 @@ importers:
         specifier: ^3.6.0
         version: 3.6.0
       lucide-react:
-        specifier: ^0.379.0
-        version: 0.379.0(react@18.3.1)
+        specifier: ^0.383.0
+        version: 0.383.0(react@18.3.1)
       next:
         specifier: 14.2.3
         version: 14.2.3(@babel/core@7.24.6)(@opentelemetry/api@1.8.0)(@playwright/test@1.44.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -378,7 +378,7 @@ importers:
         specifier: ^2.0.13
         version: 2.0.13
       '@types/node':
-        specifier: ^20.12.12
+        specifier: ^20.12.13
         version: 20.14.0
       '@types/react':
         specifier: ^18.3.3
@@ -396,10 +396,10 @@ importers:
         specifier: ^8.57.0
         version: 8.57.0
       prettier:
-        specifier: ^3.2.5
+        specifier: ^3.3.0
         version: 3.3.0
       supabase:
-        specifier: ^1.167.4
+        specifier: ^1.172.2
         version: 1.172.2
       tailwindcss:
         specifier: 3.4.3
@@ -504,7 +504,7 @@ importers:
         specifier: 5.40.0
         version: 5.40.0(react@18.3.1)
       '@tanstack/react-query-next-experimental':
-        specifier: ^5.37.1
+        specifier: ^5.40.0
         version: 5.40.0(@tanstack/react-query@5.40.0(react@18.3.1))(next@14.2.3(@opentelemetry/api@1.8.0)(@playwright/test@1.44.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       '@tanstack/react-table':
         specifier: ^8.17.3
@@ -528,8 +528,8 @@ importers:
         specifier: ^0.2.0
         version: 0.2.4(@supabase/supabase-js@2.43.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.47.3)(playwright@1.44.1)(ws@8.17.0)
       lucide-react:
-        specifier: ^0.379.0
-        version: 0.379.0(react@18.3.1)
+        specifier: ^0.383.0
+        version: 0.383.0(react@18.3.1)
       markdown-to-jsx:
         specifier: ^7.4.7
         version: 7.4.7(react@18.3.1)
@@ -607,7 +607,7 @@ importers:
         specifier: ^2.0.13
         version: 2.0.13
       '@types/node':
-        specifier: ^20.12.12
+        specifier: ^20.12.13
         version: 20.14.0
       '@types/react':
         specifier: ^18.3.3
@@ -625,10 +625,10 @@ importers:
         specifier: ^8.57.0
         version: 8.57.0
       prettier:
-        specifier: ^3.2.5
+        specifier: ^3.3.0
         version: 3.3.0
       supabase:
-        specifier: ^1.167.4
+        specifier: ^1.172.2
         version: 1.172.2
       tailwindcss:
         specifier: 3.4.3
@@ -1244,7 +1244,7 @@ importers:
         specifier: ^11.1.6
         version: 11.1.6(rollup@4.18.0)(tslib@2.6.2)(typescript@5.4.5)
       '@types/node':
-        specifier: ^20.12.12
+        specifier: ^20.12.13
         version: 20.14.0
       '@types/react':
         specifier: ^18.3.3
@@ -1262,13 +1262,13 @@ importers:
         specifier: ^8.57.0
         version: 8.57.0
       lucide-react:
-        specifier: ^0.379.0
-        version: 0.379.0(react@18.3.1)
+        specifier: ^0.383.0
+        version: 0.383.0(react@18.3.1)
       nanoid:
         specifier: ^5.0.7
         version: 5.0.7
       prettier:
-        specifier: ^3.2.5
+        specifier: ^3.3.0
         version: 3.3.0
       react:
         specifier: 18.3.1
@@ -8094,11 +8094,6 @@ packages:
   lru-cache@7.18.3:
     resolution: {integrity: sha512-jumlc0BIUrS3qJGgIkWZsyfAM7NCWiBcCDhnd+3NNM5KbBmLTgHVfWBcg6W+rLUsIpzpERPsvwUP7CckAQSOoA==}
     engines: {node: '>=12'}
-
-  lucide-react@0.379.0:
-    resolution: {integrity: sha512-KcdeVPqmhRldldAAgptb8FjIunM2x2Zy26ZBh1RsEUcdLIvsEmbcw7KpzFYUy5BbpGeWhPu9Z9J5YXfStiXwhg==}
-    peerDependencies:
-      react: 18.3.1
 
   lucide-react@0.383.0:
     resolution: {integrity: sha512-13xlG0CQCJtzjSQYwwJ3WRqMHtRj3EXmLlorrARt7y+IHnxUCp3XyFNL1DfaGySWxHObDvnu1u1dV+0VMKHUSg==}
@@ -17155,10 +17150,6 @@ snapshots:
       yallist: 3.1.1
 
   lru-cache@7.18.3: {}
-
-  lucide-react@0.379.0(react@18.3.1):
-    dependencies:
-      react: 18.3.1
 
   lucide-react@0.383.0(react@18.3.1):
     dependencies:
