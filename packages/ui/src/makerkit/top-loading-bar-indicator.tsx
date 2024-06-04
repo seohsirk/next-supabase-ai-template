@@ -1,27 +1,29 @@
 'use client';
 
-import { createRef, useEffect, useRef } from 'react';
+import { createRef, useEffect } from 'react';
 
 import type { LoadingBarRef } from 'react-top-loading-bar';
 import LoadingBar from 'react-top-loading-bar';
 
+let running = false;
+
 export function TopLoadingBarIndicator() {
   const ref = createRef<LoadingBarRef>();
-  const runningRef = useRef(false);
 
   useEffect(() => {
-    if (!ref.current || runningRef.current) {
+    if (!ref.current || running) {
       return;
     }
 
+    running = true;
+
     const loadingBarRef = ref.current;
 
-    loadingBarRef.continuousStart(0, 250);
-    runningRef.current = true;
+    loadingBarRef.continuousStart(0, 300);
 
     return () => {
       loadingBarRef.complete();
-      runningRef.current = false;
+      running = false;
     };
   }, [ref]);
 

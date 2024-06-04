@@ -1,12 +1,8 @@
-'use client';
-
 import { If } from './if';
 import { LoadingOverlay } from './loading-overlay';
 import { TopLoadingBarIndicator } from './top-loading-bar-indicator';
-import { Trans } from './trans';
 
 export function GlobalLoader({
-  children,
   displayLogo = false,
   fullPage = false,
   displaySpinner = true,
@@ -17,8 +13,6 @@ export function GlobalLoader({
   displaySpinner?: boolean;
   displayTopLoadingBar?: boolean;
 }>) {
-  const Text = children ?? <Trans i18nKey={'common:loading'} />;
-
   return (
     <>
       <If condition={displayTopLoadingBar}>
@@ -27,11 +21,11 @@ export function GlobalLoader({
 
       <If condition={displaySpinner}>
         <div
-          className={'flex flex-1 flex-col items-center justify-center py-48'}
+          className={
+            'flex flex-1 flex-col items-center justify-center py-48 animate-in fade-in zoom-in-50 slide-in-from-bottom-4'
+          }
         >
-          <LoadingOverlay displayLogo={displayLogo} fullPage={fullPage}>
-            {Text}
-          </LoadingOverlay>
+          <LoadingOverlay displayLogo={displayLogo} fullPage={fullPage} />
         </div>
       </If>
     </>
