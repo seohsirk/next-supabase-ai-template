@@ -134,6 +134,14 @@ $$;
 
 grant execute on function public.is_user_avatar to authenticated;
 
+create policy insert_avatars_models
+    on storage.objects
+    for insert
+    to authenticated
+    using (bucket_id = 'avatars_models' and (
+        public.is_user_avatar((storage.foldername(name))[2]::uuid)
+    )));
+
 create policy read_storage_generations_bucket
     on storage.objects
     for select
