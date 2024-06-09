@@ -36,7 +36,7 @@ export const createChatbotAction = enhanceAction(
       name: data.name,
     });
 
-    redirect(`${path}/chatbots/${chatbot.id}/documents`);
+    redirect(`${path}/${chatbot.id}/documents`);
   },
   {
     schema: CreateChatbotFormSchema,

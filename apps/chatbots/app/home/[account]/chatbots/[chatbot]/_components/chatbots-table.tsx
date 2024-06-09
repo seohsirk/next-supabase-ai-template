@@ -30,7 +30,7 @@ function useGetColumns() {
   const { t } = useTranslation('chatbot');
   const account = useParams().account as string;
 
-  return useMemo(() => getColumns(account, t), [t]);
+  return useMemo(() => getColumns(account, t), [t, account]);
 }
 
 function getColumns(
@@ -47,7 +47,7 @@ function getColumns(
       header: t('name'),
       cell: ({ row }) => {
         return (
-          <Link href={`${account}/chatbots/${row.original.id}/documents`}>
+          <Link href={`/home/${account}/chatbots/${row.original.id}/documents`}>
             {row.original.name}
           </Link>
         );
