@@ -7,7 +7,7 @@ import {
   useState,
 } from 'react';
 
-import { nanoid } from 'nanoid';
+import { v4 as uuid } from 'uuid';
 import { hydrateRoot } from 'react-dom/client';
 
 import { ChatBot } from './chatbot';
@@ -226,7 +226,7 @@ function useClearConversation() {
 }
 
 function generateNewConversationId() {
-  return nanoid(16);
+  return uuid();
 }
 
 function getConversationIdStorageKey() {

@@ -110,7 +110,7 @@ DOCUMENT_CHUNK_SIZE=4000
 To build the Chatbot Widget during development, run the following command:
 
 ```bash
-pnpm filter --chatbot-widget build
+pnpm --filter chatbot-widget build
 ```
 
 This will create a `makerkit-chatbot.js` file in the `dist` folder.
@@ -118,7 +118,7 @@ This will create a `makerkit-chatbot.js` file in the `dist` folder.
 To create a production build, run:
 
 ```bash
-pnpm filter --chatbot-widget build:production
+pnpm --filter chatbot-widget build:production
 ```
 
 You can make this command part of your CI/CD pipeline to deploy the Chatbot Widget to a CDN.

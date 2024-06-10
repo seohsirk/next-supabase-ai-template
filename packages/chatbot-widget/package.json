@@ -8,9 +8,7 @@
   },
   "typesVersions": {
     "*": {
-      "*": [
-        "src/*"
-      ]
+      "*": ["src/*"]
     }
   },
   "license": "MIT",
@@ -39,11 +37,12 @@
     "@types/node": "^20.12.13",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
+    "@types/uuid": "latest",
     "ai": "3.1.12",
     "dotenv": "^16.3.1",
     "eslint": "^8.57.0",
     "lucide-react": "^0.390.0",
-    "nanoid": "^5.0.7",
+    "uuid": "10.0.0",
     "prettier": "^3.3.1",
     "react": "18.3.1",
     "react-dom": "18.3.1",
@@ -56,9 +55,7 @@
     "typescript": "^5.4.5"
   },
   "eslintConfig": {
-    "extends": [
-      "@kit/eslint-config/base"
-    ]
+    "extends": ["@kit/eslint-config/base"]
   },
   "prettier": "@kit/prettier-config"
 }

@@ -61,7 +61,11 @@ export default {
     typescript({
       tsconfig: './tsconfig.json',
     }),
-    nodeResolve({ extensions: ['.tsx', '.ts', '.json'] }),
+    nodeResolve({
+      extensions: ['.tsx', '.ts', '.json', '.js', '.jsx'],
+      browser: true,
+      dedupe: ['react', 'react-dom'],
+    }),
     babel({
       babelHelpers: 'bundled',
       presets: [
