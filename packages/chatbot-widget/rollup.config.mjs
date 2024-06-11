@@ -11,6 +11,7 @@ import nodePolyfills from 'rollup-plugin-polyfill-node';
 import postcss from 'rollup-plugin-postcss';
 import tsConfigPaths from 'rollup-plugin-tsconfig-paths';
 import { visualizer } from 'rollup-plugin-visualizer';
+import tailwindcss from 'tailwindcss';
 
 const args = parseArgs({
   options: {
@@ -62,7 +63,7 @@ export default {
       tsconfig: './tsconfig.json',
     }),
     nodeResolve({
-      extensions: ['.tsx', '.ts', '.json', '.js', '.jsx'],
+      extensions: ['.tsx', '.ts', '.json', '.js', '.jsx', '.mjs'],
       browser: true,
       dedupe: ['react', 'react-dom'],
     }),
@@ -78,12 +79,9 @@ export default {
           },
         ],
       ],
-      extensions: ['.js', '.jsx', '.ts', '.tsx'],
+      extensions: ['.js', '.jsx', '.ts', '.tsx', '.mjs'],
     }),
     postcss({
-      config: {
-        path: '../apps/chatbots/postcss.config.mjs',
-      },
       extensions: ['.css'],
       minimize: true,
       extract: true,

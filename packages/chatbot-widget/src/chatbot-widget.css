@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 #makerkit-chatbot-container {
-  --font-family-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
     Roboto, 'Helvetica Neue', Arial;
   --background: 0 0% 100%;
   --foreground: 222.2 84% 4.9%;

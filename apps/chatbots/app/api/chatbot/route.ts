@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import isBot from 'isbot';
+import { isbot } from 'isbot';
 import { nanoid } from 'nanoid';
 
 import { getSupabaseRouteHandlerClient } from '@kit/supabase/route-handler-client';
@@ -26,7 +26,7 @@ export function OPTIONS() {
 export async function GET(req: NextRequest) {
   const userAgent = req.headers.get('user-agent');
 
-  if (isBot.isbot(userAgent)) {
+  if (isbot(userAgent)) {
     return new Response(`No chatbot for you!`, {
       status: 403,
     });

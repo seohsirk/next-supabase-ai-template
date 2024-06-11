@@ -12,7 +12,6 @@ import { hydrateRoot } from 'react-dom/client';
 
 import { ChatBot } from './chatbot';
 import { ChatbotSettings } from './chatbot';
-import './chatbot-widget.css';
 
 const SDK_NAME = process.env.CHATBOT_SDK_NAME;
 const SETTINGS_ENDPOINT = process.env.WIDGET_SETTINGS_ENDPOINT;

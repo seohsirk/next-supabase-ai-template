@@ -27,6 +27,7 @@
     "@kit/eslint-config": "workspace:*",
     "@kit/prettier-config": "workspace:*",
     "@kit/tsconfig": "workspace:*",
+    "@kit/tailwind-config": "workspace:*",
     "@kit/ui": "workspace:*",
     "@rollup/plugin-babel": "^6.0.4",
     "@rollup/plugin-commonjs": "^25.0.7",
@@ -52,7 +53,9 @@
     "rollup-plugin-postcss": "latest",
     "rollup-plugin-tsconfig-paths": "^1.5.2",
     "rollup-plugin-visualizer": "latest",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "tailwindcss": "^3.4.4",
+    "tailwindcss-animate": "^1.0.7"
   },
   "eslintConfig": {
     "extends": ["@kit/eslint-config/base"]

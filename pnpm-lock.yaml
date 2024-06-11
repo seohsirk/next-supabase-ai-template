@@ -1219,6 +1219,9 @@ importers:
       '@kit/prettier-config':
         specifier: workspace:*
         version: link:../../tooling/prettier
+      '@kit/tailwind-config':
+        specifier: workspace:*
+        version: link:../../tooling/tailwind
       '@kit/tsconfig':
         specifier: workspace:*
         version: link:../../tooling/typescript
@@ -1294,6 +1297,12 @@ importers:
       rollup-plugin-visualizer:
         specifier: latest
         version: 5.12.0(rollup@4.18.0)
+      tailwindcss:
+        specifier: ^3.4.4
+        version: 3.4.4(ts-node@10.9.2(@types/node@20.14.2)(typescript@5.4.5))
+      tailwindcss-animate:
+        specifier: ^1.0.7
+        version: 1.0.7(tailwindcss@3.4.4(ts-node@10.9.2(@types/node@20.14.2)(typescript@5.4.5)))
       typescript:
         specifier: ^5.4.5
         version: 5.4.5
