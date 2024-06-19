@@ -2,7 +2,7 @@
 
 Write here everything about your application.
 
-## OpenAI API 
+## OpenAI API
 
 Please provide the OpenAI API key in the `.env.local` file:
 

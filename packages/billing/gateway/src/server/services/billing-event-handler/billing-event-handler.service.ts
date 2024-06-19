@@ -62,7 +62,7 @@ class BillingEventHandlerService {
    */
   async handleWebhookEvent(
     request: Request,
-    params: Partial<CustomHandlersParams> = {}
+    params: Partial<CustomHandlersParams> = {},
   ) {
     const event = await this.strategy.verifyWebhookSignature(request);
 

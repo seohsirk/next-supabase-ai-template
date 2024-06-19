@@ -1,11 +1,12 @@
 import 'server-only';
 
+import { SupabaseClient } from '@supabase/supabase-js';
+
 import { BillingConfig } from '@kit/billing';
 import { Database } from '@kit/supabase/database';
 
 import { BillingEventHandlerFactoryService } from './billing-event-handler-factory.service';
 import { createBillingEventHandlerService } from './billing-event-handler.service';
-import {SupabaseClient} from "@supabase/supabase-js";
 
 // a function that returns a Supabase client
 type ClientProvider = () => SupabaseClient<Database>;
