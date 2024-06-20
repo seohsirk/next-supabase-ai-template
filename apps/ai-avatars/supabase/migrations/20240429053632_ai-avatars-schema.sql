@@ -113,6 +113,27 @@ create trigger on_account_created_add_credits
   after insert on public.accounts
   for each row execute procedure public.handle_new_account_credits();
 
+-- plans
+create table if not exists public.plans (
+  id serial primary key,
+  name text not null unique,
+  credits integer not null
+);
+
+revoke all on public.plans from public, service_role;
+
+grant select on public.plans to authenticated, service_role;
+
+alter table public.plans enable row level security;
+
+create policy select_plans
+    on public.plans
+    for select
+    to authenticated
+    using (
+        true
+    );
+
 insert into storage.buckets (id, name, PUBLIC)
   values ('avatars_models', 'avatars_models', false);
 
@@ -138,9 +159,9 @@ create policy insert_avatars_models
     on storage.objects
     for insert
     to authenticated
-    using (bucket_id = 'avatars_models' and (
+    with check (bucket_id = 'avatars_models' and (
         public.is_user_avatar((storage.foldername(name))[2]::uuid)
-    )));
+    ));
 
 create policy read_storage_generations_bucket
     on storage.objects
@@ -148,7 +169,7 @@ create policy read_storage_generations_bucket
     to authenticated
     using (bucket_id = 'avatars_generations' and (
         public.is_user_avatar((storage.foldername(name))[2]::uuid)
-    )));
+    ));
 
 create or replace function public.reduce_credits(target_account_id uuid, credits_cost integer)
 returns void
