@@ -31,7 +31,7 @@
     "supabase:db:dump:local": "supabase db dump --local --data-only"
   },
   "dependencies": {
-    "@edge-csrf/nextjs": "2.0.0",
+    "@edge-csrf/nextjs": "2.2.0",
     "@hookform/resolvers": "^3.6.0",
     "@kit/accounts": "workspace:^",
     "@kit/admin": "workspace:^",
@@ -72,7 +72,7 @@
     "react-hook-form": "^7.52.0",
     "react-i18next": "^14.1.2",
     "recharts": "^2.12.7",
-    "replicate": "^0.29.4",
+    "replicate": "^0.30.2",
     "sonner": "^1.5.0",
     "tailwind-merge": "^2.3.0",
     "webp-converter-browser": "^1.0.4",

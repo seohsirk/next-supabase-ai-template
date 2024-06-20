@@ -37,8 +37,8 @@ importers:
   apps/ai-avatars:
     dependencies:
       '@edge-csrf/nextjs':
-        specifier: 2.0.0
-        version: 2.0.0(next@14.2.4(@opentelemetry/api@1.9.0)(@playwright/test@1.44.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
+        specifier: 2.2.0
+        version: 2.2.0(next@14.2.4(@opentelemetry/api@1.9.0)(@playwright/test@1.44.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
       '@hookform/resolvers':
         specifier: ^3.6.0
         version: 3.6.0(react-hook-form@7.52.0(react@18.3.1))
@@ -160,8 +160,8 @@ importers:
         specifier: ^2.12.7
         version: 2.12.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       replicate:
-        specifier: ^0.29.4
-        version: 0.29.4
+        specifier: ^0.30.2
+        version: 0.30.2
       sonner:
         specifier: ^1.5.0
         version: 1.5.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -227,11 +227,11 @@ importers:
   apps/blog-writer:
     dependencies:
       '@ai-sdk/openai':
-        specifier: ^0.0.13
-        version: 0.0.13(zod@3.23.8)
+        specifier: ^0.0.31
+        version: 0.0.31(zod@3.23.8)
       '@edge-csrf/nextjs':
-        specifier: 2.0.0
-        version: 2.0.0(next@14.2.4(@opentelemetry/api@1.9.0)(@playwright/test@1.44.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
+        specifier: 2.2.0
+        version: 2.2.0(next@14.2.4(@opentelemetry/api@1.9.0)(@playwright/test@1.44.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
       '@hookform/resolvers':
         specifier: ^3.6.0
         version: 3.6.0(react-hook-form@7.52.0(react@18.3.1))
@@ -311,8 +311,8 @@ importers:
         specifier: ^8.17.3
         version: 8.17.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       ai:
-        specifier: 3.1.12
-        version: 3.1.12(openai@4.52.0)(react@18.3.1)(solid-js@1.8.17)(svelte@4.2.18)(vue@3.4.29(typescript@5.4.5))(zod@3.23.8)
+        specifier: 3.2.1
+        version: 3.2.1(openai@4.52.0)(react@18.3.1)(solid-js@1.8.17)(svelte@4.2.18)(vue@3.4.29(typescript@5.4.5))(zod@3.23.8)
       date-fns:
         specifier: ^3.6.0
         version: 3.6.0
@@ -408,8 +408,8 @@ importers:
   apps/chatbots:
     dependencies:
       '@edge-csrf/nextjs':
-        specifier: 2.0.0
-        version: 2.0.0(next@14.2.4(@opentelemetry/api@1.9.0)(@playwright/test@1.44.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
+        specifier: 2.2.0
+        version: 2.2.0(next@14.2.4(@opentelemetry/api@1.9.0)(@playwright/test@1.44.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
       '@hookform/resolvers':
         specifier: ^3.6.0
         version: 3.6.0(react-hook-form@7.52.0(react@18.3.1))
@@ -469,13 +469,13 @@ importers:
         version: link:../../packages/ui
       '@langchain/community':
         specifier: ^0.2.0
-        version: 0.2.12(@mozilla/readability@0.5.0)(@supabase/postgrest-js@1.15.5)(@supabase/supabase-js@2.43.5)(axios@1.7.2)(crypto-js@4.2.0)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(lodash@4.17.21)(openai@4.52.0)(playwright@1.44.1)(replicate@0.29.4)(ws@8.17.1)
+        version: 0.2.12(@mozilla/readability@0.5.0)(@supabase/postgrest-js@1.15.5)(@supabase/supabase-js@2.43.5)(axios@1.7.2)(crypto-js@4.2.0)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(lodash@4.17.21)(openai@4.52.0)(playwright@1.44.1)(replicate@0.30.2)(ws@8.17.1)
       '@langchain/core':
         specifier: ^0.2.0
         version: 0.2.8(langchain@0.2.5(@supabase/supabase-js@2.43.5)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.0)(playwright@1.44.1)(ws@8.17.1))(openai@4.52.0)
       '@langchain/openai':
-        specifier: 0.0.33
-        version: 0.0.33(langchain@0.2.5(@supabase/supabase-js@2.43.5)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.0)(playwright@1.44.1)(ws@8.17.1))
+        specifier: 0.1.3
+        version: 0.1.3(langchain@0.2.5(@supabase/supabase-js@2.43.5)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.0)(playwright@1.44.1)(ws@8.17.1))
       '@makerkit/data-loader-supabase-core':
         specifier: ^0.0.8
         version: 0.0.8(@supabase/postgrest-js@1.15.5)(@supabase/supabase-js@2.43.5)
@@ -507,8 +507,8 @@ importers:
         specifier: ^8.17.3
         version: 8.17.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       ai:
-        specifier: 3.1.12
-        version: 3.1.12(openai@4.52.0)(react@18.3.1)(solid-js@1.8.17)(svelte@4.2.18)(vue@3.4.29(typescript@5.4.5))(zod@3.23.8)
+        specifier: 3.2.1
+        version: 3.2.1(openai@4.52.0)(react@18.3.1)(solid-js@1.8.17)(svelte@4.2.18)(vue@3.4.29(typescript@5.4.5))(zod@3.23.8)
       date-fns:
         specifier: ^3.6.0
         version: 3.6.0
@@ -649,8 +649,8 @@ importers:
   apps/pdf-chat:
     dependencies:
       '@edge-csrf/nextjs':
-        specifier: 2.0.0
-        version: 2.0.0(next@14.2.4(@opentelemetry/api@1.9.0)(@playwright/test@1.44.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
+        specifier: 2.2.0
+        version: 2.2.0(next@14.2.4(@opentelemetry/api@1.9.0)(@playwright/test@1.44.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
       '@hookform/resolvers':
         specifier: ^3.6.0
         version: 3.6.0(react-hook-form@7.52.0(react@18.3.1))
@@ -707,13 +707,13 @@ importers:
         version: link:../../packages/ui
       '@langchain/community':
         specifier: ^0.2.0
-        version: 0.2.12(@mozilla/readability@0.5.0)(@supabase/postgrest-js@1.15.5)(@supabase/supabase-js@2.43.5)(axios@1.7.2)(crypto-js@4.2.0)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(lodash@4.17.21)(openai@4.52.0)(playwright@1.44.1)(replicate@0.29.4)(ws@8.17.1)
+        version: 0.2.12(@mozilla/readability@0.5.0)(@supabase/postgrest-js@1.15.5)(@supabase/supabase-js@2.43.5)(axios@1.7.2)(crypto-js@4.2.0)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(lodash@4.17.21)(openai@4.52.0)(playwright@1.44.1)(replicate@0.30.2)(ws@8.17.1)
       '@langchain/core':
         specifier: ^0.2.0
         version: 0.2.8(langchain@0.2.5(@supabase/supabase-js@2.43.5)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.0)(playwright@1.44.1)(ws@8.17.1))(openai@4.52.0)
       '@langchain/openai':
-        specifier: 0.0.33
-        version: 0.0.33(langchain@0.2.5(@supabase/supabase-js@2.43.5)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.0)(playwright@1.44.1)(ws@8.17.1))
+        specifier: 0.1.3
+        version: 0.1.3(langchain@0.2.5(@supabase/supabase-js@2.43.5)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.0)(playwright@1.44.1)(ws@8.17.1))
       '@makerkit/data-loader-supabase-core':
         specifier: ^0.0.8
         version: 0.0.8(@supabase/postgrest-js@1.15.5)(@supabase/supabase-js@2.43.5)
@@ -739,8 +739,8 @@ importers:
         specifier: ^8.17.3
         version: 8.17.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       ai:
-        specifier: 3.1.12
-        version: 3.1.12(openai@4.52.0)(react@18.3.1)(solid-js@1.8.17)(svelte@4.2.18)(vue@3.4.29(typescript@5.4.5))(zod@3.23.8)
+        specifier: 3.2.1
+        version: 3.2.1(openai@4.52.0)(react@18.3.1)(solid-js@1.8.17)(svelte@4.2.18)(vue@3.4.29(typescript@5.4.5))(zod@3.23.8)
       date-fns:
         specifier: ^3.6.0
         version: 3.6.0
@@ -851,8 +851,8 @@ importers:
   apps/web:
     dependencies:
       '@edge-csrf/nextjs':
-        specifier: 2.0.0
-        version: 2.0.0(next@14.2.4(@opentelemetry/api@1.9.0)(@playwright/test@1.44.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
+        specifier: 2.2.0
+        version: 2.2.0(next@14.2.4(@opentelemetry/api@1.9.0)(@playwright/test@1.44.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
       '@hookform/resolvers':
         specifier: ^3.6.0
         version: 3.6.0(react-hook-form@7.52.0(react@18.3.1))
@@ -1205,8 +1205,8 @@ importers:
   packages/chatbot-widget:
     devDependencies:
       '@babel/preset-react':
-        specifier: 7.24.1
-        version: 7.24.1(@babel/core@7.24.7)
+        specifier: 7.24.7
+        version: 7.24.7(@babel/core@7.24.7)
       '@babel/preset-typescript':
         specifier: ^7.24.1
         version: 7.24.7(@babel/core@7.24.7)
@@ -1229,8 +1229,8 @@ importers:
         specifier: ^6.0.4
         version: 6.0.4(@babel/core@7.24.7)(rollup@4.18.0)
       '@rollup/plugin-commonjs':
-        specifier: ^25.0.7
-        version: 25.0.8(rollup@4.18.0)
+        specifier: ^26.0.1
+        version: 26.0.1(rollup@4.18.0)
       '@rollup/plugin-node-resolve':
         specifier: ^15.2.3
         version: 15.2.3(rollup@4.18.0)
@@ -1256,8 +1256,8 @@ importers:
         specifier: latest
         version: 9.0.8
       ai:
-        specifier: 3.1.12
-        version: 3.1.12(openai@4.52.0)(react@18.3.1)(solid-js@1.8.17)(svelte@4.2.18)(vue@3.4.29(typescript@5.4.5))(zod@3.23.8)
+        specifier: 3.2.1
+        version: 3.2.1(openai@4.52.0)(react@18.3.1)(solid-js@1.8.17)(svelte@4.2.18)(vue@3.4.29(typescript@5.4.5))(zod@3.23.8)
       dotenv:
         specifier: ^16.3.1
         version: 16.4.5
@@ -2331,8 +2331,14 @@ packages:
       graphql:
         optional: true
 
-  '@ai-sdk/openai@0.0.13':
-    resolution: {integrity: sha512-V5Jjem+83sVxFNzhNUV25c7uXC33VKIhoo1qN098EMqTriEp9oNCRAaNXf95eVFbFs2bDLVZtkoACv++Go0BUA==}
+  '@ai-sdk/openai@0.0.31':
+    resolution: {integrity: sha512-7ehX2N0NzCdxUOYXutwYgu6gdWO+zS/v8pWEd7VW8QpNq3equ0VZ0j+pDUNv4f3GJ449QwySb6+V+DHM9W/pLg==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      zod: ^3.0.0
+
+  '@ai-sdk/provider-utils@0.0.15':
+    resolution: {integrity: sha512-eTkIaZc/Ud96DYG40lLuKWJvZ2GoW/wT4KH9r1f3wGUhj5wgQN+bzgdI57z60VOEDuMmDVuILVnTLFe0HNT5Iw==}
     engines: {node: '>=18'}
     peerDependencies:
       zod: ^3.0.0
@@ -2340,8 +2346,42 @@ packages:
       zod:
         optional: true
 
-  '@ai-sdk/provider-utils@0.0.8':
-    resolution: {integrity: sha512-J/ZNvFhORd3gCeK3jFvNrxp1Dnvy6PvPq21RJ+OsIEjsoHeKQaHALCWG0aJunXDuzd+Mck/lCg7LqA0qmIbHIg==}
+  '@ai-sdk/provider@0.0.10':
+    resolution: {integrity: sha512-NzkrtREQpHID1cTqY/C4CI30PVOaXWKYytDR2EcytmFgnP7Z6+CrGIA/YCnNhYAuUm6Nx+nGpRL/Hmyrv7NYzg==}
+    engines: {node: '>=18'}
+
+  '@ai-sdk/react@0.0.4':
+    resolution: {integrity: sha512-YPvp81onTxNlnOWolyjvappS5y9pMkZwWKMxrqwMimaJI4NWquPrAeHCYqzaVAb/+RKaveEGSvyYs/SD8AO6ig==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      react: 18.3.1
+      zod: ^3.0.0
+    peerDependenciesMeta:
+      react:
+        optional: true
+      zod:
+        optional: true
+
+  '@ai-sdk/solid@0.0.4':
+    resolution: {integrity: sha512-1X/vauXG+V0Hsb2P8kZFKaDrderTtB/7XdHZ/UkSMzTk8k0twx9OEXgztW8Rggh51t6sdI7mUoqAY5Khvjf01w==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      solid-js: ^1.7.7
+    peerDependenciesMeta:
+      solid-js:
+        optional: true
+
+  '@ai-sdk/svelte@0.0.4':
+    resolution: {integrity: sha512-LVxg9/60ARX8AQIswyDx53HQlQQH91yUOThhUA0x9s2BcxgpDgDN37imynnoZbU7lvA5M9NvwlinkmUdJzUVTA==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      svelte: ^3.0.0 || ^4.0.0
+    peerDependenciesMeta:
+      svelte:
+        optional: true
+
+  '@ai-sdk/ui-utils@0.0.4':
+    resolution: {integrity: sha512-vUfuqVOZV3MyFokAduQyJsnDP00qzyZut6mizFscXlCOmiiW3FAnu/XEnMEwCmf7yUG7O4v7Xa2zd4X1tsN5pg==}
     engines: {node: '>=18'}
     peerDependencies:
       zod: ^3.0.0
@@ -2349,9 +2389,14 @@ packages:
       zod:
         optional: true
 
-  '@ai-sdk/provider@0.0.5':
-    resolution: {integrity: sha512-TZDldBZ5clAsNwJ2PSeo/b1uILj9a2lvi0rnOj2RCNZDgaVqFRVIAnKyeHusCRv2lzhPIw03B3fiGI6VoLzOAA==}
+  '@ai-sdk/vue@0.0.4':
+    resolution: {integrity: sha512-gWyvenqPi1FC8tvczKhla4pCDTVMXvXHpiIJaBn7fRNq2vO7gDSAr9O//SCSPGY3l1aUCKLgKJbbeoXiTRSGBQ==}
     engines: {node: '>=18'}
+    peerDependencies:
+      vue: ^3.3.4
+    peerDependenciesMeta:
+      vue:
+        optional: true
 
   '@alloc/quick-lru@5.2.0':
     resolution: {integrity: sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==}
@@ -2523,8 +2568,8 @@ packages:
     peerDependencies:
       '@babel/core': ^7.0.0-0
 
-  '@babel/preset-react@7.24.1':
-    resolution: {integrity: sha512-eFa8up2/8cZXLIpkafhaADTXSnl7IsUFCYenRWrARBz0/qZwcT0RBXpys0LJU4+WfPoF2ZG6ew6s2V6izMCwRA==}
+  '@babel/preset-react@7.24.7':
+    resolution: {integrity: sha512-AAH4lEkpmzFWrGVlHaxJB7RLH21uPQ9+He+eFLWHmF9IuFQVugz8eAsamaW0DXRrTfco5zj1wWtpdcXJUOfsag==}
     engines: {node: '>=6.9.0'}
     peerDependencies:
       '@babel/core': ^7.0.0-0
@@ -2587,8 +2632,8 @@ packages:
     resolution: {integrity: sha512-dBVuXR082gk3jsFp7Rd/JI4kytwGHecnCoTtXFb7DB6CNHp4rg5k1bhg0nWdLGLnOV71lmDzGQaLMy8iPLY0pw==}
     engines: {node: '>=10.0.0'}
 
-  '@edge-csrf/nextjs@2.0.0':
-    resolution: {integrity: sha512-WFFdt6SBIh61ENonSws0jYAVpxBvzT8hWdmoJlSDvk1wopu0A8le9eXgmfuRG+HKzAhJFe7dwm/LCu9GeuSdfA==}
+  '@edge-csrf/nextjs@2.2.0':
+    resolution: {integrity: sha512-1Nq7d21GNB4BYrArasjsa7Vo0MiLN/yK7NR1N3wB+F+SIenHa1PCSNIjgTeC2f/Ko7ILNLM7mSdqVmhj35SRDg==}
     peerDependencies:
       next: ^13.0.0 || ^14.0.0
 
@@ -4994,9 +5039,9 @@ packages:
       rollup:
         optional: true
 
-  '@rollup/plugin-commonjs@25.0.8':
-    resolution: {integrity: sha512-ZEZWTK5n6Qde0to4vS9Mr5x/0UZoqCxPVR9KRUjU4kA2sO7GEUn1fop0DAwpO6z0Nw/kJON9bDmSxdWxO/TT1A==}
-    engines: {node: '>=14.0.0'}
+  '@rollup/plugin-commonjs@26.0.1':
+    resolution: {integrity: sha512-UnsKoZK6/aGIH6AdkptXhNvhaqftcjq3zZdT+LY5Ftms6JR06nADcDsYp5hTU9E2lbJUEOhdlY5J4DNTneM+jQ==}
+    engines: {node: '>=16.0.0 || 14 >= 14.17'}
     peerDependencies:
       rollup: ^2.68.0||^3.0.0||^4.0.0
     peerDependenciesMeta:
@@ -5871,26 +5916,20 @@ packages:
     resolution: {integrity: sha512-4I7Td01quW/RpocfNayFdFVk1qSuoh0E7JrbRJ16nH01HhKFQ88INq9Sd+nd72zqRySlr9BmDA8xlEJ6vJMrYA==}
     engines: {node: '>=8'}
 
-  ai@3.1.12:
-    resolution: {integrity: sha512-XlurBw1sdgQCFmCTPYjKjpm+fPS6iY+tLb/PYNUEjZn3bhqosAkcqUkGJTsFP49OMAWO1Lm2oPthCakKcn6Lzw==}
+  ai@3.2.1:
+    resolution: {integrity: sha512-6C2rGQLeZmhbjPBOZy2IU8aGg2c9btL8QKWS+dT2Pyxik2ue28FbEsOWQ2O1DOG/5NLX6VM6yNXMlBem3N59Cg==}
     engines: {node: '>=18'}
     peerDependencies:
       openai: ^4.42.0
       react: 18.3.1
-      solid-js: ^1.7.7
       svelte: ^3.0.0 || ^4.0.0
-      vue: ^3.3.4
       zod: ^3.0.0
     peerDependenciesMeta:
       openai:
         optional: true
       react:
         optional: true
-      solid-js:
-        optional: true
       svelte:
-        optional: true
-      vue:
         optional: true
       zod:
         optional: true
@@ -9549,8 +9588,8 @@ packages:
   remove-accents@0.5.0:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
 
-  replicate@0.29.4:
-    resolution: {integrity: sha512-BizXBehB2Rjil3o2R9Vy9fd0k3w7aIoXtc/+vdOmitC2viW3pSMt0GwC4h+OmMpx9zot90C43wrssyMJ3rMScQ==}
+  replicate@0.30.2:
+    resolution: {integrity: sha512-U3yDrlwAV/zhaCd5Tcb8IPXqwkzvfXbN+YABM6RGPugtmuo8W5uwxoEQAetWD+xjS5jWLzISBYR5gPNBZPLOQw==}
     engines: {git: '>=2.11.0', node: '>=18.0.0', npm: '>=7.19.0', yarn: '>=1.7.0'}
 
   require-directory@2.1.1:
@@ -9904,10 +9943,10 @@ packages:
   sprintf-js@1.1.3:
     resolution: {integrity: sha512-Oo+0REFV59/rz3gfJNKQiBlwfHaSESl1pcGyABQsnnIfWOFt6JNj5gCog2U6MLZ//IGYD+nA8nI+mTShREReaA==}
 
-  sswr@2.0.0:
-    resolution: {integrity: sha512-mV0kkeBHcjcb0M5NqKtKVg/uTIYNlIIniyDfSGrSfxpEdM9C365jK0z55pl9K0xAkNTJi2OAOVFQpgMPUk+V0w==}
+  sswr@2.1.0:
+    resolution: {integrity: sha512-Cqc355SYlTAaUt8iDPaC/4DPPXK925PePLMxyBKuWd5kKc5mwsG3nT9+Mq2tyguL5s7b4Jg+IRMpTRsNTAfpSQ==}
     peerDependencies:
-      svelte: ^4.0.0
+      svelte: ^4.0.0 || ^5.0.0-next.0
 
   stable@0.1.8:
     resolution: {integrity: sha512-ji9qxRnOVfcuLDySj9qzhGSEFVobyt1kIOSkj1qZzYLzq7Tos/oUUWvotUPQLlrsidqsK6tBH89Bc9kL5zHA6w==}
@@ -10666,25 +10705,69 @@ snapshots:
     optionalDependencies:
       graphql: 16.8.2
 
-  '@ai-sdk/openai@0.0.13(zod@3.23.8)':
+  '@ai-sdk/openai@0.0.31(zod@3.23.8)':
     dependencies:
-      '@ai-sdk/provider': 0.0.5
-      '@ai-sdk/provider-utils': 0.0.8(zod@3.23.8)
-    optionalDependencies:
+      '@ai-sdk/provider': 0.0.10
+      '@ai-sdk/provider-utils': 0.0.15(zod@3.23.8)
       zod: 3.23.8
 
-  '@ai-sdk/provider-utils@0.0.8(zod@3.23.8)':
+  '@ai-sdk/provider-utils@0.0.15(zod@3.23.8)':
     dependencies:
-      '@ai-sdk/provider': 0.0.5
+      '@ai-sdk/provider': 0.0.10
       eventsource-parser: 1.1.2
       nanoid: 3.3.6
       secure-json-parse: 2.7.0
     optionalDependencies:
       zod: 3.23.8
 
-  '@ai-sdk/provider@0.0.5':
+  '@ai-sdk/provider@0.0.10':
     dependencies:
       json-schema: 0.4.0
+
+  '@ai-sdk/react@0.0.4(react@18.3.1)(zod@3.23.8)':
+    dependencies:
+      '@ai-sdk/provider-utils': 0.0.15(zod@3.23.8)
+      '@ai-sdk/ui-utils': 0.0.4(zod@3.23.8)
+      swr: 2.2.0(react@18.3.1)
+    optionalDependencies:
+      react: 18.3.1
+      zod: 3.23.8
+
+  '@ai-sdk/solid@0.0.4(solid-js@1.8.17)(zod@3.23.8)':
+    dependencies:
+      '@ai-sdk/ui-utils': 0.0.4(zod@3.23.8)
+      solid-swr-store: 0.10.7(solid-js@1.8.17)(swr-store@0.10.6)
+      swr-store: 0.10.6
+    optionalDependencies:
+      solid-js: 1.8.17
+    transitivePeerDependencies:
+      - zod
+
+  '@ai-sdk/svelte@0.0.4(svelte@4.2.18)(zod@3.23.8)':
+    dependencies:
+      '@ai-sdk/provider-utils': 0.0.15(zod@3.23.8)
+      '@ai-sdk/ui-utils': 0.0.4(zod@3.23.8)
+      sswr: 2.1.0(svelte@4.2.18)
+    optionalDependencies:
+      svelte: 4.2.18
+    transitivePeerDependencies:
+      - zod
+
+  '@ai-sdk/ui-utils@0.0.4(zod@3.23.8)':
+    dependencies:
+      '@ai-sdk/provider-utils': 0.0.15(zod@3.23.8)
+      secure-json-parse: 2.7.0
+    optionalDependencies:
+      zod: 3.23.8
+
+  '@ai-sdk/vue@0.0.4(vue@3.4.29(typescript@5.4.5))(zod@3.23.8)':
+    dependencies:
+      '@ai-sdk/ui-utils': 0.0.4(zod@3.23.8)
+      swrv: 1.0.4(vue@3.4.29(typescript@5.4.5))
+    optionalDependencies:
+      vue: 3.4.29(typescript@5.4.5)
+    transitivePeerDependencies:
+      - zod
 
   '@alloc/quick-lru@5.2.0': {}
 
@@ -10914,7 +10997,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@babel/preset-react@7.24.1(@babel/core@7.24.7)':
+  '@babel/preset-react@7.24.7(@babel/core@7.24.7)':
     dependencies:
       '@babel/core': 7.24.7
       '@babel/helper-plugin-utils': 7.24.7
@@ -11029,7 +11112,7 @@ snapshots:
 
   '@discoveryjs/json-ext@0.5.7': {}
 
-  '@edge-csrf/nextjs@2.0.0(next@14.2.4(@opentelemetry/api@1.9.0)(@playwright/test@1.44.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))':
+  '@edge-csrf/nextjs@2.2.0(next@14.2.4(@opentelemetry/api@1.9.0)(@playwright/test@1.44.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))':
     dependencies:
       next: 14.2.4(@babel/core@7.24.7)(@opentelemetry/api@1.9.0)(@playwright/test@1.44.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
 
@@ -11452,7 +11535,7 @@ snapshots:
       react-dom: 18.3.1(react@18.3.1)
       server-only: 0.0.1
 
-  '@langchain/community@0.2.12(@mozilla/readability@0.5.0)(@supabase/postgrest-js@1.15.5)(@supabase/supabase-js@2.43.5)(axios@1.7.2)(crypto-js@4.2.0)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(lodash@4.17.21)(openai@4.52.0)(playwright@1.44.1)(replicate@0.29.4)(ws@8.17.1)':
+  '@langchain/community@0.2.12(@mozilla/readability@0.5.0)(@supabase/postgrest-js@1.15.5)(@supabase/supabase-js@2.43.5)(axios@1.7.2)(crypto-js@4.2.0)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(lodash@4.17.21)(openai@4.52.0)(playwright@1.44.1)(replicate@0.30.2)(ws@8.17.1)':
     dependencies:
       '@langchain/core': 0.2.8(langchain@0.2.3(@supabase/supabase-js@2.43.5)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.0)(playwright@1.44.1)(ws@8.17.1))(openai@4.52.0)
       '@langchain/openai': 0.1.3(langchain@0.2.3(@supabase/supabase-js@2.43.5)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.0)(playwright@1.44.1)(ws@8.17.1))
@@ -11474,7 +11557,7 @@ snapshots:
       ignore: 5.3.1
       lodash: 4.17.21
       playwright: 1.44.1
-      replicate: 0.29.4
+      replicate: 0.30.2
       ws: 8.17.1
     transitivePeerDependencies:
       - '@gomomento/sdk-web'
@@ -11525,17 +11608,6 @@ snapshots:
   '@langchain/openai@0.0.33(langchain@0.2.3(@supabase/supabase-js@2.43.5)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.0)(playwright@1.44.1)(ws@8.17.1))':
     dependencies:
       '@langchain/core': 0.2.8(langchain@0.2.3(@supabase/supabase-js@2.43.5)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.0)(playwright@1.44.1)(ws@8.17.1))(openai@4.52.0)
-      js-tiktoken: 1.0.12
-      openai: 4.52.0
-      zod: 3.23.8
-      zod-to-json-schema: 3.23.1(zod@3.23.8)
-    transitivePeerDependencies:
-      - encoding
-      - langchain
-
-  '@langchain/openai@0.0.33(langchain@0.2.5(@supabase/supabase-js@2.43.5)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.0)(playwright@1.44.1)(ws@8.17.1))':
-    dependencies:
-      '@langchain/core': 0.2.8(langchain@0.2.5(@supabase/supabase-js@2.43.5)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.0)(playwright@1.44.1)(ws@8.17.1))(openai@4.52.0)
       js-tiktoken: 1.0.12
       openai: 4.52.0
       zod: 3.23.8
@@ -13902,14 +13974,14 @@ snapshots:
     optionalDependencies:
       rollup: 3.29.4
 
-  '@rollup/plugin-commonjs@25.0.8(rollup@4.18.0)':
+  '@rollup/plugin-commonjs@26.0.1(rollup@4.18.0)':
     dependencies:
       '@rollup/pluginutils': 5.1.0(rollup@4.18.0)
       commondir: 1.0.1
       estree-walker: 2.0.2
-      glob: 8.1.0
+      glob: 10.4.2
       is-reference: 1.2.1
-      magic-string: 0.30.8
+      magic-string: 0.30.10
     optionalDependencies:
       rollup: 4.18.0
 
@@ -14993,28 +15065,30 @@ snapshots:
       clean-stack: 2.2.0
       indent-string: 4.0.0
 
-  ai@3.1.12(openai@4.52.0)(react@18.3.1)(solid-js@1.8.17)(svelte@4.2.18)(vue@3.4.29(typescript@5.4.5))(zod@3.23.8):
+  ai@3.2.1(openai@4.52.0)(react@18.3.1)(solid-js@1.8.17)(svelte@4.2.18)(vue@3.4.29(typescript@5.4.5))(zod@3.23.8):
     dependencies:
-      '@ai-sdk/provider': 0.0.5
-      '@ai-sdk/provider-utils': 0.0.8(zod@3.23.8)
+      '@ai-sdk/provider': 0.0.10
+      '@ai-sdk/provider-utils': 0.0.15(zod@3.23.8)
+      '@ai-sdk/react': 0.0.4(react@18.3.1)(zod@3.23.8)
+      '@ai-sdk/solid': 0.0.4(solid-js@1.8.17)(zod@3.23.8)
+      '@ai-sdk/svelte': 0.0.4(svelte@4.2.18)(zod@3.23.8)
+      '@ai-sdk/ui-utils': 0.0.4(zod@3.23.8)
+      '@ai-sdk/vue': 0.0.4(vue@3.4.29(typescript@5.4.5))(zod@3.23.8)
       eventsource-parser: 1.1.2
       json-schema: 0.4.0
       jsondiffpatch: 0.6.0
       nanoid: 3.3.6
       secure-json-parse: 2.7.0
-      solid-swr-store: 0.10.7(solid-js@1.8.17)(swr-store@0.10.6)
-      sswr: 2.0.0(svelte@4.2.18)
-      swr: 2.2.0(react@18.3.1)
-      swr-store: 0.10.6
-      swrv: 1.0.4(vue@3.4.29(typescript@5.4.5))
+      sswr: 2.1.0(svelte@4.2.18)
       zod-to-json-schema: 3.22.5(zod@3.23.8)
     optionalDependencies:
       openai: 4.52.0
       react: 18.3.1
-      solid-js: 1.8.17
       svelte: 4.2.18
-      vue: 3.4.29(typescript@5.4.5)
       zod: 3.23.8
+    transitivePeerDependencies:
+      - solid-js
+      - vue
 
   ajv-keywords@3.5.2(ajv@6.12.6):
     dependencies:
@@ -18932,7 +19006,7 @@ snapshots:
 
   remove-accents@0.5.0: {}
 
-  replicate@0.29.4:
+  replicate@0.30.2:
     optionalDependencies:
       readable-stream: 4.5.2
 
@@ -19328,7 +19402,7 @@ snapshots:
 
   sprintf-js@1.1.3: {}
 
-  sswr@2.0.0(svelte@4.2.18):
+  sswr@2.1.0(svelte@4.2.18):
     dependencies:
       svelte: 4.2.18
       swrev: 4.0.0
