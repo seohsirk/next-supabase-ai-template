@@ -11,6 +11,7 @@ import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-clie
 
 import { createPostsLLMService } from '~/home/(user)/posts/_lib/server/posts-llm.service';
 import { createTokenUsageTrackerService } from '~/home/(user)/posts/_lib/server/token-usage-tracker.service';
+import { Database } from '~/lib/database.types';
 
 const GeneratePostSchema = z.object({
   title: z.string().min(1),
@@ -36,7 +37,9 @@ export const generatePostAction = enhanceAction(
     const logger = await getLogger();
 
     const service = createPostsLLMService();
-    const adminClient = getSupabaseServerActionClient({ admin: true });
+    const adminClient = getSupabaseServerActionClient<Database>({
+      admin: true,
+    });
 
     logger.info(
       {
@@ -159,7 +162,7 @@ export const generatePostAction = enhanceAction(
 export const deletePostAction = enhanceAction(
   async ({ postId }) => {
     const logger = await getLogger();
-    const client = getSupabaseServerActionClient();
+    const client = getSupabaseServerActionClient<Database>();
 
     logger.info(
       {

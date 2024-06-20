@@ -18,6 +18,8 @@ import { If } from '@kit/ui/if';
 import { MarkdownRenderer } from '@kit/ui/markdown-renderer';
 import { Trans } from '@kit/ui/trans';
 
+import { Database } from '~/lib/database.types';
+
 export function BlogPostContentEditor(props: { id: string; content: string }) {
   const updatePost = useUpdatePost(props.id);
   const save$ = useMemo(() => new Subject<string>(), []);
@@ -86,7 +88,7 @@ export function BlogPostContentEditor(props: { id: string; content: string }) {
 export default BlogPostContentEditor;
 
 function useUpdatePost(id: string) {
-  const client = useSupabase();
+  const client = useSupabase<Database>();
   const mutationKey = ['posts', id];
 
   const mutationFn = async (content: string) => {

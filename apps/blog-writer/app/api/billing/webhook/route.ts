@@ -1,7 +1,3 @@
-import { SupabaseClient } from '@supabase/supabase-js';
-
-import type { Stripe } from 'stripe';
-
 import { getBillingEventHandlerService } from '@kit/billing-gateway';
 import { enhanceRouteHandler } from '@kit/next/routes';
 import { getLogger } from '@kit/shared/logger';
@@ -26,7 +22,7 @@ export const POST = enhanceRouteHandler(
     logger.info(ctx, `Received billing webhook. Processing...`);
 
     const supabaseClientProvider = () =>
-      getSupabaseRouteHandlerClient({ admin: true });
+      getSupabaseRouteHandlerClient<Database>({ admin: true });
 
     const service = await getBillingEventHandlerService(
       supabaseClientProvider,
@@ -83,7 +79,7 @@ async function updateMessagesCountQuota(params: {
   variantId: string;
   accountId: string;
 }) {
-  const client = getSupabaseRouteHandlerClient({ admin: true });
+  const client = getSupabaseRouteHandlerClient<Database>({ admin: true });
 
   // get the max messages for the price based on the price ID
   const plan = await client

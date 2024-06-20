@@ -10,8 +10,9 @@ import { Button } from '@kit/ui/button';
 import { PageBody, PageHeader } from '@kit/ui/page';
 import { Trans } from '@kit/ui/trans';
 
-import { loadUserWorkspace } from '~/home/(user)/_lib/server/load-user-workspace';
+import { Database } from '~/lib/database.types';
 import { withI18n } from '~/lib/i18n/with-i18n';
+import { requireUserInServerComponent } from '~/lib/server/require-user-in-server-component';
 
 const BlogPostContentEditor = dynamic(
   () => import('./components/blog-post-content-editor'),
@@ -28,8 +29,8 @@ interface PostPageProps {
 }
 
 async function PostPage({ params }: PostPageProps) {
-  const client = getSupabaseServerComponentClient();
-  const { user } = await loadUserWorkspace();
+  const client = getSupabaseServerComponentClient<Database>();
+  const user = await requireUserInServerComponent();
 
   const post = await fetchDataFromSupabase({
     client,

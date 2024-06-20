@@ -10,6 +10,7 @@ import { Trans } from '@kit/ui/trans';
 
 import { loadUserWorkspace } from '~/home/(user)/_lib/server/load-user-workspace';
 import { PostsTable } from '~/home/(user)/posts/_components/posts-table';
+import { Database } from '~/lib/database.types';
 import { withI18n } from '~/lib/i18n/with-i18n';
 
 interface PostPageProps {
@@ -19,7 +20,7 @@ interface PostPageProps {
 }
 
 async function PostsPage({ searchParams }: PostPageProps) {
-  const client = getSupabaseServerComponentClient();
+  const client = getSupabaseServerComponentClient<Database>();
   const page = Number(searchParams.page ?? '1');
   const { user } = await loadUserWorkspace();
 
