@@ -35,16 +35,14 @@ function Home() {
               'flex w-full flex-1 flex-col items-center space-y-8 xl:space-y-12 2xl:space-y-14'
             }
           >
-            <Pill>
-              <span>The leading SaaS Starter Kit for ambitious developers</span>
-            </Pill>
+            <Pill>An AI Blog Writer that helps you write better content</Pill>
 
             <div className={'flex flex-col items-center space-y-8'}>
               <HeroTitle>
-                <span>The SaaS Starter Kit</span>
+                <span>Write Blog Posts</span>
 
-                <span>
-                  <span>for ambitious developers</span>
+                <span className={'mt-4 bg-primary p-4 text-primary-foreground'}>
+                  at warp speed
                 </span>
               </HeroTitle>
 
@@ -52,28 +50,13 @@ function Home() {
                 <Heading
                   level={2}
                   className={
-                    'p-0 text-center font-sans text-2xl font-normal text-muted-foreground'
+                    'p-0 text-center font-sans text-2xl font-normal text-muted-foreground max-w-xl'
                   }
                 >
-                  <span>Build and launch a SaaS in days, not months</span>
-                </Heading>
-
-                <Heading
-                  level={2}
-                  className={
-                    'p-0 text-center font-sans text-2xl font-normal text-muted-foreground'
-                  }
-                >
-                  <span>Focus on your business, not on the tech</span>
-                </Heading>
-
-                <Heading
-                  level={2}
-                  className={
-                    'p-0 text-center font-sans text-2xl font-normal text-muted-foreground'
-                  }
-                >
-                  Ship something great, today.
+                  <span>
+                    Write blog posts faster than ever before with our AI Blog
+                    Writer that helps you write better content
+                  </span>
                 </Heading>
               </div>
 
@@ -293,7 +276,7 @@ function HeroTitle({ children }: React.PropsWithChildren) {
   return (
     <h1
       className={
-        'flex flex-col text-center font-heading text-5xl font-semibold tracking-tight sm:text-6xl lg:text-7xl'
+        'flex flex-col text-center font-heading text-5xl font-semibold tracking-tight sm:text-6xl lg:text-7xl 2xl:text-8xl'
       }
     >
       {children}
@@ -347,13 +330,7 @@ function FeatureContainer(
 function MainCallToActionButton() {
   return (
     <div className={'flex space-x-2'}>
-      <Button asChild variant={'link'}>
-        <Link href={'/docs'}>
-          <Trans i18nKey={'common:documentation'} />
-        </Link>
-      </Button>
-
-      <Button asChild>
+      <Button size={'lg'} asChild>
         <Link href={'/auth/sign-up'}>
           <span className={'flex items-center space-x-0.5'}>
             <span>
