@@ -28,7 +28,17 @@ STRIPE_SECRET_KEY=
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
 ```
 
-### LLM
+### Stripe Webhook
+
+Please also add the following webhook to your Stripe account:
+
+```
+- invoice.paid
+```
+
+We need to listen to the `invoice.paid` event to update the `credits_usage` table in the DB.
+
+## LLM
 
 Please add the following LLM (OpenAI Compatible) keys:
 
