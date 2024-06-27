@@ -34,49 +34,6 @@ export type Database = {
   };
   public: {
     Tables: {
-      account_credits: {
-        Row: {
-          account_id: string;
-          created_at: string;
-          credits: number;
-          id: number;
-        };
-        Insert: {
-          account_id: string;
-          created_at?: string;
-          credits?: number;
-          id?: number;
-        };
-        Update: {
-          account_id?: string;
-          created_at?: string;
-          credits?: number;
-          id?: number;
-        };
-        Relationships: [
-          {
-            foreignKeyName: 'account_credits_account_id_fkey';
-            columns: ['account_id'];
-            isOneToOne: false;
-            referencedRelation: 'accounts';
-            referencedColumns: ['id'];
-          },
-          {
-            foreignKeyName: 'account_credits_account_id_fkey';
-            columns: ['account_id'];
-            isOneToOne: false;
-            referencedRelation: 'user_account_workspace';
-            referencedColumns: ['id'];
-          },
-          {
-            foreignKeyName: 'account_credits_account_id_fkey';
-            columns: ['account_id'];
-            isOneToOne: false;
-            referencedRelation: 'user_accounts';
-            referencedColumns: ['id'];
-          },
-        ];
-      };
       accounts: {
         Row: {
           created_at: string | null;
@@ -224,123 +181,6 @@ export type Database = {
           },
         ];
       };
-      avatars_generations: {
-        Row: {
-          account_id: string;
-          created_at: string;
-          id: number;
-          model_id: number;
-          name: string;
-          prompt: string;
-          status: Database['public']['Enums']['generation_status'];
-          uuid: string;
-        };
-        Insert: {
-          account_id: string;
-          created_at?: string;
-          id?: number;
-          model_id: number;
-          name: string;
-          prompt: string;
-          status?: Database['public']['Enums']['generation_status'];
-          uuid?: string;
-        };
-        Update: {
-          account_id?: string;
-          created_at?: string;
-          id?: number;
-          model_id?: number;
-          name?: string;
-          prompt?: string;
-          status?: Database['public']['Enums']['generation_status'];
-          uuid?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: 'avatars_generations_account_id_fkey';
-            columns: ['account_id'];
-            isOneToOne: false;
-            referencedRelation: 'accounts';
-            referencedColumns: ['id'];
-          },
-          {
-            foreignKeyName: 'avatars_generations_account_id_fkey';
-            columns: ['account_id'];
-            isOneToOne: false;
-            referencedRelation: 'user_account_workspace';
-            referencedColumns: ['id'];
-          },
-          {
-            foreignKeyName: 'avatars_generations_account_id_fkey';
-            columns: ['account_id'];
-            isOneToOne: false;
-            referencedRelation: 'user_accounts';
-            referencedColumns: ['id'];
-          },
-          {
-            foreignKeyName: 'avatars_generations_model_id_fkey';
-            columns: ['model_id'];
-            isOneToOne: false;
-            referencedRelation: 'avatars_models';
-            referencedColumns: ['id'];
-          },
-        ];
-      };
-      avatars_models: {
-        Row: {
-          account_id: string;
-          created_at: string;
-          id: number;
-          model: string;
-          name: string;
-          reference_id: string;
-          status: Database['public']['Enums']['generation_status'];
-          uuid: string;
-        };
-        Insert: {
-          account_id: string;
-          created_at?: string;
-          id?: number;
-          model: string;
-          name: string;
-          reference_id: string;
-          status?: Database['public']['Enums']['generation_status'];
-          uuid?: string;
-        };
-        Update: {
-          account_id?: string;
-          created_at?: string;
-          id?: number;
-          model?: string;
-          name?: string;
-          reference_id?: string;
-          status?: Database['public']['Enums']['generation_status'];
-          uuid?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: 'avatars_models_account_id_fkey';
-            columns: ['account_id'];
-            isOneToOne: false;
-            referencedRelation: 'accounts';
-            referencedColumns: ['id'];
-          },
-          {
-            foreignKeyName: 'avatars_models_account_id_fkey';
-            columns: ['account_id'];
-            isOneToOne: false;
-            referencedRelation: 'user_account_workspace';
-            referencedColumns: ['id'];
-          },
-          {
-            foreignKeyName: 'avatars_models_account_id_fkey';
-            columns: ['account_id'];
-            isOneToOne: false;
-            referencedRelation: 'user_accounts';
-            referencedColumns: ['id'];
-          },
-        ];
-      };
       billing_customers: {
         Row: {
           account_id: string;
@@ -383,6 +223,115 @@ export type Database = {
             columns: ['account_id'];
             isOneToOne: false;
             referencedRelation: 'user_accounts';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      boards: {
+        Row: {
+          account_id: string;
+          created_at: string;
+          description: string | null;
+          id: string;
+          name: string;
+        };
+        Insert: {
+          account_id: string;
+          created_at?: string;
+          description?: string | null;
+          id?: string;
+          name: string;
+        };
+        Update: {
+          account_id?: string;
+          created_at?: string;
+          description?: string | null;
+          id?: string;
+          name?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'boards_account_id_fkey';
+            columns: ['account_id'];
+            isOneToOne: false;
+            referencedRelation: 'accounts';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'boards_account_id_fkey';
+            columns: ['account_id'];
+            isOneToOne: false;
+            referencedRelation: 'user_account_workspace';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'boards_account_id_fkey';
+            columns: ['account_id'];
+            isOneToOne: false;
+            referencedRelation: 'user_accounts';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      boards_columns: {
+        Row: {
+          account_id: string;
+          board_id: string;
+          created_at: string;
+          id: string;
+          name: string;
+          next_column_id: string | null;
+        };
+        Insert: {
+          account_id: string;
+          board_id: string;
+          created_at?: string;
+          id?: string;
+          name: string;
+          next_column_id?: string | null;
+        };
+        Update: {
+          account_id?: string;
+          board_id?: string;
+          created_at?: string;
+          id?: string;
+          name?: string;
+          next_column_id?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'boards_columns_account_id_fkey';
+            columns: ['account_id'];
+            isOneToOne: false;
+            referencedRelation: 'accounts';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'boards_columns_account_id_fkey';
+            columns: ['account_id'];
+            isOneToOne: false;
+            referencedRelation: 'user_account_workspace';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'boards_columns_account_id_fkey';
+            columns: ['account_id'];
+            isOneToOne: false;
+            referencedRelation: 'user_accounts';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'boards_columns_board_id_fkey';
+            columns: ['board_id'];
+            isOneToOne: false;
+            referencedRelation: 'boards';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'boards_columns_next_column_id_fkey';
+            columns: ['next_column_id'];
+            isOneToOne: false;
+            referencedRelation: 'boards_columns';
             referencedColumns: ['id'];
           },
         ];
@@ -646,19 +595,22 @@ export type Database = {
       };
       plans: {
         Row: {
-          credits: number;
-          id: number;
+          board_quota: number;
           name: string;
+          product_id: string;
+          task_quota: number;
         };
         Insert: {
-          credits: number;
-          id?: number;
+          board_quota: number;
           name: string;
+          product_id: string;
+          task_quota: number;
         };
         Update: {
-          credits?: number;
-          id?: number;
+          board_quota?: number;
           name?: string;
+          product_id?: string;
+          task_quota?: number;
         };
         Relationships: [];
       };
@@ -833,6 +785,167 @@ export type Database = {
           },
         ];
       };
+      tags: {
+        Row: {
+          board_id: string;
+          color: string;
+          created_at: string;
+          id: number;
+          name: string;
+        };
+        Insert: {
+          board_id: string;
+          color: string;
+          created_at?: string;
+          id?: never;
+          name: string;
+        };
+        Update: {
+          board_id?: string;
+          color?: string;
+          created_at?: string;
+          id?: never;
+          name?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'tags_board_id_fkey';
+            columns: ['board_id'];
+            isOneToOne: false;
+            referencedRelation: 'boards';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      tasks: {
+        Row: {
+          account_id: string;
+          assignee_id: string | null;
+          board_id: string | null;
+          body: string | null;
+          column_id: string | null;
+          created_at: string;
+          due_date: string | null;
+          id: string;
+          name: string;
+          position: number;
+          updated_at: string;
+        };
+        Insert: {
+          account_id: string;
+          assignee_id?: string | null;
+          board_id?: string | null;
+          body?: string | null;
+          column_id?: string | null;
+          created_at?: string;
+          due_date?: string | null;
+          id?: string;
+          name: string;
+          position?: number;
+          updated_at?: string;
+        };
+        Update: {
+          account_id?: string;
+          assignee_id?: string | null;
+          board_id?: string | null;
+          body?: string | null;
+          column_id?: string | null;
+          created_at?: string;
+          due_date?: string | null;
+          id?: string;
+          name?: string;
+          position?: number;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'tasks_account_id_fkey';
+            columns: ['account_id'];
+            isOneToOne: false;
+            referencedRelation: 'accounts';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'tasks_account_id_fkey';
+            columns: ['account_id'];
+            isOneToOne: false;
+            referencedRelation: 'user_account_workspace';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'tasks_account_id_fkey';
+            columns: ['account_id'];
+            isOneToOne: false;
+            referencedRelation: 'user_accounts';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'tasks_assignee_id_fkey';
+            columns: ['assignee_id'];
+            isOneToOne: false;
+            referencedRelation: 'accounts';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'tasks_assignee_id_fkey';
+            columns: ['assignee_id'];
+            isOneToOne: false;
+            referencedRelation: 'user_account_workspace';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'tasks_assignee_id_fkey';
+            columns: ['assignee_id'];
+            isOneToOne: false;
+            referencedRelation: 'user_accounts';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'tasks_board_id_fkey';
+            columns: ['board_id'];
+            isOneToOne: false;
+            referencedRelation: 'boards';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'tasks_column_id_fkey';
+            columns: ['column_id'];
+            isOneToOne: false;
+            referencedRelation: 'boards_columns';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      tasks_tags: {
+        Row: {
+          tag_id: number;
+          task_id: string;
+        };
+        Insert: {
+          tag_id: number;
+          task_id: string;
+        };
+        Update: {
+          tag_id?: number;
+          task_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'tasks_tags_tag_id_fkey';
+            columns: ['tag_id'];
+            isOneToOne: false;
+            referencedRelation: 'tags';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'tasks_tags_task_id_fkey';
+            columns: ['task_id'];
+            isOneToOne: false;
+            referencedRelation: 'tasks';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
     };
     Views: {
       user_account_workspace: {
@@ -887,9 +1000,21 @@ export type Database = {
         };
         Returns: boolean;
       };
-      can_generate: {
+      can_create_board: {
         Args: {
-          credits_cost: number;
+          target_account_id: string;
+        };
+        Returns: boolean;
+      };
+      can_create_board_by_slug: {
+        Args: {
+          account_slug: string;
+        };
+        Returns: boolean;
+      };
+      can_create_task: {
+        Args: {
+          target_account_id: string;
         };
         Returns: boolean;
       };
@@ -929,6 +1054,21 @@ export type Database = {
           updated_at: string | null;
           updated_by: string | null;
         };
+      };
+      current_user_can_action_board: {
+        Args: {
+          board_id: string;
+        };
+        Returns: boolean;
+      };
+      delete_task_and_reorder: {
+        Args: {
+          task_id: string;
+        };
+        Returns: {
+          affected_task_id: string;
+          new_position: number;
+        }[];
       };
       get_account_invitations: {
         Args: {
@@ -1035,18 +1175,11 @@ export type Database = {
         };
         Returns: boolean;
       };
-      is_user_avatar: {
-        Args: {
-          generation_id: string;
-        };
-        Returns: boolean;
-      };
-      reduce_credits: {
+      select_product_id_by_account_id: {
         Args: {
           target_account_id: string;
-          credits_cost: number;
         };
-        Returns: undefined;
+        Returns: string;
       };
       team_account_workspace: {
         Args: {
@@ -1136,7 +1269,6 @@ export type Database = {
         | 'members.manage'
         | 'invites.manage';
       billing_provider: 'stripe' | 'lemon-squeezy' | 'paddle';
-      generation_status: 'pending' | 'success' | 'failed';
       notification_channel: 'in_app' | 'email';
       notification_type: 'info' | 'warning' | 'error';
       payment_status: 'pending' | 'succeeded' | 'failed';

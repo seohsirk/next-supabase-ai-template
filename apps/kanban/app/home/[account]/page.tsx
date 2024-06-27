@@ -1,70 +1,121 @@
-import loadDynamic from 'next/dynamic';
+import Link from 'next/link';
 
-import { PlusCircle } from 'lucide-react';
+import { PlusCircleIcon } from 'lucide-react';
 
+import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
+import { Alert, AlertDescription } from '@kit/ui/alert';
 import { Button } from '@kit/ui/button';
-import { PageBody } from '@kit/ui/page';
-import { Spinner } from '@kit/ui/spinner';
-import { Trans } from '@kit/ui/trans';
+import { CardButton, CardButtonHeader } from '@kit/ui/card-button';
+import { Heading } from '@kit/ui/heading';
+import { PageBody, PageHeader } from '@kit/ui/page';
 
-import { createI18nServerInstance } from '~/lib/i18n/i18n.server';
+import { CreateBoardModal } from '~/home/[account]/boards/_components/create-board-modal';
 import { withI18n } from '~/lib/i18n/with-i18n';
+import { getBoards, getCanCreateBoard } from '~/lib/kanban/boards/queries';
 
-import { TeamAccountLayoutPageHeader } from './_components/team-account-layout-page-header';
-
-interface Params {
-  account: string;
-}
-
-const DashboardDemo = loadDynamic(
-  () => import('./_components/dashboard-demo'),
-  {
-    ssr: false,
-    loading: () => (
-      <div
-        className={
-          'flex h-full flex-1 flex-col items-center justify-center space-y-4' +
-          ' py-24'
-        }
-      >
-        <Spinner />
-
-        <div>
-          <Trans i18nKey={'common:loading'} />
-        </div>
-      </div>
-    ),
-  },
-);
-
-export const generateMetadata = async () => {
-  const i18n = await createI18nServerInstance();
-  const title = i18n.t('teams:home.pageTitle');
-
-  return {
-    title,
-  };
+export const metadata = {
+  title: 'Boards',
 };
 
-function TeamAccountHomePage({ params }: { params: Params }) {
+interface BoardsPageProps {
+  params: {
+    account: string;
+  };
+}
+
+async function BoardsPage({ params }: BoardsPageProps) {
+  const [boards, canCreateBoard] = await loadBoardData(params.account);
+
   return (
     <>
-      <TeamAccountLayoutPageHeader
-        account={params.account}
-        title={<Trans i18nKey={'common:dashboardTabLabel'} />}
-        description={<Trans i18nKey={'common:dashboardTabDescription'} />}
-      >
-        <Button>
-          <PlusCircle className={'mr-1 h-4'} />
-          <span>Add Widget</span>
-        </Button>
-      </TeamAccountLayoutPageHeader>
+      <PageHeader title={`Boards`} description={`Manage your Boards`}>
+        <CreateBoardModal
+          accountSlug={params.account}
+          canCreateBoard={canCreateBoard}
+        >
+          <Button size={'sm'} variant={'outline'}>
+            <PlusCircleIcon className={'mr-2 w-4'} />
+
+            <span>New Board</span>
+          </Button>
+        </CreateBoardModal>
+      </PageHeader>
 
       <PageBody>
-        <DashboardDemo />
+        <BoardsList data={boards} accountSlug={params.account} />
       </PageBody>
     </>
   );
 }
 
-export default withI18n(TeamAccountHomePage);
+function BoardsList(
+  props: React.PropsWithChildren<{
+    data: Awaited<ReturnType<typeof getBoards>>;
+    accountSlug: string;
+  }>,
+) {
+  const { error, data } = props.data;
+
+  if (error) {
+    return (
+      <Alert variant={'destructive'}>
+        <AlertDescription>
+          Sorry, we encountered an error while fetching your boards
+        </AlertDescription>
+      </Alert>
+    );
+  }
+
+  if (!data.length) {
+    return <EmptyState accountSlug={props.accountSlug} />;
+  }
+
+  return (
+    <div className={'grid grid-cols-1 gap-4 lg:grid-cols-3 xl:gap-8'}>
+      {data.map((item) => {
+        return (
+          <CardButton key={item.id} asChild>
+            <Link href={`${props.accountSlug}/boards/` + item.id.toString()}>
+              <CardButtonHeader>
+                <p>{item.name}</p>
+              </CardButtonHeader>
+            </Link>
+          </CardButton>
+        );
+      })}
+    </div>
+  );
+}
+
+export default withI18n(BoardsPage);
+
+function EmptyState(props: { accountSlug: string }) {
+  return (
+    <div className={'flex h-full w-full flex-col items-center justify-center'}>
+      <div
+        className={
+          'flex flex-col items-center justify-center space-y-8 lg:p-24'
+        }
+      >
+        <div className={'flex flex-col space-y-2'}>
+          <Heading level={3}>Let&apos;s create your first Board</Heading>
+        </div>
+
+        <CreateBoardModal accountSlug={props.accountSlug} canCreateBoard={true}>
+          <Button className={'w-full'} size={'lg'}>
+            <PlusCircleIcon className={'mr-4 h-6'} />
+            <span>Create your first Board</span>
+          </Button>
+        </CreateBoardModal>
+      </div>
+    </div>
+  );
+}
+
+async function loadBoardData(slug: string) {
+  const client = getSupabaseServerActionClient();
+  const canCreateBoard = getCanCreateBoard(client, slug);
+  const boards = getBoards(client, slug);
+
+  return Promise.all([boards, canCreateBoard]);
+}

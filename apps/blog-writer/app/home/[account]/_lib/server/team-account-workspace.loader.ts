@@ -16,7 +16,7 @@ export type TeamAccountWorkspace = Awaited<
 
 /**
  * Load the account workspace data.
- * We place this function into a separate file so it can be reused in multiple places across the server components.
+ * We place this function into a separate file so it can be reused in multiple places across the server _components.
  *
  * This function is used in the layout component for the account workspace.
  * It is cached so that the data is only fetched once per request.

@@ -178,6 +178,24 @@ export class TeamAccountsApi {
   }
 
   /**
+   * @name getMembersCount
+   * @description Get the number of members in the account.
+   * @param slug
+   */
+  async getMembers(slug: string) {
+    const { data, error } = await this.client
+      .from('accounts_memberships')
+      .select('*, account_id !inner (slug)')
+      .eq('account_id.slug', slug);
+
+    if (error) {
+      throw error;
+    }
+
+    return data;
+  }
+
+  /**
    * @name getCustomerId
    * @description Get the billing customer ID for the given account.
    * @param accountId

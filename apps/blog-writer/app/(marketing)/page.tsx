@@ -50,7 +50,7 @@ function Home() {
                 <Heading
                   level={2}
                   className={
-                    'p-0 text-center font-sans text-2xl font-normal text-muted-foreground max-w-xl'
+                    'max-w-xl p-0 text-center font-sans text-2xl font-normal text-muted-foreground'
                   }
                 >
                   <span>
