@@ -16,7 +16,7 @@ import { If } from '@kit/ui/if';
 
 import { TaskTag } from '~/lib/kanban/tags/types';
 
-import { CreateTagModal } from './create-tag-modal';
+import { CreateTagDialog } from './create-tag-dialog';
 
 /**
  * Renders a dropdown menu for filtering tags.
@@ -52,7 +52,7 @@ export function TagsFilterDropdown(
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button size={'sm'} variant={'outline'}>
+        <Button variant={'outline'}>
           <span>{selectedTags ? label : `No tag selected`}</span>
           <ChevronDownIcon className={'ml-2 w-4'} />
         </Button>
@@ -104,7 +104,7 @@ export function TagsFilterDropdown(
 
         <DropdownMenuSeparator />
 
-        <CreateTagModal
+        <CreateTagDialog
           onCreated={(tag) => {
             setModels([...models, tag]);
           }}
@@ -113,7 +113,7 @@ export function TagsFilterDropdown(
             <PlusCircleIcon className={'mr-2 w-4'} />
             <span>Create Tag</span>
           </DropdownMenuItem>
-        </CreateTagModal>
+        </CreateTagDialog>
       </DropdownMenuContent>
     </DropdownMenu>
   );

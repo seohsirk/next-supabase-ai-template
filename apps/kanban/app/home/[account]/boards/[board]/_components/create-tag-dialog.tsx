@@ -35,13 +35,15 @@ const ColorPicker = dynamic(
   },
 );
 
-export function CreateTagModal(
+export function CreateTagDialog(
   props: React.PropsWithChildren<{
     onCreated: (tag: { name: string; color: string; id: number }) => void;
   }>,
 ) {
+  const [open, setOpen] = useState(false);
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{props.children}</DialogTrigger>
 
       <DialogContent>
@@ -49,7 +51,12 @@ export function CreateTagModal(
           <DialogTitle>Create Tag</DialogTitle>
         </DialogHeader>
 
-        <CreateTagForm onCreated={props.onCreated} />
+        <CreateTagForm
+          onCreated={(data) => {
+            props.onCreated(data);
+            setOpen(false);
+          }}
+        />
       </DialogContent>
     </Dialog>
   );

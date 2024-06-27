@@ -25,7 +25,7 @@ import { Textarea } from '@kit/ui/textarea';
 
 import { createBoardAction } from '~/home/[account]/boards/_lib/server/server-actions';
 
-export function CreateBoardModal(
+export function CreateBoardDialog(
   props: React.PropsWithChildren<{
     canCreateBoard: boolean;
     accountSlug: string;

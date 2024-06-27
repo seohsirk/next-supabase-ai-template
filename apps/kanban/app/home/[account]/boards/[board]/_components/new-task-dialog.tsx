@@ -155,20 +155,12 @@ function NewTaskForm(props: {
           />
         </div>
 
-        <div className={'flex justify-between space-x-2.5'}>
-          <div className={'flex items-center space-x-2.5'}>
-            <div>
-
-            </div>
-
-            <div>
-              <TagsFilterDropdown
-                models={tags}
-                selected={selectedTagsNames}
-                onChange={setSelectedTags}
-              />
-            </div>
-          </div>
+        <div className={'flex items-center justify-between'}>
+          <TagsFilterDropdown
+            models={tags}
+            selected={selectedTagsNames}
+            onChange={setSelectedTags}
+          />
 
           <div>
             <SubmitButton />

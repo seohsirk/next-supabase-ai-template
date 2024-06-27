@@ -9,7 +9,7 @@ import { CardButton, CardButtonHeader } from '@kit/ui/card-button';
 import { Heading } from '@kit/ui/heading';
 import { PageBody, PageHeader } from '@kit/ui/page';
 
-import { CreateBoardModal } from '~/home/[account]/boards/_components/create-board-modal';
+import { CreateBoardDialog } from '~/home/[account]/boards/_components/create-board-dialog';
 import { withI18n } from '~/lib/i18n/with-i18n';
 import { getBoards, getCanCreateBoard } from '~/lib/kanban/boards/queries';
 
@@ -29,7 +29,7 @@ async function BoardsPage({ params }: BoardsPageProps) {
   return (
     <>
       <PageHeader title={`Boards`} description={`Manage your Boards`}>
-        <CreateBoardModal
+        <CreateBoardDialog
           accountSlug={params.account}
           canCreateBoard={canCreateBoard}
         >
@@ -38,7 +38,7 @@ async function BoardsPage({ params }: BoardsPageProps) {
 
             <span>New Board</span>
           </Button>
-        </CreateBoardModal>
+        </CreateBoardDialog>
       </PageHeader>
 
       <PageBody>
@@ -101,12 +101,12 @@ function EmptyState(props: { accountSlug: string }) {
           <Heading level={3}>Let&apos;s create your first Board</Heading>
         </div>
 
-        <CreateBoardModal accountSlug={props.accountSlug} canCreateBoard={true}>
+        <CreateBoardDialog accountSlug={props.accountSlug} canCreateBoard={true}>
           <Button className={'w-full'} size={'lg'}>
             <PlusCircleIcon className={'mr-4 h-6'} />
             <span>Create your first Board</span>
           </Button>
-        </CreateBoardModal>
+        </CreateBoardDialog>
       </div>
     </div>
   );
