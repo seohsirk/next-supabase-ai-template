@@ -33,7 +33,7 @@ async function BoardsPage({ params }: BoardsPageProps) {
           accountSlug={params.account}
           canCreateBoard={canCreateBoard}
         >
-          <Button size={'sm'} variant={'outline'}>
+          <Button>
             <PlusCircleIcon className={'mr-2 w-4'} />
 
             <span>New Board</span>

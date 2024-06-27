@@ -1,6 +1,13 @@
 'use client';
 
-import { createContext, useContext, useRef, useState } from 'react';
+import {
+  createContext,
+  useContext,
+  useEffect, useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 
 import {
   DragDropContext,
@@ -13,6 +20,7 @@ import {
   OnDragStartResponder,
 } from '@hello-pangea/dnd';
 import { EllipsisVerticalIcon, PlusCircleIcon } from 'lucide-react';
+import { Subject, debounceTime } from 'rxjs';
 
 import { Button } from '@kit/ui/button';
 import {
@@ -73,11 +81,33 @@ const KanbanEventsContext = createKanbanEventsContext();
 
 export function KanbanBoard(props: KanbanBoardProps) {
   const { columns, ...events } = props;
+  const scrolls$ = useMemo(() => new Subject<Event>(), []);
+
+  useEffect(() => {
+    const subscription = scrolls$.pipe(debounceTime(50)).subscribe((e) => {
+      const el = e.target as HTMLElement;
+
+      addClassOnScroll(el);
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [scrolls$]);
+
+  useLayoutEffect(() => {
+    const el = document.querySelector('.pb-container') as HTMLElement;
+
+    if (el) {
+      addClassOnScroll(el);
+    }
+  }, []);
 
   return (
     <KanbanEventsContext.Provider value={events}>
       <div
-        className={'pb-container flex flex-1 overflow-x-auto overflow-y-hidden'}
+        className={'pb-container flex flex-1 overflow-x-auto overflow-y-hidden border border-transparent'}
+        onScroll={(e) => scrolls$.next(e)}
       >
         <KanbanColumns columns={columns} />
 
@@ -172,7 +202,7 @@ export function KanbanColumns({
 
             <div
               className={cn(
-                'z-10 flex space-x-6 px-1 py-1 transition-transform',
+                'z-10 flex space-x-4 px-1 py-1 transition-transform',
                 {},
               )}
               ref={provided.innerRef}
@@ -226,7 +256,7 @@ function KanbanColumn({
   const droppableId = column.id ?? UNASSIGNED_COLUMN_ID;
 
   return (
-    <div className={cn('h-full w-full lg:min-w-[400px] lg:max-w-[400px]')}>
+    <div className={cn('h-full w-full lg:min-w-[360px] lg:max-w-[360px]')}>
       <div className={'flex h-full flex-col space-y-2.5'}>
         <div className={'flex justify-between'}>
           <div className={'flex items-center space-x-2.5'}>
@@ -266,11 +296,10 @@ function KanbanColumn({
             return (
               <div
                 className={cn(
-                  `dark:border-dark-900 relative h-full rounded-lg border border-gray-100 shadow-sm transition-all duration-300`,
+                  `relative h-full rounded-lg border shadow-sm transition-all duration-300`,
                   {
-                    ['dark:bg-dark-900/60 bg-gray-100']:
-                      snapshot.isDraggingOver,
-                    'dark:bg-dark-900/40 bg-gray-50': !snapshot.isDraggingOver,
+                    ['bg-muted']: snapshot.isDraggingOver,
+                    ['bg-background']: !snapshot.isDraggingOver,
                   },
                 )}
               >
@@ -278,8 +307,7 @@ function KanbanColumn({
                   ref={provided.innerRef}
                   {...provided.droppableProps}
                   className={
-                    'absolute flex h-full flex-col space-y-2 overflow-y-auto' +
-                    ' w-full p-2'
+                    'absolute flex h-full w-full flex-col space-y-2 overflow-y-auto p-2'
                   }
                 >
                   {column.tasks.map((task, index) => (
@@ -347,7 +375,7 @@ function KanbanTask({ task }: { task: KanbanTaskType }) {
       role={'link'}
       aria-label={'Open task'}
       onClick={() => callEvent(onTaskClick, task)}
-      className={`group flex cursor-pointer flex-col space-y-2 rounded-lg bg-background p-4 shadow-sm transition-all hover:shadow-lg dark:border dark:hover:shadow-primary/20`}
+      className={`group flex cursor-pointer flex-col space-y-2 rounded-lg border bg-background p-4 shadow-sm transition-all hover:shadow-lg dark:border dark:hover:shadow-primary/5`}
     >
       <div className={'flex items-center justify-between'}>
         <span className={'text-sm font-medium'}>{task.name}</span>
@@ -433,10 +461,7 @@ function EditableColumnName(
       suppressContentEditableWarning
       ref={ref}
       className={
-        'dark:hover:bg-dark-900 border font-semibold hover:bg-gray-50' +
-        ' border-transparent hover:border-gray-100' +
-        ' outline-none transition-colors focus:border-border' +
-        ' min-w-[20px]'
+        'min-w-[20px] border border-transparent font-semibold outline-none transition-colors hover:bg-muted focus:border-border'
       }
       contentEditable
       onBlur={(e) => {
@@ -536,4 +561,18 @@ function DragIcon(props: React.HTMLAttributes<HTMLDivElement>) {
       </div>
     </div>
   );
+}
+
+function addClassOnScroll(el: HTMLElement) {
+  if (el.scrollLeft > 0) {
+    el.classList.add('border-l-border');
+  } else {
+    el.classList.remove('border-l-border');
+  }
+
+  if (el.scrollLeft + el.clientWidth < el.scrollWidth) {
+    el.classList.add('border-r-border');
+  } else {
+    el.classList.remove('border-r-border');
+  }
 }

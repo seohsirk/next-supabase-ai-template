@@ -1,4 +1,3 @@
-
 CREATE OR REPLACE FUNCTION public.delete_task_and_reorder(IN task_id uuid)
 RETURNS TABLE (affected_task_id uuid, new_position bigint)
 set search_path = ''
@@ -246,7 +245,7 @@ create table public.tags (
   id bigint generated always as identity primary key,
   board_id uuid not null references public.boards on delete cascade,
   name varchar(255) not null,
-  color varchar(7) not null,
+  color varchar(255) not null,
   created_at timestamptz not null default now(),
 
   unique (board_id, name)

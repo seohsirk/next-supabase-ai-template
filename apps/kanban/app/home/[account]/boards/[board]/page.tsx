@@ -33,7 +33,7 @@ async function BoardPage({ params, searchParams }: BoardPageProps) {
   });
 
   return (
-    <div className={'flex h-screen flex-col overflow-y-hidden'}>
+    <div className={'flex flex-col flex-1 overflow-y-hidden'}>
       <Header data={data} />
 
       <PageBody>
