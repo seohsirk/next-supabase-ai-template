@@ -4,8 +4,9 @@ This repository contains the following Premium AI Templates:
 
 1. PDF Chat
 2. AI Avatars
-3. Chatbots (Coming Soon)
-4. Blog Writer (Coming Soon)
+3. Chatbots
+4. Blog Writer
+5. Kanban (Coming Soon)
 
 Please always refer to the app's README for instructions on how to run and set up the application.
 
