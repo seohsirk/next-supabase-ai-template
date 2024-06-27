@@ -58,7 +58,7 @@
     "@marsidev/react-turnstile": "^0.7.1",
     "@radix-ui/react-icons": "^1.3.0",
     "@supabase/supabase-js": "^2.43.5",
-    "@tanstack/react-query": "5.45.1",
+    "@tanstack/react-query": "5.48.0",
     "@tanstack/react-query-next-experimental": "^5.40.1",
     "@tanstack/react-table": "^8.17.3",
     "ai": "3.2.1",
