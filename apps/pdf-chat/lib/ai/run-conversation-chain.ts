@@ -80,7 +80,7 @@ export async function runConversationChain(params: {
         question: string;
         chatHistory?: string;
       }) => {
-        const relevantDocs = await retriever.getRelevantDocuments(
+        const relevantDocs = await retriever.invoke(
           previousStepResult.question,
         );
 

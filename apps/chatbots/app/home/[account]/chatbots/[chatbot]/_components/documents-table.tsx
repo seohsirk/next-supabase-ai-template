@@ -98,7 +98,7 @@ function getColumns(t: (key: string) => string): ColumnDef<DocumentItem>[] {
 
               <DropdownMenuContent collisionPadding={{ right: 50 }}>
                 <DropdownMenuItem asChild>
-                  <Link href={`documents?document=${doc.id}`}>
+                  <Link href={`/home/documents?document=${doc.id}`}>
                     {t('viewDocument')}
                   </Link>
                 </DropdownMenuItem>

@@ -31,6 +31,7 @@
     "supabase:db:dump:local": "supabase db dump --local --data-only"
   },
   "dependencies": {
+    "@ai-sdk/react": "^0.0.16",
     "@edge-csrf/nextjs": "2.2.0",
     "@hookform/resolvers": "^3.6.0",
     "@kit/accounts": "workspace:^",

@@ -4,8 +4,7 @@ import { useCallback, useEffect, useRef } from 'react';
 
 import { fetchDataFromSupabase } from '@makerkit/data-loader-supabase-core';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { Message } from 'ai';
-import { useChat } from 'ai/react';
+import { useChat, Message } from '@ai-sdk/react';
 import { nanoid } from 'nanoid';
 import { toast } from 'sonner';
 
