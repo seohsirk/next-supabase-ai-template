@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "@edge-csrf/nextjs": "2.2.0",
-    "@hookform/resolvers": "^3.6.0",
+    "@hookform/resolvers": "^3.7.0",
     "@kit/accounts": "workspace:^",
     "@kit/admin": "workspace:^",
     "@kit/auth": "workspace:^",
@@ -63,14 +63,14 @@
     "@supabase/supabase-js": "^2.44.2",
     "@tanstack/react-query": "5.49.2",
     "@tanstack/react-query-next-experimental": "^5.40.1",
-    "@tanstack/react-table": "^8.19.1",
+    "@tanstack/react-table": "^8.19.2",
     "ai": "3.2.1",
     "date-fns": "^3.6.0",
     "get-sitemap-links": "^1.1.0",
     "happy-dom": "^14.10.1",
     "isbot": "^5.1.6",
     "langchain": "^0.2.0",
-    "lucide-react": "^0.399.0",
+    "lucide-react": "^0.400.0",
     "markdown-to-jsx": "^7.4.7",
     "nanoid": "^5.0.7",
     "next": "14.2.4",
@@ -81,7 +81,7 @@
     "react": "18.3.1",
     "react-colorful": "^5.6.1",
     "react-dom": "18.3.1",
-    "react-hook-form": "^7.52.0",
+    "react-hook-form": "^7.52.1",
     "react-i18next": "^14.1.2",
     "recharts": "^2.12.7",
     "rxjs": "^7.8.1",
@@ -107,7 +107,7 @@
     "prettier": "^3.3.2",
     "supabase": "^1.172.2",
     "tailwindcss": "3.4.4",
-    "typescript": "^5.5.2"
+    "typescript": "^5.5.3"
   },
   "eslintConfig": {
     "root": true,

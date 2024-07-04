@@ -11,7 +11,6 @@ import nodePolyfills from 'rollup-plugin-polyfill-node';
 import postcss from 'rollup-plugin-postcss';
 import tsConfigPaths from 'rollup-plugin-tsconfig-paths';
 import { visualizer } from 'rollup-plugin-visualizer';
-import tailwindcss from 'tailwindcss';
 
 const args = parseArgs({
   options: {
