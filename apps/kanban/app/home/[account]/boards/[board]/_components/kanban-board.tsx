@@ -3,7 +3,8 @@
 import {
   createContext,
   useContext,
-  useEffect, useLayoutEffect,
+  useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -81,7 +82,11 @@ const KanbanEventsContext = createKanbanEventsContext();
 
 export function KanbanBoard(props: KanbanBoardProps) {
   const { columns, ...events } = props;
-  const scrolls$ = useMemo(() => new Subject<Event>(), []);
+
+  const scrolls$ = useMemo(
+    () => new Subject<React.UIEvent<HTMLDivElement>>(),
+    [],
+  );
 
   useEffect(() => {
     const subscription = scrolls$.pipe(debounceTime(50)).subscribe((e) => {
@@ -106,7 +111,9 @@ export function KanbanBoard(props: KanbanBoardProps) {
   return (
     <KanbanEventsContext.Provider value={events}>
       <div
-        className={'pb-container flex flex-1 overflow-x-auto overflow-y-hidden border border-transparent'}
+        className={
+          'pb-container flex flex-1 overflow-x-auto overflow-y-hidden border border-transparent'
+        }
         onScroll={(e) => scrolls$.next(e)}
       >
         <KanbanColumns columns={columns} />
