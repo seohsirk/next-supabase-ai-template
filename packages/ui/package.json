@@ -32,6 +32,7 @@
     "cmdk": "1.0.0",
     "input-otp": "1.2.4",
     "lucide-react": "^0.407.0",
+    "markdown-to-jsx": "^7.4.7",
     "react-top-loading-bar": "2.3.1",
     "tailwind-merge": "^2.3.0"
   },
@@ -121,7 +122,8 @@
     "./cookie-banner": "./src/makerkit/cookie-banner.tsx",
     "./card-button": "./src/makerkit/card-button.tsx",
     "./version-updater": "./src/makerkit/version-updater.tsx",
-    "./multi-step-form": "./src/makerkit/multi-step-form.tsx"
+    "./multi-step-form": "./src/makerkit/multi-step-form.tsx",
+    "./markdown-renderer": "./src/makerkit/markdown-renderer/index.ts"
   },
   "typesVersions": {
     "*": {
