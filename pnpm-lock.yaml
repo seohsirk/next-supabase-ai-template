@@ -98,7 +98,7 @@ importers:
         version: 0.0.8(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.44.4)
       '@makerkit/data-loader-supabase-nextjs':
         specifier: ^1.2.3
-        version: 1.2.3(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.44.4)(@tanstack/react-query@5.51.3(react@18.3.1))(next@14.2.5(@opentelemetry/api@1.9.0)(@playwright/test@1.45.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+        version: 1.2.3(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.44.4)(@tanstack/react-query@5.51.8(react@18.3.1))(next@14.2.5(@opentelemetry/api@1.9.0)(@playwright/test@1.45.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       '@marsidev/react-turnstile':
         specifier: ^0.7.1
         version: 0.7.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -112,11 +112,11 @@ importers:
         specifier: ^2.44.4
         version: 2.44.4
       '@tanstack/react-query':
-        specifier: 5.51.3
-        version: 5.51.3(react@18.3.1)
+        specifier: 5.51.8
+        version: 5.51.8(react@18.3.1)
       '@tanstack/react-query-next-experimental':
         specifier: ^5.40.1
-        version: 5.51.3(@tanstack/react-query@5.51.3(react@18.3.1))(next@14.2.5(@opentelemetry/api@1.9.0)(@playwright/test@1.45.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+        version: 5.51.8(@tanstack/react-query@5.51.8(react@18.3.1))(next@14.2.5(@opentelemetry/api@1.9.0)(@playwright/test@1.45.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       '@tanstack/react-table':
         specifier: ^8.19.3
         version: 8.19.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -154,8 +154,8 @@ importers:
         specifier: ^7.52.1
         version: 7.52.1(react@18.3.1)
       react-i18next:
-        specifier: ^14.1.3
-        version: 14.1.3(i18next@23.12.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: ^15.0.0
+        version: 15.0.0(i18next@23.12.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       recharts:
         specifier: ^2.12.7
         version: 2.12.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -291,7 +291,7 @@ importers:
         version: 0.0.8(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.44.4)
       '@makerkit/data-loader-supabase-nextjs':
         specifier: ^1.2.3
-        version: 1.2.3(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.44.4)(@tanstack/react-query@5.51.3(react@18.3.1))(next@14.2.5(@opentelemetry/api@1.9.0)(@playwright/test@1.45.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+        version: 1.2.3(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.44.4)(@tanstack/react-query@5.51.8(react@18.3.1))(next@14.2.5(@opentelemetry/api@1.9.0)(@playwright/test@1.45.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       '@marsidev/react-turnstile':
         specifier: ^0.7.1
         version: 0.7.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -302,11 +302,11 @@ importers:
         specifier: ^2.44.4
         version: 2.44.4
       '@tanstack/react-query':
-        specifier: 5.51.3
-        version: 5.51.3(react@18.3.1)
+        specifier: 5.51.8
+        version: 5.51.8(react@18.3.1)
       '@tanstack/react-query-next-experimental':
         specifier: ^5.40.1
-        version: 5.51.3(@tanstack/react-query@5.51.3(react@18.3.1))(next@14.2.5(@opentelemetry/api@1.9.0)(@playwright/test@1.45.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+        version: 5.51.8(@tanstack/react-query@5.51.8(react@18.3.1))(next@14.2.5(@opentelemetry/api@1.9.0)(@playwright/test@1.45.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       '@tanstack/react-table':
         specifier: ^8.19.3
         version: 8.19.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -338,8 +338,8 @@ importers:
         specifier: ^7.52.1
         version: 7.52.1(react@18.3.1)
       react-i18next:
-        specifier: ^14.1.3
-        version: 14.1.3(i18next@23.12.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: ^15.0.0
+        version: 15.0.0(i18next@23.12.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       recharts:
         specifier: ^2.12.7
         version: 2.12.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -472,7 +472,7 @@ importers:
         version: 0.2.19(@mozilla/readability@0.5.0)(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.44.4)(axios@1.7.2)(crypto-js@4.2.0)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(lodash@4.17.21)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0)
       '@langchain/core':
         specifier: ^0.2.0
-        version: 0.2.16(langchain@0.2.10(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7)
+        version: 0.2.17(langchain@0.2.10(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7)
       '@langchain/openai':
         specifier: 0.1.3
         version: 0.1.3(langchain@0.2.10(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))
@@ -481,7 +481,7 @@ importers:
         version: 0.0.8(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.44.4)
       '@makerkit/data-loader-supabase-nextjs':
         specifier: ^1.2.3
-        version: 1.2.3(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.44.4)(@tanstack/react-query@5.51.3(react@18.3.1))(next@14.2.5(@opentelemetry/api@1.9.0)(@playwright/test@1.45.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+        version: 1.2.3(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.44.4)(@tanstack/react-query@5.51.8(react@18.3.1))(next@14.2.5(@opentelemetry/api@1.9.0)(@playwright/test@1.45.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       '@makerkit/qstash':
         specifier: ^0.0.1
         version: 0.0.1
@@ -498,11 +498,11 @@ importers:
         specifier: ^2.44.4
         version: 2.44.4
       '@tanstack/react-query':
-        specifier: 5.51.3
-        version: 5.51.3(react@18.3.1)
+        specifier: 5.51.8
+        version: 5.51.8(react@18.3.1)
       '@tanstack/react-query-next-experimental':
         specifier: ^5.40.1
-        version: 5.51.3(@tanstack/react-query@5.51.3(react@18.3.1))(next@14.2.5(@opentelemetry/api@1.9.0)(@playwright/test@1.45.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+        version: 5.51.8(@tanstack/react-query@5.51.8(react@18.3.1))(next@14.2.5(@opentelemetry/api@1.9.0)(@playwright/test@1.45.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       '@tanstack/react-table':
         specifier: ^8.19.3
         version: 8.19.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -561,8 +561,8 @@ importers:
         specifier: ^7.52.1
         version: 7.52.1(react@18.3.1)
       react-i18next:
-        specifier: ^14.1.3
-        version: 14.1.3(i18next@23.12.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: ^15.0.0
+        version: 15.0.0(i18next@23.12.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       recharts:
         specifier: ^2.12.7
         version: 2.12.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -713,7 +713,7 @@ importers:
         version: 0.0.8(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.44.4)
       '@makerkit/data-loader-supabase-nextjs':
         specifier: ^1.2.3
-        version: 1.2.3(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.44.4)(@tanstack/react-query@5.51.3(react@18.3.1))(next@14.2.5(@opentelemetry/api@1.9.0)(@playwright/test@1.45.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+        version: 1.2.3(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.44.4)(@tanstack/react-query@5.51.8(react@18.3.1))(next@14.2.5(@opentelemetry/api@1.9.0)(@playwright/test@1.45.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       '@marsidev/react-turnstile':
         specifier: ^0.7.1
         version: 0.7.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -724,11 +724,11 @@ importers:
         specifier: ^2.44.4
         version: 2.44.4
       '@tanstack/react-query':
-        specifier: 5.51.3
-        version: 5.51.3(react@18.3.1)
+        specifier: 5.51.8
+        version: 5.51.8(react@18.3.1)
       '@tanstack/react-query-next-experimental':
         specifier: ^5.40.1
-        version: 5.51.3(@tanstack/react-query@5.51.3(react@18.3.1))(next@14.2.5(@opentelemetry/api@1.9.0)(@playwright/test@1.45.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+        version: 5.51.8(@tanstack/react-query@5.51.8(react@18.3.1))(next@14.2.5(@opentelemetry/api@1.9.0)(@playwright/test@1.45.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       '@tanstack/react-table':
         specifier: ^8.19.3
         version: 8.19.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -763,8 +763,8 @@ importers:
         specifier: ^7.52.1
         version: 7.52.1(react@18.3.1)
       react-i18next:
-        specifier: ^14.1.3
-        version: 14.1.3(i18next@23.12.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: ^15.0.0
+        version: 15.0.0(i18next@23.12.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       recharts:
         specifier: ^2.12.7
         version: 2.12.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -900,7 +900,7 @@ importers:
         version: 0.2.19(@mozilla/readability@0.5.0)(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.44.4)(axios@1.7.2)(crypto-js@4.2.0)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(lodash@4.17.21)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0)
       '@langchain/core':
         specifier: ^0.2.0
-        version: 0.2.16(langchain@0.2.10(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7)
+        version: 0.2.17(langchain@0.2.10(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7)
       '@langchain/openai':
         specifier: 0.1.3
         version: 0.1.3(langchain@0.2.10(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))
@@ -909,7 +909,7 @@ importers:
         version: 0.0.8(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.44.4)
       '@makerkit/data-loader-supabase-nextjs':
         specifier: ^1.2.3
-        version: 1.2.3(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.44.4)(@tanstack/react-query@5.51.3(react@18.3.1))(next@14.2.5(@opentelemetry/api@1.9.0)(@playwright/test@1.45.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+        version: 1.2.3(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.44.4)(@tanstack/react-query@5.51.8(react@18.3.1))(next@14.2.5(@opentelemetry/api@1.9.0)(@playwright/test@1.45.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       '@marsidev/react-turnstile':
         specifier: ^0.7.1
         version: 0.7.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -920,11 +920,11 @@ importers:
         specifier: ^2.44.4
         version: 2.44.4
       '@tanstack/react-query':
-        specifier: 5.51.3
-        version: 5.51.3(react@18.3.1)
+        specifier: 5.51.8
+        version: 5.51.8(react@18.3.1)
       '@tanstack/react-query-next-experimental':
         specifier: ^5.40.1
-        version: 5.51.3(@tanstack/react-query@5.51.3(react@18.3.1))(next@14.2.5(@opentelemetry/api@1.9.0)(@playwright/test@1.45.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+        version: 5.51.8(@tanstack/react-query@5.51.8(react@18.3.1))(next@14.2.5(@opentelemetry/api@1.9.0)(@playwright/test@1.45.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       '@tanstack/react-table':
         specifier: ^8.19.3
         version: 8.19.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -971,8 +971,8 @@ importers:
         specifier: ^7.52.1
         version: 7.52.1(react@18.3.1)
       react-i18next:
-        specifier: ^14.1.3
-        version: 14.1.3(i18next@23.12.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: ^15.0.0
+        version: 15.0.0(i18next@23.12.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       recharts:
         specifier: ^2.12.7
         version: 2.12.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -1102,7 +1102,7 @@ importers:
         version: 0.0.8(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.44.4)
       '@makerkit/data-loader-supabase-nextjs':
         specifier: ^1.2.3
-        version: 1.2.3(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.44.4)(@tanstack/react-query@5.51.3(react@18.3.1))(next@14.2.5(@opentelemetry/api@1.9.0)(@playwright/test@1.45.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+        version: 1.2.3(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.44.4)(@tanstack/react-query@5.51.8(react@18.3.1))(next@14.2.5(@opentelemetry/api@1.9.0)(@playwright/test@1.45.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       '@marsidev/react-turnstile':
         specifier: ^0.7.1
         version: 0.7.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -1113,11 +1113,11 @@ importers:
         specifier: ^2.44.4
         version: 2.44.4
       '@tanstack/react-query':
-        specifier: 5.51.3
-        version: 5.51.3(react@18.3.1)
+        specifier: 5.51.8
+        version: 5.51.8(react@18.3.1)
       '@tanstack/react-query-next-experimental':
         specifier: ^5.40.1
-        version: 5.51.3(@tanstack/react-query@5.51.3(react@18.3.1))(next@14.2.5(@opentelemetry/api@1.9.0)(@playwright/test@1.45.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+        version: 5.51.8(@tanstack/react-query@5.51.8(react@18.3.1))(next@14.2.5(@opentelemetry/api@1.9.0)(@playwright/test@1.45.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       '@tanstack/react-table':
         specifier: ^8.19.3
         version: 8.19.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -1146,8 +1146,8 @@ importers:
         specifier: ^7.52.1
         version: 7.52.1(react@18.3.1)
       react-i18next:
-        specifier: ^14.1.3
-        version: 14.1.3(i18next@23.12.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: ^15.0.0
+        version: 15.0.0(i18next@23.12.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       recharts:
         specifier: ^2.12.7
         version: 2.12.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -1291,8 +1291,8 @@ importers:
         specifier: ^7.52.1
         version: 7.52.1(react@18.3.1)
       react-i18next:
-        specifier: ^14.1.3
-        version: 14.1.3(i18next@23.12.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: ^15.0.0
+        version: 15.0.0(i18next@23.12.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       zod:
         specifier: ^3.23.8
         version: 3.23.8
@@ -1689,8 +1689,8 @@ importers:
         specifier: ^2.44.4
         version: 2.44.4
       '@tanstack/react-query':
-        specifier: 5.51.3
-        version: 5.51.3(react@18.3.1)
+        specifier: 5.51.8
+        version: 5.51.8(react@18.3.1)
       '@types/react':
         specifier: ^18.3.3
         version: 18.3.3
@@ -1716,8 +1716,8 @@ importers:
         specifier: ^7.52.1
         version: 7.52.1(react@18.3.1)
       react-i18next:
-        specifier: ^14.1.3
-        version: 14.1.3(i18next@23.12.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: ^15.0.0
+        version: 15.0.0(i18next@23.12.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       sonner:
         specifier: ^1.5.0
         version: 1.5.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -1759,13 +1759,13 @@ importers:
         version: 0.0.8(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.44.4)
       '@makerkit/data-loader-supabase-nextjs':
         specifier: ^1.2.3
-        version: 1.2.3(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.44.4)(@tanstack/react-query@5.51.3(react@18.3.1))(next@14.2.5(@opentelemetry/api@1.9.0)(@playwright/test@1.45.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+        version: 1.2.3(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.44.4)(@tanstack/react-query@5.51.8(react@18.3.1))(next@14.2.5(@opentelemetry/api@1.9.0)(@playwright/test@1.45.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       '@supabase/supabase-js':
         specifier: ^2.44.4
         version: 2.44.4
       '@tanstack/react-query':
-        specifier: 5.51.3
-        version: 5.51.3(react@18.3.1)
+        specifier: 5.51.8
+        version: 5.51.8(react@18.3.1)
       '@tanstack/react-table':
         specifier: ^8.19.3
         version: 8.19.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -1827,8 +1827,8 @@ importers:
         specifier: ^2.44.4
         version: 2.44.4
       '@tanstack/react-query':
-        specifier: 5.51.3
-        version: 5.51.3(react@18.3.1)
+        specifier: 5.51.8
+        version: 5.51.8(react@18.3.1)
       '@types/react':
         specifier: ^18.3.3
         version: 18.3.3
@@ -1842,8 +1842,8 @@ importers:
         specifier: ^7.52.1
         version: 7.52.1(react@18.3.1)
       react-i18next:
-        specifier: ^14.1.3
-        version: 14.1.3(i18next@23.12.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: ^15.0.0
+        version: 15.0.0(i18next@23.12.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       sonner:
         specifier: ^1.5.0
         version: 1.5.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -1875,8 +1875,8 @@ importers:
         specifier: ^2.44.4
         version: 2.44.4
       '@tanstack/react-query':
-        specifier: 5.51.3
-        version: 5.51.3(react@18.3.1)
+        specifier: 5.51.8
+        version: 5.51.8(react@18.3.1)
       '@types/react':
         specifier: ^18.3.3
         version: 18.3.3
@@ -1890,8 +1890,8 @@ importers:
         specifier: 18.3.1
         version: 18.3.1(react@18.3.1)
       react-i18next:
-        specifier: ^14.1.3
-        version: 14.1.3(i18next@23.12.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: ^15.0.0
+        version: 15.0.0(i18next@23.12.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
 
   packages/features/team-accounts:
     dependencies:
@@ -1945,8 +1945,8 @@ importers:
         specifier: ^2.44.4
         version: 2.44.4
       '@tanstack/react-query':
-        specifier: 5.51.3
-        version: 5.51.3(react@18.3.1)
+        specifier: 5.51.8
+        version: 5.51.8(react@18.3.1)
       '@tanstack/react-table':
         specifier: ^8.19.3
         version: 8.19.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -1978,8 +1978,8 @@ importers:
         specifier: ^7.52.1
         version: 7.52.1(react@18.3.1)
       react-i18next:
-        specifier: ^14.1.3
-        version: 14.1.3(i18next@23.12.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: ^15.0.0
+        version: 15.0.0(i18next@23.12.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       sonner:
         specifier: ^1.5.0
         version: 1.5.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -2015,11 +2015,11 @@ importers:
         specifier: workspace:*
         version: link:../../tooling/typescript
       '@tanstack/react-query':
-        specifier: 5.51.3
-        version: 5.51.3(react@18.3.1)
+        specifier: 5.51.8
+        version: 5.51.8(react@18.3.1)
       react-i18next:
-        specifier: ^14.1.3
-        version: 14.1.3(i18next@23.12.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: ^15.0.0
+        version: 15.0.0(i18next@23.12.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
 
   packages/mailers:
     dependencies:
@@ -2241,8 +2241,8 @@ importers:
         specifier: ^2.44.4
         version: 2.44.4
       '@tanstack/react-query':
-        specifier: 5.51.3
-        version: 5.51.3(react@18.3.1)
+        specifier: 5.51.8
+        version: 5.51.8(react@18.3.1)
       '@types/react':
         specifier: ^18.3.3
         version: 18.3.3
@@ -2356,8 +2356,8 @@ importers:
         specifier: ^1.3.0
         version: 1.3.0(react@18.3.1)
       '@tanstack/react-query':
-        specifier: 5.51.3
-        version: 5.51.3(react@18.3.1)
+        specifier: 5.51.8
+        version: 5.51.8(react@18.3.1)
       '@tanstack/react-table':
         specifier: ^8.19.3
         version: 8.19.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -2392,8 +2392,8 @@ importers:
         specifier: ^7.52.1
         version: 7.52.1(react@18.3.1)
       react-i18next:
-        specifier: ^14.1.3
-        version: 14.1.3(i18next@23.12.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: ^15.0.0
+        version: 15.0.0(i18next@23.12.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       sonner:
         specifier: ^1.5.0
         version: 1.5.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -2636,8 +2636,8 @@ packages:
     resolution: {integrity: sha512-30iZtAPgz+LTIYoeivqYo853f02jBYSd5uGnGpkFV0M3xOt9aN73erkgYAmZU43x4VfqcnLxW9Kpg3R5LC4YYw==}
     engines: {node: '>=6.0.0'}
 
-  '@astrojs/compiler@2.9.1':
-    resolution: {integrity: sha512-s8Ge2lWHx/s3kl4UoerjL/iPtwdtogNM/BLOaGCwQA6crMOVYpphy5wUkYlKyuh8GAeGYH/5haLAFBsgNy9AQQ==}
+  '@astrojs/compiler@2.9.2':
+    resolution: {integrity: sha512-Vpu0Ffsj8SoV+N0DFHlxxOMKHwSC9059Xy/OlG1t6uFYSoJXxkBC2WyF6igO7x10V+8uJrhOxaXr3nA90kJXow==}
 
   '@babel/code-frame@7.24.7':
     resolution: {integrity: sha512-BcYH1CVJBO9tvyIZ2jVeXgSIMvGZ2FDRvDdOIVQyuklNKSsx+eppDEBq/g47Ayw+RqNFE+URvOShmf+f/qwAlA==}
@@ -3471,8 +3471,8 @@ packages:
       youtubei.js:
         optional: true
 
-  '@langchain/core@0.2.16':
-    resolution: {integrity: sha512-mPmQi0ecJ81QwhvUQX4cwGVAqsM30ly3ygIlWoeUwDOXv9UW/IB2LAq8KKoVYIHTyEsIWJiyMP9Sv3e0xwjV8g==}
+  '@langchain/core@0.2.17':
+    resolution: {integrity: sha512-WnFiZ7R/ZUVeHO2IgcSL7Tu+CjApa26Iy99THJP5fax/NF8UQCc/ZRcw2Sb/RUuRPVm6ALDass0fSQE1L9YNJg==}
     engines: {node: '>=18'}
 
   '@langchain/openai@0.0.34':
@@ -5677,18 +5677,18 @@ packages:
     resolution: {integrity: sha512-+PmQX0PiAYPMeVYe237LJAYvOMYW1j2rH5YROyS3b4CTVJum34HfRvKvAzozHAQG0TnHNdUfY9nCeUyRAs//cw==}
     engines: {node: '>=14.16'}
 
-  '@tanstack/query-core@5.51.3':
-    resolution: {integrity: sha512-xgncI1B0OPfSsYcdqKHUxb/OF370GrtK7BxswlllDfyTVw6r3+9VdugJWaVVQT2LiSbkIqEwUteFXR2I0m2iqw==}
+  '@tanstack/query-core@5.51.8':
+    resolution: {integrity: sha512-Gp9UmHMgewLrz9m7egdpPZDywftgXSSvcRRr2UKA1r0w/OJ0CrS556sj4bMNQs2m5hQOsj/7o8lSoGr5ce1D6Q==}
 
-  '@tanstack/react-query-next-experimental@5.51.3':
-    resolution: {integrity: sha512-s6a/hDIrN9K4y6Pzb0Tqrq2B0fQvCd3ze63GL5ebLvbPxBguLZMF6aSy9Qdx+eWOR2e2Pn+GTT+nP66L99YqbQ==}
+  '@tanstack/react-query-next-experimental@5.51.8':
+    resolution: {integrity: sha512-3FGYEJREG4u+QAIUS+CfsDTqJjS/rowBPN7RY2Q+GKSNkGjmXGr+x14TsTSgOJIazGWjvUePzXN117iGMSZ/JQ==}
     peerDependencies:
-      '@tanstack/react-query': ^5.51.3
+      '@tanstack/react-query': ^5.51.8
       next: ^13 || ^14 || ^15
       react: 18.3.1
 
-  '@tanstack/react-query@5.51.3':
-    resolution: {integrity: sha512-eqg1274A/usLluT4aLXypWKeAQ6LepwCB+303Wjw4o1SAgwJaLL7sWQOA/XA2Y/S4BCmTq95jGl5qnT8tmVcoQ==}
+  '@tanstack/react-query@5.51.8':
+    resolution: {integrity: sha512-MQ6LhvOabxtNfxv47IkbI6cQy5PUte2CWSv8GVBCoTLE3iBjw22Nkv2171m+vNkveL+udH7n+R7WDal6I95RCA==}
     peerDependencies:
       react: 18.3.1
 
@@ -9693,8 +9693,8 @@ packages:
     peerDependencies:
       react: 18.3.1
 
-  react-i18next@14.1.3:
-    resolution: {integrity: sha512-wZnpfunU6UIAiJ+bxwOiTmBOAaB14ha97MjOEnLGac2RJ+h/maIYXZuTHlmyqQVX1UVHmU1YDTQ5vxLmwfXTjw==}
+  react-i18next@15.0.0:
+    resolution: {integrity: sha512-2O3IgF4zivg57Q6p6i+ChDgJ371IDcEWbuWC6gvoh5NbkDMs0Q+O7RPr4v61+Se32E0V+LmtwePAeqWZW0bi6g==}
     peerDependencies:
       i18next: '>= 23.2.3'
       react: 18.3.1
@@ -11126,7 +11126,7 @@ snapshots:
       '@jridgewell/gen-mapping': 0.3.5
       '@jridgewell/trace-mapping': 0.3.25
 
-  '@astrojs/compiler@2.9.1':
+  '@astrojs/compiler@2.9.2':
     optional: true
 
   '@babel/code-frame@7.24.7':
@@ -11943,14 +11943,14 @@ snapshots:
 
   '@langchain/community@0.2.19(@mozilla/readability@0.5.0)(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.44.4)(axios@1.7.2)(crypto-js@4.2.0)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(lodash@4.17.21)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0)':
     dependencies:
-      '@langchain/core': 0.2.16(langchain@0.2.3(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7)
+      '@langchain/core': 0.2.17(langchain@0.2.3(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7)
       '@langchain/openai': 0.1.3(langchain@0.2.3(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))
       binary-extensions: 2.3.0
       expr-eval: 2.0.2
       flat: 5.0.2
       js-yaml: 4.1.0
       langchain: 0.2.3(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0)
-      langsmith: 0.1.37(@langchain/core@0.2.16(langchain@0.2.3(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7))(langchain@0.2.3(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7)
+      langsmith: 0.1.37(@langchain/core@0.2.17(langchain@0.2.3(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7))(langchain@0.2.3(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7)
       uuid: 10.0.0
       zod: 3.23.8
       zod-to-json-schema: 3.23.1(zod@3.23.8)
@@ -11974,13 +11974,13 @@ snapshots:
       - peggy
       - pyodide
 
-  '@langchain/core@0.2.16(langchain@0.2.10(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7)':
+  '@langchain/core@0.2.17(langchain@0.2.10(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7)':
     dependencies:
       ansi-styles: 5.2.0
       camelcase: 6.3.0
       decamelize: 1.2.0
       js-tiktoken: 1.0.12
-      langsmith: 0.1.37(@langchain/core@0.2.16(langchain@0.2.10(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7))(langchain@0.2.10(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7)
+      langsmith: 0.1.37(@langchain/core@0.2.17(langchain@0.2.10(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7))(langchain@0.2.10(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7)
       ml-distance: 4.0.1
       mustache: 4.2.0
       p-queue: 6.6.2
@@ -11992,13 +11992,13 @@ snapshots:
       - langchain
       - openai
 
-  '@langchain/core@0.2.16(langchain@0.2.3(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7)':
+  '@langchain/core@0.2.17(langchain@0.2.3(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7)':
     dependencies:
       ansi-styles: 5.2.0
       camelcase: 6.3.0
       decamelize: 1.2.0
       js-tiktoken: 1.0.12
-      langsmith: 0.1.37(@langchain/core@0.2.16(langchain@0.2.3(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7))(langchain@0.2.3(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7)
+      langsmith: 0.1.37(@langchain/core@0.2.17(langchain@0.2.3(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7))(langchain@0.2.3(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7)
       ml-distance: 4.0.1
       mustache: 4.2.0
       p-queue: 6.6.2
@@ -12012,7 +12012,7 @@ snapshots:
 
   '@langchain/openai@0.0.34(langchain@0.2.3(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))':
     dependencies:
-      '@langchain/core': 0.2.16(langchain@0.2.3(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7)
+      '@langchain/core': 0.2.17(langchain@0.2.3(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7)
       js-tiktoken: 1.0.12
       openai: 4.52.7
       zod: 3.23.8
@@ -12023,7 +12023,7 @@ snapshots:
 
   '@langchain/openai@0.1.3(langchain@0.2.10(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))':
     dependencies:
-      '@langchain/core': 0.2.16(langchain@0.2.10(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7)
+      '@langchain/core': 0.2.17(langchain@0.2.10(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7)
       js-tiktoken: 1.0.12
       openai: 4.52.7
       zod: 3.23.8
@@ -12034,7 +12034,7 @@ snapshots:
 
   '@langchain/openai@0.1.3(langchain@0.2.3(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))':
     dependencies:
-      '@langchain/core': 0.2.16(langchain@0.2.3(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7)
+      '@langchain/core': 0.2.17(langchain@0.2.3(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7)
       js-tiktoken: 1.0.12
       openai: 4.52.7
       zod: 3.23.8
@@ -12045,7 +12045,7 @@ snapshots:
 
   '@langchain/textsplitters@0.0.3(langchain@0.2.10(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7)':
     dependencies:
-      '@langchain/core': 0.2.16(langchain@0.2.10(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7)
+      '@langchain/core': 0.2.17(langchain@0.2.10(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7)
       js-tiktoken: 1.0.12
     transitivePeerDependencies:
       - langchain
@@ -12053,7 +12053,7 @@ snapshots:
 
   '@langchain/textsplitters@0.0.3(langchain@0.2.3(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7)':
     dependencies:
-      '@langchain/core': 0.2.16(langchain@0.2.3(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7)
+      '@langchain/core': 0.2.17(langchain@0.2.3(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7)
       js-tiktoken: 1.0.12
     transitivePeerDependencies:
       - langchain
@@ -12067,11 +12067,11 @@ snapshots:
       '@supabase/supabase-js': 2.44.4
       ts-case-convert: 2.0.7
 
-  '@makerkit/data-loader-supabase-nextjs@1.2.3(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.44.4)(@tanstack/react-query@5.51.3(react@18.3.1))(next@14.2.5(@opentelemetry/api@1.9.0)(@playwright/test@1.45.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)':
+  '@makerkit/data-loader-supabase-nextjs@1.2.3(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.44.4)(@tanstack/react-query@5.51.8(react@18.3.1))(next@14.2.5(@opentelemetry/api@1.9.0)(@playwright/test@1.45.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@makerkit/data-loader-supabase-core': 0.0.8(@supabase/postgrest-js@1.15.8)(@supabase/supabase-js@2.44.4)
       '@supabase/supabase-js': 2.44.4
-      '@tanstack/react-query': 5.51.3(react@18.3.1)
+      '@tanstack/react-query': 5.51.8(react@18.3.1)
       next: 14.2.5(@babel/core@7.24.9)(@opentelemetry/api@1.9.0)(@playwright/test@1.45.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react: 18.3.1
     transitivePeerDependencies:
@@ -14810,17 +14810,17 @@ snapshots:
     dependencies:
       defer-to-connect: 2.0.1
 
-  '@tanstack/query-core@5.51.3': {}
+  '@tanstack/query-core@5.51.8': {}
 
-  '@tanstack/react-query-next-experimental@5.51.3(@tanstack/react-query@5.51.3(react@18.3.1))(next@14.2.5(@opentelemetry/api@1.9.0)(@playwright/test@1.45.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)':
+  '@tanstack/react-query-next-experimental@5.51.8(@tanstack/react-query@5.51.8(react@18.3.1))(next@14.2.5(@opentelemetry/api@1.9.0)(@playwright/test@1.45.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)':
     dependencies:
-      '@tanstack/react-query': 5.51.3(react@18.3.1)
+      '@tanstack/react-query': 5.51.8(react@18.3.1)
       next: 14.2.5(@babel/core@7.24.9)(@opentelemetry/api@1.9.0)(@playwright/test@1.45.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react: 18.3.1
 
-  '@tanstack/react-query@5.51.3(react@18.3.1)':
+  '@tanstack/react-query@5.51.8(react@18.3.1)':
     dependencies:
-      '@tanstack/query-core': 5.51.3
+      '@tanstack/query-core': 5.51.8
       react: 18.3.1
 
   '@tanstack/react-table@8.19.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
@@ -17551,7 +17551,7 @@ snapshots:
 
   langchain@0.2.10(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0):
     dependencies:
-      '@langchain/core': 0.2.16(langchain@0.2.10(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7)
+      '@langchain/core': 0.2.17(langchain@0.2.10(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7)
       '@langchain/openai': 0.1.3(langchain@0.2.10(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))
       '@langchain/textsplitters': 0.0.3(langchain@0.2.10(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7)
       binary-extensions: 2.3.0
@@ -17559,7 +17559,7 @@ snapshots:
       js-yaml: 4.1.0
       jsonpointer: 5.0.1
       langchainhub: 0.0.11
-      langsmith: 0.1.37(@langchain/core@0.2.16(langchain@0.2.10(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7))(langchain@0.2.10(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7)
+      langsmith: 0.1.37(@langchain/core@0.2.17(langchain@0.2.10(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7))(langchain@0.2.10(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7)
       ml-distance: 4.0.1
       openapi-types: 12.1.3
       p-retry: 4.6.2
@@ -17581,7 +17581,7 @@ snapshots:
 
   langchain@0.2.3(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0):
     dependencies:
-      '@langchain/core': 0.2.16(langchain@0.2.3(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7)
+      '@langchain/core': 0.2.17(langchain@0.2.3(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7)
       '@langchain/openai': 0.0.34(langchain@0.2.3(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))
       '@langchain/textsplitters': 0.0.3(langchain@0.2.3(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7)
       binary-extensions: 2.3.0
@@ -17589,7 +17589,7 @@ snapshots:
       js-yaml: 4.1.0
       jsonpointer: 5.0.1
       langchainhub: 0.0.11
-      langsmith: 0.1.37(@langchain/core@0.2.16(langchain@0.2.3(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7))(langchain@0.2.3(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7)
+      langsmith: 0.1.37(@langchain/core@0.2.17(langchain@0.2.3(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7))(langchain@0.2.3(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7)
       ml-distance: 4.0.1
       openapi-types: 12.1.3
       p-retry: 4.6.2
@@ -17611,7 +17611,7 @@ snapshots:
 
   langchainhub@0.0.11: {}
 
-  langsmith@0.1.37(@langchain/core@0.2.16(langchain@0.2.10(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7))(langchain@0.2.10(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7):
+  langsmith@0.1.37(@langchain/core@0.2.17(langchain@0.2.10(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7))(langchain@0.2.10(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7):
     dependencies:
       '@types/uuid': 9.0.8
       commander: 10.0.1
@@ -17619,11 +17619,11 @@ snapshots:
       p-retry: 4.6.2
       uuid: 9.0.1
     optionalDependencies:
-      '@langchain/core': 0.2.16(langchain@0.2.10(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7)
+      '@langchain/core': 0.2.17(langchain@0.2.10(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7)
       langchain: 0.2.10(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0)
       openai: 4.52.7
 
-  langsmith@0.1.37(@langchain/core@0.2.16(langchain@0.2.3(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7))(langchain@0.2.3(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7):
+  langsmith@0.1.37(@langchain/core@0.2.17(langchain@0.2.3(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7))(langchain@0.2.3(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7):
     dependencies:
       '@types/uuid': 9.0.8
       commander: 10.0.1
@@ -17631,7 +17631,7 @@ snapshots:
       p-retry: 4.6.2
       uuid: 9.0.1
     optionalDependencies:
-      '@langchain/core': 0.2.16(langchain@0.2.3(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7)
+      '@langchain/core': 0.2.17(langchain@0.2.3(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0))(openai@4.52.7)
       langchain: 0.2.3(@supabase/supabase-js@2.44.4)(axios@1.7.2)(handlebars@4.7.8)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.52.7)(playwright@1.45.2)(ws@8.18.0)
       openai: 4.52.7
 
@@ -19000,7 +19000,7 @@ snapshots:
 
   prettier-plugin-astro@0.14.1:
     dependencies:
-      '@astrojs/compiler': 2.9.1
+      '@astrojs/compiler': 2.9.2
       prettier: 3.3.3
       sass-formatter: 0.7.9
     optional: true
@@ -19175,7 +19175,7 @@ snapshots:
     dependencies:
       react: 18.3.1
 
-  react-i18next@14.1.3(i18next@23.12.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  react-i18next@15.0.0(i18next@23.12.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       '@babel/runtime': 7.24.8
       html-parse-stringify: 3.0.1
