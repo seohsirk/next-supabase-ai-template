@@ -2,9 +2,9 @@
 
 import { useCallback, useEffect, useRef } from 'react';
 
+import { Message, useChat } from '@ai-sdk/react';
 import { fetchDataFromSupabase } from '@makerkit/data-loader-supabase-core';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useChat, Message } from '@ai-sdk/react';
 import { nanoid } from 'nanoid';
 import { toast } from 'sonner';
 

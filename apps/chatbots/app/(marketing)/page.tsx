@@ -38,14 +38,17 @@ function Home() {
                 <span>for your business</span>
               </HeroTitle>
 
-              <div className={'flex flex-col max-w-2xl'}>
+              <div className={'flex max-w-2xl flex-col'}>
                 <Heading
                   level={3}
                   className={
                     'p-0 text-center font-sans text-2xl font-normal text-muted-foreground'
                   }
                 >
-                  <span>Innovative AI Chatbots for your business. Cut support costs ands grow your business with AI Chatbots</span>
+                  <span>
+                    Innovative AI Chatbots for your business. Cut support costs
+                    ands grow your business with AI Chatbots
+                  </span>
                 </Heading>
               </div>
 

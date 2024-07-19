@@ -9,6 +9,7 @@ import { useShallow } from 'zustand/react/shallow';
 
 import { KanbanBoard } from '~/home/[account]/boards/[board]/_components/kanban-board';
 import { KanbanBoardFilters } from '~/home/[account]/boards/[board]/_components/kanban-board-filters';
+import { NewTaskDialog } from '~/home/[account]/boards/[board]/_components/new-task-dialog';
 import { TaskDialog } from '~/home/[account]/boards/[board]/_components/task-dialog';
 import {
   createColumnAction,
@@ -24,7 +25,6 @@ import { processKanbanColumnsState } from '~/lib/kanban/process-kanban-columns-s
 import { KanbanColumn, KanbanTask, NullableId } from '~/lib/kanban/types';
 
 import { useBoardContextStore } from '../board-context-store';
-import {NewTaskDialog} from "~/home/[account]/boards/[board]/_components/new-task-dialog";
 
 const TEMP_TASK_ID = '__temp__';
 

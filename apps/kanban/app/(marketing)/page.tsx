@@ -25,20 +25,17 @@ function Home() {
   return (
     <div className={'mt-4 flex flex-col space-y-24 py-14'}>
       <Hero
-        pill={
-          <Pill label={'New'}>
-              Create Kanban Boards for your projects
-          </Pill>
-        }
+        pill={<Pill label={'New'}>Create Kanban Boards for your projects</Pill>}
         title={
-            <>
-                <span>A Project Management</span>
-                <span>App for Developers</span>
-            </>
+          <>
+            <span>A Project Management</span>
+            <span>App for Developers</span>
+          </>
         }
         subtitle={
-            <span>
-              Manage your projects with ease using Kanban boards. Start for free, no credit card required.
+          <span>
+            Manage your projects with ease using Kanban boards. Start for free,
+            no credit card required.
           </span>
         }
         cta={<MainCallToActionButton />}

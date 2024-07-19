@@ -101,7 +101,10 @@ function EmptyState(props: { accountSlug: string }) {
           <Heading level={3}>Let&apos;s create your first Board</Heading>
         </div>
 
-        <CreateBoardDialog accountSlug={props.accountSlug} canCreateBoard={true}>
+        <CreateBoardDialog
+          accountSlug={props.accountSlug}
+          canCreateBoard={true}
+        >
           <Button className={'w-full'} size={'lg'}>
             <PlusCircleIcon className={'mr-4 h-6'} />
             <span>Create your first Board</span>
