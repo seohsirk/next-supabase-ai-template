@@ -123,7 +123,8 @@
     "./card-button": "./src/makerkit/card-button.tsx",
     "./version-updater": "./src/makerkit/version-updater.tsx",
     "./multi-step-form": "./src/makerkit/multi-step-form.tsx",
-    "./markdown-renderer": "./src/makerkit/markdown-renderer/index.ts"
+    "./markdown-renderer": "./src/makerkit/markdown-renderer/index.ts",
+    "./marketing": "./src/makerkit/marketing/index.tsx"
   },
   "typesVersions": {
     "*": {
