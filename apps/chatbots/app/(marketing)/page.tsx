@@ -1,13 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import {
-  ChevronRight,
-  CreditCard,
-  LayoutDashboard,
-  Lock,
-  Sparkle,
-} from 'lucide-react';
+import { ArrowRightIcon } from 'lucide-react';
 
 import { PricingTable } from '@kit/billing-gateway/marketing';
 import { Button } from '@kit/ui/button';
@@ -35,7 +29,7 @@ function Home() {
               'flex w-full flex-1 flex-col items-center space-y-8 xl:space-y-12 2xl:space-y-14'
             }
           >
-            <Pill>AI Chatbots that don&apos;t suck</Pill>
+            <Pill new>AI Chatbots that don&apos;t suck</Pill>
 
             <div className={'flex flex-col items-center space-y-8'}>
               <HeroTitle>
@@ -44,32 +38,14 @@ function Home() {
                 <span>for your business</span>
               </HeroTitle>
 
-              <div className={'flex flex-col'}>
+              <div className={'flex flex-col max-w-2xl'}>
                 <Heading
-                  level={2}
+                  level={3}
                   className={
                     'p-0 text-center font-sans text-2xl font-normal text-muted-foreground'
                   }
                 >
-                  <span>Innovative AI Chatbots for your business</span>
-                </Heading>
-
-                <Heading
-                  level={2}
-                  className={
-                    'p-0 text-center font-sans text-2xl font-normal text-muted-foreground'
-                  }
-                >
-                  <span>that will help you grow and scale</span>
-                </Heading>
-
-                <Heading
-                  level={2}
-                  className={
-                    'p-0 text-center font-sans text-2xl font-normal text-muted-foreground'
-                  }
-                >
-                  <span>your business to new heights</span>
+                  <span>Innovative AI Chatbots for your business. Cut support costs ands grow your business with AI Chatbots</span>
                 </Heading>
               </div>
 
@@ -80,7 +56,7 @@ function Home() {
 
         <div
           className={
-            'mx-auto flex max-w-6xl justify-center py-12 animate-in fade-in ' +
+            'mx-auto flex justify-center py-12 animate-in fade-in ' +
             ' delay-300 duration-1000 slide-in-from-top-16 fill-mode-both'
           }
         >
@@ -91,7 +67,7 @@ function Home() {
             }
             width={1689}
             height={1057}
-            src={`/images/dashboard-demo.webp`}
+            src={`/images/dashboard.webp`}
             alt={`App Image`}
           />
         </div>
@@ -141,7 +117,7 @@ function HeroTitle({ children }: React.PropsWithChildren) {
   return (
     <h1
       className={
-        'flex flex-col text-center font-heading text-5xl font-semibold tracking-tight sm:text-6xl lg:text-7xl'
+        'hero-title flex flex-col space-y-1 text-center font-sans text-4xl font-semibold tracking-tighter dark:text-white sm:text-6xl lg:max-w-5xl lg:text-7xl xl:text-[5.125rem]'
       }
     >
       {children}
@@ -149,93 +125,82 @@ function HeroTitle({ children }: React.PropsWithChildren) {
   );
 }
 
-function Pill(props: React.PropsWithChildren) {
-  return (
-    <h2
-      className={
-        'rounded-full px-4 py-2 text-center text-sm text-muted-foreground shadow dark:shadow-primary/20'
-      }
-    >
-      <Sparkle className={'inline-block h-4'} />
-      {props.children}
-    </h2>
-  );
-}
-
-function FeatureShowcaseContainer(props: React.PropsWithChildren) {
-  return (
-    <div
-      className={
-        'flex flex-col items-center justify-between space-y-8 lg:flex-row lg:space-y-0' +
-        ' lg:space-x-24'
-      }
-    >
-      {props.children}
-    </div>
-  );
-}
-
-function FeatureContainer(
+function Pill(
   props: React.PropsWithChildren<{
-    className?: string;
-    reverse?: boolean;
+    new?: boolean;
   }>,
 ) {
   return (
-    <div
-      className={cn('flex w-full flex-col space-y-6 lg:w-6/12', {
-        'order-2 mt-8 lg:order-none lg:mt-0': props.reverse,
-      })}
+    <h2
+      className={
+        'space-x-2.5 rounded-full border border-gray-100 px-2 py-2.5 text-center text-sm font-medium text-transparent dark:border-primary/10'
+      }
     >
-      {props.children}
-    </div>
+      {props.new && (
+        <span
+          className={
+            'rounded-2xl bg-primary px-2.5 py-1.5 text-sm font-semibold text-primary-foreground'
+          }
+        >
+          New
+        </span>
+      )}
+      <GradientSecondaryText>{props.children}</GradientSecondaryText>
+    </h2>
   );
 }
 
 function MainCallToActionButton() {
   return (
-    <div className={'flex space-x-2'}>
-      <Button asChild variant={'link'}>
-        <Link href={'/docs'}>
-          <Trans i18nKey={'common:documentation'} />
-        </Link>
-      </Button>
-
-      <Button asChild>
+    <div className={'flex space-x-4'}>
+      <Button
+        className={
+          'h-12 rounded-xl px-4 text-base font-semibold transition-all hover:shadow-2xl dark:shadow-primary/30'
+        }
+        asChild
+      >
         <Link href={'/auth/sign-up'}>
           <span className={'flex items-center space-x-0.5'}>
             <span>
               <Trans i18nKey={'common:getStarted'} />
             </span>
 
-            <ChevronRight
+            <ArrowRightIcon
               className={
                 'h-4 animate-in fade-in slide-in-from-left-8' +
-                ' delay-800 duration-1000 zoom-in fill-mode-both'
+                ' delay-1000 duration-1000 zoom-in fill-mode-both'
               }
             />
           </span>
+        </Link>
+      </Button>
+
+      <Button
+        variant={'link'}
+        className={'h-12 rounded-xl px-4 text-base font-semibold'}
+        asChild
+      >
+        <Link href={'/contact'}>
+          <Trans i18nKey={'common:contactUs'} />
         </Link>
       </Button>
     </div>
   );
 }
 
-function IconContainer(
+function GradientSecondaryText(
   props: React.PropsWithChildren<{
     className?: string;
   }>,
 ) {
   return (
-    <div className={'flex'}>
-      <span
-        className={cn(
-          'flex items-center justify-center rounded-lg p-3',
-          props.className,
-        )}
-      >
-        {props.children}
-      </span>
-    </div>
+    <span
+      className={cn(
+        'bg-gradient-to-r from-foreground/60 to-foreground bg-clip-text text-transparent',
+        props.className,
+      )}
+    >
+      {props.children}
+    </span>
   );
 }

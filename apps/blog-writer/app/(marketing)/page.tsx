@@ -1,13 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import {
-  ChevronRight,
-  CreditCard,
-  LayoutDashboard,
-  Lock,
-  Sparkle,
-} from 'lucide-react';
+import { ArrowRightIcon } from 'lucide-react';
 
 import { PricingTable } from '@kit/billing-gateway/marketing';
 import { Button } from '@kit/ui/button';
@@ -35,23 +29,21 @@ function Home() {
               'flex w-full flex-1 flex-col items-center space-y-8 xl:space-y-12 2xl:space-y-14'
             }
           >
-            <Pill>An AI Blog Writer that helps you write better content</Pill>
+            <Pill new>
+              An AI Blog Writer that helps you write better content
+            </Pill>
 
             <div className={'flex flex-col items-center space-y-8'}>
               <HeroTitle>
                 <span>Write Blog Posts</span>
 
-                <span className={'mt-4 bg-primary p-4 text-primary-foreground'}>
-                  at warp speed
-                </span>
+                <span className={'text-primary'}>at warp speed</span>
               </HeroTitle>
 
-              <div className={'flex flex-col'}>
+              <div className={'flex max-w-2xl flex-col'}>
                 <Heading
-                  level={2}
-                  className={
-                    'max-w-xl p-0 text-center font-sans text-2xl font-normal text-muted-foreground'
-                  }
+                  level={3}
+                  className={'p-0 text-center font-sans text-base font-normal'}
                 >
                   <span>
                     Write blog posts faster than ever before with our AI Blog
@@ -78,157 +70,9 @@ function Home() {
             }
             width={1689}
             height={1057}
-            src={`/images/dashboard-demo.webp`}
+            src={`/images/dashboard.webp`}
             alt={`App Image`}
           />
-        </div>
-      </div>
-
-      <div className={'container mx-auto'}>
-        <div
-          className={
-            'flex flex-col items-center justify-center space-y-8 py-8 xl:space-y-16 xl:py-16'
-          }
-        >
-          <div
-            className={
-              'flex max-w-3xl flex-col items-center space-y-8 text-center'
-            }
-          >
-            <Pill>
-              <span>A modern, scalable, and secure SaaS Starter Kit</span>
-            </Pill>
-
-            <div className={'flex flex-col space-y-2'}>
-              <Heading level={1}>The best tool in the space</Heading>
-
-              <Heading
-                level={2}
-                className={'font-sans font-normal text-muted-foreground'}
-              >
-                Unbeatable Features and Benefits for Your SaaS Business
-              </Heading>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className={'container mx-auto'}>
-        <div
-          className={'flex flex-col space-y-16 xl:space-y-32 2xl:space-y-36'}
-        >
-          <FeatureShowcaseContainer>
-            <FeatureContainer>
-              <div className={'flex flex-col space-y-6'}>
-                <IconContainer className={'bg-green-50 dark:bg-green-500/10'}>
-                  <Lock className={'h-5 text-green-500'} />
-                </IconContainer>
-
-                <div className={'flex flex-col'}>
-                  <Heading level={2}>Authentication</Heading>
-
-                  <Heading
-                    level={3}
-                    className={'font-sans font-normal text-muted-foreground'}
-                  >
-                    Secure and Easy-to-Use Authentication for Your SaaS Website
-                    and API
-                  </Heading>
-                </div>
-              </div>
-
-              <div>
-                Our authentication system is built on top of the
-                industry-leading PaaS such as Supabase and Firebase. It is
-                secure, easy-to-use, and fully customizable. It supports
-                email/password, social logins, and more.
-              </div>
-            </FeatureContainer>
-
-            <FeatureContainer>
-              <Image
-                className="rounded-2xl"
-                src={'/images/sign-in.webp'}
-                width={'1760'}
-                height={'1680'}
-                alt={'Sign In'}
-              />
-            </FeatureContainer>
-          </FeatureShowcaseContainer>
-
-          <FeatureShowcaseContainer>
-            <FeatureContainer reverse>
-              <Image
-                className="rounded-2xl"
-                src={'/images/dashboard.webp'}
-                width={'2004'}
-                height={'1410'}
-                alt={'Dashboard'}
-              />
-            </FeatureContainer>
-
-            <FeatureContainer>
-              <div className={'flex flex-col space-y-6'}>
-                <IconContainer className={'bg-indigo-50 dark:bg-indigo-500/10'}>
-                  <LayoutDashboard className={'h-5 text-indigo-500'} />
-                </IconContainer>
-
-                <div className={'flex flex-col'}>
-                  <Heading level={2}>Dashboard</Heading>
-
-                  <Heading
-                    level={3}
-                    className={'font-sans font-normal text-muted-foreground'}
-                  >
-                    A fantastic dashboard to manage your SaaS business
-                  </Heading>
-                </div>
-              </div>
-
-              <div>
-                Our dashboard offers an overview of your SaaS business. It shows
-                at a glance all you need to know about your business. It is
-                fully customizable and extendable.
-              </div>
-            </FeatureContainer>
-          </FeatureShowcaseContainer>
-
-          <FeatureShowcaseContainer>
-            <FeatureContainer>
-              <div className={'flex flex-col space-y-6'}>
-                <IconContainer className={'bg-blue-50 dark:bg-blue-500/10'}>
-                  <CreditCard className={'h-5 text-blue-500'} />
-                </IconContainer>
-
-                <div className={'flex flex-col'}>
-                  <Heading level={2}>Billing</Heading>
-
-                  <Heading
-                    level={3}
-                    className={'font-sans font-normal text-muted-foreground'}
-                  >
-                    A powerful billing system for your SaaS business
-                  </Heading>
-                </div>
-              </div>
-
-              <div>
-                Powerful billing system that supports multiple payment gateways
-                such as Stripe, Lemon Squeezy and Paddle. Fully customizable and
-                easy to use.
-              </div>
-            </FeatureContainer>
-
-            <FeatureContainer>
-              <Image
-                className="rounded-2xl"
-                src={'/images/billing.webp'}
-                width={'1916'}
-                height={'1392'}
-                alt={'Billing'}
-              />
-            </FeatureContainer>
-          </FeatureShowcaseContainer>
         </div>
       </div>
 
@@ -276,7 +120,7 @@ function HeroTitle({ children }: React.PropsWithChildren) {
   return (
     <h1
       className={
-        'flex flex-col text-center font-heading text-5xl font-semibold tracking-tight sm:text-6xl lg:text-7xl 2xl:text-8xl'
+        'hero-title flex flex-col space-y-1 text-center font-sans text-4xl font-semibold tracking-tighter dark:text-white sm:text-6xl lg:max-w-5xl lg:text-7xl xl:text-[5.125rem]'
       }
     >
       {children}
@@ -284,87 +128,82 @@ function HeroTitle({ children }: React.PropsWithChildren) {
   );
 }
 
-function Pill(props: React.PropsWithChildren) {
-  return (
-    <h2
-      className={
-        'rounded-full px-4 py-2 text-center text-sm text-muted-foreground shadow dark:shadow-primary/20'
-      }
-    >
-      <Sparkle className={'inline-block h-4'} />
-      {props.children}
-    </h2>
-  );
-}
-
-function FeatureShowcaseContainer(props: React.PropsWithChildren) {
-  return (
-    <div
-      className={
-        'flex flex-col items-center justify-between space-y-8 lg:flex-row lg:space-y-0' +
-        ' lg:space-x-24'
-      }
-    >
-      {props.children}
-    </div>
-  );
-}
-
-function FeatureContainer(
+function Pill(
   props: React.PropsWithChildren<{
-    className?: string;
-    reverse?: boolean;
+    new?: boolean;
   }>,
 ) {
   return (
-    <div
-      className={cn('flex w-full flex-col space-y-6 lg:w-6/12', {
-        'order-2 mt-8 lg:order-none lg:mt-0': props.reverse,
-      })}
+    <h2
+      className={
+        'space-x-2.5 rounded-full border border-gray-100 px-2 py-2.5 text-center text-sm font-medium text-transparent dark:border-primary/10'
+      }
     >
-      {props.children}
-    </div>
+      {props.new && (
+        <span
+          className={
+            'rounded-2xl bg-primary px-2.5 py-1.5 text-sm font-semibold text-primary-foreground'
+          }
+        >
+          New
+        </span>
+      )}
+      <GradientSecondaryText>{props.children}</GradientSecondaryText>
+    </h2>
   );
 }
 
 function MainCallToActionButton() {
   return (
-    <div className={'flex space-x-2'}>
-      <Button size={'lg'} asChild>
+    <div className={'flex space-x-4'}>
+      <Button
+        className={
+          'h-12 rounded-xl px-4 text-base font-semibold transition-all hover:shadow-2xl dark:shadow-primary/30'
+        }
+        asChild
+      >
         <Link href={'/auth/sign-up'}>
           <span className={'flex items-center space-x-0.5'}>
             <span>
               <Trans i18nKey={'common:getStarted'} />
             </span>
 
-            <ChevronRight
+            <ArrowRightIcon
               className={
                 'h-4 animate-in fade-in slide-in-from-left-8' +
-                ' delay-800 duration-1000 zoom-in fill-mode-both'
+                ' delay-1000 duration-1000 zoom-in fill-mode-both'
               }
             />
           </span>
+        </Link>
+      </Button>
+
+      <Button
+        variant={'link'}
+        className={'h-12 rounded-xl px-4 text-base font-semibold'}
+        asChild
+      >
+        <Link href={'/contact'}>
+          <Trans i18nKey={'common:contactUs'} />
         </Link>
       </Button>
     </div>
   );
 }
 
-function IconContainer(
+function GradientSecondaryText(
   props: React.PropsWithChildren<{
     className?: string;
   }>,
 ) {
   return (
-    <div className={'flex'}>
-      <span
-        className={cn(
-          'flex items-center justify-center rounded-lg p-3',
-          props.className,
-        )}
-      >
-        {props.children}
-      </span>
-    </div>
+    <span
+      className={cn(
+        'bg-gradient-to-r from-foreground/60 to-foreground bg-clip-text text-transparent',
+        props.className,
+      )}
+    >
+      {props.children}
+    </span>
   );
 }
