@@ -419,6 +419,9 @@ importers:
       '@kit/admin':
         specifier: workspace:^
         version: link:../../packages/features/admin
+      '@kit/analytics':
+        specifier: workspace:^
+        version: link:../../packages/analytics
       '@kit/auth':
         specifier: workspace:^
         version: link:../../packages/features/auth
