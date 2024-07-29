@@ -21,8 +21,8 @@ import { Badge } from '@kit/ui/badge';
 import { If } from '@kit/ui/if';
 import { Trans } from '@kit/ui/trans';
 
+import { revalidatePostPageOnSaveAction } from '~/home/(user)/posts/[id]/_lib/server/server-actions';
 import { Database } from '~/lib/database.types';
-import {revalidatePostPageOnSaveAction} from "~/home/(user)/posts/[id]/_lib/server/server-actions";
 
 export function BlogPostContentEditor(props: { id: string; content: string }) {
   const save$ = useMemo(() => new ReplaySubject<string>(1), []);
@@ -126,4 +126,3 @@ function useUpdatePost(id: string) {
     mutationFn,
   });
 }
-

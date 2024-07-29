@@ -96,8 +96,8 @@ const featuresFlagConfig = FeatureFlagsSchema.parse({
     false,
   ),
   enableVersionUpdater: getBoolean(
-      process.env.NEXT_PUBLIC_ENABLE_VERSION_UPDATER,
-      false,
+    process.env.NEXT_PUBLIC_ENABLE_VERSION_UPDATER,
+    false,
   ),
 } satisfies z.infer<typeof FeatureFlagsSchema>);
 
