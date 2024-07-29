@@ -1,56 +1,64 @@
 'use client';
 
-import { useLayoutEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { useMutation } from '@tanstack/react-query';
 import {
-  Subject,
+  EMPTY,
+  ReplaySubject,
+  catchError,
   debounceTime,
-  delay,
   distinctUntilChanged,
+  filter,
+  from,
   mergeMap,
   tap,
 } from 'rxjs';
 
 import { useSupabase } from '@kit/supabase/hooks/use-supabase';
+import { TextEditor } from '@kit/text-editor';
 import { Badge } from '@kit/ui/badge';
 import { If } from '@kit/ui/if';
-import { MarkdownRenderer } from '@kit/ui/markdown-renderer';
 import { Trans } from '@kit/ui/trans';
 
 import { Database } from '~/lib/database.types';
+import {revalidatePostPageOnSaveAction} from "~/home/(user)/posts/[id]/_lib/server/server-actions";
 
 export function BlogPostContentEditor(props: { id: string; content: string }) {
-  const updatePost = useUpdatePost(props.id);
-  const save$ = useMemo(() => new Subject<string>(), []);
-
+  const save$ = useMemo(() => new ReplaySubject<string>(1), []);
   const [pendingText, setPendingText] = useState<string>();
 
   const [wordCount, setWordCount] = useState<number>(
     props.content.split(' ').length,
   );
 
-  useLayoutEffect(() => {
+  const { mutateAsync } = useUpdatePost(props.id);
+
+  useEffect(() => {
     const subscription = save$
       .pipe(
         distinctUntilChanged(),
+        filter(Boolean),
+        debounceTime(500),
         tap((content) => {
           setPendingText('posts:editingPost');
-          setWordCount(content.split(' ').length);
+          setWordCount((content ?? '').split(' ').filter(Boolean).length);
         }),
         debounceTime(3000),
-        tap(() => {
-          setPendingText('posts:savingPost');
-        }),
         mergeMap((content) => {
-          return updatePost.mutateAsync(content ?? '');
+          setPendingText('posts:savingPost');
+
+          return from(mutateAsync(content)).pipe(
+            catchError((error) => {
+              console.error('Failed to save post:', error);
+              setPendingText('posts:saveError');
+              return EMPTY;
+            }),
+          );
         }),
         tap(() => {
-          setPendingText(`posts:saveSuccess`);
-        }),
-        delay(2000),
-        tap(() => {
-          setPendingText('');
+          setPendingText('posts:saveSuccess');
+          setTimeout(() => setPendingText(''), 2000);
         }),
       )
       .subscribe();
@@ -58,18 +66,18 @@ export function BlogPostContentEditor(props: { id: string; content: string }) {
     return () => {
       subscription.unsubscribe();
     };
-  }, [save$, updatePost]);
+  }, [save$, mutateAsync]);
 
   return (
-    <div className={'mx-auto flex max-w-3xl flex-1 flex-col space-y-4 pb-16'}>
+    <div className={'flex flex-1 flex-col space-y-4 pb-16'}>
       <div className={'flex items-center space-x-4'}>
         <Badge variant={'outline'}>{wordCount} words</Badge>
 
-        <div>
+        <div className={'flex items-center'}>
           <If condition={pendingText}>
             <span
               className={
-                'text-sm text-muted-foreground duration-200 animate-in fade-in'
+                'text-xs text-muted-foreground duration-200 animate-in fade-in'
               }
             >
               <Trans i18nKey={pendingText} />
@@ -78,8 +86,13 @@ export function BlogPostContentEditor(props: { id: string; content: string }) {
         </div>
       </div>
 
-      <div>
-        <MarkdownRenderer>{props.content}</MarkdownRenderer>
+      <div className={'relative flex flex-1 flex-col'}>
+        <TextEditor
+          content={props.content}
+          onChange={(content) => {
+            save$.next(content ?? '');
+          }}
+        />
       </div>
     </div>
   );
@@ -104,6 +117,8 @@ function useUpdatePost(id: string) {
     if (error) {
       throw error;
     }
+
+    return revalidatePostPageOnSaveAction({});
   };
 
   return useMutation({
@@ -111,3 +126,4 @@ function useUpdatePost(id: string) {
     mutationFn,
   });
 }
+

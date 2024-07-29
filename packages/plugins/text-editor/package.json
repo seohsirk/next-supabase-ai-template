@@ -20,13 +20,13 @@
     "@kit/tailwind-config": "workspace:*",
     "@kit/tsconfig": "workspace:*",
     "@kit/ui": "workspace:*",
-    "@tanstack/react-query": "5.45.1",
+    "@tanstack/react-query": "5.51.15",
     "@types/node": "^20.14.6",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "react-hook-form": "^7.52.0",
+    "react-hook-form": "^7.52.1",
     "zod": "^3.23.8"
   },
   "dependencies": {
@@ -42,11 +42,11 @@
     "@lexical/table": "^0.16.0",
     "@lexical/utils": "^0.16.0",
     "@radix-ui/react-portal": "^1.1.1",
-    "ai": "^3.1.12",
+    "ai": "3.2.35",
     "lexical": "^0.16.0",
     "lexical-beautiful-mentions": "^0.1.36",
-    "lucide-react": "^0.396.0",
-    "openai": "^4.14.0"
+    "lucide-react": "^0.416.0",
+    "openai": "^4.44.0"
   },
   "eslintConfig": {
     "root": true,

@@ -51,6 +51,7 @@
     "@kit/shared": "workspace:^",
     "@kit/supabase": "workspace:^",
     "@kit/team-accounts": "workspace:^",
+    "@kit/text-editor": "workspace:^",
     "@kit/ui": "workspace:^",
     "@makerkit/data-loader-supabase-core": "^0.0.8",
     "@makerkit/data-loader-supabase-nextjs": "^1.2.3",

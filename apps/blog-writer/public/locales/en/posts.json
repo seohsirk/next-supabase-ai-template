@@ -34,5 +34,6 @@
   "postCreationFailed": "Post creation failed. Please try again later.",
   "savingPost": "Saving post...",
   "editingPost": "Editing post...",
-  "saveSuccess": "Post saved successfully"
+  "saveSuccess": "Post saved successfully",
+  "saveError": "Post save failed. Please try again later."
 }
