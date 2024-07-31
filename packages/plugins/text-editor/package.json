@@ -45,7 +45,7 @@
     "ai": "3.2.35",
     "lexical": "^0.16.0",
     "lexical-beautiful-mentions": "^0.1.36",
-    "lucide-react": "^0.416.0",
+    "lucide-react": "^0.417.0",
     "openai": "^4.44.0"
   },
   "eslintConfig": {
