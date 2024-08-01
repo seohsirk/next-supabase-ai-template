@@ -4,7 +4,7 @@ import { TeamAccountSettingsContainer } from '@kit/team-accounts/components';
 import { PageBody } from '@kit/ui/page';
 import { Trans } from '@kit/ui/trans';
 
-import featureFlagsConfig from '~/config/feature-flags.config';
+import featuresFlagConfig from '~/config/feature-flags.config';
 import pathsConfig from '~/config/paths.config';
 import { createI18nServerInstance } from '~/lib/i18n/i18n.server';
 
@@ -42,6 +42,10 @@ async function TeamAccountSettingsPage(props: Props) {
     primaryOwnerUserId: data.primary_owner_user_id,
   };
 
+  const features = {
+    enableTeamDeletion: featuresFlagConfig.enableTeamDeletion,
+  };
+
   return (
     <>
       <TeamAccountLayoutPageHeader
@@ -53,11 +57,9 @@ async function TeamAccountSettingsPage(props: Props) {
       <PageBody>
         <div className={'flex max-w-2xl flex-1 flex-col'}>
           <TeamAccountSettingsContainer
-            features={{
-              enableTeamDeletion: featureFlagsConfig.enableTeamDeletion,
-            }}
             account={account}
             paths={paths}
+            features={features}
           />
         </div>
       </PageBody>
