@@ -89,9 +89,9 @@ export function TextEditor({
             ignoreSelectionChange={true}
             onChange={(_, editor) => {
               editor.update(() => {
-                console.log(editor);
-                onChange &&
+                if (onChange) {
                   onChange($convertToMarkdownString(ALL_TRANSFORMERS));
+                }
               });
             }}
           />

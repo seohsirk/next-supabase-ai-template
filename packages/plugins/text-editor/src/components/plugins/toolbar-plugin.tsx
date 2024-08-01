@@ -679,7 +679,7 @@ function calculatePosition(ref: HTMLElement | null, isPointerDown: boolean) {
     domSelection?.rangeCount !== 0 && domSelection?.getRangeAt(0);
 
   if (!domRange || !ref || isPointerDown) {
-    return Promise.reject();
+    return Promise.reject(new Error('Invalid range or ref'));
   }
 
   return computePosition(domRange, ref, {

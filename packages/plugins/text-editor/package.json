@@ -20,7 +20,7 @@
     "@kit/tailwind-config": "workspace:*",
     "@kit/tsconfig": "workspace:*",
     "@kit/ui": "workspace:*",
-    "@tanstack/react-query": "5.51.15",
+    "@tanstack/react-query": "5.51.16",
     "@types/node": "^20.14.6",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
@@ -45,7 +45,7 @@
     "ai": "3.2.35",
     "lexical": "^0.16.0",
     "lexical-beautiful-mentions": "^0.1.36",
-    "lucide-react": "^0.417.0",
+    "lucide-react": "^0.418.0",
     "openai": "^4.44.0"
   },
   "eslintConfig": {

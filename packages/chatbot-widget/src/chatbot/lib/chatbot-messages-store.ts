@@ -30,7 +30,7 @@ export const chatBotMessagesStore = {
 
         return parsed;
       }
-    } catch (error) {
+    } catch {
       return emptyMessages;
     }
 
