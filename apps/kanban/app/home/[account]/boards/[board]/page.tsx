@@ -99,7 +99,7 @@ function Header({
       description={data.board.description}
       title={
         <div className={'flex items-center space-x-2'}>
-          <Link className={'hover:underline'} href={'../boards'}>
+          <Link className={'hover:underline'} href={'../'}>
             Boards
           </Link>
           <ChevronRightIcon className={'w-4'} />
