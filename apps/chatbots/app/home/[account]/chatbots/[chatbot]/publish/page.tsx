@@ -27,15 +27,9 @@ function ChatbotPublishPage({ params }: ChatbotPublishPageParams) {
   return (
     <PageBody className={'space-y-4'}>
       <div className={'flex flex-col space-y-2'}>
-        <Heading level={4}>
-          <Trans i18nKey={'chatbot:publishTab'} />
-        </Heading>
-
-        <div>
-          <p className={'text-sm text-muted-foreground'}>
-            <Trans i18nKey={'chatbot:publishTabSubheading'} />
-          </p>
-        </div>
+        <p className={'text-sm'}>
+          <Trans i18nKey={'chatbot:publishTabSubheading'} />
+        </p>
       </div>
 
       <pre

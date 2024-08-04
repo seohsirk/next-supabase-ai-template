@@ -502,11 +502,13 @@ function LineItemPrice({
       : lineItem?.cost
     : 0;
 
-  const costString = lineItem && formatCurrency({
-    currencyCode: product.currency,
-    locale: i18n.language,
-    value: cost,
-  });
+  const costString =
+    lineItem &&
+    formatCurrency({
+      currencyCode: product.currency,
+      locale: i18n.language,
+      value: cost,
+    });
 
   const labelString = plan.label && (
     <Trans i18nKey={plan.label} defaults={plan.label} />

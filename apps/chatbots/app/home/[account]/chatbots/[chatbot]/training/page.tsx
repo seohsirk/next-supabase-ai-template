@@ -3,6 +3,12 @@ import { PlusCircleIcon } from 'lucide-react';
 
 import { getSupabaseServerComponentClient } from '@kit/supabase/server-component-client';
 import { Button } from '@kit/ui/button';
+import {
+  EmptyState,
+  EmptyStateButton,
+  EmptyStateHeading,
+  EmptyStateText,
+} from '@kit/ui/empty-state';
 import { Heading } from '@kit/ui/heading';
 import { PageBody } from '@kit/ui/page';
 import { Trans } from '@kit/ui/trans';
@@ -39,17 +45,7 @@ async function ChatbotTrainingPage({
 
   return (
     <PageBody className={'space-y-4'}>
-      <div className={'flex items-end justify-between space-x-4'}>
-        <div className={'flex flex-col space-y-2'}>
-          <Heading level={4}>
-            <Trans i18nKey={'chatbot:trainingTab'} />
-          </Heading>
-
-          <p className={'text-sm text-muted-foreground'}>
-            <Trans i18nKey={'chatbot:trainingTabSubheading'} />
-          </p>
-        </div>
-
+      <div className={'flex items-end justify-end space-x-4'}>
         <div>
           <TrainingButton
             accountId={chatbot.account_id}
@@ -73,7 +69,7 @@ async function ChatbotTrainingPage({
         {({ data, count, pageSize }) => {
           if (!count) {
             return (
-              <EmptyState
+              <TrainingEmptyState
                 accountId={chatbot.account_id}
                 chatbotId={chatbot.id}
                 url={chatbot.url}
@@ -105,7 +101,7 @@ function TrainingButton(props: {
   return (
     <div className={'flex'}>
       <CrawlWebsiteModal {...props}>
-        <Button size={'sm'} variant={'outline'}>
+        <Button variant={'outline'}>
           <PlusCircleIcon className={'mr-2 h-4 w-4'} />
 
           <span>
@@ -117,36 +113,26 @@ function TrainingButton(props: {
   );
 }
 
-function EmptyState(props: {
+function TrainingEmptyState(props: {
   chatbotId: string;
   url: string;
   accountId: string;
 }) {
   return (
-    <>
-      <div
-        className={
-          'flex flex-1 flex-col items-center justify-center space-y-8 py-16'
-        }
-      >
-        <div className={'flex flex-col items-center justify-center space-y-2'}>
-          <Heading level={3}>
-            <Trans i18nKey={'chatbot:noJobsFound'} />
-          </Heading>
+    <EmptyState>
+      <EmptyStateHeading>
+        <Trans i18nKey={'chatbot:noJobsFound'} />
+      </EmptyStateHeading>
 
-          <div>
-            <Trans i18nKey={'chatbot:noJobsFoundDescription'} />
-          </div>
-        </div>
+      <EmptyStateText>
+        <Trans i18nKey={'chatbot:noJobsFoundDescription'} />
+      </EmptyStateText>
 
-        <div>
-          <CrawlWebsiteModal {...props}>
-            <Button size={'lg'}>
-              <Trans i18nKey={'chatbot:importDocumentsButton'} />
-            </Button>
-          </CrawlWebsiteModal>
-        </div>
-      </div>
-    </>
+      <CrawlWebsiteModal {...props}>
+        <EmptyStateButton>
+          <Trans i18nKey={'chatbot:importDocumentsButton'} />
+        </EmptyStateButton>
+      </CrawlWebsiteModal>
+    </EmptyState>
   );
 }

@@ -3,10 +3,13 @@ import { notFound } from 'next/navigation';
 import { ServerDataLoader } from '@makerkit/data-loader-supabase-nextjs';
 
 import { getSupabaseServerComponentClient } from '@kit/supabase/server-component-client';
-import { Button } from '@kit/ui/button';
-import { Heading } from '@kit/ui/heading';
+import {
+  EmptyState,
+  EmptyStateButton,
+  EmptyStateHeading,
+  EmptyStateText,
+} from '@kit/ui/empty-state';
 import { PageBody } from '@kit/ui/page';
-import { Trans } from '@kit/ui/trans';
 
 import { loadTeamWorkspace } from '~/home/[account]/_lib/server/team-account-workspace.loader';
 import { CrawlWebsiteModal } from '~/home/[account]/chatbots/[chatbot]/_components/crawl-website-modal';
@@ -47,17 +50,7 @@ async function ChatbotPage({ params, searchParams }: ChatbotPageParams) {
   }
 
   return (
-    <PageBody className={'space-y-4'}>
-      <div className={'flex flex-col space-y-2'}>
-        <Heading level={4}>
-          <Trans i18nKey={'chatbot:documentsTab'} />
-        </Heading>
-
-        <p className={'text-sm text-muted-foreground'}>
-          <Trans i18nKey={'chatbot:documentsTabSubheading'} />
-        </p>
-      </div>
-
+    <PageBody>
       <ServerDataLoader
         client={client}
         page={page}
@@ -71,10 +64,10 @@ async function ChatbotPage({ params, searchParams }: ChatbotPageParams) {
         {(props) => {
           if (props.count === 0) {
             return (
-              <EmptyState
-                accountId={account.id}
-                id={chatbot.id}
+              <ChatbotsEmptyState
+                id={chatbotId}
                 url={chatbot.url}
+                accountId={account.id}
               />
             );
           }
@@ -90,28 +83,26 @@ async function ChatbotPage({ params, searchParams }: ChatbotPageParams) {
 
 export default withI18n(ChatbotPage);
 
-function EmptyState(props: { id: string; url: string; accountId: string }) {
+function ChatbotsEmptyState(props: {
+  id: string;
+  url: string;
+  accountId: string;
+}) {
   return (
-    <div
-      className={
-        'flex flex-1 flex-col items-center justify-center space-y-8 py-16'
-      }
-    >
-      <div className={'flex flex-col items-center space-y-2'}>
-        <Heading level={3}>No documents found</Heading>
+    <EmptyState>
+      <EmptyStateHeading>No documents found</EmptyStateHeading>
 
-        <p>Get started by crawling your website to train your chatbot</p>
-      </div>
+      <EmptyStateText>
+        Get started by crawling your website to train your
+      </EmptyStateText>
 
       <CrawlWebsiteModal
         accountId={props.accountId}
         chatbotId={props.id}
         url={props.url}
       >
-        <Button size={'lg'} className={'text-center text-sm'}>
-          Train Chatbot with Website
-        </Button>
+        <EmptyStateButton>Train Chatbot with Website</EmptyStateButton>
       </CrawlWebsiteModal>
-    </div>
+    </EmptyState>
   );
 }

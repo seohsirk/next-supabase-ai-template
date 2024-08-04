@@ -1,5 +1,4 @@
 import { ChatbotSettings } from '@kit/chatbot-widget/chatbot';
-import { Heading } from '@kit/ui/heading';
 import { PageBody } from '@kit/ui/page';
 import { Trans } from '@kit/ui/trans';
 
@@ -26,11 +25,7 @@ async function ChatbotDesignPage({ params }: ChatbotDesignPageParams) {
   return (
     <PageBody className={'space-y-4'}>
       <div className={'flex flex-col space-y-2'}>
-        <Heading level={4}>
-          <Trans i18nKey={'chatbot:designTab'} />
-        </Heading>
-
-        <p className={'text-sm text-muted-foreground'}>
+        <p className={'text-sm'}>
           <Trans i18nKey={'chatbot:designTabSubheading'} />
         </p>
       </div>

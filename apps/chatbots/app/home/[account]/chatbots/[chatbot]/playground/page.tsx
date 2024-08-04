@@ -40,11 +40,7 @@ async function ChatbotPlaygroundPage({ params }: ChatbotPlaygroundPageParams) {
   return (
     <>
       <PageBody className={'space-y-2'}>
-        <Heading level={4}>
-          <Trans i18nKey={'chatbot:playgroundTab'} />
-        </Heading>
-
-        <p className={'text-sm text-muted-foreground'}>
+        <p className={'text-sm'}>
           <Trans i18nKey={'chatbot:playgroundTabSubheading'} />
         </p>
       </PageBody>
