@@ -15,7 +15,7 @@ const routes = [
     end: (path: string) => !path.includes('/posts/'),
   },
   {
-    label: 'account:accountTabLabel',
+    label: 'common:routes.account',
     path: pathsConfig.app.personalAccountSettings,
     Icon: <User className={iconClasses} />,
   },
@@ -23,7 +23,7 @@ const routes = [
 
 if (featureFlagsConfig.enablePersonalAccountBilling) {
   routes.push({
-    label: 'common:billingTabLabel',
+    label: 'common:routes.billing',
     path: pathsConfig.app.personalAccountBilling,
     Icon: <CreditCard className={iconClasses} />,
   });
