@@ -4,6 +4,7 @@ import { PlusCircleIcon } from 'lucide-react';
 
 import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
 import { Alert, AlertDescription } from '@kit/ui/alert';
+import { AppBreadcrumbs } from '@kit/ui/app-breadcrumbs';
 import { Button } from '@kit/ui/button';
 import { CardButton, CardButtonHeader } from '@kit/ui/card-button';
 import { Heading } from '@kit/ui/heading';
@@ -28,7 +29,7 @@ async function BoardsPage({ params }: BoardsPageProps) {
 
   return (
     <>
-      <PageHeader title={`Boards`} description={`Manage your Boards`}>
+      <PageHeader title={`Boards`} description={<AppBreadcrumbs />}>
         <CreateBoardDialog
           accountSlug={params.account}
           canCreateBoard={canCreateBoard}
