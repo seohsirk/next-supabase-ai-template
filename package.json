@@ -63,7 +63,7 @@
     "@turbo/gen": "^2.0.11",
     "cross-env": "^7.0.3",
     "pnpm": "^9.6.0",
-    "prettier": "^3.3.2",
+    "prettier": "^3.3.3",
     "turbo": "2.0.11",
     "typescript": "^5.5.4"
   },
