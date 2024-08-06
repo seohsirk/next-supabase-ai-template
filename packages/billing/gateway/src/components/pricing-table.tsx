@@ -37,11 +37,12 @@ export function PricingTable({
   CheckoutButtonRenderer,
   redirectToCheckout = true,
   displayPlanDetails = true,
+  alwaysDisplayMonthlyPrice = true,
 }: {
   config: BillingConfig;
   paths: Paths;
   displayPlanDetails?: boolean;
-
+  alwaysDisplayMonthlyPrice?: boolean;
   redirectToCheckout?: boolean;
 
   CheckoutButtonRenderer?: React.ComponentType<{
@@ -100,6 +101,7 @@ export function PricingTable({
               product={product}
               paths={paths}
               displayPlanDetails={displayPlanDetails}
+              alwaysDisplayMonthlyPrice={alwaysDisplayMonthlyPrice}
               CheckoutButton={CheckoutButtonRenderer}
             />
           );
@@ -121,6 +123,7 @@ function PricingItem(
     primaryLineItem: z.infer<typeof LineItemSchema> | undefined;
 
     redirectToCheckout?: boolean;
+    alwaysDisplayMonthlyPrice?: boolean;
 
     plan: {
       id: string;
@@ -214,12 +217,13 @@ function PricingItem(
         <Separator />
 
         <div className={'flex flex-col space-y-2'}>
-          <Price>
+          <Price isMonthlyPrice={props.alwaysDisplayMonthlyPrice}>
             <LineItemPrice
               plan={props.plan}
               product={props.product}
               interval={interval}
               lineItem={lineItem}
+              alwaysDisplayMonthlyPrice={props.alwaysDisplayMonthlyPrice}
             />
           </Price>
 
@@ -337,7 +341,12 @@ function FeaturesList(
   );
 }
 
-function Price({ children }: React.PropsWithChildren) {
+function Price({
+  children,
+  isMonthlyPrice = true,
+}: React.PropsWithChildren<{
+  isMonthlyPrice?: boolean;
+}>) {
   return (
     <div
       className={`animate-in slide-in-from-left-4 fade-in flex items-end gap-2 duration-500`}
@@ -350,9 +359,11 @@ function Price({ children }: React.PropsWithChildren) {
         {children}
       </span>
 
-      <span className={'text-muted-foreground text-sm leading-loose'}>
-        <Trans i18nKey={'billing:perMonth'} />
-      </span>
+      <If condition={isMonthlyPrice}>
+        <span className={'text-muted-foreground text-sm leading-loose'}>
+          <Trans i18nKey={'billing:perMonth'} />
+        </span>
+      </If>
     </div>
   );
 }
@@ -483,6 +494,7 @@ function LineItemPrice({
   plan,
   interval,
   product,
+  alwaysDisplayMonthlyPrice = true,
 }: {
   lineItem: z.infer<typeof LineItemSchema> | undefined;
   plan: {
@@ -492,13 +504,16 @@ function LineItemPrice({
   product: {
     currency: string;
   };
+  alwaysDisplayMonthlyPrice?: boolean;
 }) {
   const { i18n } = useTranslation();
   const isYearlyPricing = interval === 'year';
 
   const cost = lineItem
     ? isYearlyPricing
-      ? Number(lineItem.cost / 12).toFixed(2)
+      ? alwaysDisplayMonthlyPrice
+        ? Number(lineItem.cost / 12).toFixed(2)
+        : lineItem.cost
       : lineItem?.cost
     : 0;
 
