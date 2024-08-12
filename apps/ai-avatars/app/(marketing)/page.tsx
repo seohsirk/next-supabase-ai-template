@@ -1,20 +1,10 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { ArrowRightIcon, LayoutDashboard } from 'lucide-react';
+import { ArrowRightIcon } from 'lucide-react';
 
 import { PricingTable } from '@kit/billing-gateway/marketing';
-import {
-  CtaButton,
-  FeatureCard,
-  FeatureGrid,
-  FeatureShowcase,
-  FeatureShowcaseIconContainer,
-  GradientSecondaryText,
-  Hero,
-  Pill,
-  SecondaryHero,
-} from '@kit/ui/marketing';
+import {CtaButton, GradientText, Hero, Pill, SecondaryHero} from '@kit/ui/marketing';
 import { Trans } from '@kit/ui/trans';
 
 import billingConfig from '~/config/billing.config';
@@ -32,122 +22,84 @@ function Home() {
         }
         title={
           <>
-            <span>Beautiful AI Avatars</span>
+            <span>Generate{' '}
+              <GradientText className={'from-primary to-primary/70'}>AI Avatars</GradientText>
+            </span>
 
-            <span>in seconds</span>
+            <span>
+              for you and your family
+            </span>
           </>
         }
         subtitle={
           <span>
-            Create AI Avatars for you and your family in seconds with our AI
-            Avatar Generator
+           The AI Avatars app allows you to create AI avatars for you and your loved ones. Get started for free today.
           </span>
         }
         cta={<MainCallToActionButton />}
         image={
-          <Image
-            priority
-            className={
-              'delay-250 rounded-2xl border border-gray-200 duration-1000 ease-out animate-in fade-in zoom-in-50 fill-mode-both dark:border-primary/10'
-            }
-            width={3558}
-            height={2222}
-            src={`/images/dashboard.webp`}
-            alt={`App Image`}
-          />
+          <div
+            className={'grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-4'}
+          >
+            <Image
+              className={'rounded shadow'}
+              src={'/images/avatars/avatar-0.webp'}
+              alt={`Avatar 1`}
+              width={800}
+              height={600}
+            />
+            <Image
+              className={'rounded shadow'}
+              src={'/images/avatars/avatar-1.webp'}
+              alt={`Avatar 2`}
+              width={800}
+              height={600}
+            />
+            <Image
+              className={'rounded shadow'}
+              src={'/images/avatars/avatar-2.webp'}
+              alt={`Avatar 3`}
+              width={800}
+              height={600}
+            />
+            <Image
+              className={'rounded shadow'}
+              src={'/images/avatars/avatar-3.webp'}
+              alt={`Avatar 4`}
+              width={800}
+              height={600}
+            />
+            <Image
+              className={'rounded shadow'}
+              src={'/images/avatars/avatar-4.webp'}
+              alt={`Avatar 5`}
+              width={800}
+              height={600}
+            />
+            <Image
+              className={'rounded shadow'}
+              src={'/images/avatars/avatar-5.webp'}
+              alt={`Avatar 6`}
+              width={800}
+              height={600}
+            />
+            <Image
+              className={'rounded shadow'}
+              src={'/images/avatars/avatar-6.webp'}
+              alt={`Avatar 7`}
+              width={800}
+              height={600}
+            />
+            <Image
+              className={'rounded shadow'}
+              src={'/images/avatars/avatar-7.webp'}
+              alt={`Avatar 8`}
+              width={800}
+              height={600}
+            />
+          </div>
         }
       />
-
-      <div className={'container mx-auto'}>
-        <div
-          className={'flex flex-col space-y-16 xl:space-y-32 2xl:space-y-36'}
-        >
-          <FeatureShowcase
-            heading={
-              <>
-                <b className="font-semibold dark:text-white">
-                  The ultimate SaaS Starter Kit
-                </b>
-                .{' '}
-                <GradientSecondaryText>
-                  Unleash your creativity and build your SaaS faster than ever
-                  with Makerkit.
-                </GradientSecondaryText>
-              </>
-            }
-            icon={
-              <FeatureShowcaseIconContainer>
-                <LayoutDashboard className="h-5" />
-                <span>All-in-one solution</span>
-              </FeatureShowcaseIconContainer>
-            }
-          >
-            <FeatureGrid>
-              <FeatureCard
-                className={
-                  'relative col-span-2 overflow-hidden bg-violet-500 text-white lg:h-96'
-                }
-                label={'Beautiful Dashboard'}
-                description={`Makerkit provides a beautiful dashboard to manage your SaaS business.`}
-              >
-                <Image
-                  className="absolute right-0 top-0 hidden h-full w-full rounded-tl-2xl border border-border lg:top-36 lg:flex lg:h-auto lg:w-10/12"
-                  src={'/images/dashboard-header.webp'}
-                  width={'2061'}
-                  height={'800'}
-                  alt={'Dashboard Header'}
-                />
-              </FeatureCard>
-
-              <FeatureCard
-                className={
-                  'relative col-span-2 w-full overflow-hidden lg:col-span-1'
-                }
-                label={'Authentication'}
-                description={`Makerkit provides a variety of providers to allow your users to sign in.`}
-              >
-                <Image
-                  className="absolute left-16 top-32 hidden h-auto w-8/12 rounded-l-2xl lg:flex"
-                  src={'/images/sign-in.webp'}
-                  width={'1760'}
-                  height={'1680'}
-                  alt={'Sign In'}
-                />
-              </FeatureCard>
-
-              <FeatureCard
-                className={
-                  'relative col-span-2 overflow-hidden lg:col-span-1 lg:h-96'
-                }
-                label={'Multi Tenancy'}
-                description={`Multi tenant memberships for your SaaS business.`}
-              >
-                <Image
-                  className="absolute right-0 top-0 hidden h-full w-full rounded-tl-2xl border lg:top-28 lg:flex lg:h-auto lg:w-8/12"
-                  src={'/images/multi-tenancy.webp'}
-                  width={'2061'}
-                  height={'800'}
-                  alt={'Multi Tenancy'}
-                />
-              </FeatureCard>
-
-              <FeatureCard
-                className={'relative col-span-2 overflow-hidden lg:h-96'}
-                label={'Billing'}
-                description={`Makerkit supports multiple payment gateways to charge your customers.`}
-              >
-                <Image
-                  className="absolute right-0 top-0 hidden h-full w-full rounded-tl-2xl border border-border lg:top-36 lg:flex lg:h-auto lg:w-11/12"
-                  src={'/images/billing.webp'}
-                  width={'2061'}
-                  height={'800'}
-                  alt={'Billing'}
-                />
-              </FeatureCard>
-            </FeatureGrid>
-          </FeatureShowcase>
-        </div>
-      </div>
 
       <div className={'container mx-auto'}>
         <div
@@ -185,7 +137,7 @@ function MainCallToActionButton() {
         <Link href={'/auth/sign-up'}>
           <span className={'flex items-center space-x-0.5'}>
             <span>
-              <Trans i18nKey={'common:getStarted'} />
+              Generate your first AI Avatar
             </span>
 
             <ArrowRightIcon
@@ -195,12 +147,6 @@ function MainCallToActionButton() {
               }
             />
           </span>
-        </Link>
-      </CtaButton>
-
-      <CtaButton variant={'link'}>
-        <Link href={'/contact'}>
-          <Trans i18nKey={'common:contactUs'} />
         </Link>
       </CtaButton>
     </div>

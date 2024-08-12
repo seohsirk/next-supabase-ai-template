@@ -1,7 +1,7 @@
 import { use } from 'react';
 
+import { AppBreadcrumbs } from '@kit/ui/app-breadcrumbs';
 import { PageBody } from '@kit/ui/page';
-import { Trans } from '@kit/ui/trans';
 
 import { HomeLayoutPageHeader } from '~/home/(user)/_components/home-page-header';
 import { loadUserWorkspace } from '~/home/(user)/_lib/server/load-user-workspace';
@@ -15,7 +15,7 @@ function NewAvatarsGenerationPage() {
     <>
       <HomeLayoutPageHeader
         title={'Generate your Avatars'}
-        description={'Generate your avatars with the AI Avatars generator'}
+        description={<AppBreadcrumbs />}
       />
 
       <PageBody>

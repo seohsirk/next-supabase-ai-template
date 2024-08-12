@@ -3,6 +3,12 @@
 import Link from 'next/link';
 
 import { Badge } from '@kit/ui/badge';
+import {
+  EmptyState,
+  EmptyStateButton,
+  EmptyStateHeading,
+  EmptyStateText,
+} from '@kit/ui/empty-state';
 import { DataTable } from '@kit/ui/enhanced-data-table';
 
 import { Database } from '~/lib/database.types';
@@ -20,6 +26,23 @@ export function ModelsTable(props: {
     createdAt: string;
   }>;
 }) {
+  if (props.data.length === 0) {
+    return (
+      <EmptyState>
+        <EmptyStateHeading>Train a model with your pictures</EmptyStateHeading>
+        <EmptyStateText>
+          You haven&apos;t created any models yet. Click the button below to
+          create a new model.
+        </EmptyStateText>
+        <EmptyStateButton size={'lg'} asChild>
+          <Link href={`/home/models/new`}>
+            Train a Model from your pictures
+          </Link>
+        </EmptyStateButton>
+      </EmptyState>
+    );
+  }
+
   return (
     <DataTable
       data={props.data}

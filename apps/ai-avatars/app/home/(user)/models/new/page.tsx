@@ -1,5 +1,6 @@
 import { use } from 'react';
 
+import { AppBreadcrumbs } from '@kit/ui/app-breadcrumbs';
 import { PageBody } from '@kit/ui/page';
 
 import { HomeLayoutPageHeader } from '~/home/(user)/_components/home-page-header';
@@ -14,7 +15,7 @@ function CreateModelPage() {
     <>
       <HomeLayoutPageHeader
         title={'Create Model'}
-        description={`Models are trained with your pictures. Let's create your model!`}
+        description={<AppBreadcrumbs />}
       />
 
       <PageBody>

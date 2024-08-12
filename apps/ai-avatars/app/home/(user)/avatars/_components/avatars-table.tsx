@@ -3,6 +3,12 @@
 import Link from 'next/link';
 
 import { Badge } from '@kit/ui/badge';
+import {
+  EmptyState,
+  EmptyStateButton,
+  EmptyStateHeading,
+  EmptyStateText,
+} from '@kit/ui/empty-state';
 import { DataTable } from '@kit/ui/enhanced-data-table';
 
 import { Database } from '~/lib/database.types';
@@ -22,6 +28,24 @@ export function AvatarsGenerationsTable(props: {
     createdAt: string;
   }>;
 }) {
+  if (props.data.length === 0) {
+    return (
+      <EmptyState>
+        <EmptyStateHeading>Generate your Avatars</EmptyStateHeading>
+
+        <EmptyStateText>
+          You haven&apos;t generated any avatars yet.
+        </EmptyStateText>
+
+        <EmptyStateButton size={'lg'} asChild>
+          <Link href={`/home/avatars/new`}>
+            Generate your first Avatar
+          </Link>
+        </EmptyStateButton>
+      </EmptyState>
+    );
+  }
+
   const linkPrefix = props.linkPrefix ?? 'avatars';
 
   return (

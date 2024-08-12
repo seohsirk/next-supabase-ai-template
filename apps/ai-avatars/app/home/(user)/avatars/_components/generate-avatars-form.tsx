@@ -76,7 +76,7 @@ export function GenerateAvatarsForm(props: { accountId: string }) {
       </CardHeader>
 
       <CardContent className={'space-y-12'}>
-        <Stepper currentStep={step} steps={['Details', 'Finish']} />
+        <Stepper variant={'numbers'} currentStep={step} steps={['Details', 'Finish']} />
 
         <If condition={step === 0}>
           <GenerationSettingsStep

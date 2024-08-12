@@ -19,6 +19,13 @@ import { useSupabase } from '@kit/supabase/hooks/use-supabase';
 import { Alert, AlertDescription, AlertTitle } from '@kit/ui/alert';
 import { Button } from '@kit/ui/button';
 import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@kit/ui/card';
+import {
   Form,
   FormControl,
   FormDescription,
@@ -53,54 +60,69 @@ export function NewModelForm(props: { accountId: string }) {
   const [files, setFiles] = useState<File[]>([]);
 
   return (
-    <div className={'mt-8 flex w-full max-w-5xl flex-col space-y-16'}>
-      <Stepper currentStep={step} steps={['Details', 'Images', 'Finish']} />
+    <Card>
+      <CardHeader>
+        <CardTitle>Create Model using your images</CardTitle>
 
-      <If condition={step === 0}>
-        <ModelDetailsStep
-          name={name}
-          captionPrefix={captionPrefix}
-          onSubmit={({ name, captionPrefix }) => {
-            setState(() => {
-              return { step: 1, name, captionPrefix };
-            });
-          }}
-        />
-      </If>
+        <CardDescription>
+          To generate avatars, you need to create a model using your images.
+          This process will take a few minutes.
+        </CardDescription>
+      </CardHeader>
 
-      <If condition={step === 1}>
-        <UploadImagesStep
-          files={files}
-          setFiles={setFiles}
-          onBack={() => setState((state) => ({ ...state, step: 0 }))}
-          onSubmit={() => {
-            setState((state) => {
-              return {
-                ...state,
-                step: 2,
-              };
-            });
-          }}
+      <CardContent className={'flex max-w-3xl flex-col space-y-8'}>
+        <Stepper
+          variant={'numbers'}
+          currentStep={step}
+          steps={['Details', 'Images', 'Finish']}
         />
-      </If>
 
-      <If condition={step === 2}>
-        <SubmitModelStep
-          accountId={props.accountId}
-          name={name}
-          captionPrefix={captionPrefix}
-          files={files}
-          onBack={() =>
-            setState((state) => {
-              return {
-                ...state,
-                step: 1,
-              };
-            })
-          }
-        />
-      </If>
-    </div>
+        <If condition={step === 0}>
+          <ModelDetailsStep
+            name={name}
+            captionPrefix={captionPrefix}
+            onSubmit={({ name, captionPrefix }) => {
+              setState(() => {
+                return { step: 1, name, captionPrefix };
+              });
+            }}
+          />
+        </If>
+
+        <If condition={step === 1}>
+          <UploadImagesStep
+            files={files}
+            setFiles={setFiles}
+            onBack={() => setState((state) => ({ ...state, step: 0 }))}
+            onSubmit={() => {
+              setState((state) => {
+                return {
+                  ...state,
+                  step: 2,
+                };
+              });
+            }}
+          />
+        </If>
+
+        <If condition={step === 2}>
+          <SubmitModelStep
+            accountId={props.accountId}
+            name={name}
+            captionPrefix={captionPrefix}
+            files={files}
+            onBack={() =>
+              setState((state) => {
+                return {
+                  ...state,
+                  step: 1,
+                };
+              })
+            }
+          />
+        </If>
+      </CardContent>
+    </Card>
   );
 }
 
