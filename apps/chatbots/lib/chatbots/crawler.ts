@@ -1,10 +1,12 @@
 export default class Crawler {
   async getSitemapLinks(url: string) {
-    const { default: getSitemapLinks } = await import('get-sitemap-links');
-
+    const { Sitemapper } = await import('./sitemap-crawler');
     const sitemapUrl = this.getSitemapUrl(url);
+    const sitemapper = new Sitemapper({ url: sitemapUrl });
 
-    return getSitemapLinks(sitemapUrl);
+    const { sites } = await sitemapper.fetch(sitemapUrl);
+
+    return sites;
   }
 
   async crawl(url: string) {

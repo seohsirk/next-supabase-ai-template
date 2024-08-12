@@ -350,6 +350,6 @@ function getBodySchema() {
   return z.object({
     chatbotId: z.string().uuid(),
     jobId: z.number(),
-    links: z.array(z.string().url()),
+    links: z.array(z.string()),
   });
 }
