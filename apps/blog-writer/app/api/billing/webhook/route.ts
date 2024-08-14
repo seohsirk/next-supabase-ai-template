@@ -1,7 +1,7 @@
 import { getBillingEventHandlerService } from '@kit/billing-gateway';
 import { enhanceRouteHandler } from '@kit/next/routes';
 import { getLogger } from '@kit/shared/logger';
-import { getSupabaseRouteHandlerClient } from '@kit/supabase/route-handler-client';
+import { getSupabaseServerAdminClient } from '@kit/supabase/server-admin-client';
 
 import billingConfig from '~/config/billing.config';
 import { Database } from '~/lib/database.types';
@@ -21,8 +21,7 @@ export const POST = enhanceRouteHandler(
 
     logger.info(ctx, `Received billing webhook. Processing...`);
 
-    const supabaseClientProvider = () =>
-      getSupabaseRouteHandlerClient<Database>({ admin: true });
+    const supabaseClientProvider = () => getSupabaseServerAdminClient<Database>();
 
     const service = await getBillingEventHandlerService(
       supabaseClientProvider,
@@ -79,10 +78,10 @@ async function updateMessagesCountQuota(params: {
   variantId: string;
   accountId: string;
 }) {
-  const client = getSupabaseRouteHandlerClient<Database>({ admin: true });
+  const adminClient = getSupabaseServerAdminClient<Database>();
 
   // get the max messages for the price based on the price ID
-  const plan = await client
+  const plan = await adminClient
     .from('plans')
     .select('tokens_quota')
     .eq('variant_id', params.variantId)
@@ -96,7 +95,7 @@ async function updateMessagesCountQuota(params: {
 
   // upsert the message count for the account
   // and set the period start and end dates (from the subscription)
-  const response = await client
+  const response = await adminClient
     .from('credits_usage')
     .update({
       tokens_quota,
