@@ -84,7 +84,7 @@ async function updateCreditsQuota(params: {
   accountId: string;
   variantId: string;
 }) {
-  const client = getSupabaseRouteHandlerClient<Database>({ admin: true });
+  const client = getSupabaseServerAdminClient<Database>();
   const { subscriptionId, accountId, variantId } = params;
   const logger = await getLogger();
 
