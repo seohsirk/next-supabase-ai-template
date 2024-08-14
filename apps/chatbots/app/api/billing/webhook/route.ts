@@ -1,7 +1,7 @@
 import { getBillingEventHandlerService } from '@kit/billing-gateway';
 import { enhanceRouteHandler } from '@kit/next/routes';
 import { getLogger } from '@kit/shared/logger';
-import { getSupabaseRouteHandlerClient } from '@kit/supabase/route-handler-client';
+import { getSupabaseServerAdminClient } from '@kit/supabase/server-admin-client';
 
 import billingConfig from '~/config/billing.config';
 import { Database } from '~/lib/database.types';
@@ -21,8 +21,7 @@ export const POST = enhanceRouteHandler(
 
     logger.info(ctx, `Received billing webhook. Processing...`);
 
-    const supabaseClientProvider = () =>
-      getSupabaseRouteHandlerClient<Database>({ admin: true });
+    const supabaseClientProvider = () => getSupabaseServerAdminClient<Database>();
 
     const service = await getBillingEventHandlerService(
       supabaseClientProvider,
@@ -85,7 +84,7 @@ async function updateCreditsQuota(params: {
   accountId: string;
   variantId: string;
 }) {
-  const client = getSupabaseRouteHandlerClient<Database>({ admin: true });
+  const client = getSupabaseServerAdminClient<Database>();
   const logger = await getLogger();
 
   const { subscriptionId, accountId, variantId } = params;
