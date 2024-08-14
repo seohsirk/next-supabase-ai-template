@@ -5,7 +5,6 @@ import { cookies } from 'next/headers';
 
 import { createClient } from '@supabase/supabase-js';
 
-import type { CookieOptions } from '@supabase/ssr';
 import { createServerClient } from '@supabase/ssr';
 
 import { Database } from '../database.types';
@@ -15,50 +14,60 @@ import {
 } from '../get-service-role-key';
 import { getSupabaseClientKeys } from '../get-supabase-client-keys';
 
-const serviceRoleKey = getServiceRoleKey();
 const keys = getSupabaseClientKeys();
+const serviceRoleKey = getServiceRoleKey();
+
+function createServerSupabaseClient<GenericSchema = Database>() {
+  return createServerClient<GenericSchema>(keys.url, keys.anonKey, {
+    cookies: getCookiesStrategy(),
+  });
+}
 
 /**
- * @name getSupabaseRouteHandlerClient
- * @description Get a Supabase client for use in the Route Handler Routes
+ * @name getSupabaseServerComponentClient
+ * @deprecated Use `getSupabaseServerClient` instead.
+ * @param params
  */
-export function getSupabaseRouteHandlerClient<GenericSchema = Database>(
-  params = {
-    admin: false,
-  },
-) {
+export function getSupabaseServerActionClient<
+  GenericSchema = Database,
+>(params?: { admin: boolean }) {
   // prevent any caching (to be removed in Next v15)
   noStore();
 
-  if (params.admin) {
+  const keys = getSupabaseClientKeys();
+  const admin = params?.admin ?? false;
+
+  if (admin) {
     warnServiceRoleKeyUsage();
 
     return createClient<GenericSchema>(keys.url, serviceRoleKey, {
       auth: {
         persistSession: false,
-        autoRefreshToken: false,
         detectSessionInUrl: false,
+        autoRefreshToken: false,
       },
     });
   }
 
-  return createServerClient<GenericSchema>(keys.url, keys.anonKey, {
-    cookies: getCookiesStrategy(),
-  });
+  return createServerSupabaseClient<GenericSchema>();
 }
 
 function getCookiesStrategy() {
   const cookieStore = cookies();
 
   return {
-    set: (name: string, value: string, options: CookieOptions) => {
-      cookieStore.set({ name, value, ...options });
-    },
     get: (name: string) => {
       return cookieStore.get(name)?.value;
     },
-    remove: (name: string, options: CookieOptions) => {
-      cookieStore.set({ name, value: '', ...options });
+    set: (name: string, value: string, options: object) => {
+      cookieStore.set({ name, value, ...options });
+    },
+    remove: (name: string, options: object) => {
+      cookieStore.set({
+        name,
+        value: '',
+        ...options,
+      });
     },
   };
 }
