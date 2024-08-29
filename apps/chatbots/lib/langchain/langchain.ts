@@ -155,7 +155,7 @@ async function crateChain(params: {
       question: (input: { question: string }) => input.question,
       chatHistory: (input: { chatHistory?: string }) => input.chatHistory ?? '',
       context: async (input: { question: string; chatHistory?: string }) => {
-        const relevantDocs = await retriever.getRelevantDocuments(
+        const relevantDocs = await retriever.invoke(
           input.question,
         );
 

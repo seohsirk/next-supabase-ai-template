@@ -87,7 +87,7 @@ You can also change the following environment variables:
 CHATBOT_MAX_DOCUMENTS=2
 
 # The similarity threshold for the retriever.
-# The default is 0.8.
+# The default is 0.7
 CHATBOT_SIMILARITY_THRESHOLD=0.8
 
 # The OpenAI model to use for the Chatbot.

@@ -7,7 +7,7 @@ import { isbot } from 'isbot';
 import { z } from 'zod';
 
 import { getLogger } from '@kit/shared/logger';
-import { getSupabaseRouteHandlerClient } from '@kit/supabase/route-handler-client';
+import { getSupabaseServerAdminClient } from '@kit/supabase/server-admin-client';
 
 import appConfig from '~/config/app.config';
 import { Database } from '~/lib/database.types';
@@ -99,11 +99,9 @@ export function handleChatBotRequest({
       return fakeDataStreamer();
     }
 
-    const client = getSupabaseRouteHandlerClient<Database>({
-      admin: true,
-    });
+    const adminClient = getSupabaseServerAdminClient<Database>();
 
-    const canGenerateAIResponse = await client.rpc('can_respond_to_message', {
+    const canGenerateAIResponse = await adminClient.rpc('can_respond_to_message', {
       target_chatbot_id: chatbotId,
     });
 
@@ -128,7 +126,7 @@ export function handleChatBotRequest({
           `Detected new conversation. Inserting conversation...`,
         );
 
-        const { data, error } = await insertConversation(client, {
+        const { data, error } = await insertConversation(adminClient, {
           chatbotId,
           conversationReferenceId,
         });
@@ -169,7 +167,7 @@ export function handleChatBotRequest({
       );
 
       return fallbackSearchDocuments({
-        client,
+        client: adminClient,
         query: latestMessage.content,
         chatbotId,
         conversationReferenceId,
@@ -182,10 +180,10 @@ export function handleChatBotRequest({
     }
 
     try {
-      const siteName = await getChatbotSiteName(client, chatbotId);
+      const siteName = await getChatbotSiteName(adminClient, chatbotId);
 
       const stream = await generateReplyFromChain({
-        client,
+        client: adminClient,
         messages,
         chatbotId,
         siteName,
@@ -266,9 +264,12 @@ async function searchDocuments(params: {
   const { client, filter, query } = params;
   const store = await getVectorStore(client);
 
+  const maxDocuments = process.env.CHATBOT_MAX_DOCUMENTS ? parseInt(process.env.CHATBOT_MAX_DOCUMENTS) : 5;
+
   const documents = await store
     .asRetriever({
       filter,
+      k: maxDocuments,
     })
     .invoke(query);
 
@@ -279,6 +280,7 @@ async function searchDocuments(params: {
     .join('\n\n');
 
   const contentResponse = `I found these documents that might help you:\n\n${content}`;
+  
   const text = documents.length
     ? contentResponse
     : 'Sorry, I was not able to find an answer for you.';
