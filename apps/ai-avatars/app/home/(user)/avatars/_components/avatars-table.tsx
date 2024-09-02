@@ -38,7 +38,7 @@ export function AvatarsGenerationsTable(props: {
         </EmptyStateText>
 
         <EmptyStateButton size={'lg'} asChild>
-          <Link href={`/home/avatars/new`}>
+          <Link href={`/home/avatars/generate`}>
             Generate your first Avatar
           </Link>
         </EmptyStateButton>

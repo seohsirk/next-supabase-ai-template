@@ -144,6 +144,7 @@ function SubmitModelStep({
   const referenceId = useMemo(() => nanoid(32), []);
 
   const uploadImages = useUploadImages();
+  const deleteImages = useDeleteImages();
 
   useEffect(() => {
     const upload = () => {
@@ -161,8 +162,13 @@ function SubmitModelStep({
             captionPrefix,
           });
         })
-        .catch((error) => {
+        .catch(async (error) => {
+          // set the error state to show the error message
           setError(error);
+
+          // delete the uploaded images if the model creation fails
+          // so we don't have orphaned files
+          await deleteImages({ referenceId, accountId });
 
           throw error;
         });
@@ -299,6 +305,29 @@ function useUploadImages() {
   );
 }
 
+function useDeleteImages() {
+  const supabase = useSupabase();
+
+  return useCallback(
+    async ({
+      referenceId,
+      accountId,
+    }: {
+      referenceId: string;
+      accountId: string;
+    }) => {
+      const { error } = await supabase.storage
+        .from('avatars_models')
+        .remove([`${accountId}/${referenceId}.zip`]);
+
+      if (error) {
+        throw error;
+      }
+    },
+    [supabase],
+  );
+}
+
 function ModelDetailsStep({
   onSubmit,
   name,
@@ -410,14 +439,14 @@ function UploadImagesStep({
 
       <div
         className={
-          'md:grid-cols:2 grid grid-cols-1 gap-4 lg:grid-cols-3 xl:grid-cols-4'
+          'md:grid-cols:2 grid grid-cols-1 gap-x-4 gap-y-4 sm:gap-x-24 lg:grid-cols-3 xl:grid-cols-4'
         }
       >
         {files.map((file, index) => {
           return (
             <div
               key={file.name}
-              className={'relative h-60 w-60 animate-in fade-in'}
+              className={'relative h-48 w-48 animate-in fade-in'}
             >
               <TooltipProvider>
                 <Tooltip>

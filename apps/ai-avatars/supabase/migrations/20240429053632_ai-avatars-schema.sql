@@ -115,7 +115,7 @@ create trigger on_account_created_add_credits
 
 -- plans
 create table if not exists public.plans (
-  id serial primary key,
+  variant_id text not null unique,
   name text not null unique,
   credits integer not null
 );
@@ -155,20 +155,28 @@ $$;
 
 grant execute on function public.is_user_avatar to authenticated;
 
-create policy insert_avatars_models
+create policy storage_insert_avatars_models
     on storage.objects
     for insert
     to authenticated
     with check (bucket_id = 'avatars_models' and (
-        public.is_user_avatar((storage.foldername(name))[2]::uuid)
-    ));
+        (select auth.uid()) = (storage.foldername(name))[1]::uuid)
+    );
+
+create policy delete_storage_models_bucket
+    on storage.objects
+    for delete
+    to authenticated
+    using (bucket_id = 'avatars_models' and (
+        (select auth.uid()) = (storage.foldername(name))[1]::uuid)
+    );
 
 create policy read_storage_generations_bucket
     on storage.objects
     for select
     to authenticated
     using (bucket_id = 'avatars_generations' and (
-        public.is_user_avatar((storage.foldername(name))[2]::uuid)
+        public.is_user_avatar((storage.foldername(name))[1]::uuid)
     ));
 
 create or replace function public.reduce_credits(target_account_id uuid, credits_cost integer)

@@ -1,5 +1,6 @@
 import { getSupabaseServerComponentClient } from '@kit/supabase/server-component-client';
 import { Alert, AlertDescription, AlertTitle } from '@kit/ui/alert';
+import { AppBreadcrumbs } from '@kit/ui/app-breadcrumbs';
 import { PageBody, PageHeader } from '@kit/ui/page';
 
 import { AvatarsGenerationsTable } from '~/home/(user)/avatars/_components/avatars-table';
@@ -61,12 +62,19 @@ async function ModelPage({
   }
 
   return (
-    <div>
-      <PageHeader title={data.name} description={'Manage your model'} />
+    <>
+      <PageHeader
+        title={data.name}
+        description={
+          <AppBreadcrumbs
+            values={{
+              [params.uuid]: data.name,
+            }}
+          />
+        }
+      />
 
-      <PageBody className={'space-y-4'}>
-        <p>Below are the generations of this model.</p>
-
+      <PageBody>
         <AvatarsGenerationsTable
           page={page}
           pageCount={1}
@@ -75,7 +83,7 @@ async function ModelPage({
           linkPrefix={'../avatars'}
         />
       </PageBody>
-    </div>
+    </>
   );
 }
 
