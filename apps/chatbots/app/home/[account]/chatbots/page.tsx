@@ -5,7 +5,12 @@ import { PlusCircleIcon } from 'lucide-react';
 
 import { getSupabaseServerComponentClient } from '@kit/supabase/server-component-client';
 import { Button } from '@kit/ui/button';
-import { Heading } from '@kit/ui/heading';
+import {
+  EmptyState,
+  EmptyStateButton,
+  EmptyStateHeading,
+  EmptyStateText,
+} from '@kit/ui/empty-state';
 import { PageBody, PageHeader } from '@kit/ui/page';
 import { Trans } from '@kit/ui/trans';
 
@@ -70,7 +75,7 @@ async function ChatbotsPage({ params, searchParams }: ChatbotsPageProps) {
         >
           {(props) => {
             if (!props.data.length && canCreateChatbot) {
-              return <EmptyState accountId={accountId} />;
+              return <ChatbotsEmptyState accountId={accountId} />;
             }
 
             return <ChatbotsTable {...props} />;
@@ -83,35 +88,27 @@ async function ChatbotsPage({ params, searchParams }: ChatbotsPageProps) {
 
 export default withI18n(ChatbotsPage);
 
-function EmptyState({ accountId }: { accountId: string }) {
+function ChatbotsEmptyState({ accountId }: { accountId: string }) {
   return (
-    <div className={'flex h-full w-full flex-col items-center justify-center'}>
-      <div
-        className={
-          'flex flex-col items-center justify-center space-y-8 lg:p-24'
-        }
-      >
-        <div className={'flex flex-col space-y-2'}>
-          <Heading>
-            <Trans i18nKey={'chatbot:chatbotsEmptyStateHeading'} />
-          </Heading>
+    <EmptyState>
+      <EmptyStateHeading>
+        <Trans i18nKey={'chatbot:chatbotsEmptyStateHeading'} />
+      </EmptyStateHeading>
 
-          <Heading level={3} className={'font-medium text-muted-foreground'}>
-            <Trans i18nKey={'chatbot:chatbotsEmptyStateSubheading'} />
-          </Heading>
-        </div>
+      <EmptyStateText>
+        <Trans i18nKey={'chatbot:chatbotsEmptyStateSubheading'} />
+      </EmptyStateText>
 
-        <CreateChatbotModal accountId={accountId} canCreateChatbot={true}>
-          <Button size={'lg'}>
-            <PlusCircleIcon className={'mr-4 h-6'} />
+      <CreateChatbotModal accountId={accountId} canCreateChatbot={true}>
+        <EmptyStateButton>
+          <PlusCircleIcon className={'mr-2 h-4'} />
 
-            <span>
-              <Trans i18nKey={'chatbot:chatbotsEmptyStateButton'} />
-            </span>
-          </Button>
-        </CreateChatbotModal>
-      </div>
-    </div>
+          <span>
+            <Trans i18nKey={'chatbot:chatbotsEmptyStateButton'} />
+          </span>
+        </EmptyStateButton>
+      </CreateChatbotModal>
+    </EmptyState>
   );
 }
 
