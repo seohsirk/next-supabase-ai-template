@@ -6,8 +6,10 @@ import { z } from 'zod';
 
 import { enhanceAction } from '@kit/next/actions';
 import { createNotificationsApi } from '@kit/notifications/api';
-import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
+import { getSupabaseServerAdminClient } from '@kit/supabase/server-admin-client';
+import { getSupabaseServerClient } from '@kit/supabase/server-client';
 
+import { Database } from '~/lib/database.types';
 import {
   deleteColumnById,
   insertBoardColumn,
@@ -19,7 +21,7 @@ import { insertTask } from '~/lib/kanban/tasks/mutations';
 
 export const insertTaskAction = enhanceAction(
   async (data, user) => {
-    const client = getSupabaseServerActionClient();
+    const client = getSupabaseServerClient();
     const task = getInsertTaskBodySchema().parse(data);
 
     const payload = {
@@ -98,9 +100,7 @@ export const insertTaskAction = enhanceAction(
         return;
       }
 
-      const adminClient = getSupabaseServerActionClient({
-        admin: true,
-      });
+      const adminClient = getSupabaseServerAdminClient<Database>();
 
       const notificationsService = createNotificationsApi(adminClient);
 
@@ -131,7 +131,7 @@ export const insertTaskAction = enhanceAction(
 
 export const deleteTaskAction = enhanceAction(
   async (params) => {
-    const client = getSupabaseServerActionClient();
+    const client = getSupabaseServerClient<Database>();
 
     const { data, error } = await client.rpc('delete_task_and_reorder', {
       task_id: params.taskId,
@@ -167,7 +167,7 @@ export const deleteTaskAction = enhanceAction(
 
 export const createColumnAction = enhanceAction(
   async (params) => {
-    const client = getSupabaseServerActionClient();
+    const client = getSupabaseServerClient<Database>();
     const column = await insertBoardColumn(client, params);
 
     revalidateBoardPage();
@@ -184,7 +184,7 @@ export const createColumnAction = enhanceAction(
 
 export const deleteColumnAction = enhanceAction(
   async (params) => {
-    const client = getSupabaseServerActionClient();
+    const client = getSupabaseServerClient<Database>();
     const operations = [];
     const columnResponse = await getBoardColumn(client, params.columnId);
 
@@ -234,7 +234,7 @@ export const deleteColumnAction = enhanceAction(
 
 export const updateColumnAction = enhanceAction(
   async (params) => {
-    const client = getSupabaseServerActionClient();
+    const client = getSupabaseServerClient<Database>();
 
     const result = await client
       .from('boards_columns')
@@ -265,7 +265,7 @@ export const updateColumnAction = enhanceAction(
 
 export const moveTaskAction = enhanceAction(
   async (params) => {
-    const client = getSupabaseServerActionClient();
+    const client = getSupabaseServerClient<Database>();
 
     const requests = params.operations.map((operation) => {
       return client
@@ -296,7 +296,7 @@ export const moveTaskAction = enhanceAction(
 
 export const moveColumnAction = enhanceAction(
   async (params) => {
-    const client = getSupabaseServerActionClient();
+    const client = getSupabaseServerClient<Database>();
 
     const requests = params.operations.map((operation) => {
       return client
@@ -325,7 +325,7 @@ export const moveColumnAction = enhanceAction(
 
 export const insertNewTagAction = enhanceAction(
   async (data) => {
-    const client = getSupabaseServerActionClient();
+    const client = getSupabaseServerClient<Database>();
 
     const tags = await insertTags(client, {
       boardId: data.boardId,

@@ -9,11 +9,12 @@ import { z } from 'zod';
 
 import { getLogger } from '@kit/shared/logger';
 import { requireUser } from '@kit/supabase/require-user';
-import { getSupabaseRouteHandlerClient } from '@kit/supabase/route-handler-client';
+import { getSupabaseServerClient } from '@kit/supabase/server-client';
 
 import { createConversationTitle } from '~/lib/ai/create-conversation-title';
 import { runConversationChain } from '~/lib/ai/run-conversation-chain';
 import { Database } from '~/lib/database.types';
+import {getSupabaseServerAdminClient} from "@kit/supabase/server-admin-client";
 
 export const runtime = 'edge';
 
@@ -39,7 +40,7 @@ export async function POST(
     });
   }
 
-  const client = getSupabaseRouteHandlerClient<Database>();
+  const client = getSupabaseServerClient<Database>();
   const auth = await requireUser(client);
 
   if (!auth.data) {
@@ -100,9 +101,7 @@ export async function POST(
     conversation = data;
   }
 
-  const adminClient = getSupabaseRouteHandlerClient<Database>({
-    admin: true,
-  });
+  const adminClient = getSupabaseServerAdminClient<Database>();
 
   const stream = await runConversationChain({
     client,

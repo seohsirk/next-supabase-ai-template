@@ -1,13 +1,13 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 
 import { getLogger } from '@kit/shared/logger';
-import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
 
 import { createChatbotsService } from '~/home/[account]/chatbots/_lib/server/chatbots-service';
 import Crawler from '~/lib/chatbots/crawler';
 import { Database } from '~/lib/database.types';
 import { createJobsService } from '~/lib/jobs/jobs.service';
 import { parallelizeBatch } from '~/lib/rx-parallelize-batch';
+import {getSupabaseServerAdminClient} from "@kit/supabase/server-admin-client";
 
 export function createChatbotTasksQueue() {
   return new ChatbotTaskQueue();
@@ -96,9 +96,7 @@ class ChatbotTaskQueue {
       `Fetched SiteMap links. Inserting job...`,
     );
 
-    const adminClient = getSupabaseServerActionClient<Database>({
-      admin: true,
-    });
+    const adminClient = getSupabaseServerAdminClient<Database>();
 
     const jobsService = createJobsService(adminClient);
 

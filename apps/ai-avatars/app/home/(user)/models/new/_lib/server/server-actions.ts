@@ -8,7 +8,8 @@ import { z } from 'zod';
 
 import { enhanceAction } from '@kit/next/actions';
 import { getLogger } from '@kit/shared/logger';
-import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
+import { getSupabaseServerAdminClient } from '@kit/supabase/server-admin-client';
+import { getSupabaseServerClient } from '@kit/supabase/server-client';
 
 import appConfig from '~/config/app.config';
 import { Database } from '~/lib/database.types';
@@ -48,7 +49,7 @@ const creditsCost = process.env.CREDITS_PER_MODEL
 
 export const createNewModel = enhanceAction(
   async ({ referenceId, name: modelName, captionPrefix }, user) => {
-    const client = getSupabaseServerActionClient<Database>();
+    const client = getSupabaseServerClient<Database>();
     const logger = await getLogger();
 
     const name = `createNewModel`;
@@ -122,9 +123,7 @@ export const createNewModel = enhanceAction(
         `Reducing credits for the account...`,
       );
 
-      const adminClient = getSupabaseServerActionClient<Database>({
-        admin: true,
-      });
+      const adminClient = getSupabaseServerAdminClient<Database>();
 
       // this function will both check if the organization
       // has enough credits and reduce them
@@ -145,7 +144,9 @@ export const createNewModel = enhanceAction(
           `Error reducing credits for the account`,
         );
 
-        return Promise.reject(`Error reducing credits for the account`);
+        return Promise.reject(
+          new Error(`Error reducing credits for the account`),
+        );
       }
 
       logger.info(
@@ -230,9 +231,7 @@ async function getZipFileUrl(params: {
   const filePath = `/${accountId}/${referenceId}.zip`;
   const expiresInOneHourMs = 60 * 60 * 1000;
 
-  const adminClient = getSupabaseServerActionClient({
-    admin: true,
-  });
+  const adminClient = getSupabaseServerAdminClient<Database>();
 
   const { data, error } = await adminClient.storage
     .from('avatars_models')

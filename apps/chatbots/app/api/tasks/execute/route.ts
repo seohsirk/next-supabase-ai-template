@@ -6,7 +6,6 @@ import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
 import { z } from 'zod';
 
 import { getLogger } from '@kit/shared/logger';
-import { getSupabaseRouteHandlerClient } from '@kit/supabase/route-handler-client';
 
 import Crawler from '~/lib/chatbots/crawler';
 import Parser from '~/lib/chatbots/parser';
@@ -15,6 +14,7 @@ import { createDocumentsService } from '~/lib/documents/documents.service';
 import { createJobsService } from '~/lib/jobs/jobs.service';
 import { getVectorStore } from '~/lib/langchain/vector-store';
 import { parallelizeBatch } from '~/lib/rx-parallelize-batch';
+import {getSupabaseServerAdminClient} from "@kit/supabase/server-admin-client";
 
 const DOCUMENT_CHUNK_SIZE = process.env.DOCUMENT_CHUNK_SIZE
   ? Number(process.env.DOCUMENT_CHUNK_SIZE)
@@ -70,11 +70,9 @@ async function handler(req: NextRequest) {
     `Body successfully validated`,
   );
 
-  const supabase = getSupabaseRouteHandlerClient<Database>({
-    admin: true,
-  });
+  const adminClient = getSupabaseServerAdminClient<Database>();
 
-  const jobsService = createJobsService(supabase);
+  const jobsService = createJobsService(adminClient);
 
   // we fetch the job to make sure it exists
   const jobResponse = await jobsService.getJobById(body.jobId);
@@ -89,7 +87,7 @@ async function handler(req: NextRequest) {
 
   const crawler = new Crawler();
   const parser = new Parser();
-  const vectorStore = await getVectorStore(supabase);
+  const vectorStore = await getVectorStore(adminClient);
 
   logger.info(
     {
@@ -98,7 +96,7 @@ async function handler(req: NextRequest) {
     `Crawling links...`,
   );
 
-  const service = createDocumentsService(supabase);
+  const service = createDocumentsService(adminClient);
   const accountId = jobResponse.data.account_id;
 
   const requests = body.links.map((url) => {
@@ -275,7 +273,7 @@ async function handler(req: NextRequest) {
     status,
   });
 
-  const docsQuotaResponse = await supabase.rpc('reduce_documents_quota', {
+  const docsQuotaResponse = await adminClient.rpc('reduce_documents_quota', {
     target_account_id: accountId,
     docs_count: successfulTasks.length,
   });

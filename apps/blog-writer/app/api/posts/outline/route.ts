@@ -4,10 +4,10 @@ import { z } from 'zod';
 
 import { enhanceRouteHandler } from '@kit/next/routes';
 import { getLogger } from '@kit/shared/logger';
-import { getSupabaseRouteHandlerClient } from '@kit/supabase/route-handler-client';
 
 import { createPostsLLMService } from '~/home/(user)/posts/_lib/server/posts-llm.service';
 import { createTokenUsageTrackerService } from '~/home/(user)/posts/_lib/server/token-usage-tracker.service';
+import {getSupabaseServerAdminClient} from "@kit/supabase/server-admin-client";
 
 const Schema = z.object({
   title: z.string().min(1),
@@ -22,7 +22,7 @@ export const POST = enhanceRouteHandler(
     const logger = await getLogger();
 
     const tokensTracker = createTokenUsageTrackerService(
-      getSupabaseRouteHandlerClient({ admin: true }),
+      getSupabaseServerAdminClient(),
       user.id,
     );
 

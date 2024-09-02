@@ -5,14 +5,15 @@ import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
 import { enhanceAction } from '@kit/next/actions';
-import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
+import { getSupabaseServerClient } from '@kit/supabase/server-client';
 import { createTeamAccountsApi } from '@kit/team-accounts/api';
 
+import { Database } from '~/lib/database.types';
 import { insertBoard } from '~/lib/kanban/boards/mutations';
 
 export const createBoardAction = enhanceAction(
   async (data) => {
-    const client = getSupabaseServerActionClient();
+    const client = getSupabaseServerClient<Database>();
     const teamAccountsApi = createTeamAccountsApi(client);
 
     const account = await teamAccountsApi.getTeamAccount(data.accountSlug);

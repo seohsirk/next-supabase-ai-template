@@ -3,10 +3,11 @@ import { NextRequest } from 'next/server';
 import { SupabaseClient } from '@supabase/supabase-js';
 
 import { getLogger } from '@kit/shared/logger';
-import { getSupabaseRouteHandlerClient } from '@kit/supabase/route-handler-client';
+import { getSupabaseServerClient } from '@kit/supabase/server-client';
 
 import { Database } from '~/lib/database.types';
 import { validateReplicateWebhook } from '~/lib/replicate/validate-replicate-webhook';
+import {getSupabaseServerAdminClient} from "@kit/supabase/server-admin-client";
 
 interface Generation {
   id: string;
@@ -49,9 +50,7 @@ export async function POST(request: NextRequest) {
     `Replicate prediction webhook received`,
   );
 
-  const client = getSupabaseRouteHandlerClient<Database>({
-    admin: true,
-  });
+  const client = getSupabaseServerAdminClient<Database>();
 
   const response = await client
     .from('avatars_generations')
@@ -235,9 +234,7 @@ async function notifyUserOfGenerationComplete(params: {
 }) {
   const logger = await getLogger();
 
-  const client = getSupabaseRouteHandlerClient<Database>({
-    admin: true,
-  });
+  const client = getSupabaseServerAdminClient<Database>();
 
   const onError = (error: unknown) => {
     logger.error(

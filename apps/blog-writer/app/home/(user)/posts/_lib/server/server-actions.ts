@@ -7,7 +7,8 @@ import { z } from 'zod';
 
 import { enhanceAction } from '@kit/next/actions';
 import { getLogger } from '@kit/shared/logger';
-import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
+import { getSupabaseServerAdminClient } from '@kit/supabase/server-admin-client';
+import { getSupabaseServerClient } from '@kit/supabase/server-client';
 
 import { createPostsLLMService } from '~/home/(user)/posts/_lib/server/posts-llm.service';
 import { createTokenUsageTrackerService } from '~/home/(user)/posts/_lib/server/token-usage-tracker.service';
@@ -37,9 +38,7 @@ export const generatePostAction = enhanceAction(
     const logger = await getLogger();
 
     const service = createPostsLLMService();
-    const adminClient = getSupabaseServerActionClient<Database>({
-      admin: true,
-    });
+    const adminClient = getSupabaseServerAdminClient<Database>();
 
     logger.info(
       {
@@ -162,7 +161,7 @@ export const generatePostAction = enhanceAction(
 export const deletePostAction = enhanceAction(
   async ({ postId }) => {
     const logger = await getLogger();
-    const client = getSupabaseServerActionClient<Database>();
+    const client = getSupabaseServerClient<Database>();
 
     logger.info(
       {

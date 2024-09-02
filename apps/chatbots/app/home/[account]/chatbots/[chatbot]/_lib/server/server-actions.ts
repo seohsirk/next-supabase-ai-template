@@ -9,7 +9,7 @@ import { z } from 'zod';
 import { ChatbotSettings } from '@kit/chatbot-widget/chatbot';
 import { enhanceAction } from '@kit/next/actions';
 import { getLogger } from '@kit/shared/logger';
-import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
+import { getSupabaseServerClient } from '@kit/supabase/server-client';
 
 import { createChatbotTasksQueue } from '~/home/[account]/_lib/server/chatbot-task-queue';
 import { CreateChatbotFormSchema } from '~/home/[account]/chatbots/[chatbot]/_lib/schema/create-chatbot.schema';
@@ -25,7 +25,7 @@ interface SitemapFilters {
 
 export const createChatbotAction = enhanceAction(
   async (data) => {
-    const client = getSupabaseServerActionClient<Database>();
+    const client = getSupabaseServerClient<Database>();
     const service = createChatbotsService(client);
     const path = headers().get('x-action-path');
 
@@ -45,7 +45,7 @@ export const createChatbotAction = enhanceAction(
 
 export const getSitemapLinksAction = enhanceAction(
   async (params: { chatbotId: string; filters: SitemapFilters }) => {
-    const client = getSupabaseServerActionClient<Database>();
+    const client = getSupabaseServerClient<Database>();
     const logger = await getLogger();
     const { default: Crawler } = await import('~/lib/chatbots/crawler');
     const crawler = new Crawler();
@@ -81,7 +81,7 @@ export const getSitemapLinksAction = enhanceAction(
 export const createChatbotCrawlingJobAction = enhanceAction(
   async (body: { chatbotId: string; filters: SitemapFilters }) => {
     const queue = createChatbotTasksQueue();
-    const client = getSupabaseServerActionClient<Database>();
+    const client = getSupabaseServerClient<Database>();
 
     await queue.createJob(client, {
       chatbotId: body.chatbotId,
@@ -96,7 +96,7 @@ export const createChatbotCrawlingJobAction = enhanceAction(
 );
 
 export const deleteDocumentAction = enhanceAction(async (data: FormData) => {
-  const client = getSupabaseServerActionClient<Database>();
+  const client = getSupabaseServerClient<Database>();
   const logger = await getLogger();
 
   const documentId = z.coerce.number().parse(data.get('documentId'));
@@ -148,7 +148,7 @@ export const saveChatbotSettingsAction = async (
 ) => {
   const { chatbotId, ...body } = DesignChatbotSchema.parse(data);
 
-  const client = getSupabaseServerActionClient<Database>();
+  const client = getSupabaseServerClient<Database>();
   const logger = await getLogger();
 
   const settings: ChatbotSettings = {
@@ -202,7 +202,7 @@ export const saveChatbotSettingsAction = async (
 
 export const updateChatbotAction = enhanceAction(
   async (data: z.infer<typeof UpdateChatbotSchema>) => {
-    const client = getSupabaseServerActionClient();
+    const client = getSupabaseServerClient<Database>();
     const service = createChatbotsService(client);
 
     const { error } = await service.updateChatbot(data);

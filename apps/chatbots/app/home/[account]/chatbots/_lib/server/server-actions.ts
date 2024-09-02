@@ -8,14 +8,14 @@ import { z } from 'zod';
 
 import { enhanceAction } from '@kit/next/actions';
 import { getLogger } from '@kit/shared/logger';
-import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
+import { getSupabaseServerClient } from '@kit/supabase/server-client';
 
 import { Database } from '~/lib/database.types';
 
 import { createChatbotsService } from '../../_lib/server/chatbots-service';
 
 export const deleteChatbotAction = enhanceAction(async (data: FormData) => {
-  const client = getSupabaseServerActionClient<Database>();
+  const client = getSupabaseServerClient<Database>();
   const logger = await getLogger();
 
   const chatbotId = z.string().uuid().parse(data.get('chatbotId'));

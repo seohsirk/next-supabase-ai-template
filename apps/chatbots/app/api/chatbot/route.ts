@@ -3,9 +3,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { isbot } from 'isbot';
 import { nanoid } from 'nanoid';
 
-import { getSupabaseRouteHandlerClient } from '@kit/supabase/route-handler-client';
-
 import { createChatbotsService } from '~/home/[account]/chatbots/_lib/server/chatbots-service';
+import {getSupabaseServerAdminClient} from "@kit/supabase/server-admin-client";
+import {Database} from "~/lib/database.types";
 
 const CONVERSATION_ID_STORAGE_KEY = getConversationIdHeaderName();
 
@@ -39,9 +39,7 @@ export async function GET(req: NextRequest) {
     return new Response('Missing chatbot ID', { status: 400 });
   }
 
-  const client = getSupabaseRouteHandlerClient({
-    admin: true,
-  });
+  const client = getSupabaseServerAdminClient<Database>();
 
   const service = createChatbotsService(client);
   const { settings, siteName } = await service.getChatbotSettings(chatbotId);

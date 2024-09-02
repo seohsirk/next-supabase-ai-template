@@ -9,7 +9,8 @@ import { z } from 'zod';
 
 import { enhanceAction } from '@kit/next/actions';
 import { getLogger } from '@kit/shared/logger';
-import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
+import { getSupabaseServerAdminClient } from '@kit/supabase/server-admin-client';
+import { getSupabaseServerClient } from '@kit/supabase/server-client';
 
 import { parsePdf } from '~/lib/ai/parse-pdf';
 import { getVectorStore } from '~/lib/ai/vector-store';
@@ -27,7 +28,7 @@ const DOCUMENT_CHUNK_SIZE = process.env.DOCUMENT_CHUNK_SIZE
 export const addDocumentAction = enhanceAction(
   async (params, user) => {
     const logger = await getLogger();
-    const client = getSupabaseServerActionClient<Database>();
+    const client = getSupabaseServerClient<Database>();
     const { path, title } = params;
 
     logger.info(params, `Uploading document...`);
@@ -41,7 +42,7 @@ export const addDocumentAction = enhanceAction(
     }
 
     const documentData = await storageDocument.data.arrayBuffer();
-    const text = (await parsePdf(documentData)) as string;
+    const text = await parsePdf(documentData);
     const accountId = user.id;
 
     const { data } = await client
@@ -92,9 +93,7 @@ export const addDocumentAction = enhanceAction(
       throw new Error(`Document is empty`);
     }
 
-    const adminClient = getSupabaseServerActionClient<Database>({
-      admin: true,
-    });
+    const adminClient = getSupabaseServerAdminClient<Database>();
 
     // we create a vector store using the admin client
     // because RLS is enabled on the documents table without policies
@@ -226,7 +225,7 @@ export const addDocumentAction = enhanceAction(
 
 export const deleteDocumentAction = enhanceAction(
   async ({ documentId }) => {
-    const client = getSupabaseServerActionClient<Database>();
+    const client = getSupabaseServerClient<Database>();
 
     const { error } = await client
       .from('documents')
@@ -252,7 +251,7 @@ export const deleteDocumentAction = enhanceAction(
 
 export const deleteConversationAction = enhanceAction(
   async (referenceId: string) => {
-    const client = getSupabaseServerActionClient<Database>();
+    const client = getSupabaseServerClient<Database>();
 
     const { error } = await client.from('conversations').delete().match({
       reference_id: referenceId,
@@ -275,7 +274,7 @@ export const deleteConversationAction = enhanceAction(
 
 export const clearConversationAction = enhanceAction(
   async (referenceId: string) => {
-    const client = getSupabaseServerActionClient<Database>();
+    const client = getSupabaseServerClient<Database>();
     const conversation = await getConversationByReferenceId(referenceId);
 
     const { error } = await client.from('messages').delete().match({
@@ -300,7 +299,7 @@ export const clearConversationAction = enhanceAction(
 export async function getConversationByReferenceId(
   conversationReferenceId: string,
 ) {
-  const client = getSupabaseServerActionClient<Database>();
+  const client = getSupabaseServerClient<Database>();
 
   const { data, error } = await client
     .from('conversations')

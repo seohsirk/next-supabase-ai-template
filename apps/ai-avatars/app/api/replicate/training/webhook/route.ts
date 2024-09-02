@@ -3,10 +3,10 @@ import { NextRequest } from 'next/server';
 import { SupabaseClient } from '@supabase/supabase-js';
 
 import { getLogger } from '@kit/shared/logger';
-import { getSupabaseRouteHandlerClient } from '@kit/supabase/route-handler-client';
 
 import { Database } from '~/lib/database.types';
 import { validateReplicateWebhook } from '~/lib/replicate/validate-replicate-webhook';
+import {getSupabaseServerAdminClient} from "@kit/supabase/server-admin-client";
 
 interface TrainingWebhook {
   completed_at: string;
@@ -66,10 +66,7 @@ export async function POST(request: NextRequest) {
     `Fetching generation...`,
   );
 
-  const client = getSupabaseRouteHandlerClient<Database>({
-    admin: true,
-  });
-
+  const client = getSupabaseServerAdminClient<Database>();
   const status = body.status;
 
   if (status === 'failed' || status === 'canceled') {
@@ -162,9 +159,7 @@ async function notifyUserOfModelCreation(params: {
 }) {
   const logger = await getLogger();
 
-  const client = getSupabaseRouteHandlerClient<Database>({
-    admin: true,
-  });
+  const client = getSupabaseServerAdminClient<Database>();
 
   const onError = (error: unknown) => {
     logger.error(

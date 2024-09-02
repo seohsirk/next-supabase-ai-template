@@ -52,7 +52,7 @@ Users can purchase credits using Stripe, and the credits will be added to their 
 
 Whenever users generate a new model, we will charge 10 credits. Whenever users generate a new avatar, we will charge 1 credit.
 
-By default, new organizations are assigned 20 credits. You can change this in the `organization_credits` table in your Supabase database by changing the `credits` field default value.
+By default, new organizations are assigned 20 credits. You can change this in the `account_credits` table in your Supabase database by changing the `credits` field default value.
 
 #### Stripe Plans
 
@@ -131,7 +131,7 @@ We support more variables for tweaking the model, but these are all optional and
 CAPTION_PREFIX='headshot profile picture'
 REPLICATE_IMAGE_WIDTH='1024'
 REPLICATE_IMAGE_HEIGHT='1024'
-REPLICATE_PROMPT_STRENGTH= '0.8'
+REPLICATE_PROMPT_STRENGTH='0.8'
 REPLICATE_LORA_SCALE='0.6'
 REPLICATE_GUIDANCE_SCALE='7.5'
 REPLICATE_HIGH_NOISE_FRAC='0.8'
@@ -221,36 +221,3 @@ To populate the dropdown with the new prompts, add new options at `src/app/dashb
 2. Support regarding the quality of your generated images is also not provided by Makerkit - it's best to experiment with the variables and prompts to improve the quality of the generated images.
 3. I can help with any issues regarding the usage of this kit, but I cannot help with issues regarding the quality of the generated images - or Replicate's service.
 
-# Your Application
-
-Write here everything about your application.
-
-## Setup
-
-For working locally, please add a file named `.env.local` where we can place our environment variables. This file is not committed to Git, therefore it is safe to store sensitive information in it.
-
-After starting Supabase, copy the service role key from the Supabase project settings and add it to the `.env.local` file.
-
-```
-SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
-```
-
-## Stripe
-
-For the Stripe integration, first we need to start the Stripe CLI:
-
-```
-pnpm run stripe:listen
-```
-
-Then, update the `.env.local` file with the following variables:
-
-```
-STRIPE_WEBHOOK_SECRET=
-STRIPE_SECRET_KEY=
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
-```
-
-### Supabase
-
-Please follow the instructions in the [Supabase README](../supabase/README.md) to setup your Supabase project.

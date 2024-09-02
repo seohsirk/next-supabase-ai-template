@@ -2,7 +2,6 @@ import Link from 'next/link';
 
 import { PlusCircleIcon } from 'lucide-react';
 
-import { getSupabaseServerActionClient } from '@kit/supabase/server-actions-client';
 import { Alert, AlertDescription } from '@kit/ui/alert';
 import { AppBreadcrumbs } from '@kit/ui/app-breadcrumbs';
 import { Button } from '@kit/ui/button';
@@ -13,6 +12,8 @@ import { PageBody, PageHeader } from '@kit/ui/page';
 import { CreateBoardDialog } from '~/home/[account]/boards/_components/create-board-dialog';
 import { withI18n } from '~/lib/i18n/with-i18n';
 import { getBoards, getCanCreateBoard } from '~/lib/kanban/boards/queries';
+import {Database} from "~/lib/database.types";
+import {getSupabaseServerClient} from "@kit/supabase/server-client";
 
 export const metadata = {
   title: 'Boards',
@@ -117,7 +118,7 @@ function EmptyState(props: { accountSlug: string }) {
 }
 
 async function loadBoardData(slug: string) {
-  const client = getSupabaseServerActionClient();
+  const client = getSupabaseServerClient<Database>();
   const canCreateBoard = getCanCreateBoard(client, slug);
   const boards = getBoards(client, slug);
 
