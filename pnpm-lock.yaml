@@ -74,7 +74,7 @@ importers:
         version: link:../../packages/i18n
       '@kit/mailers':
         specifier: workspace:^
-        version: link:../../packages/mailers
+        version: link:../../packages/mailers/core
       '@kit/monitoring':
         specifier: workspace:^
         version: link:../../packages/monitoring/api
@@ -270,7 +270,7 @@ importers:
         version: link:../../packages/i18n
       '@kit/mailers':
         specifier: workspace:^
-        version: link:../../packages/mailers
+        version: link:../../packages/mailers/core
       '@kit/monitoring':
         specifier: workspace:^
         version: link:../../packages/monitoring/api
@@ -457,7 +457,7 @@ importers:
         version: link:../../packages/i18n
       '@kit/mailers':
         specifier: workspace:^
-        version: link:../../packages/mailers
+        version: link:../../packages/mailers/core
       '@kit/monitoring':
         specifier: workspace:^
         version: link:../../packages/monitoring/api
@@ -710,7 +710,7 @@ importers:
         version: link:../../packages/i18n
       '@kit/mailers':
         specifier: workspace:^
-        version: link:../../packages/mailers
+        version: link:../../packages/mailers/core
       '@kit/monitoring':
         specifier: workspace:^
         version: link:../../packages/monitoring/api
@@ -900,7 +900,7 @@ importers:
         version: link:../../packages/i18n
       '@kit/mailers':
         specifier: workspace:^
-        version: link:../../packages/mailers
+        version: link:../../packages/mailers/core
       '@kit/monitoring':
         specifier: workspace:^
         version: link:../../packages/monitoring/api
@@ -1105,7 +1105,7 @@ importers:
         version: link:../../packages/i18n
       '@kit/mailers':
         specifier: workspace:^
-        version: link:../../packages/mailers
+        version: link:../../packages/mailers/core
       '@kit/monitoring':
         specifier: workspace:^
         version: link:../../packages/monitoring/api
@@ -1544,15 +1544,24 @@ importers:
 
   packages/cms/core:
     devDependencies:
+      '@kit/cms-types':
+        specifier: workspace:^
+        version: link:../types
       '@kit/eslint-config':
         specifier: workspace:*
         version: link:../../../tooling/eslint
+      '@kit/keystatic':
+        specifier: workspace:^
+        version: link:../keystatic
       '@kit/prettier-config':
         specifier: workspace:*
         version: link:../../../tooling/prettier
       '@kit/tsconfig':
         specifier: workspace:*
         version: link:../../../tooling/typescript
+      '@kit/wordpress':
+        specifier: workspace:^
+        version: link:../wordpress
       '@types/node':
         specifier: ^20.14.14
         version: 20.16.3
@@ -1569,9 +1578,9 @@ importers:
         specifier: ^0.4.0
         version: 0.4.0(@types/react@18.3.5)(react@18.3.1)
     devDependencies:
-      '@kit/cms':
+      '@kit/cms-types':
         specifier: workspace:^
-        version: link:../core
+        version: link:../types
       '@kit/eslint-config':
         specifier: workspace:*
         version: link:../../../tooling/eslint
@@ -1597,11 +1606,23 @@ importers:
         specifier: ^3.23.8
         version: 3.23.8
 
+  packages/cms/types:
+    devDependencies:
+      '@kit/eslint-config':
+        specifier: workspace:*
+        version: link:../../../tooling/eslint
+      '@kit/prettier-config':
+        specifier: workspace:*
+        version: link:../../../tooling/prettier
+      '@kit/tsconfig':
+        specifier: workspace:*
+        version: link:../../../tooling/typescript
+
   packages/cms/wordpress:
     devDependencies:
-      '@kit/cms':
+      '@kit/cms-types':
         specifier: workspace:^
-        version: link:../core
+        version: link:../types
       '@kit/eslint-config':
         specifier: workspace:*
         version: link:../../../tooling/eslint
@@ -1617,6 +1638,9 @@ importers:
       '@types/node':
         specifier: ^20.14.14
         version: 20.16.3
+      '@types/react':
+        specifier: ^18.3.5
+        version: 18.3.5
       wp-types:
         specifier: ^4.66.1
         version: 4.66.1
@@ -1702,7 +1726,7 @@ importers:
         version: link:../../../tooling/eslint
       '@kit/mailers':
         specifier: workspace:^
-        version: link:../../mailers
+        version: link:../../mailers/core
       '@kit/monitoring':
         specifier: workspace:^
         version: link:../../monitoring/api
@@ -1961,7 +1985,7 @@ importers:
         version: link:../../../tooling/eslint
       '@kit/mailers':
         specifier: workspace:^
-        version: link:../../mailers
+        version: link:../../mailers/core
       '@kit/monitoring':
         specifier: workspace:*
         version: link:../../monitoring/api
@@ -2066,30 +2090,99 @@ importers:
         specifier: ^15.0.1
         version: 15.0.1(i18next@23.14.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
 
-  packages/mailers:
-    dependencies:
-      nodemailer:
-        specifier: ^6.9.14
-        version: 6.9.14
-      vercel-email:
-        specifier: 0.0.6
-        version: 0.0.6
+  packages/mailers/core:
     devDependencies:
       '@kit/eslint-config':
         specifier: workspace:*
-        version: link:../../tooling/eslint
+        version: link:../../../tooling/eslint
+      '@kit/nodemailer':
+        specifier: workspace:^
+        version: link:../nodemailer
       '@kit/prettier-config':
         specifier: workspace:*
-        version: link:../../tooling/prettier
+        version: link:../../../tooling/prettier
+      '@kit/resend':
+        specifier: workspace:^
+        version: link:../resend
       '@kit/tailwind-config':
         specifier: workspace:*
-        version: link:../../tooling/tailwind
+        version: link:../../../tooling/tailwind
       '@kit/tsconfig':
         specifier: workspace:*
-        version: link:../../tooling/typescript
+        version: link:../../../tooling/typescript
+      '@types/node':
+        specifier: ^20.14.14
+        version: 20.16.3
+      zod:
+        specifier: ^3.23.8
+        version: 3.23.8
+
+  packages/mailers/nodemailer:
+    dependencies:
+      nodemailer:
+        specifier: ^6.9.15
+        version: 6.9.15
+    devDependencies:
+      '@kit/eslint-config':
+        specifier: workspace:*
+        version: link:../../../tooling/eslint
+      '@kit/mailers-shared':
+        specifier: workspace:^
+        version: link:../shared
+      '@kit/prettier-config':
+        specifier: workspace:*
+        version: link:../../../tooling/prettier
+      '@kit/tailwind-config':
+        specifier: workspace:*
+        version: link:../../../tooling/tailwind
+      '@kit/tsconfig':
+        specifier: workspace:*
+        version: link:../../../tooling/typescript
       '@types/nodemailer':
         specifier: 6.4.15
         version: 6.4.15
+      zod:
+        specifier: ^3.23.8
+        version: 3.23.8
+
+  packages/mailers/resend:
+    devDependencies:
+      '@kit/eslint-config':
+        specifier: workspace:*
+        version: link:../../../tooling/eslint
+      '@kit/mailers-shared':
+        specifier: workspace:^
+        version: link:../shared
+      '@kit/prettier-config':
+        specifier: workspace:*
+        version: link:../../../tooling/prettier
+      '@kit/tailwind-config':
+        specifier: workspace:*
+        version: link:../../../tooling/tailwind
+      '@kit/tsconfig':
+        specifier: workspace:*
+        version: link:../../../tooling/typescript
+      '@types/node':
+        specifier: ^20.14.14
+        version: 20.16.3
+      zod:
+        specifier: ^3.23.8
+        version: 3.23.8
+
+  packages/mailers/shared:
+    devDependencies:
+      '@kit/eslint-config':
+        specifier: workspace:*
+        version: link:../../../tooling/eslint
+      '@kit/prettier-config':
+        specifier: workspace:*
+        version: link:../../../tooling/prettier
+      '@kit/tailwind-config':
+        specifier: workspace:*
+        version: link:../../../tooling/tailwind
+      '@kit/tsconfig':
+        specifier: workspace:*
+        version: link:../../../tooling/typescript
       zod:
         specifier: ^3.23.8
         version: 3.23.8
@@ -7930,6 +8023,10 @@ packages:
     resolution: {integrity: sha512-1BC0BVFhS/p0qtw6enp8e+8OD0UrK0oFLztSjNzhcKA3WDuJxxAPXzPuPtKkjEY9UUoEWlX/8fgKeu2S8i9JTA==}
     engines: {node: '>= 0.4'}
 
+  is-core-module@2.15.0:
+    resolution: {integrity: sha512-Dd+Lb2/zvk9SKy1TGCt1wFJFo/MWBPMX5x7KcvLajWTGuomczdQX61PvY5yK6SVACwpoexWo81IfFyoKY2QnTA==}
+    engines: {node: '>= 0.4'}
+
   is-core-module@2.15.1:
     resolution: {integrity: sha512-z0vtXSwucUJtANQWldhbtbt7BnL0vxiFjIdDLAatwhDYty2bad6s+rijD6Ri4YuYJubLzIJLUidCh09e1djEVQ==}
     engines: {node: '>= 0.4'}
@@ -8933,8 +9030,8 @@ packages:
   node-releases@2.0.18:
     resolution: {integrity: sha512-d9VeXT4SJ7ZeOqGX6R5EM022wpL+eWPooLI+5UpWn2jCT1aosUQEhQP214x33Wkwx3JQMvIm+tIoVOdodFS40g==}
 
-  nodemailer@6.9.14:
-    resolution: {integrity: sha512-Dobp/ebDKBvz91sbtRKhcznLThrKxKt97GI2FAlAyy+fk19j73Uz3sBXolVtmcXjaorivqsbbbjDY+Jkt4/bQA==}
+  nodemailer@6.9.15:
+    resolution: {integrity: sha512-AHf04ySLC6CIfuRtRiEYtGEXgRfa6INgWGluDhnxTZhHSKvrBu7lc1VVchQ0d8nPc4cFaZoPq8vkyNoZr0TpGQ==}
     engines: {node: '>=6.0.0'}
 
   nopt@5.0.0:
@@ -10747,9 +10844,6 @@ packages:
     resolution: {integrity: sha512-OljLrQ9SQdOUqTaQxqL5dEfZWrXExyyWsozYlAWFawPVNuD83igl7uJD2RTkNMbniIYgt8l81eCJGIdQF7avLQ==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
 
-  vercel-email@0.0.6:
-    resolution: {integrity: sha512-lpELZ8/B6qyLMUOzmvZiU5evo1Hv5jfSpI/rrzny5UYfOAUKFYycraXNT+fT/cC6ewUKQVJDg8/v3LwyX3cCzA==}
-
   vfile-message@4.0.2:
     resolution: {integrity: sha512-jRDZ1IMLttGj41KcZvlrYAaI3CfqpLpfpf+Mfig13viT6NKvRzWZ+lXz0Y5D60w6uJIBAOGq9mSHf0gktF0duw==}
 
@@ -11104,7 +11198,7 @@ snapshots:
   '@babel/code-frame@7.24.7':
     dependencies:
       '@babel/highlight': 7.24.7
-      picocolors: 1.1.0
+      picocolors: 1.0.1
 
   '@babel/compat-data@7.24.9': {}
 
@@ -11314,7 +11408,7 @@ snapshots:
       '@babel/helper-validator-identifier': 7.24.7
       chalk: 2.4.2
       js-tokens: 4.0.0
-      picocolors: 1.1.0
+      picocolors: 1.0.1
 
   '@babel/parser@7.24.7':
     dependencies:
@@ -17360,6 +17454,10 @@ snapshots:
 
   is-callable@1.2.7: {}
 
+  is-core-module@2.15.0:
+    dependencies:
+      hasown: 2.0.2
+
   is-core-module@2.15.1:
     dependencies:
       hasown: 2.0.2
@@ -18396,7 +18494,7 @@ snapshots:
 
   node-releases@2.0.18: {}
 
-  nodemailer@6.9.14: {}
+  nodemailer@6.9.15: {}
 
   nopt@5.0.0:
     dependencies:
@@ -19415,7 +19513,7 @@ snapshots:
 
   resolve@1.22.8:
     dependencies:
-      is-core-module: 2.15.1
+      is-core-module: 2.15.0
       path-parse: 1.0.7
       supports-preserve-symlinks-flag: 1.0.0
 
@@ -19860,7 +19958,7 @@ snapshots:
 
   stripe@16.9.0:
     dependencies:
-      '@types/node': 20.16.3
+      '@types/node': 22.5.2
       qs: 6.13.0
 
   style-inject@0.3.0: {}
@@ -20312,7 +20410,7 @@ snapshots:
     dependencies:
       browserslist: 4.23.3
       escalade: 3.1.2
-      picocolors: 1.1.0
+      picocolors: 1.0.1
 
   update-check@1.5.4:
     dependencies:
@@ -20371,8 +20469,6 @@ snapshots:
       builtins: 1.0.3
 
   validate-npm-package-name@5.0.1: {}
-
-  vercel-email@0.0.6: {}
 
   vfile-message@4.0.2:
     dependencies:
