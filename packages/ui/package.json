@@ -104,7 +104,7 @@
     "./switch": "./src/shadcn/switch.tsx",
     "./breadcrumb": "./src/shadcn/breadcrumb.tsx",
     "./chart": "./src/shadcn/chart.tsx",
-    "./utils": "./src/utils/index.ts",
+    "./utils": "./src/lib/utils/index.ts",
     "./if": "./src/makerkit/if.tsx",
     "./trans": "./src/makerkit/trans.tsx",
     "./divider": "./src/makerkit/divider.tsx",

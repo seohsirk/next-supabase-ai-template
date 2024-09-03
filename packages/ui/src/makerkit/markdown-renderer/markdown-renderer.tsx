@@ -2,7 +2,7 @@ import { memo } from 'react';
 
 import Markdown from 'markdown-to-jsx';
 
-import { cn } from '../../utils';
+import { cn } from '../../lib/utils';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import MarkdownStyles from './markdown-renderer.module.css';
