@@ -56,7 +56,7 @@
     "rollup-plugin-visualizer": "latest",
     "tailwindcss": "3.4.10",
     "tailwindcss-animate": "^1.0.7",
-    "typescript": "^5.5.4",
+    "typescript": "^5.6.2",
     "uuid": "10.0.0"
   },
   "eslintConfig": {
