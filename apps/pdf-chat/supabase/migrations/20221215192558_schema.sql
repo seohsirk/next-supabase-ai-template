@@ -2296,8 +2296,8 @@ set
 declare
     user_name text;
 begin
-    if new.raw_user_meta_data ->> 'display_name' is not null then
-        user_name := new.raw_user_meta_data ->> 'display_name';
+    if new.raw_user_meta_data ->> 'name' is not null then
+        user_name := new.raw_user_meta_data ->> 'name';
 
     end if;
 
@@ -2308,6 +2308,11 @@ begin
 
     if user_name is null then
         user_name := '';
+
+    end if;
+
+    if new.raw_user_meta_data ->> 'avatar_url' is not null then
+        new.picture_url := new.raw_user_meta_data ->> 'avatar_url';
 
     end if;
 
