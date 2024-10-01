@@ -2,6 +2,20 @@
 
 Write here everything about your application.
 
+## Requirements
+
+This project uses [Unpdf](https://github.com/unjs/unpdf) for extracting text from PDFs. This project may require a
+Node.js version of at least 22.x. Before running the project, make sure you have Node.js installed with the correct
+version.
+
+If UnPDF does not work even on Node 22, please try to downgrade the unpdf version to 0.10.1.
+
+Please do so using the following command:
+
+```
+pnpm --filter pdf-chat add unpdf@0.10.1
+```
+
 ## Setup
 
 For working locally, please add a file named `.env.local` where we can place our environment variables. This file is not committed to Git, therefore it is safe to store sensitive information in it.
