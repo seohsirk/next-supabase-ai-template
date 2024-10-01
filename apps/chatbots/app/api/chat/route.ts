@@ -7,8 +7,6 @@ const HEADERS = {
     'Content-Type, x-chatbot-id, x-conversation-id, User-Agent',
 };
 
-export const runtime = 'edge';
-
 export const POST = handleChatBotRequest({
   responseHeaders: HEADERS,
 });

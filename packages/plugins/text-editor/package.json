@@ -21,8 +21,8 @@
     "@kit/tsconfig": "workspace:*",
     "@kit/ui": "workspace:*",
     "@tanstack/react-query": "5.56.2",
-    "@types/node": "^20.14.14",
-    "@types/react": "^18.3.5",
+    "@types/node": "^22.5.5",
+    "@types/react": "^18.3.10",
     "@types/react-dom": "^18.3.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
@@ -42,11 +42,11 @@
     "@lexical/table": "^0.17.0",
     "@lexical/utils": "^0.17.0",
     "@radix-ui/react-portal": "^1.1.1",
-    "ai": "3.3.22",
+    "ai": "3.4.0",
     "lexical": "^0.17.0",
-    "lexical-beautiful-mentions": "^0.1.38",
-    "lucide-react": "^0.441.0",
-    "openai": "^4.54.0"
+    "lexical-beautiful-mentions": "^0.1.41",
+    "lucide-react": "^0.446.0",
+    "openai": "^4.62.1"
   },
   "eslintConfig": {
     "root": true,

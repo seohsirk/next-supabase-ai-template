@@ -79,7 +79,6 @@ function ChatBodyContainer(props: {
     setMessages,
   } = useChat({
     api: getApiEndpoint(props.documentId),
-    streamMode: 'text',
     headers: {
       'x-conversation-id': conversationIdRef.current ?? '',
     },

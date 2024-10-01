@@ -207,7 +207,6 @@ To run the application, you will need to add the following environment variables
 
 ```
 QSTASH_TOKEN=
-QSTASH_URL=
 QSTASH_CURRENT_SIGNING_KEY=
 QSTASH_NEXT_SIGNING_KEY=
 ```
@@ -219,7 +218,26 @@ You will need to adjust the code accordingly.
 
 ### QStash endpoint
 
-To test your queues locally, you need to run the QStash endpoint locally. You have various options, such as creating a tunnel with Ngrok, Cloudflare Tunnel, LocalCan, or even VSCode Port Forwarding.
+#### Production endpoint
+
+In production, you need to set the `QSTASH_URL` environment variable to hit your production instance:
+
+```
+QSTASH_URL=<your-production-url>/api/tasks/execute
+```
+
+If <your-production-url> is `https://next-supabase-chatbot.com`, you will set the following environment variable:
+
+```
+QSTASH_URL=https://next-supabase-chatbot.com/api/tasks/execute
+```
+
+#### Testing locally
+
+To test your queues locally, you need a way for QStash to hit your local instance. This is normally done using a tunnel.
+
+You have various options, such as creating a tunnel with Ngrok, Cloudflare Tunnel, LocalCan, or even VSCode Port
+Forwarding.
 
 In such case, your `QSTASH_URL` will be the URL of the tunnel. Assuming your tunnel URL is `https://next-supabase-chatbot.ngrok.com`, you will set the following environment variable:
 

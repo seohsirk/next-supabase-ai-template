@@ -19,7 +19,7 @@
     "@kit/prettier-config": "workspace:*",
     "@kit/tsconfig": "workspace:*",
     "@kit/wordpress": "workspace:^",
-    "@types/node": "^20.14.14"
+    "@types/node": "^22.5.5"
   },
   "eslintConfig": {
     "root": true,

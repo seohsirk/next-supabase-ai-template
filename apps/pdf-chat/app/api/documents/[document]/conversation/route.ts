@@ -4,19 +4,17 @@ import { NextRequest } from 'next/server';
 
 import { SupabaseClient } from '@supabase/supabase-js';
 
-import { StreamingTextResponse } from 'ai';
+import { LangChainAdapter } from 'ai';
 import { z } from 'zod';
 
 import { getLogger } from '@kit/shared/logger';
 import { requireUser } from '@kit/supabase/require-user';
+import { getSupabaseServerAdminClient } from '@kit/supabase/server-admin-client';
 import { getSupabaseServerClient } from '@kit/supabase/server-client';
 
 import { createConversationTitle } from '~/lib/ai/create-conversation-title';
 import { runConversationChain } from '~/lib/ai/run-conversation-chain';
 import { Database } from '~/lib/database.types';
-import {getSupabaseServerAdminClient} from "@kit/supabase/server-admin-client";
-
-export const runtime = 'edge';
 
 interface Params {
   document: string;
@@ -120,7 +118,7 @@ export async function POST(
     `Stream generated. Sending response...`,
   );
 
-  return new StreamingTextResponse(stream);
+  return LangChainAdapter.toDataStreamResponse(stream);
 }
 
 function getBodySchema() {

@@ -60,10 +60,6 @@ export const deleteChatbotAction = enhanceAction(async (data: FormData) => {
 
   revalidatePath(`/home/[account]`, `page`);
   revalidatePath(`/home/[account]/chatbots/[chatbot]`, `layout`);
-
-  return {
-    success: true,
-  };
 }, {});
 
 async function deleteChatbot(

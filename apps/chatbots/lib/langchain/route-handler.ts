@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server';
 
 import { SupabaseClient } from '@supabase/supabase-js';
 
-import { StreamingTextResponse } from 'ai';
+import { LangChainAdapter } from 'ai';
 import { isbot } from 'isbot';
 import { z } from 'zod';
 
@@ -101,9 +101,12 @@ export function handleChatBotRequest({
 
     const adminClient = getSupabaseServerAdminClient<Database>();
 
-    const canGenerateAIResponse = await adminClient.rpc('can_respond_to_message', {
-      target_chatbot_id: chatbotId,
-    });
+    const canGenerateAIResponse = await adminClient.rpc(
+      'can_respond_to_message',
+      {
+        target_chatbot_id: chatbotId,
+      },
+    );
 
     if (canGenerateAIResponse.error) {
       logger.error(
@@ -199,8 +202,10 @@ export function handleChatBotRequest({
         `Stream generated. Sending response...`,
       );
 
-      return new StreamingTextResponse(stream, {
-        headers: responseHeaders,
+      return LangChainAdapter.toDataStreamResponse(stream, {
+        init: {
+          headers: responseHeaders,
+        },
       });
     } catch (error) {
       // if there's an error generating the response
@@ -251,7 +256,7 @@ async function fallbackSearchDocuments(params: {
     });
   }
 
-  return new StreamingTextResponse(stream);
+  return LangChainAdapter.toDataStreamResponse(stream);
 }
 
 async function searchDocuments(params: {
@@ -264,7 +269,9 @@ async function searchDocuments(params: {
   const { client, filter, query } = params;
   const store = await getVectorStore(client);
 
-  const maxDocuments = process.env.CHATBOT_MAX_DOCUMENTS ? parseInt(process.env.CHATBOT_MAX_DOCUMENTS) : 5;
+  const maxDocuments = process.env.CHATBOT_MAX_DOCUMENTS
+    ? parseInt(process.env.CHATBOT_MAX_DOCUMENTS)
+    : 5;
 
   const documents = await store
     .asRetriever({
@@ -280,7 +287,7 @@ async function searchDocuments(params: {
     .join('\n\n');
 
   const contentResponse = `I found these documents that might help you:\n\n${content}`;
-  
+
   const text = documents.length
     ? contentResponse
     : 'Sorry, I was not able to find an answer for you.';
