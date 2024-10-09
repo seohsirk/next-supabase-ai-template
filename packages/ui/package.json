@@ -35,7 +35,7 @@
     "markdown-to-jsx": "^7.4.7",
     "react-top-loading-bar": "2.3.1",
     "recharts": "^2.12.7",
-    "tailwind-merge": "^2.4.0"
+    "tailwind-merge": "^2.5.3"
   },
   "devDependencies": {
     "@kit/eslint-config": "workspace:*",
