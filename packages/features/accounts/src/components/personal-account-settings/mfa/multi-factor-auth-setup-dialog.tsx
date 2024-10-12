@@ -6,7 +6,8 @@ import Image from 'next/image';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { ArrowLeftIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
@@ -252,7 +253,8 @@ function FactorQrCode({
   onSetFactorId: (factorId: string) => void;
 }>) {
   const enrollFactorMutation = useEnrollFactor(userId);
-  const [error, setError] = useState(false);
+  const { t } = useTranslation();
+  const [error, setError] = useState<string>('');
 
   const form = useForm({
     resolver: zodResolver(
@@ -280,9 +282,19 @@ function FactorQrCode({
           </AlertTitle>
 
           <AlertDescription>
-            <Trans i18nKey={'account:qrCodeErrorDescription'} />
+            <Trans
+              i18nKey={`auth:errors.${error}`}
+              defaults={t('account:qrCodeErrorDescription')}
+            />
           </AlertDescription>
         </Alert>
+
+        <div>
+          <Button variant={'outline'} onClick={onCancel}>
+            <ArrowLeftIcon className={'h-4'} />
+            <Trans i18nKey={`common:retry`} />
+          </Button>
+        </div>
       </div>
     );
   }
@@ -292,17 +304,13 @@ function FactorQrCode({
       <FactorNameForm
         onCancel={onCancel}
         onSetFactorName={async (name) => {
-          const data = await enrollFactorMutation
-            .mutateAsync(name)
-            .catch((error) => {
-              console.error(error);
+          const response = await enrollFactorMutation.mutateAsync(name);
 
-              return;
-            });
-
-          if (data === undefined) {
-            return setError(true);
+          if (!response.success) {
+            return setError(response.data as string);
           }
+
+          const data = response.data;
 
           if (data.type === 'totp') {
             form.setValue('factorName', name);
@@ -401,24 +409,36 @@ function QrImage({ src }: { src: string }) {
 
 function useEnrollFactor(userId: string) {
   const client = useSupabase();
+  const queryClient = useQueryClient();
   const mutationKey = useFactorsMutationKey(userId);
 
   const mutationFn = async (factorName: string) => {
-    const { data, error } = await client.auth.mfa.enroll({
+    const response = await client.auth.mfa.enroll({
       friendlyName: factorName,
       factorType: 'totp',
     });
 
-    if (error) {
-      throw error;
+    if (response.error) {
+      return {
+        success: false as const,
+        data: response.error.code,
+      };
     }
 
-    return data;
+    return {
+      success: true as const,
+      data: response.data,
+    };
   };
 
   return useMutation({
     mutationFn,
     mutationKey,
+    onSuccess() {
+      return queryClient.refetchQueries({
+        queryKey: mutationKey,
+      });
+    },
   });
 }
 
