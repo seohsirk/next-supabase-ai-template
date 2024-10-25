@@ -13,18 +13,21 @@ import { Trans } from '@kit/ui/trans';
 import { EditChatDialog } from '~/home/[account]/chatbots/_components/edit-chat-dialog';
 import { loadChatbot } from '~/home/[account]/chatbots/_lib/server/load-chatbot';
 
+interface ChatbotLayoutProps {
+  params: Promise<{
+    account: string;
+    chatbot: string;
+  }>;
+}
+
 async function ChatbotLayout(
-  props: React.PropsWithChildren<{
-    params: {
-      account: string;
-      chatbot: string;
-    };
-  }>,
+  props: React.PropsWithChildren<ChatbotLayoutProps>,
 ) {
-  const chatbot = await loadChatbot(props.params.chatbot);
+  const params = await props.params;
+  const chatbot = await loadChatbot(params.chatbot);
 
   const path = (path = '') => {
-    const { account, chatbot } = props.params;
+    const { account, chatbot } = params;
 
     return ['/home', account, 'chatbots', chatbot, path]
       .filter(Boolean)

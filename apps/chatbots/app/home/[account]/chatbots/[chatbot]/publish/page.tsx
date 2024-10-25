@@ -1,4 +1,5 @@
-import { Heading } from '@kit/ui/heading';
+import { use } from 'react';
+
 import { PageBody } from '@kit/ui/page';
 import { Trans } from '@kit/ui/trans';
 
@@ -7,18 +8,20 @@ import { withI18n } from '~/lib/i18n/with-i18n';
 import { CopyToClipboardButton } from './_components/copy-to-clipboard-button';
 
 interface ChatbotPublishPageParams {
-  params: {
-    organization: string;
+  params: Promise<{
+    account: string;
     chatbot: string;
-  };
+  }>;
 }
 
 export const metadata = {
   title: 'Publish',
 };
 
-function ChatbotPublishPage({ params }: ChatbotPublishPageParams) {
-  const widgetHostingUrl = process.env.NEXT_PUBLIC_WIDGET_HOSTING_URL;
+const widgetHostingUrl = process.env.NEXT_PUBLIC_WIDGET_HOSTING_URL;
+
+function ChatbotPublishPage(props: ChatbotPublishPageParams) {
+  const params = use(props.params);
 
   const script = `
     <script async data-chatbot='${params.chatbot}' src='${widgetHostingUrl}' />

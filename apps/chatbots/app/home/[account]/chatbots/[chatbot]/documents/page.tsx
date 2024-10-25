@@ -20,22 +20,25 @@ import { Database } from '~/lib/database.types';
 import { withI18n } from '~/lib/i18n/with-i18n';
 
 interface ChatbotPageParams {
-  params: {
+  params: Promise<{
     account: string;
     chatbot: string;
-  };
+  }>;
 
-  searchParams: {
+  searchParams: Promise<{
     page?: string;
     query?: string;
-  };
+  }>;
 }
 
 export const metadata = {
   title: 'Documents',
 };
 
-async function ChatbotPage({ params, searchParams }: ChatbotPageParams) {
+async function ChatbotPage(props: ChatbotPageParams) {
+  const params = await props.params;
+  const searchParams = await props.searchParams;
+
   const client = getSupabaseServerComponentClient<Database>();
   const chatbotId = params.chatbot;
   const page = searchParams.page ? +searchParams.page : 1;

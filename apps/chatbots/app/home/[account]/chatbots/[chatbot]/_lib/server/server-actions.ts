@@ -27,7 +27,8 @@ export const createChatbotAction = enhanceAction(
   async (data) => {
     const client = getSupabaseServerClient<Database>();
     const service = createChatbotsService(client);
-    const path = headers().get('x-action-path');
+    const headersStore = await headers();
+    const path = headersStore.get('x-action-path');
 
     const chatbot = await service.insertChatbot({
       site_name: data.siteName,

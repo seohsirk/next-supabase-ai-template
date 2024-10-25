@@ -8,17 +8,18 @@ import { withI18n } from '~/lib/i18n/with-i18n';
 import { DesignChatbotContainer } from './_components/design-chatbot-container';
 
 interface ChatbotDesignPageParams {
-  params: {
+  params: Promise<{
     account: string;
     chatbot: string;
-  };
+  }>;
 }
 
 export const metadata = {
   title: 'Design',
 };
 
-async function ChatbotDesignPage({ params }: ChatbotDesignPageParams) {
+async function ChatbotDesignPage(props: ChatbotDesignPageParams) {
+  const params = await props.params;
   const chatbot = await loadChatbot(params.chatbot);
   const settings = chatbot.settings as unknown as ChatbotSettings;
 

@@ -9,7 +9,6 @@ import {
   EmptyStateHeading,
   EmptyStateText,
 } from '@kit/ui/empty-state';
-import { Heading } from '@kit/ui/heading';
 import { PageBody } from '@kit/ui/page';
 import { Trans } from '@kit/ui/trans';
 
@@ -21,24 +20,24 @@ import { CrawlWebsiteModal } from '../_components/crawl-website-modal';
 import { JobsTable } from './_components/jobs-table';
 
 interface ChatbotTrainingPageParams {
-  params: {
+  params: Promise<{
     account: string;
     chatbot: string;
-  };
+  }>;
 
-  searchParams: {
+  searchParams: Promise<{
     page?: string;
-  };
+  }>;
 }
 
 export const metadata = {
   title: 'Training',
 };
 
-async function ChatbotTrainingPage({
-  params,
-  searchParams,
-}: ChatbotTrainingPageParams) {
+async function ChatbotTrainingPage(props: ChatbotTrainingPageParams) {
+  const params = await props.params;
+  const searchParams = await props.searchParams;
+
   const client = getSupabaseServerComponentClient<Database>();
   const page = searchParams.page ? +searchParams.page : 1;
   const chatbot = await loadChatbot(params.chatbot);
