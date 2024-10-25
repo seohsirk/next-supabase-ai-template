@@ -14,8 +14,7 @@ const iconClasses = 'w-4';
 
 const getRoutes = (account: string) => [
   {
-    label: 'Chatbots',
-    collapsible: false,
+    label: 'common:routes.application',
     children: [
       {
         label: 'Chatbots',
