@@ -337,7 +337,7 @@ function moveCol(
         col.nextColumnId = nextColumnId;
 
         return {
-          id: col.id as string,
+          id: col.id,
           nextColumnId,
         };
       })

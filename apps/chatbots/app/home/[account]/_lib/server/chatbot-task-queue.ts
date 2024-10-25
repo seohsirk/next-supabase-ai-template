@@ -53,7 +53,7 @@ class ChatbotTaskQueue {
 
     // if organization is over quota, throw error
     if (!canCreateJob.data) {
-      return Promise.reject(`Can't create job. Organization is over quota.`);
+      return Promise.reject(new Error(`Can't create job. Organization is over quota.`));
     }
 
     // if organization is not over quota, create job

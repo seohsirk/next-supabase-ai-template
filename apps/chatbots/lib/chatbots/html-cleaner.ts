@@ -22,7 +22,7 @@ export default class HtmlCleaner {
       const href = link.getAttribute('href');
 
       // if the link is relative, make it absolute
-      if (href && href.startsWith('/')) {
+      if (href?.startsWith('/')) {
         link.setAttribute('href', `${host}${href}`);
       }
     });

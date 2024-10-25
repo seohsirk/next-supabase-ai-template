@@ -4,9 +4,12 @@ import HtmlCleaner from '~/lib/chatbots/html-cleaner';
 
 export default class Parser {
   async parse(html: string, host: string) {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { Readability } = require('@mozilla/readability');
 
     const document = await this.createDocument(html);
+
+    /* eslint-disable @typescript-eslint/no-unsafe-call */
     const reader = new Readability(document);
     const parsed = reader.parse();
     const cleanedContent = this.cleanHtml(parsed.content, host);

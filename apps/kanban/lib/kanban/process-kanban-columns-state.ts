@@ -17,7 +17,7 @@ export function processKanbanColumnsState(
 
   const orderedColumns = [unassignedColumn, ...sortColumns(columns)];
 
-  const taskMap: Map<NullableId, KanbanTask[]> = new Map();
+  const taskMap = new Map<NullableId, KanbanTask[]>();
 
   tasks.sort((a, b) => {
     if (a.id === null) return -1;
@@ -37,7 +37,7 @@ export function processKanbanColumnsState(
   return orderedColumns.map((column) => {
     return {
       ...column,
-      tasks: taskMap.get(column.id) || [],
+      tasks: taskMap.get(column.id) ?? [],
     };
   });
 }

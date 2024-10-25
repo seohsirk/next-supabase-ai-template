@@ -1,4 +1,3 @@
-import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
@@ -10,25 +9,20 @@ import { Button } from '@kit/ui/button';
 import { PageBody, PageHeader } from '@kit/ui/page';
 import { Trans } from '@kit/ui/trans';
 
+import BlogPostContentEditor from '~/home/(user)/posts/[id]/components/blog-post-content-editor';
 import { Database } from '~/lib/database.types';
 import { withI18n } from '~/lib/i18n/with-i18n';
 import { requireUserInServerComponent } from '~/lib/server/require-user-in-server-component';
 
-const BlogPostContentEditor = dynamic(
-  () => import('./components/blog-post-content-editor'),
-  {
-    ssr: false,
-  },
-);
-
 interface PostPageProps {
-  params: {
+  params: Promise<{
     organization: string;
     id: string;
-  };
+  }>;
 }
 
-async function PostPage({ params }: PostPageProps) {
+async function PostPage(props: PostPageProps) {
+  const params = await props.params;
   const client = getSupabaseServerComponentClient<Database>();
   const user = await requireUserInServerComponent();
 

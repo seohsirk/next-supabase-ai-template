@@ -1,4 +1,5 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+/* eslint-disable */
+
 // @ts-nocheck
 
 /**

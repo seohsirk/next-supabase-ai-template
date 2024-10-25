@@ -315,7 +315,7 @@ function fakeDataStreamer() {
 
   const stream = new ReadableStream({
     start(controller) {
-      // @ts-ignore
+      // @ts-expect-error: ignore this
       timerId = setInterval(() => {
         if (closed) return;
 

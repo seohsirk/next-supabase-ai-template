@@ -3,11 +3,10 @@ import { NextRequest } from 'next/server';
 import { SupabaseClient } from '@supabase/supabase-js';
 
 import { getLogger } from '@kit/shared/logger';
-import { getSupabaseServerClient } from '@kit/supabase/server-client';
+import { getSupabaseServerAdminClient } from '@kit/supabase/server-admin-client';
 
 import { Database } from '~/lib/database.types';
 import { validateReplicateWebhook } from '~/lib/replicate/validate-replicate-webhook';
-import {getSupabaseServerAdminClient} from "@kit/supabase/server-admin-client";
 
 interface Generation {
   id: string;

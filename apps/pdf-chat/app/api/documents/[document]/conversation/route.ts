@@ -30,7 +30,8 @@ export async function POST(
 ) {
   const logger = await getLogger();
   const { messages, create } = getBodySchema().parse(await request.json());
-  const conversationId = headers().get('x-conversation-id');
+  const headersStore = await headers();
+  const conversationId = headersStore.get('x-conversation-id');
 
   if (!conversationId) {
     return new Response(`Missing conversation ID`, {

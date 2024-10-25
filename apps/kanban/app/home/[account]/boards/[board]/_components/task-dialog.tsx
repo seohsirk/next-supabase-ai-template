@@ -38,10 +38,8 @@ export function TaskDialog(
 
 function TaskDialogContent({
   taskId,
-  onClose,
 }: {
   taskId: string;
-  onClose: () => void;
 }) {
   const { isLoading, data: task, error } = useQueryTask(taskId);
 

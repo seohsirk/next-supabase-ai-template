@@ -208,7 +208,7 @@ function useCreateColumnAction(boardId: string, accountId: string) {
           break;
       }
     });
-  }, [addColumn, boardId, updateColumn]);
+  }, [accountId, addColumn, boardId, updateColumn]);
 }
 
 function useDeleteTaskAction() {
@@ -309,8 +309,8 @@ function useTaskMoveRequestedAction() {
 
   return useCallback(
     (taskId: string, columnId: NullableId, newIndex: number) => {
-      moveTask(taskId, columnId, newIndex, async (operations) => {
-        await moveTaskAction({ operations });
+      moveTask(taskId, columnId, newIndex, (operations) => {
+        void moveTaskAction({ operations });
       });
     },
     [moveTask],
@@ -322,8 +322,8 @@ function useColumnMoveRequestedAction() {
 
   return useCallback(
     (columnId: string, newPosition: number) => {
-      moveColumn(columnId, newPosition, async (operations) => {
-        await moveColumnAction({ operations });
+      moveColumn(columnId, newPosition, (operations) => {
+        void moveColumnAction({ operations });
       });
     },
     [moveColumn],
@@ -332,8 +332,8 @@ function useColumnMoveRequestedAction() {
 
 function useSelectedFilters() {
   const params = useSearchParams();
-  const tags = params.get('tags')?.split(',').filter(Boolean) || [];
-  const assignees = params.get('assignees')?.split(',').filter(Boolean) || [];
+  const tags = params.get('tags')?.split(',').filter(Boolean) ?? [];
+  const assignees = params.get('assignees')?.split(',').filter(Boolean) ?? [];
 
   return {
     tags,

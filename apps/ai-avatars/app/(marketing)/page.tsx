@@ -4,8 +4,13 @@ import Link from 'next/link';
 import { ArrowRightIcon } from 'lucide-react';
 
 import { PricingTable } from '@kit/billing-gateway/marketing';
-import {CtaButton, GradientText, Hero, Pill, SecondaryHero} from '@kit/ui/marketing';
-import { Trans } from '@kit/ui/trans';
+import {
+  CtaButton,
+  GradientText,
+  Hero,
+  Pill,
+  SecondaryHero,
+} from '@kit/ui/marketing';
 
 import billingConfig from '~/config/billing.config';
 import pathsConfig from '~/config/paths.config';
@@ -22,18 +27,20 @@ function Home() {
         }
         title={
           <>
-            <span>Generate{' '}
-              <GradientText className={'from-primary to-primary/70'}>AI Avatars</GradientText>
+            <span>
+              Generate{' '}
+              <GradientText className={'from-primary to-primary/70'}>
+                AI Avatars
+              </GradientText>
             </span>
 
-            <span>
-              for you and your family
-            </span>
+            <span>for you and your family</span>
           </>
         }
         subtitle={
           <span>
-           The AI Avatars app allows you to create AI avatars for you and your loved ones. Get started for free today.
+            The AI Avatars app allows you to create AI avatars for you and your
+            loved ones. Get started for free today.
           </span>
         }
         cta={<MainCallToActionButton />}
@@ -136,9 +143,7 @@ function MainCallToActionButton() {
       <CtaButton>
         <Link href={'/auth/sign-up'}>
           <span className={'flex items-center space-x-0.5'}>
-            <span>
-              Generate your first AI Avatar
-            </span>
+            <span>Generate your first AI Avatar</span>
 
             <ArrowRightIcon
               className={

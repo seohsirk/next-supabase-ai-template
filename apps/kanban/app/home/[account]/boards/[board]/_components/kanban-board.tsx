@@ -147,7 +147,7 @@ export function KanbanColumns({
       return droppableId;
     };
 
-    switch (result.type) {
+    switch ((result.type as ColumnType)) {
       case ColumnType.COLUMN: {
         if (!destination) {
           return;

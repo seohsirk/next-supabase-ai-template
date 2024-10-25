@@ -177,6 +177,7 @@ function SubmitButton() {
   return <Button disabled={pending}>Create Task</Button>;
 }
 
+/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 function SelectMemberAssigneeDropdown() {
   const membersQuery = useOrganizationMembers();
 

@@ -5,7 +5,6 @@ import { useEffect } from 'react';
 import { ChatBubbleIcon } from '@radix-ui/react-icons';
 
 import { Button } from '@kit/ui/button';
-import { cn } from '@kit/ui/utils';
 
 type Conversation = {
   id: string;

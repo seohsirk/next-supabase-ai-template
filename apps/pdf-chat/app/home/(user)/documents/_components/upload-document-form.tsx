@@ -137,7 +137,9 @@ function AcceptedFilesConfirmation(props: {
         });
 
         toast.success(`Document uploaded successfully!`);
-      } catch (e) {
+      } catch (error) {
+        console.error(error);
+
         toast.error(`Sorry, we encountered an error. Please try again.`);
         setCurrentStep(1);
       }

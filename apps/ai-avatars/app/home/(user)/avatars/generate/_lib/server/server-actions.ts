@@ -151,7 +151,7 @@ export const generatePicturesAction = enhanceAction(
           `Error reducing credits for the account`,
         );
 
-        return Promise.reject(`Error reducing credits for the organization`);
+        return Promise.reject(new Error(`Error reducing credits for the organization`));
       }
 
       logger.info(

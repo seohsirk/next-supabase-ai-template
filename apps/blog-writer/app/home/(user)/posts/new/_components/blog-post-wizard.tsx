@@ -140,7 +140,7 @@ function BlogPostWizardFormContainer() {
           title: detailsForm.getValues('title'),
           outline: outlineForm.getValues('outline'),
         });
-      } catch (e) {
+      } catch {
         toast.error(t(`posts:postCreationFailed`));
         setStep(BlogPostCreatorStep.BulletPoints);
       }
@@ -682,7 +682,7 @@ function useFetchOutlineFromTopic() {
       throw new Error(`Failed to fetch outline.`);
     }
 
-    return response.json();
+    return response.json() as Promise<OutlineData['outline']>;
   };
 
   return useMutation({
@@ -706,7 +706,7 @@ function useFetchBulletPointsFromOutline() {
       throw new Error(`Failed to fetch bullet points.`);
     }
 
-    return await response.json();
+    return await response.json() as Promise<OutlineData['outline']>;
   };
 
   return useMutation({

@@ -39,7 +39,7 @@ importers:
     dependencies:
       '@edge-csrf/nextjs':
         specifier: 2.5.0
-        version: 2.5.0(next@15.0.0(@opentelemetry/api@1.9.0)(@playwright/test@1.48.1)(react-dom@18.3.1(react@19.0.0-rc-69d4b800-20241021))(react@19.0.0-rc-69d4b800-20241021))
+        version: 2.5.0(next@15.0.0(@opentelemetry/api@1.9.0)(@playwright/test@1.48.1)(babel-plugin-react-compiler@19.0.0-beta-8a03594-20241020)(react-dom@18.3.1(react@19.0.0-rc-69d4b800-20241021))(react@19.0.0-rc-69d4b800-20241021))
       '@hookform/resolvers':
         specifier: ^3.9.0
         version: 3.9.0(react-hook-form@7.53.1(react@19.0.0-rc-69d4b800-20241021))
@@ -138,7 +138,7 @@ importers:
         version: 15.0.0(@opentelemetry/api@1.9.0)(@playwright/test@1.48.1)(babel-plugin-react-compiler@19.0.0-beta-8a03594-20241020)(react-dom@18.3.1(react@19.0.0-rc-69d4b800-20241021))(react@19.0.0-rc-69d4b800-20241021)
       next-sitemap:
         specifier: ^4.2.3
-        version: 4.2.3(next@15.0.0(@opentelemetry/api@1.9.0)(@playwright/test@1.48.1)(react-dom@18.3.1(react@19.0.0-rc-69d4b800-20241021))(react@19.0.0-rc-69d4b800-20241021))
+        version: 4.2.3(next@15.0.0(@opentelemetry/api@1.9.0)(@playwright/test@1.48.1)(babel-plugin-react-compiler@19.0.0-beta-8a03594-20241020)(react-dom@18.3.1(react@19.0.0-rc-69d4b800-20241021))(react@19.0.0-rc-69d4b800-20241021))
       next-themes:
         specifier: 0.3.0
         version: 0.3.0(react-dom@18.3.1(react@19.0.0-rc-69d4b800-20241021))(react@19.0.0-rc-69d4b800-20241021)
@@ -241,7 +241,7 @@ importers:
         version: 0.0.60(zod@3.23.8)
       '@edge-csrf/nextjs':
         specifier: 2.5.0
-        version: 2.5.0(next@15.0.0(@opentelemetry/api@1.9.0)(@playwright/test@1.48.1)(react-dom@18.3.1(react@19.0.0-rc-69d4b800-20241021))(react@19.0.0-rc-69d4b800-20241021))
+        version: 2.5.0(next@15.0.0(@opentelemetry/api@1.9.0)(@playwright/test@1.48.1)(babel-plugin-react-compiler@19.0.0-beta-8a03594-20241020)(react-dom@18.3.1(react@19.0.0-rc-69d4b800-20241021))(react@19.0.0-rc-69d4b800-20241021))
       '@hookform/resolvers':
         specifier: ^3.9.0
         version: 3.9.0(react-hook-form@7.53.1(react@19.0.0-rc-69d4b800-20241021))
@@ -337,7 +337,7 @@ importers:
         version: 15.0.0(@opentelemetry/api@1.9.0)(@playwright/test@1.48.1)(babel-plugin-react-compiler@19.0.0-beta-8a03594-20241020)(react-dom@18.3.1(react@19.0.0-rc-69d4b800-20241021))(react@19.0.0-rc-69d4b800-20241021)
       next-sitemap:
         specifier: ^4.2.3
-        version: 4.2.3(next@15.0.0(@opentelemetry/api@1.9.0)(@playwright/test@1.48.1)(react-dom@18.3.1(react@19.0.0-rc-69d4b800-20241021))(react@19.0.0-rc-69d4b800-20241021))
+        version: 4.2.3(next@15.0.0(@opentelemetry/api@1.9.0)(@playwright/test@1.48.1)(babel-plugin-react-compiler@19.0.0-beta-8a03594-20241020)(react-dom@18.3.1(react@19.0.0-rc-69d4b800-20241021))(react@19.0.0-rc-69d4b800-20241021))
       next-themes:
         specifier: 0.3.0
         version: 0.3.0(react-dom@18.3.1(react@19.0.0-rc-69d4b800-20241021))(react@19.0.0-rc-69d4b800-20241021)
@@ -399,15 +399,24 @@ importers:
       autoprefixer:
         specifier: ^10.4.20
         version: 10.4.20(postcss@8.4.47)
+      babel-plugin-react-compiler:
+        specifier: 19.0.0-beta-8a03594-20241020
+        version: 19.0.0-beta-8a03594-20241020
       dotenv-cli:
         specifier: ^7.4.2
         version: 7.4.2
       eslint:
         specifier: ^8.57.0
         version: 8.57.0
+      import-in-the-middle:
+        specifier: 1.11.2
+        version: 1.11.2
       prettier:
         specifier: ^3.3.3
         version: 3.3.3
+      require-in-the-middle:
+        specifier: 7.4.0
+        version: 7.4.0
       supabase:
         specifier: ^1.204.3
         version: 1.207.8
@@ -422,7 +431,7 @@ importers:
     dependencies:
       '@edge-csrf/nextjs':
         specifier: 2.5.0
-        version: 2.5.0(next@15.0.0(@opentelemetry/api@1.9.0)(@playwright/test@1.48.1)(react-dom@18.3.1(react@19.0.0-rc-69d4b800-20241021))(react@19.0.0-rc-69d4b800-20241021))
+        version: 2.5.0(next@15.0.0(@opentelemetry/api@1.9.0)(@playwright/test@1.48.1)(babel-plugin-react-compiler@19.0.0-beta-8a03594-20241020)(react-dom@18.3.1(react@19.0.0-rc-69d4b800-20241021))(react@19.0.0-rc-69d4b800-20241021))
       '@hookform/resolvers':
         specifier: ^3.9.0
         version: 3.9.0(react-hook-form@7.53.1(react@19.0.0-rc-69d4b800-20241021))
@@ -551,7 +560,7 @@ importers:
         version: 15.0.0(@opentelemetry/api@1.9.0)(@playwright/test@1.48.1)(babel-plugin-react-compiler@19.0.0-beta-8a03594-20241020)(react-dom@18.3.1(react@19.0.0-rc-69d4b800-20241021))(react@19.0.0-rc-69d4b800-20241021)
       next-sitemap:
         specifier: ^4.2.3
-        version: 4.2.3(next@15.0.0(@opentelemetry/api@1.9.0)(@playwright/test@1.48.1)(react-dom@18.3.1(react@19.0.0-rc-69d4b800-20241021))(react@19.0.0-rc-69d4b800-20241021))
+        version: 4.2.3(next@15.0.0(@opentelemetry/api@1.9.0)(@playwright/test@1.48.1)(babel-plugin-react-compiler@19.0.0-beta-8a03594-20241020)(react-dom@18.3.1(react@19.0.0-rc-69d4b800-20241021))(react@19.0.0-rc-69d4b800-20241021))
       next-themes:
         specifier: 0.3.0
         version: 0.3.0(react-dom@18.3.1(react@19.0.0-rc-69d4b800-20241021))(react@19.0.0-rc-69d4b800-20241021)
@@ -681,7 +690,7 @@ importers:
     dependencies:
       '@edge-csrf/nextjs':
         specifier: 2.5.0
-        version: 2.5.0(next@15.0.0(@opentelemetry/api@1.9.0)(@playwright/test@1.48.1)(react-dom@18.3.1(react@19.0.0-rc-69d4b800-20241021))(react@19.0.0-rc-69d4b800-20241021))
+        version: 2.5.0(next@15.0.0(@opentelemetry/api@1.9.0)(@playwright/test@1.48.1)(babel-plugin-react-compiler@19.0.0-beta-8a03594-20241020)(react-dom@18.3.1(react@19.0.0-rc-69d4b800-20241021))(react@19.0.0-rc-69d4b800-20241021))
       '@hello-pangea/dnd':
         specifier: ^16.6.0
         version: 16.6.0(react-dom@18.3.1(react@19.0.0-rc-69d4b800-20241021))(react@19.0.0-rc-69d4b800-20241021)(types-react-dom@19.0.0-rc.1)(types-react@19.0.0-rc.1)
@@ -777,7 +786,7 @@ importers:
         version: 15.0.0(@opentelemetry/api@1.9.0)(@playwright/test@1.48.1)(babel-plugin-react-compiler@19.0.0-beta-8a03594-20241020)(react-dom@18.3.1(react@19.0.0-rc-69d4b800-20241021))(react@19.0.0-rc-69d4b800-20241021)
       next-sitemap:
         specifier: ^4.2.3
-        version: 4.2.3(next@15.0.0(@opentelemetry/api@1.9.0)(@playwright/test@1.48.1)(react-dom@18.3.1(react@19.0.0-rc-69d4b800-20241021))(react@19.0.0-rc-69d4b800-20241021))
+        version: 4.2.3(next@15.0.0(@opentelemetry/api@1.9.0)(@playwright/test@1.48.1)(babel-plugin-react-compiler@19.0.0-beta-8a03594-20241020)(react-dom@18.3.1(react@19.0.0-rc-69d4b800-20241021))(react@19.0.0-rc-69d4b800-20241021))
       next-themes:
         specifier: 0.3.0
         version: 0.3.0(react-dom@18.3.1(react@19.0.0-rc-69d4b800-20241021))(react@19.0.0-rc-69d4b800-20241021)
@@ -880,7 +889,7 @@ importers:
         version: 0.0.59(react@19.0.0-rc-69d4b800-20241021)(zod@3.23.8)
       '@edge-csrf/nextjs':
         specifier: 2.5.0
-        version: 2.5.0(next@15.0.0(@opentelemetry/api@1.9.0)(@playwright/test@1.48.1)(react-dom@18.3.1(react@19.0.0-rc-69d4b800-20241021))(react@19.0.0-rc-69d4b800-20241021))
+        version: 2.5.0(next@15.0.0(@opentelemetry/api@1.9.0)(@playwright/test@1.48.1)(babel-plugin-react-compiler@19.0.0-beta-8a03594-20241020)(react-dom@18.3.1(react@19.0.0-rc-69d4b800-20241021))(react@19.0.0-rc-69d4b800-20241021))
       '@hookform/resolvers':
         specifier: ^3.9.0
         version: 3.9.0(react-hook-form@7.53.1(react@19.0.0-rc-69d4b800-20241021))
@@ -991,7 +1000,7 @@ importers:
         version: 15.0.0(@opentelemetry/api@1.9.0)(@playwright/test@1.48.1)(babel-plugin-react-compiler@19.0.0-beta-8a03594-20241020)(react-dom@18.3.1(react@19.0.0-rc-69d4b800-20241021))(react@19.0.0-rc-69d4b800-20241021)
       next-sitemap:
         specifier: ^4.2.3
-        version: 4.2.3(next@15.0.0(@opentelemetry/api@1.9.0)(@playwright/test@1.48.1)(react-dom@18.3.1(react@19.0.0-rc-69d4b800-20241021))(react@19.0.0-rc-69d4b800-20241021))
+        version: 4.2.3(next@15.0.0(@opentelemetry/api@1.9.0)(@playwright/test@1.48.1)(babel-plugin-react-compiler@19.0.0-beta-8a03594-20241020)(react-dom@18.3.1(react@19.0.0-rc-69d4b800-20241021))(react@19.0.0-rc-69d4b800-20241021))
       next-themes:
         specifier: 0.3.0
         version: 0.3.0(react-dom@18.3.1(react@19.0.0-rc-69d4b800-20241021))(react@19.0.0-rc-69d4b800-20241021)
@@ -1091,7 +1100,7 @@ importers:
     dependencies:
       '@edge-csrf/nextjs':
         specifier: 2.5.0
-        version: 2.5.0(next@15.0.0(@opentelemetry/api@1.9.0)(@playwright/test@1.48.1)(react-dom@18.3.1(react@19.0.0-rc-69d4b800-20241021))(react@19.0.0-rc-69d4b800-20241021))
+        version: 2.5.0(next@15.0.0(@opentelemetry/api@1.9.0)(@playwright/test@1.48.1)(babel-plugin-react-compiler@19.0.0-beta-8a03594-20241020)(react-dom@18.3.1(react@19.0.0-rc-69d4b800-20241021))(react@19.0.0-rc-69d4b800-20241021))
       '@hookform/resolvers':
         specifier: ^3.9.0
         version: 3.9.0(react-hook-form@7.53.1(react@19.0.0-rc-69d4b800-20241021))
@@ -1181,7 +1190,7 @@ importers:
         version: 15.0.0(@opentelemetry/api@1.9.0)(@playwright/test@1.48.1)(babel-plugin-react-compiler@19.0.0-beta-8a03594-20241020)(react-dom@18.3.1(react@19.0.0-rc-69d4b800-20241021))(react@19.0.0-rc-69d4b800-20241021)
       next-sitemap:
         specifier: ^4.2.3
-        version: 4.2.3(next@15.0.0(@opentelemetry/api@1.9.0)(@playwright/test@1.48.1)(react-dom@18.3.1(react@19.0.0-rc-69d4b800-20241021))(react@19.0.0-rc-69d4b800-20241021))
+        version: 4.2.3(next@15.0.0(@opentelemetry/api@1.9.0)(@playwright/test@1.48.1)(babel-plugin-react-compiler@19.0.0-beta-8a03594-20241020)(react-dom@18.3.1(react@19.0.0-rc-69d4b800-20241021))(react@19.0.0-rc-69d4b800-20241021))
       next-themes:
         specifier: 0.3.0
         version: 0.3.0(react-dom@18.3.1(react@19.0.0-rc-69d4b800-20241021))(react@19.0.0-rc-69d4b800-20241021)
@@ -11644,7 +11653,7 @@ snapshots:
 
   '@discoveryjs/json-ext@0.5.7': {}
 
-  '@edge-csrf/nextjs@2.5.0(next@15.0.0(@opentelemetry/api@1.9.0)(@playwright/test@1.48.1)(react-dom@18.3.1(react@19.0.0-rc-69d4b800-20241021))(react@19.0.0-rc-69d4b800-20241021))':
+  '@edge-csrf/nextjs@2.5.0(next@15.0.0(@opentelemetry/api@1.9.0)(@playwright/test@1.48.1)(babel-plugin-react-compiler@19.0.0-beta-8a03594-20241020)(react-dom@18.3.1(react@19.0.0-rc-69d4b800-20241021))(react@19.0.0-rc-69d4b800-20241021))':
     dependencies:
       next: 15.0.0(@opentelemetry/api@1.9.0)(@playwright/test@1.48.1)(babel-plugin-react-compiler@19.0.0-beta-8a03594-20241020)(react-dom@18.3.1(react@19.0.0-rc-69d4b800-20241021))(react@19.0.0-rc-69d4b800-20241021)
 
@@ -17445,7 +17454,7 @@ snapshots:
       isstream: 0.1.2
       jsonwebtoken: 9.0.2
       mime-types: 2.1.35
-      retry-axios: 2.6.0(axios@1.7.4)
+      retry-axios: 2.6.0(axios@1.7.4(debug@4.3.7))
       tough-cookie: 4.1.4
     transitivePeerDependencies:
       - supports-color
@@ -18516,7 +18525,7 @@ snapshots:
 
   neverthrow@7.2.0: {}
 
-  next-sitemap@4.2.3(next@15.0.0(@opentelemetry/api@1.9.0)(@playwright/test@1.48.1)(react-dom@18.3.1(react@19.0.0-rc-69d4b800-20241021))(react@19.0.0-rc-69d4b800-20241021)):
+  next-sitemap@4.2.3(next@15.0.0(@opentelemetry/api@1.9.0)(@playwright/test@1.48.1)(babel-plugin-react-compiler@19.0.0-beta-8a03594-20241020)(react-dom@18.3.1(react@19.0.0-rc-69d4b800-20241021))(react@19.0.0-rc-69d4b800-20241021)):
     dependencies:
       '@corex/deepmerge': 4.0.43
       '@next/env': 13.5.6
@@ -19676,7 +19685,7 @@ snapshots:
       onetime: 5.1.2
       signal-exit: 3.0.7
 
-  retry-axios@2.6.0(axios@1.7.4):
+  retry-axios@2.6.0(axios@1.7.4(debug@4.3.7)):
     dependencies:
       axios: 1.7.4(debug@4.3.7)
 

@@ -64,7 +64,7 @@ function ChatBodyContainer(props: {
   // set a ref for the conversation id - or generate a new one if there is none
   const conversationIdRef = useRef(props.conversationId);
 
-  const scrollingDiv = useRef<HTMLDivElement | null>();
+  const scrollingDiv = useRef<HTMLDivElement | null>(null);
   const scrollToBottom = useScrollToBottom(scrollingDiv.current);
 
   const queryClient = useQueryClient();
@@ -315,7 +315,11 @@ function useConversationMessages(
       throw error;
     }
 
-    return (data ?? []).map((message) => {
+    return (data ?? []).map((message: {
+      id: number;
+      sender: string;
+      text: string;
+    }) => {
       return {
         id: message.id.toString(),
         role: message.sender,

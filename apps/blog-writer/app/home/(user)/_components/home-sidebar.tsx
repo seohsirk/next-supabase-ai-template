@@ -2,6 +2,7 @@
 
 import { If } from '@kit/ui/if';
 import { Sidebar, SidebarContent, SidebarNavigation } from '@kit/ui/sidebar';
+import { cn } from '@kit/ui/utils';
 
 import { AppLogo } from '~/components/app-logo';
 import { ProfileAccountDropdownContainer } from '~/components/personal-account-dropdown-container';
@@ -27,7 +28,14 @@ export function HomeSidebar(props: HomeSidebarProps) {
         <div className={'flex items-center justify-between space-x-2'}>
           <If
             condition={featuresFlagConfig.enableTeamAccounts}
-            fallback={<AppLogo className={'py-2'} />}
+            fallback={
+              <AppLogo
+                className={cn({
+                  'max-w-full': collapsed,
+                  'py-2': !collapsed,
+                })}
+              />
+            }
           >
             <HomeAccountSelector userId={user.id} accounts={accounts} />
           </If>
@@ -44,10 +52,7 @@ export function HomeSidebar(props: HomeSidebarProps) {
 
       <div className={'absolute bottom-4 left-0 w-full'}>
         <SidebarContent>
-          <ProfileAccountDropdownContainer
-            user={user}
-            account={workspace}
-          />
+          <ProfileAccountDropdownContainer user={user} account={workspace} />
         </SidebarContent>
       </div>
     </Sidebar>
