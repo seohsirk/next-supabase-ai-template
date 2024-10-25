@@ -315,17 +315,19 @@ function useConversationMessages(
       throw error;
     }
 
-    return (data ?? []).map((message: {
-      id: number;
-      sender: string;
-      text: string;
-    }) => {
-      return {
-        id: message.id.toString(),
-        role: message.sender,
-        content: message.text,
-      };
-    });
+      return (data ?? []).map(
+          (message: {
+              id: number;
+              sender: 'function' | 'user' | 'system' | 'data' | 'assistant' | 'tool';
+              text: string;
+          }) => {
+              return {
+                  id: message.id.toString(),
+                  role: message.sender,
+                  content: message.text,
+              };
+          },
+      );
   };
 
   const queryKey = conversation?.id

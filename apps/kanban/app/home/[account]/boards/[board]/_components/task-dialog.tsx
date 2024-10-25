@@ -29,7 +29,6 @@ export function TaskDialog(
       <DialogContent>
         <TaskDialogContent
           taskId={props.taskId}
-          onClose={() => props.setIsOpen(false)}
         />
       </DialogContent>
     </Dialog>
