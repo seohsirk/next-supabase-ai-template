@@ -14,18 +14,21 @@ import { KanbanBoardContainer } from './_components/kanban-board-container';
 type BoardUUID = string;
 
 interface BoardPageProps {
-  params: {
+  params: Promise<{
     account: string;
     board: BoardUUID;
-  };
+  }>;
 
-  searchParams: {
+  searchParams: Promise<{
     tags?: string;
     task?: string;
-  };
+  }>;
 }
 
-async function BoardPage({ params, searchParams }: BoardPageProps) {
+async function BoardPage(props: BoardPageProps) {
+  const params = await props.params;
+  const searchParams = await props.searchParams;
+
   const tags = searchParams.tags?.split(',').filter(Boolean) ?? [];
 
   const data = await fetchBoardData(params.board, {
