@@ -10,16 +10,19 @@ import { withI18n } from '~/lib/i18n/with-i18n';
 import { DocumentPageContainer } from './_components/document-page-container';
 
 interface DocumentPageParams {
-  params: {
+  params: Promise<{
     uid: string;
-  };
+  }>;
 
-  searchParams: {
+  searchParams: Promise<{
     conversation: string;
-  };
+  }>;
 }
 
-async function DocumentPage({ params, searchParams }: DocumentPageParams) {
+async function DocumentPage(props: DocumentPageParams) {
+  const params = await props.params;
+  const searchParams = await props.searchParams;
+
   const client = getSupabaseServerComponentClient();
 
   // fetch the document and conversations
