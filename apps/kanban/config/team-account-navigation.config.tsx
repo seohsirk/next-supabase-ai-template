@@ -9,10 +9,15 @@ const iconClasses = 'w-4';
 
 const getRoutes = (account: string) => [
   {
-    label: 'Boards',
-    path: pathsConfig.app.accountHome.replace('[account]', account),
-    Icon: <LayoutDashboard className={iconClasses} />,
-    end: true,
+    label: 'common:routes.application',
+    children: [
+      {
+        label: 'Boards',
+        path: pathsConfig.app.accountHome.replace('[account]', account),
+        Icon: <LayoutDashboard className={iconClasses} />,
+        end: true,
+      },
+    ],
   },
   {
     label: 'common:routes.settings',
