@@ -24,7 +24,7 @@ const AUTOCOMPLETE_ENDPOINT =
 
 export function AutocompletePlugin() {
   const [editor] = useLexicalComposerContext();
-  const previousCompletionRef = useRef<string>();
+  const previousCompletionRef = useRef<string>(null);
 
   const { stop, complete, completion, isLoading } = useCompletion({
     api: AUTOCOMPLETE_ENDPOINT,

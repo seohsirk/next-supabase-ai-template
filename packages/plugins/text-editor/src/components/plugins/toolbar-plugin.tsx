@@ -47,8 +47,8 @@ import { getHighlightedText } from './magic-toolbar/utils';
 const LowPriority = 1;
 
 function FloatingLinkEditor({ editor }: { editor: LexicalEditor }) {
-  const editorRef = useRef<HTMLDivElement | null | undefined>();
-  const inputRef = useRef<HTMLElement | null>();
+  const editorRef = useRef<HTMLDivElement | null | undefined>(null);
+  const inputRef = useRef<HTMLElement | null>(null);
   const mouseDownRef = useRef<boolean>(false);
 
   const [linkUrl, setLinkUrl] = useState<string>('');
@@ -229,8 +229,8 @@ function getSelectedNode(selection: RangeSelection) {
 
 export function ToolbarPlugin() {
   const [editor] = useLexicalComposerContext();
-  const toolbarRef = useRef<HTMLDivElement | null>();
-  const customPromptModalRef = useRef<HTMLDivElement>();
+  const toolbarRef = useRef<HTMLDivElement | null>(null);
+  const customPromptModalRef = useRef<HTMLDivElement>(null);
 
   const [isLink, setIsLink] = useState(false);
   const [isBold, setIsBold] = useState(false);
@@ -251,7 +251,7 @@ export function ToolbarPlugin() {
   const isVisible = coords.x && coords.y;
 
   const calculateToolbarPosition = useCallback(() => {
-    void calculatePosition(toolbarRef.current!, isPointerDown)
+    void calculatePosition(toolbarRef.current, isPointerDown)
       .then((pos) => {
         setCoords({
           x: pos.x,
@@ -264,7 +264,7 @@ export function ToolbarPlugin() {
   }, [isPointerDown, closeToolbar]);
 
   const calculatePromptModalPosition = useCallback(() => {
-    void calculatePosition(customPromptModalRef.current!, false)
+    void calculatePosition(customPromptModalRef.current, false)
       .then((pos) => {
         setCustomPromptCoords({
           x: pos.x,

@@ -206,7 +206,7 @@ export function NewMentionsPlugin(
   props: React.PropsWithChildren<{
     data: string[];
   }>,
-): JSX.Element | null {
+) {
   const [editor] = useLexicalComposerContext();
   const [queryString, setQueryString] = useState<string | null>('');
   const results = useMentionLookupService(queryString, props.data);
