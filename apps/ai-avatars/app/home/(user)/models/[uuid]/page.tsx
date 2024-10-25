@@ -14,14 +14,15 @@ interface SearchParams {
   page: string;
 }
 
-async function ModelPage({
-  params,
-  searchParams,
-}: {
-  params: Params;
-  searchParams: SearchParams;
+async function ModelPage(props: {
+  params: Promise<Params>;
+  searchParams: Promise<SearchParams>;
 }) {
   const client = getSupabaseServerComponentClient<Database>();
+
+  const params = await props.params;
+  const searchParams = await props.searchParams;
+
   const page = searchParams.page ? Number(searchParams.page) : 1;
   const pageSize = 8;
   const startOffset = (page - 1) * pageSize;

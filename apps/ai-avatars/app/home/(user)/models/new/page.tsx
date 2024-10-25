@@ -4,12 +4,12 @@ import { AppBreadcrumbs } from '@kit/ui/app-breadcrumbs';
 import { PageBody } from '@kit/ui/page';
 
 import { HomeLayoutPageHeader } from '~/home/(user)/_components/home-page-header';
-import { loadUserWorkspace } from '~/home/(user)/_lib/server/load-user-workspace';
 import { NewModelForm } from '~/home/(user)/models/new/_components/new-model-form';
 import { withI18n } from '~/lib/i18n/with-i18n';
+import { requireUserInServerComponent } from '~/lib/server/require-user-in-server-component';
 
 function CreateModelPage() {
-  const { user } = use(loadUserWorkspace());
+  const { id } = use(requireUserInServerComponent());
 
   return (
     <>
@@ -19,7 +19,7 @@ function CreateModelPage() {
       />
 
       <PageBody>
-        <NewModelForm accountId={user.id} />
+        <NewModelForm accountId={id} />
       </PageBody>
     </>
   );

@@ -21,11 +21,10 @@ interface SearchParams {
   page: number;
 }
 
-async function AvatarsGenerationsPage({
-  searchParams,
-}: {
-  searchParams: SearchParams;
+async function AvatarsGenerationsPage(props: {
+  searchParams: Promise<SearchParams>;
 }) {
+  const searchParams = await props.searchParams;
   const client = getSupabaseServerComponentClient<Database>();
   const data = await loadUserWorkspace();
 

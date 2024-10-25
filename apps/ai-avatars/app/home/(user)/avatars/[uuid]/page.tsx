@@ -16,7 +16,8 @@ interface Params {
   uuid: string;
 }
 
-async function AvatarsPage({ params }: { params: Params }) {
+async function AvatarsPage({ params }: { params: Promise<Params> }) {
+  const uuid = (await params).uuid;
   const client = getSupabaseServerComponentClient<Database>();
 
   const [{ data, error }, images] = await Promise.all([
@@ -27,7 +28,7 @@ async function AvatarsPage({ params }: { params: Params }) {
       table: 'avatars_generations',
       where: {
         uuid: {
-          eq: params.uuid,
+          eq: uuid,
         },
       },
       select: `
@@ -38,7 +39,7 @@ async function AvatarsPage({ params }: { params: Params }) {
         prompt
       `,
     }),
-    getImagesFromStorage(client, params.uuid),
+    getImagesFromStorage(client, uuid),
   ]);
 
   if (error) {
