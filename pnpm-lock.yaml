@@ -44,58 +44,58 @@ importers:
         specifier: ^3.9.0
         version: 3.9.0(react-hook-form@7.53.1(react@19.0.0-rc-69d4b800-20241021))
       '@kit/accounts':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/features/accounts
       '@kit/admin':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/features/admin
       '@kit/analytics':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/analytics
       '@kit/auth':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/features/auth
       '@kit/billing':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/billing/core
       '@kit/billing-gateway':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/billing/gateway
       '@kit/cms':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/cms/core
       '@kit/database-webhooks':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/database-webhooks
       '@kit/email-templates':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/email-templates
       '@kit/i18n':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/i18n
       '@kit/mailers':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/mailers/core
       '@kit/monitoring':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/monitoring/api
       '@kit/next':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/next
       '@kit/notifications':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/features/notifications
       '@kit/shared':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/shared
       '@kit/supabase':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/supabase
       '@kit/team-accounts':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/features/team-accounts
       '@kit/ui':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/ui
       '@makerkit/data-loader-supabase-core':
         specifier: ^0.0.8
@@ -177,16 +177,16 @@ importers:
         version: 3.23.8
     devDependencies:
       '@kit/eslint-config':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../tooling/eslint
       '@kit/prettier-config':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../tooling/prettier
       '@kit/tailwind-config':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../tooling/tailwind
       '@kit/tsconfig':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../tooling/typescript
       '@next/bundle-analyzer':
         specifier: 15.0.1
@@ -246,61 +246,61 @@ importers:
         specifier: ^3.9.0
         version: 3.9.0(react-hook-form@7.53.1(react@19.0.0-rc-69d4b800-20241021))
       '@kit/accounts':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/features/accounts
       '@kit/admin':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/features/admin
       '@kit/analytics':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/analytics
       '@kit/auth':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/features/auth
       '@kit/billing':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/billing/core
       '@kit/billing-gateway':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/billing/gateway
       '@kit/cms':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/cms/core
       '@kit/database-webhooks':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/database-webhooks
       '@kit/email-templates':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/email-templates
       '@kit/i18n':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/i18n
       '@kit/mailers':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/mailers/core
       '@kit/monitoring':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/monitoring/api
       '@kit/next':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/next
       '@kit/notifications':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/features/notifications
       '@kit/shared':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/shared
       '@kit/supabase':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/supabase
       '@kit/team-accounts':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/features/team-accounts
       '@kit/text-editor':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/plugins/text-editor
       '@kit/ui':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/ui
       '@makerkit/data-loader-supabase-core':
         specifier: ^0.0.8
@@ -370,16 +370,16 @@ importers:
         version: 3.23.8
     devDependencies:
       '@kit/eslint-config':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../tooling/eslint
       '@kit/prettier-config':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../tooling/prettier
       '@kit/tailwind-config':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../tooling/tailwind
       '@kit/tsconfig':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../tooling/typescript
       '@next/bundle-analyzer':
         specifier: 15.0.1
@@ -436,61 +436,61 @@ importers:
         specifier: ^3.9.0
         version: 3.9.0(react-hook-form@7.53.1(react@19.0.0-rc-69d4b800-20241021))
       '@kit/accounts':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/features/accounts
       '@kit/admin':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/features/admin
       '@kit/analytics':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/analytics
       '@kit/auth':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/features/auth
       '@kit/billing':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/billing/core
       '@kit/billing-gateway':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/billing/gateway
       '@kit/chatbot-widget':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/chatbot-widget
       '@kit/cms':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/cms/core
       '@kit/database-webhooks':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/database-webhooks
       '@kit/email-templates':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/email-templates
       '@kit/i18n':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/i18n
       '@kit/mailers':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/mailers/core
       '@kit/monitoring':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/monitoring/api
       '@kit/next':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/next
       '@kit/notifications':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/features/notifications
       '@kit/shared':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/shared
       '@kit/supabase':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/supabase
       '@kit/team-accounts':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/features/team-accounts
       '@kit/ui':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/ui
       '@langchain/community':
         specifier: ^0.3.0
@@ -611,16 +611,16 @@ importers:
         version: 3.23.8
     devDependencies:
       '@kit/eslint-config':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../tooling/eslint
       '@kit/prettier-config':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../tooling/prettier
       '@kit/tailwind-config':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../tooling/tailwind
       '@kit/tsconfig':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../tooling/typescript
       '@next/bundle-analyzer':
         specifier: 15.0.1
@@ -698,58 +698,58 @@ importers:
         specifier: ^3.9.0
         version: 3.9.0(react-hook-form@7.53.1(react@19.0.0-rc-69d4b800-20241021))
       '@kit/accounts':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/features/accounts
       '@kit/admin':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/features/admin
       '@kit/analytics':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/analytics
       '@kit/auth':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/features/auth
       '@kit/billing':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/billing/core
       '@kit/billing-gateway':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/billing/gateway
       '@kit/cms':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/cms/core
       '@kit/database-webhooks':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/database-webhooks
       '@kit/email-templates':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/email-templates
       '@kit/i18n':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/i18n
       '@kit/mailers':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/mailers/core
       '@kit/monitoring':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/monitoring/api
       '@kit/next':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/next
       '@kit/notifications':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/features/notifications
       '@kit/shared':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/shared
       '@kit/supabase':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/supabase
       '@kit/team-accounts':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/features/team-accounts
       '@kit/ui':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/ui
       '@makerkit/data-loader-supabase-core':
         specifier: ^0.0.8
@@ -825,16 +825,16 @@ importers:
         version: 4.5.5(immer@10.1.1)(react@19.0.0-rc-69d4b800-20241021)(types-react@19.0.0-rc.1)
     devDependencies:
       '@kit/eslint-config':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../tooling/eslint
       '@kit/prettier-config':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../tooling/prettier
       '@kit/tailwind-config':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../tooling/tailwind
       '@kit/tsconfig':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../tooling/typescript
       '@next/bundle-analyzer':
         specifier: 15.0.1
@@ -894,58 +894,58 @@ importers:
         specifier: ^3.9.0
         version: 3.9.0(react-hook-form@7.53.1(react@19.0.0-rc-69d4b800-20241021))
       '@kit/accounts':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/features/accounts
       '@kit/admin':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/features/admin
       '@kit/analytics':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/analytics
       '@kit/auth':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/features/auth
       '@kit/billing':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/billing/core
       '@kit/billing-gateway':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/billing/gateway
       '@kit/cms':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/cms/core
       '@kit/database-webhooks':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/database-webhooks
       '@kit/email-templates':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/email-templates
       '@kit/i18n':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/i18n
       '@kit/mailers':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/mailers/core
       '@kit/monitoring':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/monitoring/api
       '@kit/next':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/next
       '@kit/notifications':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/features/notifications
       '@kit/shared':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/shared
       '@kit/supabase':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/supabase
       '@kit/team-accounts':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/features/team-accounts
       '@kit/ui':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/ui
       '@langchain/community':
         specifier: ^0.3.0
@@ -1039,16 +1039,16 @@ importers:
         version: 3.23.8
     devDependencies:
       '@kit/eslint-config':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../tooling/eslint
       '@kit/prettier-config':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../tooling/prettier
       '@kit/tailwind-config':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../tooling/tailwind
       '@kit/tsconfig':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../tooling/typescript
       '@next/bundle-analyzer':
         specifier: 15.0.1
@@ -17447,7 +17447,7 @@ snapshots:
       isstream: 0.1.2
       jsonwebtoken: 9.0.2
       mime-types: 2.1.35
-      retry-axios: 2.6.0(axios@1.7.4(debug@4.3.7))
+      retry-axios: 2.6.0(axios@1.7.4)
       tough-cookie: 4.1.4
     transitivePeerDependencies:
       - supports-color
@@ -19635,7 +19635,7 @@ snapshots:
       onetime: 5.1.2
       signal-exit: 3.0.7
 
-  retry-axios@2.6.0(axios@1.7.4(debug@4.3.7)):
+  retry-axios@2.6.0(axios@1.7.4):
     dependencies:
       axios: 1.7.4(debug@4.3.7)
 
