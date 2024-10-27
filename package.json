@@ -22,6 +22,8 @@
     "typecheck": "turbo typecheck --cache-dir=.turbo",
     "test": "turbo test --cache-dir=.turbo",
     "update": "pnpm update -r",
+    "syncpack:list": "pnpm dlx syncpack list-mismatches",
+    "syncpack:fix": "pnpm dlx syncpack fix-mismatches",
     "dev:kanban": "pnpm --filter kanban dev",
     "dev:avatars": "pnpm --filter ai-avatars dev",
     "dev:chatbots": "pnpm --filter chatbots dev",
@@ -67,7 +69,7 @@
     "turbo": "2.2.3",
     "typescript": "^5.6.3"
   },
-  "packageManager": "pnpm@9.1.4",
+  "packageManager": "pnpm@9.12.0",
   "pnpm": {
     "overrides": {
       "react-is": "rc",
