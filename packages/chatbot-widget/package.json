@@ -37,7 +37,7 @@
     "@rollup/plugin-replace": "^5.0.7",
     "@rollup/plugin-terser": "latest",
     "@rollup/plugin-typescript": "^11.1.6",
-    "@types/node": "^22.8.2",
+    "@types/node": "^22.8.6",
     "@types/react": "npm:types-react@19.0.0-rc.1",
     "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1",
     "@types/uuid": "latest",
@@ -54,7 +54,7 @@
     "rollup-plugin-postcss": "latest",
     "rollup-plugin-tsconfig-paths": "^1.5.2",
     "rollup-plugin-visualizer": "latest",
-    "tailwindcss": "3.4.12",
+    "tailwindcss": "3.4.14",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "^5.6.3",
     "uuid": "10.0.0"
