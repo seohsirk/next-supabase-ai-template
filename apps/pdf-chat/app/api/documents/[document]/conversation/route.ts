@@ -33,6 +33,13 @@ export async function POST(
   const headersStore = await headers();
   const conversationId = headersStore.get('x-conversation-id');
 
+  // params 객체 자체를 await
+  // params를 비동기적으로 처리
+  const resolvedParams = await Promise.resolve(params);
+  const documentId = resolvedParams.document;
+
+  console.log('params.document!!!!!!', documentId);
+
   if (!conversationId) {
     return new Response(`Missing conversation ID`, {
       status: 401,
@@ -53,8 +60,8 @@ export async function POST(
 
   const { data: remainingTokens } = await client.rpc('get_remaining_tokens');
 
-  // set a minimum number of tokens left to respond to a message
-  // so we can safely assume that the user won't run out of tokens mid-conversation
+  // 메시지에 응답하기 위해 남아있어야 하는 최소 토큰 수를 설정합니다
+  // 이를 통해 대화 도중에 토큰이 부족해지는 상황을 방지할 수 있습니다
   const minimumTokensRequired = 500;
 
   if (!remainingTokens || remainingTokens < minimumTokensRequired) {
@@ -63,14 +70,15 @@ export async function POST(
     });
   }
 
-  // if the client wants to create a new conversation, we create it
+  // 클라이언트가 새로운 대화를 생성하고자 하는 경우 대화를 생성합니다
   if (create) {
     try {
       const input = messages[messages.length - 1]?.content ?? '';
 
       conversation = await createConversation({
         input,
-        documentId: params.document,
+        // documentId: params.document,
+        documentId,
         accountId: auth.data.id,
         client,
         conversationId,
@@ -107,7 +115,8 @@ export async function POST(
     adminClient: adminClient,
     conversationId: conversation.id,
     accountId: conversation.account_id,
-    documentId: params.document,
+    // documentId: params.document,
+    documentId,
     chatHistory: messages,
   });
 
@@ -166,7 +175,8 @@ async function createConversation(params: {
     .from('conversations')
     .insert({
       name: title,
-      document_id: params.documentId,
+      // document_id: params.documentId,
+      document_id: documentId,
       account_id: accountId,
       reference_id: params.conversationId,
     })

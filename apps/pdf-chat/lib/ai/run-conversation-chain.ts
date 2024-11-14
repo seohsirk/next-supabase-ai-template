@@ -80,11 +80,59 @@ export async function runConversationChain(params: {
         question: string;
         chatHistory?: string;
       }) => {
-        const relevantDocs = await retriever.invoke(
-          previousStepResult.question,
-        );
+        const logger = await getLogger();
 
-        return formatDocumentsAsString(relevantDocs);
+        try {
+          // 검색 전 로그
+          logger.info(
+            {
+              step: 'before_retrieval',
+              question: previousStepResult.question,
+            },
+            'Starting document retrieval',
+          );
+
+          const relevantDocs = await retriever.invoke(
+            previousStepResult.question,
+          );
+
+          // 검색된 문서 확인
+          logger.info(
+            {
+              step: 'after_retrieval',
+              docsFound: relevantDocs.length,
+              documents: relevantDocs.map((doc) => ({
+                content: doc.pageContent.substring(0, 200), // 처음 200자만 표시
+                metadata: doc.metadata,
+                score: doc.metadata?.similarity, // 유사도 점수 확인
+              })),
+            },
+            'Retrieved documents',
+          );
+
+          const formattedContext = formatDocumentsAsString(relevantDocs);
+
+          // 최종 컨텍스트 확인
+          logger.info(
+            {
+              step: 'final_context',
+              contextLength: formattedContext.length,
+              contextPreview: formattedContext.substring(0, 200), // 처음 200자만 표시
+            },
+            'Formatted context',
+          );
+
+          return formattedContext;
+        } catch (error) {
+          logger.error(
+            {
+              step: 'error',
+              error,
+            },
+            'Error during context retrieval',
+          );
+          return '';
+        }
       },
     },
     getQuestionPrompt(),
@@ -172,8 +220,8 @@ class StreamEndCallbackHandler extends BaseCallbackHandler {
       );
     }, '');
 
-    // we need to calculate the tokens usage
-    // langchain doesn't provide this information (at least not consistently)
+    // 토큰 사용량을 계산해야 합니다
+    // langchain은 이 정보를 제공하지 않습니다 (적어도 일관되게는 아님)
     const queryTokens = encode(this.previousMessage).length;
     const replyTokens = encode(text).length;
     const totalTokens = queryTokens + replyTokens;
@@ -300,10 +348,24 @@ async function getVectorStoreRetriever(
 
   const vectorStore = await getVectorStore(client);
 
-  const retriever = vectorStore.asRetriever(MAX_DOCUMENTS_CONTEXT, (filter) => {
-    return filter.eq('metadata -> document_id::uuid', `"${documentId}"`);
-  });
+  console.log(
+    'Vector store data:',
+    await vectorStore.similaritySearch('test', 1),
+  );
 
+  const retriever = vectorStore.asRetriever(
+    MAX_DOCUMENTS_CONTEXT,
+    (filter: any) => {
+      const filterQuery = filter.eq(
+        'metadata -> document_id::uuid',
+        `"${documentId}"`,
+      );
+      console.log('Filter query:', filterQuery);
+      return filterQuery;
+    },
+  );
+
+  console.log('retriever!!!!!!', retriever);
   return new ContextualCompressionRetriever({
     baseCompressor: compressorPipeline,
     baseRetriever: retriever,
@@ -312,7 +374,7 @@ async function getVectorStoreRetriever(
 
 function getQuestionPrompt() {
   return PromptTemplate.fromTemplate(
-    `Use the following pieces of context to answer the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer.
+    `Use the following pieces of context to answer the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer. answer in Korean.
       ----------------
       CHAT HISTORY: {chatHistory}
       ----------------
@@ -339,7 +401,7 @@ function createModel(props: {
     modelName: LLM_MODEL_NAME,
     temperature: props.temperature ?? 0,
     streaming: props.streaming ?? true,
-    maxTokens: 200,
+    maxTokens: 1000,
     openAIApiKey: LLM_API_KEY,
     configuration: {
       baseURL: LLM_BASE_URL,

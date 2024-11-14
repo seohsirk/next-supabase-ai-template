@@ -6,8 +6,8 @@ export function getEmbeddingsModel() {
 }
 
 /**
- * Get the embeddings model to use for the AI using OpenAI.
- * Good for production.
+ * OpenAI를 사용하여 AI에 사용할 임베딩 모델을 가져옵니다.
+ * 프로덕션에 적합합니다.
  */
 function getOpenAIEmbeddingsModel() {
   const data = z
@@ -21,7 +21,10 @@ function getOpenAIEmbeddingsModel() {
     });
 
   return new OpenAIEmbeddings({
+    model: process.env.LLM_EMBEDDINGS_MODEL,
+    dimensions: 1536,
     openAIApiKey: data.openAIApiKey,
+    stripNewLines: true, // 줄바꿈 문자를 제거합니다.
     configuration: {
       baseURL: data.baseURL,
     },

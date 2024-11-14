@@ -2,6 +2,8 @@
 
 import { useCallback, useState } from 'react';
 
+import { useRouter } from 'next/navigation';
+
 import { useMutation } from '@tanstack/react-query';
 import { Cloud } from 'lucide-react';
 import { nanoid } from 'nanoid';
@@ -136,11 +138,17 @@ function AcceptedFilesConfirmation(props: {
           path,
         });
 
-        toast.success(`Document uploaded successfully!`);
-      } catch (error) {
-        console.error(error);
+        toast.success(`문서가 성공적으로 업로드되었습니다!`);
 
-        toast.error(`Sorry, we encountered an error. Please try again.`);
+        const router = useRouter();
+        router.push('/home');
+      } catch (error) {
+        if (error instanceof Error && error.message.includes('NEXT_REDIRECT')) {
+          return;
+        }
+
+        console.error(error);
+        toast.error(`죄송합니다. 오류가 발생했습니다. 다시 시도해 주세요.`);
         setCurrentStep(1);
       }
     },

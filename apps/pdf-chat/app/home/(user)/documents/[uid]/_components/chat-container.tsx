@@ -88,15 +88,15 @@ function ChatBodyContainer(props: {
     initialMessages: props.messages ?? undefined,
     onError: (error) => {
       console.error(error);
-      toast.error('Something went wrong. Please try again.');
+      toast.error('죄송합니다. 오류가 발생했습니다. 다시 시도해 주세요.');
     },
     onFinish: (message) => {
       void (async () => {
         // scroll to the bottom when the message is sent
         scrollToBottom({ smooth: true });
 
-        // we need to update the cache with the new message
-        // so that we don't have to fetch it from the API the next time
+        // 새로운 메시지로 캐시를 업데이트해야 합니다
+        // 다음에 API에서 다시 가져오지 않아도 되도록 하기 위함입니다
         const updateCache = async () => {
           const cacheKey = getConversationIdStorageKey(
             conversationIdRef.current,
@@ -113,17 +113,17 @@ function ChatBodyContainer(props: {
 
           await queryClient.setQueryData([cacheKey], nextCache);
 
-          // revalidate the number of available tokens
+          // 사용 가능한 토큰 수를 재검증
           await revalidateAvailableTokens();
         };
 
-        // if the conversation id is already set, we just update the cache
+        // 대화 ID가 이미 설정되어 있다면 캐시만 업데이트합니다
         if (props.conversationId) {
           return updateCache();
         }
 
-        // if there is no conversation id, it means the user created a new conversation
-        // in this case, we fetch the conversation from the API and update the UI
+        // 대화 ID가 없다면 사용자가 새로운 대화를 생성했다는 의미입니다
+        // 이 경우 API에서 대화를 가져와서 UI를 업데이트합니다
         try {
           if (!conversationIdRef.current) {
             conversationIdRef.current = createConversationReferenceId();
@@ -133,15 +133,15 @@ function ChatBodyContainer(props: {
             conversationIdRef.current,
           );
 
-          // once the conversation is created, we update the UI
+          // 대화가 생성되면 UI를 업데이트합니다
           if (data) {
             conversationIdRef.current = data.reference_id;
 
             // update the cache
             await updateCache();
 
-            // dispatch an event to the parent component
-            // so that it can display the new conversation in the sidebar
+            // 부모 컴포넌트에 이벤트를 전달하여
+            // 사이드바에 새로운 대화를 표시할 수 있도록 합니다
             setTimeout(() => {
               if (props.onCreateConversation) {
                 props.onCreateConversation({
@@ -152,16 +152,14 @@ function ChatBodyContainer(props: {
             }, 1000);
           }
         } catch {
-          toast.error(
-            'Something went wrong creating your conversation. Please try again.',
-          );
+          toast.error('죄송합니다. 오류가 발생했습니다. 다시 시도해 주세요.');
         }
       })();
     },
   });
 
   useEffect(() => {
-    // when the messages change, we need to update the state
+    // 메시지가 변경되면 상태를 업데이트해야 합니다
     if (props.messages) {
       setMessages(props.messages);
       scrollToBottom({ smooth: true });
@@ -169,11 +167,11 @@ function ChatBodyContainer(props: {
   }, [props.messages]);
 
   useEffect(() => {
-    // when the messages change, we need to update the state
+    // 메시지가 변경되면 상태를 업데이트해야 합니다
     scrollToBottom({ smooth: true });
   }, [isLoading]);
 
-  // when the conversation id changes, we need to update the ref
+  // 대화 ID가 변경되면 ref를 업데이트해야 합니다
   useEffect(() => {
     if (props.conversationId) {
       conversationIdRef.current = props.conversationId;
@@ -270,7 +268,7 @@ function NoMessageEmptySpace() {
       </div>
 
       <span className={'text-gray-500 dark:text-gray-400'}>
-        Ask me anything about this document - I&apos;ll do my best to help you.
+        이 문서에 대해 무엇이든 물어보세요 - 최선을 다해 도와드리겠습니다.
       </span>
     </div>
   );
@@ -315,19 +313,19 @@ function useConversationMessages(
       throw error;
     }
 
-      return (data ?? []).map(
-          (message: {
-              id: number;
-              sender: 'function' | 'user' | 'system' | 'data' | 'assistant' | 'tool';
-              text: string;
-          }) => {
-              return {
-                  id: message.id.toString(),
-                  role: message.sender,
-                  content: message.text,
-              };
-          },
-      );
+    return (data ?? []).map(
+      (message: {
+        id: number;
+        sender: 'function' | 'user' | 'system' | 'data' | 'assistant' | 'tool';
+        text: string;
+      }) => {
+        return {
+          id: message.id.toString(),
+          role: message.sender,
+          content: message.text,
+        };
+      },
+    );
   };
 
   const queryKey = conversation?.id

@@ -4,7 +4,7 @@ const LLM_MODEL_NAME = process.env.LLM_MODEL_NAME ?? 'gpt-turbo-3.5';
 const LLM_BASE_URL = process.env.LLM_BASE_URL;
 const LLM_API_KEY = process.env.LLM_API_KEY;
 
-const FALLBACK_TITLE = `Conversation with AI assistant`;
+const FALLBACK_TITLE = `AI 어시스턴트와의 대화`;
 
 export async function createConversationTitle(question: string) {
   const client = new OpenAI({
@@ -17,7 +17,7 @@ export async function createConversationTitle(question: string) {
   try {
     const response = await client.chat.completions.create({
       model: LLM_MODEL_NAME,
-      max_tokens: 100,
+      max_tokens: 400,
       messages: [
         {
           role: `user`,

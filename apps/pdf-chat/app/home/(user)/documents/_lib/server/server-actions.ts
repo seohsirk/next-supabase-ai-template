@@ -65,7 +65,7 @@ export const addDocumentAction = enhanceAction(
       throw new Error(`You can't index more documents`);
     }
 
-    const tokensCount = isWithinTokenLimit(text, remainingTokens);
+    const tokensCount = isWithinTokenLimit(text as string, remainingTokens);
 
     if (tokensCount === false) {
       logger.info(
@@ -102,10 +102,10 @@ export const addDocumentAction = enhanceAction(
 
     const splitter = new RecursiveCharacterTextSplitter({
       chunkSize: DOCUMENT_CHUNK_SIZE,
-      chunkOverlap: 0,
+      chunkOverlap: 200,
     });
 
-    const splittedDocs = await splitter.splitText(text);
+    const splittedDocs = await splitter.splitText(text as string);
 
     logger.info(
       {
@@ -119,7 +119,7 @@ export const addDocumentAction = enhanceAction(
       .from('documents')
       .insert({
         title,
-        content: text,
+        content: text as string,
         account_id: accountId,
       })
       .select('id')

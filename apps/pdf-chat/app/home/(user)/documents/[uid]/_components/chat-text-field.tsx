@@ -18,7 +18,7 @@ export function ChatTextField({
         disabled={loading}
         onInput={handleInputChange}
         value={input}
-        placeholder="Ask your PDF anything and it will answer you."
+        placeholder="문서에 대해 질문하세요."
         className={
           '!min-h-[80px] w-full border bg-gray-50 px-4 shadow-sm' +
           ' focus:ring-none outline-none transition-all' +
